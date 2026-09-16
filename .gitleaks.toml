@@ -1,0 +1,25 @@
+# Configuracion de gitleaks; la lee el job `security` del CI (gitleaks/gitleaks-action@v2).
+title = "colombia-estudia"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+Contrasena de mentira en un fixture de test unitario, no es un secreto.
+
+apps/web/__tests__/unit/api/auth/reset.test.ts usa cadenas falsas para ejercitar los codigos
+de error de Supabase (weak_password, same_password). La regla generic-api-key de gitleaks
+descarta por stopwords cualquier valor que contenga "password"; por eso, de las ~30 cadenas
+falsas del suite, solo salto 'validlength123' (entropia 3.66).
+
+El fixture ya se renombro a uno que contiene "password", pero el valor viejo sigue vivo en el
+commit 9ef87e7 del PR #1 y gitleaks escanea todos los commits del PR: sin esta entrada el job
+`security` seguiria en rojo hasta reescribir esa historia.
+
+Alcance deliberadamente minimo: solo este literal. No se hace allowlist por ruta (p. ej. todo
+__tests__/) para no cegar el escaner donde alguien podria pegar una llave real.
+"""
+regexes = [
+  '''validlength123''',
+]

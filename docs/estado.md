@@ -856,3 +856,129 @@ lectura) pero lo marco explícitamente porque rompí la regla que acordamos.
 | `packages/types/jest.config.cjs` | `roots` sin la entrada inexistente `__tests__`                   |
 | `apps/web/public/.gitkeep`       | Nuevo — trackea el directorio vacío que Storybook/Next requieren |
 | `.github/workflows/ci.yml`       | Job `security`: `permissions: pull-requests: read` añadido       |
+
+### Tercera tanda (16/9, tras los 3 fixes anteriores)
+
+El pipeline avanzó otra vez y dejó ver 4 cosas más. Dos son fallos nuevos, una es un fallo
+que yo dejé a medias, y la cuarta es un hallazgo de seguridad real que hay que mirar.
+
+5. **`test-unit` — el mismo bug de `roots`, en `packages/domain`**
+   `Directory .../packages/domain/__tests__ in the roots[1] option was not found.`
+   Es idéntico al punto (1): `packages/domain/jest.config.cjs:74` listaba
+   `'<rootDir>/__tests__'` y ese directorio está vacío en disco (git no lo trackea), mientras
+   los 9 tests reales viven co-ubicados en `packages/domain/src/*.test.ts`.
+   **Error mío**: en la tanda anterior arreglé solo el paquete que apareció en el log en vez
+   de revisar los cinco `jest.config.*` del monorepo de una. Eso costó una corrida entera de
+   CI. Ya revisé todos: `types` y `domain` eran los únicos con la entrada fantasma;
+   `design-tokens` tiene un `__tests__` vacío pero su config no declara `roots`, y `apps/web`
+   sí tiene `__tests__` con contenido real.
+   **Fix**: `roots: ['<rootDir>/src']` en `packages/domain/jest.config.cjs`.
+
+6. **`storybook` (y `e2e`) — `sh: 1: playwright: not found`**
+   El paso `npx playwright install --with-deps chromium` corre en la raíz del monorepo, pero
+   `playwright` y `@playwright/test` son devDependencies de `apps/web`
+   (`apps/web/package.json`), no de la raíz. Con el node_modules aislado de pnpm el binario no
+   está en `node_modules/.bin` de la raíz.
+   **Fix**: `pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium`
+   en los dos jobs que lo usan (`storybook` y `e2e`).
+   Pendiente menor (no tocado): el job `storybook` usa `npx http-server` y `npx wait-on` desde
+   la raíz; `http-server` no está declarado en ningún workspace y `wait-on` solo en `apps/web`,
+   así que npx los descarga del registry en cada corrida. Funciona, pero no está fijado.
+
+7. **`pa11y`/`e2e` — "Artifact not found for name: build" (resuelto el punto 4)**
+   Causa (inferencia con alta confianza, no llegué a ver el log del job `build`):
+   `actions/upload-artifact@v4` a partir de 4.4 **excluye archivos ocultos por defecto**
+   (`include-hidden-files: false`). `apps/web/.next` empieza por punto, así que todo su
+   contenido queda fuera; y `apps/web/public` no existía en el checkout (punto 2). Resultado:
+   cero archivos subidos → el paso solo emite el aviso "No files were found with the provided
+   path" → el job `build` termina **verde sin crear artifact** → `pa11y` y `e2e`, que dependen
+   de él con `needs: build`, sí arrancan y fallan al descargarlo. Esto explica la contradicción
+   que no cuadraba: build en verde y artifact inexistente.
+   **Fix**: `include-hidden-files: true` y además `if-no-files-found: error` en el paso de
+   upload, para que un artifact vacío rompa el job `build` en vez de fallar en cascada dos jobs
+   más abajo.
+   **Confirmación**: en el log del job `build` de la corrida anterior debe aparecer el aviso
+   "No files were found with the provided path". Si no aparece, la causa es otra y hay que
+   volver a mirar.
+
+8. **`security` — gitleaks encontró filtraciones (`🛑 Leaks detected`)**
+   El fix de permisos funcionó: gitleaks ya corre, escanea y sube su SARIF
+   (`gitleaks-results.sarif`, artifact ID 10462817464). Queda un warning al intentar comentar
+   el PR (necesitaría `pull-requests: write`, no solo `read`); es cosmético, no rompe el job.
+   Lo que sí rompe el job es que **detectó secretos**.
+   Revisé el árbol de trabajo con grep (patrones `sb_secret_`, `sb_publishable_`, JWT,
+   `postgres://user:pass@`, claves privadas PEM, `re_…`) y **no encontré ningún secreto real**:
+   todo lo que aparece son placeholders (`<project-ref>`, `postgres:postgres@localhost`,
+   `sb_publishable_placeholder`, `sb_secret_…` con elipsis) en `.env.example`,
+   `reference/08-env-vars.md`, `CLAUDE.md`, `.github/workflows/ci.yml` y los SQL de RLS (que
+   mencionan el rol `service_role` por su nombre). `.env` está correctamente ignorado
+   (`.gitignore:13-14`, con `!.env.example`).
+   Quedan dos hipótesis y **no puedo distinguirlas sin git** (regla: no corro git en tu árbol):
+   (a) falso positivo de las reglas genéricas de gitleaks sobre esos placeholders —lo más
+   probable—, o (b) algo en el **historial** que ya no está en el árbol (por ejemplo un `.env`
+   commiteado antes de que existiera el `.gitignore`), que sería una filtración real y exigiría
+   rotar la llave y reescribir historia.
+   **Pendiente tuyo**: abrir el _job summary_ del job `security` (o descargar el artifact
+   `gitleaks-results.sarif`) y pegarme las filas de hallazgos: regla, archivo, línea y commit.
+   **Con el valor del secreto tachado** si resulta ser uno real. Con eso decido entre
+   `.gitleaks.toml` con allowlist acotada (si es falso positivo) o plan de rotación (si no).
+
+### Archivos modificados en esta tanda
+
+| Archivo                           | Cambio                                                                                                                                                   |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/domain/jest.config.cjs` | `roots` sin la entrada inexistente `__tests__`                                                                                                           |
+| `.github/workflows/ci.yml`        | `include-hidden-files: true` + `if-no-files-found: error` en el upload del build; `playwright install` vía `pnpm --filter … exec` en `storybook` y `e2e` |
+
+### Cuarta tanda (16/9) — el hallazgo de gitleaks era un falso positivo
+
+Hallazgo único, ya con los datos del _job summary_:
+
+```
+RuleID:      generic-api-key
+File:        apps/web/__tests__/unit/api/auth/reset.test.ts
+Line:        71
+Entropy:     3.664498
+Commit:      9ef87e729ab84d3e715b7b1a37c7092ca9b0990d
+```
+
+Línea 71: `password: 'validlength123'` — un fixture del test
+`returns 400 with leak message for weak_password error code`, que sirve para ejercitar el
+código de error de Supabase. **No es un secreto**: no existe esa cuenta, el valor nunca sale
+del suite, y el `updateUser` está mockeado (`apps/web/__tests__/unit/api/auth/reset.test.ts:65`).
+
+Por qué saltó justo esa línea y no las otras ~30 contraseñas falsas del suite (`login.test.ts`,
+`accept.test.ts`, el resto de `reset.test.ts`): la regla `generic-api-key` de gitleaks descarta
+por _stopwords_ cualquier valor que contenga `password`, `secret`, `token`, etc. `validlength123`
+no contenía ninguna, y su entropía (3.66) pasó el umbral. `validpassword123`, `oldpassword123` y
+`securePassword123` sí contienen la stopword, por eso nunca aparecieron.
+
+**Fix, en dos partes:**
+
+1. `apps/web/__tests__/unit/api/auth/reset.test.ts:71` — fixture renombrado a
+   `'validlengthpassword'`. Sigue midiendo lo mismo (19 caracteres, pasa el
+   `z.string().min(12)` de `apps/web/app/api/auth/reset/route.ts:15`, así que el test entra al
+   branch de `weak_password` igual que antes) y ahora contiene la stopword, así que la regla
+   no vuelve a dispararse en commits futuros.
+2. `.gitleaks.toml` nuevo, con `[extend] useDefault = true` y un allowlist de **un solo
+   literal** (`validlength123`). Hace falta aunque el fixture ya esté renombrado: gitleaks
+   escanea _todos los commits del PR_, y el valor viejo sigue vivo en `9ef87e7`. Renombrarlo en
+   un commit nuevo no lo saca del rango de escaneo; solo lo sacaría reescribir la historia, que
+   para una contraseña de mentira no vale la pena.
+
+Alcance del allowlist a propósito mínimo: **no** se hizo allowlist por ruta (`__tests__/`
+entero), que habría sido más cómodo pero ciega al escáner justo donde alguien podría pegar una
+llave real algún día.
+
+Pendiente menor, decisión tuya: gitleaks avisa que no pudo comentar en el PR
+(`Resource not accessible by integration`) porque para comentar necesita
+`pull-requests: write`, y el job solo tiene `read`. Es cosmético — el escaneo, el SARIF y el
+_job summary_ funcionan igual. Si quieres el comentario automático en el PR, hay que subirle el
+permiso; si no, se queda así.
+
+### Archivos modificados en esta tanda
+
+| Archivo                                          | Cambio                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------ |
+| `.gitleaks.toml`                                 | Nuevo — allowlist de un literal, con la justificación dentro |
+| `apps/web/__tests__/unit/api/auth/reset.test.ts` | Fixture línea 71 renombrado a `'validlengthpassword'`        |

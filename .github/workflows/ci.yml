@@ -75,6 +75,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: build
+          # `.next` empieza por punto: upload-artifact@v4 (>=4.4) excluye archivos ocultos
+          # por defecto. Sin esto no se sube ningun archivo, el paso solo avisa
+          # ("No files were found with the provided path"), el job queda verde y
+          # pa11y/e2e fallan con "Artifact not found for name: build".
+          include-hidden-files: true
+          if-no-files-found: error
           path: |
             apps/web/.next
             apps/web/public
@@ -110,7 +116,7 @@ jobs:
         with:
           name: build
           path: apps/web
-      - run: npx playwright install --with-deps chromium
+      - run: pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium
       - name: Run e2e tests
         run: pnpm test:e2e
         env:
@@ -124,7 +130,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - run: pnpm --filter @colombia-estudia/web storybook:build
-      - run: npx playwright install --with-deps chromium
+      - run: pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium
       - name: Run storybook tests
         run: |
           npx http-server apps/web/storybook-static -p 6006 &

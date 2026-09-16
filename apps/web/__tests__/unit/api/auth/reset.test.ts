@@ -68,7 +68,7 @@ describe('POST /api/auth/reset', () => {
 
     const response = await POST(
       createRequest({
-        password: 'validlength123',
+        password: 'validlengthpassword',
       })
     );
 
