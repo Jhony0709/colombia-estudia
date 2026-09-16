@@ -133,6 +133,12 @@ jobs:
 
   security:
     runs-on: ubuntu-latest
+    # gitleaks-action necesita leer los commits del PR via API (GET /pulls/:n/commits);
+    # el permission set por defecto del workflow (contents: read) no alcanza -> 403
+    # "Resource not accessible by integration".
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
         with:

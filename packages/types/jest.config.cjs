@@ -71,7 +71,7 @@ module.exports = {
     ')/)' +
     '[^/]+\\.m?js$',
   ],
-  roots: ['<rootDir>/src', '<rootDir>/__tests__'],
+  roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   collectCoverageFrom: ['src/**/*.ts', '!src/index.ts'],
