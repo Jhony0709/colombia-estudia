@@ -71,7 +71,11 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm build
         env:
-          SKIP_ENV_VALIDATION: '1'
+          # Las NEXT_PUBLIC_* se incrustan en el bundle de cliente en tiempo de BUILD;
+          # ponerlas solo en pa11y/e2e (runtime) llega tarde para el codigo de navegador.
+          # Mismos placeholders que usan esos jobs, para que el artifact sea coherente.
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
       - uses: actions/upload-artifact@v4
         with:
           name: build

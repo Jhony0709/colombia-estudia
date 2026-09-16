@@ -982,3 +982,68 @@ permiso; si no, se queda así.
 | ------------------------------------------------ | ------------------------------------------------------------ |
 | `.gitleaks.toml`                                 | Nuevo — allowlist de un literal, con la justificación dentro |
 | `apps/web/__tests__/unit/api/auth/reset.test.ts` | Fixture línea 71 renombrado a `'validlengthpassword'`        |
+
+### Quinta tanda (16/9) — los 15 fallos de e2e son un bug de produccion, no de los tests
+
+Los 15 fallos son 5 tests x 3 proyectos (chromium, mobile-320px, reduced-motion): **todo**
+`auth.spec.ts`, incluido el más tonto (`heading receives focus on page load`). Que falle
+absolutamente todo apunta a la página, no a los tests.
+
+**Evidencia (mirando el build de producción que ya estaba en disco, `apps/web/.next`, BUILD_ID
+de las 15:03):**
+
+- `.next/prerender-manifest.json` lista como **estáticas**: `/auth/login`, `/auth/mfa`,
+  `/auth/recuperar`, `/auth/restablecer`, `/auth/logout` y `/_not-found`.
+- `.next/server/app/auth/login.html` (el HTML que sirve `next start`) contiene:
+  - 5+ `<script src="/_next/static/chunks/…">` **sin un solo `nonce=`**;
+  - **cero** `name="email"`, `name="password"` o `type="submit"`;
+  - el esqueleto de Suspense (`animate-pulse`) y un `<h1>` **sin `tabindex`**.
+
+**Causa.** `middleware.ts` (`buildCsp`) manda `script-src 'self' 'nonce-…' 'strict-dynamic'`.
+Con `strict-dynamic` el navegador **ignora `'self'`**: solo ejecuta los scripts que lleven el
+nonce de esa petición. Next inyecta ese nonce leyendo la cabecera CSP **en tiempo de render**
+(`next/dist/server/app-render/app-render.js:109` →
+`get-script-nonce-from-header.js:11`), y una página prerenderizada en el build nunca pasa por
+ahí. Resultado en producción: HTML sin nonce → el navegador bloquea todos los scripts → React
+no hidrata → como `login-content.tsx` es un client component con `useSearchParams()` dentro de
+un `Suspense`, lo único que llega al navegador es el esqueleto. El formulario no existe, el h1
+no tiene `tabindex` (lo pone `FocusManager`, que es cliente y nunca corre).
+
+Los 5 tests fallan por eso, y los 3 proyectos fallan igual porque no depende del viewport.
+
+**Esto no es un problema de CI: la pantalla de login estaba rota en cualquier build de
+producción.** En local nunca se vio porque `playwright.config.ts:37` usa `pnpm dev` fuera de CI,
+y en dev todo se renderiza dinámicamente (y la CSP de dev además lleva `unsafe-eval`).
+
+**Fix**: `export const dynamic = 'force-dynamic'` en `apps/web/app/layout.tsx`, con el porqué
+escrito ahí mismo. Va en el layout raíz y no página por página porque la CSP es global: la
+invariante "todo se renderiza dinámico" vale para toda la app, y así ninguna página futura se
+vuelve estática en silencio y se rompe en producción. La herencia layout → hijos está
+verificada en el código de Next (`create-component-tree.js:134-153`: lee `dynamic` de cada
+segmento, layout o página, y `force-dynamic` marca `workStore.forceDynamic`).
+
+Coste: se pierde la optimización estática en esas 5 páginas de auth. Para una pantalla de login
+bajo una CSP con nonce por petición eso no es una pérdida real. La alternativa sería quitar
+`strict-dynamic` de la CSP, pero eso contradice `plan/04-seguridad.md` ("nonce + strict-dynamic,
+no unsafe-inline") y toca `middleware.ts`, que está protegido: si lo prefieres, dilo y lo
+cambiamos por ahí.
+
+Queda una consecuencia menor sin resolver: `/_not-found` sigue siendo especial y no acepta
+config de segmento; si Next la deja estática, la 404 se verá con estilos (los CSS son `'self'`,
+`strict-dynamic` solo afecta a `script-src`) pero sin JS. Es aceptable.
+
+**Segundo hallazgo, latente**, encontrado de paso: las `NEXT_PUBLIC_*` se incrustan en el bundle
+de **cliente** en tiempo de build, y el job `build` no las tenía; `pa11y` y `e2e` las ponen en
+runtime, que para el código de navegador llega tarde. Hoy no rompe nada porque
+`lib/auth/supabase-browser.ts` todavía no lo importa ningún componente, pero el día que un
+client component llame a `createBrowserSupabaseClient()` reventaría con
+"Missing NEXT_PUBLIC_SUPABASE_URL" solo en CI. Añadidos los mismos placeholders al job `build`.
+De paso quité `SKIP_ENV_VALIDATION: '1'` de ese job: no lo lee nadie en el repo (grep en todo
+`apps/web`), venía de plantilla.
+
+### Archivos modificados en esta tanda
+
+| Archivo                    | Cambio                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| `apps/web/app/layout.tsx`  | `export const dynamic = 'force-dynamic'` + el porqué (CSP con nonce)            |
+| `.github/workflows/ci.yml` | Job `build`: `NEXT_PUBLIC_*` placeholders; fuera `SKIP_ENV_VALIDATION` (inerte) |
