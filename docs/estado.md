@@ -596,6 +596,13 @@ Correcciones de la auditoría de §10 (16/9):
   `/admin/institucion` verificado contra `lib/a11y/focus-manager.tsx:21-34`.
 - "Lo pedido y no hecho: Commit" no es un pendiente: es la regla de trabajo.
 
+Primer run del CI en GitHub (16/9): todos los jobs cayeron en `pnpm/action-setup@v4`, justo tras
+"Running self-installer": la composite action pasaba `version: 9` y `package.json` declara
+`packageManager: pnpm@9.0.0`; la acción rechaza tener las dos ("Multiple versions of pnpm
+specified"). Quitado `version` de `.github/actions/setup/action.yml`; `packageManager` es la
+única fuente. El aviso "Node 20 is being deprecated" es de la runtime de las actions, no del
+proyecto (Node 22 en `setup-node`), y no rompe nada.
+
 ## Criterio de salida — Fase 1 (plan/02:125-131)
 
 | Criterio                                         | Estado                                                                  |
