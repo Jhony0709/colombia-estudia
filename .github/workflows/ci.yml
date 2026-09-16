@@ -1,0 +1,148 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm lint
+      - run: pnpm lint:arch
+      - run: pnpm knip
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm type-check
+
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm test:unit -- --coverage
+
+  test-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm db:generate
+      - run: pnpm db:migrate:deploy
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+          DIRECT_URL: postgres://postgres:postgres@localhost:5432/test
+      - run: pnpm test:integration
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+          RUN_DB_TESTS: '1'
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm build
+        env:
+          SKIP_ENV_VALIDATION: '1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            apps/web/.next
+            apps/web/public
+
+  pa11y:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: apps/web
+      - name: Start server and run pa11y
+        run: |
+          cd apps/web
+          pnpm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+          pnpm a11y
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+
+  e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: apps/web
+      - run: npx playwright install --with-deps chromium
+      - name: Run e2e tests
+        run: pnpm test:e2e
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+
+  storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm --filter @colombia-estudia/web storybook:build
+      - run: npx playwright install --with-deps chromium
+      - name: Run storybook tests
+        run: |
+          npx http-server apps/web/storybook-static -p 6006 &
+          npx wait-on http://localhost:6006 --timeout 60000
+          pnpm --filter @colombia-estudia/web test-storybook
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/setup
+      # Blocking: production dependencies only
+      - run: pnpm audit --audit-level high --prod
+      # Informative: all dependencies
+      - run: pnpm audit --audit-level high
+        continue-on-error: true

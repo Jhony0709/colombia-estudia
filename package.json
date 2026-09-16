@@ -1,0 +1,63 @@
+{
+  "name": "colombia-estudia",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "turbo dev --filter=@colombia-estudia/web",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "lint:arch": "turbo lint:arch",
+    "type-check": "turbo type-check",
+    "test": "turbo test",
+    "test:unit": "turbo test:unit",
+    "test:integration": "turbo test:integration",
+    "test:e2e": "turbo test:e2e",
+    "clean": "turbo clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:generate": "turbo db:generate --filter=@colombia-estudia/web",
+    "db:migrate": "turbo db:migrate --filter=@colombia-estudia/web",
+    "db:migrate:deploy": "prisma migrate deploy --schema prisma/schema.prisma",
+    "db:studio": "turbo db:studio --filter=@colombia-estudia/web",
+    "storybook": "turbo storybook --filter=@colombia-estudia/web",
+    "a11y": "turbo a11y --filter=@colombia-estudia/web",
+    "prepare": "husky",
+    "knip": "knip"
+  },
+  "dependencies": {
+    "@prisma/client": "5.22.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.7.0",
+    "husky": "^9.1.7",
+    "knip": "^5.64.1",
+    "lint-staged": "^16.2.1",
+    "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "prisma": "5.22.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.6.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": "prettier --write"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": ">=8.5.18",
+      "rollup": ">=3.30.0"
+    },
+    "auditConfig": {
+      "ignoreCves": [
+        "GHSA-mw96-cpmx-2vgc",
+        "GHSA-qxc2-j82w-r537"
+      ]
+    }
+  }
+}

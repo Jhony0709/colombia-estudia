@@ -1,0 +1,1129 @@
+// Colombia Estudia — schema (MVP, modelo Programa → Cohorte, revisado tras la auditoría de fase 0)
+// SSOT del modelo: reference/05-database/schema.md. Este archivo lo implementa.
+//
+// Reglas que este schema encarna (ver reference/04-business-logic/):
+//   - TODA tabla del negocio lleva institutionId (desnormalizado en las hijas) para que el cliente
+//     Prisma extendido lo inyecte en cada consulta y el test de aislamiento cubra cada tabla.
+//   - Person no tiene `role` ni `blocked`: los roles son Membership, el estado de cuenta se deriva.
+//   - Lo publicado (LessonVersion, AssessmentVersion) es inmutable. Las reglas del intento
+//     (intentos, tiempo, umbral, revisión) viven en la versión, no en el contenedor.
+//   - Una asignación es (cohorte, tema); su versión puede cambiar (auditado) sin romper el progreso.
+//   - El contenido es Markdown; los recursos son MediaAsset (video en Vimeo por defecto).
+//   - Las respuestas correctas viven en `answerKey`, excluida del cliente Prisma por defecto (omit).
+//   - Accommodation es la parte ejecutable del PIAR. Nunca guarda diagnóstico.
+//   - RestrictionPolicy no tiene flags académicos. La suspensión para adultos está PENDIENTE
+//     de confirmación jurídica y no existe como columna hasta entonces.
+//   - Estados por tiempo (acceso vencido, cuota vencida, intento vencido) se DERIVAN con `now`;
+//     no se persisten salvo cuando ocurre una acción.
+//   - onDelete: por defecto Restrict (el de Prisma para relaciones obligatorias). Cascade solo
+//     en hijos puros (LessonVersionAsset, Notification). Person nunca se borra: se anonimiza.
+//   - Índices únicos parciales (marcados "SQL:") se declaran en la migración, no aquí.
+
+generator client {
+  provider        = "prisma-client-js"
+  /// Con Prisma ≥ 6.2 `omit` es GA: quitar el preview flag.
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ───────────────────────────── Tenancy e identidad ─────────────────────────────
+
+/// La entidad cliente (Valida YA hoy; otra institución mañana). Raíz de tenancy y marca.
+model Institution {
+  id                String    @id @default(cuid())
+  slug              String    @unique
+  name              String
+  legalName         String?
+  taxId             String?
+  timezone          String    @default("America/Bogota")
+  currency          String    @default("COP")
+  /// Marca por institución: los correos y la UI salen con esto, no con variables de entorno.
+  logoAssetId       String?
+  brandColor        String?
+  supportEmail      String
+  supportPhone      String?
+  emailFromName     String
+  /// Política de tratamiento de datos de la institución (responsable del tratamiento, Ley 1581).
+  dataPolicyUrl     String?
+  dataPolicyVersion String    @default("1")
+  primaryDomain     String?   @unique
+  /// { readOnly?: boolean, gatewayFeeBy?: 'INSTITUTION' | 'PAYER' } — validado con Zod; nada de negocio crítico aquí.
+  settings          Json?
+  createdAt         DateTime  @default(now())
+  archivedAt        DateTime?
+
+  people                Person[]
+  memberships           Membership[]
+  guardianships         Guardianship[]
+  consents              Consent[]
+  partners              Partner[]
+  programs              Program[]
+  modules               Module[]
+  subjects              Subject[]
+  cohorts               Cohort[]
+  enrollments           Enrollment[]
+  lessons               Lesson[]
+  lessonVersions        LessonVersion[]
+  lessonVersionAssets   LessonVersionAsset[]
+  assessments           Assessment[]
+  assessmentVersions    AssessmentVersion[]
+  lessonAssignments     LessonAssignment[]
+  assessmentAssignments AssessmentAssignment[]
+  mediaAssets           MediaAsset[]
+  lessonProgress        LessonProgress[]
+  attempts              Attempt[]
+  scores                Score[]
+  learningEvents        LearningEvent[]
+  accommodations        Accommodation[]
+  paymentPlans          PaymentPlan[]
+  installments          Installment[]
+  payments              Payment[]
+  paymentAgreements     PaymentAgreement[]
+  restrictionPolicy     RestrictionPolicy?
+  importRuns            ImportRun[]
+  liveSessions          LiveSession[]
+  certificates          Certificate[]
+  submissions           Submission[]
+  auditLogs             AuditLog[]
+  notifications         Notification[]
+  invitations           Invitation[]
+}
+
+/// Un ser humano. Una sola fila aunque tenga varios roles. Pertenece a UNA institución
+/// (límite aceptado: ver PRODUCT_DECISIONS; refactor antes de la segunda institución).
+/// documentNumber y birthDate son datos personales (Ley 1581): acceso al detalle en AuditLog.
+/// birthDate es opcional en la persona pero OBLIGATORIA para matricular (decide isMinorAtEnrollment).
+/// Nunca se borra: `anonymizedAt` + procedimiento que vacía la PII conservando el id.
+model Person {
+  id             String    @id @default(cuid())
+  institutionId  String
+  givenName      String
+  familyName     String
+  documentType   String?
+  documentNumber String?
+  birthDate      DateTime? @db.Date
+  /// Normalizado a minúsculas por Zod antes de guardar. Único por institución (Supabase lo exige global).
+  email          String?
+  phone          String?
+  /// Supabase Auth uid. Nulo para personas sin credencial.
+  authUserId     String?   @unique
+  /// Referencia de origen para importaciones idempotentes: "learndash:user:123".
+  sourceRef      String?
+  /// { fontScale?, lineHeight?, width?, contrast?, motion?, transcriptAlwaysVisible? } — ver 03-ui/tokens.md.
+  readingPreferences Json?
+  anonymizedAt   DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+
+  memberships         Membership[]
+  guardianOf          Guardianship[]     @relation("GuardianPerson")
+  guardians           Guardianship[]     @relation("StudentPerson")
+  consentsSigned      Consent[]          @relation("ConsentSigner")
+  consentsAbout       Consent[]          @relation("ConsentSubject")
+  partnerContacts     Partner[]          @relation("PartnerContact")
+  enrollments         Enrollment[]
+  authoredLessons     Lesson[]
+  authoredAssessments Assessment[]
+  lessonProgress      LessonProgress[]
+  attempts            Attempt[]          @relation("AttemptStudent")
+  gradedAttempts      Attempt[]          @relation("AttemptGrader")
+  scores              Score[]            @relation("ScoreStudent")
+  scoresRecorded      Score[]            @relation("ScoreRecorder")
+  accommodations      Accommodation[]
+  paymentPlansPaid    PaymentPlan[]      @relation("PlanPayerPerson")
+  agreementsSigned    PaymentAgreement[] @relation("AgreementPayerPerson")
+  learningEvents      LearningEvent[]
+  notifications       Notification[]
+  uploadedMedia         MediaAsset[]
+  submissionsReviewed   Submission[]       @relation("SubmissionReviewer")
+  invitations           Invitation[]
+  invitationsCreated    Invitation[]       @relation("InvitationCreator")
+
+  @@unique([institutionId, documentType, documentNumber])
+  @@unique([institutionId, email])
+  @@unique([institutionId, sourceRef])
+  @@index([institutionId, familyName, givenName])
+}
+
+enum Role {
+  ADMIN
+  OPERATIONS
+  INSTRUCTOR
+  INCLUSION_COORDINATOR
+  STUDENT
+  GUARDIAN
+  PARTNER_CONTACT
+}
+
+/// El par (persona, rol) en una institución. El alcance temporal de un estudiante lo da su matrícula.
+/// SQL: índice único parcial (personId, role) WHERE revokedAt IS NULL — permite re-otorgar sin perder historial.
+model Membership {
+  id            String    @id @default(cuid())
+  institutionId String
+  personId      String
+  role          Role
+  createdAt     DateTime  @default(now())
+  revokedAt     DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  person      Person      @relation(fields: [personId], references: [id])
+
+  @@index([institutionId, role])
+  @@index([personId, role, revokedAt])
+}
+
+/// Solo para estudiantes menores de edad. Un menor no se matricula sin al menos una acudencia.
+model Guardianship {
+  id                     String  @id @default(cuid())
+  institutionId          String
+  guardianId             String
+  studentId              String
+  relationship           String
+  isFinancialResponsible Boolean @default(false)
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  guardian    Person      @relation("GuardianPerson", fields: [guardianId], references: [id])
+  student     Person      @relation("StudentPerson", fields: [studentId], references: [id])
+
+  @@unique([guardianId, studentId])
+  @@index([studentId])
+}
+
+enum ConsentChannel {
+  PLATFORM
+  PAPER
+  EMAIL
+}
+
+/// Autorización de tratamiento de datos (Ley 1581 de 2012).
+/// Adulto: signedById == subjectId, firmado en su primer ingreso. Menor: la firma un acudiente
+/// (signedById ∈ Guardianship del menor; verificado en el servidor).
+/// policyVersion = Institution.dataPolicyVersion vigente al firmar.
+model Consent {
+  id            String         @id @default(cuid())
+  institutionId String
+  subjectId     String
+  signedById    String
+  policyVersion String
+  channel       ConsentChannel
+  grantedAt     DateTime       @default(now())
+  revokedAt     DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  subject     Person      @relation("ConsentSubject", fields: [subjectId], references: [id])
+  signedBy    Person      @relation("ConsentSigner", fields: [signedById], references: [id])
+
+  @@index([institutionId, subjectId, revokedAt])
+}
+
+/// Aliado B2B (empresa, fundación, otra institución) que envía y a veces paga una cohorte.
+model Partner {
+  id              String    @id @default(cuid())
+  institutionId   String
+  name            String
+  taxId           String?
+  contactPersonId String?
+  archivedAt      DateTime?
+
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  contactPerson Person?     @relation("PartnerContact", fields: [contactPersonId], references: [id])
+
+  cohorts           Cohort[]
+  paymentPlans      PaymentPlan[]
+  paymentAgreements PaymentAgreement[]
+
+  @@unique([institutionId, name])
+}
+
+// ───────────────────────────── Programa y cohortes ─────────────────────────────
+
+/// Lo que se vende: "Bachillerato Valida YA". El catálogo de contenido cuelga de aquí.
+model Program {
+  id                String    @id @default(cuid())
+  institutionId     String
+  code              String
+  name              String
+  description       String?
+  /// Días de acceso desde la matrícula, por defecto para las cohortes del programa.
+  defaultAccessDays Int       @default(300)
+  sourceRef         String?
+  createdAt         DateTime  @default(now())
+  archivedAt        DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+
+  modules     Module[]
+  cohorts     Cohort[]
+  lessons     Lesson[]
+  assessments Assessment[]
+
+  @@unique([institutionId, code])
+  @@unique([institutionId, sourceRef])
+}
+
+/// Sección del programa: "Módulo Mes 1". Ordena el contenido. Las evaluaciones de un módulo
+/// van después de sus temas y, en progresión LINEAR, bloquean el módulo siguiente.
+model Module {
+  id            String    @id @default(cuid())
+  institutionId String
+  programId     String
+  position      Int
+  name          String
+  sourceRef     String?
+  archivedAt    DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  program     Program     @relation(fields: [programId], references: [id])
+
+  lessons      Lesson[]
+  assessments  Assessment[]
+  certificates Certificate[]
+
+  @@unique([programId, position])
+  @@unique([institutionId, sourceRef])
+}
+
+model Subject {
+  id            String    @id @default(cuid())
+  institutionId String
+  name          String
+  code          String?
+  archivedAt    DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+
+  lessons     Lesson[]
+  assessments Assessment[]
+  scores      Score[]
+
+  @@unique([institutionId, name])
+}
+
+enum CohortStatus {
+  PLANNED
+  OPEN
+  CLOSED
+  ARCHIVED
+}
+
+enum Progression {
+  LINEAR
+  FREE
+}
+
+/// Una edición del programa: "2026-1", "2026-1 ValoraT". Unidad comercial y académica.
+model Cohort {
+  id            String       @id @default(cuid())
+  institutionId String
+  programId     String
+  partnerId     String?
+  code          String
+  name          String
+  status        CohortStatus @default(PLANNED)
+  progression   Progression  @default(LINEAR)
+  startsOn      DateTime     @db.Date
+  endsOn        DateTime     @db.Date
+  /// Vence el acceso de todas las matrículas de la cohorte. Nulo = usa Program.defaultAccessDays por matrícula.
+  accessUntil   DateTime?    @db.Date
+  sourceRef     String?
+  createdAt     DateTime     @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  program     Program     @relation(fields: [programId], references: [id])
+  partner     Partner?    @relation(fields: [partnerId], references: [id])
+
+  enrollments           Enrollment[]
+  lessonAssignments     LessonAssignment[]
+  assessmentAssignments AssessmentAssignment[]
+  scores                Score[]
+  liveSessions          LiveSession[]
+
+  @@unique([institutionId, code])
+  @@unique([institutionId, sourceRef])
+  @@index([programId, status])
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  WITHDRAWN
+}
+
+/// Matrícula: estudiante en una cohorte. Congela si era menor al matricularse (decide consentimiento y mora).
+/// "Vencida" NO es un estado persistido: se deriva de accessUntil < now (packages/domain).
+/// Ciclo de vida y reglas en acceso-y-cartera.md §8.
+model Enrollment {
+  id                  String           @id @default(cuid())
+  institutionId       String
+  studentId           String
+  cohortId            String
+  status              EnrollmentStatus @default(ACTIVE)
+  isMinorAtEnrollment Boolean
+  enrolledAt          DateTime         @default(now())
+  accessUntil         DateTime         @db.Date
+  completedAt         DateTime?
+  withdrawnAt         DateTime?
+  withdrawReason      String?
+  sourceRef           String?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  student     Person      @relation(fields: [studentId], references: [id])
+  cohort      Cohort      @relation(fields: [cohortId], references: [id])
+
+  paymentPlan       PaymentPlan?
+  paymentAgreements PaymentAgreement[]
+  accommodation     Accommodation?
+  lessonProgress    LessonProgress[]
+  attempts          Attempt[]
+  scores            Score[]
+  certificates      Certificate[]
+  submissions       Submission[]
+
+  @@unique([studentId, cohortId])
+  @@unique([institutionId, sourceRef])
+  @@index([institutionId, cohortId, status])
+}
+
+// ───────────────────────────── Contenido (catálogo versionado, Markdown) ─────────────────────────────
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// Un tema del programa ("Física – Magnitudes escalares y vectoriales"). Contenedor editable.
+model Lesson {
+  id                String    @id @default(cuid())
+  institutionId     String
+  programId         String
+  moduleId          String
+  subjectId         String
+  position          Int
+  title             String
+  /// BCP 47. El render lo pone en el contenedor del contenido; fragmentos en otro idioma usan :lang[]{}.
+  language          String    @default("es-CO")
+  /// Qué debe poder hacer el estudiante al terminar. Texto libre hoy; competencia/DBA después.
+  learningObjective String?
+  /// Tema de tipo ACTIVIDAD: se completa con una entrega (Submission) revisada, no con evidencia de lectura.
+  requiresSubmission Boolean  @default(false)
+  authorId          String
+  sourceRef         String?
+  createdAt         DateTime  @default(now())
+  archivedAt        DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  program     Program     @relation(fields: [programId], references: [id])
+  module      Module      @relation(fields: [moduleId], references: [id])
+  subject     Subject     @relation(fields: [subjectId], references: [id])
+  author      Person      @relation(fields: [authorId], references: [id])
+
+  versions    LessonVersion[]
+  assignments LessonAssignment[]
+
+  @@unique([moduleId, position])
+  @@unique([institutionId, sourceRef])
+  @@index([institutionId, programId, subjectId])
+}
+
+/// Publicación inmutable. `content` es Markdown (CommonMark + GFM + `$…$` LaTeX + directivas
+/// ::video / ::audio / ::pdf / :lang; contrato en packages/types/src/content.ts).
+/// `legacyException` documenta por qué se publicó contenido que no pasa la validación (solo el importador
+/// puede crearla); `convertUntil` es la fecha comprometida de conversión.
+/// `invalidatesProgress`: el autor lo marca cuando el cambio es sustancial y el tema debe reabrirse.
+model LessonVersion {
+  id                  String        @id @default(cuid())
+  institutionId       String
+  lessonId            String
+  number              Int
+  status              PublishStatus @default(DRAFT)
+  content             String
+  /// Minutos estimados de estudio. Alimenta la evidencia mínima de completado.
+  estimatedMinutes    Int?
+  invalidatesProgress Boolean       @default(false)
+  accessibilityReport Json?
+  /// { reason, approvedById, approvedAt } — solo contenido migrado.
+  legacyException     Json?
+  convertUntil        DateTime?     @db.Date
+  createdAt           DateTime      @default(now())
+  publishedAt         DateTime?
+  publishedById       String?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  lesson      Lesson      @relation(fields: [lessonId], references: [id])
+
+  assets      LessonVersionAsset[]
+  assignments LessonAssignment[]
+  progress    LessonProgress[]
+
+  @@unique([lessonId, number])
+  @@index([institutionId, status, convertUntil])
+}
+
+/// Recursos referenciados por una versión, extraídos del Markdown al publicar. Hace consultable el
+/// legado, impide borrar un asset en uso y garantiza que el asset es de la misma institución.
+model LessonVersionAsset {
+  lessonVersionId String
+  mediaAssetId    String
+  institutionId   String
+
+  institution   Institution   @relation(fields: [institutionId], references: [id])
+  lessonVersion LessonVersion @relation(fields: [lessonVersionId], references: [id], onDelete: Cascade)
+  mediaAsset    MediaAsset    @relation(fields: [mediaAssetId], references: [id], onDelete: Restrict)
+
+  @@id([lessonVersionId, mediaAssetId])
+  @@index([institutionId, mediaAssetId])
+}
+
+enum AssessmentKind {
+  DIAGNOSTIC
+  SUBJECT
+  FINAL
+}
+
+/// Contenedor editable de una evaluación. Las reglas del intento NO viven aquí: viven en la versión.
+model Assessment {
+  id                String         @id @default(cuid())
+  institutionId     String
+  programId         String
+  moduleId          String?
+  subjectId         String?
+  kind              AssessmentKind @default(SUBJECT)
+  /// Orden dentro del módulo, después de los temas. Único por módulo.
+  position          Int            @default(0)
+  title             String
+  language          String         @default("es-CO")
+  learningObjective String?
+  authorId          String
+  sourceRef         String?
+  createdAt         DateTime       @default(now())
+  archivedAt        DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  program     Program     @relation(fields: [programId], references: [id])
+  module      Module?     @relation(fields: [moduleId], references: [id])
+  subject     Subject?    @relation(fields: [subjectId], references: [id])
+  author      Person      @relation(fields: [authorId], references: [id])
+
+  versions    AssessmentVersion[]
+  assignments AssessmentAssignment[]
+
+  @@unique([moduleId, position])
+  @@unique([institutionId, sourceRef])
+  @@index([institutionId, programId])
+}
+
+enum ReviewPolicy {
+  NONE
+  SCORE_ONLY
+  FULL_AFTER_GRADED
+  FULL_AFTER_DUE
+}
+
+/// Publicación inmutable. `content` = preguntas SIN respuestas correctas. `answerKey` = respuestas y
+/// puntos, excluida por defecto del cliente Prisma (omit) y leída solo por grading.ts.
+/// Las reglas del intento se congelan aquí, no en Assessment.
+model AssessmentVersion {
+  id                  String        @id @default(cuid())
+  institutionId       String
+  assessmentId        String
+  number              Int
+  status              PublishStatus @default(DRAFT)
+  content             Json
+  answerKey           Json
+  maxAttempts         Int           @default(1)
+  timeLimitMinutes    Int?
+  /// Porcentaje 0–100. Nulo = no aplica umbral.
+  passPercent         Int?
+  reviewPolicy        ReviewPolicy  @default(SCORE_ONLY)
+  accessibilityReport Json?
+  createdAt           DateTime      @default(now())
+  publishedAt         DateTime?
+  publishedById       String?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  assessment  Assessment  @relation(fields: [assessmentId], references: [id])
+
+  assignments AssessmentAssignment[]
+  attempts    Attempt[]
+
+  @@unique([assessmentId, number])
+}
+
+/// Un tema disponible para una cohorte. La versión puede cambiar (auditado): la asignación es (cohorte, tema),
+/// y el progreso guarda con qué versión se recogió la evidencia. Una fuente, N cohortes.
+model LessonAssignment {
+  id              String    @id @default(cuid())
+  institutionId   String
+  cohortId        String
+  lessonId        String
+  lessonVersionId String
+  availableFrom   DateTime
+  availableUntil  DateTime?
+  assignedById    String
+
+  institution   Institution   @relation(fields: [institutionId], references: [id])
+  cohort        Cohort        @relation(fields: [cohortId], references: [id])
+  lesson        Lesson        @relation(fields: [lessonId], references: [id])
+  lessonVersion LessonVersion @relation(fields: [lessonVersionId], references: [id])
+
+  progress    LessonProgress[]
+  submissions Submission[]
+
+  @@unique([cohortId, lessonId])
+  @@index([institutionId, cohortId])
+}
+
+model AssessmentAssignment {
+  id                  String    @id @default(cuid())
+  institutionId       String
+  cohortId            String
+  assessmentId        String
+  assessmentVersionId String
+  availableFrom       DateTime
+  dueAt               DateTime?
+  assignedById        String
+
+  institution       Institution       @relation(fields: [institutionId], references: [id])
+  cohort            Cohort            @relation(fields: [cohortId], references: [id])
+  assessment        Assessment        @relation(fields: [assessmentId], references: [id])
+  assessmentVersion AssessmentVersion @relation(fields: [assessmentVersionId], references: [id])
+
+  attempts Attempt[]
+
+  @@unique([cohortId, assessmentId])
+  @@index([institutionId, cohortId])
+}
+
+enum MediaKind {
+  VIDEO
+  AUDIO
+  IMAGE
+  DOCUMENT
+}
+
+enum MediaProvider {
+  VIMEO
+  STORAGE
+  YOUTUBE
+  MUX
+}
+
+enum MediaStatus {
+  PENDING
+  READY
+  ERROR
+}
+
+enum CaptionsSource {
+  NONE
+  AUTO
+  REVIEWED
+}
+
+/// Todo recurso referenciado desde el Markdown. Video: VIMEO por defecto (providerRef = id de Vimeo).
+/// Imagen/PDF/audio: STORAGE (providerRef = ruta del bucket). La validación de publicación exige:
+/// imagen → altText; video/audio → captionsSource REVIEWED o transcriptPath (AUTO no cuenta);
+/// PDF → textAlternativePath; y siempre status READY y misma institución. Salvo `legacy`.
+model MediaAsset {
+  id                  String         @id @default(cuid())
+  institutionId       String
+  kind                MediaKind
+  provider            MediaProvider
+  providerRef         String
+  status              MediaStatus    @default(PENDING)
+  mimeType            String?
+  sizeBytes           Int?
+  durationSeconds     Int?
+  altText             String?
+  captionsSource      CaptionsSource @default(NONE)
+  /// WebVTT con tiempos: la transcripción sincronizada del player. El texto plano se deriva.
+  transcriptPath      String?
+  /// Markdown con el texto del documento (PDF transcrito) o de la imagen de página.
+  textAlternativePath String?
+  /// Migrado de la plataforma anterior sin alternativa textual. Debe convertirse.
+  legacy              Boolean        @default(false)
+  uploadedById        String
+  createdAt           DateTime       @default(now())
+  archivedAt          DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  uploadedBy  Person      @relation(fields: [uploadedById], references: [id])
+
+  usedBy      LessonVersionAsset[]
+  submissions Submission[]
+
+  @@unique([institutionId, provider, providerRef])
+  @@index([institutionId, kind, legacy])
+}
+
+// ───────────────────────────── Aprendizaje ─────────────────────────────
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ProgressSource {
+  EVIDENCE
+  IMPORTED
+  MANUAL
+}
+
+/// Avance de una matrícula sobre un tema asignado. `lessonVersionId` = con qué versión se recogió la evidencia.
+/// COMPLETED lo decide packages/domain/src/lesson-completion.ts según la forma del contenido.
+model LessonProgress {
+  id                 String         @id @default(cuid())
+  institutionId      String
+  enrollmentId       String
+  studentId          String
+  lessonAssignmentId String
+  lessonVersionId    String
+  status             ProgressStatus @default(NOT_STARTED)
+  source             ProgressSource @default(EVIDENCE)
+  /// { videoPositionSeconds?, transcriptReadToEnd?, scrolledToEnd?, secondsOnLesson?, manual?: { byId, reason } }
+  evidence           Json           @default("{}")
+  startedAt          DateTime?
+  lastActivityAt     DateTime?
+  completedAt        DateTime?
+
+  institution   Institution      @relation(fields: [institutionId], references: [id])
+  enrollment    Enrollment       @relation(fields: [enrollmentId], references: [id])
+  student       Person           @relation(fields: [studentId], references: [id])
+  assignment    LessonAssignment @relation(fields: [lessonAssignmentId], references: [id])
+  lessonVersion LessonVersion    @relation(fields: [lessonVersionId], references: [id])
+
+  @@unique([enrollmentId, lessonAssignmentId])
+  @@index([institutionId, lessonAssignmentId, status])
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  EXPIRED
+  GRADED
+}
+
+/// Un intento. Guarda la evidencia completa (respuestas) y los ajustes aplicados al iniciar.
+/// Al llegar deadlineAt con respuestas guardadas → SUBMITTED y se califica; EXPIRED solo si no hubo ninguna.
+/// SQL: índice único parcial (enrollmentId, assessmentAssignmentId) WHERE status = 'IN_PROGRESS'.
+model Attempt {
+  id                     String         @id @default(cuid())
+  institutionId          String
+  enrollmentId           String
+  studentId              String
+  assessmentAssignmentId String
+  /// Snapshot de la versión con la que se abrió el intento (la asignación puede cambiar de versión después).
+  assessmentVersionId    String
+  number                 Int
+  status                 AttemptStatus  @default(IN_PROGRESS)
+  source                 ProgressSource @default(EVIDENCE)
+  /// { [questionCode]: { answer, answeredAt, pointsAwarded?, feedback? } }
+  answers                Json           @default("{}")
+  /// Copia de Accommodation en el momento de iniciar. Nulo si no había ajustes.
+  appliedAccommodation   Json?
+  startedAt              DateTime       @default(now())
+  /// Calculado por packages/domain attempt-policy. Nulo = sin límite.
+  deadlineAt             DateTime?
+  submittedAt            DateTime?
+  gradedAt               DateTime?
+  gradedById             String?
+  score                  Decimal?       @db.Decimal(6, 2)
+  maxScore               Decimal?       @db.Decimal(6, 2)
+
+  institution       Institution          @relation(fields: [institutionId], references: [id])
+  enrollment        Enrollment           @relation(fields: [enrollmentId], references: [id])
+  student           Person               @relation("AttemptStudent", fields: [studentId], references: [id])
+  gradedBy          Person?              @relation("AttemptGrader", fields: [gradedById], references: [id])
+  assignment        AssessmentAssignment @relation(fields: [assessmentAssignmentId], references: [id])
+  assessmentVersion AssessmentVersion    @relation(fields: [assessmentVersionId], references: [id])
+
+  scoresFrom Score[]
+
+  @@unique([enrollmentId, assessmentAssignmentId, number])
+  @@index([institutionId, assessmentAssignmentId, status])
+}
+
+/// Nota de una asignatura en una cohorte, escala 0–100 (coherente con passPercent).
+/// Derivada por grading.ts del mejor intento GRADED de la evaluación SUBJECT de esa asignatura;
+/// `sourceAttemptId` apunta a ese intento. Se persiste para consulta y reporte, no se edita a mano.
+model Score {
+  id              String    @id @default(cuid())
+  institutionId   String
+  enrollmentId    String
+  studentId       String
+  subjectId       String
+  cohortId        String
+  value           Decimal   @db.Decimal(5, 2)
+  sourceAttemptId String?
+  note            String?
+  /// Nulo = derivada por grading.ts (sin actor persona). Con valor = registrada o corregida a mano, con AuditLog.
+  recordedById    String?
+  publishedAt     DateTime?
+  updatedAt       DateTime  @updatedAt
+
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  enrollment    Enrollment  @relation(fields: [enrollmentId], references: [id])
+  student       Person      @relation("ScoreStudent", fields: [studentId], references: [id])
+  recordedBy    Person?     @relation("ScoreRecorder", fields: [recordedById], references: [id])
+  subject       Subject     @relation(fields: [subjectId], references: [id])
+  cohort        Cohort      @relation(fields: [cohortId], references: [id])
+  sourceAttempt Attempt?    @relation(fields: [sourceAttemptId], references: [id])
+
+  @@unique([enrollmentId, subjectId])
+  @@index([institutionId, cohortId])
+}
+
+/// Append-only. Lo que el estudiante hizo, cuándo. `type` es un literal del catálogo en packages/types
+/// (ver schema.md "Catálogos"). Base de analytics, evidencia y del reporte para aliados.
+model LearningEvent {
+  id            BigInt   @id @default(autoincrement())
+  institutionId String
+  studentId     String
+  enrollmentId  String?
+  type          String
+  payload       Json
+  occurredAt    DateTime @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  student     Person      @relation(fields: [studentId], references: [id])
+
+  @@index([studentId, occurredAt])
+  @@index([institutionId, type, occurredAt])
+}
+
+// ───────────────────────────── Inclusión (PIAR ejecutable) ─────────────────────────────
+
+/// La parte ejecutable del PIAR (Decreto 1421 de 2017). Por matrícula. NO contiene diagnóstico.
+model Accommodation {
+  id                   String   @id @default(cuid())
+  institutionId        String
+  studentId            String
+  enrollmentId         String   @unique
+  extraTimeFactor      Decimal  @default(1) @db.Decimal(3, 2)
+  exemptFromTimer      Boolean  @default(false)
+  allowedAttemptsBonus Int      @default(0)
+  requiresCaptions     Boolean  @default(false)
+  allowsAssistiveTech  Boolean  @default(true)
+  /// Indicaciones pedagógicas. El formulario advierte que no es lugar para diagnósticos.
+  notes                String?
+  createdById          String
+  updatedAt            DateTime @updatedAt
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  student     Person      @relation(fields: [studentId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+}
+
+// ───────────────────────────── Cartera ─────────────────────────────
+// El estado de cuenta NO es una tabla: se deriva de Installment (confirmadas) + PaymentAgreement.status
+// por matrícula, con `now`, en packages/domain/src/account-status.ts. Ver acceso-y-cartera.md §4.
+// Montos en pesos enteros (Decimal(12,0)); Prisma los devuelve como Decimal.js, nunca `number`.
+
+enum PayerType {
+  PERSON
+  PARTNER
+}
+
+/// Lo que cuesta una matrícula y quién lo paga (el estudiante, su acudiente o un aliado).
+model PaymentPlan {
+  id            String    @id @default(cuid())
+  institutionId String
+  enrollmentId  String    @unique
+  payerType     PayerType
+  payerPersonId String?
+  partnerId     String?
+  totalAmount   Decimal   @db.Decimal(12, 0)
+  createdAt     DateTime  @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+  payerPerson Person?     @relation("PlanPayerPerson", fields: [payerPersonId], references: [id])
+  partner     Partner?    @relation(fields: [partnerId], references: [id])
+
+  installments Installment[]
+
+  @@index([institutionId, partnerId])
+}
+
+enum InstallmentStatus {
+  OPEN
+  PARTIALLY_PAID
+  PAID
+  VOID
+}
+
+/// Una cuota. "Vencida" se deriva (OPEN y dueOn < hoy). `status` = f(Σ pagos confirmados, amount),
+/// recalculado en la MISMA transacción que confirma o anula un pago; en ningún otro sitio.
+/// Al firmar un acuerdo, las cuotas pendientes pasan a VOID y nacen cuotas nuevas con agreementId,
+/// continuando la numeración `position` del plan.
+/// La factura electrónica DIAN la emite el proveedor externo; aquí solo su referencia.
+model Installment {
+  id                 String            @id @default(cuid())
+  institutionId      String
+  paymentPlanId      String
+  agreementId        String?
+  position           Int
+  amount             Decimal           @db.Decimal(12, 0)
+  dueOn              DateTime          @db.Date
+  status             InstallmentStatus @default(OPEN)
+  externalInvoiceRef String?
+
+  institution Institution       @relation(fields: [institutionId], references: [id])
+  paymentPlan PaymentPlan       @relation(fields: [paymentPlanId], references: [id])
+  agreement   PaymentAgreement? @relation(fields: [agreementId], references: [id])
+
+  payments Payment[]
+
+  @@unique([paymentPlanId, position])
+  @@index([institutionId, status, dueOn])
+}
+
+enum PaymentMethod {
+  TRANSFER
+  BRE_B
+  CASH
+  GATEWAY
+}
+
+/// Un abono. Se registra y se confirma en dos pasos (resumen + confirmación). Un pago se anula, nunca
+/// se borra: `voidedAt` recalcula la cuota y el estado de cuenta, con AuditLog.
+model Payment {
+  id            String        @id @default(cuid())
+  institutionId String
+  installmentId String
+  amount        Decimal       @db.Decimal(12, 0)
+  method        PaymentMethod
+  reference     String?
+  /// GATEWAY: id de la transacción en la pasarela (Wompi). Único para que el webhook sea idempotente.
+  gatewayRef    String?   @unique
+  paidAt        DateTime
+  confirmedById String?
+  confirmedAt   DateTime?
+  voidedById    String?
+  voidedAt      DateTime?
+  voidReason    String?
+  createdAt     DateTime      @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  installment Installment @relation(fields: [installmentId], references: [id])
+
+  @@index([institutionId, installmentId])
+}
+
+enum AgreementStatus {
+  ACTIVE
+  FULFILLED
+  CANCELLED
+}
+
+/// Acuerdo de pago firmado por quien paga. Evidencia de ánimo de pago; la Corte lo valora (SU-624/99).
+/// Sus cuotas son filas de Installment con agreementId. "Incumplido" se deriva (cuota del acuerdo vencida).
+model PaymentAgreement {
+  id            String          @id @default(cuid())
+  institutionId String
+  enrollmentId  String
+  payerPersonId String?
+  partnerId     String?
+  status        AgreementStatus @default(ACTIVE)
+  signedAt      DateTime
+  notes         String?
+  createdAt     DateTime        @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+  payerPerson Person?     @relation("AgreementPayerPerson", fields: [payerPersonId], references: [id])
+  partner     Partner?    @relation(fields: [partnerId], references: [id])
+
+  installments Installment[]
+
+  @@index([institutionId, enrollmentId, status])
+}
+
+/// Qué suspende la institución por mora. Todo apagado por defecto. Ningún flag toca el acceso
+/// académico de un MENOR (jurisprudencia constitucional). La suspensión de contenido para ADULTOS
+/// está pendiente de confirmación jurídica: no existe como columna hasta entonces (acceso-y-cartera.md §2).
+model RestrictionPolicy {
+  id                            String   @id @default(cuid())
+  institutionId                 String   @unique
+  requireAgreementForNextCohort Boolean  @default(false)
+  notifyPayerOnOverdue          Boolean  @default(false)
+  updatedById                   String
+  updatedAt                     DateTime @updatedAt
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+}
+
+// ───────────────────────────── Sesiones en vivo, entregas y certificados ─────────────────────────────
+
+/// Clase sincrónica de una cohorte. El MVP guarda el enlace (Zoom, Meet) y la fecha; el calendario
+/// del estudiante la muestra y el job diario recuerda. Sin integración de API de videoconferencia.
+model LiveSession {
+  id            String    @id @default(cuid())
+  institutionId String
+  cohortId      String
+  title         String
+  description   String?
+  startsAt      DateTime
+  endsAt        DateTime
+  url           String
+  /// Grabación posterior, como recurso (Vimeo) con sus subtítulos.
+  recordingId   String?
+  createdById   String
+  archivedAt    DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  cohort      Cohort      @relation(fields: [cohortId], references: [id])
+
+  @@index([institutionId, cohortId, startsAt])
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  RETURNED
+  APPROVED
+}
+
+/// Entrega de una actividad (tema con requiresSubmission): texto y/o archivo, revisada por un instructor.
+/// APPROVED completa el LessonProgress del tema con source EVIDENCE.
+model Submission {
+  id                 String           @id @default(cuid())
+  institutionId      String
+  enrollmentId       String
+  lessonAssignmentId String
+  status             SubmissionStatus @default(SUBMITTED)
+  text               String?
+  fileAssetId        String?
+  submittedAt        DateTime         @default(now())
+  reviewedById       String?
+  reviewedAt         DateTime?
+  feedback           String?
+
+  institution Institution      @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment       @relation(fields: [enrollmentId], references: [id])
+  assignment  LessonAssignment @relation(fields: [lessonAssignmentId], references: [id])
+  file        MediaAsset?      @relation(fields: [fileAssetId], references: [id])
+  reviewedBy  Person?          @relation("SubmissionReviewer", fields: [reviewedById], references: [id])
+
+  @@index([institutionId, lessonAssignmentId, status])
+  @@index([enrollmentId])
+}
+
+enum CertificateKind {
+  MODULE
+  PROGRAM
+}
+
+/// Constancia de finalización de un módulo o del programa. NO es el título de bachiller (ese lo expide
+/// quien tiene la autorización legal, fuera de la plataforma). Se emite sola al completar; `code` es
+/// público y verificable en /certificado/[code]. Nunca se condiciona a la cartera (acceso-y-cartera.md §2).
+/// SQL: índice único parcial (enrollmentId) WHERE kind = 'PROGRAM' — el @@unique de abajo no cubre
+/// moduleId NULL (Postgres trata los NULL como distintos) y el job no debe emitir dos PROGRAM.
+model Certificate {
+  id            String          @id @default(cuid())
+  institutionId String
+  enrollmentId  String
+  kind          CertificateKind
+  moduleId      String?
+  code          String          @unique
+  issuedAt      DateTime        @default(now())
+  revokedAt     DateTime?
+  revokeReason  String?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+  module      Module?     @relation(fields: [moduleId], references: [id])
+
+  @@unique([enrollmentId, kind, moduleId])
+  @@index([institutionId, issuedAt])
+}
+
+// ───────────────────────────── Operación ─────────────────────────────
+
+/// Una ejecución del importador (LearnDash u otro). Idempotente por sourceRef; `dryRun` no escribe.
+model ImportRun {
+  id            String    @id @default(cuid())
+  institutionId String
+  source        String
+  dryRun        Boolean   @default(true)
+  startedById   String
+  startedAt     DateTime  @default(now())
+  finishedAt    DateTime?
+  /// Conteos por entidad, duplicados fusionados, filas rechazadas con motivo.
+  summary       Json?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+
+  @@index([institutionId, startedAt])
+}
+
+/// Append-only. Cambios de nota, ajustes, cartera, roles, política, versión asignada, excepciones de legado,
+/// lecturas de PII. `entity`/`action` son literales del catálogo en packages/types.
+model AuditLog {
+  id            BigInt   @id @default(autoincrement())
+  institutionId String
+  actorId       String?
+  entity        String
+  entityId      String
+  action        String
+  before        Json?
+  after         Json?
+  occurredAt    DateTime @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+
+  @@index([institutionId, entity, entityId])
+  @@index([institutionId, occurredAt])
+}
+
+/// Aviso en la plataforma (centro de notificaciones). El correo es un canal más; esto es la fuente.
+/// `dedupeKey` evita repetir el mismo aviso el mismo día ("overdue:<installmentId>:2026-09-14").
+model Notification {
+  id            String    @id @default(cuid())
+  institutionId String
+  personId      String
+  type          String
+  title         String
+  body          String
+  href          String?
+  dedupeKey     String?
+  readAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@unique([personId, dedupeKey])
+  @@index([personId, readAt])
+}
+
+// ───────────────────────────── Invitaciones ─────────────────────────────
+
+/// Invitación para acceder a la plataforma. El token se hashea antes de guardar.
+/// Reinvitar crea una nueva fila (historial). `acceptedAt` marca que se usó.
+/// Decisión de plan/03-identidad-y-acceso.md §"Datos que faltan".
+model Invitation {
+  id            String    @id @default(cuid())
+  institutionId String
+  personId      String
+  tokenHash     String
+  expiresAt     DateTime
+  acceptedAt    DateTime?
+  createdById   String
+  createdAt     DateTime  @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  person      Person      @relation(fields: [personId], references: [id])
+  createdBy   Person      @relation("InvitationCreator", fields: [createdById], references: [id])
+
+  @@index([institutionId, personId])
+  @@index([tokenHash])
+}

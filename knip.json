@@ -1,0 +1,70 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    ".": {
+      "ignoreDependencies": ["@prisma/client"]
+    },
+    "apps/web": {
+      "entry": [
+        "app/**/*.{ts,tsx}",
+        "lib/db/*.ts",
+        "lib/http/*.ts",
+        "lib/observability/*.ts",
+        "lib/core/*.ts",
+        "lib/media/*.ts",
+        "lib/a11y/*.{ts,tsx}",
+        "lib/i18n/*.ts",
+        "lib/auth/*.ts",
+        "lib/authz/*.ts",
+        "lib/utils.ts",
+        "components/**/*.{ts,tsx}",
+        "__tests__/**/*.{ts,tsx}",
+        ".storybook/*.ts"
+      ],
+      "project": ["**/*.{ts,tsx}"],
+      "ignoreDependencies": ["@colombia-estudia/types"]
+    },
+    "packages/domain": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/types": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/design-tokens": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/config": {
+      "entry": ["jest/esm.js"],
+      "project": ["**/*.js"]
+    },
+    "packages/scripts": {
+      "entry": ["**/*.ts"],
+      "project": ["**/*.ts"],
+      "ignoreDependencies": ["@faker-js/faker"]
+    }
+  },
+  "ignoreDependencies": [
+    "@radix-ui/react-dialog",
+    "@radix-ui/react-dropdown-menu",
+    "@radix-ui/react-select",
+    "@radix-ui/react-tabs",
+    "@radix-ui/react-toast",
+    "@radix-ui/react-tooltip",
+    "@radix-ui/react-visually-hidden",
+    "@tanstack/react-query",
+    "date-fns-tz",
+    "pino-pretty",
+    "wait-on",
+    "@axe-core/playwright",
+    "eslint-config-next",
+    "eslint-plugin-jsx-a11y",
+    "eslint-plugin-storybook",
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser",
+    "postcss-load-config",
+    "@swc/core",
+    "jest-environment-jsdom",
+    "jsdom"
+  ],
+  "ignoreBinaries": ["only-allow", "playwright", "vercel", "wait-on"]
+}

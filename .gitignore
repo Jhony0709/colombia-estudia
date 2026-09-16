@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.next/
+.turbo/
+dist/
+out/
+storybook-static/
+
+# Environment files (except example)
+.env
+.env.*
+!.env.example
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma
+prisma/migrations/**/migration.lock
+
+# Cache
+*.tsbuildinfo
+.eslintcache
+
+# Debug logs
+npm-debug.log*
+pnpm-debug.log*
+debug.log
+
+# Claude local settings
+.claude/settings.local.json
