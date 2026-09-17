@@ -1105,3 +1105,60 @@ Object.checkControlGroups`.
 | `apps/web/playwright.config.ts`       | `mobile-320px` fijado a chromium (iPhone SE implicaba webkit)                 |
 | `apps/web/__tests__/e2e/auth.spec.ts` | Locator de la alerta acotado a `main [role="alert"]`                          |
 | `apps/web/.pa11yci`                   | `runners: ["axe"]` (htmlcs se cae con `type=email` + `autocomplete=username`) |
+
+### Septima tanda (17/9) — pa11y analizo la pagina de error de Next, no el login
+
+Los dos errores de axe ("Documents must have <title>", "<html> element must have a lang
+attribute") no son de la pantalla de login: el propio log muestra el HTML analizado,
+`<html id="__next_error__">`. Ese es el **documento de error interno de Next**, que no lleva
+`lang` ni `<title>`. O sea: el servidor devolvio un 500 en `/auth/login` y axe audito esa
+pagina de error.
+
+**Lo que si esta verificado:**
+
+- El HTML auditado es el documento de error de Next (`id="__next_error__"`), no el login.
+- La app **no tiene ningun** `error.tsx`, `global-error.tsx` ni `not-found.tsx`
+  (`find apps/web/app -name "*error*.tsx" -o -name "not-found.tsx"` → vacio), asi que cualquier
+  fallo de servidor o cualquier 404 cae en ese documento crudo, en ingles y sin marcar idioma.
+- pa11y reporto la URL final `/auth/login`, o sea que el redirect del middleware desde `/` si
+  funciono y el navegador si llego a la ruta del login.
+- **En la corrida anterior esa misma pagina renderizo bien**: htmlcs se cayo dentro de
+  `checkControlGroups` procesando un token de `autocomplete`, y a esa rama solo se llega si hay
+  un control de formulario real con ese atributo en el DOM. Habia formulario.
+- El codigo de la app **no cambio entre las dos corridas**: el unico archivo tocado despues de
+  las 18:01 es `app/layout.tsx` a las 19:01 (el `force-dynamic`), que ya estaba en la corrida
+  anterior. Lo demas que toque fue `playwright.config.ts`, `auth.spec.ts` y `.pa11yci`.
+
+Es decir: **mismo codigo, un 500 intermitente**.
+
+**Una hipotesis que descarte antes de proponerla** (la anoto porque era la mas obvia): que el
+middleware reventara al llamar a `supabase.auth.getUser()` contra
+`https://placeholder.supabase.co`. No es eso. Con peticion anonima (sin cookie de sesion)
+`getUser()` **no hace ninguna llamada de red**: devuelve `AuthSessionMissingError` directamente
+(`@supabase/auth-js@2.116.0/dist/main/GoTrueClient.js`, `_getUser` → `_useSession`, rama
+`!data.session?.access_token`). Asi que "Supabase inalcanzable en CI" queda descartado como
+causa.
+
+No tengo evidencia de que es lo que revienta, y no voy a inventarla. Lo que falta es el stack
+del servidor, que hasta ahora se perdia: el job arrancaba `pnpm start &` y su salida no quedaba
+en ningun lado, solo se veia el HTML de error que devolvia.
+
+**Cambio aplicado**: el job `pa11y` manda la salida de `next start` a `/tmp/next-server.log` y
+un paso con `if: failure()` la vuelca. La proxima corrida que falle trae el stack y el `digest`
+del error.
+
+**Dos cosas que NO hice a proposito:**
+
+1. No agregue `global-error.tsx` / `not-found.tsx` todavia, aunque falten y haya que ponerlos.
+   Si los agrego ahora, el 500 dejaria de verse: pa11y auditaria una pagina de error bonita,
+   con `lang` y `<title>`, y **pasaria en verde con el servidor roto**. Primero se entiende el
+   500; despues se ponen, junto con su version en espanol.
+2. Relacionado: pa11y audita felizmente un 500 y solo reporta accesibilidad — no mira el codigo
+   HTTP. Vale la pena que el job falle ante cualquier respuesta que no sea 200 antes de auditar
+   (un `curl -f` previo, por ejemplo). Pendiente de decidir.
+
+### Archivos modificados en esta tanda
+
+| Archivo                    | Cambio                                                                   |
+| -------------------------- | ------------------------------------------------------------------------ |
+| `.github/workflows/ci.yml` | Job `pa11y`: log de `next start` a archivo + volcado con `if: failure()` |

@@ -102,13 +102,18 @@ jobs:
       - name: Start server and run pa11y
         run: |
           cd apps/web
-          pnpm start &
+          # El log del servidor va a un archivo y se vuelca si algo falla: sin esto, cuando
+          # una pagina responde 500 solo se ve el HTML de error de Next y no el stack.
+          pnpm start > /tmp/next-server.log 2>&1 &
           npx wait-on http://localhost:3000 --timeout 60000
           pnpm a11y
         env:
           NODE_ENV: production
           NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+      - name: Log del servidor (si fallo)
+        if: failure()
+        run: cat /tmp/next-server.log
 
   e2e:
     needs: build
