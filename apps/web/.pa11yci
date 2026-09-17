@@ -3,7 +3,8 @@
     "timeout": 30000,
     "wait": 1000,
     "standard": "WCAG2AA",
-    "runners": ["axe", "htmlcs"],
+    "runners": ["axe"],
+    "_comment_runners": "htmlcs desactivado: html_codesniffer@2.5.1 (build/HTMLCS.js, checkControlGroups) revienta con \"Cannot read property 'replace' of undefined\" ante un input[type=email][autocomplete=username]. Su lista de controles validos para el token 'username' solo admite text/search/hidden/textarea/select, asi que entra a la rama de error, y la traduccion 1_3_5_H98.InvalidAutoComplete_Text no existe en ese build: el runner lanza y tumba toda la URL. El HTML es correcto (la spec permite autocomplete=username en type=email) y el e2e lo comprueba (auth.spec.ts:105). Revisar si html_codesniffer lo arregla.",
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     }

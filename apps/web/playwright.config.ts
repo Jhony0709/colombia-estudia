@@ -20,6 +20,12 @@ export default defineConfig({
       name: 'mobile-320px',
       use: {
         ...devices['iPhone SE'],
+        // devices['iPhone SE'] trae defaultBrowserType: 'webkit'. Lo que este proyecto
+        // comprueba es el reflow a 320px (WCAG 1.4.10), no Safari, y el CI solo instala
+        // chromium: sin esto los 5 tests fallan por falta del binario de webkit.
+        // Si algun dia se quiere cobertura real de Safari, se instala webkit en el job
+        // `e2e` y se quita esta linea.
+        browserName: 'chromium',
         viewport: { width: 320, height: 568 },
       },
     },

@@ -96,8 +96,10 @@ test.describe('Auth flows', () => {
     await page.fill('input[name="password"]', 'wrongpassword');
     await page.click('button[type="submit"]');
 
-    // Wait for error to appear
-    const alert = page.locator('[role="alert"]');
+    // Ojo con el locator: ademas de esta alerta, el layout raiz monta una live region
+    // permanente con role="alert" (lib/a11y/announce.tsx:65), hermana de <main>. Un
+    // '[role="alert"]' a secas resuelve a 2 elementos y Playwright falla por strict mode.
+    const alert = page.locator('main [role="alert"]');
     await expect(alert).toBeVisible();
     await expect(alert).toContainText('Correo o contraseña incorrectos');
   });

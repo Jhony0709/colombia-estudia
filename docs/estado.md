@@ -1047,3 +1047,61 @@ De paso quité `SKIP_ENV_VALIDATION: '1'` de ese job: no lo lee nadie en el repo
 | -------------------------- | ------------------------------------------------------------------------------- |
 | `apps/web/app/layout.tsx`  | `export const dynamic = 'force-dynamic'` + el porqué (CSP con nonce)            |
 | `.github/workflows/ci.yml` | Job `build`: `NEXT_PUBLIC_*` placeholders; fuera `SKIP_ENV_VALIDATION` (inerte) |
+
+### Sexta tanda (16/9) — e2e 8/15 en verde, y los 7 que quedaban
+
+El `force-dynamic` funcionó: de 15 fallos a 8 tests en verde. Los 7 restantes eran dos cosas
+distintas, y la aritmética lo delata: 5 fallos son _todo_ el proyecto `mobile-320px`, y los
+otros 2 son un único test que cae en los otros dos proyectos.
+
+9. **`mobile-320px` fallaba entero: corría en WebKit, que el CI no instala**
+   `playwright.config.ts` define ese proyecto con `...devices['iPhone SE']` y sin `browserName`.
+   Ese descriptor trae `defaultBrowserType: "webkit"` (verificado en
+   `playwright-core@1.63.0/lib/coreBundle.js`, entrada `"iPhone SE"`), así que Playwright
+   intentaba lanzar WebKit mientras el job solo hace `playwright install … chromium`. De ahí
+   que fallaran los 5 tests del proyecto y ninguno de los otros dos.
+   **Fix**: `browserName: 'chromium'` explícito en ese proyecto. Lo que comprueba es el reflow a
+   320px (WCAG 1.4.10), no Safari. Si algún día se quiere cobertura real de Safari, se añade
+   `webkit` al `playwright install` del job `e2e` y se quita esa línea.
+
+10. **`login shows error on invalid credentials`: el locator resolvía a dos elementos**
+    El test hacía `page.locator('[role="alert"]')`. En esta app hay **dos** elementos con ese
+    rol en cuanto aparece el error: la alerta visible
+    (`login-content.tsx:141`, `<Alert severity="error">`) y la _live region_ permanente que el
+    layout raíz monta para anuncios de lector de pantalla
+    (`lib/a11y/announce.tsx:65`, `role="alert" aria-live="assertive" class="sr-only"`), que es
+    hermana de `<main>` y está en todas las páginas. Los locators de Playwright son estrictos:
+    dos coincidencias = fallo, en los tres proyectos por igual. Los tests de teclado no tocan
+    `[role="alert"]`, por eso pasaban.
+    **Fix**: acotar el locator a `main [role="alert"]` (la live region queda fuera de `<main>`),
+    con el porqué escrito en el test. Es un bug del test, no del producto: tener una live region
+    assertive permanente además de la alerta renderizada es correcto.
+
+11. **`pa11y` — no es la página, es el runner htmlcs, que se cae**
+    `Evaluation failed: TypeError: Cannot read property 'replace' of undefined at
+Object.checkControlGroups`.
+    En `html_codesniffer@2.5.1/build/HTMLCS.js`, la función `checkControlGroups` (sniff H98 de
+    WCAG 1.3.5, "Identify Input Purpose") hace
+    `e.getAttribute("autocomplete").split(" ")` y, para el token `username`, considera válidos
+    **solo** `input[type=hidden|text|search]`, `textarea` y `select`. Nuestro campo de correo es
+    `input[type="email"][autocomplete="username"]`, así que entra en la rama de error… y ahí
+    llama a `HTMLCS.getTranslation("1_3_5_H98.InvalidAutoComplete_Text").replace(...)`, cadena
+    que **no existe** en ese build. `undefined.replace` → excepción → el runner tumba la URL
+    entera y pa11y reporta "Failed to run".
+    Es doble bug de la herramienta: la lista de controles está mal (la spec HTML permite
+    `autocomplete="username"` en `type="email"`, y nuestro e2e lo comprueba a propósito en
+    `auth.spec.ts:105`) y encima el falso positivo revienta en vez de reportarse.
+    No se puede silenciar con `ignore`, porque eso filtra _resultados_ y aquí lo que hay es una
+    excepción del runner.
+    **Fix**: `.pa11yci` pasa a `"runners": ["axe"]`, con la explicación dentro del propio JSON.
+    Se pierde la segunda opinión de HTMLCS; axe es el motor mantenido y sigue cubriendo WCAG2AA.
+    Si lo quieres de vuelta, las opciones son parchear `html_codesniffer` con `pnpm patch` o
+    esperar a upstream (2.5.1 lleva años sin publicar).
+
+### Archivos modificados en esta tanda
+
+| Archivo                               | Cambio                                                                        |
+| ------------------------------------- | ----------------------------------------------------------------------------- |
+| `apps/web/playwright.config.ts`       | `mobile-320px` fijado a chromium (iPhone SE implicaba webkit)                 |
+| `apps/web/__tests__/e2e/auth.spec.ts` | Locator de la alerta acotado a `main [role="alert"]`                          |
+| `apps/web/.pa11yci`                   | `runners: ["axe"]` (htmlcs se cae con `type=email` + `autocomplete=username`) |
