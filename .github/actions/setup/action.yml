@@ -1,0 +1,22 @@
+name: Setup
+description: Setup Node.js, pnpm, and install dependencies
+
+runs:
+  using: composite
+  steps:
+    # No `version` here: package.json `packageManager` (pnpm@9.0.0) is the single source; giving
+    # both makes the action fail with "Multiple versions of pnpm specified" (first CI run, 16/9).
+    - uses: pnpm/action-setup@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Generate Prisma client
+      shell: bash
+      run: pnpm db:generate

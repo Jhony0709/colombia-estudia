@@ -12,8 +12,9 @@ ajustes razonables (PIAR), cartera por cuotas y aliados B2B. Multitenant, accesi
 3. [`reference/04-business-logic/acceso-y-cartera.md`](reference/04-business-logic/acceso-y-cartera.md) — capacidades y la regla de mora.
 4. [`PRODUCT_DECISIONS.md`](PRODUCT_DECISIONS.md) — lo decidido y lo pendiente.
 5. [`ROADMAP.md`](ROADMAP.md) — el vertical slice y las fases.
-6. [`DESIGN.md`](DESIGN.md) y `.claude/skills/` — el contrato de diseño y las skills obligatorias para UI.
-7. [`reference/00-index.md`](reference/00-index.md) — el resto.
+6. [`plan/00-index.md`](plan/00-index.md) — cómo se construye cada fase: estructura, middleware, login, seguridad, datos, UX, proceso.
+7. [`DESIGN.md`](DESIGN.md) y `.claude/skills/` — el contrato de diseño y las skills obligatorias para UI.
+8. [`reference/00-index.md`](reference/00-index.md) — el resto.
 
 ## Estado
 
@@ -25,4 +26,5 @@ Fase 0 (dominio en papel) cerrada el 14/9/2026 tras una auditoría de tres panel
 ## Reglas para trabajar aquí
 
 Están en [`CLAUDE.md`](CLAUDE.md). Aplican a personas y a agentes por igual.
+
 # colombia-estudia

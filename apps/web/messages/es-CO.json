@@ -1,0 +1,70 @@
+{
+  "a11y": {
+    "skipToContent": "Ir al contenido"
+  },
+  "invitation": {
+    "welcome": "Bienvenido",
+    "welcomeMessage": "Hola {name}, tienes una invitación de {institution}.",
+    "continue": "Continuar",
+    "createPassword": "Crea tu contraseña",
+    "password": "Contraseña",
+    "passwordHint": "Mínimo 12 caracteres",
+    "dataPolicy": "Política de datos",
+    "acceptPolicy": "Acepto la política de tratamiento de datos",
+    "viewPolicy": "Ver política",
+    "createAccount": "Crear cuenta",
+    "success": "¡Cuenta creada!",
+    "successMessage": "Tu cuenta ha sido creada exitosamente.",
+    "redirecting": "Redirigiendo...",
+    "expired": "Esta invitación ha expirado",
+    "used": "Esta invitación ya fue utilizada",
+    "alreadyRegistered": "Ya tienes una cuenta registrada",
+    "notFound": "Invitación no válida",
+    "errorTitle": "Error",
+    "requestNew": "Pedir nueva invitación",
+    "requestSent": "Solicitud enviada",
+    "requestSentDetail": "Hemos notificado al equipo. Te contactarán pronto.",
+    "goToLogin": "Ir a iniciar sesión",
+    "goToHome": "Ir al inicio",
+    "minorNotice": "Tu acudiente firmó el consentimiento de datos en tu matrícula.",
+    "consentRequired": "Debes aceptar la política de datos para continuar",
+    "genericError": "Ocurrió un error. Intenta de nuevo."
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "magicLink": "Entrar con enlace por correo",
+    "invalidCredentials": "Correo o contraseña incorrectos",
+    "recover": "Recuperar contraseña",
+    "recoverInstructions": "Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.",
+    "recoverSuccess": "Si el correo existe, recibirás un enlace",
+    "reset": "Restablecer contraseña",
+    "newPassword": "Nueva contraseña",
+    "passwordHint": "Mínimo 12 caracteres",
+    "resetSuccess": "Contraseña actualizada",
+    "mfa": "Verificación en dos pasos",
+    "mfaEnroll": "Escanea el código QR con tu aplicación de autenticación",
+    "mfaCode": "Código de verificación",
+    "mfaVerify": "Verificar",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "submit": "Continuar",
+    "backToLogin": "Volver a iniciar sesión",
+    "callbackError": "Error al iniciar sesión. Intenta de nuevo.",
+    "emailRequired": "Escribe tu correo para enviarte el enlace",
+    "magicLinkSent": "Si el correo existe, te enviamos un enlace para entrar. Revisa tu bandeja.",
+    "magicLinkError": "No pudimos enviar el enlace. Intenta de nuevo.",
+    "orMagicLink": "¿Prefieres no usar contraseña?"
+  },
+  "button": {
+    "loading": "Cargando…"
+  },
+  "noAccess": {
+    "title": "Sin acceso",
+    "message": "No tienes acceso a ninguna área de la plataforma.",
+    "contact": "Contacta a {email} para más información."
+  }
+}

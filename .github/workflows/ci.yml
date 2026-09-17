@@ -1,0 +1,169 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm lint
+      - run: pnpm lint:arch
+      - run: pnpm knip
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm type-check
+
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm test:unit -- --coverage
+
+  test-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm db:generate
+      - run: pnpm db:migrate:deploy
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+          DIRECT_URL: postgres://postgres:postgres@localhost:5432/test
+      - run: pnpm test:integration
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+          RUN_DB_TESTS: '1'
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm build
+        env:
+          # Las NEXT_PUBLIC_* se incrustan en el bundle de cliente en tiempo de BUILD;
+          # ponerlas solo en pa11y/e2e (runtime) llega tarde para el codigo de navegador.
+          # Mismos placeholders que usan esos jobs, para que el artifact sea coherente.
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
+          # `.next` empieza por punto: upload-artifact@v4 (>=4.4) excluye archivos ocultos
+          # por defecto. Sin esto no se sube ningun archivo, el paso solo avisa
+          # ("No files were found with the provided path"), el job queda verde y
+          # pa11y/e2e fallan con "Artifact not found for name: build".
+          include-hidden-files: true
+          if-no-files-found: error
+          path: |
+            apps/web/.next
+            apps/web/public
+
+  pa11y:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: apps/web
+      - name: Start server and run pa11y
+        run: |
+          cd apps/web
+          # El log del servidor va a un archivo y se vuelca si algo falla: sin esto, cuando
+          # una pagina responde 500 solo se ve el HTML de error de Next y no el stack.
+          pnpm start > /tmp/next-server.log 2>&1 &
+          npx wait-on http://localhost:3000 --timeout 60000
+          pnpm a11y
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+      - name: Log del servidor (si fallo)
+        if: failure()
+        run: cat /tmp/next-server.log
+
+  e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: apps/web
+      - run: pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium
+      - name: Run e2e tests
+        run: pnpm test:e2e
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+
+  storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm --filter @colombia-estudia/web storybook:build
+      - run: pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium
+      - name: Run storybook tests
+        run: |
+          npx http-server apps/web/storybook-static -p 6006 &
+          npx wait-on http://localhost:6006 --timeout 60000
+          pnpm --filter @colombia-estudia/web test-storybook
+
+  security:
+    runs-on: ubuntu-latest
+    # gitleaks-action necesita leer los commits del PR via API (GET /pulls/:n/commits);
+    # el permission set por defecto del workflow (contents: read) no alcanza -> 403
+    # "Resource not accessible by integration".
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/setup
+      # Blocking: production dependencies only
+      - run: pnpm audit --audit-level high --prod
+      # Informative: all dependencies
+      - run: pnpm audit --audit-level high
+        continue-on-error: true
