@@ -39,6 +39,11 @@ function escapeHtml(s: string): string {
  */
 function formatDate(d: Date): string {
   return d.toLocaleDateString('es-CO', {
+    // Explicito a proposito: el servidor de Vercel corre en UTC y `TZ` es una variable
+    // reservada que no se puede fijar ahi. Sin esto, una fecha entre las 19:00 y la
+    // medianoche de Bogota se renderiza con el dia siguiente. Mismo criterio que
+    // packages/domain/src/dates.ts.
+    timeZone: 'America/Bogota',
     day: 'numeric',
     month: 'long',
     year: 'numeric',

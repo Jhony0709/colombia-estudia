@@ -34,12 +34,16 @@ describe('renderInvitationEmail', () => {
     expect(html).not.toContain('<Company>');
   });
 
-  it('formats date in Spanish', () => {
+  it('formats date in Spanish, in Bogota time', () => {
     const { html, text } = renderInvitationEmail(baseData);
 
-    // Check for Spanish month name (septiembre)
-    expect(html).toMatch(/23.*septiembre.*2026/i);
-    expect(text).toMatch(/23.*septiembre.*2026/i);
+    // expiresAt es 2026-09-23T00:00:00Z, que en Bogota (UTC-5) son las 19:00 del **22**.
+    // La fecha que ve el destinatario tiene que ser la suya, no la del servidor: decirle 23
+    // le haria creer que tiene todo ese dia. La instancia se eligio justo en esa franja para
+    // que el test falle si alguien quita el `timeZone` de formatDate y vuelve a depender de
+    // la TZ del proceso (en Vercel, UTC; `TZ` es variable reservada y no se puede fijar).
+    expect(html).toMatch(/22.*septiembre.*2026/i);
+    expect(text).toMatch(/22.*septiembre.*2026/i);
   });
 
   it('uses neutral copy - tienes una invitación', () => {

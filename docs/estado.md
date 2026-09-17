@@ -1162,3 +1162,126 @@ del error.
 | Archivo                    | Cambio                                                                   |
 | -------------------------- | ------------------------------------------------------------------------ |
 | `.github/workflows/ci.yml` | Job `pa11y`: log de `next start` a archivo + volcado con `if: failure()` |
+
+### CI en verde (17/9)
+
+Todos los jobs pasan: `lint`, `type-check`, `test-unit`, `test-integration`, `build`,
+`storybook`, `security`, `pa11y`, `e2e`. Se cerraron 12 fallos en siete tandas, desde el
+conflicto de versiones de pnpm hasta el `force-dynamic`.
+
+**Ojo con dar por cerrado el 500 de `pa11y`.** Esa corrida fallaba de forma intermitente y esta
+vez paso; nunca se vio el stack, asi que **no esta diagnosticado, solo no se reprodujo**. El
+instrumento ya esta puesto (el job vuelca `/tmp/next-server.log` con `if: failure()`), asi que
+si reaparece traera el stack. Si vuelve a verse un `<html id="__next_error__">` en cualquier
+entorno, ese es el hilo del que tirar.
+
+### Abierto, por orden de importancia
+
+1. **El 500 intermitente de `/auth/login`** — sin diagnosticar (arriba).
+2. **Faltan `global-error.tsx` y `not-found.tsx`** (en espanol, con `lang` y `<title>`). Ahora
+   se pueden agregar, pero **junto con** una comprobacion de codigo HTTP en el job `pa11y`
+   (un `curl -f` antes de auditar): si no, una pagina de error accesible haria pasar en verde
+   un servidor roto.
+3. **`htmlcs` desactivado en pa11y** (`.pa11yci`): se perdio la segunda opinion sobre WCAG.
+   Revisar si `html_codesniffer` arregla el crash de `checkControlGroups`, o parchearlo con
+   `pnpm patch`.
+4. **`mobile-320px` corre en chromium, no en WebKit** (`playwright.config.ts`): el reflow a
+   320px si se cubre; Safari real no. Decidir si se instala `webkit` en el job `e2e`.
+5. **Override de `rollup`** en `package.json`: sigue con la nota de riesgo/rollback por si
+   rompe el build de Vercel.
+6. **Permiso `pull-requests: write`** para que gitleaks pueda comentar en el PR (hoy solo
+   `read`, y avisa que no puede comentar). Cosmetico.
+
+### Pendiente tuyo (infra, no codigo)
+
+- Mergear el PR.
+- Proyecto en Vercel: variables por `reference/08-env-vars.md`, dominio de staging y la redirect
+  URL en Supabase (`https://<dominio>/auth/callback`).
+- Correr `institution:create` contra staging con `ADMIN_PASSWORD` fuera de banda.
+- El recorrido manual de `plan/02-fundaciones.md:121-122`: login de ADMIN con TOTP → `/api/me`
+  → `/admin/institucion`, con teclado y con VoiceOver.
+- `RESEND_API_KEY`.
+
+### Vercel — deteccion de framework (17/9)
+
+Al importar en Vercel, el build fallo dos veces por la misma raiz: no detectaba Next.
+
+1. `No Output Directory named "public"` — el Root Directory habia quedado en la raiz del
+   monorepo, y ahi `package.json` no tiene `next` (su build es `turbo build`), asi que Vercel
+   cayo al preset generico "Other", que espera `public/` como salida. Se corrige poniendo
+   Root Directory = `apps/web` **con la opcion de incluir archivos fuera del root activada**
+   (el build de `apps/web` lee `../../prisma/schema.prisma` y los paquetes del workspace).
+2. `No Output Directory named "dist"` — ya mirando `apps/web`, Vercel detecto **Vite** en vez
+   de Next: `apps/web/package.json` declara `vite: ^5` como dependencia directa, arrastrada por
+   `@storybook/nextjs-vite@9.1.20` desde la migracion de Storybook 9. El preset Vite espera
+   `dist/`.
+
+**Fix duradero**: `apps/web/vercel.json` nuevo con `{"framework": "nextjs"}`. Vercel lee el
+`vercel.json` del Root Directory, asi que queda fijado en el repo y no depende de que alguien
+acierte el preset en el dashboard al reimportar o al crear otro proyecto.
+
+| Archivo                | Cambio                           |
+| ---------------------- | -------------------------------- |
+| `apps/web/vercel.json` | Nuevo — fija `framework: nextjs` |
+
+### Primer deploy en Vercel (17/9)
+
+Build verde desde el CLI. Dominio de produccion asignado: `colombia-estudia.vercel.app`.
+**El build compile no significa que la app funcione**: este deploy salio sin variables de
+entorno, asi que cualquier ruta que toque base de datos responde 500.
+
+Orden para dejarlo utilizable (importa el orden):
+
+1. Cargar en Vercel (Production y Preview) las siete de `reference/08-env-vars.md`:
+   `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SUPABASE_URL`,
+   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`,
+   `NEXT_PUBLIC_APP_URL=https://colombia-estudia.vercel.app`, `TZ=America/Bogota`.
+2. Correr `institution:create` contra staging. Sin la fila de `Institution` con slug
+   `colombia-estudia`, `resolveInstitutionBySlug` devuelve null y `getRequestContext` lanza el
+   error de despliegue: la app queda rota aunque las variables esten bien.
+3. Anadir `https://colombia-estudia.vercel.app/auth/callback` a las redirect URLs de Supabase,
+   o el callback PKCE (recuperacion y magic link) no cierra.
+4. Redesplegar **con build nuevo** (`vercel --prod`), no un redeploy del output anterior: las
+   `NEXT_PUBLIC_*` se incrustan en el bundle de cliente en tiempo de build.
+5. Humo: `/api/health` primero, `/auth/login` despues.
+
+Nota sobre desplegar desde local: `vercel --prod` sube el arbol de trabajo tal cual, con lo que
+tengas sin commitear. Produccion deberia salir de `main` via Git (`vercel git connect`), como
+dice `plan/02`; el deploy local sirve para desbloquear, no como via permanente.
+
+### `TZ` es variable reservada en Vercel (17/9)
+
+Vercel no deja fijar `TZ`, asi que sus runtimes corren en UTC. Fueron seis variables, no siete.
+
+**No es un problema de correccion, pero destapó un bug de verdad.** Revise todo el codigo que
+formatea fechas: `packages/domain/src/dates.ts:9-21` ya fija `America/Bogota` de forma
+explicita en el `Intl.DateTimeFormat` y calcula el fin de dia con el offset UTC-5 a mano, y
+nada en el repo lee `process.env.TZ` (grep en `packages` y `apps/web`: cero resultados). Pero
+habia una excepcion:
+
+`apps/web/lib/mail/templates/invitation.ts:41` formateaba la fecha de expiracion con
+`toLocaleDateString('es-CO', …)` **sin `timeZone`**, o sea en la zona del proceso. Comprobado:
+
+```
+new Date('2026-09-23T00:00:00.000Z')
+  sin timeZone (proceso UTC) → 23 de septiembre de 2026
+  con America/Bogota         → 22 de septiembre de 2026
+```
+
+En Vercel, cualquier expiracion entre las 19:00 y la medianoche de Bogota le habria dicho al
+destinatario un dia de mas — justo el dia en que la invitacion ya no sirve. Lo enmascaraba el
+`TZ=America/Bogota` del entorno local; al no poder fijarlo en Vercel, aparecio.
+
+**Fix**: `timeZone: 'America/Bogota'` explicito en `formatDate`, con el mismo criterio que el
+paquete de dominio.
+
+El test `invitation.test.ts` esperaba `23 de septiembre`, o sea codificaba el comportamiento
+equivocado (pasaba porque el runner de CI corre en UTC). Ahora espera `22` y la instancia de
+prueba (`2026-09-23T00:00:00.000Z`) esta elegida a proposito dentro de esa franja, con el
+porque escrito, para que falle si alguien quita el `timeZone` y vuelve a depender del entorno.
+
+| Archivo                                                     | Cambio                                       |
+| ----------------------------------------------------------- | -------------------------------------------- |
+| `apps/web/lib/mail/templates/invitation.ts`                 | `timeZone: 'America/Bogota'` en `formatDate` |
+| `apps/web/__tests__/unit/mail/templates/invitation.test.ts` | Espera la fecha en Bogota (22, no 23)        |
+| `reference/08-env-vars.md`                                  | Fila de `TZ`: local/CI, reservada en Vercel  |
