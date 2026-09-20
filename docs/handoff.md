@@ -33,12 +33,20 @@ contenido, una fuente / N cohortes con aliados B2B, cartera que respeta la juris
 
 ## Estado
 
-- **Fase 0 cerrada.** No hay código de aplicación. `prisma/schema.prisma` (35 modelos) pasa
-  `prisma validate`. Todo `reference/` está escrito salvo el catálogo de componentes, que
-  nace con el primer componente.
-- **Repositorio git en `main` con remoto `origin`** (14/9). Los commits los hace Jhonny.
-- Las dos skills ya están en `.claude/skills/`.
-- **Fase 1 empieza por `packages/domain` con tests**, no por pantallas. Ver `ROADMAP.md`.
+El detalle por fase está en `docs/estado.md`, que es el documento que se actualiza. Esto es
+solo el resumen para orientarse (18/9/2026):
+
+- **Fases 0, 1 y 2 cerradas.** Fundaciones, observabilidad, CI/CD, auth con MFA e
+  invitaciones, institución, programas, módulos, asignaturas, cohortes, matrículas,
+  personas, acudencias, consentimientos, carga CSV y notificaciones.
+- **Fase 3 (contenido) avanzada**: temas, evaluaciones, versiones, publicación, validación,
+  media y Vimeo. Falta el importador de LearnDash y el pipeline de OCR.
+- **Fase 4 (aprender y evaluar) iniciada**: `features/learn` tiene los servicios de cohorte
+  y de tema; falta todo el camino del intento (presentar, autoguardar, entregar, calificar).
+- **Fase 5 (cartera) sin empezar**: `features/billing` está vacía.
+- `prisma/schema.prisma` tiene **36 modelos** y pasa `prisma validate`. Dos migraciones.
+- **Repositorio git en `main` con remoto `origin`.** Los commits los hace Jhonny.
+- Las tres skills están en `.claude/skills/`.
 
 ## Decisiones tomadas (14/9, tarde)
 

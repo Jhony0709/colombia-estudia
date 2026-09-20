@@ -1,28 +1,25 @@
 /**
- * POST /api/people/[personId]/reinvite
- * SSOT: reference/02-api/endpoints.md:72 ("reinvitar invalida el anterior; audita")
+ * POST /api/people/[personId]/reinvite — volver a invitar.
+ * SSOT: reference/02-api/endpoints.md:75 — "reinvitar invalida el anterior".
  *
- * Same rules as POST /api/people/invitations; the AuditLog carries `after.reinvite = true`.
+ * La invalidación no se hace aquí: `sendInvitation` vence las invitaciones pendientes antes
+ * de crear la nueva, así que el enlace viejo deja de servir en cuanto sale el nuevo correo.
  */
 
-import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
 import { getRequestContext } from '@/lib/authz/request-context';
+import { routeParam } from '@/lib/http/admin-input';
+import { APIError } from '@/lib/core/errors';
 import { sendInvitation } from '@/features/auth/server/invitations.service';
 
-const paramsSchema = z.object({
-  personId: z.string().cuid(),
-});
-
-export const POST = apiHandler({
-  capability: 'people.manage',
-})(async (req, ctx) => {
-  const { personId } = paramsSchema.parse(await ctx.params);
+export const POST = apiHandler({ capability: 'people.manage' })(async (req, ctx) => {
   const reqCtx = await getRequestContext();
+  if (!reqCtx.person) throw new APIError('Authentication required', 'UNAUTHENTICATED');
+
   return sendInvitation({
     institution: reqCtx.institution,
-    personId,
-    actorId: reqCtx.person!.id,
+    personId: await routeParam(ctx.params, 'personId'),
+    actorId: reqCtx.person.id,
     origin: req.nextUrl.origin,
     reinvite: true,
   });

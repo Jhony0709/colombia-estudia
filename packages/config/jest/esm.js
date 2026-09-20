@@ -39,6 +39,15 @@ const ESM_PACKAGES = [
   'property-information',
   'space-separated-tokens',
   'comma-separated-tokens',
+  // Entran con la cadena de render (remark-rehype → rehype-katex → rehype-sanitize →
+  // rehype-stringify, 17/9). Los cuatro son ESM puro y son los ÚNICOS de esa cadena que no
+  // caían ya en los comodines de arriba: comprobado recorriendo el árbol de dependencias.
+  'hastscript',
+  'html-void-elements',
+  'web-namespaces',
+  // Con `/` y con `+`: pnpm guarda los paquetes con ámbito como `@ungap+structured-clone`
+  // en `.pnpm/`, y como `@ungap/structured-clone` en el enlace de dentro.
+  '@ungap[+/]structured-clone',
 ].join('|');
 
 const transformIgnorePatterns = [`/node_modules/(?!(\\.pnpm/)?(${ESM_PACKAGES})(@[^/]+)?/)`];

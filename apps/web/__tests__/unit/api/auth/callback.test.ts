@@ -65,7 +65,7 @@ describe('GET /auth/callback', () => {
     expect(response.headers.get('Location')).toBe('http://localhost:3000/aprender');
   });
 
-  it('redirects to / when next is missing', async () => {
+  it('redirects to /ingresar (HOME_AFTER_LOGIN) when next is missing', async () => {
     mockExchangeCodeForSession.mockResolvedValue({ error: null });
 
     const req = new NextRequest(new URL('/auth/callback?code=valid-code', 'http://localhost:3000'));
@@ -73,10 +73,10 @@ describe('GET /auth/callback', () => {
     const response = await GET(req);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('Location')).toBe('http://localhost:3000/');
+    expect(response.headers.get('Location')).toBe('http://localhost:3000/ingresar');
   });
 
-  it('sanitizes malicious next parameter to /', async () => {
+  it('sanitizes malicious next parameter to /ingresar', async () => {
     mockExchangeCodeForSession.mockResolvedValue({ error: null });
 
     const req = new NextRequest(
@@ -86,7 +86,7 @@ describe('GET /auth/callback', () => {
     const response = await GET(req);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('Location')).toBe('http://localhost:3000/');
+    expect(response.headers.get('Location')).toBe('http://localhost:3000/ingresar');
   });
 
   it('redirects to /auth/restablecer for recovery flow (type=recovery)', async () => {

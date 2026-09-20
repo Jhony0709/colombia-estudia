@@ -293,7 +293,7 @@ describe('requireCapability', () => {
     });
 
     await expect(requireCapability('institution.manage')).rejects.toThrow('NEXT_REDIRECT');
-    expect(mockRedirect).toHaveBeenCalledWith('/');
+    expect(mockRedirect).toHaveBeenCalledWith('/ingresar');
   });
 
   it('does not redirect when capability exists', async () => {

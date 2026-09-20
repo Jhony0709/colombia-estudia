@@ -8,8 +8,17 @@
 
 'use client';
 
-import { createContext, useContext, useId, forwardRef, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useId,
+  forwardRef,
+  type ReactNode,
+  type SelectHTMLAttributes,
+} from 'react';
+import { Info } from 'lucide-react';
 import { Label } from '../label';
+import { Tooltip } from '../tooltip';
 import { Input, type InputProps } from '../input';
 import { cn } from '@/lib/utils';
 
@@ -55,6 +64,13 @@ export interface FormFieldProps {
   error?: string;
   /** Hint text displayed below input (hidden when error shown) */
   hint?: string;
+  /**
+   * Dónde va la ayuda (19/9). `below`: párrafo bajo el campo. `icon`: un icono de información
+   * junto a la etiqueta con la ayuda en tooltip, para formularios en fila donde el párrafo
+   * desalinea los campos (los filtros de Personas). En los dos casos el texto sigue en el DOM
+   * y enlazado por `aria-describedby`: el icono es un atajo de ratón, no la única vía.
+   */
+  hintPlacement?: 'below' | 'icon';
   /** Mark field as required (adds visual asterisk and aria-required) */
   required?: boolean;
   /** Child input component (should use useFormField hook) */
@@ -75,6 +91,7 @@ export interface FormFieldProps {
  */
 export function FormField({
   label,
+  hintPlacement = 'below',
   name,
   error,
   hint,
@@ -103,12 +120,33 @@ export function FormField({
   return (
     <FormFieldContext.Provider value={contextValue}>
       <div className={cn('space-y-1', className)}>
-        <Label htmlFor={inputId} required={required}>
-          {label}
-        </Label>
+        {hint && hintPlacement === 'icon' ? (
+          <span className="flex items-center gap-1">
+            <Label htmlFor={inputId} required={required}>
+              {label}
+            </Label>
+            <Tooltip label={hint} side="top">
+              {/* Solo ratón: el lector ya recibe la ayuda por aria-describedby al enfocar el campo. */}
+              <span
+                aria-hidden="true"
+                tabIndex={-1}
+                className="text-text-subtle hover:text-text inline-flex cursor-help"
+              >
+                <Info className="size-3.5" />
+              </span>
+            </Tooltip>
+          </span>
+        ) : (
+          <Label htmlFor={inputId} required={required}>
+            {label}
+          </Label>
+        )}
         {children}
         {hint && !hasError && (
-          <p id={hintId} className="type-caption text-text-muted">
+          <p
+            id={hintId}
+            className={cn('type-caption text-text-muted', hintPlacement === 'icon' && 'sr-only')}
+          >
             {hint}
           </p>
         )}
@@ -145,3 +183,45 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({ name, .
 });
 
 FormInput.displayName = 'FormInput';
+
+// ─────────────────────────── FormSelect ───────────────────────────
+
+export interface FormSelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'id'> {
+  /** Field name (for form submission) */
+  name: string;
+  /** Options to render */
+  children: ReactNode;
+}
+
+/**
+ * Native select that connects to FormField context.
+ *
+ * Native on purpose: it is the control every screen reader, every mobile keyboard and every
+ * autofill already knows. Same wiring as FormInput (id, describedby, invalid, required).
+ */
+export const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(
+  ({ name, className, children, ...props }, ref) => {
+    const fieldProps = useFormField();
+    const { hasError, ...aria } = fieldProps;
+
+    return (
+      <select
+        ref={ref}
+        name={name}
+        {...aria}
+        {...props}
+        className={cn(
+          'rounded-control bg-surface-sunken w-full border px-3 py-2',
+          'type-body text-text min-h-touch',
+          'duration-fast ease-standard transition-colors',
+          hasError ? 'border-status-error-base' : 'border-border',
+          className
+        )}
+      >
+        {children}
+      </select>
+    );
+  }
+);
+
+FormSelect.displayName = 'FormSelect';

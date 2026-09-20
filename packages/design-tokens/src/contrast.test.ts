@@ -86,15 +86,50 @@ describe('meetsUIContrast', () => {
   });
 });
 
+/*
+  `getTokenValue` navega rutas con puntos. Lo que se prueba es LA NAVEGACIÓN, no qué color
+  tiene la paleta.
+
+  Antes estos tres casos llevaban el valor clavado (`'#0F172A'`), así que el rediseño del
+  18/9 los rompió sin que hubiera nada roto: un accesor perfectamente sano fallando porque
+  cambió un color en otro archivo. Quién vigila la paleta son los pares de contraste de más
+  abajo, que sí saben decir por qué un valor está mal; un literal en un test de utilidad solo
+  sabe decir que cambió.
+
+  El objeto de prueba es propio y no la paleta, para que vuelva a pasar nunca.
+*/
 describe('getTokenValue', () => {
-  it('gets nested token values', () => {
-    expect(getTokenValue(light, 'text.default')).toBe('#0F172A');
-    expect(getTokenValue(light, 'surface.base')).toBe('#FFFFFF');
-    expect(getTokenValue(light, 'status.success.base')).toBe('#15803D');
+  const fixture = {
+    surface: { base: '#FFFFFF' },
+    text: { default: '#000000' },
+    status: { success: { base: '#15803D' } },
+    nested: { deep: { deeper: { value: '#ABCDEF' } } },
+    notAString: { value: 42 },
+  };
+
+  it('navega un nivel, dos y tres', () => {
+    expect(getTokenValue(fixture, 'surface.base')).toBe('#FFFFFF');
+    expect(getTokenValue(fixture, 'status.success.base')).toBe('#15803D');
+    expect(getTokenValue(fixture, 'nested.deep.deeper.value')).toBe('#ABCDEF');
   });
 
-  it('returns empty string for missing paths', () => {
-    expect(getTokenValue(light, 'nonexistent.path')).toBe('');
+  it('funciona sobre la forma real de la paleta', () => {
+    expect(getTokenValue(light, 'text.default')).toBe(light.text.default);
+    expect(getTokenValue(dark, 'status.success.base')).toBe(dark.status.success.base);
+  });
+
+  it('devuelve cadena vacía cuando la ruta no existe', () => {
+    expect(getTokenValue(fixture, 'nonexistent.path')).toBe('');
+  });
+
+  it('devuelve cadena vacía cuando la ruta se corta en un valor', () => {
+    // `surface.base` es una cadena: seguir bajando no puede devolver basura.
+    expect(getTokenValue(fixture, 'surface.base.más')).toBe('');
+  });
+
+  it('devuelve cadena vacía cuando lo encontrado no es una cadena', () => {
+    expect(getTokenValue(fixture, 'notAString')).toBe('');
+    expect(getTokenValue(fixture, 'notAString.value')).toBe('');
   });
 });
 

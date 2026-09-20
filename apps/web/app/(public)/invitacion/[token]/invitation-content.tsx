@@ -14,6 +14,7 @@ import { FormField } from '@/components/atoms/form-field';
 import { FormPasswordInput } from '@/components/atoms/password-input';
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
+import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
 
 interface Props {
   token: string;
@@ -41,7 +42,7 @@ export default function InvitationContent({
 
   const headingRef = useRef<HTMLHeadingElement>(null);
 
-  const nextRef = useRef<string>('/');
+  const nextRef = useRef<string>(HOME_AFTER_LOGIN);
   const alertRef = useRef<HTMLDivElement>(null);
 
   // Focus heading on step change
@@ -234,7 +235,7 @@ export default function InvitationContent({
               type="checkbox"
               checked={acceptsPolicy}
               onChange={(e) => setAcceptsPolicy(e.target.checked)}
-              className="border-border-default text-accent-base focus:ring-accent-base mt-1 h-5 w-5 rounded"
+              className="border-border text-accent-base focus:ring-accent-base mt-1 h-5 w-5 rounded"
             />
             <span className="type-body text-text">
               {t('acceptPolicy')}{' '}
@@ -243,7 +244,7 @@ export default function InvitationContent({
                   href={dataPolicyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent-base hover:underline"
+                  className="text-text-link underline"
                 >
                   {t('viewPolicy')}
                 </a>

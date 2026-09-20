@@ -75,7 +75,8 @@ mora en adultos y plan de Vimeo (antes de producción).
 
 ### Fase 3 — Contenido y migración (3-4 semanas)
 
-Es la fase crítica: sin el contenido migrado no hay lanzamiento.
+Ya no la limita el importador sino **quién escribe el contenido**: los 110 temas y las 7
+evaluaciones se redactan en la plataforma. El efecto en el calendario está sin recalcular.
 
 - Editor Markdown accesible (CodeMirror 6): pegar o subir imágenes con diálogo de `alt`,
   fórmulas con vista previa, `:lang`, panel de avisos navegable, vista previa real.
@@ -84,15 +85,14 @@ Es la fase crítica: sin el contenido migrado no hay lanzamiento.
   inmutable; `invalidatesProgress`.
 - Editor de evaluaciones (`single_choice`, `multiple_choice`, `true_false`, `short_text`)
   con `answerKey` aparte y reglas del intento en la versión.
-- **Importador de LearnDash** (`/admin/importar`): **solo contenido** (decisión 1). Fuente
-  dump SQL + WXR; `dryRun` con `ImportRun.summary`; idempotente por `sourceRef`; deduplica
-  el clon ValoraT. Crea programa, módulos, temas (`requiresSubmission` para los
-  "ACTIVIDAD"), versiones, evaluaciones. Videos como `MediaAsset VIMEO` (legado, sin
-  subtítulos revisados); imágenes de página como `legacy` con `convertUntil`.
-- **Pipeline OCR** sobre los 110 temas: el texto automático se guarda como alternativa
-  textual con aviso (decisión 5); 10 se revisan a mano para medir la calidad.
+- ~~**Importador de LearnDash**~~ — **CANCELADO el 18/9** (ver `PRODUCT_DECISIONS.md` y
+  `plan/07` §7): todo el contenido es nuevo. En su lugar entraron la creación de temas y
+  evaluaciones desde la plataforma (`POST /api/content/lessons`, `POST /api/content/assessments`).
+- ~~**Pipeline OCR**~~ — **CANCELADO el 18/9**: sin migración no hay imágenes de página que
+  transcribir.
 - Biblioteca: recursos descargables por módulo.
-- `/contenido/legado` con la lista y su avance.
+- ~~`/contenido/legado`~~ — **CANCELADO el 18/9**: ninguna versión se publica con excepción
+  de legado, así que no hay lista que llevar.
 - Verificar la restricción por dominio en Vimeo con el dominio nuevo.
 
 ### Fase 4 — Aprender y evaluar (3 semanas)

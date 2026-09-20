@@ -66,11 +66,11 @@ Se resuelve en la transición `publish`, que **rechaza** el contenido que no cum
 en `04-business-logic/contenido-y-evaluaciones.md`. El contenido es Markdown, lo que hace
 la validación exacta y el render semántico por construcción.
 
-**Legado.** El contenido migrado de LearnDash es en gran parte imagen de página de PDF:
-inaccesible por definición. Se publica con excepción auditada y fecha de conversión, con
-el texto automático del OCR como alternativa (aviso "puede contener errores"); el player
-lo declara (`role="note"`), ofrece zoom/pan, descarga del original y "Pedir versión
-accesible"; `/contenido/legado` lo lista hasta que desaparezca.
+**~~Legado~~ (RETIRADO 18/9).** Cuando se pensaba importar desde LearnDash, ese contenido
+era en gran parte imagen de página de PDF —inaccesible por definición— y se publicaba con
+excepción auditada, texto de OCR, zoom/pan y "Pedir versión accesible". Al cancelarse la
+importación no hay contenido migrado: no existe excepción, y `publish` rechaza por igual
+todo recurso sin alternativa textual. Se conserva aquí como registro de por qué existió.
 
 **El editor también.** Autores con lector de pantalla existen: botón "Subir imagen",
 diálogo de `alt`, panel de avisos como lista navegable, vista previa con encabezados reales.

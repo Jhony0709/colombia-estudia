@@ -5,6 +5,7 @@
  */
 
 import { renderInvitationEmail } from '@/lib/mail/templates/invitation';
+import { light } from '@colombia-estudia/design-tokens';
 
 describe('renderInvitationEmail', () => {
   const baseData = {
@@ -61,10 +62,24 @@ describe('renderInvitationEmail', () => {
     expect(text).toContain('https://example.com/invitacion/abc123');
   });
 
-  it('uses accent.base color #1E40AF for button', () => {
+  /*
+    Se compara contra el TOKEN, no contra un hexadecimal.
+
+    Clavado, este test fallaba cada vez que cambiaba la paleta aunque la plantilla estuviera
+    bien —pasó el 18/9— y, peor, no decía nada cuando la plantilla se quedaba atrás. Contra el
+    token vigila lo que de verdad importa: que el botón del correo lleve el acento de hoy.
+  */
+  it('el botón lleva el acento vigente, no una copia', () => {
     const { html } = renderInvitationEmail(baseData);
 
-    expect(html).toContain('background:#1E40AF');
+    expect(html).toContain(`background:${light.accent.base}`);
+    expect(html).toContain(`color:${light.text.onAccent}`);
+  });
+
+  it('el texto secundario lleva `text.muted` vigente', () => {
+    const { html } = renderInvitationEmail(baseData);
+
+    expect(html).toContain(`color:${light.text.muted}`);
   });
 
   it('returns subject, html, and text', () => {

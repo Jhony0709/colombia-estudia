@@ -27,8 +27,12 @@ Recibe el AST y los `MediaAsset` resueltos (por id, con `institutionId`, `status
 
 ### 3. Editor (`features/content/editor`)
 
-CodeMirror 6 con `@codemirror/lang-markdown`, tema con tokens, `Escape` suelta `Tab`
-(documentado en pantalla), autocompletado de directivas. Barra: "Subir imagen" (input
+~~CodeMirror 6 con `@codemirror/lang-markdown`, tema con tokens, `Escape` suelta `Tab`
+(documentado en pantalla), autocompletado de directivas.~~ **Descartado el 17/9**; el
+`<textarea>` que lo sustituyó, **sustituido el 19/9** por un editor propio de bloques sin
+`contenteditable` (`features/content/editor`, ver `PRODUCT_DECISIONS.md`). Se guarda Markdown,
+recortado del original bloque a bloque. Pegar una dirección de Vimeo en un texto vacío lo
+convierte en vídeo. El aviso lleva al bloque. Barra: "Subir imagen" (input
 file), "Insertar video de Vimeo" (pega URL o id → `POST /api/media/vimeo`), "Fórmula"
 (diálogo con vista previa MathML), "Fragmento en otro idioma". Pegar/arrastrar imagen →
 `POST /api/media/upload` → subida directa → `confirm` → diálogo "Describe la imagen" (alt
@@ -60,7 +64,11 @@ por acción del autor; descarga del VTT a `transcriptPath` cuando existe.
 las versiones asignadas a la cohorte, agrupados por módulo, con tamaño y "descargar" (URL
 firmada, `attachment`).
 
-### 7. Importador de LearnDash (`packages/scripts/migrate/learndash/`)
+### 7. ~~Importador de LearnDash~~ — **CANCELADO el 18/9** (ver `PRODUCT_DECISIONS.md`): todo el contenido es nuevo
+
+<!-- El detalle de abajo se conserva por si algún día entra contenido de otra plataforma. -->
+
+#### (cancelado) Importador de LearnDash (`packages/scripts/migrate/learndash/`)
 
 Entrada: dump SQL de WordPress (tablas `wp_posts`, `wp_postmeta`, `wp_wp_pro_quiz_master`,
 `wp_wp_pro_quiz_question`, `wp_term_*`) restaurado en un Postgres local o parseado con
@@ -88,7 +96,9 @@ Entrada: dump SQL de WordPress (tablas `wp_posts`, `wp_postmeta`, `wp_wp_pro_qui
 No se importan personas, cohortes con inscritos ni progreso (decisión 1). Las cohortes
 históricas quedan en LearnDash en solo lectura.
 
-### 8. OCR (`packages/scripts/migrate/ocr/`)
+### 8. ~~OCR~~ — **CANCELADO el 18/9**: no hay imágenes de página que transcribir
+
+#### (cancelado) OCR (`packages/scripts/migrate/ocr/`)
 
 Tesseract (`tesseract.js` o binario) con `spa`, preprocesado con `sharp` (binarización,
 deskew), salida a Markdown con heurísticas: líneas en mayúsculas cortas → `##`, viñetas →
@@ -97,7 +107,7 @@ listas, fórmulas detectadas por patrón → `$…$` para revisión. Resultado a
 prueba, a un `LessonVersion 2 DRAFT` para revisión humana. Métrica: % de caracteres
 corregidos a mano en los 10; decide cuántos se transcriben antes del lanzamiento.
 
-### 9. `/contenido/legado`
+### 9. ~~`/contenido/legado`~~ — **CANCELADO el 18/9**: no va a haber ninguna versión con excepción de legado
 
 Tabla de versiones con `legacyException`, `convertUntil`, solicitudes de versión accesible,
 videos con `captionsSource ≠ REVIEWED`; filtros; exportar.

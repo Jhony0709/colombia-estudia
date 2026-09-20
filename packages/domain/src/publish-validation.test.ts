@@ -20,7 +20,6 @@ function createAsset(overrides: Partial<LessonAssetInfo> & { id: string }): Less
     transcriptPath: null,
     textAlternativePath: null,
     altText: null,
-    legacy: false,
     ...overrides,
   };
 }
@@ -32,7 +31,7 @@ function createParsedLesson(md: string): ParsedLesson {
 function validateLesson(
   md: string,
   assets: Map<string, LessonAssetInfo> = new Map(),
-  options: { institutionId?: string; subjectName?: string; legacyException?: boolean } = {}
+  options: { institutionId?: string; subjectName?: string } = {}
 ) {
   const parsed = createParsedLesson(md);
   return validateLessonForPublish({
@@ -40,11 +39,34 @@ function validateLesson(
     assets,
     institutionId: options.institutionId ?? 'inst1',
     lesson: { language: 'es', subjectName: options.subjectName ?? 'Matemáticas' },
-    legacyException: options.legacyException ?? false,
   });
 }
 
 // ─────────────────────────── Lesson Validation - Images ───────────────────────────
+
+describe('validateLessonForPublish - contenido vacío', () => {
+  // Un tema recién creado no tiene nada escrito. Antes del 18/9 el editor decía "cumple las
+  // reglas de publicación" sobre un borrador en blanco: todas las demás reglas miran lo que
+  // hay, y cuando no hay nada no encuentran nada que objetar.
+  it.each(['', '   ', '\n\n\n', '   \n  \n'])('un borrador en blanco (%j) no publica', (md) => {
+    const result = validateLesson(md);
+
+    expect(result.ok).toBe(false);
+    expect(result.errors.map((e) => e.rule)).toContain('content-empty');
+  });
+
+  it('un párrafo ya es contenido', () => {
+    const result = validateLesson('Una sola línea, pero escrita.\n');
+
+    expect(result.errors.map((e) => e.rule)).not.toContain('content-empty');
+  });
+
+  it('un tema con encabezado y texto tampoco lo dispara', () => {
+    const result = validateLesson('## Sección\n\nUn párrafo de contenido.\n');
+
+    expect(result.ok).toBe(true);
+  });
+});
 
 describe('validateLessonForPublish - images', () => {
   it('Toda imagen tiene alt descriptivo - ![](…) rechazado (image-alt-required)', () => {
@@ -90,23 +112,12 @@ describe('validateLessonForPublish - images', () => {
 
     expect(result.warnings.some((w) => w.rule === 'chart-needs-data-table')).toBe(true);
   });
-
-  it('legacyException: image-alt-required → warning en vez de error', () => {
-    const md = '![](asset:cm12345678901234567890123)';
-    const assets = new Map([
-      ['cm12345678901234567890123', createAsset({ id: 'cm12345678901234567890123' })],
-    ]);
-    const result = validateLesson(md, assets, { legacyException: true });
-
-    expect(result.ok).toBe(true);
-    expect(result.warnings.some((w) => w.rule === 'image-alt-required')).toBe(true);
-  });
 });
 
 // ─────────────────────────── Lesson Validation - Video/Audio ───────────────────────────
 
 describe('validateLessonForPublish - video/audio', () => {
-  it('Video sin subtítulos revisados ni transcripción rechazado (video-needs-captions)', () => {
+  it('Video sin subtítulos revisados ni transcripción: aviso, no rechazo (video-needs-captions, 19/9)', () => {
     const md = '::video{asset="cm12345678901234567890123"}';
     const assets = new Map([
       [
@@ -121,8 +132,9 @@ describe('validateLessonForPublish - video/audio', () => {
     ]);
     const result = validateLesson(md, assets);
 
-    expect(result.ok).toBe(false);
-    expect(result.errors.some((e) => e.rule === 'video-needs-captions')).toBe(true);
+    expect(result.ok).toBe(true);
+    expect(result.errors.some((e) => e.rule === 'video-needs-captions')).toBe(false);
+    expect(result.warnings.some((w) => w.rule === 'video-needs-captions')).toBe(true);
   });
 
   it('Video con captionsSource REVIEWED → ok', () => {
@@ -139,7 +151,7 @@ describe('validateLessonForPublish - video/audio', () => {
     ]);
     const result = validateLesson(md, assets);
 
-    expect(result.errors.some((e) => e.rule === 'video-needs-captions')).toBe(false);
+    expect(result.warnings.some((w) => w.rule === 'video-needs-captions')).toBe(false);
   });
 
   it('Video con transcriptPath → ok', () => {
@@ -160,7 +172,7 @@ describe('validateLessonForPublish - video/audio', () => {
     expect(result.errors.some((e) => e.rule === 'video-needs-captions')).toBe(false);
   });
 
-  it('Audio sin subtítulos ni transcripción rechazado (audio-needs-captions)', () => {
+  it('Audio sin subtítulos ni transcripción: aviso, no rechazo (audio-needs-captions, 19/9)', () => {
     const md = '::audio{asset="cm12345678901234567890123"}';
     const assets = new Map([
       [
@@ -175,27 +187,9 @@ describe('validateLessonForPublish - video/audio', () => {
     ]);
     const result = validateLesson(md, assets);
 
-    expect(result.ok).toBe(false);
-    expect(result.errors.some((e) => e.rule === 'audio-needs-captions')).toBe(true);
-  });
-
-  it('legacyException + legacy asset: video-needs-captions → warning', () => {
-    const md = '::video{asset="cm12345678901234567890123"}';
-    const assets = new Map([
-      [
-        'cm12345678901234567890123',
-        createAsset({
-          id: 'cm12345678901234567890123',
-          kind: 'VIDEO',
-          captionsSource: 'AUTO',
-          legacy: true,
-        }),
-      ],
-    ]);
-    const result = validateLesson(md, assets, { legacyException: true });
-
     expect(result.ok).toBe(true);
-    expect(result.warnings.some((w) => w.rule === 'video-needs-captions')).toBe(true);
+    expect(result.errors.some((e) => e.rule === 'audio-needs-captions')).toBe(false);
+    expect(result.warnings.some((w) => w.rule === 'audio-needs-captions')).toBe(true);
   });
 });
 
@@ -431,6 +425,28 @@ describe('validateLessonForPublish - English lessons', () => {
 });
 
 // ─────────────────────────── Assessment Validation ───────────────────────────
+
+describe('validateAssessmentForPublish - questions-required', () => {
+  // Una evaluación sin preguntas pasaba todas las demás reglas: nada que duplicar, ninguna
+  // clave que falte, ningún punto que no cuadre. Habría llegado a una cohorte como un
+  // examen en blanco que califica 0/0. Decisión de Jhonny, 17/9.
+  it('Una evaluación sin preguntas NO publica', () => {
+    const result = validateAssessmentForPublish({ content: { questions: [] }, answerKey: {} });
+
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e.rule === 'questions-required')).toBe(true);
+  });
+
+  it('Tener instrucciones no sustituye a tener preguntas', () => {
+    const result = validateAssessmentForPublish({
+      content: { instructions: 'Lee con calma.', questions: [] },
+      answerKey: {},
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e.rule === 'questions-required')).toBe(true);
+  });
+});
 
 describe('validateAssessmentForPublish - schema', () => {
   it('Contenido válido → ok', () => {
@@ -805,24 +821,21 @@ describe('auditoría 15/9 - encabezados (:60, :120)', () => {
   });
 });
 
-describe('auditoría 15/9 - legacyException aplica a la versión, no al asset (:96-97, decisión 6)', () => {
-  it('video migrado con captionsSource AUTO y legacy=false → warning bajo legacyException', () => {
+describe('subtítulos: aviso, no bloqueo (19/9)', () => {
+  // Del 18/9 al 19/9 esta regla fue error sin excepción. El 19/9 Jhonny decidió que un video
+  // sin subtítulos revisados ni transcripción se publica, y que la regla avise sin bloquear.
+  // El aviso sigue existiendo: lo que se prueba aquí es que no desaparece al rebajarlo.
+  it('un video sin subtítulos revisados ni transcripción publica, y el aviso sigue ahí', () => {
     const id = 'cm12345678901234567890123';
     const assets = new Map([
-      [id, createAsset({ id, kind: 'VIDEO', captionsSource: 'AUTO', legacy: false })],
+      [id, createAsset({ id, kind: 'VIDEO', captionsSource: 'AUTO', transcriptPath: null })],
     ]);
-    const result = validateLesson(`::video{asset="${id}"}`, assets, { legacyException: true });
-    expect(result.ok).toBe(true);
-    expect(result.warnings.some((w) => w.rule === 'video-needs-captions')).toBe(true);
-  });
 
-  it('sin legacyException el mismo video es error', () => {
-    const id = 'cm12345678901234567890123';
-    const assets = new Map([
-      [id, createAsset({ id, kind: 'VIDEO', captionsSource: 'AUTO', legacy: false })],
-    ]);
     const result = validateLesson(`::video{asset="${id}"}`, assets);
-    expect(result.ok).toBe(false);
+
+    expect(result.ok).toBe(true);
+    expect(result.errors.some((e) => e.rule === 'video-needs-captions')).toBe(false);
+    expect(result.warnings.some((w) => w.rule === 'video-needs-captions')).toBe(true);
   });
 });
 

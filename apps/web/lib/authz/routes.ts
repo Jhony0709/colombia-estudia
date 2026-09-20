@@ -29,8 +29,11 @@ const PUBLIC_PREFIXES = [
 
 /**
  * Exact public paths (not prefixes).
+ *
+ * `/` es pública desde el 19/9: sin sesión muestra la portada (web pública); con sesión sigue
+ * redirigiendo al área del rol (app/page.tsx). Solo el `/` exacto: `/aprender` sigue protegida.
  */
-const PUBLIC_EXACT = ['/api/health'] as const;
+const PUBLIC_EXACT = ['/', '/api/health'] as const;
 
 // ─────────────────────────── Protection Check ───────────────────────────
 
@@ -101,8 +104,15 @@ export function isValidNextUrl(next: string | null | undefined): boolean {
 }
 
 /**
- * Sanitize the `next` URL - returns the URL if valid, or "/" otherwise.
+ * Adónde va alguien con sesión y sin destino explícito: `/ingresar` redirige al área del rol
+ * (app/ingresar/page.tsx). Desde el 19/9 `/` es la portada y no redirige a nadie: la portada
+ * con sesión muestra «Ingresar», que lleva aquí.
+ */
+export const HOME_AFTER_LOGIN = '/ingresar';
+
+/**
+ * Sanitize the `next` URL - returns the URL if valid, or HOME_AFTER_LOGIN otherwise.
  */
 export function sanitizeNextUrl(next: string | null | undefined): string {
-  return isValidNextUrl(next) ? next! : '/';
+  return isValidNextUrl(next) ? next! : HOME_AFTER_LOGIN;
 }

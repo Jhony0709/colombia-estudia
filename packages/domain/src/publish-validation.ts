@@ -3,8 +3,11 @@
  * SSOT: reference/04-business-logic/contenido-y-evaluaciones.md:108-138
  *
  * Each row in the validation tables is a rule with a test case.
- * legacyException: only the importer can set this; it downgrades accessibility
- * errors to warnings while preserving all other rules.
+ * Accessibility rules are hard errors, with no exception — with ONE exception decided by
+ * Jhonny on 19/9 (PRODUCT_DECISIONS.md): a video or audio without reviewed captions or a
+ * transcript is a WARNING, not an error. It still shows up in the panel, it still says what
+ * is missing; it no longer stops publication. The migration path that used to downgrade
+ * every rule to a warning was removed on 18/9 and stays removed.
  */
 
 import type {
@@ -32,7 +35,6 @@ export interface ValidateLessonInput {
     language: string;
     subjectName: string;
   };
-  legacyException: boolean;
 }
 
 export interface ValidationResult {
@@ -144,9 +146,25 @@ function imageAltProblem(alt: string): { rule: string; message: string; fix: str
  * @returns Validation result with ok, errors, and warnings
  */
 export function validateLessonForPublish(input: ValidateLessonInput): ValidationResult {
-  const { parsed, assets, institutionId, lesson, legacyException } = input;
+  const { parsed, assets, institutionId, lesson } = input;
   const errors: ContentIssue[] = [];
   const warnings: ContentIssue[] = [];
+
+  // Nothing written yet. Sin esto, un tema recién creado dice "cumple las reglas de
+  // publicación" y ofrece publicarse vacío: todas las demás reglas miran lo que HAY, y
+  // cuando no hay nada, no hay nada que objetar. Las evaluaciones ya tenían su equivalente
+  // (`questions-required`); los temas no.
+  //
+  // `ast.children.length === 0` es la comprobación exacta: el Markdown en blanco, o solo
+  // espacios y saltos de línea, no produce ni un nodo.
+  if (parsed.ast.children.length === 0) {
+    errors.push({
+      rule: 'content-empty',
+      severity: 'error',
+      message: 'Lesson content is empty',
+      fix: 'Write the lesson content before publishing it.',
+    });
+  }
 
   // Propagate parser syntax issues (:123)
   for (const issue of parsed.issues) {
@@ -159,13 +177,13 @@ export function validateLessonForPublish(input: ValidateLessonInput): Validation
 
   // Validate each asset reference
   for (const assetRef of parsed.assets) {
-    validateAssetRef(assetRef, assets, institutionId, legacyException, errors, warnings);
+    validateAssetRef(assetRef, assets, institutionId, errors, warnings);
   }
 
   // Validate images for alt text
   for (const assetRef of parsed.assets) {
     if (assetRef.kind === 'image') {
-      validateImageAlt(assetRef, parsed, legacyException, errors, warnings);
+      validateImageAlt(assetRef, parsed, errors, warnings);
     }
   }
 
@@ -203,7 +221,6 @@ function validateAssetRef(
   assetRef: AssetRef,
   assets: Map<string, LessonAssetInfo>,
   institutionId: string,
-  legacyException: boolean,
   errors: ContentIssue[],
   warnings: ContentIssue[]
 ): void {
@@ -249,45 +266,34 @@ function validateAssetRef(
     return;
   }
 
-  // Video/audio needs captions or transcript (:116)
-  // With legacyException (only the importer, :96-97) the asset-alternative rules become
-  // warnings whatever the asset's `legacy` flag: decision 6 publishes migrated videos with
-  // captionsSource AUTO under the exception.
+  // Video/audio without captions or transcript (:116): a WARNING since 19/9, by decision
+  // (PRODUCT_DECISIONS.md). It was an error from 18/9 to 19/9. The rule still runs and still
+  // names what is missing; publication no longer waits for it.
   if (assetRef.kind === 'video' || assetRef.kind === 'audio') {
     const needsCaptions = asset.captionsSource !== 'REVIEWED' && !asset.transcriptPath;
     if (needsCaptions) {
-      const issue: ContentIssue = {
+      warnings.push({
         rule: assetRef.kind === 'video' ? 'video-needs-captions' : 'audio-needs-captions',
-        severity: legacyException ? 'warning' : 'error',
+        severity: 'warning',
         message: `${assetRef.kind === 'video' ? 'Video' : 'Audio'} needs reviewed captions or transcript`,
         line: assetRef.position?.start.line,
         column: assetRef.position?.start.column,
         fix: 'Add reviewed captions (captionsSource: REVIEWED) or a transcript.',
-      };
-      if (issue.severity === 'error') {
-        errors.push(issue);
-      } else {
-        warnings.push(issue);
-      }
+      });
     }
   }
 
   // PDF needs text alternative (:117)
   if (assetRef.kind === 'pdf') {
     if (!asset.textAlternativePath) {
-      const issue: ContentIssue = {
+      errors.push({
         rule: 'pdf-needs-text-alternative',
-        severity: legacyException ? 'warning' : 'error',
+        severity: 'error',
         message: 'PDF needs a text alternative',
         line: assetRef.position?.start.line,
         column: assetRef.position?.start.column,
         fix: 'Add a Markdown text alternative for the PDF content.',
-      };
-      if (issue.severity === 'error') {
-        errors.push(issue);
-      } else {
-        warnings.push(issue);
-      }
+      });
     }
   }
 }
@@ -295,28 +301,21 @@ function validateAssetRef(
 function validateImageAlt(
   assetRef: AssetRef,
   parsed: ParsedLesson,
-  legacyException: boolean,
   errors: ContentIssue[],
   warnings: ContentIssue[]
 ): void {
   const alt = assetRef.alt || '';
 
-  // Alt rules (:114). Under legacyException the legacy page images publish with the
-  // "Página {n} de {tema}, texto en imagen pendiente de transcripción" pattern (:94), so
-  // a failing alt is a warning, not a rejection.
+  // Alt rules (:114). Always an error since 18/9: an image without usable alt text does not
+  // publish, and there is no exception left to hide behind.
   const problem = imageAltProblem(alt);
   if (problem) {
-    const issue: ContentIssue = {
+    errors.push({
       ...problem,
-      severity: legacyException ? 'warning' : 'error',
+      severity: 'error',
       line: assetRef.position?.start.line,
       column: assetRef.position?.start.column,
-    };
-    if (issue.severity === 'error') {
-      errors.push(issue);
-    } else {
-      warnings.push(issue);
-    }
+    });
     return;
   }
 
@@ -483,6 +482,19 @@ export function validateAssessmentForPublish(input: {
 
   const content = contentResult.data;
   const answerKey = keyResult.data;
+
+  // An assessment with no questions passed every other rule and published: nothing to
+  // duplicate, no key to miss, no points to mismatch. It would have reached a cohort as a
+  // blank exam that grades 0/0. Approved by Jhonny on 17/9.
+  if (content.questions.length === 0) {
+    errors.push({
+      rule: 'questions-required',
+      severity: 'error',
+      message: 'An assessment needs at least one question',
+      path: 'questions',
+      fix: 'Add a question before publishing.',
+    });
+  }
 
   // Check for unique codes
   const codes = new Set<string>();

@@ -152,7 +152,7 @@ describe('POST /api/invitations/[token]/accept', () => {
     expect(response.status).toBe(200);
 
     const body = await response.json();
-    expect(body.data.next).toBe('/');
+    expect(body.data.next).toBe('/ingresar');
   });
 
   it('creates Auth user, updates Person, Consent, Invitation, AuditLog', async () => {
@@ -259,7 +259,7 @@ describe('POST /api/invitations/[token]/accept', () => {
       email: 'ana@example.com',
       password: 'una-contraseña-larga',
     });
-    expect((await response.json()).data.next).toBe('/');
+    expect((await response.json()).data.next).toBe('/ingresar');
   });
 
   it('returns 409 when the email already has an Auth account (email_exists)', async () => {

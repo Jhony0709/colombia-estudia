@@ -178,7 +178,7 @@ job diario idempotente (`POST /api/jobs/daily`, Vercel Cron, `CRON_SECRET`) que:
 1. envía recordatorios de cuotas vencidas a quien paga, si `notifyPayerOnOverdue`
    (`Notification` con `dedupeKey` + correo);
 2. avisa a operaciones de acuerdos con cuota vencida;
-3. avisa a autores de `convertUntil` a menos de 14 días;
+3. ~~avisa a autores de `convertUntil` a menos de 14 días~~ (RETIRADO 18/9: el campo ya no existe);
 4. cierra intentos `IN_PROGRESS` con `deadlineAt < now` (entrega lo guardado y califica);
 5. recuerda sesiones en vivo a 24 h y 1 h;
 6. emite certificados de módulos y programas completados desde la última corrida;

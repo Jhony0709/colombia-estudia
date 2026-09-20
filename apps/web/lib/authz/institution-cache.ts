@@ -19,6 +19,7 @@ interface CachedInstitution {
   supportEmail: string;
   supportPhone: string | null;
   emailFromName: string;
+  dataPolicyUrl: string | null;
   dataPolicyVersion: string;
   settings: unknown;
 }
@@ -86,6 +87,7 @@ export async function resolveInstitutionBySlug(slug: string): Promise<CachedInst
       supportEmail: true,
       supportPhone: true,
       emailFromName: true,
+      dataPolicyUrl: true,
       dataPolicyVersion: true,
       settings: true,
     },

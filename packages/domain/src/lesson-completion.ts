@@ -11,7 +11,7 @@
 
 // ─────────────────────────── Types ───────────────────────────
 
-export type LessonForm = 'VIDEO' | 'MARKDOWN' | 'LEGACY' | 'SUBMISSION';
+export type LessonForm = 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
 
 export type SubmissionStatus = 'SUBMITTED' | 'RETURNED' | 'APPROVED';
 
@@ -44,7 +44,6 @@ export interface IsLessonCompletedInput {
  * |-------|-------------------------|
  * | VIDEO | posición ≥ 90 % O transcripción leída hasta el final |
  * | MARKDOWN | scroll al final Y tiempo ≥ min(estimatedMinutes × 0.5, 2 min) |
- * | LEGACY | igual que MARKDOWN (// AMBIGUO(:149)) |
  * | SUBMISSION | Submission con estado APPROVED |
  */
 export function isLessonCompleted(input: IsLessonCompletedInput): boolean {
@@ -55,10 +54,6 @@ export function isLessonCompleted(input: IsLessonCompletedInput): boolean {
       return isVideoCompleted(evidence, videoDurationSeconds);
 
     case 'MARKDOWN':
-      return isMarkdownCompleted(evidence, estimatedMinutes);
-
-    case 'LEGACY':
-      // AMBIGUO(contenido-y-evaluaciones.md:149): igual que MARKDOWN
       return isMarkdownCompleted(evidence, estimatedMinutes);
 
     case 'SUBMISSION':

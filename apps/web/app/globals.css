@@ -54,3 +54,185 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+/**
+ * El contenido de un tema, ya renderizado.
+ * SSOT: reference/03-ui/tokens.md, plan/08-aprender-y-evaluar.md:22-26.
+ *
+ * `@tailwind base` quita el tamaño de los encabezados y las viñetas de las listas. Eso está
+ * bien para una interfaz que se compone con utilidades, y está mal para un bloque de HTML
+ * que llega entero desde el servidor: sin esto, un tema con `##`, listas y tablas se ve como
+ * un solo párrafo largo. La estructura seguiría siendo correcta para un lector de pantalla
+ * —los `h2` son `h2`— pero para quien ve la pantalla desaparecería.
+ *
+ * Todo sale de los tokens de tipografía y espacio: esto no inventa tamaños, los aplica a los
+ * elementos que el Markdown produce. Lo usan el player del estudiante y la vista previa del
+ * autor, que tienen que verse igual (por eso la vista previa existe).
+ */
+.contenido {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line-height);
+}
+
+/*
+  Preferencias de lectura (plan/08 §2, `reading-preferences.tsx`): las pone el estudiante
+  en `<html data-reading-*>` y solo tocan el contenido del tema, no la interfaz. Los pasos
+  cumplen WCAG 1.4.12: el espaciado ancho es 1.5 de línea y 0.12 em entre letras.
+*/
+html[data-reading-size='lg'] .contenido {
+  font-size: calc(var(--type-body-size) * 1.2);
+}
+html[data-reading-size='xl'] .contenido {
+  font-size: calc(var(--type-body-size) * 1.45);
+}
+html[data-reading-spacing='wide'] .contenido {
+  line-height: 1.8;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+html[data-reading-spacing='wide'] .contenido > * + * {
+  margin-top: calc(var(--space-4) * 1.5);
+}
+html[data-reading-width='narrow'] .contenido {
+  max-width: 55ch;
+}
+
+.contenido > * + * {
+  margin-top: var(--space-4);
+}
+
+.contenido h2 {
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line-height);
+  font-weight: var(--type-heading-weight);
+  margin-top: var(--space-8);
+}
+
+.contenido h3 {
+  font-size: var(--type-subheading-size);
+  line-height: var(--type-subheading-line-height);
+  font-weight: var(--type-subheading-weight);
+  margin-top: var(--space-6);
+}
+
+.contenido h4,
+.contenido h5,
+.contenido h6 {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line-height);
+  font-weight: var(--type-body-emphasis-weight);
+  margin-top: var(--space-6);
+}
+
+.contenido ul,
+.contenido ol {
+  padding-left: var(--space-6);
+}
+
+.contenido ul {
+  list-style: disc;
+}
+
+.contenido ol {
+  list-style: decimal;
+}
+
+.contenido li + li {
+  margin-top: var(--space-2);
+}
+
+.contenido a {
+  color: var(--text-link);
+  /* El subrayado siempre: el color no basta (1.4.1). */
+  text-decoration: underline;
+}
+
+.contenido blockquote {
+  border-left: 3px solid var(--border-default);
+  padding-left: var(--space-4);
+  color: var(--text-muted);
+}
+
+.contenido code {
+  /* La misma lista que declara `fontFamily.mono` en el plugin de tokens. No hay una
+     variable `--font-mono`: el mono no viene de next/font, se resuelve en el sistema. */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background-color: var(--surface-sunken);
+  border-radius: var(--radius-control);
+  padding: 0 var(--space-1);
+}
+
+.contenido pre {
+  background-color: var(--surface-sunken);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  /* Un bloque de código largo se desplaza; no empuja la página a lo ancho. */
+  overflow-x: auto;
+}
+
+.contenido pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Una tabla ancha se desplaza dentro de su propio marco, no rompe la lectura. */
+.contenido table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.contenido th,
+.contenido td {
+  border: 1px solid var(--border-default);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+}
+
+.contenido th {
+  font-weight: var(--type-body-emphasis-weight);
+  background-color: var(--surface-sunken);
+}
+
+.contenido img {
+  max-width: 100%;
+  height: auto;
+}
+
+.contenido figure {
+  margin-top: var(--space-6);
+}
+
+.contenido figcaption {
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line-height);
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+}
+
+/* El iframe de Vimeo mantiene su proporción sin que nadie calcule padding. */
+.contenido iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.contenido audio {
+  width: 100%;
+}
+
+/* Una fórmula larga se desplaza sola en vez de ensanchar la columna de lectura. */
+.contenido .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* El aviso de recurso ausente y el de directiva desconocida que pone el render. */
+.contenido .contenido-faltante,
+.contenido .contenido-invalido {
+  background-color: var(--surface-note);
+  border-radius: var(--radius-card);
+  padding: var(--space-3);
+  color: var(--text-muted);
+}

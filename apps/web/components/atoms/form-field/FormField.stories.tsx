@@ -3,7 +3,7 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { FormField, FormInput } from './FormField';
+import { FormField, FormInput, FormSelect } from './FormField';
 
 const meta: Meta<typeof FormField> = {
   title: 'Atoms/FormField',
@@ -117,4 +117,33 @@ export const DarkWithError: Story = {
       </div>
     ),
   ],
+};
+
+export const WithSelect: Story = {
+  args: {
+    label: 'Rol',
+    name: 'rol',
+    children: (
+      <FormSelect name="rol" defaultValue="">
+        <option value="">Cualquier rol</option>
+        <option value="STUDENT">Estudiante</option>
+        <option value="GUARDIAN">Acudiente</option>
+      </FormSelect>
+    ),
+  },
+};
+
+export const SelectWithError: Story = {
+  args: {
+    label: 'Rol',
+    name: 'rol',
+    required: true,
+    error: 'Elige un rol',
+    children: (
+      <FormSelect name="rol" defaultValue="">
+        <option value="">Elige…</option>
+        <option value="STUDENT">Estudiante</option>
+      </FormSelect>
+    ),
+  },
 };

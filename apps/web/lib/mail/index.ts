@@ -18,6 +18,18 @@ interface InstitutionMailConfig {
 }
 
 /**
+ * ¿Hay de verdad un proveedor de correo detrás?
+ *
+ * Sin él, `getMailer` devuelve el `ConsoleMailer`, que **no envía nada**: escribe el correo
+ * en el log del servidor. La operación necesita saberlo: «invitación enviada» sobre una
+ * pantalla, cuando en realidad no salió ningún correo, es la clase de mentira que hace que
+ * alguien espere tres días a que un estudiante entre.
+ */
+export function isMailConfigured(): boolean {
+  return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_DOMAIN);
+}
+
+/**
  * Get a mailer instance for the given institution.
  *
  * @throws Error if RESEND_API_KEY or EMAIL_DOMAIN is missing in production.

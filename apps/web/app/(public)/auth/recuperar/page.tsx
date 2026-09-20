@@ -66,7 +66,7 @@ export default function RecuperarPage() {
         </h1>
         <Alert severity="success">{t('recoverSuccess')}</Alert>
         <div className="text-center">
-          <Link href="/auth/login" className="type-body text-accent-base hover:underline">
+          <Link href="/auth/login" className="type-body text-text-link underline">
             {t('backToLogin')}
           </Link>
         </div>
@@ -106,7 +106,7 @@ export default function RecuperarPage() {
       </form>
 
       <div className="text-center">
-        <Link href="/auth/login" className="type-body text-accent-base hover:underline">
+        <Link href="/auth/login" className="type-body text-text-link underline">
           {t('backToLogin')}
         </Link>
       </div>

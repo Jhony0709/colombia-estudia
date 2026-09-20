@@ -42,9 +42,18 @@ jest.mock('@/lib/auth/invitation-token', () => ({
   }),
 }));
 
-// Mock mailer
+/*
+  Mock mailer.
+
+  `isMailConfigured` no es decorado: `sendInvitation` lo llama para devolver `emailDelivered`,
+  y de ahí sale el aviso de la ficha de la persona que distingue «invitación enviada» de «el
+  enlace existe pero no salió ningún correo». Faltaba en este mock desde que se añadió ese
+  campo, así que el camino feliz moría con «isMailConfigured is not a function» —los casos de
+  400 y 409 pasaban porque lanzan antes de llegar ahí—.
+*/
 jest.mock('@/lib/mail', () => ({
   getMailer: () => ({ send: mockMailerSend }),
+  isMailConfigured: () => true,
 }));
 
 jest.mock('@/lib/mail/templates/invitation', () => ({
@@ -193,6 +202,8 @@ describe('POST /api/people/invitations', () => {
 
     const body = await response.json();
     expect(body.data.invitationId).toBe('inv-123');
+    // Que el correo saliera de verdad se dice; no se da por hecho.
+    expect(body.data.emailDelivered).toBe(true);
 
     // Verify invalidation of existing invitations
     expect(mockPrismaInvitationUpdateMany).toHaveBeenCalledWith({

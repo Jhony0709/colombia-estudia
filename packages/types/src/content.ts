@@ -40,7 +40,6 @@ export interface LessonAssetInfo {
   transcriptPath: string | null;
   textAlternativePath: string | null;
   altText: string | null;
-  legacy: boolean;
 }
 
 export type AssetRefKind = 'image' | 'video' | 'audio' | 'pdf';

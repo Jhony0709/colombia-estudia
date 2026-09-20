@@ -10,6 +10,7 @@
  */
 
 import { redirect } from 'next/navigation';
+import { HOME_AFTER_LOGIN } from './routes';
 import { getRequestContext, STAFF_ROLES, type RequestContext } from './request-context';
 
 export async function requireStaffSession(): Promise<RequestContext> {
@@ -21,7 +22,7 @@ export async function requireStaffSession(): Promise<RequestContext> {
 
   const isStaff = ctx.person.memberships.some((m) => !m.revokedAt && STAFF_ROLES.includes(m.role));
   if (!isStaff) {
-    redirect('/');
+    redirect(HOME_AFTER_LOGIN);
   }
 
   if (ctx.mfaPending) {

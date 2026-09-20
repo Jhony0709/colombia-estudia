@@ -29,20 +29,20 @@ cómo se nombra en material comercial. El código usa el término en inglés.
 
 ## Contenido y evaluación
 
-| Término                                | Significado                                                                                                          | UI                                               |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| **Lesson**                             | Contenedor editable de una unidad de contenido.                                                                      | "Tema"                                           |
-| **LessonVersion**                      | Publicación **inmutable** de un tema. `content` es Markdown.                                                         | "Versión" (solo autores)                         |
-| **Assignment**                         | Un tema o evaluación disponible para una cohorte; su versión puede cambiar.                                          | —                                                |
-| **MediaAsset**                         | Video (Vimeo), imagen, audio o PDF referenciado desde el Markdown, con su alternativa accesible.                     | "Recurso"                                        |
-| **Legacy**                             | Recurso migrado sin alternativa textual. Se publica con excepción auditada y **debe convertirse**.                   | "Pendiente de conversión"                        |
-| **LessonProgress**                     | Avance de una matrícula sobre un tema, con evidencia.                                                                | "Progreso"                                       |
-| **Assessment** / **AssessmentVersion** | Contenedor editable / publicación inmutable de una evaluación (preguntas + `answerKey` aparte + reglas del intento). | "Evaluación"                                     |
-| **Attempt**                            | Un intento. Respuestas, ajustes aplicados, nota y estado.                                                            | "Intento"                                        |
-| **Score**                              | Nota de una asignatura en una cohorte, 0–100, derivada del mejor intento.                                            | "Nota"                                           |
-| **Submission**                         | Entrega de una actividad (tema con `requiresSubmission`): texto y/o archivo, revisada por un instructor.             | "Entrega"                                        |
-| **LiveSession**                        | Clase sincrónica de una cohorte: enlace y fecha.                                                                     | "Clase en vivo"                                  |
-| **Certificate**                        | Constancia de finalización de módulo o programa, con código público verificable. **No es el título de bachiller.**   | "Constancia" (módulo) / "Certificado" (programa) |
+| Término                                | Significado                                                                                                                                                    | UI                                               |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| **Lesson**                             | Contenedor editable de una unidad de contenido.                                                                                                                | "Tema"                                           |
+| **LessonVersion**                      | Publicación **inmutable** de un tema. `content` es Markdown.                                                                                                   | "Versión" (solo autores)                         |
+| **Assignment**                         | Un tema o evaluación disponible para una cohorte; su versión puede cambiar.                                                                                    | —                                                |
+| **MediaAsset**                         | Video (Vimeo), imagen, audio o PDF referenciado desde el Markdown, con su alternativa accesible.                                                               | "Recurso"                                        |
+| ~~**Legacy**~~ (RETIRADO 18/9)         | Recurso migrado sin alternativa textual, publicado con excepción auditada. Sin importación desde LearnDash no existe: todo recurso publicado trae alternativa. | —                                                |
+| **LessonProgress**                     | Avance de una matrícula sobre un tema, con evidencia.                                                                                                          | "Progreso"                                       |
+| **Assessment** / **AssessmentVersion** | Contenedor editable / publicación inmutable de una evaluación (preguntas + `answerKey` aparte + reglas del intento).                                           | "Evaluación"                                     |
+| **Attempt**                            | Un intento. Respuestas, ajustes aplicados, nota y estado.                                                                                                      | "Intento"                                        |
+| **Score**                              | Nota de una asignatura en una cohorte, 0–100, derivada del mejor intento.                                                                                      | "Nota"                                           |
+| **Submission**                         | Entrega de una actividad (tema con `requiresSubmission`): texto y/o archivo, revisada por un instructor.                                                       | "Entrega"                                        |
+| **LiveSession**                        | Clase sincrónica de una cohorte: enlace y fecha.                                                                                                               | "Clase en vivo"                                  |
+| **Certificate**                        | Constancia de finalización de módulo o programa, con código público verificable. **No es el título de bachiller.**                                             | "Constancia" (módulo) / "Certificado" (programa) |
 
 ## Ajustes razonables
 

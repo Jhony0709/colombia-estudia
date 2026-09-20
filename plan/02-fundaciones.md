@@ -124,7 +124,7 @@ staging, un ADMIN y un programa vacío. Deploy en staging. Recorrido: login del 
 
 ## Criterio de salida
 
-- Test de aislamiento por tabla en verde para los 35 modelos.
+- Test de aislamiento por tabla en verde para los 36 modelos.
 - `packages/domain` y `packages/types` ≥ 90 % con los casos de `reference/`.
 - `answerKey` no aparece en ninguna respuesta de un test de API.
 - CI completa en verde en un PR de prueba; `migrate deploy` corrió por CI en staging.

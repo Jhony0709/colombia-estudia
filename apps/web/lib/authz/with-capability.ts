@@ -6,6 +6,7 @@
  */
 
 import { redirect } from 'next/navigation';
+import { HOME_AFTER_LOGIN } from './routes';
 import { APIError } from '../core/errors';
 import { getRequestContext, type RequestContext } from './request-context';
 import { scopeAllows, type Capability, type ResourceScope } from '@colombia-estudia/domain';
@@ -145,9 +146,10 @@ export async function requireCapability(capability: Capability): Promise<void> {
     redirect('/auth/login');
   }
 
-  // No capability → redirect to home (routes.md:20)
+  // No capability → al área del rol (routes.md:20). `/ingresar` decide cuál; nunca vuelve
+  // aquí porque cada área pide una capacidad que su rol sí tiene.
   const scopes = ctx.capabilities.get(capability);
   if (!scopes || scopes.length === 0) {
-    redirect('/');
+    redirect(HOME_AFTER_LOGIN);
   }
 }

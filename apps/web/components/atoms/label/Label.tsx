@@ -25,7 +25,7 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, required, children, ...props }, ref) => (
     <LabelPrimitive.Root
       ref={ref}
-      className={cn('type-body text-text font-medium', className)}
+      className={cn('type-body-emphasis text-text', className)}
       {...props}
     >
       {children}

@@ -10,9 +10,13 @@ import { APIError } from '@/lib/core/errors';
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { generateInvitationToken, hashToken } from '@/lib/auth/invitation-token';
 import { getSupabaseAdmin } from '@/lib/auth/supabase-server';
-import { getMailer } from '@/lib/mail';
+import { getMailer, isMailConfigured } from '@/lib/mail';
 import { renderInvitationEmail } from '@/lib/mail/templates/invitation';
 import { bogotaDate } from '@colombia-estudia/domain';
+import {
+  staffPersonIds,
+  notifyManyWithoutContext,
+} from '@/features/notifications/server/notifications.service';
 
 // ─────────────────────────── Send / reinvite ───────────────────────────
 
@@ -25,13 +29,34 @@ interface SendInvitationInput {
   reinvite?: boolean;
 }
 
+export interface SentInvitation {
+  invitationId: string;
+  /**
+   * El enlace con el token **en claro**, devuelto UNA vez, aquí y solo aquí.
+   *
+   * La base guarda `tokenHash` (SHA-256) y nunca el token: quien tenga acceso a la base no
+   * puede suplantar a nadie con una invitación pendiente. La consecuencia es que el enlace no
+   * se puede recuperar después —ni por la pantalla ni por consulta— y por eso se devuelve en
+   * el momento de crearlo, para que operación pueda entregarlo por otro canal cuando el
+   * correo no sale. Perdido, no se recupera: se reenvía, y eso invalida el anterior.
+   *
+   * No se escribe en ningún log. `apiHandler` registra ruta, estado y duración, nunca el
+   * cuerpo de la respuesta.
+   */
+  inviteUrl: string;
+  expiresAt: Date;
+  /**
+   * `false` significa que **no salió ningún correo**: no hay proveedor configurado y el
+   * `ConsoleMailer` lo escribió en el log. La pantalla lo dice en vez de cantar victoria.
+   */
+  emailDelivered: boolean;
+}
+
 /**
  * Invalidates pending invitations, creates a new one, sends the email and audits
- * `invitation.sent`. The raw token only ever travels inside the email.
+ * `invitation.sent`.
  */
-export async function sendInvitation(
-  input: SendInvitationInput
-): Promise<{ invitationId: string }> {
+export async function sendInvitation(input: SendInvitationInput): Promise<SentInvitation> {
   const { institution, personId, actorId, origin, reinvite = false } = input;
   const db = createTenantClient(institution.id);
 
@@ -67,10 +92,11 @@ export async function sendInvitation(
     },
   });
 
+  const inviteUrl = `${origin}/invitacion/${token}`;
   const email = renderInvitationEmail({
     givenName: person.givenName,
     institutionName: institution.name,
-    inviteUrl: `${origin}/invitacion/${token}`,
+    inviteUrl,
     expiresAt,
   });
   await getMailer({
@@ -89,7 +115,12 @@ export async function sendInvitation(
     },
   });
 
-  return { invitationId: invitation.id };
+  return {
+    invitationId: invitation.id,
+    inviteUrl,
+    expiresAt,
+    emailDelivered: isMailConfigured(),
+  };
 }
 
 // ─────────────────────────── Accept ───────────────────────────
@@ -199,30 +230,121 @@ export async function requestNewInvitation(token: string): Promise<void> {
   // Pending and valid: the person can still use the link.
   if (!invitation.acceptedAt && invitation.expiresAt > new Date()) return;
 
-  const staffMembers = await prisma.membership.findMany({
-    where: {
-      institutionId: invitation.institutionId,
-      role: { in: ['ADMIN', 'OPERATIONS'] },
-      revokedAt: null,
-    },
-    select: { personId: true },
-  });
-  if (staffMembers.length === 0) return;
+  const staff = await staffPersonIds(invitation.institutionId, ['ADMIN', 'OPERATIONS']);
+  if (staff.length === 0) return;
 
   const today = bogotaDate(new Date());
   const personName = `${invitation.person.givenName} ${invitation.person.familyName}`;
 
-  await prisma.notification.createMany({
-    data: staffMembers.map((member) => ({
-      institutionId: invitation.institutionId,
-      personId: member.personId,
-      type: 'reinvite_requested' as const,
-      title: 'Solicitud de nueva invitación',
-      body: `${personName} (${invitation.person.email ?? 'sin correo'}) solicitó una nueva invitación.`,
-      // routes.md:51: personas e invitaciones viven en /personas (grupo staff).
-      href: `/personas/${invitation.personId}`,
-      dedupeKey: `reinvite:${invitation.personId}:${today}`,
-    })),
-    skipDuplicates: true,
+  // Sin contexto de petición: este flujo es público, lo dispara quien abrió un enlace
+  // vencido sin haber iniciado sesión nunca.
+  await notifyManyWithoutContext(invitation.institutionId, staff, {
+    type: 'reinvite_requested',
+    title: 'Solicitud de nueva invitación',
+    body: `${personName} (${invitation.person.email ?? 'sin correo'}) solicitó una nueva invitación.`,
+    // routes.md:51: personas e invitaciones viven en /personas (grupo staff).
+    href: `/personas/${invitation.personId}`,
+    // Una sola solicitud por persona y día: quien insiste con el enlace vencido no debe
+    // llenar el centro de notificaciones de operaciones.
+    dedupeKey: `reinvite:${invitation.personId}:${today}`,
   });
+}
+
+// ─────────────────────────── Estado para operación ───────────────────────────
+
+export interface InvitationOverview {
+  /**
+   * `account` gana sobre todo lo demás: si la persona ya entró, da igual cuántas
+   * invitaciones tenga detrás.
+   */
+  state: 'account' | 'accepted' | 'pending' | 'expired' | 'none';
+  /** Si tiene correo. Sin correo no hay invitación que enviar, y conviene decirlo antes. */
+  hasEmail: boolean;
+  /** Cuándo vence la que está viva, si la hay. */
+  expiresAt: string | null;
+  /** Cuándo la aceptó, si la aceptó. */
+  acceptedAt: string | null;
+  /**
+   * El historial: cuándo se envió cada una y quién la envió. Es lo que contesta «¿ya se le
+   * mandó?», que hasta hoy solo se podía responder mirando la auditoría.
+   */
+  history: Array<{
+    id: string;
+    sentAt: string;
+    expiresAt: string;
+    acceptedAt: string | null;
+    sentBy: string;
+    /** Vencida o invalidada por un reenvío: para quien mira es lo mismo, ya no sirve. */
+    dead: boolean;
+  }>;
+  /** Si hay proveedor de correo. Si no, «enviar» no manda nada y hay que entregar el enlace. */
+  mailConfigured: boolean;
+}
+
+/**
+ * Todo lo que operación necesita saber de la invitación de una persona.
+ *
+ * Lo que **no** devuelve, y no puede devolver, es el enlace: la base guarda solo la huella
+ * del token. Ver `SentInvitation.inviteUrl`.
+ */
+export async function getInvitationOverview({
+  institutionId,
+  personId,
+  now = new Date(),
+}: {
+  institutionId: string;
+  personId: string;
+  now?: Date;
+}): Promise<InvitationOverview | null> {
+  const db = createTenantClient(institutionId);
+
+  const person = await db.person.findFirst({
+    where: { id: personId },
+    select: {
+      id: true,
+      email: true,
+      authUserId: true,
+      invitations: {
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          createdAt: true,
+          expiresAt: true,
+          acceptedAt: true,
+          createdBy: { select: { givenName: true, familyName: true } },
+        },
+      },
+    },
+  });
+
+  if (!person) return null;
+
+  const live = person.invitations.find((i) => i.acceptedAt === null && i.expiresAt > now);
+  const accepted = person.invitations.find((i) => i.acceptedAt !== null);
+
+  const state: InvitationOverview['state'] = person.authUserId
+    ? 'account'
+    : accepted
+      ? 'accepted'
+      : live
+        ? 'pending'
+        : person.invitations.length > 0
+          ? 'expired'
+          : 'none';
+
+  return {
+    state,
+    hasEmail: Boolean(person.email),
+    expiresAt: live ? live.expiresAt.toISOString() : null,
+    acceptedAt: accepted?.acceptedAt ? accepted.acceptedAt.toISOString() : null,
+    history: person.invitations.map((invitation) => ({
+      id: invitation.id,
+      sentAt: invitation.createdAt.toISOString(),
+      expiresAt: invitation.expiresAt.toISOString(),
+      acceptedAt: invitation.acceptedAt ? invitation.acceptedAt.toISOString() : null,
+      sentBy: `${invitation.createdBy.givenName} ${invitation.createdBy.familyName}`.trim(),
+      dead: invitation.acceptedAt === null && invitation.expiresAt <= now,
+    })),
+    mailConfigured: isMailConfigured(),
+  };
 }

@@ -10,6 +10,9 @@ concurrency:
 
 permissions:
   contents: read
+  # ci.yml se llama con `workflow_call` y hereda estos permisos: los que pide a nivel de job
+  # (el `security` pide pull-requests: read para gitleaks) solo pueden reducir, nunca ampliar.
+  pull-requests: read
 
 jobs:
   ci:

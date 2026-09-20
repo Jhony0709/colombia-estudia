@@ -7,6 +7,7 @@
 import type { Preview, ReactRenderer } from '@storybook/nextjs-vite';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { NextIntlClientProvider } from 'next-intl';
+import { TooltipProvider } from '../components/atoms/tooltip';
 import { createElement } from 'react';
 import '../app/globals.css';
 
@@ -36,6 +37,8 @@ const preview: Preview = {
     // CORRECTION 7: NextIntlClientProvider for all stories
     (Story) =>
       createElement(NextIntlClientProvider, { locale: 'es-CO', messages }, createElement(Story)),
+    // Como layout.tsx: cualquier botón con tooltip (Menu, SideNav, editor) exige el proveedor.
+    (Story) => createElement(TooltipProvider, null, createElement(Story)),
     // Theme decorator for dark mode toggle
     withThemeByClassName<ReactRenderer>({
       themes: {

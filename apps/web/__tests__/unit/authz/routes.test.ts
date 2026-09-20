@@ -22,6 +22,8 @@ describe('isProtected', () => {
       '/api/certificates/abc123',
       '/api/webhooks/wompi',
       '/api/jobs/daily',
+      // La portada (19/9): pública sin sesión; con sesión redirige (app/page.tsx).
+      '/',
     ])('%s is NOT protected', (path) => {
       expect(isProtected(path)).toBe(false);
     });
@@ -29,7 +31,7 @@ describe('isProtected', () => {
 
   describe('protected routes', () => {
     it.each([
-      '/',
+      '/ingresar',
       '/aprender',
       '/aprender/tema/123',
       '/aprender/evaluacion/456',
@@ -118,14 +120,14 @@ describe('sanitizeNextUrl', () => {
   });
 
   it('returns "/" for invalid URL', () => {
-    expect(sanitizeNextUrl('//evil.com')).toBe('/');
+    expect(sanitizeNextUrl('//evil.com')).toBe('/ingresar');
   });
 
   it('returns "/" for null', () => {
-    expect(sanitizeNextUrl(null)).toBe('/');
+    expect(sanitizeNextUrl(null)).toBe('/ingresar');
   });
 
   it('returns "/" for undefined', () => {
-    expect(sanitizeNextUrl(undefined)).toBe('/');
+    expect(sanitizeNextUrl(undefined)).toBe('/ingresar');
   });
 });

@@ -18,10 +18,11 @@ ajustes razonables (PIAR), cartera por cuotas y aliados B2B. Multitenant, accesi
 
 ## Estado
 
-Fase 0 (dominio en papel) cerrada el 14/9/2026 tras una auditoría de tres paneles
-(`docs/auditoria-fase0.md`). No hay código de aplicación todavía; `prisma/schema.prisma`
-(35 modelos) está validado y es la implementación de `reference/05-database/schema.md`.
-**Para retomar el proyecto en una sesión nueva: [`docs/handoff.md`](docs/handoff.md).**
+Fases 0, 1 y 2 cerradas; fase 3 (contenido) avanzada y fase 4 (aprender y evaluar)
+iniciada. `prisma/schema.prisma` (36 modelos) es la implementación de
+`reference/05-database/schema.md`. **El estado al día está en
+[`docs/estado.md`](docs/estado.md), en su última entrada**; para retomar el proyecto en una
+sesión nueva, [`docs/handoff.md`](docs/handoff.md).
 
 ## Reglas para trabajar aquí
 

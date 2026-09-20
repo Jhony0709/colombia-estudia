@@ -68,7 +68,7 @@ La única lectura es `grading.ts`. Un `include` olvidado no filtra las respuesta
 
 **Contenido en Markdown, recursos en `MediaAsset`, unión en `LessonVersionAsset`.** La
 tabla de unión se llena al publicar: impide borrar un recurso en uso (`Restrict`), garantiza
-misma institución y hace consultable el legado sin parsear Markdown.
+misma institución y hace consultable qué recurso usa cada versión sin parsear Markdown.
 
 **`captionsSource` distingue `AUTO` de `REVIEWED`.** Los subtítulos automáticos de Vimeo con
 vocabulario de Física no cumplen WCAG 1.2.2; no cuentan para publicar ni para `requiresCaptions`.
@@ -137,16 +137,16 @@ borra el usuario en Supabase Auth); `Consent.revokedAt`; se conservan `Attempt`,
 
 - `LearningEvent.type`: `lesson.opened`, `lesson.video.progress`, `lesson.transcript.read`,
   `lesson.scrolled_to_end`, `lesson.completed`, `attempt.started`, `attempt.answer.saved`,
-  `attempt.submitted`, `attempt.graded`, `assessment.blocked_view`, `accessible.requested`,
-  `problem.reported`.
+  `attempt.submitted`, `attempt.graded`, `assessment.blocked_view`, ~~`accessible.requested`~~
+  (RETIRADO 18/9, con `POST …/request-accessible`), `problem.reported`.
 - `AuditLog.entity/action`: `institution.{created,updated}`, `enrollment.{created,withdrawn,extended,completed}`,
   `certificate.{issued,revoked}`, `submission.{approved,returned}`, `live_session.{created,updated}`,
-  `assignment.version_changed`, `lesson_version.{published,legacy_exception}`,
+  `assignment.version_changed`, `lesson_version.published`,
   `accommodation.{created,updated}`, `payment.{confirmed,voided}`, `agreement.{signed,fulfilled,cancelled}`,
   `policy.updated`, `membership.{granted,revoked}`, `person.{pii_read,anonymized}`,
   `progress.override`, `import.run`, `job.daily`, `invitation.{sent,accepted}`.
 - `Notification.type`: `overdue_reminder`, `agreement_overdue`, `attempt_graded`,
-  `lesson_reopened`, `accessible_ready`, `convert_until_soon`, `problem_reported`,
+  `lesson_reopened`, ~~`accessible_ready`~~ (RETIRADO 18/9), `problem_reported`,
   `submission_reviewed`, `submission_received`, `live_session_soon`, `certificate_issued`,
   `payment_confirmed`.
 

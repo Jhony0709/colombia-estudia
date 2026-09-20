@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { FormField, FormInput, useFormField } from './FormField';
+import { FormField, FormInput, FormSelect, useFormField } from './FormField';
 
 // Test component that uses useFormField hook
 function TestInput({ name }: { name: string }) {
@@ -197,5 +197,34 @@ describe('useFormField', () => {
     }).toThrow('useFormField must be used within FormField');
 
     consoleSpy.mockRestore();
+  });
+});
+
+describe('FormSelect', () => {
+  it('receives the id, description and required state from the field', () => {
+    render(
+      <FormField label="Rol" name="rol" required hint="Elige uno">
+        <FormSelect name="rol">
+          <option value="STUDENT">Estudiante</option>
+        </FormSelect>
+      </FormField>
+    );
+
+    const select = screen.getByLabelText(/Rol/);
+    expect(select.tagName).toBe('SELECT');
+    expect(select).toHaveAttribute('aria-required', 'true');
+    expect(select).toHaveAccessibleDescription('Elige uno');
+  });
+
+  it('marks itself invalid when the field has an error', () => {
+    render(
+      <FormField label="Rol" name="rol" error="Elige un rol">
+        <FormSelect name="rol">
+          <option value="">—</option>
+        </FormSelect>
+      </FormField>
+    );
+
+    expect(screen.getByLabelText(/Rol/)).toHaveAttribute('aria-invalid', 'true');
   });
 });

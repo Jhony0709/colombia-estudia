@@ -192,33 +192,6 @@ describe('isLessonCompleted - MARKDOWN', () => {
   });
 });
 
-// ─────────────────────────── LEGACY ───────────────────────────
-
-describe('isLessonCompleted - LEGACY', () => {
-  it('AMBIGUO: igual que MARKDOWN', () => {
-    // Same rules as MARKDOWN
-    const result = isLessonCompleted(
-      createInput({
-        form: 'LEGACY',
-        evidence: { scrolledToEnd: true, secondsOnLesson: 120 },
-        estimatedMinutes: 5,
-      })
-    );
-    expect(result).toBe(true);
-
-    const result2 = isLessonCompleted(
-      createInput({
-        form: 'LEGACY',
-        evidence: { scrolledToEnd: false, secondsOnLesson: 200 },
-        estimatedMinutes: 5,
-      })
-    );
-    expect(result2).toBe(false);
-  });
-});
-
-// ─────────────────────────── SUBMISSION ───────────────────────────
-
 describe('isLessonCompleted - SUBMISSION', () => {
   it('APPROVED → true', () => {
     const result = isLessonCompleted(

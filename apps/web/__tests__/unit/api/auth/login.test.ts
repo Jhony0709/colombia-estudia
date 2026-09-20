@@ -51,6 +51,7 @@ const institution = {
   name: 'Colombia Estudia',
   supportEmail: 'support@colombiaestudia.co',
   supportPhone: null,
+  dataPolicyUrl: null,
   dataPolicyVersion: '1',
   settings: null,
 };
@@ -94,7 +95,7 @@ describe('POST /api/auth/login', () => {
     });
   }
 
-  it('returns 200 with { data: { next: "/" } } on successful login', async () => {
+  it('returns 200 with { data: { next: "/ingresar" } } on successful login', async () => {
     mockSupabaseAuth.signInWithPassword.mockResolvedValue({
       data: { user: { id: 'auth-user-1' } },
       error: null,
@@ -112,7 +113,7 @@ describe('POST /api/auth/login', () => {
 
     expect(response.status).toBe(200);
     const body = await response.json();
-    expect(body.data.next).toBe('/');
+    expect(body.data.next).toBe('/ingresar');
   });
 
   it('preserves next parameter on successful login', async () => {
@@ -137,7 +138,7 @@ describe('POST /api/auth/login', () => {
     expect(body.data.next).toBe('/aprender');
   });
 
-  it('sanitizes malicious next parameter to /', async () => {
+  it('sanitizes malicious next parameter to /ingresar', async () => {
     mockSupabaseAuth.signInWithPassword.mockResolvedValue({
       data: { user: { id: 'auth-user-1' } },
       error: null,
@@ -156,7 +157,7 @@ describe('POST /api/auth/login', () => {
 
     expect(response.status).toBe(200);
     const body = await response.json();
-    expect(body.data.next).toBe('/');
+    expect(body.data.next).toBe('/ingresar');
   });
 
   it('returns 401 with generic message on bad credentials', async () => {

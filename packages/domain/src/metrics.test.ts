@@ -12,7 +12,6 @@ import {
   assessmentsTakenAndPassed,
   billingBreakdown,
   accommodationsApplied,
-  legacyStatus,
 } from './metrics';
 
 // ─────────────────────────── completionRate ───────────────────────────
@@ -402,69 +401,5 @@ describe('accommodationsApplied', () => {
     expect(result.count).toBe(0);
     expect(result.byAuthorizer).toEqual({});
     expect(result.changesInPeriod).toBe(0);
-  });
-});
-
-// ─────────────────────────── legacyStatus ───────────────────────────
-
-describe('legacyStatus', () => {
-  it('counts pending legacy versions', () => {
-    const result = legacyStatus({
-      versions: [
-        { hasLegacyException: true, converted: false },
-        { hasLegacyException: true, converted: false },
-        { hasLegacyException: false, converted: false },
-      ],
-      accessibilityRequests: 5,
-    });
-
-    expect(result.pending).toBe(2);
-  });
-
-  it('counts converted legacy versions', () => {
-    const result = legacyStatus({
-      versions: [
-        { hasLegacyException: true, converted: true },
-        { hasLegacyException: true, converted: false },
-        { hasLegacyException: true, converted: true },
-      ],
-      accessibilityRequests: 3,
-    });
-
-    expect(result.converted).toBe(2);
-    expect(result.pending).toBe(1);
-  });
-
-  it('ignores versions without legacyException', () => {
-    const result = legacyStatus({
-      versions: [
-        { hasLegacyException: false, converted: false },
-        { hasLegacyException: false, converted: true },
-      ],
-      accessibilityRequests: 0,
-    });
-
-    expect(result.pending).toBe(0);
-    expect(result.converted).toBe(0);
-  });
-
-  it('passes through accessibilityRequests count', () => {
-    const result = legacyStatus({
-      versions: [],
-      accessibilityRequests: 42,
-    });
-
-    expect(result.requests).toBe(42);
-  });
-
-  it('handles empty versions array', () => {
-    const result = legacyStatus({
-      versions: [],
-      accessibilityRequests: 0,
-    });
-
-    expect(result.pending).toBe(0);
-    expect(result.converted).toBe(0);
-    expect(result.requests).toBe(0);
   });
 });

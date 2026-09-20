@@ -17,6 +17,7 @@ import { FormField, FormInput } from '@/components/atoms/form-field';
 import { FormPasswordInput } from '@/components/atoms/password-input';
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
+import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
 
 export default function LoginContent() {
   const t = useTranslations('auth');
@@ -44,7 +45,7 @@ export default function LoginContent() {
     }
   }, [error]);
 
-  const next = searchParams.get('next') || '/';
+  const next = searchParams.get('next') || HOME_AFTER_LOGIN;
 
   async function handlePasswordLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -118,7 +119,7 @@ export default function LoginContent() {
         <button
           type="button"
           onClick={() => setMagicLinkSent(false)}
-          className="type-body text-accent-base hover:underline"
+          className="type-body text-text-link underline"
         >
           {t('backToLogin')}
         </button>
@@ -173,7 +174,7 @@ export default function LoginContent() {
 
       {/* Password first (decision 16/9); the passwordless path is secondary, as text links. */}
       <div className="flex flex-col items-center gap-2 text-center">
-        <Link href="/auth/recuperar" className="type-body text-accent-base hover:underline">
+        <Link href="/auth/recuperar" className="type-body text-text-link underline">
           {t('forgotPassword')}
         </Link>
         <p className="type-body text-text-muted">
@@ -182,7 +183,7 @@ export default function LoginContent() {
             type="button"
             onClick={handleMagicLink}
             disabled={loading !== null}
-            className="type-body text-accent-base disabled:text-text-subtle hover:underline"
+            className="type-body text-text-link disabled:text-text-subtle underline"
           >
             {t('magicLink')}
           </button>

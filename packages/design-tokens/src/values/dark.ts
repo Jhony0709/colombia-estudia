@@ -2,68 +2,83 @@
  * Dark theme color values.
  * SSOT: reference/03-ui/tokens.md
  *
- * All colors must pass contrast tests in contrast.test.ts
+ * Rediseño del 18/9, mismo tono (214°) que el claro.
+ *
+ * `accent.base` **no puede ser el azul de marca (#0047BA) aquí**: sobre un lienzo oscuro da
+ * 2.33:1 y un azul marino no se ve. Es el mismo tono subido de luminosidad, con texto oscuro encima, que es como el acento
+ * funciona en oscuro.
+ *
+ * El tema oscuro era el frágil: `border.default / surface.base` daba **3.07 con un mínimo de
+ * 3**, a una centésima de fallar. Ahora da 4.87. Holgura mínima del tema: +1.87 (antes +0.07).
  */
 
 import type { SemanticColorTokens } from '../contract/semantic-tokens';
 
 export const darkColors: SemanticColorTokens = {
   surface: {
-    canvas: '#0F172A',
-    base: '#1E293B',
-    sunken: '#0F172A',
-    raised: '#334155',
-    note: '#422006',
+    canvas: '#0B1220',
+    base: '#151E2E',
+    sunken: '#0F1827',
+    raised: '#1E2A3D',
+    note: '#3A2A08',
   },
   text: {
-    default: '#F8FAFC',
-    muted: '#94A3B8',
-    subtle: '#94A3B8', // Same as muted for dark mode to meet 4.5:1
-    onAccent: '#0F172A', // Dark text on light accent for 4.5:1
-    link: '#60A5FA',
+    default: '#F6F8FB',
+    muted: '#A2B1C4',
+    // Igual que `muted`: en oscuro, bajar más rompería el 4.5:1 y `text.subtle` también
+    // se usa para deshabilitado, que tiene que seguir siendo legible.
+    subtle: '#A2B1C4',
+    onAccent: '#08101C',
+    link: '#8FB6F0',
   },
   accent: {
-    base: '#60A5FA', // Lightened for 4.5:1 with dark text
-    hover: '#93C5FD',
-    active: '#BFDBFE',
+    base: '#8FB6F0',
+    hover: '#B0CCF6',
+    active: '#CFE0FA',
   },
   border: {
-    default: '#64748B', // Lightened for 3:1 contrast
-    muted: '#475569',
+    default: '#7B8CA3',
+    muted: '#2A374A',
   },
   status: {
     success: {
-      base: '#22C55E',
-      muted: '#14532D',
-      onBase: '#0F172A',
+      base: '#34D07A',
+      muted: '#0C3520',
+      onBase: '#08101C',
     },
     warning: {
-      base: '#FBBF24',
-      muted: '#422006',
-      onBase: '#0F172A',
+      base: '#F5B93C',
+      muted: '#3A2A08',
+      onBase: '#08101C',
     },
     error: {
-      base: '#EF4444',
-      muted: '#450A0A',
-      onBase: '#0F172A', // Dark text for 4.5:1
+      base: '#F26D6D',
+      muted: '#3A0F0F',
+      onBase: '#08101C',
     },
     info: {
-      base: '#60A5FA',
-      muted: '#1E3A8A',
-      onBase: '#0F172A',
+      base: '#8FB6F0',
+      muted: '#12305E',
+      onBase: '#08101C',
     },
     locked: {
-      base: '#9CA3AF',
-      muted: '#1F2937',
-      onBase: '#0F172A',
+      base: '#9FADBE',
+      muted: '#1B2432',
+      onBase: '#08101C',
     },
     legacy: {
-      base: '#F59E0B',
-      muted: '#422006',
-      onBase: '#0F172A',
+      base: '#F0A93C',
+      muted: '#3A2A08',
+      onBase: '#08101C',
     },
   },
   focus: {
-    ring: '#60A5FA',
+    ring: '#8FB6F0',
+  },
+  brand: {
+    // Los mismos en los dos temas: son la marca, no colores semánticos.
+    yellow: '#F5C400',
+    onYellow: '#0C1522',
+    red: '#D72638',
   },
 };

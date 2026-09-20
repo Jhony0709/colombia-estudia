@@ -31,6 +31,23 @@ const PUBLIC_ROUTES = new Map([
   ['invitations/[token]/accept/route.ts', 'token = credencial'],
   ['invitations/[token]/request-new/route.ts', 'público por diseño'],
   ['me/route.ts', 'comprueba ctx.person a mano; Deuda: migrar a capability'],
+  // Notificaciones: el contrato dice "cualquiera" (endpoints.md:34) porque cada quien
+  // ve y marca LAS SUYAS. Lo que filtra no es un permiso sino el `personId` de la
+  // sesión, que entra en el `where`; una capacidad no añadiría nada y daría a entender
+  // que hay algo que un rol puede o no puede hacer aquí.
+  ['notifications/route.ts', 'exige sesión; filtra por el personId del contexto'],
+  [
+    'notifications/[notificationId]/read/route.ts',
+    'exige sesión; el personId del contexto va en el where del UPDATE',
+  ],
+  ['notifications/read-all/route.ts', 'exige sesión; solo marca las propias'],
+  // Fases 5 y 6 (19/9): tres rutas que se autentican por otra cosa que una capacidad.
+  [
+    'certificates/[code]/route.ts',
+    'verificación pública de constancias (endpoints.md:49); límite por IP en lib/http/rate-limit.ts',
+  ],
+  ['webhooks/wompi/route.ts', 'firma de Wompi (checksum del evento), no sesión'],
+  ['jobs/daily/route.ts', 'CRON_SECRET en Authorization: Bearer, no sesión'],
 ]);
 
 function walk(dir: string, out: string[] = []): string[] {

@@ -41,9 +41,14 @@ describe('Label', () => {
     expect(screen.queryByText('*')).not.toBeInTheDocument();
   });
 
-  it('applies type-body class', () => {
+  // `body-emphasis` y no `body`: una etiqueta de campo destaca sobre el valor, y antes
+  // eso se conseguia pegandole `font-medium` por fuera del sistema de roles.
+  // Se mantiene el tamano de `body` a proposito: reducirla a `label` (0,875rem) haria
+  // mas pequenas las etiquetas de formulario para un publico que lee de noche en movil.
+  it('usa el rol body-emphasis', () => {
     render(<Label>Etiqueta</Label>);
-    expect(screen.getByText('Etiqueta')).toHaveClass('type-body');
+    expect(screen.getByText('Etiqueta')).toHaveClass('type-body-emphasis');
+    expect(screen.getByText('Etiqueta')).not.toHaveClass('font-medium');
   });
 
   it('accepts custom className', () => {

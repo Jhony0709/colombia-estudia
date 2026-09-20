@@ -267,33 +267,3 @@ export function accommodationsApplied(input: {
 
   return { count, byAuthorizer, changesInPeriod };
 }
-
-/**
- * Legado.
- * reportes.md:19 "versiones publicadas con legacyException pendientes vs convertidas;
- * solicitudes de versión accesible"
- *
- * @returns pending: versions with legacyException not converted,
- *          converted: versions converted, requests: accessibility requests count.
- */
-export function legacyStatus(input: {
-  versions: Array<{ hasLegacyException: boolean; converted: boolean }>;
-  accessibilityRequests: number;
-}): { pending: number; converted: number; requests: number } {
-  const { versions, accessibilityRequests } = input;
-
-  let pending = 0;
-  let converted = 0;
-
-  for (const version of versions) {
-    if (version.hasLegacyException) {
-      if (version.converted) {
-        converted++;
-      } else {
-        pending++;
-      }
-    }
-  }
-
-  return { pending, converted, requests: accessibilityRequests };
-}

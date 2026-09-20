@@ -13,6 +13,7 @@ import { getRequestId } from '../observability/request-id';
 import { logger, hashPersonId } from '../observability/logger';
 import { APIError, isAPIError } from '../core/errors';
 import { success, error } from './responses';
+import { revalidateStaffPages } from './revalidate';
 import type { Capability } from '@colombia-estudia/domain';
 
 // ─────────────────────────── Context ───────────────────────────
@@ -142,6 +143,15 @@ export function apiHandler<TInput = unknown, TOutput = unknown>(
 
         // Execute handler
         const result = await handler(req, ctx, input);
+
+        // Una escritura deja viejas las pantallas de staff, que son Server Components y leen
+        // de la base al renderizar. Va aquí, en el único sitio por el que pasan todas las
+        // rutas, y no repetido en cada una: una lista de doce llamadas a `revalidatePath` es
+        // una lista de doce sitios donde olvidarse de la número trece. Ver
+        // `lib/http/revalidate.ts` para por qué `router.refresh()` solo no basta.
+        if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
+          revalidateStaffPages();
+        }
 
         // If handler returns a Response (NextResponse or a plain Response, e.g. a redirect),
         // use it directly. NextResponse extends Response, so checking Response covers both.

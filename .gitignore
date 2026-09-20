@@ -43,3 +43,6 @@ debug.log
 .claude/settings.local.json
 .vercel
 .env*
+
+# Scratch local (nunca al repo: puede contener CSV con datos de personas)
+_to_delete/

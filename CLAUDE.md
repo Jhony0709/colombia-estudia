@@ -9,11 +9,13 @@ exige además. Ante duda, `reference/` manda.
 
 ## Estado actual
 
-**Fase 0 (dominio en papel) cerrada.** No hay código de aplicación todavía. El schema de
-Prisma (35 modelos) y toda la documentación de `reference/` están listos. Ver
-`docs/handoff.md` para retomar el proyecto.
+**El estado vive en `docs/estado.md`.** No se duplica aquí: si este bloque y ese documento
+se contradicen, manda `docs/estado.md`. Resumen a 18/9/2026: fases 0, 1 y 2 cerradas,
+fase 3 (contenido) avanzada, fase 4 (aprender y evaluar) iniciada, fase 5 (cartera) sin
+empezar. 359 ficheros TypeScript, 56 endpoints, 22 páginas, 91 ficheros de test, 36 modelos
+en Prisma. Ver `ROADMAP.md` para qué entra en cada fase.
 
-## Comandos (disponibles desde fase 1)
+## Comandos
 
 ```bash
 # Desarrollo

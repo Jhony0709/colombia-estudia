@@ -67,6 +67,7 @@ const institution = {
   name: 'Valida YA',
   supportEmail: 'support@validaya.co',
   supportPhone: null,
+  dataPolicyUrl: null,
   dataPolicyVersion: '1',
   settings: null,
 };
@@ -117,6 +118,7 @@ describe('getRequestContext', () => {
       name: 'Valida YA',
       supportEmail: 'support@validaya.co',
       supportPhone: null,
+      dataPolicyUrl: null,
       dataPolicyVersion: '1',
       settings: null,
     });
@@ -145,6 +147,7 @@ describe('getRequestContext', () => {
       name: 'Valida YA',
       supportEmail: 'support@validaya.co',
       supportPhone: null,
+      dataPolicyUrl: null,
       dataPolicyVersion: '1',
       settings: null,
     });
@@ -174,6 +177,7 @@ describe('getRequestContext', () => {
       name: 'Valida YA',
       supportEmail: 'support@validaya.co',
       supportPhone: null,
+      dataPolicyUrl: null,
       dataPolicyVersion: '1',
       settings: null,
     });

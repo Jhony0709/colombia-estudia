@@ -13,7 +13,7 @@ import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
 import { resolveInstitutionBySlug } from '@/lib/authz/institution-cache';
 import { findLoginPerson } from '@/features/auth/server/session.service';
 import { COLOMBIA_ESTUDIA } from '@/lib/authz/tenant';
-import { sanitizeNextUrl } from '@/lib/authz/routes';
+import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
 
 const schema = z.object({
   email: z.string().email(),
@@ -63,6 +63,7 @@ export const POST = apiHandler({
   if (!needsMfa) {
     return { next: target };
   }
-  const mfaUrl = target === '/' ? '/auth/mfa' : `/auth/mfa?next=${encodeURIComponent(target)}`;
+  const mfaUrl =
+    target === HOME_AFTER_LOGIN ? '/auth/mfa' : `/auth/mfa?next=${encodeURIComponent(target)}`;
   return { next: mfaUrl };
 });

@@ -26,7 +26,15 @@ cards: el interior usa `sunken`.
 lectura larga: **el Markdown se renderiza en `body`, ≥ 16 px en móvil, line-height 1.5,
 ancho máximo `size.readingWidth = 68ch`** · `data` tabular para notas, cuotas y cronómetro
 (`tabular-nums`) · `caption` metadatos · `overline` etiquetas de sección. Fórmulas: MathML
-hereda `body`. Nunca `px` para texto; nunca un tamaño que no sea un rol.
+hereda `body` · `label` texto DENTRO de un control (botón, chip, pestaña): no es prosa,
+no se lee seguido · `body-emphasis` mismo tamaño que `body` con más peso, la única forma
+de destacar sin cambiar de rol. Nunca `px` para texto; nunca un tamaño que no sea un rol;
+nunca una utilidad de peso suelta (`font-medium` y compañía) sobre un rol: para eso está
+`body-emphasis`.
+
+Familia única: **Atkinson Hyperlegible Next**, self-hosted, en `apps/web/app/fonts/`
+(decisión 17/9). `data` depende de su feature `tnum`: una fuente sin `tnum` deja
+`tabular-nums` en letra muerta y descuadra notas, cuotas y cronómetro sin avisar.
 
 ## Color semántico
 
@@ -48,7 +56,7 @@ sitio y toda la UI las sigue.
 ## Espaciado, radios, tamaños
 
 `space.{1..12}` en `rem` · `radius.{control,card,sheet,pill}` · `size.touchMin = 44px`
-SIEMPRE en player, evaluación y cartera · `elevation.{0..3}` vía helper, nunca sombra a
+SIEMPRE en player, evaluación y cartera · `elevation.{none,floating,modal}` vía helper, nunca sombra a
 mano. Reflow a 320 px sin scroll horizontal; tablas en contenedor con scroll propio.
 
 ## Motion (resumen — la doctrina completa en motion-colombia-estudia)
@@ -82,6 +90,8 @@ cuota vencida", nunca "en mora"; "Se habilita al completar Física – Magnitude
 
 ## Reglas de proceso
 
+Antes de construir o cambiar una pantalla: `frontend-colombia-estudia` (frontera
+cliente/servidor, elección de duración dentro de la escala, autocrítica antes de cerrar).
 Todo en tokens (el barrido `/audit-ui` de ui-craft-colombia-estudia es obligatorio antes
 de cerrar trabajo visual). Todo componente interactivo se prueba con teclado antes del PR.
 Story con addon-a11y por componente. Componentes retirados no se borran. Pruebas en

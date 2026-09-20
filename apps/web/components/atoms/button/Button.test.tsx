@@ -14,6 +14,42 @@ jest.mock('next-intl', () => ({
 }));
 
 describe('Button', () => {
+  /*
+    El deshabilitado tiene que apagar el FONDO, no solo el texto.
+
+    Con solo el texto, un primario deshabilitado quedaba en 1.05:1 en oscuro: gris claro sobre
+    el acento, es decir, invisible. Esto fija que el fondo deje de ser el acento; el par
+    `text.subtle / surface.sunken` lo vigila por el lado del contraste en design-tokens.
+  */
+  it('un primario deshabilitado deja de llevar el fondo del acento', () => {
+    render(<Button disabled>Crear</Button>);
+
+    const button = screen.getByRole('button', { name: 'Crear' });
+    expect(button).toHaveClass('bg-surface-sunken');
+    expect(button).not.toHaveClass('bg-accent-base');
+    expect(button).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('un `quiet` deshabilitado NO gana fondo: se volvería relleno al dejar de pulsarse', () => {
+    render(
+      <Button variant="quiet" disabled>
+        Quitar
+      </Button>
+    );
+
+    const button = screen.getByRole('button', { name: 'Quitar' });
+    expect(button).toHaveClass('text-text-subtle');
+    expect(button).not.toHaveClass('bg-surface-sunken');
+  });
+
+  it('cargando también apaga el fondo: no se puede pulsar', () => {
+    render(<Button loading>Guardar</Button>);
+
+    const button = screen.getByRole('button');
+    expect(button).toHaveClass('bg-surface-sunken');
+    expect(button).toHaveAttribute('aria-busy', 'true');
+  });
+
   it('renders children text', () => {
     render(<Button>Enviar</Button>);
     expect(screen.getByRole('button', { name: 'Enviar' })).toBeInTheDocument();
@@ -160,14 +196,26 @@ describe('Button', () => {
   });
 
   describe('sizes', () => {
-    it('default size has type-body', () => {
-      render(<Button size="default">Default</Button>);
-      expect(screen.getByRole('button')).toHaveClass('type-body');
+    // El tipo de un boton es el rol `label` (texto dentro de un control) en los dos
+    // tamanos: lo unico que los diferencia es el relleno. Antes `lg` usaba
+    // `type-subheading`, que es un rol de encabezado, y el peso venia de un
+    // `font-medium` suelto en la clase base.
+    it.each(['default', 'lg'] as const)('el tamano %s usa el rol label', (size) => {
+      render(<Button size={size}>Boton</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('type-label');
+      expect(button).not.toHaveClass('type-body');
+      expect(button).not.toHaveClass('type-subheading');
+      expect(button).not.toHaveClass('font-medium');
     });
 
-    it('lg size has type-subheading', () => {
+    it('los tamanos se diferencian solo en el relleno', () => {
+      const { unmount } = render(<Button size="default">Default</Button>);
+      expect(screen.getByRole('button')).toHaveClass('px-4', 'py-2');
+      unmount();
+
       render(<Button size="lg">Large</Button>);
-      expect(screen.getByRole('button')).toHaveClass('type-subheading');
+      expect(screen.getByRole('button')).toHaveClass('px-6', 'py-3');
     });
   });
 

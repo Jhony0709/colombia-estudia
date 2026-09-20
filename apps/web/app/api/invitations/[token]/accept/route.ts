@@ -13,6 +13,7 @@ import { APIError } from '@/lib/core/errors';
 import { validateInvitationToken } from '@/lib/invitations/validate-token';
 import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
 import { acceptInvitation } from '@/features/auth/server/invitations.service';
+import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
 
 const schema = z.object({
   password: z.string().min(12, 'La contraseña debe tener al menos 12 caracteres'),
@@ -58,5 +59,5 @@ export const POST = apiHandler({ schema })(async (_req, ctx, { password, accepts
   const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
   // `/` sends each role to its area and to /auth/mfa when needed.
-  return { next: signInError ? '/auth/login' : '/' };
+  return { next: signInError ? '/auth/login' : HOME_AFTER_LOGIN };
 });

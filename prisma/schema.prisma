@@ -435,8 +435,6 @@ model Lesson {
 
 /// Publicación inmutable. `content` es Markdown (CommonMark + GFM + `$…$` LaTeX + directivas
 /// ::video / ::audio / ::pdf / :lang; contrato en packages/types/src/content.ts).
-/// `legacyException` documenta por qué se publicó contenido que no pasa la validación (solo el importador
-/// puede crearla); `convertUntil` es la fecha comprometida de conversión.
 /// `invalidatesProgress`: el autor lo marca cuando el cambio es sustancial y el tema debe reabrirse.
 model LessonVersion {
   id                  String        @id @default(cuid())
@@ -449,9 +447,6 @@ model LessonVersion {
   estimatedMinutes    Int?
   invalidatesProgress Boolean       @default(false)
   accessibilityReport Json?
-  /// { reason, approvedById, approvedAt } — solo contenido migrado.
-  legacyException     Json?
-  convertUntil        DateTime?     @db.Date
   createdAt           DateTime      @default(now())
   publishedAt         DateTime?
   publishedById       String?
@@ -464,7 +459,7 @@ model LessonVersion {
   progress    LessonProgress[]
 
   @@unique([lessonId, number])
-  @@index([institutionId, status, convertUntil])
+  @@index([institutionId, status])
 }
 
 /// Recursos referenciados por una versión, extraídos del Markdown al publicar. Hace consultable el
@@ -631,7 +626,8 @@ enum CaptionsSource {
 /// Todo recurso referenciado desde el Markdown. Video: VIMEO por defecto (providerRef = id de Vimeo).
 /// Imagen/PDF/audio: STORAGE (providerRef = ruta del bucket). La validación de publicación exige:
 /// imagen → altText; video/audio → captionsSource REVIEWED o transcriptPath (AUTO no cuenta);
-/// PDF → textAlternativePath; y siempre status READY y misma institución. Salvo `legacy`.
+/// PDF → textAlternativePath; y siempre status READY y misma institución. Sin excepciones
+/// (la de legado se retiró el 18/9 al cancelarse la importación).
 model MediaAsset {
   id                  String         @id @default(cuid())
   institutionId       String
@@ -648,8 +644,6 @@ model MediaAsset {
   transcriptPath      String?
   /// Markdown con el texto del documento (PDF transcrito) o de la imagen de página.
   textAlternativePath String?
-  /// Migrado de la plataforma anterior sin alternativa textual. Debe convertirse.
-  legacy              Boolean        @default(false)
   uploadedById        String
   createdAt           DateTime       @default(now())
   archivedAt          DateTime?
@@ -661,7 +655,7 @@ model MediaAsset {
   submissions Submission[]
 
   @@unique([institutionId, provider, providerRef])
-  @@index([institutionId, kind, legacy])
+  @@index([institutionId, kind])
 }
 
 // ───────────────────────────── Aprendizaje ─────────────────────────────

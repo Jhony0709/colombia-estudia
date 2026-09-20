@@ -5,4 +5,5 @@
  */
 
 export * from './content';
+export * from './render';
 export * from './catalogs';

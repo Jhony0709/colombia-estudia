@@ -62,7 +62,7 @@ LaTeX acotado + directivas propias. El contrato exacto es un parser/validador en
 | HTML crudo               | —                                            | Rechazado                                                                                                                                                    |
 
 Todo `asset:<id>` debe ser de la **misma institución** y estar `READY`. Al publicar, los ids
-se extraen a `LessonVersionAsset` (impide borrar un recurso en uso y hace consultable el legado).
+se extraen a `LessonVersionAsset` (impide borrar un recurso en uso y hace consultable qué versión usa qué recurso).
 
 Por qué Markdown y no JSON de un editor: texto plano, portable, diffable, destino natural
 del OCR, render semántico limpio. Por qué LaTeX: Matemáticas, Geometría y Física; una
@@ -82,7 +82,12 @@ Vimeo**. Se soportan ambos caminos, y la meta es que todo acabe en el primero.
 `LessonVersion` en `DRAFT` para revisión humana. Figuras que no son texto se recortan e
 insertan como imagen con `alt`. Publica con la validación normal.
 
-**Camino 2 — PDF o imagen como legado (el puente).** Se importa con `MediaAsset.legacy = true`
+> **Retirado el 18/9.** Al cancelarse la importación desde LearnDash no hay contenido
+> migrado, así que no hay nada que excepcionar: `legacyException`, `convertUntil` y
+> `MediaAsset.legacy` salieron del schema y del código. Lo de abajo se conserva como
+> registro de por qué existió, no como descripción del sistema. Ver `PRODUCT_DECISIONS.md`.
+
+**Camino 2 — ~~PDF o imagen como legado~~ (RETIRADO).** Se importa con `MediaAsset.legacy = true`
 y se publica con `LessonVersion.legacyException { reason, approvedById, approvedAt }` y
 `convertUntil`, registrado en `AuditLog`. La validación **no bloquea** una versión con
 excepción, pero:
@@ -96,12 +101,17 @@ excepción, pero:
 - **contenido nuevo nunca puede ser legado**: `POST …/publish` rechaza cualquier
   `legacyException`; solo el servicio del importador escribe ese campo.
 
+> Ninguna de esas cuatro viñetas existe hoy: la ruta `/contenido/legado`, el endpoint
+> `GET /api/content/legacy`, el aviso del player y el rechazo en `publish` se retiraron
+> con el campo. Publicar valida igual para todos: sin alternativa textual no se publica.
+
 **Decisión 5 (Jhonny): texto automático.** El borrador OCR sin revisar se guarda en
 `MediaAsset.textAlternativePath` y el player lo expone como alternativa textual bajo el
 aviso "Texto generado automáticamente; puede contener errores". Sirve al lector de
 pantalla y a la búsqueda desde el día uno; la revisión humana sigue siendo el destino.
 
-**Decisión 6: los videos migrados publican bajo la excepción de legado** con
+**~~Decisión 6: los videos migrados publican bajo la excepción de legado~~ — SIN EFECTO
+desde el 18/9** (no hay videos migrados). Todo video nuevo cumple la regla estricta: con
 `captionsSource AUTO` o `NONE`; nadie revisa subtítulos por ahora. La regla estricta aplica
 a videos nuevos.
 
@@ -142,12 +152,12 @@ con enlace a la línea, no en un toast.
 `LessonProgress.evidence` guarda lo que pasó; `COMPLETED` lo decide
 `packages/domain/src/lesson-completion.ts` según la forma del contenido:
 
-| Forma                            | Evidencia de completado                                                          |
-| -------------------------------- | -------------------------------------------------------------------------------- |
-| Video                            | posición ≥ 90 % **o** transcripción leída hasta el final (`transcriptReadToEnd`) |
-| Markdown                         | scroll al final **y** tiempo ≥ min(`estimatedMinutes` × 0,5, 2 min)              |
-| Legado (imagen/PDF)              | visto hasta el final **y** tiempo mínimo                                         |
-| Actividad (`requiresSubmission`) | `Submission` con estado `APPROVED` por un instructor. Nada más lo completa       |
+| Forma                                   | Evidencia de completado                                                          |
+| --------------------------------------- | -------------------------------------------------------------------------------- |
+| Video                                   | posición ≥ 90 % **o** transcripción leída hasta el final (`transcriptReadToEnd`) |
+| Markdown                                | scroll al final **y** tiempo ≥ min(`estimatedMinutes` × 0,5, 2 min)              |
+| ~~Legado (imagen/PDF)~~ (RETIRADO 18/9) | — `LessonForm` ya solo tiene `VIDEO`, `MARKDOWN` y `SUBMISSION`                  |
+| Actividad (`requiresSubmission`)        | `Submission` con estado `APPROVED` por un instructor. Nada más lo completa       |
 
 `source`: `EVIDENCE` (normal), `MANUAL` (operaciones con `progress.override`, motivo y
 `AuditLog`), `IMPORTED` (reservado; con la decisión 1 no se importa progreso).

@@ -9,6 +9,7 @@
  * - Account status derivation
  * - Attempt policy (deadline, attempts allowed)
  * - Publish validation
+ * - Content version state machine
  * - Grading
  * - Lesson and enrollment completion
  * - Metrics
@@ -20,6 +21,7 @@ export * from './capabilities';
 export * from './account-status';
 export * from './attempt-policy';
 export * from './publish-validation';
+export * from './transitions';
 export * from './grading';
 export * from './lesson-completion';
 export * from './enrollment-completion';

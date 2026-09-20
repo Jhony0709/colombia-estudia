@@ -1,28 +1,58 @@
-# Runbook: dar de alta una institución
+# Runbook — Poner en marcha una institución
 
-Manual hoy, por script; automatizable cuando haya una tercera. Cada paso deja rastro.
+Lo que hace operaciones, en orden, para que una institución empiece a dictar. Es también el
+guion de la capacitación de 2 h (plan/10 §7).
 
-1. **Contrato y datos**: contrato de licencia + contrato de encargo de tratamiento de datos
-   (Ley 1581: la institución es responsable, la plataforma encargada). Nombre legal, NIT,
-   contacto de soporte, política de tratamiento de datos (URL y versión), logo, color.
-2. **Tenant**: `Institution` con `slug`, marca y contacto (`scripts/institution/create.ts`),
-   `RestrictionPolicy` vacía, `AuditLog institution.created`.
-3. **Dominio propio** (decisión 3): la institución aporta el dominio (p. ej.
-   `app.validaya.com`); CNAME a Vercel, `Institution.primaryDomain`, SSL automático.
-   Remitente de correo `Institution.emailFromName <no-responder@colombiaestudia.co>` (o el
-   dominio de la institución si verifica su DNS en Resend).
-4. **Vimeo**: añadir el dominio a la lista de embeds permitidos de la cuenta de la institución.
-5. **Wompi**: hoy las llaves van en variables de entorno (una sola institución recaudando).
-   Con la segunda institución pasan a la base, cifradas, por institución. Sandbox primero.
-6. **Primer ADMIN**: `Person` + `Membership ADMIN` + invitación.
-7. **Programa**: programa, módulos, asignaturas (el admin lo hace en `/admin/institucion`),
-   o importación si vienen de otra plataforma (`/admin/importar`, `dryRun` primero).
-8. **Cohorte piloto**: crear, cargar CSV en seco, corregir, confirmar, invitar.
-9. **Verificación**: test de aislamiento en staging con dos instituciones; recorrido con
-   teclado y lector de pantalla en el dominio nuevo; backup restaurado.
-10. **Capacitación**: operaciones (matrículas, cartera, invitaciones) y autores (editor,
-    publicación, legado).
+## 1. La institución (ADMIN)
 
-Lo que aún no existe y frena una tercera institución: `Person` global multi-institución,
-facturación por institución, llaves de Wompi por institución en la base (hoy variables de
-entorno: una sola cuenta recaudadora). Está en `ROADMAP.md`.
+`/admin/institucion`: nombre, correo de soporte, nombre del remitente de correos, color de
+marca. `/admin/politicas`: las dos banderas de cartera (apagadas al empezar).
+
+## 2. El plan de estudios (ADMIN)
+
+`/contenido/asignaturas` → `/contenido/programas` (con sus módulos, en orden). Sin
+programa no hay tema que escribir.
+
+## 3. El contenido (INSTRUCTOR)
+
+`/contenido/temas`: un tema por lección, Markdown con imágenes (con alt), video de Vimeo
+(con transcripción WebVTT) y PDF (con alternativa textual). Marcar «Se completa con
+entrega» solo si un instructor va a revisar algo. Vista previa → publicar.
+`/contenido/evaluaciones`: preguntas, clave de respuestas aparte, reglas del intento
+(intentos, tiempo, umbral, qué ve el estudiante después). Publicar.
+
+## 4. Las personas (OPERATIONS)
+
+`/personas`: crear con documento, correo y **fecha de nacimiento** (sin ella no se puede
+matricular). Menores: registrar el acudiente antes de matricular. Importar por CSV desde
+`/cohortes/[id]/importar` cuando son muchos (plantilla en la pantalla).
+
+## 5. La cohorte (OPERATIONS)
+
+`/cohortes` → «Nueva cohorte» (programa, código, fechas, progresión lineal o libre, aliado
+si lo hay). Matricular (una a una o CSV). **Abrir** la cohorte: es lo que asigna los temas
+y evaluaciones publicados y deja entrar. Invitar (`Invitaciones` → «Preparar el envío»).
+Programar sesiones en vivo si las hay.
+
+## 6. La cartera (OPERATIONS)
+
+`/cartera` → cada matrícula → «Crear el plan» (quién paga, total, cuotas, primer
+vencimiento). Los pagos se registran en dos pasos; los acuerdos con vista previa.
+
+## 7. Durante la cohorte
+
+- `/cohortes/[id]/avance`: quién va cómo, en riesgo, exportar.
+- `/cohortes/[id]/entregas`: aprobar o devolver con comentario.
+- `/cohortes/[id]/matriculas/[m]`: progreso, marcar completado a mano (con motivo), ajustes
+  razonables (coordinación de inclusión), constancias.
+- `/notificaciones`: lo que pide atención.
+
+## 8. Al terminar
+
+Las constancias se emiten solas. Cerrar la cohorte cuando pase `endsOn`. Prorrogar el
+acceso a quien lo necesite desde la ficha de la cohorte.
+
+## Lo que operaciones no puede hacer (y quién sí)
+
+Cambiar una nota (se deriva del intento; no hay pantalla), suspender el acceso por mora
+(no existe), ver ajustes razonables (coordinación de inclusión), anonimizar (ADMIN).

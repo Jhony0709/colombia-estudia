@@ -26,8 +26,8 @@ institución. Sin eso, cualquiera que conozca el id reproduce el video.
 `POST /api/media/vimeo` registra un video por id, consulta la API de Vimeo (duración,
 pistas de subtítulos) y marca `captionsSource = AUTO` si las pistas son generadas. Solo un
 autor que las revisó las marca `REVIEWED`; hasta entonces un video **nuevo** no publica sin
-`transcriptPath`. Los 130 videos migrados publican bajo la excepción de legado (decisión 6:
-nadie revisa subtítulos por ahora).
+`transcriptPath`. ~~Los 130 videos migrados publican bajo la excepción de legado~~ (RETIRADO 18/9: no hay
+videos migrados; la regla estricta aplica a todos).
 
 Contrato del player (ver `03-ui/accesibilidad.md`): `title` en el iframe, "Saltar el
 video", transcripción visible, "Ver solo la transcripción" sin cargar el iframe.

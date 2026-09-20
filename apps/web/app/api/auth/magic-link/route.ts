@@ -9,7 +9,7 @@
 import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
 import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
-import { sanitizeNextUrl } from '@/lib/authz/routes';
+import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
 
 const schema = z.object({
   email: z.string().email(),
@@ -23,7 +23,7 @@ export const POST = apiHandler({
   // `req.nextUrl.origin`, not the Origin header: with '' as base `new URL` throws (500).
   const callbackUrl = new URL('/auth/callback', req.nextUrl.origin);
   const target = sanitizeNextUrl(next);
-  if (target !== '/') {
+  if (target !== HOME_AFTER_LOGIN) {
     callbackUrl.searchParams.set('next', target);
   }
 
