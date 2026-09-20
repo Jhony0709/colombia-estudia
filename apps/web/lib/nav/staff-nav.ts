@@ -68,25 +68,25 @@ const NAV: readonly NavDefinition[] = [
   },
   { href: '/cohortes', label: 'Cohortes', capability: 'cohort.manage', section: 'operacion' },
   { href: '/personas', label: 'Personas', capability: 'people.manage', section: 'operacion' },
-  { href: '/cartera', label: 'Cartera', capability: 'billing.manage', section: 'operacion' },
-  {
-    href: '/admin/inclusion/reporte',
-    label: 'Inclusión',
-    capability: 'accommodation.manage',
-    section: 'operacion',
-  },
+  // { href: '/cartera', label: 'Cartera', capability: 'billing.manage', section: 'operacion' },
+  // {
+  //   href: '/admin/inclusion/reporte',
+  //   label: 'Inclusión',
+  //   capability: 'accommodation.manage',
+  //   section: 'operacion',
+  // },
   {
     href: '/admin/institucion',
     label: 'Institución',
     capability: 'institution.manage',
     section: 'administracion',
   },
-  {
-    href: '/admin/politicas',
-    label: 'Políticas',
-    capability: 'institution.manage',
-    section: 'administracion',
-  },
+  // {
+  //   href: '/admin/politicas',
+  //   label: 'Políticas',
+  //   capability: 'institution.manage',
+  //   section: 'administracion',
+  // },
 ];
 
 export function buildStaffNav(capabilities: Map<Capability, Scope[]>): NavDestination[] {
