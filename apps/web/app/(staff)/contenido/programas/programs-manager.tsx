@@ -349,7 +349,9 @@ function ModuleList({
 }) {
   const t = useTranslations('admin.curriculum');
   const [name, setName] = useState('');
-  const [confirming, setConfirming] = useState<string | null>(null);
+  const [confirming, setConfirming] = useState<{ id: string; op: 'archive' | 'delete' } | null>(
+    null
+  );
   const listId = useId();
   const last = program.modules.length - 1;
 
@@ -418,7 +420,7 @@ function ModuleList({
                       <span className="sr-only">{t('moveDownNamed', { name: module.name })}</span>
                     </Button>
                   </Tooltip>
-                  {confirming === module.id ? (
+                  {confirming?.id === module.id ? (
                     <>
                       <Button
                         variant="secondary"
@@ -427,13 +429,13 @@ function ModuleList({
                           const ok = await send(
                             `/api/admin/modules/${module.id}`,
                             'PATCH',
-                            { op: 'archive' },
-                            t('moduleArchived')
+                            { op: confirming.op },
+                            t(confirming.op === 'delete' ? 'moduleDeleted' : 'moduleArchived')
                           );
                           if (ok) setConfirming(null);
                         }}
                       >
-                        {t('confirmArchive')}
+                        {t(confirming.op === 'delete' ? 'confirmDelete' : 'confirmArchive')}
                         <span className="sr-only"> {module.name}</span>
                       </Button>
                       <Button variant="quiet" onClick={() => setConfirming(null)} disabled={busy}>
@@ -441,14 +443,27 @@ function ModuleList({
                       </Button>
                     </>
                   ) : (
-                    <Button
-                      variant="quiet"
-                      disabled={busy}
-                      onClick={() => setConfirming(module.id)}
-                    >
-                      {t('archive')}
-                      <span className="sr-only"> {module.name}</span>
-                    </Button>
+                    <>
+                      <Button
+                        variant="quiet"
+                        disabled={busy}
+                        onClick={() => setConfirming({ id: module.id, op: 'archive' })}
+                      >
+                        {t('archive')}
+                        <span className="sr-only"> {module.name}</span>
+                      </Button>
+                      {/* Eliminar (24/9) solo cuando está vacío: sin temas no hay nada que perder. */}
+                      {module.lessonCount === 0 && (
+                        <Button
+                          variant="quiet"
+                          disabled={busy}
+                          onClick={() => setConfirming({ id: module.id, op: 'delete' })}
+                        >
+                          {t('delete')}
+                          <span className="sr-only"> {module.name}</span>
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               );

@@ -6,6 +6,7 @@ import { THEME_COOKIE, themeClass, themeColorScheme, toTheme } from '@/lib/theme
 import { AnnounceProvider } from '@/lib/a11y/announce';
 import { AccessibilityPreferencesProvider } from '@/lib/a11y/preferences-provider';
 import { TooltipProvider } from '@/components/atoms/tooltip';
+import { ToastProvider } from '@/components/organisms/toaster';
 import { FocusManager } from '@/lib/a11y/focus-manager';
 import { SkipLink } from '@/lib/a11y/skip-link';
 import { atkinson } from './fonts/sans';
@@ -69,14 +70,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <AccessibilityPreferencesProvider>
             <TooltipProvider>
               <AnnounceProvider>
-                <SkipLink />
-                <FocusManager />
-                {/*
+                <ToastProvider
+                  labels={{
+                    region: 'Avisos',
+                    close: 'Cerrar el aviso',
+                    severity: {
+                      success: 'Listo',
+                      info: 'Información',
+                      warning: 'Aviso',
+                      error: 'Error',
+                    },
+                  }}
+                >
+                  <SkipLink />
+                  <FocusManager />
+                  {/*
                 El <main id="contenido"> lo pone cada área: (public), (staff) y (admin).
                 Si viviera aquí, la cabecera de navegación quedaría dentro del contenido
                 principal y el enlace "saltar al contenido" llevaría al menú, no al contenido.
               */}
-                {children}
+                  {children}
+                </ToastProvider>
               </AnnounceProvider>
             </TooltipProvider>
           </AccessibilityPreferencesProvider>

@@ -13,8 +13,8 @@
 import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Alert } from '@/components/atoms/alert';
 import { Button } from '@/components/atoms/button';
+import { useToast } from '@/components/organisms/toaster';
 import { Card } from '@/components/atoms/card';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { cn } from '@/lib/utils';
@@ -39,8 +39,7 @@ export function LessonActivity({
   // Enunciados (24/9): con uno o más, el estudiante responde pregunta por pregunta.
   const [prompts, setPrompts] = useState<string[]>(initial.prompts);
   const [busy, setBusy] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const dirty =
     instructions !== (initial.instructions ?? '') ||
@@ -49,8 +48,6 @@ export function LessonActivity({
 
   const save = async () => {
     setBusy(true);
-    setError(null);
-    setSaved(false);
     try {
       const res = await fetch(`/api/content/lessons/${lessonId}/activity`, {
         method: 'PUT',
@@ -62,14 +59,17 @@ export function LessonActivity({
         }),
       });
       if (!res.ok) {
-        setError(apiErrorText(await res.json().catch(() => null), t('error')));
+        toast({
+          severity: 'error',
+          title: apiErrorText(await res.json().catch(() => null), t('error')),
+        });
         return;
       }
-      setSaved(true);
+      toast({ severity: 'success', title: t('saved') });
       // El panel de preparación lee las instrucciones del servidor.
       router.refresh();
     } catch {
-      setError(t('error'));
+      toast({ severity: 'error', title: t('error') });
     } finally {
       setBusy(false);
     }
@@ -84,9 +84,6 @@ export function LessonActivity({
         <p className="type-caption text-text-muted max-w-reading">{t('hint')}</p>
       </div>
 
-      {error !== null && <Alert severity="error">{error}</Alert>}
-      {saved && <Alert severity="success">{t('saved')}</Alert>}
-
       <div>
         <label htmlFor={ids.instructions} className="type-label text-text block">
           {t('instructions')}
@@ -98,7 +95,6 @@ export function LessonActivity({
           value={instructions}
           onChange={(event) => {
             setInstructions(event.target.value);
-            setSaved(false);
           }}
           className="border-border bg-surface-base text-text type-body rounded-control mt-1 w-full border p-3"
         />
@@ -122,7 +118,6 @@ export function LessonActivity({
                 checked={accepts === option}
                 onChange={() => {
                   setAccepts(option);
-                  setSaved(false);
                 }}
                 className="mt-1"
               />
@@ -162,7 +157,6 @@ export function LessonActivity({
                         const next = [...prompts];
                         next[index] = event.target.value;
                         setPrompts(next);
-                        setSaved(false);
                       }}
                       className="border-border bg-surface-base text-text type-body rounded-control w-full border p-2"
                     />
@@ -173,7 +167,6 @@ export function LessonActivity({
                     disabled={busy}
                     onClick={() => {
                       setPrompts(prompts.filter((_, i) => i !== index));
-                      setSaved(false);
                     }}
                   >
                     {t('prompts.remove')}
@@ -189,7 +182,6 @@ export function LessonActivity({
             disabled={busy || prompts.length >= 20}
             onClick={() => {
               setPrompts([...prompts, '']);
-              setSaved(false);
             }}
           >
             {t('prompts.add')}

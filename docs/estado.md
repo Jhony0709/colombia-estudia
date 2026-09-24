@@ -4824,6 +4824,73 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 24/9 — Eliminar un componente vacío
+
+Jhonny: «¿dónde puedo borrar los temas o componentes?». Los temas ya tenían su «Eliminar»
+en el editor (bloque anterior); los componentes no tenían más que archivar. Ahora:
+
+- `deleteModule` (`curriculum.service.ts`): solo un componente **vacío** —sin temas (los
+  archivados cuentan), sin exámenes y sin constancias—; si no, `CONFLICT` con el consejo.
+  Audita `module.deleted`. `PATCH /api/admin/modules/[id]` con `{ op: 'delete' }`.
+- Programas → fila del programa abierta → subtabla de componentes: «Eliminar» aparece solo
+  cuando el componente tiene 0 temas, con confirmación en línea («Confirmar eliminación»),
+  igual que archivar. Con temas, el camino es eliminar los temas primero (desde su editor)
+  o archivar el componente.
+- `tsc` en cero. Sin ver en Chrome.
+
+## 24/9 — Toasts, y el ritmo entre secciones a la escala
+
+Jhonny: «el espaciado de división entre secciones es un poco grande; la sección avisos debe
+funcionar como un toast de información dependiendo lo que se quiera mostrar, success o
+errores o información».
+
+- **Espaciado**: `Page` y `EditorLayout` iban en `space-y-10` (40 px), que no está en la
+  escala; secciones = `space-8` (32 px) según `layout-y-componentes.md` §2. Ahora `space-y-8`
+  en los dos, para toda la app.
+- **`ToastProvider` / `useToast`** (`components/organisms/toaster`): Radix Toast, que ya
+  estaba en dependencias sin usar. Abajo a la derecha (a lo ancho en teléfono), una
+  gravedad por toast (`success` / `info` / `warning` / `error`) con icono y borde, y la
+  palabra en `sr-only` para que el lector la oiga. Éxito e información se van a los 6 s,
+  aviso a los 10; **el error no se va solo**: se cierra. `role` según gravedad, pausa con el
+  ratón o el foco, F8 para llegar con teclado, deslizar para cerrar. `key` para sustituir en
+  vez de apilar. Motion: grow al entrar, fade al salir (`.toast-item`, tokens; corte con
+  reduced-motion). Montado en `app/layout.tsx`.
+- **Editor de temas**: la tarjeta «Avisos» se va. Cada resultado de validación produce **un**
+  toast cuando cambia (error «N avisos impiden publicar» con el primero como descripción y
+  «Ver los avisos»; aviso si solo hay advertencias; éxito «cumple las reglas» al pasar de
+  tener avisos a no tenerlos). La lista completa con «ir a la línea» vive en una **hoja**
+  (`Sheet`), que abre el toast y también el «Ver avisos» del diálogo de publicar (antes
+  hacía scroll a la tarjeta). Los errores de guardar / previsualizar / publicar y el
+  «Publicada la versión N» también son toasts; igual «Datos del tema» y «Actividad»
+  (guardado / error). Mensajes `editor.toast.*`, `issuesSheetHint`, `issuesNone`.
+- **Verificado** con tu sesión en «Aprender es avanzar» (ya con la migración aplicada): toast
+  «1 aviso impide publicar · El tema está vacío · Ver los avisos» y la hoja con el aviso
+  completo. `tsc` en cero.
+- **Sin migrar aún**: `CurriculumFeedback` (programas, asignaturas) sigue con `Alert` en
+  línea; queda para cuando se toque esa pantalla.
+
+## 24/9 — Eliminar un tema, con validación extra
+
+Jhonny: «permite eliminar los temas, con validación extra». Excepción acotada a «no se borra
+nada» (`PRODUCT_DECISIONS.md` 2026-09-24):
+
+- **Servicio** `deleteLesson` (`lessons.service.ts`): solo si `_count.assignments === 0`
+  (ninguna cohorte lo tiene) y `_count.assessments === 0` (sin examen del tema); si no,
+  `CONFLICT` con el consejo («archívalo» / «elimina el examen antes»). Validación extra:
+  `confirmTitle` igual al título, si no `VALIDATION_ERROR`. Borra versiones (los
+  `LessonVersionAsset` caen en cascada; los `MediaAsset` se quedan) y el tema; audita
+  `lesson.deleted` con título y número de versiones.
+- **API**: `DELETE /api/content/lessons/[lessonId]` con `{ confirmTitle }`
+  (`endpoints.md`).
+- **Editor** (`delete-lesson-dialog.tsx`, dentro de «Datos del tema» bajo Archivar):
+  «Eliminar el tema» abre el diálogo de Radix con el motion de la casa, dice cuántas
+  versiones se van y que no se deshace, pide escribir el título y solo entonces habilita
+  «Eliminar definitivamente»; al terminar vuelve a `/contenido/temas`. Si el tema está en
+  una cohorte o tiene examen, en vez del botón sale la razón. `openDraft` devuelve `usage`
+  (`assignments`, `assessments`, `versions`) para decidirlo antes de intentarlo.
+- **Sin verificar en Chrome**: el editor no carga en tu `next dev` hasta que regeneres el
+  cliente de Prisma y reinicies (error anterior). `tsc` en cero.
+
 ## 24/9 — Los tres huecos de la nota de voz: preguntas en la plataforma, cierre y «componente»
 
 Jhonny: «Hueco 1: ve con prompts: string[]. Hueco 2: texto general, sin base. Hueco 3:

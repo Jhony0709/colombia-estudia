@@ -129,6 +129,34 @@ body {
   animation: dialog-fade-out var(--duration-normal) var(--easing-exit);
 }
 
+/** Toasts (24/9): mismo grow/fade que el diálogo, sin el centrado; deslizar sigue al dedo. */
+@keyframes toast-grow-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.toast-item[data-state='open'] {
+  animation: toast-grow-in var(--duration-normal) var(--easing-enter);
+}
+.toast-item[data-state='closed'] {
+  animation: dialog-fade-out var(--duration-normal) var(--easing-exit);
+}
+.toast-item[data-swipe='move'] {
+  transform: translateX(var(--radix-toast-swipe-move-x));
+}
+.toast-item[data-swipe='cancel'] {
+  transform: translateX(0);
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+.toast-item[data-swipe='end'] {
+  animation: dialog-fade-out var(--duration-fast) var(--easing-exit);
+}
+
 /**
  * El contenido de un tema, ya renderizado.
  * SSOT: reference/03-ui/tokens.md, plan/08-aprender-y-evaluar.md:22-26.

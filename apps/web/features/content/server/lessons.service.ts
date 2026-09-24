@@ -64,6 +64,11 @@ export interface DraftView {
   /** Enunciados (24/9): con uno o más, el estudiante responde pregunta por pregunta. */
   activityPrompts: string[];
   /**
+   * Dónde se usa (24/9), para decidir si se puede **eliminar**: cohortes que lo tienen
+   * asignado y exámenes del tema. Con cualquiera de los dos, solo se archiva.
+   */
+  usage: { assignments: number; assessments: number; versions: number };
+  /**
    * Si ya hay alguna versión publicada. Cierra el módulo y la forma de completado: moverlos
    * con gente estudiando reordena la ruta o cambia qué da el tema por hecho.
    */
@@ -354,6 +359,71 @@ export async function archiveLesson({
   });
 }
 
+/**
+ * Eliminar un tema de verdad (24/9, pedido de Jhonny: «permite eliminar los temas, con
+ * validación extra»). La regla de la casa sigue siendo «no se borra nada» para lo que alguien
+ * ya vio: por eso solo se elimina un tema que **ninguna cohorte tiene asignado** y que **no
+ * tiene examen del tema**; en cualquier otro caso la respuesta es archivar. La validación
+ * extra es que quien borra escribe el título exacto. Se llevan las versiones y sus referencias
+ * a media (cascada en `LessonVersionAsset`); los archivos de media se quedan. Audita `deleted`.
+ */
+export async function deleteLesson({
+  institutionId,
+  actorId,
+  lessonId,
+  confirmTitle,
+}: {
+  institutionId: string;
+  actorId: string;
+  lessonId: string;
+  confirmTitle: string;
+}): Promise<{ lessonId: string }> {
+  const db = createTenantClient(institutionId);
+
+  return db.$transaction(async (tx) => {
+    const lesson = await tx.lesson.findFirst({
+      where: { id: lessonId },
+      select: {
+        id: true,
+        title: true,
+        _count: { select: { assignments: true, assessments: true, versions: true } },
+      },
+    });
+    if (!lesson) throw new APIError('Lesson not found', 'NOT_FOUND');
+    if (lesson._count.assignments > 0) {
+      throw new APIError(
+        'Este tema ya está en una cohorte y no se puede eliminar: archívalo.',
+        'CONFLICT'
+      );
+    }
+    if (lesson._count.assessments > 0) {
+      throw new APIError(
+        'Este tema tiene un examen del tema. Elimina o desvincula el examen antes.',
+        'CONFLICT'
+      );
+    }
+    if (confirmTitle.trim() !== lesson.title.trim()) {
+      throw new APIError('El título escrito no coincide con el del tema.', 'VALIDATION_ERROR');
+    }
+
+    await tx.lessonVersion.deleteMany({ where: { lessonId } });
+    await tx.lesson.delete({ where: { id: lessonId } });
+
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'lesson',
+        entityId: lessonId,
+        action: 'deleted',
+        before: { title: lesson.title, versions: lesson._count.versions },
+      },
+    });
+
+    return { lessonId };
+  });
+}
+
 /** Los temas del programa, con el estado de su versión más alta. */
 export async function listLessons({
   institutionId,
@@ -530,6 +600,7 @@ export async function openDraft({
       activityAccepts: true,
       activityPrompts: true,
       subject: { select: { name: true } },
+      _count: { select: { assignments: true, assessments: true, versions: true } },
       versions: {
         orderBy: { number: 'desc' },
         take: 1,
@@ -564,6 +635,7 @@ export async function openDraft({
     activityInstructions: lesson.activityInstructions,
     activityAccepts: lesson.activityAccepts,
     activityPrompts: promptsOf(lesson.activityPrompts),
+    usage: lesson._count,
     hasPublished: publishedCount > 0,
   };
 

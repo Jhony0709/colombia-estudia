@@ -26,7 +26,7 @@
  */
 
 import * as Dialog from '@radix-ui/react-dialog';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
@@ -35,6 +35,7 @@ import { Card } from '@/components/atoms/card';
 import { PageHeader } from '@/components/templates/page';
 import { PageHelp } from '@/components/organisms/page-help';
 import { Sheet } from '@/components/organisms/sheet';
+import { useToast } from '@/components/organisms/toaster';
 import { issueText } from '@/lib/content/issue-text';
 import { LessonDetailsForm, type ModuleChoice, type SubjectChoice } from './lesson-details-form';
 import { lessonHelpTopics } from './lesson-help';
@@ -93,6 +94,7 @@ export interface LessonWorkspaceProps {
       subjectId: string;
       requiresSubmission: boolean;
     };
+    usage: { assignments: number; assessments: number; versions: number };
   };
 }
 
@@ -109,6 +111,7 @@ export function LessonEditor({
   details,
 }: LessonWorkspaceProps) {
   const t = useTranslations('editor');
+  const ti = useTranslations('issues');
   const tc = useTranslations('crumbs');
   const minutesId = useId();
   const blockEditor = useRef<BlockEditorHandle>(null);
@@ -124,7 +127,17 @@ export function LessonEditor({
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [validation, setValidation] = useState<Validation | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // Los avisos de validación como toast (24/9, Jhonny): uno por resultado, no por aviso, y
+  // solo cuando el resultado cambia (la validación corre cada pocos segundos). La lista
+  // completa, con «ir a la línea», vive en una hoja que abre el toast o el diálogo de publicar.
+  const [issuesOpen, setIssuesOpen] = useState(false);
+  const { toast } = useToast();
+  const lastIssuesKey = useRef<string | null>(null);
+  // Los errores de guardar, previsualizar o publicar van en toast (no se van solos).
+  const notifyError = useCallback(
+    (message: string) => toast({ severity: 'error', title: message, key: 'editor-error' }),
+    [toast]
+  );
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState<number | null>(null);
   const [confirming, setConfirming] = useState(false);
@@ -148,15 +161,14 @@ export function LessonEditor({
 
     if (!res.ok) {
       const payload = await res.json().catch(() => null);
-      setError(payload?.error?.message ?? t('saveError'));
+      notifyError(payload?.error?.message ?? t('saveError'));
       return false;
     }
 
     setSavedAt(new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' }));
     setDirty(false);
-    setError(null);
     return true;
-  }, [content, minutes, reopens, t, versionId]);
+  }, [content, minutes, reopens, t, versionId, notifyError]);
 
   const validate = useCallback(async () => {
     const res = await fetch(`/api/content/lessons/${versionId}/validate`, {
@@ -213,7 +225,6 @@ export function LessonEditor({
   const onPreview = async () => {
     setPreviewing(true);
     setPreviewOpen(true);
-    setError(null);
     try {
       if (dirty && !(await save())) return;
 
@@ -225,13 +236,13 @@ export function LessonEditor({
       const payload = await res.json();
 
       if (!res.ok) {
-        setError(payload?.error?.message ?? t('previewError'));
+        notifyError(payload?.error?.message ?? t('previewError'));
         return;
       }
 
       setPreview((payload.data ?? payload) as { html: string; missingAssets: string[] });
     } catch {
-      setError(t('previewError'));
+      notifyError(t('previewError'));
     } finally {
       setPreviewing(false);
     }
@@ -263,7 +274,6 @@ export function LessonEditor({
 
   const onPublish = async () => {
     setPublishing(true);
-    setError(null);
     try {
       if (dirty && !(await save())) return;
 
@@ -275,24 +285,56 @@ export function LessonEditor({
       const payload = await res.json();
 
       if (!res.ok) {
-        setError(payload?.error?.message ?? t('publishError'));
+        notifyError(payload?.error?.message ?? t('publishError'));
         void validate();
         return;
       }
 
-      setPublished((payload.data?.number ?? payload.number) as number);
+      const number = (payload.data?.number ?? payload.number) as number;
+      setPublished(number);
+      toast({ severity: 'success', title: t('publishedOk', { number }) });
       setConfirming(false);
     } catch {
-      setError(t('publishError'));
+      notifyError(t('publishError'));
     } finally {
       setPublishing(false);
     }
   };
 
-  const errors = validation?.errors ?? [];
-  const warnings = validation?.warnings ?? [];
+  // Con `useMemo` para que el efecto de los toasts no se dispare en cada render.
+  const errors = useMemo(() => validation?.errors ?? [], [validation]);
+  const warnings = useMemo(() => validation?.warnings ?? [], [validation]);
   const blocked = !validation || errors.length > 0 || !canPublish;
   const hasIssues = errors.length + warnings.length > 0;
+
+  useEffect(() => {
+    if (validation === null) return;
+    const key = [...errors, ...warnings]
+      .map((i) => `${i.rule ?? ''}:${lineOf(i) ?? ''}:${i.message ?? ''}`)
+      .join('|');
+    if (key === lastIssuesKey.current) return;
+    const hadBefore = lastIssuesKey.current !== null && lastIssuesKey.current !== '';
+    lastIssuesKey.current = key;
+    if (errors.length > 0) {
+      toast({
+        key: 'editor-issues',
+        severity: 'error',
+        title: t('toast.blocked', { count: errors.length }),
+        description: issueText(errors[0]!, ti).message,
+        action: { label: t('toast.see'), onClick: () => setIssuesOpen(true) },
+      });
+    } else if (warnings.length > 0) {
+      toast({
+        key: 'editor-issues',
+        severity: 'warning',
+        title: t('toast.warnings', { count: warnings.length }),
+        description: issueText(warnings[0]!, ti).message,
+        action: { label: t('toast.see'), onClick: () => setIssuesOpen(true) },
+      });
+    } else if (hadBefore) {
+      toast({ key: 'editor-issues', severity: 'success', title: t('toast.clean') });
+    }
+  }, [validation, errors, warnings, t, ti, toast]);
 
   const saveStatus = dirty
     ? t('unsaved')
@@ -384,12 +426,8 @@ export function LessonEditor({
           subjects={details.subjects}
           hasPublished={header.hasPublished}
           initial={details.initial}
+          usage={details.usage}
         />
-
-        {error !== null && <Alert severity="error">{error}</Alert>}
-        {published !== null && (
-          <Alert severity="success">{t('publishedOk', { number: published })}</Alert>
-        )}
 
         {/*
         La única tarjeta sin título propio, y a propósito
@@ -450,21 +488,28 @@ export function LessonEditor({
             void validate();
           }}
         />
-
-        {/* Los avisos solo cuando los hay. «El contenido cumple las reglas» no merece una
-          tarjeta: se dice en el diálogo de publicar, que es donde importa. */}
-        {hasIssues && (
-          <div id="editor-avisos">
-            <Card as="h2" title={t('issuesTitle')}>
-              <IssueList
-                issues={[...errors, ...warnings]}
-                errorCount={errors.length}
-                onGo={goToLine}
-              />
-            </Card>
-          </div>
-        )}
       </EditorLayout>
+
+      {/* La lista completa de avisos, con «ir a la línea», en una hoja (24/9). */}
+      <Sheet
+        open={issuesOpen}
+        onOpenChange={setIssuesOpen}
+        title={t('issuesTitle')}
+        description={t('issuesSheetHint', { errors: errors.length, warnings: warnings.length })}
+      >
+        {hasIssues ? (
+          <IssueList
+            issues={[...errors, ...warnings]}
+            errorCount={errors.length}
+            onGo={(line) => {
+              setIssuesOpen(false);
+              goToLine(line);
+            }}
+          />
+        ) : (
+          <p className="type-body text-text-muted">{t('issuesNone')}</p>
+        )}
+      </Sheet>
 
       <PageHelp screen={t('contentLabel')} topics={lessonHelpTopics(t, { canPublish })} />
 
@@ -517,13 +562,7 @@ export function LessonEditor({
                 </Dialog.Description>
                 <div className="flex flex-wrap gap-3">
                   <Dialog.Close asChild>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      onClick={() =>
-                        document.getElementById('editor-avisos')?.scrollIntoView({ block: 'start' })
-                      }
-                    >
+                    <Button type="button" variant="secondary" onClick={() => setIssuesOpen(true)}>
                       {t('seeIssues')}
                     </Button>
                   </Dialog.Close>

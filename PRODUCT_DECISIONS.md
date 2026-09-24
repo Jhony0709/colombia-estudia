@@ -1002,3 +1002,13 @@ Los clientes usan «componente» para la unidad del programa. Decisión de Jhonn
 palabra cambia en todos los textos que ve la gente (mensajes y errores de la API); el
 modelo, las rutas y los identificadores siguen diciendo `module`. La documentación de
 `reference/` conserva «módulo» donde nombra el modelo.
+
+## 2026-09-24 — Un tema se puede eliminar, solo si nadie lo ha visto
+
+«No se borra nada, nunca» (plan/06) protege lo que alguien ya estudió. Un tema creado por
+error o a medias, que ninguna cohorte tiene asignado y sin examen del tema, no lo ha visto
+nadie: eliminarlo no le quita nada a nadie y evita una lista de archivados que crece con
+cada prueba. Decisión de Jhonny: `DELETE /api/content/lessons/[id]` con esas dos
+condiciones en el servidor y una validación extra en la pantalla y en la API —escribir el
+título exacto—. En cualquier otro caso, archivar, y el editor lo dice en vez de ofrecer un
+botón que falla.

@@ -77,6 +77,7 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
         details={{
           modules,
           subjects,
+          usage: draft.usage,
           initial: {
             title: draft.title,
             learningObjective: draft.learningObjective,

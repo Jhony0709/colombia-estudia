@@ -18,10 +18,11 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { Button } from '@/components/atoms/button';
+import { useToast } from '@/components/organisms/toaster';
 import { Card } from '@/components/atoms/card';
 import { ChevronRight } from 'lucide-react';
-import { Alert } from '@/components/atoms/alert';
 import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
+import { DeleteLessonDialog } from './delete-lesson-dialog';
 
 export interface ModuleChoice {
   id: string;
@@ -40,6 +41,7 @@ export function LessonDetailsForm({
   subjects,
   initial,
   hasPublished,
+  usage,
 }: {
   lessonId: string;
   modules: ModuleChoice[];
@@ -52,6 +54,8 @@ export function LessonDetailsForm({
     requiresSubmission: boolean;
   };
   hasPublished: boolean;
+  /** Dónde se usa el tema; decide si «Eliminar» se ofrece (24/9). */
+  usage: { assignments: number; assessments: number; versions: number };
 }) {
   const t = useTranslations('editor');
   const router = useRouter();
@@ -63,14 +67,11 @@ export function LessonDetailsForm({
   const [requiresSubmission, setRequiresSubmission] = useState(initial.requiresSubmission);
 
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
+  const { toast } = useToast();
   const [archiving, setArchiving] = useState(false);
 
   const save = async () => {
     setBusy(true);
-    setError(null);
-    setSaved(false);
     try {
       const res = await fetch(`/api/content/lessons/${lessonId}/details`, {
         method: 'PUT',
@@ -86,16 +87,16 @@ export function LessonDetailsForm({
 
       if (!res.ok) {
         const payload = await res.json().catch(() => null);
-        setError(apiErrorText(payload, t('detailsError')));
+        toast({ severity: 'error', title: apiErrorText(payload, t('detailsError')) });
         return;
       }
 
-      setSaved(true);
+      toast({ severity: 'success', title: t('detailsSaved') });
       // La cabecera de la página trae el título y la asignatura desde el servidor: sin esto
       // el usuario guardaría un título nuevo y seguiría leyendo el viejo arriba.
       router.refresh();
     } catch {
-      setError(t('detailsError'));
+      toast({ severity: 'error', title: t('detailsError') });
     } finally {
       setBusy(false);
     }
@@ -103,17 +104,16 @@ export function LessonDetailsForm({
 
   const archive = async () => {
     setBusy(true);
-    setError(null);
     try {
       const res = await fetch(`/api/content/lessons/${lessonId}/archive`, { method: 'POST' });
       if (!res.ok) {
         const payload = await res.json().catch(() => null);
-        setError(payload?.error?.message ?? t('archiveError'));
+        toast({ severity: 'error', title: payload?.error?.message ?? t('archiveError') });
         return;
       }
       router.push('/contenido');
     } catch {
-      setError(t('archiveError'));
+      toast({ severity: 'error', title: t('archiveError') });
     } finally {
       setBusy(false);
     }
@@ -135,9 +135,6 @@ export function LessonDetailsForm({
         {/* Los campos a ancho de lectura: un título en 1024 px es una línea que el ojo recorre
           entera para volver al principio. */}
         <div className="max-w-reading mt-4 space-y-4">
-          {error !== null && <Alert severity="error">{error}</Alert>}
-          {saved && <Alert severity="success">{t('detailsSaved')}</Alert>}
-
           <FormField label={t('detailsFieldTitle')} name="lessonTitle" required>
             <FormInput
               name="lessonTitle"
@@ -247,6 +244,11 @@ export function LessonDetailsForm({
                 {t('archive')}
               </Button>
             )}
+          </div>
+
+          {/* Eliminar de verdad (24/9): solo si nadie lo ha visto; pide escribir el título. */}
+          <div className="border-border-muted border-t pt-4">
+            <DeleteLessonDialog lessonId={lessonId} title={initial.title} usage={usage} />
           </div>
         </div>
       </details>

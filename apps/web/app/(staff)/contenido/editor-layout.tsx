@@ -30,7 +30,7 @@ export function EditorLayout({
         </summary>
         <div className="px-2 pb-2">{rail}</div>
       </details>
-      <div className="min-w-0 space-y-10">{children}</div>
+      <div className="min-w-0 space-y-8">{children}</div>
       <aside className="sticky top-4 hidden lg:block">{rail}</aside>
     </div>
   );

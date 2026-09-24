@@ -191,6 +191,15 @@ quien llegue por URL. Motion: `.dialog-overlay` / `.dialog-panel` (`globals.css`
 `data-state` de Radix, entrada grow + salida fade con los tokens de `duration`/`easing`; son
 las clases que debe usar cualquier diálogo centrado nuevo.
 
+### Toast: el aviso que se va solo, salvo el error (24/9)
+
+`components/organisms/toaster` (`ToastProvider` en el layout raíz, `useToast()` en cualquier
+cliente). Para el resultado de una acción (guardado, publicado, no se pudo) y para avisos
+de validación que cambian: una gravedad por toast, la palabra en `sr-only`, éxito e
+información se van a los 6 s, el error se cierra. Una acción como mucho («Ver los avisos»),
+y lo que necesite más de una frase va a una hoja, no al toast. No es para lo que el usuario
+tiene que leer antes de seguir (eso es `Alert` en línea o un diálogo).
+
 ### Tooltip: el nombre de un botón de icono, a la vista
 
 `Tooltip` (`atoms/tooltip`) envuelve un botón que solo enseña un icono y muestra su nombre al

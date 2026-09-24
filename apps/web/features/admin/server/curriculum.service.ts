@@ -313,6 +313,62 @@ export async function renameModule({
   });
 }
 
+/**
+ * Eliminar un componente (24/9): solo uno **vacío** —sin temas (ni archivados), sin
+ * exámenes y sin constancias emitidas—; con cualquiera de los tres, archivar. Es la misma
+ * excepción acotada que la de los temas: borrar lo que nadie ha visto no le quita nada a
+ * nadie. Las posiciones de los demás componentes no se recompactan: el orden relativo se
+ * conserva y `position` es solo orden.
+ */
+export async function deleteModule({
+  institutionId,
+  actorId,
+  moduleId,
+}: {
+  institutionId: string;
+  actorId: string | null;
+  moduleId: string;
+}): Promise<{ id: string }> {
+  const db = createTenantClient(institutionId);
+
+  return db.$transaction(async (tx) => {
+    const target = await tx.module.findFirst({
+      where: { id: moduleId, institutionId },
+      select: {
+        id: true,
+        name: true,
+        _count: { select: { lessons: true, assessments: true, certificates: true } },
+      },
+    });
+    if (!target) throw new APIError('Module not found', 'NOT_FOUND');
+    if (target._count.lessons > 0) {
+      throw new APIError(
+        'Este componente tiene temas (contando los archivados). Elimínalos o archiva el componente.',
+        'CONFLICT'
+      );
+    }
+    if (target._count.assessments > 0) {
+      throw new APIError('Este componente tiene exámenes: archívalo.', 'CONFLICT');
+    }
+    if (target._count.certificates > 0) {
+      throw new APIError('Este componente ya emitió constancias: archívalo.', 'CONFLICT');
+    }
+
+    await tx.module.delete({ where: { id: moduleId } });
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'module',
+        entityId: moduleId,
+        action: 'deleted',
+        before: { name: target.name },
+      },
+    });
+    return { id: moduleId };
+  });
+}
+
 export async function archiveModule({
   institutionId,
   actorId,
