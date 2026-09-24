@@ -15,6 +15,27 @@ const nextConfig: NextConfig = {
     '@colombia-estudia/types',
     '@colombia-estudia/design-tokens',
   ],
+  // 20/9: las URL toman el vocabulario del cliente (examen, actividad). Las viejas siguen
+  // llegando —enlaces en correos y notificaciones ya enviados— y aterrizan en las nuevas.
+  async redirects() {
+    return [
+      {
+        source: '/contenido/evaluaciones/:path*',
+        destination: '/contenido/examenes/:path*',
+        permanent: true,
+      },
+      {
+        source: '/aprender/evaluacion/:path*',
+        destination: '/aprender/examen/:path*',
+        permanent: true,
+      },
+      {
+        source: '/cohortes/:cohortId/entregas',
+        destination: '/cohortes/:cohortId/actividades',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

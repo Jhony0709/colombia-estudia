@@ -15,7 +15,7 @@ import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { createReadUrl } from '@/lib/media/storage';
-import { getCohortOutline } from './cohort.service';
+import { getCohortOutline, listMyEnrollments } from './cohort.service';
 
 export interface LibraryItem {
   id: string;
@@ -34,6 +34,11 @@ export interface LibraryModule {
   items: LibraryItem[];
 }
 
+/**
+ * La biblioteca de todas las cohortes activas del estudiante (21/9). Con más de un programa,
+ * cada módulo lleva delante el nombre de su programa para que «Módulo 1» de uno no se
+ * confunda con «Módulo 1» del otro.
+ */
 export async function getLibraryForStudent({
   institutionId,
   personId,
@@ -43,7 +48,38 @@ export async function getLibraryForStudent({
   personId: string;
   now?: Date;
 }): Promise<{ modules: LibraryModule[]; recordings: LibraryItem[] }> {
-  const outline = await getCohortOutline({ institutionId, personId, now });
+  const mine = await listMyEnrollments({ institutionId, personId, now });
+  const active = mine.filter((row) => row.gate === null);
+
+  const parts = await Promise.all(
+    active.map((row) =>
+      getLibraryForEnrollment({ institutionId, personId, enrollmentId: row.enrollmentId, now })
+    )
+  );
+
+  const several = active.length > 1;
+  return {
+    modules: parts.flatMap((part, index) =>
+      part.modules.map((m) =>
+        several ? { ...m, name: `${active[index]!.cohort.programName} · ${m.name}` } : m
+      )
+    ),
+    recordings: parts.flatMap((part) => part.recordings),
+  };
+}
+
+async function getLibraryForEnrollment({
+  institutionId,
+  personId,
+  enrollmentId,
+  now,
+}: {
+  institutionId: string;
+  personId: string;
+  enrollmentId: string;
+  now: Date;
+}): Promise<{ modules: LibraryModule[]; recordings: LibraryItem[] }> {
+  const outline = await getCohortOutline({ institutionId, personId, enrollmentId, now });
   if (outline.gate || !outline.cohort) return { modules: [], recordings: [] };
 
   const enabledLessonIds = new Set(

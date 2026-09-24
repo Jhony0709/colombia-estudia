@@ -20,9 +20,11 @@ const body = z.object({
   programId: z.string().cuid(),
   /** Nulo en una diagnóstica: es del programa, no de un módulo. */
   moduleId: z.string().cuid().nullable().optional(),
+  /** El tema del que es examen (20/9); pide `moduleId` y el tema tiene que ser de ese módulo. */
+  lessonId: z.string().cuid().nullable().optional(),
   subjectId: z.string().cuid().nullable().optional(),
   kind: z.enum(['DIAGNOSTIC', 'SUBJECT', 'FINAL']),
-  title: z.string().trim().min(1, 'La evaluación necesita un título').max(200),
+  title: z.string().trim().min(1, 'El examen necesita un título').max(200),
   /**
    * `.optional()` **además** de `optionalText`: son dos cosas distintas y confundirlas
    * dejó rota la creación de contenido desde el 18/9. `optionalText` dice que el texto
@@ -48,6 +50,7 @@ export const POST = apiHandler<Body>({ schema: body, capability: 'lesson.author'
     actorId: ctx.person.id,
     programId: input.programId,
     moduleId: input.moduleId,
+    lessonId: input.lessonId,
     subjectId: input.subjectId,
     kind: input.kind,
     title: input.title,

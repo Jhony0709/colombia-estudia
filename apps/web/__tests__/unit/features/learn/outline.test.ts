@@ -10,6 +10,7 @@ import {
   sequence,
   sortItems,
   resumePoint,
+  nextPoint,
   progressOf,
   neighbours,
   type OutlineItem,
@@ -35,7 +36,7 @@ const lineal = (modules: Array<{ id: string; items: OutlineItem[] }>) =>
   sequence({ modules, progression: 'LINEAR', now: NOW });
 
 describe('sortItems', () => {
-  it('los temas van antes que las evaluaciones del mismo módulo', () => {
+  it('los temas van antes que los exámenes de módulo', () => {
     const mezcla = [
       item({ assignmentId: 'e1', title: 'Eval', kind: 'ASSESSMENT', position: 1 }),
       item({ assignmentId: 't2', title: 'Tema 2', position: 2 }),
@@ -43,6 +44,68 @@ describe('sortItems', () => {
     ];
 
     expect(sortItems(mezcla).map((i) => i.assignmentId)).toEqual(['t1', 't2', 'e1']);
+  });
+
+  it('el examen de un tema va justo después de ese tema (20/9)', () => {
+    const mezcla = [
+      item({ assignmentId: 'e-fin', title: 'Final', kind: 'ASSESSMENT', position: 2 }),
+      item({ assignmentId: 't2', title: 'Tema 2', position: 2, lessonId: 'l2' }),
+      item({
+        assignmentId: 'e1',
+        title: 'Examen 1',
+        kind: 'ASSESSMENT',
+        position: 1,
+        lessonId: 'l1',
+      }),
+      item({ assignmentId: 't1', title: 'Tema 1', position: 1, lessonId: 'l1' }),
+    ];
+
+    expect(sortItems(mezcla).map((i) => i.assignmentId)).toEqual(['t1', 'e1', 't2', 'e-fin']);
+  });
+
+  it('un examen cuyo tema no está en la ruta cae al final del módulo', () => {
+    const mezcla = [
+      item({
+        assignmentId: 'e-x',
+        title: 'Huérfano',
+        kind: 'ASSESSMENT',
+        position: 1,
+        lessonId: 'no',
+      }),
+      item({ assignmentId: 't1', title: 'Tema 1', position: 1, lessonId: 'l1' }),
+      item({ assignmentId: 't2', title: 'Tema 2', position: 2, lessonId: 'l2' }),
+    ];
+
+    expect(sortItems(mezcla).map((i) => i.assignmentId)).toEqual(['t1', 't2', 'e-x']);
+  });
+
+  it('en LINEAR el examen del tema 1 bloquea el tema 2', () => {
+    const result = lineal([
+      {
+        id: 'm1',
+        items: [
+          item({ assignmentId: 't2', title: 'Tema 2', position: 2, lessonId: 'l2' }),
+          item({
+            assignmentId: 'e1',
+            title: 'Examen 1',
+            kind: 'ASSESSMENT',
+            position: 1,
+            lessonId: 'l1',
+          }),
+          item({
+            assignmentId: 't1',
+            title: 'Tema 1',
+            position: 1,
+            lessonId: 'l1',
+            status: 'COMPLETED',
+          }),
+        ],
+      },
+    ]);
+
+    expect(result.get('e1')?.enabled).toBe(true);
+    expect(result.get('t2')?.enabled).toBe(false);
+    expect(result.get('t2')?.blockedBy).toBe('Examen 1');
   });
 });
 
@@ -244,5 +307,25 @@ describe('neighbours', () => {
 
   it('una ruta vacía no revienta', () => {
     expect(neighbours([], 'a')).toEqual({ previous: null, next: null });
+  });
+});
+
+describe('nextPoint', () => {
+  const build = (items: OutlineItem[]) => [...lineal([{ id: 'm1', items }]).values()];
+
+  it('devuelve el primero sin completar aunque no se pueda abrir todavía', () => {
+    const items = build([
+      item({ assignmentId: 'n1', title: 'N1', position: 1, availableFrom: MANANA }),
+      item({ assignmentId: 'n2', title: 'N2', position: 2 }),
+    ]);
+
+    expect(resumePoint(items)).toBeNull();
+    expect(nextPoint(items)?.assignmentId).toBe('n1');
+    expect(nextPoint(items)?.unavailableReason).toBe('NOT_YET');
+  });
+
+  it('con todo completado no hay nada por delante', () => {
+    const items = build([item({ assignmentId: 'z', title: 'Z', status: 'COMPLETED' })]);
+    expect(nextPoint(items)).toBeNull();
   });
 });

@@ -40,6 +40,13 @@ export interface DataTableProps<T> {
    * blanco, y una tabla suelta sobre el lienzo era lo único que quedaba sin despegar.
    */
   plain?: boolean;
+  /**
+   * Filas de 8 px de padding vertical en vez de 12 (ola 3 UX, 23/9): para listas largas que
+   * se recorren de arriba abajo (matrículas, cartera, personas), donde la densidad ayuda a
+   * comparar. No baja del objetivo presionable: las celdas con enlace siguen midiendo
+   * `min-h-touch` por el enlace, no por la fila. La tabla por defecto sigue en 12.
+   */
+  compactRows?: boolean;
 }
 
 export function DataTable<T>({
@@ -49,6 +56,7 @@ export function DataTable<T>({
   rowKey,
   empty,
   plain = false,
+  compactRows = false,
 }: DataTableProps<T>) {
   if (rows.length === 0) {
     return <>{empty}</>;
@@ -98,7 +106,8 @@ export function DataTable<T>({
                 <td
                   key={column.key}
                   className={cn(
-                    'text-text px-2 py-3 first:pl-0 last:pr-0',
+                    'text-text px-2 first:pl-0 last:pr-0',
+                    compactRows ? 'py-2' : 'py-3',
                     column.numeric ? 'type-data' : 'type-body',
                     column.narrow && 'w-px whitespace-nowrap'
                   )}

@@ -24,6 +24,7 @@ import {
   type EnrollmentWithPayerType,
   type Membership,
   type Guardianship,
+  type WardEnrollment,
   type PartnerContact,
   type AccountStatus,
 } from '@colombia-estudia/domain';
@@ -193,6 +194,19 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
         select: {
           guardianId: true,
           studentId: true,
+          isFinancialResponsible: true,
+          // Las matrículas del pupilo (Fase C): son las que el acudiente puede mirar.
+          student: {
+            select: {
+              enrollments: {
+                select: {
+                  id: true,
+                  cohortId: true,
+                  paymentPlan: { select: { payerType: true } },
+                },
+              },
+            },
+          },
         },
       },
       partnerContacts: {
@@ -292,11 +306,25 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
     ? typedMemberships.filter((m) => !MFA_REQUIRED_ROLES.includes(m.role))
     : typedMemberships;
 
+  // Las matrículas de los pupilos, una fila por matrícula (Fase C, 23/9).
+  const wardEnrollments: WardEnrollment[] = person.guardianOf.flatMap((g) =>
+    g.student.enrollments.map((e) => ({
+      enrollmentId: e.id,
+      cohortId: e.cohortId,
+      payerType: e.paymentPlan?.payerType ?? null,
+      isFinancialResponsible: g.isFinancialResponsible,
+    }))
+  );
+
   // Resolve capabilities
   const capabilities = resolveCapabilities({
     memberships: membershipsForCapabilities,
     enrollments: enrollmentsWithPayer,
-    guardianships: person.guardianOf,
+    guardianships: person.guardianOf.map((g) => ({
+      guardianId: g.guardianId,
+      studentId: g.studentId,
+    })),
+    wardEnrollments,
     partnerContactOf: person.partnerContacts.map((partner) => ({
       personId: person.id,
       partnerId: partner.id,
@@ -318,7 +346,10 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
       role: m.role as Membership['role'],
     })),
     enrollments: enrollmentsWithPayer,
-    guardianships: person.guardianOf,
+    guardianships: person.guardianOf.map((g) => ({
+      guardianId: g.guardianId,
+      studentId: g.studentId,
+    })),
     // Map Partner[] (where person is contactPerson) to PartnerContact[]
     partnerContacts: person.partnerContacts.map((partner) => ({
       personId: person.id,

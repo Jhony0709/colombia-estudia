@@ -376,6 +376,7 @@ export interface BillingRow {
   paid: number;
   overdue: number;
   nextDueOn: string | null;
+  /** Lo que falta por pagar de la próxima cuota (monto menos abonos). */
   nextAmount: number | null;
   hasAgreement: boolean;
 }
@@ -475,7 +476,9 @@ export async function listBilling({
       paid: live.reduce((s, i) => s + Math.min(paidOf(i), n(i.amount)), 0),
       overdue,
       nextDueOn: next ? day(next.dueOn) : null,
-      nextAmount: next ? n(next.amount) : null,
+      // Lo que falta de esa cuota, no su monto nominal: con un abono parcial, «$ 300.000»
+      // era mentira (23/9, visto en /cartera con la cuota de IVY-2026-1).
+      nextAmount: next ? Math.max(0, n(next.amount) - paidOf(next)) : null,
       hasAgreement: e.paymentAgreements.some((a) => a.status === 'ACTIVE'),
     };
   });

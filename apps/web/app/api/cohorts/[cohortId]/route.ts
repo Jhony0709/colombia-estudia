@@ -4,7 +4,8 @@
  *
  * Abrir congela el contenido: crea una asignación por tema y por evaluación, cada una atada a
  * la versión publicada en ese momento. Si falta alguna, responde 409 con la lista en
- * `error.details.missing` y no abre nada.
+ * `error.details.missing` y no abre nada — salvo con `skipUnpublished` (23/9), que abre con
+ * lo publicado y deja lo demás para «Actualizaciones del programa».
  * AMBIGUO: no estaba en reference/02-api/endpoints.md; añadido en §13.
  */
 
@@ -13,7 +14,11 @@ import { apiHandler } from '@/lib/http/api-handler';
 import { requireInstitutionId, routeParam } from '@/lib/http/admin-input';
 import { openCohort, closeCohort } from '@/features/cohorts/server/cohorts.service';
 
-const schema = z.object({ op: z.enum(['open', 'close']) });
+const schema = z.object({
+  op: z.enum(['open', 'close']),
+  /** 23/9: abrir dejando fuera lo que sigue en borrador (ver `openCohort`). */
+  skipUnpublished: z.boolean().optional(),
+});
 
 type Input = z.infer<typeof schema>;
 
@@ -27,6 +32,6 @@ export const PATCH = apiHandler<Input>({ schema, capability: 'cohort.manage' })(
   const cohortId = await routeParam(ctx.params, 'cohortId');
 
   return input.op === 'open'
-    ? openCohort({ institutionId, actorId, cohortId })
+    ? openCohort({ institutionId, actorId, cohortId, skipUnpublished: input.skipUnpublished })
     : closeCohort({ institutionId, actorId, cohortId });
 });

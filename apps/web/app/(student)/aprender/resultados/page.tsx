@@ -49,9 +49,37 @@ export default async function ResultsPage() {
   type Attempt = (typeof results.attempts)[number];
   type Score = (typeof results.scores)[number];
 
+  const dueDay = (iso: string) =>
+    format.dateTime(new Date(iso), {
+      day: 'numeric',
+      month: 'short',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+
   return (
     <Page>
       <PageHeader title={tr('title')} description={tr('description')} />
+
+      {/*
+        Mis exámenes (E3, 23/9): una tarjeta por examen que dice, en una frase, qué pasa con
+        él —bloqueado y por qué, pendiente y hasta cuándo, en curso, entregado y qué nota se
+        conserva—. Antes era una tabla de cuatro columnas con «Bloqueado» sin motivo y «—»
+        en casi todas las celdas para quien empieza.
+      */}
+      <PageSection title={tr('examsTitle')} description={tr('examsHint')}>
+        {results.assessments.length === 0 ? (
+          <EmptyState title={tr('noExams')} description={tr('noExamsHint')} />
+        ) : (
+          <ul className="grid gap-3 md:grid-cols-2">
+            {results.assessments.map((e) => (
+              <li key={e.assignmentId}>
+                <ExamCard exam={e} when={dueDay} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </PageSection>
 
       <PageSection title={tr('scoresTitle')} description={tr('scoresHint')}>
         <DataTable<Score>
@@ -86,7 +114,7 @@ export default async function ResultsPage() {
               cell: (a) => (
                 <>
                   <Link
-                    href={`/aprender/evaluacion/${a.assignmentId}/intento/${a.id}`}
+                    href={`/aprender/examen/${a.assignmentId}/intento/${a.id}`}
                     className="text-text-link underline underline-offset-4"
                   >
                     {a.title}
@@ -142,5 +170,80 @@ export default async function ResultsPage() {
         />
       </PageSection>
     </Page>
+  );
+}
+
+/**
+ * Un examen en una tarjeta: título, dónde, y **una frase** con su situación y el porqué. La
+ * composición de la nota se dice tal cual («se conserva tu mejor intento»), sin texto
+ * pedagógico inventado. La acción, si la hay, es una: ver el examen o seguir el intento.
+ */
+async function ExamCard({
+  exam,
+  when,
+}: {
+  exam: Awaited<ReturnType<typeof getResultsForStudent>>['assessments'][number];
+  when: (iso: string) => string;
+}) {
+  const tr = await getTranslations('learn.results');
+
+  let tone: 'neutral' | 'info' | 'success' | 'warning' = 'neutral';
+  let line: string;
+  let action: { href: string; label: string } | null = null;
+
+  if (!exam.enabled) {
+    line = exam.blockedBy
+      ? tr('card.blockedBy', { title: exam.blockedBy })
+      : exam.unavailableReason === 'CLOSED'
+        ? tr('card.closed')
+        : tr('card.notYet');
+  } else if (exam.status === 'IN_PROGRESS') {
+    tone = 'info';
+    line = tr('card.inProgress');
+    action = { href: `/aprender/examen/${exam.assignmentId}`, label: tr('card.continue') };
+  } else if (exam.status === 'COMPLETED') {
+    if (exam.best) {
+      tone = exam.best.passed ? 'success' : 'warning';
+      line = tr('card.best', {
+        percent: exam.best.percent,
+        passed: exam.best.passed ? 'yes' : 'no',
+        count: exam.visibleAttempts,
+      });
+    } else {
+      line = tr('card.hidden');
+    }
+    action = { href: `/aprender/examen/${exam.assignmentId}`, label: tr('card.view') };
+  } else {
+    line = exam.dueAt ? tr('card.pendingDue', { date: when(exam.dueAt) }) : tr('card.pending');
+    action = { href: `/aprender/examen/${exam.assignmentId}`, label: tr('card.view') };
+  }
+
+  const TONE = {
+    neutral: 'border-border-muted',
+    info: 'border-status-info-base',
+    success: 'border-status-success-base',
+    warning: 'border-status-warning-base',
+  } as const;
+
+  return (
+    <article
+      className={`bg-surface-base rounded-card elevation-resting flex h-full flex-col gap-2 border border-l-4 p-4 ${TONE[tone]}`}
+    >
+      <h3 className={`type-body-emphasis m-0 ${exam.enabled ? 'text-text' : 'text-text-muted'}`}>
+        {exam.title}
+      </h3>
+      <p className="type-caption text-text-muted m-0">
+        {exam.programName} · {exam.moduleName}
+      </p>
+      <p className="type-body text-text m-0">{line}</p>
+      {action && (
+        <Link
+          href={action.href}
+          className="text-text-link type-body min-h-touch mt-auto inline-flex items-center underline underline-offset-4"
+        >
+          {action.label}
+        </Link>
+      )}
+    </article>
   );
 }

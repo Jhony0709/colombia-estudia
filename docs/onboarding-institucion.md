@@ -17,8 +17,8 @@ programa no hay tema que escribir.
 
 `/contenido/temas`: un tema por lección, Markdown con imágenes (con alt), video de Vimeo
 (con transcripción WebVTT) y PDF (con alternativa textual). Marcar «Se completa con
-entrega» solo si un instructor va a revisar algo. Vista previa → publicar.
-`/contenido/evaluaciones`: preguntas, clave de respuestas aparte, reglas del intento
+actividad» solo si un instructor va a revisar algo. Vista previa → publicar.
+`/contenido/examenes`: preguntas, clave de respuestas aparte, reglas del intento
 (intentos, tiempo, umbral, qué ve el estudiante después). Publicar.
 
 ## 4. Las personas (OPERATIONS)
@@ -27,11 +27,21 @@ entrega» solo si un instructor va a revisar algo. Vista previa → publicar.
 matricular). Menores: registrar el acudiente antes de matricular. Importar por CSV desde
 `/cohortes/[id]/importar` cuando son muchos (plantilla en la pantalla).
 
+### Registro público (Fase B)
+
+La persona también puede darse de alta sola en `/registro` (enlace en la portada y en el
+login): nombre, apellido, correo, teléfono, fecha de nacimiento y contraseña. Si en
+`/admin/institucion` → «Registro público» hay una **cohorte de introducción** elegida,
+queda matriculada en el acto; si no, o si es menor de edad (necesita acudiente), la cuenta
+se crea y operación la matricula desde `/cohortes/[id]`. La clave «nombre + dos últimos
+dígitos de la cédula» **no** existe: se adivina en dos intentos y usa un dato personal; el
+equivalente es el enlace de invitación (7 días).
+
 ## 5. La cohorte (OPERATIONS)
 
 `/cohortes` → «Nueva cohorte» (programa, código, fechas, progresión lineal o libre, aliado
 si lo hay). Matricular (una a una o CSV). **Abrir** la cohorte: es lo que asigna los temas
-y evaluaciones publicados y deja entrar. Invitar (`Invitaciones` → «Preparar el envío»).
+y exámenes publicados y deja entrar. Invitar (`Invitaciones` → «Preparar el envío»).
 Programar sesiones en vivo si las hay.
 
 ## 6. La cartera (OPERATIONS)
@@ -42,7 +52,7 @@ vencimiento). Los pagos se registran en dos pasos; los acuerdos con vista previa
 ## 7. Durante la cohorte
 
 - `/cohortes/[id]/avance`: quién va cómo, en riesgo, exportar.
-- `/cohortes/[id]/entregas`: aprobar o devolver con comentario.
+- `/cohortes/[id]/actividades`: aprobar o devolver con comentario.
 - `/cohortes/[id]/matriculas/[m]`: progreso, marcar completado a mano (con motivo), ajustes
   razonables (coordinación de inclusión), constancias.
 - `/notificaciones`: lo que pide atención.

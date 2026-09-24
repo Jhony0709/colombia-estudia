@@ -13,7 +13,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <section>
-          <h1 className="type-heading text-text text-center">Iniciar sesión</h1>
+          <h1 className="type-heading text-text">Iniciar sesión</h1>
           <div className="bg-surface-sunken rounded-card h-64 animate-pulse" />
         </section>
       }

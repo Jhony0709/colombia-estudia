@@ -307,7 +307,7 @@ export async function getCalendarForEnrollment({
       title: a.assessment.title,
       at: a.dueAt!.toISOString(),
       endsAt: null,
-      href: `/aprender/evaluacion/${a.id}`,
+      href: `/aprender/examen/${a.id}`,
       joinable: false,
       description: null,
     })),

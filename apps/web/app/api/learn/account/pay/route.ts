@@ -5,8 +5,13 @@ import { apiHandler } from '@/lib/http/api-handler';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { APIError } from '@/lib/core/errors';
 import { startCheckout } from '@/features/billing/server/account.service';
+import { isValidNextUrl } from '@/lib/authz/routes';
 
-const schema = z.object({ installmentId: z.string().cuid() });
+const schema = z.object({
+  installmentId: z.string().cuid(),
+  /** Adónde vuelve el checkout; solo una ruta relativa propia (Fase C: `/familia/…`). */
+  returnPath: z.string().optional(),
+});
 type Input = z.infer<typeof schema>;
 
 export const POST = apiHandler<Input>({ schema, capability: 'billing.read.own' })(async (
@@ -22,5 +27,8 @@ export const POST = apiHandler<Input>({ schema, capability: 'billing.read.own' }
     scopes: ctx.capabilities.get('billing.read.own') ?? [],
     origin: req.nextUrl.origin,
     customerEmail: ctx.person.email ?? null,
+    ...(input.returnPath && isValidNextUrl(input.returnPath)
+      ? { returnPath: input.returnPath }
+      : {}),
   });
 });

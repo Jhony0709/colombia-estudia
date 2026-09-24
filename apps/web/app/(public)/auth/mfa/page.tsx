@@ -13,8 +13,11 @@ export default function MfaPage() {
   return (
     <Suspense
       fallback={
-        <section className="flex items-center justify-center">
-          <div className="type-body text-text-muted animate-pulse">Cargando...</div>
+        <section className="space-y-6">
+          {/* Sin `animate-pulse`: el pulso en texto está vetado (motion-colombia-estudia). */}
+          <p role="status" className="type-body text-text-muted">
+            Comprobando tu configuración.
+          </p>
         </section>
       }
     >

@@ -13,9 +13,12 @@
  * Qué muestra según el estado que devuelve el servidor:
  * - sin entrega o `RETURNED`: el formulario (con el comentario del revisor arriba, cuando lo
  *   hay);
- * - `SUBMITTED`: «en revisión» con fecha, sin formulario —reenviar sin devolución sería
- *   pisar lo que el instructor está leyendo—;
+ * - `SUBMITTED`: «en revisión» con fecha y un botón para corregirla (23/9): hasta que un
+ *   instructor la revise, lo que está en cola es del estudiante y la puede reemplazar;
  * - `APPROVED`: aprobada; el tema ya quedó completado del lado del servidor.
+ *
+ * Qué pide el formulario lo decide el autor del tema (`accepts`, 23/9): solo texto, solo
+ * archivo, o cualquiera de los dos. El servidor vuelve a comprobarlo.
  */
 
 import { useId, useRef, useState, type FormEvent } from 'react';
@@ -28,6 +31,11 @@ import { Label } from '@/components/atoms/label';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { cn } from '@/lib/utils';
+import { useDraft } from '@/lib/net/draft';
+import { useSlowRequest } from '@/lib/net/slow-request';
+import { RequestStatus } from '@/components/molecules/request-status';
+
+export type ActivityAccepts = 'TEXT' | 'FILE' | 'TEXT_OR_FILE';
 
 export interface SubmissionViewProps {
   id: string;
@@ -53,37 +61,63 @@ async function readJson(res: Response): Promise<unknown> {
 export function SubmissionForm({
   assignmentId,
   submission,
+  dateLabel,
+  accepts,
 }: {
   assignmentId: string;
   submission: SubmissionViewProps | null;
+  /** Qué entrega el estudiante, según el autor del tema. */
+  accepts: ActivityAccepts;
+  /**
+   * La fecha de la entrega ya escrita, formateada en el servidor (21/9). Formatearla aquí
+   * daba un error de hidratación: el ICU de Node dice «20 de septiembre, 10:59» y el de
+   * Chrome «20 de septiembre a las 10:59», y React lo trata como HTML distinto.
+   */
+  dateLabel: string | null;
 }) {
   const t = useTranslations('learn.submission');
+  // Solo para el tamaño del archivo elegido, que nace en el cliente y no se hidrata.
   const format = useFormatter();
   const router = useRouter();
   const { announce } = useAnnounce();
+  const tn = useTranslations('net');
   const ids = { text: useId(), file: useId(), error: useId() };
 
-  const [text, setText] = useState(
-    submission?.status === 'RETURNED' ? (submission.text ?? '') : ''
+  // Lo escrito se conserva para corregirlo, tanto si la devolvieron como si la quiere
+  // reemplazar antes de que la revisen. Y se guarda en el aparato mientras se escribe (E1,
+  // 23/9): una recarga o una petición que nunca contesta no se lo llevan.
+  const draft = useDraft(
+    `submission.${assignmentId}`,
+    submission?.status === 'RETURNED' || submission?.status === 'SUBMITTED'
+      ? (submission.text ?? '')
+      : ''
   );
+  const text = draft.text;
+  const setText = draft.setText;
+  // La espera que se ve: «está tardando», «no pudimos», reintentar (E1).
+  const wait = useSlowRequest({ screen: 'lesson', action: 'submit', request: 'submission' });
   const [file, setFile] = useState<File | null>(null);
   const [phase, setPhase] = useState<Phase>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [replacing, setReplacing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const date = (iso: string) =>
-    format.dateTime(new Date(iso), {
-      day: 'numeric',
-      month: 'long',
-      hour: 'numeric',
-      minute: '2-digit',
-    });
+  const date = (_iso: string) => dateLabel ?? '';
+  const wantsText = accepts !== 'FILE';
+  const wantsFile = accepts !== 'TEXT';
 
-  if (submission?.status === 'SUBMITTED') {
+  if (submission?.status === 'SUBMITTED' && !replacing) {
     return (
       <SubmissionPanel icon={Clock} tone="info" title={t('sent.title')}>
         <p className="type-body">{t('sent.body', { date: date(submission.submittedAt) })}</p>
         <Summary submission={submission} />
+        {/* Hasta que la revisen, sigue siendo suya: puede cambiarla (23/9). */}
+        <div>
+          <Button type="button" variant="secondary" onClick={() => setReplacing(true)}>
+            {t('sent.replace')}
+          </Button>
+          <p className="type-caption text-text-muted mt-1">{t('sent.replaceHint')}</p>
+        </div>
       </SubmissionPanel>
     );
   }
@@ -116,13 +150,19 @@ export function SubmissionForm({
     setFile(chosen);
   };
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit = async (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
     setError(null);
-    const trimmed = text.trim();
+    wait.reset();
+    const trimmed = wantsText ? text.trim() : '';
+    if (accepts === 'FILE' && !file) return setError(t('errors.needFile'));
+    if (accepts === 'TEXT' && !trimmed) return setError(t('errors.needText'));
     if (!trimmed && !file) return setError(t('errors.empty'));
 
-    try {
+    // Un fallo de servidor (respuesta con error) se dice con su texto; un `fetch` que
+    // lanza (sin respuesta) lo recoge `wait` como `failed` con «Reintentar». En los dos
+    // casos el texto y el archivo siguen en su sitio.
+    const sent = await wait.run(async () => {
       let fileAssetId: string | null = null;
 
       if (file) {
@@ -136,7 +176,8 @@ export function SubmissionForm({
           data?: { mediaAssetId: string; signedUrl: string };
         } | null;
         if (!ticketRes.ok || !ticket?.data) {
-          return setError(apiErrorText(ticket, t('errors.upload')));
+          setError(apiErrorText(ticket, t('errors.upload')));
+          return false;
         }
 
         const put = await fetch(ticket.data.signedUrl, {
@@ -144,7 +185,10 @@ export function SubmissionForm({
           headers: { 'Content-Type': file.type, 'x-upsert': 'false' },
           body: file,
         });
-        if (!put.ok) return setError(t('errors.upload'));
+        if (!put.ok) {
+          setError(t('errors.upload'));
+          return false;
+        }
 
         const confirmRes = await fetch(`/api/media/${ticket.data.mediaAssetId}/confirm`, {
           method: 'POST',
@@ -152,7 +196,10 @@ export function SubmissionForm({
           body: JSON.stringify({}),
         });
         const confirmed = await readJson(confirmRes);
-        if (!confirmRes.ok) return setError(apiErrorText(confirmed, t('errors.upload')));
+        if (!confirmRes.ok) {
+          setError(apiErrorText(confirmed, t('errors.upload')));
+          return false;
+        }
         fileAssetId = ticket.data.mediaAssetId;
       }
 
@@ -163,14 +210,18 @@ export function SubmissionForm({
         body: JSON.stringify({ text: trimmed || undefined, fileAssetId }),
       });
       const payload = await readJson(res);
-      if (!res.ok) return setError(apiErrorText(payload, t('errors.send')));
+      if (!res.ok) {
+        setError(apiErrorText(payload, t('errors.send')));
+        return false;
+      }
+      return true;
+    });
+    setPhase('idle');
 
+    if (sent) {
+      draft.clear();
       announce(t('sentAnnounce'));
       router.refresh();
-    } catch {
-      setError(t('errors.send'));
-    } finally {
-      setPhase('idle');
     }
   };
 
@@ -179,8 +230,15 @@ export function SubmissionForm({
   return (
     <section aria-labelledby={`${ids.text}-heading`} className="mt-8 space-y-4">
       <h2 id={`${ids.text}-heading`} className="type-heading">
-        {submission?.status === 'RETURNED' ? t('returned.title') : t('title')}
+        {submission?.status === 'RETURNED'
+          ? t('returned.title')
+          : replacing
+            ? t('replacing.title')
+            : t('title')}
       </h2>
+
+      {replacing && <Alert severity="info">{t('replacing.body')}</Alert>}
+      {draft.restored && <Alert severity="info">{tn('draftRestored')}</Alert>}
 
       {submission?.status === 'RETURNED' && (
         <Alert severity="warning">
@@ -192,52 +250,68 @@ export function SubmissionForm({
       )}
 
       <form onSubmit={onSubmit} noValidate className="space-y-4">
-        <div className="space-y-1.5">
-          <Label htmlFor={ids.text}>{t('textLabel')}</Label>
-          <textarea
-            id={ids.text}
-            name="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={8}
-            maxLength={20_000}
-            disabled={busy}
-            aria-describedby={error ? ids.error : undefined}
-            className={cn(
-              'rounded-control border-border bg-surface-sunken text-text type-body w-full border px-3 py-2',
-              'focus:border-accent-base duration-fast ease-standard transition-colors',
-              busy && 'text-text-subtle cursor-not-allowed'
-            )}
-          />
-          <p className="type-caption text-text-muted">{t('textHint')}</p>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor={ids.file}>{t('fileLabel')}</Label>
-          <input
-            ref={fileInput}
-            id={ids.file}
-            type="file"
-            name="file"
-            accept={ACCEPT}
-            disabled={busy}
-            onChange={(e) => onFileChange(e.target.files?.[0] ?? null)}
-            className="type-body text-text block w-full"
-          />
-          <p className="type-caption text-text-muted">{t('fileHint')}</p>
-          {file && (
-            <p className="type-caption text-text inline-flex items-center gap-1.5">
-              <FileText className="size-4" aria-hidden="true" />
-              {file.name} · {format.number(file.size / 1024 / 1024, { maximumFractionDigits: 1 })}{' '}
-              MB
+        {wantsText && (
+          <div className="space-y-1.5">
+            <Label htmlFor={ids.text}>{t('textLabel')}</Label>
+            <textarea
+              id={ids.text}
+              name="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={8}
+              maxLength={20_000}
+              disabled={busy}
+              aria-describedby={error ? ids.error : undefined}
+              className={cn(
+                'rounded-control border-border bg-surface-sunken text-text type-body w-full border px-3 py-2',
+                'focus:border-accent-base duration-fast ease-standard transition-colors',
+                busy && 'text-text-subtle cursor-not-allowed'
+              )}
+            />
+            <p className="type-caption text-text-muted">
+              {t(`textHint.${accepts}` as 'textHint.TEXT')}
             </p>
-          )}
-        </div>
+          </div>
+        )}
+
+        {wantsFile && (
+          <div className="space-y-1.5">
+            <Label htmlFor={ids.file}>{t(`fileLabel.${accepts}` as 'fileLabel.FILE')}</Label>
+            <input
+              ref={fileInput}
+              id={ids.file}
+              type="file"
+              name="file"
+              accept={ACCEPT}
+              disabled={busy}
+              onChange={(e) => onFileChange(e.target.files?.[0] ?? null)}
+              className="type-body text-text block w-full"
+            />
+            <p className="type-caption text-text-muted">{t('fileHint')}</p>
+            {file && (
+              <p className="type-caption text-text inline-flex items-center gap-1.5">
+                <FileText className="size-4" aria-hidden="true" />
+                {file.name} · {format.number(file.size / 1024 / 1024, { maximumFractionDigits: 1 })}{' '}
+                MB
+              </p>
+            )}
+          </div>
+        )}
 
         {error && (
           <Alert severity="error" className="mt-2">
             <span id={ids.error}>{error}</span>
           </Alert>
+        )}
+
+        <RequestStatus
+          phase={wait.phase}
+          elapsedSeconds={wait.elapsedSeconds}
+          onRetry={() => void onSubmit()}
+          kept={wantsText ? 'text' : 'nothing'}
+        />
+        {wait.phase === 'failed' && file && (
+          <p className="type-caption text-text-muted">{tn('fileKept')}</p>
         )}
 
         <div className="flex flex-wrap items-center gap-3">
@@ -246,10 +320,20 @@ export function SubmissionForm({
               ? t('uploading')
               : phase === 'sending'
                 ? t('sending')
-                : submission?.status === 'RETURNED'
+                : submission?.status === 'RETURNED' || replacing
                   ? t('resend')
                   : t('send')}
           </Button>
+          {replacing && (
+            <Button
+              type="button"
+              variant="quiet"
+              disabled={busy}
+              onClick={() => setReplacing(false)}
+            >
+              {t('replacing.cancel')}
+            </Button>
+          )}
           {submission?.status === 'RETURNED' && (
             <span className="type-caption text-text-muted inline-flex items-center gap-1">
               <RotateCcw className="size-3.5" aria-hidden="true" />

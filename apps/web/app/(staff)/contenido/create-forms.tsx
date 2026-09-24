@@ -27,6 +27,14 @@ export interface ModuleOption {
   programName: string;
 }
 
+/** Un tema del que una evaluación puede ser examen (20/9). */
+export interface LessonOption {
+  id: string;
+  title: string;
+  moduleId: string;
+  position: number;
+}
+
 export interface SubjectOption {
   id: string;
   name: string;
@@ -168,9 +176,11 @@ export function CreateLessonForm({
 export function CreateAssessmentForm({
   programs,
   modules,
+  lessons,
 }: {
   programs: ProgramOption[];
   modules: ModuleOption[];
+  lessons: LessonOption[];
 }) {
   const t = useTranslations('content');
   const { busy, error, send } = useCreate('/api/content/assessments');
@@ -179,6 +189,7 @@ export function CreateAssessmentForm({
   const [programId, setProgramId] = useState(programs[0]?.id ?? '');
   const [kind, setKind] = useState<'DIAGNOSTIC' | 'SUBJECT' | 'FINAL'>('SUBJECT');
   const [moduleId, setModuleId] = useState('');
+  const [lessonId, setLessonId] = useState('');
 
   if (programs.length === 0) {
     return <Alert severity="warning">{t('createNeedsProgram')}</Alert>;
@@ -188,6 +199,11 @@ export function CreateAssessmentForm({
   // significa nada.
   const needsModule = kind !== 'DIAGNOSTIC';
   const modulesOfProgram = modules.filter((m) => m.programId === programId);
+  // El tema del que es examen (20/9): solo los del módulo elegido, en su orden. Sin tema,
+  // el examen va al final del módulo.
+  const lessonsOfModule = lessons
+    .filter((l) => l.moduleId === moduleId)
+    .sort((a, b) => a.position - b.position);
 
   return (
     <form
@@ -201,8 +217,9 @@ export function CreateAssessmentForm({
             kind,
             title,
             moduleId: needsModule && moduleId !== '' ? moduleId : null,
+            lessonId: needsModule && moduleId !== '' && lessonId !== '' ? lessonId : null,
           },
-          (payload) => `/contenido/evaluaciones/${payload.assessmentId}`
+          (payload) => `/contenido/examenes/${payload.assessmentId}`
         );
       }}
     >
@@ -258,7 +275,10 @@ export function CreateAssessmentForm({
               <FormSelect
                 name="assessmentModuleId"
                 value={moduleId}
-                onChange={(event) => setModuleId(event.target.value)}
+                onChange={(event) => {
+                  setModuleId(event.target.value);
+                  setLessonId('');
+                }}
               >
                 <option value="">{t('formNoModule')}</option>
                 {modulesOfProgram.map((m) => (
@@ -271,6 +291,24 @@ export function CreateAssessmentForm({
           </div>
         )}
       </div>
+
+      {/* En su propia fila: cuatro selects en una no caben, y este lleva texto de ayuda. */}
+      {needsModule && moduleId !== '' && (
+        <FormField label={t('formLesson')} name="assessmentLessonId" hint={t('formLessonHint')}>
+          <FormSelect
+            name="assessmentLessonId"
+            value={lessonId}
+            onChange={(event) => setLessonId(event.target.value)}
+          >
+            <option value="">{t('formNoLesson')}</option>
+            {lessonsOfModule.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.title}
+              </option>
+            ))}
+          </FormSelect>
+        </FormField>
+      )}
 
       <Button type="submit" loading={busy} disabled={title.trim() === ''}>
         {t('createAssessment')}

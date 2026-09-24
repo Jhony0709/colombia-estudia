@@ -18,6 +18,7 @@
 const PUBLIC_PREFIXES = [
   '/auth/',
   '/invitacion/',
+  '/registro', // Registro público (Fase B, 23/9); su API es /api/auth/register
   '/certificado/',
   '/api/health',
   '/api/auth/',

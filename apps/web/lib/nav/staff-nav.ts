@@ -32,8 +32,23 @@ export interface NavDestination {
 }
 
 interface NavDefinition extends NavDestination {
-  capability: Capability;
+  /** La capacidad que abre la puerta; `'staff'` = cualquiera de las de staff. */
+  capability: Capability | 'staff';
 }
+
+/**
+ * Las capacidades que hacen a alguien «staff» a efectos de la barra: con cualquiera de
+ * ellas, `/inicio` tiene algo que decirle (entregas, cohortes, invitaciones, cartera).
+ */
+const STAFF_CAPABILITIES: readonly Capability[] = [
+  'institution.manage',
+  'cohort.manage',
+  'people.manage',
+  'billing.manage',
+  'lesson.author',
+  'assessment.grade',
+  'accommodation.manage',
+];
 
 /**
  * El orden de la pantalla es **el orden en que se crea un curso** (Jhonny, 19/9), que es el
@@ -47,6 +62,8 @@ interface NavDefinition extends NavDestination {
  * mientras que no entender por qué una cohorte no abre cuesta una tarde.
  */
 const NAV: readonly NavDefinition[] = [
+  // Ola 3 (23/9): la pantalla de situación, arriba del todo y para todo el staff.
+  { href: '/inicio', label: 'Inicio', capability: 'staff', section: 'inicio' },
   {
     href: '/contenido/asignaturas',
     label: 'Asignaturas',
@@ -61,36 +78,41 @@ const NAV: readonly NavDefinition[] = [
   },
   { href: '/contenido/temas', label: 'Temas', capability: 'lesson.author', section: 'contenido' },
   {
-    href: '/contenido/evaluaciones',
-    label: 'Evaluaciones',
+    href: '/contenido/examenes',
+    label: 'Exámenes',
     capability: 'lesson.author',
     section: 'contenido',
   },
   { href: '/cohortes', label: 'Cohortes', capability: 'cohort.manage', section: 'operacion' },
   { href: '/personas', label: 'Personas', capability: 'people.manage', section: 'operacion' },
-  // { href: '/cartera', label: 'Cartera', capability: 'billing.manage', section: 'operacion' },
-  // {
-  //   href: '/admin/inclusion/reporte',
-  //   label: 'Inclusión',
-  //   capability: 'accommodation.manage',
-  //   section: 'operacion',
-  // },
+  { href: '/cartera', label: 'Cartera', capability: 'billing.manage', section: 'operacion' },
+  {
+    href: '/admin/inclusion/reporte',
+    label: 'Inclusión',
+    capability: 'accommodation.manage',
+    section: 'operacion',
+  },
   {
     href: '/admin/institucion',
     label: 'Institución',
     capability: 'institution.manage',
     section: 'administracion',
   },
-  // {
-  //   href: '/admin/politicas',
-  //   label: 'Políticas',
-  //   capability: 'institution.manage',
-  //   section: 'administracion',
-  // },
+  {
+    href: '/admin/politicas',
+    label: 'Políticas',
+    capability: 'institution.manage',
+    section: 'administracion',
+  },
 ];
 
+const has = (capabilities: Map<Capability, Scope[]>, capability: Capability) =>
+  (capabilities.get(capability)?.length ?? 0) > 0;
+
 export function buildStaffNav(capabilities: Map<Capability, Scope[]>): NavDestination[] {
-  return NAV.filter((item) => (capabilities.get(item.capability)?.length ?? 0) > 0).map(
-    ({ href, label, section }) => ({ href, label, section })
-  );
+  return NAV.filter((item) =>
+    item.capability === 'staff'
+      ? STAFF_CAPABILITIES.some((c) => has(capabilities, c))
+      : has(capabilities, item.capability)
+  ).map(({ href, label, section }) => ({ href, label, section }));
 }

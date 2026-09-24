@@ -11,6 +11,7 @@ import { SideNav } from '@/components/organisms/side-nav';
 import { THEME_COOKIE, toTheme } from '@/lib/theme/theme';
 import { buildStaffNav } from '@/lib/nav/staff-nav';
 import { countUnread } from '@/features/notifications/server/notifications.service';
+import { buildSpaces } from '@/lib/nav/spaces';
 
 export default async function StaffLayout({ children }: { children: React.ReactNode }) {
   await requireStaffSession();
@@ -29,6 +30,7 @@ export default async function StaffLayout({ children }: { children: React.ReactN
         theme={theme}
         institutionName={ctx.institution.name}
         items={buildStaffNav(ctx.capabilities)}
+        spaces={buildSpaces(ctx.capabilities)}
         personName={ctx.person ? `${ctx.person.givenName} ${ctx.person.familyName}` : null}
         unreadNotifications={unread}
       />

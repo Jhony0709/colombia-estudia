@@ -56,16 +56,12 @@ export default function RecuperarPage() {
 
   if (sent) {
     return (
-      <section>
-        <h1
-          ref={headingRef}
-          tabIndex={-1}
-          className="type-heading text-text text-center outline-none"
-        >
+      <section className="space-y-6">
+        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
           {t('recover')}
         </h1>
         <Alert severity="success">{t('recoverSuccess')}</Alert>
-        <div className="text-center">
+        <div>
           <Link href="/auth/login" className="type-body text-text-link underline">
             {t('backToLogin')}
           </Link>
@@ -75,16 +71,12 @@ export default function RecuperarPage() {
   }
 
   return (
-    <section>
-      <h1
-        ref={headingRef}
-        tabIndex={-1}
-        className="type-heading text-text text-center outline-none"
-      >
+    <section className="space-y-6">
+      <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
         {t('recover')}
       </h1>
 
-      <p className="type-body text-text-muted text-center">{t('recoverInstructions')}</p>
+      <p className="type-body text-text-muted">{t('recoverInstructions')}</p>
 
       {error && <Alert severity="error">{error}</Alert>}
 
@@ -105,7 +97,7 @@ export default function RecuperarPage() {
         </Button>
       </form>
 
-      <div className="text-center">
+      <div>
         <Link href="/auth/login" className="type-body text-text-link underline">
           {t('backToLogin')}
         </Link>

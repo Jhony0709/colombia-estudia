@@ -411,7 +411,8 @@ export interface PersonDetail {
     status: string;
     accessUntil: string;
   }>;
-  guardians: Array<{ id: string; name: string; relationship: string }>;
+  /** `hasAccount` (Fase C, 23/9): si el acudiente ya puede entrar a `/familia` o hay que invitarlo. */
+  guardians: Array<{ id: string; name: string; relationship: string; hasAccount: boolean }>;
   wards: Array<{ id: string; name: string; relationship: string }>;
   /** Ley 1581: fecha de anonimización, si la hubo. La ficha lo dice y no ofrece nada más. */
   anonymizedAt: string | null;
@@ -473,7 +474,7 @@ export async function getPersonDetail({
       guardians: {
         select: {
           relationship: true,
-          guardian: { select: { id: true, givenName: true, familyName: true } },
+          guardian: { select: { id: true, givenName: true, familyName: true, authUserId: true } },
         },
       },
       guardianOf: {
@@ -532,6 +533,7 @@ export async function getPersonDetail({
       id: g.guardian.id,
       name: fullName(g.guardian),
       relationship: g.relationship,
+      hasAccount: g.guardian.authUserId !== null,
     })),
     wards: person.guardianOf.map((w) => ({
       id: w.student.id,

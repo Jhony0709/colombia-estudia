@@ -12,8 +12,10 @@ import { getTranslations } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { requireCapability } from '@/lib/authz/with-capability';
 import { getInstitutionOverview } from '@/features/admin/server/institution.service';
+import { getRegistrationSettings } from '@/features/admin/server/registration.service';
 import { Page, PageHeader } from '@/components/templates/page';
 import { InstitutionForm } from './institution-form';
+import { RegistrationForm } from './registration-form';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,8 +27,9 @@ export default async function InstitutionPage() {
   await requireCapability('institution.manage');
   const ctx = await getRequestContext();
 
-  const [overview, t] = await Promise.all([
+  const [overview, registration, t] = await Promise.all([
     getInstitutionOverview(ctx.institution.id),
+    getRegistrationSettings(ctx.institution.id),
     getTranslations('admin.institution'),
   ]);
 
@@ -49,6 +52,9 @@ export default async function InstitutionPage() {
       />
 
       <InstitutionForm settings={overview.settings} />
+
+      {/* El registro público (Fase B): su propia sección y su propio botón. */}
+      <RegistrationForm settings={registration} />
     </Page>
   );
 }

@@ -23,7 +23,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { CircleCheck } from 'lucide-react';
 import { useAnnounce } from '@/lib/a11y/announce';
 
 type Status = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
@@ -123,6 +122,12 @@ export function EvidenceRecorder({
     // Envío periódico.
     const timer = window.setInterval(() => void flush(), FLUSH_MS);
 
+    // Al volver la conexión se manda lo acumulado sin esperar al reloj (23/9): la evidencia
+    // nunca se perdió —`sent` solo avanza cuando el servidor contesta—, pero esperar 20 s
+    // con el banner recién apagado hace creer que se perdió.
+    const onOnline = () => void flush();
+    window.addEventListener('online', onOnline);
+
     // Centinela: el final del artículo entró en pantalla.
     let io: IntersectionObserver | null = null;
     if (sentinel.current && 'IntersectionObserver' in window) {
@@ -139,15 +144,32 @@ export function EvidenceRecorder({
     }
 
     // Video de Vimeo: posición y duración por postMessage.
+    //
+    // 23/9, visto con la sesión de Estudiante Uno: el player responde al protocolo antiguo
+    // de `postMessage` (sin SDK), y ahí el evento de avance se llama `playProgress`
+    // (`{ seconds, percent, duration }`), no `timeupdate`; y `getDuration` contesta en
+    // `value`, no en `data`. Esto solo escuchaba `timeupdate`, así que un video **nunca**
+    // completaba el tema por verlo: solo la transcripción leída lo completaba. Se aceptan
+    // los dos nombres y las dos formas de respuesta.
     const iframes =
       form === 'VIDEO'
         ? Array.from(document.querySelectorAll<HTMLIFrameElement>('article .media-video iframe'))
         : [];
+    const subscribe = (f: HTMLIFrameElement) => {
+      for (const value of ['playProgress', 'timeupdate']) {
+        f.contentWindow?.postMessage(
+          JSON.stringify({ method: 'addEventListener', value }),
+          VIMEO_ORIGIN
+        );
+      }
+      f.contentWindow?.postMessage(JSON.stringify({ method: 'getDuration' }), VIMEO_ORIGIN);
+    };
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== VIMEO_ORIGIN) return;
       let msg: {
         event?: string;
         method?: string;
+        value?: unknown;
         data?: { seconds?: number; duration?: number };
       } | null = null;
       try {
@@ -157,23 +179,17 @@ export function EvidenceRecorder({
       }
       if (!msg) return;
       if (msg.event === 'ready') {
-        for (const f of iframes) {
-          f.contentWindow?.postMessage(
-            JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }),
-            VIMEO_ORIGIN
-          );
-          f.contentWindow?.postMessage(JSON.stringify({ method: 'getDuration' }), VIMEO_ORIGIN);
+        for (const f of iframes) subscribe(f);
+        return;
+      }
+      if (msg.method === 'getDuration') {
+        const duration = typeof msg.value === 'number' ? msg.value : msg.data;
+        if (typeof duration === 'number') {
+          snap.current.videoDurationSeconds = Math.max(snap.current.videoDurationSeconds, duration);
         }
         return;
       }
-      if (msg.method === 'getDuration' && typeof msg.data === 'number') {
-        snap.current.videoDurationSeconds = Math.max(
-          snap.current.videoDurationSeconds,
-          msg.data as number
-        );
-        return;
-      }
-      if (msg.event === 'timeupdate' && msg.data) {
+      if ((msg.event === 'timeupdate' || msg.event === 'playProgress') && msg.data) {
         const seconds = Math.floor(msg.data.seconds ?? 0);
         const duration = Math.floor(msg.data.duration ?? 0);
         const before = snap.current.videoPositionSeconds;
@@ -186,12 +202,7 @@ export function EvidenceRecorder({
     if (iframes.length > 0) {
       window.addEventListener('message', onMessage);
       // Por si el player ya estaba listo antes de que este efecto se montara.
-      for (const f of iframes) {
-        f.contentWindow?.postMessage(
-          JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }),
-          VIMEO_ORIGIN
-        );
-      }
+      for (const f of iframes) subscribe(f);
     }
 
     // La transcripción leída hasta el final (transcript-panel.tsx) también completa un video.
@@ -214,6 +225,7 @@ export function EvidenceRecorder({
       window.clearInterval(timer);
       io?.disconnect();
       window.removeEventListener('message', onMessage);
+      window.removeEventListener('online', onOnline);
       window.removeEventListener(TRANSCRIPT_READ_EVENT, onTranscriptRead);
       document.removeEventListener('visibilitychange', onHide);
       void flush(true);
@@ -222,13 +234,13 @@ export function EvidenceRecorder({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignmentId, form]);
 
+  // El estado visible vive en la barra fija del pie (23/9, `page.tsx`), que el servidor
+  // vuelve a pintar tras `router.refresh()`. Aquí queda solo el anuncio para el lector de
+  // pantalla, que es lo que cambia en vivo sin recargar.
   return (
     <>
       <div ref={sentinel} aria-hidden="true" className="h-px" />
-      <p role="status" className="type-caption text-text-muted mt-6 flex items-center gap-2">
-        {status === 'COMPLETED' && (
-          <CircleCheck aria-hidden="true" className="text-status-success-base size-4" />
-        )}
+      <p role="status" className="sr-only">
         {t(`status.${status}`, { form: t(`form.${form}`) })}
       </p>
     </>

@@ -16,14 +16,14 @@ párrafos, encabezados (empieza por `##`), listas, tablas, imágenes, video, PDF
 «Vista previa» muestra exactamente lo que verá el estudiante. «Publicar» congela la
 versión: lo que ya está asignado a una cohorte no cambia bajo los pies de nadie.
 
-## «Se completa con entrega»
+## «Se completa con actividad»
 
 Márcalo solo si vas a revisar algo (un texto, un archivo). El tema no se completa leyendo:
-se completa cuando apruebas la entrega en `/cohortes/[cohorte]/entregas`.
+se completa cuando apruebas la actividad en `/cohortes/[cohorte]/actividades`.
 
-## Una evaluación
+## Un examen
 
-«Nueva evaluación» → preguntas (opción única, múltiple, verdadero/falso, respuesta corta)
+«Nuevo examen» → tipo (diagnóstico, parcial o final), módulo y, si es el examen de un tema, el tema (aparece justo después de él en la ruta) → preguntas (opción única, múltiple, verdadero/falso, respuesta corta)
 con sus puntos. La clave de respuestas va en un panel aparte y nunca viaja al estudiante.
 Reglas: intentos, minutos, porcentaje para aprobar, qué ve el estudiante después
 (nada, la nota, o cada pregunta). Publicar.

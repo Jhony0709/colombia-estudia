@@ -13,40 +13,29 @@
  * escritorio, que va en `density-compact`, los tres quedan a 36 px como las filas de al lado;
  * en el cajón del teléfono, a 44. Con `min-h-touch` eran tres botones de 44 entre filas de 36.
  *
- * El cambio se aplica a mano sobre `<html>` ANTES de que el servidor se entere. La cookie es
- * lo que hace que la próxima carga ya venga bien; sin tocar la clase aquí, el tema no
+ * El cambio se aplica a mano sobre `<html>` ANTES de que el servidor se entere
+ * (`lib/theme/apply-theme.ts`, compartido con el menú del estudiante desde el 22/9). La
+ * cookie es lo que hace que la próxima carga ya venga bien; sin tocar la clase, el tema no
  * cambiaría hasta recargar, que no es lo que espera nadie que pulsa un botón.
  */
 
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
-import { THEME_COOKIE, themeClass, type Theme } from '@/lib/theme/theme';
+import type { Theme } from '@/lib/theme/theme';
+import { applyTheme, THEME_OPTIONS } from '@/lib/theme/apply-theme';
 import { Tooltip } from '@/components/atoms/tooltip';
 import { cn } from '@/lib/utils';
 
-const OPTIONS: Array<{ value: Theme; label: string; Icon: typeof Sun }> = [
-  { value: 'light', label: 'Tema claro', Icon: Sun },
-  { value: 'dark', label: 'Tema oscuro', Icon: Moon },
-  { value: 'system', label: 'El tema de mi equipo', Icon: Monitor },
-];
+const ICONS: Record<Theme, typeof Sun> = { light: Sun, dark: Moon, system: Monitor };
 
-/** Un año. El tema no es una sesión: quien lo elige no quiere volver a elegirlo en marzo. */
-const ONE_YEAR = 60 * 60 * 24 * 365;
+const OPTIONS = THEME_OPTIONS.map((option) => ({ ...option, Icon: ICONS[option.value] }));
 
 export function ThemeToggle({ theme }: { theme: Theme }) {
   const [current, setCurrent] = useState<Theme>(theme);
 
   function choose(next: Theme) {
     setCurrent(next);
-
-    const html = document.documentElement;
-    html.classList.remove('dark', 'theme-system');
-    const className = themeClass(next);
-    if (className) html.classList.add(className);
-
-    // `SameSite=Lax` y sin `Secure` para que siga funcionando en `http://localhost`. No lleva
-    // nada de nadie: es el nombre de un tema.
-    document.cookie = `${THEME_COOKIE}=${next}; path=/; max-age=${ONE_YEAR}; SameSite=Lax`;
+    applyTheme(next);
   }
 
   return (

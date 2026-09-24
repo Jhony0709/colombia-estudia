@@ -7,14 +7,14 @@ Recibes un correo con un enlace (dura 7 días). Creas tu contraseña. Después e
 
 ## Estudiar
 
-**Mi programa** es tu ruta: módulos, temas y evaluaciones en orden. Un tema se completa
+**Mis programas** muestra una tarjeta por programa en el que estás, con tu avance y por dónde seguir; abajo va la ruta del que elijas: módulos, temas y exámenes en orden; el examen de un tema va justo después del tema. Un tema se completa
 solo cuando lo lees hasta el final (o ves el video casi entero, o lees su transcripción
-completa). Si tiene entrega, escribes o adjuntas y un instructor la revisa.
+completa). Si tiene actividad, escribes o adjuntas y un instructor la revisa.
 
 Arriba del tema, «Cómo leer»: tamaño de letra, espaciado y ancho. Se guardan en tu
 navegador.
 
-## Evaluaciones
+## Exámenes
 
 Antes de empezar ves cuántos intentos tienes, cuánto tiempo y qué verás al terminar.
 El tiempo corre desde que pulsas «Empezar» y no se pausa. Cada respuesta se guarda sola;

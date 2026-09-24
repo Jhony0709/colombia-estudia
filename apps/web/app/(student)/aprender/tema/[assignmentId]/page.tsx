@@ -12,17 +12,22 @@ import { cache } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getFormatter } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { getLessonForStudent, type LessonNeighbour } from '@/features/learn/server/lesson.service';
 import { Page, PageHeader } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { Alert } from '@/components/atoms/alert';
+import { Button } from '@/components/atoms/button';
+import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
+import { ArrowLeft, ArrowRight, CircleCheck } from 'lucide-react';
 import { EvidenceRecorder } from './evidence-recorder';
 import { SubmissionForm } from './submission-form';
 import { TranscriptPanel } from './transcript-panel';
-import { ReadingPreferences } from './reading-preferences';
-import { ReportProblem } from './report-problem';
+import { LessonTools } from './lesson-tools';
+import { TaskBar, TaskMode } from '@/components/organisms/task-mode';
+import { PrimaryActionTracker } from '@/components/molecules/primary-action-tracker';
+import { RouteRail, WithRouteRail } from '../../route-rail';
 
 /**
  * `cache` de React memoiza por petición: `generateMetadata` y la página piden lo mismo, y
@@ -58,6 +63,7 @@ export default async function LessonPage({
   const { assignmentId } = await params;
   const ctx = await getRequestContext();
   const t = await getTranslations('learn');
+  const format = await getFormatter();
 
   if (!ctx.person) {
     return (
@@ -116,133 +122,332 @@ export default async function LessonPage({
   const { lesson, progress, submission, navigation } = view;
   if (!lesson) notFound();
 
+  // «Módulo 2 · Tema 3 de 8 · 12 min» (23/9): dónde estoy en la ruta, sin abrir el rail.
+  const place = placeInRoute(view.route, lesson.assignmentId);
   const meta = [
-    lesson.moduleName,
+    place
+      ? t('lesson.place', { module: place.module, index: place.index, total: place.total })
+      : lesson.moduleName,
     lesson.estimatedMinutes !== null
       ? t('lesson.minutes', { count: lesson.estimatedMinutes })
       : null,
-    t(`status.${progress?.status ?? 'NOT_STARTED'}`),
   ]
     .filter(Boolean)
     .join(' · ');
 
+  const status = progress?.status ?? 'NOT_STARTED';
+
   return (
-    <Page>
+    <Page wide>
+      {/* Modo tarea (E2, 23/9): en el teléfono, la barra global se va y esta la sustituye. */}
+      <TaskMode />
+      <TaskBar
+        backHref={`/aprender?matricula=${lesson.enrollmentId}#ruta`}
+        backLabel={t('task.back')}
+        place={meta}
+        action={<LessonTools assignmentId={lesson.assignmentId} compact />}
+      />
       <PageHeader
         overline={meta}
         title={lesson.title}
         description={lesson.learningObjective ?? undefined}
+        action={<LessonTools assignmentId={lesson.assignmentId} />}
       />
 
-      {lesson.requiresSubmission && (
-        <Alert severity="info">{t('lesson.needsSubmissionNotice')}</Alert>
-      )}
-
-      {/* Preferencias de lectura (§2): tamaño, espaciado y ancho, guardadas en el navegador. */}
-      <ReadingPreferences />
-
-      {/* Un recurso que falta se dice. Un hueco silencioso deja al estudiante creyendo que
+      {/* La ruta al lado (21/9): dónde estoy y qué sigue, sin volver al panel. */}
+      <WithRouteRail
+        rail={
+          <RouteRail
+            modules={view.route}
+            currentId={lesson.assignmentId}
+            enrollmentId={lesson.enrollmentId}
+          />
+        }
+      >
+        {/* Un recurso que falta se dice. Un hueco silencioso deja al estudiante creyendo que
           la página cargó entera. */}
-      {lesson.missingAssets.length > 0 && (
-        <Alert severity="warning">
-          {t('lesson.missingAssets', { count: lesson.missingAssets.length })}
-        </Alert>
-      )}
+        {lesson.missingAssets.length > 0 && (
+          <Alert severity="warning">
+            {t('lesson.missingAssets', { count: lesson.missingAssets.length })}
+          </Alert>
+        )}
 
-      {/*
+        {/*
         `dangerouslySetInnerHTML` con el nombre que tiene, y aquí está bien: este HTML sale de
         `renderLessonHtml`, que pasa por `rehype-sanitize` con un esquema cerrado. Es EL sitio
         donde ese saneado se paga. Si alguna vez entra aquí HTML de otra procedencia, esta
         línea deja de ser segura.
       */}
-      <article
-        className="contenido max-w-reading"
-        lang={lesson.language}
-        dangerouslySetInnerHTML={{ __html: lesson.html }}
-      />
+        <article
+          className="contenido max-w-reading"
+          lang={lesson.language}
+          dangerouslySetInnerHTML={{ __html: lesson.html }}
+        />
 
-      {/* Transcripción sincronizada de cada video (§2): clic lleva al segundo; «solo transcripción». */}
-      <TranscriptPanel transcripts={lesson.transcripts} />
+        {/* Transcripción sincronizada de cada video (§2): clic lleva al segundo; «solo transcripción». */}
+        <TranscriptPanel transcripts={lesson.transcripts} />
 
-      {/* Evidencia de estudio (§2b): el servidor decide `COMPLETED`; esto solo mide. */}
-      <EvidenceRecorder
-        assignmentId={lesson.assignmentId}
-        form={lesson.form}
-        initialStatus={progress?.status ?? 'NOT_STARTED'}
-      />
+        {/* Evidencia de estudio (§2b): el servidor decide `COMPLETED`; esto solo mide. */}
+        <EvidenceRecorder
+          assignmentId={lesson.assignmentId}
+          form={lesson.form}
+          initialStatus={progress?.status ?? 'NOT_STARTED'}
+        />
 
-      {/* La entrega (§2b): el formulario, o el estado de la que ya se mandó. */}
-      {lesson.requiresSubmission && (
-        <SubmissionForm assignmentId={lesson.assignmentId} submission={submission} />
-      )}
+        {/*
+          «Practica» (23/9): la actividad es el paso siguiente al contenido y va como bloque
+          propio, separado por un cambio de área (48 px), con lo que el autor pidió y el
+          formulario o el estado de la entrega. Sin instrucciones se dice, para que no
+          parezca que faltan por un error.
+        */}
+        {lesson.activity !== null && (
+          <section
+            aria-labelledby="actividad-titulo"
+            id="practica"
+            className="border-border-muted mt-12 space-y-3 border-t pt-8"
+          >
+            <p className="type-overline text-text-muted">{t('activity.step')}</p>
+            <h2 id="actividad-titulo" className="type-heading">
+              {t('activity.title')}
+            </h2>
+            {lesson.activity.html ? (
+              // Mismo `renderLessonHtml` y mismo saneado que el texto del tema: es el único
+              // HTML de otra procedencia que entra aquí, y pasa por el mismo esquema cerrado.
+              <div
+                className="contenido max-w-reading"
+                lang={lesson.language}
+                dangerouslySetInnerHTML={{ __html: lesson.activity.html }}
+              />
+            ) : (
+              <p className="type-body text-text-muted max-w-reading">{t('activity.none')}</p>
+            )}
+            <p className="type-caption text-text-muted">
+              {t(`activity.accepts.${lesson.activity.accepts}`)}
+            </p>
+          </section>
+        )}
 
-      <LessonNav previous={navigation.previous} next={navigation.next} />
+        {/* La entrega (§2b): el formulario, o el estado de la que ya se mandó. */}
+        {lesson.requiresSubmission && lesson.activity !== null && (
+          <SubmissionForm
+            assignmentId={lesson.assignmentId}
+            submission={submission}
+            accepts={lesson.activity.accepts}
+            dateLabel={
+              submission
+                ? format.dateTime(new Date(submission.reviewedAt ?? submission.submittedAt), {
+                    day: 'numeric',
+                    month: 'long',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    // Sin «p. m.»: la abreviatura termina en punto y la frase también, y
+                    // salía «12:20 p. m..» (visto con Estudiante Uno, 23/9).
+                    hour12: false,
+                  })
+                : null
+            }
+          />
+        )}
 
-      {/* «Reportar un problema» (§2): al final, discreto; avisa a operación e instructores. */}
-      <ReportProblem assignmentId={lesson.assignmentId} />
+        <LessonNav
+          previous={navigation.previous}
+          next={navigation.next}
+          assignmentId={lesson.assignmentId}
+          enrollmentId={lesson.enrollmentId}
+          currentTitle={lesson.title}
+          status={status}
+          form={lesson.form}
+          submission={submission?.status ?? null}
+          requiresSubmission={lesson.requiresSubmission}
+        />
+      </WithRouteRail>
     </Page>
   );
 }
 
+/** Dónde cae este tema en la ruta: su módulo y «tema x de y» contando solo los temas. */
+function placeInRoute(
+  route: Array<{
+    name: string;
+    position: number;
+    items: Array<{ kind: string; assignmentId: string }>;
+  }>,
+  assignmentId: string
+): { module: string; index: number; total: number } | null {
+  for (const block of route) {
+    const lessons = block.items.filter((item) => item.kind === 'LESSON');
+    const index = lessons.findIndex((item) => item.assignmentId === assignmentId);
+    if (index >= 0) {
+      return {
+        module: `${block.position}. ${block.name}`,
+        index: index + 1,
+        total: lessons.length,
+      };
+    }
+  }
+  return null;
+}
+
 /**
- * Anterior · La ruta · Siguiente.
+ * La barra fija del pie (23/9, `docs/ux/decision-ux-2309.md`): a la izquierda qué falta o
+ * qué pasó; a la derecha **una** acción que cambia con el estado:
  *
- * Lo bloqueado **no es un enlace**: con progresión lineal el siguiente está bloqueado hasta
- * que este tema se complete, y un enlace que no lleva a ninguna parte se anuncia como enlace
- * y frustra a quien lo pulsa. En su lugar va el texto que dice qué falta.
+ * - tema con actividad sin entregar → «Enviar actividad» (baja a «Practica»);
+ * - actividad devuelta → «Enviar nueva versión»; en revisión → nada que pulsar, se dice;
+ * - siguiente habilitado → «Siguiente: …» o «Ir al examen: …»;
+ * - siguiente bloqueado → se dice qué falta, sin botón que no lleve a ninguna parte.
+ *
+ * Anterior y «Volver a la ruta» son salidas, en texto. Hasta el 23/9 esta barra solo tenía
+ * anterior/siguiente y el estado de la evidencia flotaba en medio del scroll.
  */
 async function LessonNav({
   previous,
   next,
+  assignmentId,
+  enrollmentId,
+  currentTitle,
+  status,
+  form,
+  submission,
+  requiresSubmission,
 }: {
   previous: LessonNeighbour | null;
   next: LessonNeighbour | null;
+  assignmentId: string;
+  enrollmentId: string;
+  currentTitle: string;
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+  form: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
+  submission: 'SUBMITTED' | 'RETURNED' | 'APPROVED' | null;
+  requiresSubmission: boolean;
 }) {
   const t = await getTranslations('learn');
 
+  const pendingSubmission = requiresSubmission && submission !== 'APPROVED';
+  const statusText =
+    status === 'COMPLETED'
+      ? t('evidence.status.COMPLETED')
+      : pendingSubmission
+        ? submission === 'SUBMITTED'
+          ? t('bar.inReview')
+          : submission === 'RETURNED'
+            ? t('bar.returned')
+            : t('bar.needsSubmission')
+        : t(`evidence.status.${status}`, { form: t(`evidence.form.${form}`) });
+
+  let action: React.ReactNode = null;
+  // E0 (23/9): la acción principal de la barra se mide (mostrada / pulsada), incluida la
+  // «bloqueada»: cuántas veces el estudiante llega al pie sin poder seguir es el dato.
+  const track = (kind: 'submit' | 'next' | 'exam' | 'blocked', node: React.ReactNode) => (
+    <PrimaryActionTracker
+      screen="lesson"
+      action={kind}
+      assignmentId={assignmentId}
+      form={form}
+      enrollmentId={enrollmentId}
+    >
+      {node}
+    </PrimaryActionTracker>
+  );
+  if (pendingSubmission && submission !== 'SUBMITTED') {
+    action = track(
+      'submit',
+      <Button asChild>
+        <a href="#practica">
+          {submission === 'RETURNED' ? t('bar.resend') : t('bar.send')}
+          <ArrowRight aria-hidden className="size-4 shrink-0" />
+        </a>
+      </Button>
+    );
+  } else if (next) {
+    // Habilitado: el botón; bloqueado: el texto que dice qué falta (sin enlace que no lleve
+    // a ninguna parte).
+    action = track(
+      !next.enabled ? 'blocked' : next.kind === 'ASSESSMENT' ? 'exam' : 'next',
+      <NavLink item={next} direction="next" currentTitle={currentTitle} />
+    );
+  }
+
   return (
-    <nav aria-label={t('lesson.navLabel')} className="border-border mt-8 border-t pt-4">
-      <ul className="flex flex-wrap items-center justify-between gap-3">
-        <li>{previous ? <NavLink item={previous} direction="previous" /> : null}</li>
-        <li>
+    <StickyActionBar
+      label={t('lesson.navLabel')}
+      status={
+        <span className="inline-flex items-center gap-2">
+          {status === 'COMPLETED' && (
+            <CircleCheck aria-hidden className="text-status-success-base size-4 shrink-0" />
+          )}
+          {statusText}
+        </span>
+      }
+      secondary={
+        <>
+          {previous ? <NavLink item={previous} direction="previous" /> : null}
+          {/* A la ruta de ESTE programa (21/9): con varias matrículas, `/aprender` a secas
+              abriría la más reciente, que puede ser otra. */}
           <Link
-            href="/aprender"
-            className="text-text-link min-h-touch inline-flex items-center underline"
+            href={`/aprender?matricula=${enrollmentId}#ruta`}
+            className="type-caption text-text-link min-h-touch inline-flex items-center underline"
           >
             {t('lesson.backToOutline')}
           </Link>
-        </li>
-        <li>{next ? <NavLink item={next} direction="next" /> : null}</li>
-      </ul>
-    </nav>
+        </>
+      }
+      action={action}
+    />
   );
 }
 
 async function NavLink({
   item,
   direction,
+  currentTitle,
 }: {
   item: LessonNeighbour;
   direction: 'previous' | 'next';
+  /** Para decir «completa este tema» en vez de repetir su propio título. */
+  currentTitle?: string;
 }) {
   const t = await getTranslations('learn');
 
   const href =
     item.kind === 'LESSON'
       ? `/aprender/tema/${item.assignmentId}`
-      : `/aprender/evaluacion/${item.assignmentId}`;
+      : `/aprender/examen/${item.assignmentId}`;
 
   if (!item.enabled) {
     return (
-      <span className="type-caption text-text-muted block max-w-[20rem]">
-        {item.blockedBy ? t('blockedBy', { title: item.blockedBy }) : t('notYet')}
+      <span className="type-caption text-text-muted block max-w-[20rem] text-right">
+        {item.blockedBy === currentTitle
+          ? t('lesson.completeToContinue', { title: item.title })
+          : item.blockedBy
+            ? t('blockedBy', { title: item.blockedBy })
+            : t('notYet')}
       </span>
     );
   }
 
+  if (direction === 'next') {
+    return (
+      <Button asChild>
+        <Link href={href}>
+          <span className="max-w-[16rem] truncate">
+            {item.kind === 'ASSESSMENT'
+              ? t('lesson.nextExam', { title: item.title })
+              : t('lesson.next', { title: item.title })}
+          </span>
+          <ArrowRight aria-hidden className="size-4 shrink-0" />
+        </Link>
+      </Button>
+    );
+  }
+
   return (
-    <Link href={href} className="text-text-link min-h-touch inline-flex items-center underline">
-      {t(direction === 'previous' ? 'lesson.previous' : 'lesson.next', { title: item.title })}
+    <Link
+      href={href}
+      className="text-text-link type-caption min-h-touch inline-flex items-center gap-1 underline"
+    >
+      <ArrowLeft aria-hidden className="size-4 shrink-0" />
+      <span className="max-w-[12rem] truncate">{t('lesson.previous', { title: item.title })}</span>
     </Link>
   );
 }

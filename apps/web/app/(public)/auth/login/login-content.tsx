@@ -107,12 +107,8 @@ export default function LoginContent() {
 
   if (magicLinkSent) {
     return (
-      <section>
-        <h1
-          ref={headingRef}
-          tabIndex={-1}
-          className="type-heading text-text text-center outline-none"
-        >
+      <section className="space-y-6">
+        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
           {t('magicLink')}
         </h1>
         <Alert severity="success">{t('magicLinkSent')}</Alert>
@@ -128,12 +124,8 @@ export default function LoginContent() {
   }
 
   return (
-    <section>
-      <h1
-        ref={headingRef}
-        tabIndex={-1}
-        className="type-heading text-text text-center outline-none"
-      >
+    <section className="space-y-6">
+      <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
         {t('login')}
       </h1>
 
@@ -173,7 +165,15 @@ export default function LoginContent() {
       </form>
 
       {/* Password first (decision 16/9); the passwordless path is secondary, as text links. */}
-      <div className="flex flex-col items-center gap-2 text-center">
+      <div className="flex flex-col items-start gap-2">
+        {/* Registro público (Fase B): quien llega sin cuenta se la crea. Va primero (23/9): es
+            la salida más frecuente de quien llega aquí por primera vez. */}
+        <p className="type-body text-text-muted">
+          {t('noAccount')}{' '}
+          <Link href="/registro" className="type-body text-text-link underline">
+            {t('register')}
+          </Link>
+        </p>
         <Link href="/auth/recuperar" className="type-body text-text-link underline">
           {t('forgotPassword')}
         </Link>

@@ -18,6 +18,8 @@ const mockPathname = jest.fn();
 
 jest.mock('next/navigation', () => ({
   usePathname: () => mockPathname(),
+  // El conmutador de espacios (23/9) navega con el router; aquí nadie lo pulsa.
+  useRouter: () => ({ push: jest.fn() }),
 }));
 
 const items = [

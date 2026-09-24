@@ -13,20 +13,18 @@ interface StudentDefinition extends NavDestination {
   needs: Capability;
 }
 
-/** Los grupos de la barra lateral del estudiante (20/9), en el orden en que se pintan. */
-export const STUDENT_SECTIONS = [
-  { key: 'estudiar', label: 'Estudiar' },
-  { key: 'historial', label: 'Mi historial' },
-] as const;
-
+/**
+ * `section` decide dónde cae cada destino en la barra superior (21/9): `estudiar` son las
+ * pestañas; `historial` va en el menú de la persona.
+ */
 const NAV: readonly StudentDefinition[] = [
   {
     href: '/aprender',
-    label: 'Mi programa',
+    label: 'Mis programas',
     needs: 'lesson.read',
     section: 'estudiar',
-    // El player y las evaluaciones son «Mi programa»; los otros destinos tienen su prefijo.
-    activeUnder: ['/aprender/tema/', '/aprender/evaluacion/'],
+    // El player y los exámenes son «Mis programas»; los otros destinos tienen su prefijo.
+    activeUnder: ['/aprender/tema/', '/aprender/examen/'],
   },
   { href: '/aprender/calendario', label: 'Calendario', needs: 'lesson.read', section: 'estudiar' },
   { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'estudiar' },
@@ -46,6 +44,13 @@ const NAV: readonly StudentDefinition[] = [
     href: '/aprender/mi-cuenta',
     label: 'Mi cuenta',
     needs: 'billing.read.own',
+    section: 'historial',
+  },
+  // El estudiante que además es acudiente (Fase C, 23/9): su otra área, en el menú.
+  {
+    href: '/familia',
+    label: 'Mi familia',
+    needs: 'progress.read.ward',
     section: 'historial',
   },
 ];

@@ -92,11 +92,15 @@ export async function getCohortProgress({
         enrolledAt: true,
         accessUntil: true,
         completedAt: true,
+        startsAtModule: true,
         student: { select: { id: true, givenName: true, familyName: true } },
         lessonProgress: { select: { status: true, source: true, lastActivityAt: true } },
       },
     }),
-    db.lessonAssignment.count({ where: { cohortId } }),
+    db.lessonAssignment.findMany({
+      where: { cohortId },
+      select: { lesson: { select: { module: { select: { position: true } } } } },
+    }),
     db.attempt.findMany({
       where: { assignment: { cohortId }, status: 'GRADED' },
       select: {
@@ -136,6 +140,11 @@ export async function getCohortProgress({
     })
   );
 
+  // Lo asignado se cuenta por matrícula (20/9): a quien entró en un módulo posterior no se le
+  // cuentan los temas de los módulos que no ve, o su avance saldría siempre a medias.
+  const assignedFrom = (startsAtModule: number | null) =>
+    lessonAssignments.filter((a) => a.lesson.module.position >= (startsAtModule ?? 1)).length;
+
   const rows: CohortProgressRow[] = enrollments.map((e) => {
     const evidenceCompleted = e.lessonProgress.filter(
       (p) => p.status === 'COMPLETED' && p.source === 'EVIDENCE'
@@ -155,7 +164,7 @@ export async function getCohortProgress({
       accessUntil: e.accessUntil.toISOString().slice(0, 10),
       evidenceCompleted,
       manualCompleted,
-      assigned: lessonAssignments,
+      assigned: assignedFrom(e.startsAtModule),
       assessmentsTaken: taken,
       assessmentsPassed: passed,
       lastActivityAt: last ? last.toISOString() : null,
@@ -222,8 +231,8 @@ export function cohortProgressCsv(progress: CohortProgress): string {
     'temas_asignados',
     'temas_completados_con_evidencia',
     'temas_completados_manual_o_importados',
-    'evaluaciones_presentadas',
-    'evaluaciones_aprobadas',
+    'examenes_presentados',
+    'examenes_aprobados',
     'ultima_actividad',
     'en_riesgo',
   ];

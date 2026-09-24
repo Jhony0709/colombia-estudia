@@ -23,19 +23,14 @@ import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { DataTable } from '@/components/molecules/data-table';
 import { EmptyState } from '@/components/molecules/empty-state';
-import { Badge, type BadgeVariant } from '@/components/atoms/badge';
+import { Badge } from '@/components/atoms/badge';
+import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 import { ProgressOverride } from './progress-override';
 import { AccommodationForm } from './accommodation-form';
 import { RevokeCertificate } from './revoke-certificate';
 import { listCertificatesForEnrollment } from '@/features/certificates/server/certificates.service';
 
 export const metadata: Metadata = { title: 'Matrícula' };
-
-const STATUS_BADGE: Record<string, BadgeVariant> = {
-  NOT_STARTED: 'neutral',
-  IN_PROGRESS: 'info',
-  COMPLETED: 'success',
-};
 
 export default async function EnrollmentDetailPage({
   params,
@@ -89,6 +84,10 @@ export default async function EnrollmentDetailPage({
         title={detail.student.name}
         description={`${te(`statuses.${detail.status}`)} · ${t('accessUntil', { date: detail.accessUntil })}${
           detail.isMinorAtEnrollment ? ` · ${t('minor')}` : ''
+        }${
+          detail.startsAtModule !== null
+            ? ` · ${t('startsAtModule', { position: detail.startsAtModule })}`
+            : ''
         }`}
         back={
           <Breadcrumb
@@ -149,9 +148,7 @@ export default async function EnrollmentDetailPage({
               narrow: true,
               cell: (l) => (
                 <>
-                  <Badge variant={STATUS_BADGE[l.status] ?? 'neutral'}>
-                    {t(`lessonStatus.${l.status}`)}
-                  </Badge>
+                  <StatusBadge domain="lesson" status={l.status} />
                   {l.source === 'MANUAL' && (
                     <span className="type-caption text-text-muted block">{t('manual')}</span>
                   )}
@@ -190,7 +187,7 @@ export default async function EnrollmentDetailPage({
         />
       </PageSection>
 
-      <PageSection title={t('assessmentsTitle')} id="evaluaciones">
+      <PageSection title={t('assessmentsTitle')} id="examenes">
         <DataTable<Assessment>
           caption={t('assessmentsCaption')}
           rows={detail.assessments}

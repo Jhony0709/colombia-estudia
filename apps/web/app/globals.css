@@ -56,6 +56,80 @@ body {
 }
 
 /**
+ * Modo tarea (E2 del estudiante, 23/9): con `<html class="task-mode">` —el player y el
+ * intento la ponen al montar— la barra superior del estudiante desaparece en el teléfono y
+ * la pantalla pone la suya (`TaskBar`). `lg` = 1024 px, el mismo corte que la rejilla.
+ */
+@media (max-width: 1023.98px) {
+  .task-mode [data-student-nav] {
+    display: none;
+  }
+}
+
+/**
+ * Pantallas de acceso (`AuthShell`, 23/9): velo sobre la foto de la columna izquierda. El
+ * titular blanco va en el tercio inferior, donde el velo pasa de 0,85; sobre la ventana más
+ * clara de estas fotos eso deja el blanco por encima de 7:1. Arriba apenas oscurece, para que
+ * la persona se vea. Va aquí y no en línea por la CSP (sin `style` en línea).
+ */
+.auth-photo-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 18, 40, 0.1) 0%,
+    rgba(10, 18, 40, 0.15) 40%,
+    rgba(10, 18, 40, 0.85) 68%,
+    rgba(10, 18, 40, 0.9) 100%
+  );
+}
+
+/**
+ * Motion de un diálogo (23/9, .claude/skills/motion-colombia-estudia): entrada = grow (desde
+ * el 96 % con fade, `easing.enter`, `duration.normal`); salida = fade (`easing.exit`,
+ * `duration.normal`). Solo `opacity` y `transform`: el desenfoque del velo no se anima, se
+ * funde con su opacidad. Radix pone `data-state` y espera al `animationend` antes de
+ * desmontar, así que la salida se ve. `prefers-reduced-motion` = corte seco por la regla
+ * global de arriba (0,01 ms), en ambos sentidos.
+ */
+@keyframes dialog-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dialog-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dialog-grow-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+.dialog-overlay[data-state='open'] {
+  animation: dialog-fade-in var(--duration-normal) var(--easing-enter);
+}
+.dialog-overlay[data-state='closed'] {
+  animation: dialog-fade-out var(--duration-normal) var(--easing-exit);
+}
+.dialog-panel[data-state='open'] {
+  animation: dialog-grow-in var(--duration-normal) var(--easing-enter);
+}
+.dialog-panel[data-state='closed'] {
+  animation: dialog-fade-out var(--duration-normal) var(--easing-exit);
+}
+
+/**
  * El contenido de un tema, ya renderizado.
  * SSOT: reference/03-ui/tokens.md, plan/08-aprender-y-evaluar.md:22-26.
  *

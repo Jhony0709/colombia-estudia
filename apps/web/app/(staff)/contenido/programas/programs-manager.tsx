@@ -17,6 +17,7 @@
  * comprobable sin manejadores de diálogo.
  */
 
+import Link from 'next/link';
 import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { FormField, FormInput } from '@/components/atoms/form-field';
@@ -72,6 +73,10 @@ function ProgramCard({
           <span className="text-text-muted">{program.code}</span> — {program.name}
         </h3>
         <div className="flex gap-2">
+          {/* El constructor (23/9): la ruta del programa como la verá el estudiante. */}
+          <Button asChild variant="secondary">
+            <Link href={`/contenido/programas/${program.id}`}>{t('openBuilder')}</Link>
+          </Button>
           <Button variant="quiet" onClick={() => setEditing((v) => !v)} disabled={busy}>
             {editing ? t('cancel') : t('edit')}
           </Button>

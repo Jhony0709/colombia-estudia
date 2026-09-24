@@ -12,7 +12,7 @@
 
 import { useEffect, useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Settings2 } from 'lucide-react';
+import { Sheet } from '@/components/organisms/sheet';
 import { cn } from '@/lib/utils';
 
 type Size = 'base' | 'lg' | 'xl';
@@ -23,10 +23,20 @@ interface Prefs {
   size: Size;
   spacing: Spacing;
   width: Width;
+  /** Transcripción del vídeo desplegada al abrir el tema (plan/11-ux «Preferencias de lectura»). */
+  transcriptOpen: boolean;
 }
 
 const KEY = 'ce:reading';
-const DEFAULTS: Prefs = { size: 'base', spacing: 'base', width: 'base' };
+const DEFAULTS: Prefs = { size: 'base', spacing: 'base', width: 'base', transcriptOpen: false };
+
+/** Lo dispara este panel al cambiar la preferencia; `transcript-panel.tsx` la escucha. */
+export const TRANSCRIPT_PREF_EVENT = 'ce:transcript-pref';
+
+/** Lee la preferencia de transcripción sin montar el panel (para el panel de transcripción). */
+export function transcriptOpenPreference(): boolean {
+  return load().transcriptOpen;
+}
 
 function load(): Prefs {
   try {
@@ -37,6 +47,7 @@ function load(): Prefs {
       size: parsed.size === 'lg' || parsed.size === 'xl' ? parsed.size : 'base',
       spacing: parsed.spacing === 'wide' ? 'wide' : 'base',
       width: parsed.width === 'narrow' ? 'narrow' : 'base',
+      transcriptOpen: parsed.transcriptOpen === true,
     };
   } catch {
     return DEFAULTS;
@@ -50,7 +61,18 @@ function apply(p: Prefs) {
   html.dataset.readingWidth = p.width;
 }
 
-export function ReadingPreferences() {
+/**
+ * Desde el 23/9 vive en una hoja que abre el menú del tema (`lesson-tools.tsx`): las
+ * preferencias se tocan una vez y no merecen un bloque en línea entre el título y el texto.
+ * El efecto de montaje sigue aquí: aplica lo guardado aunque nadie abra la hoja.
+ */
+export function ReadingPreferences({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const t = useTranslations('learn.reading');
   const [prefs, setPrefs] = useState<Prefs>(DEFAULTS);
 
@@ -76,15 +98,16 @@ export function ReadingPreferences() {
     } catch {
       // Sin almacenamiento (modo privado): se aplica igual, solo no se recuerda.
     }
+    if (patch.transcriptOpen !== undefined) {
+      window.dispatchEvent(
+        new CustomEvent(TRANSCRIPT_PREF_EVENT, { detail: { open: patch.transcriptOpen } })
+      );
+    }
   };
 
   return (
-    <details className="border-border-muted rounded-card border">
-      <summary className="type-label min-h-touch inline-flex cursor-pointer items-center gap-2 px-4">
-        <Settings2 className="size-4" aria-hidden="true" />
-        {t('title')}
-      </summary>
-      <div className="space-y-3 px-4 pb-4">
+    <Sheet open={open} onOpenChange={onOpenChange} title={t('title')} description={t('hint')}>
+      <div className="space-y-4">
         <Group
           label={t('size')}
           value={prefs.size}
@@ -113,8 +136,20 @@ export function ReadingPreferences() {
           ]}
           onChange={(width) => update({ width })}
         />
+        <label className="min-h-touch flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={prefs.transcriptOpen}
+            onChange={(event) => update({ transcriptOpen: event.target.checked })}
+            className="border-border mt-1 size-5 cursor-pointer rounded-[4px] border accent-[var(--accent-base)]"
+          />
+          <span className="type-body text-text">
+            {t('transcriptOpen')}
+            <span className="type-caption text-text-muted block">{t('transcriptOpenHint')}</span>
+          </span>
+        </label>
       </div>
-    </details>
+    </Sheet>
   );
 }
 

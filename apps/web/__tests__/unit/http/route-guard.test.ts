@@ -24,6 +24,10 @@ const PUBLIC_ROUTES = new Map([
   ['auth/magic-link/route.ts', 'magic link sin sesión'],
   ['auth/recover/route.ts', 'recuperación sin sesión'],
   ['auth/reset/route.ts', 'reset con token de sesión (no capability)'],
+  [
+    'auth/register/route.ts',
+    'registro público (Fase B, 23/9); límite por IP en lib/http/rate-limit.ts',
+  ],
   ['auth/mfa/enroll/route.ts', 'MFA requiere sesión, no capability'],
   ['auth/mfa/verify/route.ts', 'MFA requiere sesión, no capability'],
   ['auth/mfa/factors/route.ts', 'MFA requiere sesión, no capability'],

@@ -10,7 +10,14 @@ import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { bogotaDate } from '@colombia-estudia/domain';
-import { sequence, resumePoint, progressOf, type OutlineItem, type SequencedItem } from './outline';
+import {
+  sequence,
+  resumePoint,
+  nextPoint,
+  progressOf,
+  type OutlineItem,
+  type SequencedItem,
+} from './outline';
 
 /**
  * Por qué el estudiante no puede estudiar ahora mismo.
@@ -60,6 +67,8 @@ export interface CohortOutline {
   } | null;
   modules: OutlineModule[];
   resume: SequencedItem | null;
+  /** El primer ítem sin completar, se pueda abrir o no (23/9): para explicar la espera. */
+  upcoming: SequencedItem | null;
   progress: { completed: number; total: number };
   /** Decisión 8: se dice que la financia una entidad aliada, sin nombrarla. */
   partnerFunded: boolean;
@@ -73,6 +82,7 @@ const EMPTY: CohortOutline = {
   cohort: null,
   modules: [],
   resume: null,
+  upcoming: null,
   progress: { completed: 0, total: 0 },
   partnerFunded: false,
 };
@@ -90,26 +100,56 @@ function assessmentStatus(attempts: Array<{ status: string }>): OutlineItem['sta
   return 'NOT_STARTED';
 }
 
+/**
+ * Qué matrícula pinta la ruta (21/9). Un estudiante puede estar en varias cohortes a la vez
+ * —el de introducción y el de bachillerato, o dos programas—, así que «mi cohorte» no es
+ * una sola:
+ *
+ * - `enrollmentId`: esa, siempre que sea de la persona. Lo usa el panel al elegir un programa.
+ * - `assignmentId`: la matrícula de la cohorte que tiene esa asignación. Lo usan el player,
+ *   la evidencia, la entrega y los intentos: un enlace a un tema tiene que abrir ese tema
+ *   esté en la cohorte que esté, no el de «la más reciente».
+ * - Nada: la más reciente, que es lo que había.
+ */
+export interface EnrollmentPick {
+  enrollmentId?: string | null;
+  assignmentId?: string | null;
+}
+
 export async function getCohortOutline({
   institutionId,
   personId,
+  enrollmentId: pickedEnrollmentId = null,
+  assignmentId: pickedAssignmentId = null,
   now = new Date(),
 }: {
   institutionId: string;
   personId: string;
   now?: Date;
-}): Promise<CohortOutline> {
+} & EnrollmentPick): Promise<CohortOutline> {
   const db = createTenantClient(institutionId);
 
-  // La matrícula más reciente: el plan habla de "mi cohorte" en singular, y con varias la
-  // que importa es en la que está ahora.
   const enrollment = await db.enrollment.findFirst({
-    where: { studentId: personId },
+    where: {
+      studentId: personId,
+      ...(pickedEnrollmentId ? { id: pickedEnrollmentId } : {}),
+      ...(pickedAssignmentId
+        ? {
+            cohort: {
+              OR: [
+                { lessonAssignments: { some: { id: pickedAssignmentId } } },
+                { assessmentAssignments: { some: { id: pickedAssignmentId } } },
+              ],
+            },
+          }
+        : {}),
+    },
     orderBy: { enrolledAt: 'desc' },
     select: {
       id: true,
       status: true,
       accessUntil: true,
+      startsAtModule: true,
       cohort: {
         select: {
           id: true,
@@ -166,9 +206,13 @@ export async function getCohortOutline({
     return { ...EMPTY, gate, enrollmentId: enrollment.id, cohort: cohortInfo, partnerFunded };
   }
 
+  // Grado de entrada (20/9): quien entra a un módulo posterior no ve los anteriores, y no
+  // cuentan en su avance. `openCohort` los asigna igual; la matrícula es la que decide.
+  const fromModule = enrollment.startsAtModule ?? 1;
+
   const [modules, lessonAssignments, assessmentAssignments] = await Promise.all([
     db.module.findMany({
-      where: { programId: cohort.programId, archivedAt: null },
+      where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
       orderBy: { position: 'asc' },
       select: { id: true, name: true, position: true },
     }),
@@ -187,6 +231,14 @@ export async function getCohortOutline({
             requiresSubmission: true,
           },
         },
+        // Los minutos y si embebe vídeo: la forma del ítem en la ruta (misma regla que
+        // `lesson-form.ts`: entrega > vídeo > lectura).
+        lessonVersion: {
+          select: {
+            estimatedMinutes: true,
+            assets: { select: { mediaAsset: { select: { kind: true } } } },
+          },
+        },
         progress: {
           where: { enrollmentId: enrollment.id },
           select: { status: true },
@@ -199,7 +251,10 @@ export async function getCohortOutline({
         id: true,
         availableFrom: true,
         dueAt: true,
-        assessment: { select: { id: true, title: true, moduleId: true, position: true } },
+        assessment: {
+          select: { id: true, title: true, moduleId: true, lessonId: true, position: true },
+        },
+        assessmentVersion: { select: { timeLimitMinutes: true } },
         attempts: { where: { studentId: personId }, select: { status: true } },
       },
     }),
@@ -213,6 +268,7 @@ export async function getCohortOutline({
         assignmentId: assignment.id,
         title: assignment.lesson.title,
         moduleId: assignment.lesson.moduleId,
+        lessonId: assignment.lesson.id,
         position: assignment.lesson.position,
         status:
           progress?.status === 'COMPLETED'
@@ -221,6 +277,12 @@ export async function getCohortOutline({
               ? 'IN_PROGRESS'
               : 'NOT_STARTED',
         requiresSubmission: assignment.lesson.requiresSubmission,
+        form: assignment.lesson.requiresSubmission
+          ? 'SUBMISSION'
+          : assignment.lessonVersion.assets.some((a) => a.mediaAsset.kind === 'VIDEO')
+            ? 'VIDEO'
+            : 'MARKDOWN',
+        estimatedMinutes: assignment.lessonVersion.estimatedMinutes,
         availableFrom: assignment.availableFrom,
         availableUntil: assignment.availableUntil,
       };
@@ -236,8 +298,12 @@ export async function getCohortOutline({
           assignmentId: assignment.id,
           title: assignment.assessment.title,
           moduleId: assignment.assessment.moduleId,
+          lessonId: assignment.assessment.lessonId,
           position: assignment.assessment.position,
           status: assessmentStatus(assignment.attempts),
+          form: 'ASSESSMENT',
+          estimatedMinutes: assignment.assessmentVersion.timeLimitMinutes,
+          dueAt: assignment.dueAt,
           availableFrom: assignment.availableFrom,
           // `dueAt` es la fecha de entrega, no el cierre del acceso: una evaluación vencida
           // se sigue viendo, y quien decide si admite un intento es el motor de intentos.
@@ -271,7 +337,68 @@ export async function getCohortOutline({
       items: all.filter((item) => item.moduleId === module.id),
     })),
     resume: resumePoint(all),
+    upcoming: nextPoint(all),
     progress: progressOf(all),
     partnerFunded,
   };
+}
+
+/** Una matrícula en el panel del estudiante: lo justo para elegir y para retomar. */
+export interface MyEnrollment {
+  enrollmentId: string;
+  cohort: NonNullable<CohortOutline['cohort']>;
+  gate: CohortGate | null;
+  progress: { completed: number; total: number };
+  resume: SequencedItem | null;
+  upcoming: SequencedItem | null;
+  partnerFunded: boolean;
+}
+
+/**
+ * Todas las matrículas de la persona, para el panel (21/9). Las activas primero —lo que se
+ * puede estudiar hoy va arriba— y dentro de cada grupo la más reciente antes.
+ *
+ * Una consulta de ruta por matrícula: son pocas (dos o tres por persona) y así el avance y el
+ * «retomar» de cada tarjeta salen de la misma regla que la ruta entera, sin una segunda
+ * aritmética que pueda discrepar.
+ */
+export async function listMyEnrollments({
+  institutionId,
+  personId,
+  now = new Date(),
+}: {
+  institutionId: string;
+  personId: string;
+  now?: Date;
+}): Promise<MyEnrollment[]> {
+  const db = createTenantClient(institutionId);
+
+  const enrollments = await db.enrollment.findMany({
+    where: { studentId: personId },
+    orderBy: { enrolledAt: 'desc' },
+    select: { id: true },
+  });
+
+  const outlines = await Promise.all(
+    enrollments.map((e) => getCohortOutline({ institutionId, personId, enrollmentId: e.id, now }))
+  );
+
+  const rows = outlines.flatMap((outline): MyEnrollment[] =>
+    outline.enrollmentId && outline.cohort
+      ? [
+          {
+            enrollmentId: outline.enrollmentId,
+            cohort: outline.cohort,
+            gate: outline.gate,
+            progress: outline.progress,
+            resume: outline.resume,
+            upcoming: outline.upcoming,
+            partnerFunded: outline.partnerFunded,
+          },
+        ]
+      : []
+  );
+
+  const rank = (row: MyEnrollment) => (row.gate === null ? 0 : 1);
+  return rows.sort((a, b) => rank(a) - rank(b));
 }

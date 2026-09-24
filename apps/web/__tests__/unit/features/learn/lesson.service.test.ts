@@ -53,6 +53,7 @@ const outlineCon = (items: ReturnType<typeof item>[]) => ({
   cohort: { id: 'c1', code: 'C1', name: 'Cohorte', programName: 'Programa', progression: 'LINEAR' },
   modules: [{ id: 'm1', name: 'Módulo 1', position: 1, items }],
   resume: null,
+  upcoming: null,
   progress: { completed: 0, total: items.length },
   partnerFunded: false,
 });
@@ -83,6 +84,7 @@ describe('lo que no se abre', () => {
       cohort: null,
       modules: [],
       resume: null,
+      upcoming: null,
       progress: { completed: 0, total: 0 },
       partnerFunded: false,
     });
@@ -191,6 +193,19 @@ describe('lo que se abre', () => {
 
     expect(mockAssignmentFindFirst).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: 'a1', cohortId: 'c1' } })
+    );
+  });
+
+  // Con varias matrículas (21/9), la ruta que se consulta es la de la cohorte que tiene la
+  // asignación, no la de «la matrícula más reciente».
+  it('la ruta se pide por la asignación, para que valga en cualquiera de sus cohortes', async () => {
+    mockGetCohortOutline.mockResolvedValue(outlineCon([item({ assignmentId: 'a1', title: 'A' })]));
+    mockAssignmentFindFirst.mockResolvedValue(asignacion('## S\n\nTexto.\n'));
+
+    await getLessonForStudent({ ...ARGS, assignmentId: 'a1' });
+
+    expect(mockGetCohortOutline).toHaveBeenCalledWith(
+      expect.objectContaining({ assignmentId: 'a1' })
     );
   });
 

@@ -166,9 +166,20 @@ con enlace a la línea, no en un toast.
 
 Un tema con `requiresSubmission` (los "ACTIVIDAD" de LearnDash) se completa con una
 `Submission`: texto y/o un archivo (imagen, PDF, audio) subido a Storage. El instructor
-la ve en `/cohortes/[id]/entregas`, y la **aprueba** (completa el tema, `EVIDENCE`) o la
+la ve en `/cohortes/[id]/actividades`, y la **aprueba** (completa el tema, `EVIDENCE`) o la
 **devuelve** con comentarios (`RETURNED`; el estudiante reenvía). Notificación en ambos
 sentidos. Cubre lo que `open_text` habría cubierto, con archivo además.
+
+**La actividad es una sección propia del tema (23/9).** `Lesson.activityInstructions`
+(Markdown, se pinta con el mismo `renderLessonHtml` que el texto) y
+`Lesson.activityAccepts` (`TEXT` | `FILE` | `TEXT_OR_FILE`) viven en el tema, **no en la
+versión** (decisión de Jhonny, 23/9): se corrigen en caliente y las cohortes abiertas los
+ven al momento, al revés que el texto, que está congelado por asignación. La forma de
+completar (`requiresSubmission`) sí sigue cerrada con el tema publicado. El servidor
+rechaza una entrega que no cumpla `activityAccepts` (texto donde se pidió archivo, etc.).
+Una entrega `SUBMITTED` se puede **reemplazar hasta que alguien la revise**: la revisión
+empieza cuando el instructor decide, no cuando el estudiante pulsa enviar. Una `APPROVED`
+no se toca.
 
 ## Certificados
 

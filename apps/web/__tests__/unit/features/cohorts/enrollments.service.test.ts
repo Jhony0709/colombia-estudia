@@ -31,6 +31,7 @@ import {
   resolveAccessUntil,
   bogotaToday,
   enrollPerson,
+  previewEnrollment,
   withdrawEnrollment,
   extendEnrollment,
 } from '@/features/cohorts/server/enrollments.service';
@@ -77,7 +78,10 @@ describe('enrollPerson', () => {
     id: 'cohort-1',
     status: 'OPEN',
     accessUntil: null,
-    program: { defaultAccessDays: 300 },
+    program: {
+      defaultAccessDays: 300,
+      modules: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    },
   };
 
   it('refuses a person with no birth date', async () => {
@@ -146,6 +150,52 @@ describe('enrollPerson', () => {
     ).rejects.toMatchObject({ code: 'CONFLICT' });
   });
 
+  // Grado de entrada (20/9): se guarda tal cual y queda en la auditoría.
+  it('stores the entry module and audits it', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+    db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+    db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+
+    await enrollPerson({
+      ...BASE,
+      cohortId: 'cohort-1',
+      personHandle: '123',
+      startsAtModule: 3,
+      now: NOW,
+    });
+
+    expect(db.enrollment.create.mock.calls[0][0].data.startsAtModule).toBe(3);
+    expect(db.auditLog.create.mock.calls[0][0].data.after.startsAtModule).toBe(3);
+  });
+
+  it('defaults the entry module to null (whole program)', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+    db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+    db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+
+    await enrollPerson({ ...BASE, cohortId: 'cohort-1', personHandle: '123', now: NOW });
+
+    expect(db.enrollment.create.mock.calls[0][0].data.startsAtModule).toBeNull();
+  });
+
+  it('refuses an entry module the program does not have', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+
+    await expect(
+      enrollPerson({
+        ...BASE,
+        cohortId: 'cohort-1',
+        personHandle: '123',
+        startsAtModule: 9,
+        now: NOW,
+      })
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(db.enrollment.create).not.toHaveBeenCalled();
+  });
+
   it('turns the duplicate enrolment into a readable 409', async () => {
     db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
     db.cohort.findFirst.mockResolvedValue(cohort);
@@ -154,6 +204,85 @@ describe('enrollPerson', () => {
     await expect(
       enrollPerson({ ...BASE, cohortId: 'cohort-1', personHandle: '123', now: NOW })
     ).rejects.toMatchObject({ code: 'CONFLICT' });
+  });
+});
+
+describe('previewEnrollment', () => {
+  const cohort = { accessUntil: null, program: { defaultAccessDays: 30 } };
+
+  it('says who it found and what blocks the enrolment, without writing', async () => {
+    db.person.findFirst.mockResolvedValue({
+      id: 'p-1',
+      givenName: 'Ana',
+      familyName: 'Pérez',
+      birthDate: MINOR_BIRTH,
+      guardians: [],
+      enrollments: [
+        {
+          cohortId: 'cohort-1',
+          status: 'WITHDRAWN',
+          cohort: { code: 'C-1', program: { name: 'P' } },
+        },
+        {
+          cohortId: 'cohort-2',
+          status: 'ACTIVE',
+          cohort: { code: 'C-2', program: { name: 'Otro' } },
+        },
+      ],
+    });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+
+    const preview = await previewEnrollment({
+      institutionId: 'inst-1',
+      cohortId: 'cohort-1',
+      personHandle: 'ana@example.com',
+      now: NOW,
+    });
+
+    expect(preview.person).toEqual({
+      id: 'p-1',
+      name: 'Ana Pérez',
+      hasBirthDate: true,
+      isMinor: true,
+      guardianName: null,
+    });
+    expect(preview.blockers).toEqual(['MINOR_WITHOUT_GUARDIAN', 'ALREADY_ENROLLED']);
+    expect(preview.activeElsewhere).toEqual([{ cohortCode: 'C-2', programName: 'Otro' }]);
+    expect(preview.accessUntil).toBe('2026-10-17');
+    expect(db.enrollment.create).not.toHaveBeenCalled();
+    expect(db.auditLog.create).not.toHaveBeenCalled();
+  });
+
+  it('reports an unknown handle as NOT_FOUND instead of throwing', async () => {
+    db.person.findFirst.mockResolvedValue(null);
+    const preview = await previewEnrollment({
+      institutionId: 'inst-1',
+      cohortId: 'cohort-1',
+      personHandle: 'nadie@example.com',
+      now: NOW,
+    });
+    expect(preview.person).toBeNull();
+    expect(preview.blockers).toEqual(['NOT_FOUND']);
+  });
+
+  it('has no blockers for an adult who is not enrolled yet', async () => {
+    db.person.findFirst.mockResolvedValue({
+      id: 'p-2',
+      givenName: 'Luis',
+      familyName: 'Gómez',
+      birthDate: ADULT_BIRTH,
+      guardians: [],
+      enrollments: [],
+    });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+    const preview = await previewEnrollment({
+      institutionId: 'inst-1',
+      cohortId: 'cohort-1',
+      personHandle: '123',
+      now: NOW,
+    });
+    expect(preview.blockers).toEqual([]);
+    expect(preview.person?.isMinor).toBe(false);
   });
 });
 

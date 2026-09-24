@@ -18,12 +18,21 @@
  * rompe cuando se hace a ojo.
  */
 
-import * as Dropdown from '@radix-ui/react-dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Tooltip } from '@/components/atoms/tooltip';
-import { cn } from '@/lib/utils';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSeparator,
+  DropdownTrigger,
+} from '@/components/molecules/dropdown';
 
+/**
+ * Desde el 21/9 es una piel sobre `molecules/dropdown` (Radix + `motion`): el «⋯» con su
+ * tooltip y el menú alineado a la derecha. Los que ya lo usaban no cambian.
+ */
 export interface MenuProps {
   /**
    * Lo que anuncia el botón. Obligatorio y sin valor por defecto: «menú» no dice de qué,
@@ -36,26 +45,22 @@ export interface MenuProps {
 
 export function Menu({ label, children, align = 'end' }: MenuProps) {
   return (
-    <Dropdown.Root>
+    <Dropdown>
       <Tooltip label={label}>
-        <Dropdown.Trigger
-          aria-label={label}
-          className="text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch min-w-touch data-[state=open]:bg-surface-sunken inline-flex items-center justify-center"
-        >
-          <MoreHorizontal aria-hidden="true" className="h-5 w-5" />
-        </Dropdown.Trigger>
+        <DropdownTrigger>
+          <button
+            type="button"
+            aria-label={label}
+            className="text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch min-w-touch data-[state=open]:bg-surface-sunken inline-flex items-center justify-center"
+          >
+            <MoreHorizontal aria-hidden="true" className="h-5 w-5" />
+          </button>
+        </DropdownTrigger>
       </Tooltip>
-
-      <Dropdown.Portal>
-        <Dropdown.Content
-          align={align}
-          sideOffset={4}
-          className="bg-surface-raised border-border-muted rounded-card elevation-floating min-w-48 border p-1"
-        >
-          {children}
-        </Dropdown.Content>
-      </Dropdown.Portal>
-    </Dropdown.Root>
+      <DropdownMenu aria-label={label} align={align}>
+        {children}
+      </DropdownMenu>
+    </Dropdown>
   );
 }
 
@@ -77,24 +82,17 @@ export function MenuItem({
   destructive = false,
 }: MenuItemProps) {
   return (
-    <Dropdown.Item
-      disabled={disabled}
+    <DropdownItem
       onSelect={onSelect}
-      className={cn(
-        'type-body rounded-control min-h-touch flex cursor-pointer items-center px-3',
-        'data-[highlighted]:bg-surface-sunken outline-none',
-        // Deshabilitado con su color, no con opacidad: `text.subtle` sigue cumpliendo 4.5:1.
-        disabled && 'text-text-subtle cursor-default',
-        !disabled && destructive && 'text-status-error-base',
-        !disabled && !destructive && 'text-text'
-      )}
+      disabled={disabled}
+      color={destructive ? 'danger' : 'default'}
     >
       {children}
-    </Dropdown.Item>
+    </DropdownItem>
   );
 }
 
 /** La raya que separa lo ocasional de lo que no tiene vuelta atrás. */
 export function MenuSeparator() {
-  return <Dropdown.Separator className="bg-border-muted my-1 h-px" />;
+  return <DropdownSeparator />;
 }

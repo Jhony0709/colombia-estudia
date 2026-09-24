@@ -34,6 +34,8 @@ export interface AssessmentListItem {
   kind: string;
   position: number;
   moduleName: string | null;
+  /** Título del tema del que es examen (20/9); nulo si es del módulo o del programa. */
+  lessonTitle: string | null;
   latestStatus: PublishStatus | null;
   latestNumber: number | null;
   hasPublished: boolean;
@@ -80,6 +82,7 @@ export async function createAssessment({
   actorId,
   programId,
   moduleId,
+  lessonId,
   subjectId,
   kind,
   title,
@@ -89,6 +92,8 @@ export async function createAssessment({
   actorId: string;
   programId: string;
   moduleId?: string | null;
+  /** El tema del que es examen (20/9). Tiene que ser del mismo módulo. */
+  lessonId?: string | null;
   subjectId?: string | null;
   kind: 'DIAGNOSTIC' | 'SUBJECT' | 'FINAL';
   title: string;
@@ -113,8 +118,20 @@ export async function createAssessment({
       if (!found) throw new APIError('Module not found in this program', 'NOT_FOUND');
     }
 
-    // Las evaluaciones van después de los temas dentro del módulo (schema:
-    // "Orden dentro del módulo, después de los temas").
+    if (lessonId) {
+      // Un examen de tema (20/9) va justo después de ese tema en la ruta del estudiante, y
+      // eso solo tiene sentido si el tema es del mismo módulo. Sin módulo no hay tema posible.
+      const lesson = moduleId
+        ? await tx.lesson.findFirst({
+            where: { id: lessonId, moduleId, archivedAt: null },
+            select: { id: true },
+          })
+        : null;
+      if (!lesson) throw new APIError('Lesson not found in this module', 'NOT_FOUND');
+    }
+
+    // `position` ordena las evaluaciones entre sí dentro del módulo; el sitio que ocupan
+    // respecto a los temas lo decide `lessonId` (features/learn/server/outline.ts).
     const last = moduleId
       ? await tx.assessment.findFirst({
           where: { moduleId },
@@ -129,6 +146,7 @@ export async function createAssessment({
           institutionId,
           programId,
           moduleId: moduleId ?? null,
+          lessonId: lessonId ?? null,
           subjectId: subjectId ?? null,
           kind,
           position: (last?.position ?? 0) + 1,
@@ -158,7 +176,7 @@ export async function createAssessment({
           entity: 'assessment',
           entityId: assessment.id,
           action: 'created',
-          after: { title, kind, moduleId: moduleId ?? null },
+          after: { title, kind, moduleId: moduleId ?? null, lessonId: lessonId ?? null },
         },
       });
 
@@ -166,7 +184,7 @@ export async function createAssessment({
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new APIError(
-          'Otra evaluación ocupó esa posición en el módulo mientras se creaba esta. Inténtalo otra vez.',
+          'Otro examen ocupó esa posición en el módulo mientras se creaba este. Inténtalo otra vez.',
           'CONFLICT'
         );
       }
@@ -191,6 +209,7 @@ export async function listAssessments({
       kind: true,
       position: true,
       module: { select: { name: true } },
+      lesson: { select: { title: true } },
       versions: {
         orderBy: { number: 'desc' },
         select: { number: true, status: true, content: true },
@@ -207,6 +226,7 @@ export async function listAssessments({
       kind: assessment.kind,
       position: assessment.position,
       moduleName: assessment.module?.name ?? null,
+      lessonTitle: assessment.lesson?.title ?? null,
       latestStatus: latest ? toPublishStatus(latest.status) : null,
       latestNumber: latest?.number ?? null,
       hasPublished: assessment.versions.some((v) => isVersionLive(toPublishStatus(v.status))),
@@ -334,7 +354,7 @@ async function requireDraft(institutionId: string, versionId: string) {
   if (!version) throw new APIError('Assessment version not found', 'NOT_FOUND');
   if (!isVersionEditable(toPublishStatus(version.status))) {
     throw new APIError(
-      'Esa versión ya está publicada y no se puede editar. Abre la evaluación otra vez para empezar la siguiente.',
+      'Esa versión ya está publicada y no se puede editar. Abre el examen otra vez para empezar la siguiente.',
       'CONFLICT'
     );
   }

@@ -19,8 +19,6 @@
  */
 
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { BrandLogo } from '@/components/atoms/brand-logo';
 import * as Dialog from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import {
@@ -34,9 +32,9 @@ import {
   ClipboardCheck,
   FolderOpen,
   GraduationCap,
+  Home,
   Layers,
   Library,
-  LogOut,
   Map,
   Menu,
   ShieldCheck,
@@ -47,6 +45,9 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavItem } from '@/components/atoms/nav-item';
+import { LogoutButton } from '@/components/organisms/logout-dialog';
+import { SpaceSwitcher } from '@/components/molecules/space-switcher';
+import type { Space } from '@/lib/nav/spaces';
 import { ThemeToggle } from '@/components/molecules/theme-toggle';
 import type { Theme } from '@/lib/theme/theme';
 import type { NavDestination } from '@/lib/nav/staff-nav';
@@ -54,6 +55,8 @@ import type { NavDestination } from '@/lib/nav/staff-nav';
 export interface SideNavProps {
   institutionName: string;
   items: NavDestination[];
+  /** Los espacios de la persona (ola 3, 23/9); con dos o más, la marca es el conmutador. */
+  spaces?: Space[];
   personName: string | null;
   /**
    * Avisos sin leer. El contador va en **texto**, no en un punto de color
@@ -85,10 +88,11 @@ export interface SideNavProps {
   el nombre del enlace lo da siempre el texto (AP8 de `ui-craft`).
 */
 const ICONS: Record<string, LucideIcon> = {
+  '/inicio': Home,
   '/personas': Users,
   '/cohortes': GraduationCap,
   '/contenido/temas': BookOpen,
-  '/contenido/evaluaciones': ClipboardCheck,
+  '/contenido/examenes': ClipboardCheck,
   '/contenido/programas': Layers,
   '/contenido/asignaturas': Library,
   '/admin/institucion': Building2,
@@ -111,6 +115,7 @@ const ICONS: Record<string, LucideIcon> = {
  * en `lib/nav/staff-nav.ts`.
  */
 const STAFF_SECTIONS = [
+  { key: 'inicio', label: 'Hoy' },
   { key: 'plan', label: 'Plan de estudios' },
   { key: 'contenido', label: 'Contenido' },
   { key: 'operacion', label: 'Operación' },
@@ -213,13 +218,8 @@ function NavBody({
         <ThemeToggle theme={theme} />
 
         {personName && <p className="type-caption text-text-muted px-3 pt-2">{personName}</p>}
-        <NavItem
-          href="/auth/logout"
-          onClick={onNavigate}
-          icon={<LogOut className="h-[18px] w-[18px]" />}
-        >
-          Cerrar sesión
-        </NavItem>
+        {/* Un botón, no un `NavItem`: abre el diálogo de confirmación en el sitio (23/9). */}
+        <LogoutButton className="rounded-control min-h-control text-text-muted hover:bg-surface-sunken hover:text-text duration-fast ease-standard flex w-full items-center gap-3 px-3 transition-colors" />
       </div>
     </div>
   );
@@ -231,6 +231,7 @@ export function SideNav({
   personName,
   unreadNotifications = 0,
   theme,
+  spaces = [],
   sections = STAFF_SECTIONS,
   homeHref = '/ingresar',
   notificationsHref = '/notificaciones',
@@ -246,14 +247,12 @@ export function SideNav({
   }, [currentPath]);
 
   const brand = (
-    <Link
-      href={homeHref}
-      className="type-body-emphasis text-text min-h-touch flex items-center gap-2 px-3"
-    >
-      {/* Isotipo decorativo: el nombre ya va escrito al lado. */}
-      <BrandLogo variant="isotipo" alt="" className="h-7" />
-      {institutionName}
-    </Link>
+    <SpaceSwitcher
+      institutionName={institutionName}
+      spaces={spaces}
+      homeHref={homeHref}
+      className="px-3"
+    />
   );
 
   return (
@@ -265,7 +264,13 @@ export function SideNav({
         teléfono, más abajo, se queda en la densidad por defecto. La regla y su límite están
         en `layout-y-componentes.md` §2b.
       */}
-      <div className="bg-surface-canvas border-border-muted w-sidenav density-compact type-data hidden shrink-0 border-r p-2 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:gap-5">
+      {/*
+        `overflow-y-auto` (23/9): la columna mide la pantalla (`h-screen`) pero su contenido
+        no; en una ventana de 716 px de alto, «Cerrar sesión» y el nombre quedaban debajo del
+        borde sin forma de llegar (visto con la sesión de Jhonny). Ahora la columna se
+        desplaza sola cuando no cabe.
+      */}
+      <div className="bg-surface-canvas border-border-muted w-sidenav density-compact type-data hidden shrink-0 border-r p-2 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:gap-5 lg:overflow-y-auto">
         {brand}
         <NavBody
           items={items}

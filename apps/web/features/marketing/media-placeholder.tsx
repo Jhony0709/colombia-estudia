@@ -18,6 +18,8 @@ const RATIO_CLASS = {
   '1/1': 'aspect-square',
   '21/9': 'aspect-[21/9]',
   '5/4': 'aspect-[5/4]',
+  '3/4': 'aspect-[3/4]',
+  '3/1': 'aspect-[3/1]',
 } as const;
 
 export interface MediaPlaceholderProps {

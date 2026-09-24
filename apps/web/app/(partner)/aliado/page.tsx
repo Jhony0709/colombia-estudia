@@ -15,7 +15,7 @@ import { getCohortProgress, listPartnerCohorts } from '@/features/cohorts/server
 import { CohortProgressView } from '@/features/cohorts/components/cohort-progress-view';
 import { listOwnAccounts } from '@/features/billing/server/account.service';
 import { DataTable } from '@/components/molecules/data-table';
-import { Badge, type BadgeVariant } from '@/components/atoms/badge';
+import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { cn } from '@/lib/utils';
@@ -55,12 +55,6 @@ export default async function PartnerPage({
   const format = await getFormatter();
   const cop = (v: number) =>
     format.number(v, { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
-  const STATUS_BADGE: Record<string, BadgeVariant> = {
-    CURRENT: 'success',
-    OVERDUE: 'error',
-    IN_AGREEMENT: 'warning',
-    PARTNER_PAID: 'info',
-  };
   type Account = (typeof accounts)[number];
 
   return (
@@ -122,11 +116,7 @@ export default async function PartnerPage({
                 key: 'status',
                 header: t('status'),
                 narrow: true,
-                cell: (a) => (
-                  <Badge variant={STATUS_BADGE[a.status ?? 'CURRENT']}>
-                    {t(`statuses.${a.status ?? 'CURRENT'}`)}
-                  </Badge>
-                ),
+                cell: (a) => <StatusBadge domain="account" status={a.status ?? 'CURRENT'} />,
               },
               {
                 key: 'paid',

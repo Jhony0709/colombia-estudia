@@ -18,6 +18,23 @@ consumidor de `LearningEvent` y `AuditLog`.
 | Ajustes aplicados                    | ajustes vigentes por cohorte y cambios en el periodo, con quién los autorizó                     | `Accommodation`, `AuditLog`    | admin, coordinación                 |
 | ~~Legado~~ (RETIRADO 18/9)           | medía la conversión del contenido migrado; sin importación no hay qué medir                      | —                              | —                                   |
 
+## El recorrido del estudiante (E0, 23/9)
+
+`/inicio` muestra, en 30 días, cuántas personas distintas dieron cada paso:
+
+| Paso                             | Evento(s) en `LearningEvent`                                                       | Quién lo emite |
+| -------------------------------- | ---------------------------------------------------------------------------------- | -------------- |
+| Vio qué hacer en `/aprender`     | `student.primary_action.shown` con `payload.screen = 'aprender'`                   | el cliente     |
+| Entró al tema desde ahí          | `student.primary_action.clicked` con `screen = 'aprender'`                         | el cliente     |
+| Abrió un tema                    | `lesson.opened`                                                                    | el servidor    |
+| Llegó al final del contenido     | `lesson.scrolled_to_end`, `lesson.video.progress`, `lesson.transcript.read`        | el servidor    |
+| Completó o envió                 | `lesson.completed`, `submission_received`                                          | el servidor    |
+| Siguió desde la barra del player | `student.primary_action.clicked` con `screen = 'lesson'` y `action ∈ {next, exam}` | el cliente     |
+
+Los eventos del cliente llegan por `POST /api/learn/events` con un vocabulario cerrado
+(`lib/telemetry/student-events.ts`): pantalla, acción, asignación y forma. Nada libre, nada
+personal. Los umbrales de espera de red (decisión E1) saldrán de estos datos, no al revés.
+
 ## Exportación
 
 `GET /api/partner/cohort/export` y `GET /api/cohorts/[id]/export` devuelven CSV por

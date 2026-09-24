@@ -22,7 +22,7 @@ import {
   type CohortRow,
 } from '@/features/cohorts/server/cohorts.service';
 import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
-import { Badge } from '@/components/atoms/badge';
+import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 import { Button } from '@/components/atoms/button';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { DataTable } from '@/components/molecules/data-table';
@@ -201,6 +201,7 @@ export default async function CohortsPage({ searchParams }: { searchParams: Sear
 
         <DataTable<CohortRow>
           caption={t('tableCaption')}
+          compactRows
           rows={cohorts}
           rowKey={(cohort) => cohort.id}
           empty={
@@ -253,19 +254,7 @@ export default async function CohortsPage({ searchParams }: { searchParams: Sear
             {
               key: 'status',
               header: t('status'),
-              cell: (cohort) => (
-                <Badge
-                  variant={
-                    cohort.status === 'OPEN'
-                      ? 'success'
-                      : cohort.status === 'CLOSED'
-                        ? 'neutral'
-                        : 'info'
-                  }
-                >
-                  {t(`statuses.${cohort.status}`)}
-                </Badge>
-              ),
+              cell: (cohort) => <StatusBadge domain="cohort" status={cohort.status} />,
             },
             {
               key: 'actions',

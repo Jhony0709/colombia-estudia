@@ -255,6 +255,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
 
           <DataTable<PersonRow>
             caption={t('tableCaption')}
+            compactRows
             rows={result.rows}
             rowKey={(person) => person.id}
             empty={

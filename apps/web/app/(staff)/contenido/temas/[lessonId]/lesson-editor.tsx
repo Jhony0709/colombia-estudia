@@ -39,8 +39,13 @@ import { issueText } from '@/lib/content/issue-text';
 import { LessonDetailsForm, type ModuleChoice, type SubjectChoice } from './lesson-details-form';
 import { lessonHelpTopics } from './lesson-help';
 import { MediaSettingsDialog, useLessonMedia } from './lesson-media';
+import { LessonActivity, type ActivityAccepts } from './lesson-activity';
 import { BlockEditor, type BlockEditorHandle } from '@/features/content/editor/BlockEditor';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
+import { pendingChecks, ReadinessPanel, type ReadinessCheck } from '../../readiness-panel';
+import { PublishedLine } from '../../published-line';
+import { EditorLayout } from '../../editor-layout';
+import type { LessonReadiness } from '@/features/content/server/readiness.service';
 
 interface Issue {
   rule?: string;
@@ -74,6 +79,10 @@ export interface LessonWorkspaceProps {
   initialEstimatedMinutes: number | null;
   initialInvalidatesProgress: boolean;
   canPublish: boolean;
+  /** Dónde está el tema en la ruta, sus exámenes, su versión publicada y las cohortes abiertas. */
+  readiness: LessonReadiness | null;
+  /** La actividad, solo en un tema que se completa con una; `null` en los demás. */
+  activity: { instructions: string | null; accepts: ActivityAccepts } | null;
   details: {
     modules: ModuleChoice[];
     subjects: SubjectChoice[];
@@ -95,6 +104,8 @@ export function LessonEditor({
   initialEstimatedMinutes,
   initialInvalidatesProgress,
   canPublish,
+  readiness,
+  activity,
   details,
 }: LessonWorkspaceProps) {
   const t = useTranslations('editor');
@@ -269,7 +280,7 @@ export function LessonEditor({
         return;
       }
 
-      setPublished(payload.number as number);
+      setPublished((payload.data?.number ?? payload.number) as number);
       setConfirming(false);
     } catch {
       setError(t('publishError'));
@@ -288,6 +299,18 @@ export function LessonEditor({
     : savedAt
       ? t('savedAt', { time: savedAt })
       : t('noChanges');
+
+  const checks = readinessChecks({
+    t,
+    readiness,
+    content,
+    minutes,
+    validation,
+    media: media.items,
+    activity,
+    publishedNumber: published ?? readiness?.published?.number ?? null,
+  });
+  const pendingCohorts = readiness?.cohorts.pending ?? [];
 
   return (
     <>
@@ -343,91 +366,105 @@ export function LessonEditor({
         <p role="status" className="type-caption text-text-muted">
           {saveStatus}
         </p>
+        <PublishedLine published={readiness?.published ?? null} />
       </div>
 
-      <LessonDetailsForm
-        lessonId={lessonId}
-        modules={details.modules}
-        subjects={details.subjects}
-        hasPublished={header.hasPublished}
-        initial={details.initial}
-      />
-
-      {error !== null && <Alert severity="error">{error}</Alert>}
-      {published !== null && (
-        <Alert severity="success">{t('publishedOk', { number: published })}</Alert>
-      )}
-
       {/*
+        Ola 2 (23/9): la «Preparación» —dónde está el tema, qué le falta y a quién le
+        llegará— es una columna fija a la derecha en escritorio y un bloque plegado arriba
+        en móvil; el cuerpo queda para escribir.
+      */}
+      <EditorLayout
+        rail={<ReadinessPanel id="preparacion" checks={checks} layout="rail" />}
+        railSummary={t('readiness.summary', { pending: pendingChecks(checks) })}
+      >
+        <LessonDetailsForm
+          lessonId={lessonId}
+          modules={details.modules}
+          subjects={details.subjects}
+          hasPublished={header.hasPublished}
+          initial={details.initial}
+        />
+
+        {error !== null && <Alert severity="error">{error}</Alert>}
+        {published !== null && (
+          <Alert severity="success">{t('publishedOk', { number: published })}</Alert>
+        )}
+
+        {/*
         La única tarjeta sin título propio, y a propósito
         (`reference/03-ui/layout-y-componentes.md` §1): el editor es un `role="group"` de
         campos y su nombre accesible es este párrafo (`aria-labelledby`), como el `<legend>`
         de un `fieldset`. Convertirlo en el `h2` del template haría que el grupo se llamara
         como una sección en vez de como lo que se escribe. Por eso `Card` recibe `labelledBy`.
       */}
-      <Card labelledBy="editor-texto">
-        <p id="editor-texto" className="type-subheading text-text">
-          {t('contentLabel')}
-        </p>
+        <Card labelledBy="editor-texto">
+          <p id="editor-texto" className="type-subheading text-text">
+            {t('contentLabel')}
+          </p>
 
-        <BlockEditor
-          ref={blockEditor}
-          labelledBy="editor-texto"
-          initialMarkdown={initialContent}
-          media={media.items ?? []}
-          onRegisterVideo={registerVideo}
-          onMediaSettings={setMediaSettings}
-          onChange={(markdown) => {
-            setContent(markdown);
-            setDirty(true);
+          <BlockEditor
+            ref={blockEditor}
+            labelledBy="editor-texto"
+            initialMarkdown={initialContent}
+            media={media.items ?? []}
+            onRegisterVideo={registerVideo}
+            onMediaSettings={setMediaSettings}
+            onChange={(markdown) => {
+              setContent(markdown);
+              setDirty(true);
+            }}
+          />
+
+          {/* Los minutos son de la versión, como el texto, y se guardan con él. */}
+          <div className="w-40">
+            <label htmlFor={minutesId} className="type-label text-text block">
+              {t('minutesLabel')}
+            </label>
+            <input
+              id={minutesId}
+              type="number"
+              min={1}
+              max={600}
+              inputMode="numeric"
+              value={minutes}
+              onChange={(event) => {
+                setMinutes(event.target.value);
+                setDirty(true);
+              }}
+              className="border-border bg-surface-base text-text type-body min-h-control rounded-control mt-1 w-full border px-3"
+            />
+          </div>
+        </Card>
+
+        {/* La actividad, como sección propia (23/9): qué entrega el estudiante y con qué. */}
+        {activity !== null && <LessonActivity lessonId={lessonId} initial={activity} />}
+
+        {/* La accesibilidad de un vídeo se edita en un diálogo desde el engranaje de su bloque. */}
+        <MediaSettingsDialog
+          item={media.items?.find((item) => item.mediaAssetId === mediaSettings) ?? null}
+          open={mediaSettings !== null}
+          onClose={() => setMediaSettings(null)}
+          onSaved={() => {
+            void media.reload();
+            void validate();
           }}
         />
 
-        {/* Los minutos son de la versión, como el texto, y se guardan con él. */}
-        <div className="w-40">
-          <label htmlFor={minutesId} className="type-label text-text block">
-            {t('minutesLabel')}
-          </label>
-          <input
-            id={minutesId}
-            type="number"
-            min={1}
-            max={600}
-            inputMode="numeric"
-            value={minutes}
-            onChange={(event) => {
-              setMinutes(event.target.value);
-              setDirty(true);
-            }}
-            className="border-border bg-surface-base text-text type-body min-h-control rounded-control mt-1 w-full border px-3"
-          />
-        </div>
-      </Card>
-
-      {/* La accesibilidad de un vídeo se edita en un diálogo desde el engranaje de su bloque. */}
-      <MediaSettingsDialog
-        item={media.items?.find((item) => item.mediaAssetId === mediaSettings) ?? null}
-        open={mediaSettings !== null}
-        onClose={() => setMediaSettings(null)}
-        onSaved={() => {
-          void media.reload();
-          void validate();
-        }}
-      />
-
-      {/* Los avisos solo cuando los hay. «El contenido cumple las reglas» no merece una
+        {/* Los avisos solo cuando los hay. «El contenido cumple las reglas» no merece una
           tarjeta: se dice en el diálogo de publicar, que es donde importa. */}
-      {hasIssues && (
-        <div id="editor-avisos">
-          <Card as="h2" title={t('issuesTitle')}>
-            <IssueList
-              issues={[...errors, ...warnings]}
-              errorCount={errors.length}
-              onGo={goToLine}
-            />
-          </Card>
-        </div>
-      )}
+        {hasIssues && (
+          <div id="editor-avisos">
+            <Card as="h2" title={t('issuesTitle')}>
+              <IssueList
+                issues={[...errors, ...warnings]}
+                errorCount={errors.length}
+                onGo={goToLine}
+              />
+            </Card>
+          </div>
+        )}
+      </EditorLayout>
 
       <PageHelp screen={t('contentLabel')} topics={lessonHelpTopics(t, { canPublish })} />
 
@@ -502,6 +539,20 @@ export function LessonEditor({
                 <Dialog.Description className="type-body text-text max-w-reading">
                   {t('confirmBody', { warnings: warnings.length })}
                 </Dialog.Description>
+                {/*
+                  Publicar no cambia lo que las cohortes ya tienen asignado (eso es
+                  `PATCH /api/cohorts/assignments/[id]`); lo que sí abre es que las cohortes
+                  abiertas que aún no tienen el tema puedan añadirlo. Se dice aquí, que es
+                  donde se decide.
+                */}
+                {pendingCohorts.length > 0 && (
+                  <p className="type-body text-text-muted max-w-reading">
+                    {t('confirmPending', {
+                      count: pendingCohorts.length,
+                      list: pendingCohorts.map((cohort) => cohort.code).join(', '),
+                    })}
+                  </p>
+                )}
 
                 <div className="flex items-start gap-2">
                   <input
@@ -584,4 +635,148 @@ function IssueList({
       })}
     </ul>
   );
+}
+
+/**
+ * Las comprobaciones del panel de preparación. Lo que la base sabe viene en `readiness`; lo
+ * que cambia mientras se escribe (texto, minutos, avisos, vídeos) se lee del estado.
+ */
+function readinessChecks({
+  t,
+  readiness,
+  content,
+  minutes,
+  validation,
+  media,
+  activity,
+  publishedNumber,
+}: {
+  t: ReturnType<typeof useTranslations<'editor'>>;
+  readiness: LessonReadiness | null;
+  content: string;
+  minutes: string;
+  validation: Validation | null;
+  media: Array<{ missingCaptions: boolean }> | null;
+  activity: { instructions: string | null; accepts: ActivityAccepts } | null;
+  publishedNumber: number | null;
+}): ReadinessCheck[] {
+  if (readiness === null) return [];
+
+  const builder = `/contenido/programas/${readiness.program.id}` as const;
+  const checks: ReadinessCheck[] = [];
+
+  checks.push({
+    key: 'route',
+    state: 'info',
+    label: t('readiness.route'),
+    detail: `${t('readiness.routeDetail', {
+      program: readiness.program.name,
+      position: readiness.module.position,
+      module: readiness.module.name,
+    })} · ${
+      readiness.previousTitle === null
+        ? t('readiness.routeFirst')
+        : t('readiness.routeAfter', { title: readiness.previousTitle })
+    }`,
+    href: builder,
+    linkLabel: t('readiness.routeLink'),
+  });
+
+  const empty = content.trim() === '';
+  const errors = validation?.errors.length ?? 0;
+  const warnings = validation?.warnings.length ?? 0;
+  checks.push({
+    key: 'content',
+    state: empty ? 'todo' : validation === null ? 'todo' : errors > 0 ? 'warn' : 'ok',
+    label: t('readiness.content'),
+    detail: empty
+      ? t('readiness.contentEmpty')
+      : validation === null
+        ? t('readiness.contentChecking')
+        : errors > 0
+          ? t('readiness.contentErrors', { count: errors })
+          : t('readiness.contentOk', { warnings }),
+  });
+
+  const videos = media?.length ?? 0;
+  const missing = media?.filter((item) => item.missingCaptions).length ?? 0;
+  checks.push({
+    key: 'videos',
+    state: media === null ? 'todo' : videos === 0 ? 'info' : missing > 0 ? 'warn' : 'ok',
+    label: t('readiness.videos'),
+    detail:
+      media === null
+        ? t('readiness.videosLoading')
+        : videos === 0
+          ? t('readiness.videosNone')
+          : missing > 0
+            ? t('readiness.videosMissing', { missing, count: videos })
+            : t('readiness.videosOk', { count: videos }),
+  });
+
+  const parsedMinutes = minutes.trim() === '' ? null : Number(minutes);
+  const hasMinutes = parsedMinutes !== null && Number.isFinite(parsedMinutes) && parsedMinutes > 0;
+  checks.push({
+    key: 'minutes',
+    state: hasMinutes ? 'ok' : 'warn',
+    label: t('readiness.minutes'),
+    detail: hasMinutes
+      ? t('readiness.minutesOk', { minutes: parsedMinutes })
+      : t('readiness.minutesMissing'),
+  });
+
+  // Solo en un tema con actividad: en los demás no hay nada que preparar ahí.
+  if (activity !== null) {
+    const hasInstructions = (activity.instructions ?? '').trim() !== '';
+    checks.push({
+      key: 'activity',
+      state: hasInstructions ? 'ok' : 'warn',
+      label: t('readiness.activity'),
+      detail: hasInstructions
+        ? t('readiness.activityOk', { accepts: activity.accepts })
+        : t('readiness.activityMissing'),
+    });
+  }
+
+  const exams = readiness.exams;
+  const onlyExam = exams.length === 1 ? exams[0] : undefined;
+  const examsPublished = exams.filter((exam) => exam.hasPublished).length;
+  checks.push({
+    key: 'exam',
+    state: exams.length === 0 ? 'todo' : examsPublished < exams.length ? 'warn' : 'ok',
+    label: t('readiness.exam'),
+    detail:
+      exams.length === 0
+        ? t('readiness.examNone')
+        : onlyExam
+          ? t('readiness.examOne', {
+              title: onlyExam.title,
+              status: onlyExam.hasPublished ? 'published' : 'draft',
+            })
+          : t('readiness.examMany', { count: exams.length, published: examsPublished }),
+    ...(exams.length === 0 ? { href: builder, linkLabel: t('readiness.examLink') } : {}),
+  });
+
+  const { assigned, pending } = readiness.cohorts;
+  const cohortsDetail =
+    assigned === 0 && pending.length === 0
+      ? t('readiness.cohortsNone')
+      : [
+          assigned > 0 ? t('readiness.cohortsAssigned', { count: assigned }) : null,
+          pending.length > 0 ? t('readiness.cohortsPending', { count: pending.length }) : null,
+        ]
+          .filter((part) => part !== null)
+          .join(' · ');
+  checks.push({
+    key: 'publish',
+    state: publishedNumber === null ? 'todo' : 'ok',
+    label: t('readiness.publish'),
+    detail: `${
+      publishedNumber === null
+        ? t('readiness.publishNone')
+        : t('readiness.publishOk', { number: publishedNumber })
+    } · ${cohortsDetail}`,
+  });
+
+  return checks;
 }

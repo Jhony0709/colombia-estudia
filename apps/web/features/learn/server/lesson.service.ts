@@ -19,7 +19,7 @@ import { renderLessonHtml, parseLessonMarkdown } from '@colombia-estudia/types';
 import type { LessonForm } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
 import { resolveRenderAssets } from '@/features/content/server/render-assets';
-import { getCohortOutline, type CohortGate } from './cohort.service';
+import { getCohortOutline, type CohortGate, type OutlineModule } from './cohort.service';
 import { neighbours } from './outline';
 import { readText } from '@/lib/media/storage';
 import { parseWebVtt, type Cue } from '@/lib/media/webvtt';
@@ -68,12 +68,19 @@ export interface LessonForStudent {
   gate: LessonGate | null;
   lesson: {
     assignmentId: string;
+    /** La matrícula por la que se abre (21/9): «volver a la ruta» vuelve a ESE programa. */
+    enrollmentId: string;
     title: string;
     moduleName: string;
     language: string;
     learningObjective: string | null;
     estimatedMinutes: number | null;
     requiresSubmission: boolean;
+    /**
+     * La actividad (23/9), solo con `requiresSubmission`: las instrucciones ya en HTML
+     * saneado (mismo `renderLessonHtml`, sin assets) y qué se acepta como entrega.
+     */
+    activity: { html: string | null; accepts: 'TEXT' | 'FILE' | 'TEXT_OR_FILE' } | null;
     /** Qué evidencia la completa. `lesson-form.ts` explica por qué se decide así. */
     form: LessonForm;
     /** HTML ya saneado por `renderLessonHtml`: es lo que sostiene el `dangerouslySetInnerHTML`. */
@@ -90,6 +97,8 @@ export interface LessonForStudent {
   /** La entrega vigente cuando el tema la exige; `null` si no la exige o aún no hay. */
   submission: SubmissionView | null;
   navigation: { previous: LessonNeighbour | null; next: LessonNeighbour | null };
+  /** La ruta del programa, para la barra lateral del player (21/9). Vacía si no se abre. */
+  route: OutlineModule[];
 }
 
 const NO_NAV = { previous: null, next: null };
@@ -100,6 +109,7 @@ const blocked = (gate: LessonGate): LessonForStudent => ({
   progress: null,
   submission: null,
   navigation: NO_NAV,
+  route: [],
 });
 
 /** El vecino, recortado a lo que la barra de acciones necesita. */
@@ -171,7 +181,7 @@ export async function getLessonForStudent({
   assignmentId: string;
   now?: Date;
 }): Promise<LessonForStudent> {
-  const outline = await getCohortOutline({ institutionId, personId, now });
+  const outline = await getCohortOutline({ institutionId, personId, assignmentId, now });
 
   // Los estados terminales de la cohorte mandan sobre todo lo demás: con el acceso vencido
   // no hay tema que valga.
@@ -208,6 +218,8 @@ export async function getLessonForStudent({
           language: true,
           learningObjective: true,
           requiresSubmission: true,
+          activityInstructions: true,
+          activityAccepts: true,
           module: { select: { name: true } },
         },
       },
@@ -246,12 +258,25 @@ export async function getLessonForStudent({
     gate: null,
     lesson: {
       assignmentId,
+      enrollmentId: outline.enrollmentId,
       title: assignment.lesson.title,
       moduleName: assignment.lesson.module.name,
       language: assignment.lesson.language,
       learningObjective: assignment.lesson.learningObjective,
       estimatedMinutes: assignment.lessonVersion.estimatedMinutes,
       requiresSubmission: assignment.lesson.requiresSubmission,
+      // Las instrucciones son del tema, no de la versión: lo que el autor corrija se ve aquí
+      // al momento (decisión del 23/9).
+      activity: assignment.lesson.requiresSubmission
+        ? {
+            html: assignment.lesson.activityInstructions
+              ? renderLessonHtml(assignment.lesson.activityInstructions, new Map(), {
+                  language: assignment.lesson.language,
+                })
+              : null,
+            accepts: assignment.lesson.activityAccepts,
+          }
+        : null,
       form: lessonFormOf({ parsed, requiresSubmission: assignment.lesson.requiresSubmission }),
       html: renderLessonHtml(content, assets, { language: assignment.lesson.language }),
       missingAssets: assetIds.filter((id) => !assets.has(id)),
@@ -260,6 +285,7 @@ export async function getLessonForStudent({
     progress: progressView(progressRow),
     submission,
     navigation: { previous: neighbourView(previous), next: neighbourView(next) },
+    route: outline.modules,
   };
 }
 

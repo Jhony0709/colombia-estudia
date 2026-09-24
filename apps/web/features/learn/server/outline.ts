@@ -17,10 +17,25 @@ export interface OutlineItem {
   assignmentId: string;
   title: string;
   moduleId: string;
-  /** Posición dentro del módulo. Las evaluaciones van después de los temas. */
+  /**
+   * El tema al que pertenece el ítem: en un `LESSON`, el suyo; en un `ASSESSMENT`, el tema
+   * del que es examen (20/9). Un examen sin tema va al final del módulo.
+   */
+  lessonId?: string | null;
+  /** Posición dentro del módulo, entre los ítems de su misma clase. */
   position: number;
   status: ItemStatus;
   requiresSubmission?: boolean;
+  /**
+   * La forma del ítem, para el icono y la etiqueta (21/9): vídeo, lectura, actividad o
+   * examen. Coursera no pinta un ítem sin decir qué es, y tiene razón: «Tema 3» no dice
+   * cuánto cuesta abrirlo; «Vídeo · 12 min», sí.
+   */
+  form?: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION' | 'ASSESSMENT';
+  /** Minutos estimados (tema) o límite del intento (examen). Nulo si no se sabe. */
+  estimatedMinutes?: number | null;
+  /** Fecha límite de entrega (examen). Nula si no tiene o si es un tema. */
+  dueAt?: Date | null;
   availableFrom: Date;
   availableUntil: Date | null;
 }
@@ -33,12 +48,39 @@ export interface SequencedItem extends OutlineItem {
   unavailableReason: 'NOT_YET' | 'CLOSED' | null;
 }
 
-/** Los ítems de un módulo, en el orden en que se recorren: temas y luego evaluaciones. */
-export function sortItems(items: OutlineItem[]): OutlineItem[] {
-  return [...items].sort((a, b) => {
-    if (a.kind !== b.kind) return a.kind === 'LESSON' ? -1 : 1;
-    return a.position - b.position;
-  });
+/**
+ * Los ítems de un módulo, en el orden en que se recorren (20/9): cada tema seguido de sus
+ * exámenes, y al final los exámenes del módulo que no son de ningún tema.
+ *
+ * Un examen que apunta a un tema que no está en la lista (no asignado a la cohorte, o de
+ * otro módulo por error) cae también al final: mejor visible fuera de sitio que perdido.
+ */
+export type Sortable = Pick<OutlineItem, 'kind' | 'lessonId' | 'position'>;
+
+/**
+ * Genérico sobre lo mínimo que hace falta para ordenar (23/9): el builder del programa
+ * (`features/content/server/builder.service.ts`) ordena temas y exámenes sin cohorte y sin
+ * fechas con la **misma** función, que es lo que garantiza que el admin construye la ruta
+ * que el estudiante recorre.
+ */
+export function sortItems<T extends Sortable>(items: T[]): T[] {
+  const byPosition = (a: T, b: T) => a.position - b.position;
+  const lessons = items.filter((item) => item.kind === 'LESSON').sort(byPosition);
+  const assessments = items.filter((item) => item.kind === 'ASSESSMENT').sort(byPosition);
+
+  const lessonIds = new Set(
+    lessons.flatMap((lesson) => (lesson.lessonId ? [lesson.lessonId] : []))
+  );
+  const ofLesson = (lessonId: string) =>
+    assessments.filter((assessment) => assessment.lessonId === lessonId);
+  const ofModule = assessments.filter(
+    (assessment) => !assessment.lessonId || !lessonIds.has(assessment.lessonId)
+  );
+
+  return [
+    ...lessons.flatMap((lesson) => [lesson, ...(lesson.lessonId ? ofLesson(lesson.lessonId) : [])]),
+    ...ofModule,
+  ];
 }
 
 /**
@@ -110,6 +152,17 @@ export function resumePoint(items: SequencedItem[]): SequencedItem | null {
   if (started) return started;
 
   return items.find((item) => item.enabled && item.status !== 'COMPLETED') ?? null;
+}
+
+/**
+ * Lo que toca a continuación aunque no se pueda abrir todavía (23/9): el primer ítem sin
+ * completar, habilitado o no. Es lo que la tarjeta «Empieza por aquí» necesita cuando
+ * `resumePoint` no encuentra nada abierto —la cohorte no ha empezado, o el primer tema tiene
+ * fecha—: decir cuál es el primer tema y por qué no se puede abrir aún, en vez de un título
+ * solo.
+ */
+export function nextPoint(items: SequencedItem[]): SequencedItem | null {
+  return items.find((item) => item.status !== 'COMPLETED') ?? null;
 }
 
 /**

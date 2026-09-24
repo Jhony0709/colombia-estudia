@@ -32,7 +32,7 @@ const FIELD_NAMES: Record<string, string> = {
   timeLimitMinutes: 'Minutos',
   passPercent: 'Porcentaje para aprobar',
   reviewPolicy: 'Qué ve el estudiante después',
-  requiresSubmission: 'Se completa con entrega',
+  requiresSubmission: 'Se completa con actividad',
   defaultAccessDays: 'Días de acceso por defecto',
   supportEmail: 'Correo de soporte',
   brandColor: 'Color de marca',

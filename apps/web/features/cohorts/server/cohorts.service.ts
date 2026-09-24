@@ -198,7 +198,11 @@ export interface UpcomingCohort {
   on: Date;
 }
 
-/** Cohortes que empiezan (planificadas) o terminan (abiertas) en los próximos `days` días. */
+/**
+ * Cohortes que empiezan o terminan en los próximos `days` días. Empiezan las planificadas y
+ * también las **abiertas con inicio futuro** (23/9: RAP-TEST se abrió el 23/9 para empezar el
+ * 1/10 y el carril decía «ninguna cohorte empieza»); terminan las abiertas.
+ */
 export async function listUpcomingCohorts({
   institutionId,
   days = 30,
@@ -214,7 +218,7 @@ export async function listUpcomingCohorts({
   const until = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
   const [starting, ending] = await Promise.all([
     db.cohort.findMany({
-      where: { status: 'PLANNED', startsOn: { gte: now, lte: until } },
+      where: { status: { in: ['PLANNED', 'OPEN'] }, startsOn: { gte: now, lte: until } },
       orderBy: { startsOn: 'asc' },
       take,
       select: { id: true, code: true, name: true, startsOn: true },
@@ -330,11 +334,18 @@ export async function openCohort({
   institutionId,
   actorId,
   cohortId,
+  skipUnpublished = false,
 }: {
   institutionId: string;
   actorId: string | null;
   cohortId: string;
-}): Promise<{ id: string; assigned: number }> {
+  /**
+   * 23/9: abrir dejando fuera lo que sigue en borrador. Lo que falte entra después por
+   * «Actualizaciones del programa» (`assignPublishedContent`). Sin esto, un solo tema a
+   * medias bloqueaba la apertura entera.
+   */
+  skipUnpublished?: boolean;
+}): Promise<{ id: string; assigned: number; skipped: number }> {
   if (!actorId) {
     // `assignedById` is not nullable: an assignment always records who made it.
     throw new APIError('Missing actor', 'INTERNAL');
@@ -375,7 +386,7 @@ export async function openCohort({
 
     const plan = planCohortOpening(lessons, assessments);
 
-    if (plan.missing.length > 0) {
+    if (plan.missing.length > 0 && !skipUnpublished) {
       throw new APIError(
         'Hay contenido sin versión publicada; la cohorte no se abrió',
         'CONFLICT',
@@ -422,11 +433,12 @@ export async function openCohort({
         after: {
           lessonAssignments: plan.lessons.length,
           assessmentAssignments: plan.assessments.length,
+          skippedUnpublished: plan.missing.length,
         },
       },
     });
 
-    return { id: cohortId, assigned };
+    return { id: cohortId, assigned, skipped: plan.missing.length };
   });
 }
 
@@ -495,4 +507,285 @@ export async function listCohortFormOptions(institutionId: string): Promise<Coho
   ]);
 
   return { programs, partners };
+}
+
+// ─────────────────────────── Preflight y actualizaciones (23/9) ───────────────────────────
+
+export interface OpeningPreflight {
+  cohort: {
+    id: string;
+    code: string;
+    name: string;
+    status: string;
+    startsOn: string;
+    endsOn: string;
+    progression: string;
+  };
+  programName: string;
+  modules: number;
+  lessonsPublished: number;
+  assessmentsPublished: number;
+  enrollments: number;
+  /** Lo que se quedaría fuera por no tener versión publicada. */
+  missing: OpeningPlan['missing'];
+}
+
+/**
+ * Lo que «Abrir» va a hacer, antes de hacerlo: cuántas piezas entran, cuántas se quedan
+ * fuera y cuánta gente hay. Es la misma `planCohortOpening` que usa `openCohort`, así que
+ * lo que dice la revisión es lo que pasa después.
+ */
+export async function getOpeningPreflight({
+  institutionId,
+  cohortId,
+}: {
+  institutionId: string;
+  cohortId: string;
+}): Promise<OpeningPreflight | null> {
+  const db = createTenantClient(institutionId);
+  const cohort = await db.cohort.findFirst({
+    where: { id: cohortId },
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      status: true,
+      startsOn: true,
+      endsOn: true,
+      progression: true,
+      programId: true,
+      program: {
+        select: { name: true, modules: { where: { archivedAt: null }, select: { id: true } } },
+      },
+      _count: { select: { enrollments: true } },
+    },
+  });
+  if (!cohort) return null;
+
+  const [lessons, assessments] = await Promise.all([
+    db.lesson.findMany({
+      where: { programId: cohort.programId, archivedAt: null },
+      select: {
+        id: true,
+        title: true,
+        versions: { select: { id: true, status: true, number: true } },
+      },
+    }),
+    db.assessment.findMany({
+      where: { programId: cohort.programId, archivedAt: null },
+      select: {
+        id: true,
+        title: true,
+        versions: { select: { id: true, status: true, number: true } },
+      },
+    }),
+  ]);
+  const plan = planCohortOpening(lessons, assessments);
+  const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+
+  return {
+    cohort: {
+      id: cohort.id,
+      code: cohort.code,
+      name: cohort.name,
+      status: cohort.status,
+      startsOn: isoDay(cohort.startsOn),
+      endsOn: isoDay(cohort.endsOn),
+      progression: cohort.progression,
+    },
+    programName: cohort.program.name,
+    modules: cohort.program.modules.length,
+    lessonsPublished: plan.lessons.length,
+    assessmentsPublished: plan.assessments.length,
+    enrollments: cohort._count.enrollments,
+    missing: plan.missing,
+  };
+}
+
+export interface PendingContentUpdate {
+  kind: 'lesson' | 'assessment';
+  id: string;
+  title: string;
+  moduleName: string | null;
+  versionNumber: number;
+}
+
+/**
+ * Contenido publicado del programa que esta cohorte abierta todavía no tiene asignado
+ * (23/9): un tema o examen creado y publicado después de abrirla, o dejado fuera al abrir.
+ * Solo piezas nuevas: una versión nueva de algo ya asignado no entra aquí, porque la
+ * cohorte abierta conserva la versión con la que empezó (decisión de congelar al abrir).
+ */
+export async function listPendingContentUpdates({
+  institutionId,
+  cohortId,
+}: {
+  institutionId: string;
+  cohortId: string;
+}): Promise<PendingContentUpdate[]> {
+  const db = createTenantClient(institutionId);
+  const cohort = await db.cohort.findFirst({
+    where: { id: cohortId },
+    select: {
+      status: true,
+      programId: true,
+      lessonAssignments: { select: { lessonId: true } },
+      assessmentAssignments: { select: { assessmentId: true } },
+    },
+  });
+  if (!cohort || cohort.status !== 'OPEN') return [];
+
+  const assignedLessons = new Set(cohort.lessonAssignments.map((a) => a.lessonId));
+  const assignedAssessments = new Set(cohort.assessmentAssignments.map((a) => a.assessmentId));
+
+  const [lessons, assessments] = await Promise.all([
+    db.lesson.findMany({
+      where: { programId: cohort.programId, archivedAt: null, id: { notIn: [...assignedLessons] } },
+      select: {
+        id: true,
+        title: true,
+        module: { select: { name: true } },
+        versions: { select: { id: true, status: true, number: true } },
+      },
+    }),
+    db.assessment.findMany({
+      where: {
+        programId: cohort.programId,
+        archivedAt: null,
+        id: { notIn: [...assignedAssessments] },
+      },
+      select: {
+        id: true,
+        title: true,
+        module: { select: { name: true } },
+        versions: { select: { id: true, status: true, number: true } },
+      },
+    }),
+  ]);
+
+  const rows: PendingContentUpdate[] = [];
+  for (const lesson of lessons) {
+    const v = pickPublishedVersion(lesson.versions);
+    if (v)
+      rows.push({
+        kind: 'lesson',
+        id: lesson.id,
+        title: lesson.title,
+        moduleName: lesson.module.name,
+        versionNumber: v.number,
+      });
+  }
+  for (const assessment of assessments) {
+    const v = pickPublishedVersion(assessment.versions);
+    if (v)
+      rows.push({
+        kind: 'assessment',
+        id: assessment.id,
+        title: assessment.title,
+        moduleName: assessment.module?.name ?? null,
+        versionNumber: v.number,
+      });
+  }
+  return rows;
+}
+
+/**
+ * Asigna a una cohorte abierta contenido publicado que no tenía (23/9): la versión
+ * publicada más alta de cada pieza, disponible desde ahora. `items` vacío = todo lo
+ * pendiente. Idempotente: lo ya asignado se salta.
+ */
+export async function assignPublishedContent({
+  institutionId,
+  actorId,
+  cohortId,
+  items = [],
+  now = new Date(),
+}: {
+  institutionId: string;
+  actorId: string | null;
+  cohortId: string;
+  items?: Array<{ kind: 'lesson' | 'assessment'; id: string }>;
+  now?: Date;
+}): Promise<{ assigned: number }> {
+  if (!actorId) throw new APIError('Missing actor', 'INTERNAL');
+  const db = createTenantClient(institutionId);
+
+  const cohort = await db.cohort.findFirst({ where: { id: cohortId }, select: { status: true } });
+  if (!cohort) throw new APIError('Cohort not found', 'NOT_FOUND');
+  if (cohort.status !== 'OPEN')
+    throw new APIError('Solo se añade contenido a una cohorte abierta', 'CONFLICT');
+
+  const pending = await listPendingContentUpdates({ institutionId, cohortId });
+  const wanted =
+    items.length === 0
+      ? pending
+      : pending.filter((p) => items.some((i) => i.kind === p.kind && i.id === p.id));
+  if (wanted.length === 0) return { assigned: 0 };
+
+  const lessonIds = wanted.filter((w) => w.kind === 'lesson').map((w) => w.id);
+  const assessmentIds = wanted.filter((w) => w.kind === 'assessment').map((w) => w.id);
+
+  const [lessons, assessments] = await Promise.all([
+    db.lesson.findMany({
+      where: { id: { in: lessonIds } },
+      select: {
+        id: true,
+        title: true,
+        versions: { select: { id: true, status: true, number: true } },
+      },
+    }),
+    db.assessment.findMany({
+      where: { id: { in: assessmentIds } },
+      select: {
+        id: true,
+        title: true,
+        versions: { select: { id: true, status: true, number: true } },
+      },
+    }),
+  ]);
+  const plan = planCohortOpening(lessons, assessments);
+
+  await db.$transaction(async (tx) => {
+    if (plan.lessons.length > 0) {
+      await tx.lessonAssignment.createMany({
+        data: plan.lessons.map((l) => ({
+          institutionId,
+          cohortId,
+          lessonId: l.lessonId,
+          lessonVersionId: l.lessonVersionId,
+          availableFrom: now,
+          assignedById: actorId,
+        })),
+        skipDuplicates: true,
+      });
+    }
+    if (plan.assessments.length > 0) {
+      await tx.assessmentAssignment.createMany({
+        data: plan.assessments.map((a) => ({
+          institutionId,
+          cohortId,
+          assessmentId: a.assessmentId,
+          assessmentVersionId: a.assessmentVersionId,
+          availableFrom: now,
+          assignedById: actorId,
+        })),
+        skipDuplicates: true,
+      });
+    }
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'cohort',
+        entityId: cohortId,
+        action: 'content_added',
+        after: {
+          lessons: plan.lessons.map((l) => l.lessonId),
+          assessments: plan.assessments.map((a) => a.assessmentId),
+        },
+      },
+    });
+  });
+
+  return { assigned: plan.lessons.length + plan.assessments.length };
 }

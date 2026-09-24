@@ -12,12 +12,17 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { APIError } from '@/lib/core/errors';
 import { getCohortOutline } from '@/features/learn/server/cohort.service';
 
-export const GET = apiHandler({ capability: 'lesson.read' })(async () => {
+export const GET = apiHandler({ capability: 'lesson.read' })(async (req) => {
   const ctx = await getRequestContext();
   if (!ctx.person) throw new APIError('Authentication required', 'UNAUTHENTICATED');
+
+  // `?enrollmentId=` elige entre varias matrículas (21/9); sin él, la más reciente. Un id
+  // que no sea de la persona no encuentra nada: el filtro por `personId` sigue mandando.
+  const enrollmentId = new URL(req.url).searchParams.get('enrollmentId');
 
   return getCohortOutline({
     institutionId: ctx.institution.id,
     personId: ctx.person.id,
+    enrollmentId,
   });
 });

@@ -20,6 +20,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatCueTime, type Cue } from '@/lib/media/webvtt';
 import { cn } from '@/lib/utils';
+import { TRANSCRIPT_PREF_EVENT, transcriptOpenPreference } from './reading-preferences';
 
 export const TRANSCRIPT_READ_EVENT = 'ce:transcript-read';
 const VIMEO_ORIGIN = 'https://player.vimeo.com';
@@ -47,6 +48,19 @@ function Transcript({ transcript }: { transcript: TranscriptProps }) {
   const id = useId();
   const [current, setCurrent] = useState(-1);
   const [textOnly, setTextOnly] = useState(false);
+  // Plegada por defecto (23/9): el vídeo va primero y la transcripción es un apoyo que se
+  // pide. Quien la necesita siempre lo deja dicho en «Cómo leer» y aquí se abre sola.
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(transcriptOpenPreference());
+    const onPref = (event: Event) => {
+      const detail = (event as CustomEvent<{ open: boolean }>).detail;
+      if (detail) setOpen(detail.open);
+    };
+    window.addEventListener(TRANSCRIPT_PREF_EVENT, onPref);
+    return () => window.removeEventListener(TRANSCRIPT_PREF_EVENT, onPref);
+  }, []);
   const iframe = useRef<HTMLIFrameElement | null>(null);
   const figure = useRef<HTMLElement | null>(null);
   const list = useRef<HTMLOListElement>(null);
@@ -124,11 +138,18 @@ function Transcript({ transcript }: { transcript: TranscriptProps }) {
   };
 
   return (
-    <section aria-labelledby={`${id}-h`} className="border-border-muted rounded-card mt-6 border">
-      <div className="border-border-muted flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
-        <h2 id={`${id}-h`} className="type-body-emphasis m-0">
+    <details
+      open={open}
+      onToggle={(event) => setOpen((event.target as HTMLDetailsElement).open)}
+      className="border-border-muted rounded-card mt-6 border"
+    >
+      <summary className="type-body-emphasis min-h-touch flex cursor-pointer items-center justify-between gap-2 px-4 py-2">
+        <span id={`${id}-h`}>
           {transcript.title ? t('titleNamed', { title: transcript.title }) : t('title')}
-        </h2>
+        </span>
+        <span className="type-caption text-text-muted">{open ? t('hide') : t('show')}</span>
+      </summary>
+      <div className="border-border-muted flex flex-wrap items-center justify-end gap-2 border-t px-4 py-2">
         <label className="type-caption min-h-touch inline-flex cursor-pointer items-center gap-2">
           <input
             type="checkbox"
@@ -167,6 +188,6 @@ function Transcript({ transcript }: { transcript: TranscriptProps }) {
         ))}
       </ol>
       <div ref={sentinel} aria-hidden="true" className="h-px" />
-    </section>
+    </details>
   );
 }

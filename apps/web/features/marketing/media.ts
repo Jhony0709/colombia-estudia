@@ -15,9 +15,14 @@ export type MediaId =
   | 'editorial-colombia' // paisaje/patrimonio (panel "Una Colombia más preparada")
   | 'banner-student' // persona con audífonos/portátil (banner azul)
   | 'final-students' // grupo de estudiantes (CTA final)
-  | 'program-bachillerato'; // tarjeta del programa
+  | 'program-bachillerato' // tarjeta del programa
+  // Columna izquierda de las pantallas de acceso (23/9): una por intención.
+  | 'auth-login' // iniciar sesión
+  | 'auth-register' // registro
+  | 'auth-recover' // recuperar, restablecer, segundo factor
+  | 'auth-strip'; // banda apaisada sobre el formulario en el teléfono
 
-export type AspectRatio = '4/5' | '16/9' | '3/2' | '1/1' | '21/9' | '5/4';
+export type AspectRatio = '4/5' | '16/9' | '3/2' | '1/1' | '21/9' | '5/4' | '3/4' | '3/1';
 
 export interface EditorialMedia {
   src: string;
@@ -69,6 +74,27 @@ export const MEDIA_SLOTS: readonly MediaSlot[] = [
     id: 'program-bachillerato',
     ratio: '16/9',
     brief: 'Aula, tutoría o estudiante adulto; horizontal.',
+  },
+  {
+    id: 'auth-login',
+    ratio: '3/4',
+    brief:
+      'Persona adulta estudiando en casa, vertical; el tercio izquierdo tranquilo para el titular.',
+  },
+  {
+    id: 'auth-register',
+    ratio: '3/4',
+    brief: 'Persona adulta empezando a estudiar, vertical; misma composición que auth-login.',
+  },
+  {
+    id: 'auth-recover',
+    ratio: '3/4',
+    brief: 'Persona con el teléfono, en tránsito, vertical; misma composición que auth-login.',
+  },
+  {
+    id: 'auth-strip',
+    ratio: '3/1',
+    brief: 'Mesa de estudio sin caras, apaisada 3:1; la mitad izquierda libre.',
   },
 ];
 
@@ -122,6 +148,35 @@ export const MEDIA: Record<MediaId, EditorialMedia | null> = {
     width: 1600,
     height: 900,
     focalPoint: { x: 0.25, y: 0.5 },
+  },
+  // Pantallas de acceso (23/9). Generadas, como las demás: ilustración, no estudiantes reales.
+  'auth-login': {
+    src: '/photos/login-woman.jpg',
+    alt: 'Mujer adulta de cárdigan verde escribe en un cuaderno junto a una ventana con vista a una ciudad entre montañas.',
+    width: 1086,
+    height: 1448,
+    focalPoint: { x: 0.7, y: 0.4 },
+  },
+  'auth-register': {
+    src: '/photos/register-man.jpg',
+    alt: 'Hombre adulto estudia con un cuaderno en la mesa de la cocina, al atardecer, con un dibujo infantil pegado en la nevera.',
+    width: 1086,
+    height: 1448,
+    focalPoint: { x: 0.65, y: 0.45 },
+  },
+  'auth-recover': {
+    src: '/photos/recover-bus.jpg',
+    alt: 'Joven lee en su teléfono sentada junto a la ventana de un bus, con un cuaderno en las piernas y la ciudad afuera.',
+    width: 1086,
+    height: 1448,
+    focalPoint: { x: 0.7, y: 0.4 },
+  },
+  'auth-strip': {
+    src: '/photos/login-strip.jpg',
+    alt: 'Mesa de madera con un cuaderno abierto, un bolígrafo, una taza y un portátil, con luz de ventana.',
+    width: 2172,
+    height: 724,
+    focalPoint: { x: 0.75, y: 0.5 },
   },
 };
 

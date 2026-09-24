@@ -6,6 +6,7 @@
  */
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
@@ -52,7 +53,7 @@ export function PersonGuardians({
   guardians,
 }: {
   personId: string;
-  guardians: Array<{ id: string; name: string; relationship: string }>;
+  guardians: Array<{ id: string; name: string; relationship: string; hasAccount: boolean }>;
 }) {
   const t = useTranslations('people');
   const { busy, error, done, send } = useMutation();
@@ -75,6 +76,14 @@ export function PersonGuardians({
             <li key={g.id} className="flex flex-wrap items-center gap-2">
               <span className="type-body text-text flex-1">
                 {t('guardianIs', { name: g.name, relationship: g.relationship })}
+                {/* Fase C (23/9): el acudiente entra a /familia con su propia cuenta; la
+                    invitación se manda desde su ficha, como a cualquier persona. */}
+                <span className="type-caption text-text-muted block">
+                  {g.hasAccount ? t('guardianHasAccount') : t('guardianNoAccount')}{' '}
+                  <Link href={`/personas/${g.id}`} className="text-text-link underline">
+                    {g.hasAccount ? t('guardianOpen') : t('guardianInvite')}
+                  </Link>
+                </span>
               </span>
               <Button
                 variant="quiet"

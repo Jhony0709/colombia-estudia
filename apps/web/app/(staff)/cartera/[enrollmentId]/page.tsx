@@ -16,7 +16,8 @@ import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { DataTable } from '@/components/molecules/data-table';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { StatCard, StatGrid } from '@/components/molecules/stat-card';
-import { Badge, type BadgeVariant } from '@/components/atoms/badge';
+import { Badge } from '@/components/atoms/badge';
+import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 import { Alert } from '@/components/atoms/alert';
 import { Wallet, TriangleAlert, CalendarClock, CircleCheck } from 'lucide-react';
 import {
@@ -29,19 +30,6 @@ import {
 } from './billing-actions';
 
 export const metadata: Metadata = { title: 'Cartera de la matrícula' };
-
-const STATUS_BADGE: Record<string, BadgeVariant> = {
-  CURRENT: 'success',
-  OVERDUE: 'error',
-  IN_AGREEMENT: 'warning',
-  PARTNER_PAID: 'info',
-};
-const INSTALLMENT_BADGE: Record<string, BadgeVariant> = {
-  OPEN: 'neutral',
-  PARTIALLY_PAID: 'info',
-  PAID: 'success',
-  VOID: 'neutral',
-};
 
 export default async function EnrollmentBillingPage({
   params,
@@ -137,9 +125,7 @@ export default async function EnrollmentBillingPage({
                   })
                 : t('allPaid')}
               {' · '}
-              <Badge variant={STATUS_BADGE[account.status ?? 'CURRENT']}>
-                {t(`statuses.${account.status}`)}
-              </Badge>
+              <StatusBadge domain="account" status={account.status ?? 'CURRENT'} />
             </p>
           </section>
 
@@ -178,11 +164,12 @@ export default async function EnrollmentBillingPage({
                   key: 'status',
                   header: t('status'),
                   narrow: true,
-                  cell: (i) => (
-                    <Badge variant={i.overdue ? 'error' : INSTALLMENT_BADGE[i.status]}>
-                      {i.overdue ? t('installment.overdue') : t(`installment.statuses.${i.status}`)}
-                    </Badge>
-                  ),
+                  cell: (i) =>
+                    i.overdue ? (
+                      <Badge variant="error">{t('installment.overdue')}</Badge>
+                    ) : (
+                      <StatusBadge domain="installment" status={i.status} />
+                    ),
                 },
                 {
                   key: 'actions',

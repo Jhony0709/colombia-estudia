@@ -19,30 +19,30 @@ cómo se nombra en material comercial. El código usa el término en inglés.
 
 ## Programa y cohortes
 
-| Término        | Significado                                                                                | UI           | Venta      |
-| -------------- | ------------------------------------------------------------------------------------------ | ------------ | ---------- |
-| **Program**    | Lo que se vende: "Bachillerato Valida YA". Dueño del catálogo.                             | "Programa"   | "Programa" |
-| **Module**     | Sección ordenada del programa: "Módulo Mes 1". Sus evaluaciones van después de sus temas.  | "Módulo"     | —          |
-| **Subject**    | Español, Física, Inglés. Transversal.                                                      | "Asignatura" | —          |
-| **Cohort**     | Edición del programa con fechas: "2026-1", "2026-1 ValoraT". Unidad comercial y académica. | "Cohorte"    | "Cohorte"  |
-| **Enrollment** | Estudiante en una cohorte. Estado, acceso hasta, si era menor al matricularse.             | "Matrícula"  | —          |
+| Término        | Significado                                                                                                                 | UI           | Venta      |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------ | ---------- |
+| **Program**    | Lo que se vende: "Bachillerato Valida YA". Dueño del catálogo.                                                              | "Programa"   | "Programa" |
+| **Module**     | Sección ordenada del programa: "Módulo Mes 1". Cada tema lleva detrás sus exámenes; las evaluaciones sin tema van al final. | "Módulo"     | —          |
+| **Subject**    | Español, Física, Inglés. Transversal.                                                                                       | "Asignatura" | —          |
+| **Cohort**     | Edición del programa con fechas: "2026-1", "2026-1 ValoraT". Unidad comercial y académica.                                  | "Cohorte"    | "Cohorte"  |
+| **Enrollment** | Estudiante en una cohorte. Estado, acceso hasta, si era menor al matricularse.                                              | "Matrícula"  | —          |
 
 ## Contenido y evaluación
 
-| Término                                | Significado                                                                                                                                                    | UI                                               |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| **Lesson**                             | Contenedor editable de una unidad de contenido.                                                                                                                | "Tema"                                           |
-| **LessonVersion**                      | Publicación **inmutable** de un tema. `content` es Markdown.                                                                                                   | "Versión" (solo autores)                         |
-| **Assignment**                         | Un tema o evaluación disponible para una cohorte; su versión puede cambiar.                                                                                    | —                                                |
-| **MediaAsset**                         | Video (Vimeo), imagen, audio o PDF referenciado desde el Markdown, con su alternativa accesible.                                                               | "Recurso"                                        |
-| ~~**Legacy**~~ (RETIRADO 18/9)         | Recurso migrado sin alternativa textual, publicado con excepción auditada. Sin importación desde LearnDash no existe: todo recurso publicado trae alternativa. | —                                                |
-| **LessonProgress**                     | Avance de una matrícula sobre un tema, con evidencia.                                                                                                          | "Progreso"                                       |
-| **Assessment** / **AssessmentVersion** | Contenedor editable / publicación inmutable de una evaluación (preguntas + `answerKey` aparte + reglas del intento).                                           | "Evaluación"                                     |
-| **Attempt**                            | Un intento. Respuestas, ajustes aplicados, nota y estado.                                                                                                      | "Intento"                                        |
-| **Score**                              | Nota de una asignatura en una cohorte, 0–100, derivada del mejor intento.                                                                                      | "Nota"                                           |
-| **Submission**                         | Entrega de una actividad (tema con `requiresSubmission`): texto y/o archivo, revisada por un instructor.                                                       | "Entrega"                                        |
-| **LiveSession**                        | Clase sincrónica de una cohorte: enlace y fecha.                                                                                                               | "Clase en vivo"                                  |
-| **Certificate**                        | Constancia de finalización de módulo o programa, con código público verificable. **No es el título de bachiller.**                                             | "Constancia" (módulo) / "Certificado" (programa) |
+| Término                                | Significado                                                                                                                                                    | UI                                                                      |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **Lesson**                             | Contenedor editable de una unidad de contenido.                                                                                                                | "Tema"                                                                  |
+| **LessonVersion**                      | Publicación **inmutable** de un tema. `content` es Markdown.                                                                                                   | "Versión" (solo autores)                                                |
+| **Assignment**                         | Un tema o evaluación disponible para una cohorte; su versión puede cambiar.                                                                                    | —                                                                       |
+| **MediaAsset**                         | Video (Vimeo), imagen, audio o PDF referenciado desde el Markdown, con su alternativa accesible.                                                               | "Recurso"                                                               |
+| ~~**Legacy**~~ (RETIRADO 18/9)         | Recurso migrado sin alternativa textual, publicado con excepción auditada. Sin importación desde LearnDash no existe: todo recurso publicado trae alternativa. | —                                                                       |
+| **LessonProgress**                     | Avance de una matrícula sobre un tema, con evidencia.                                                                                                          | "Progreso"                                                              |
+| **Assessment** / **AssessmentVersion** | Contenedor editable / publicación inmutable de un examen (preguntas + `answerKey` aparte + reglas del intento). Con `lessonId`, examen de un tema (20/9).      | "Examen" (20/9; antes "Evaluación"). Tipos: Diagnóstico, Parcial, Final |
+| **Attempt**                            | Un intento. Respuestas, ajustes aplicados, nota y estado.                                                                                                      | "Intento"                                                               |
+| **Score**                              | Nota de una asignatura en una cohorte, 0–100, derivada del mejor intento.                                                                                      | "Nota"                                                                  |
+| **Submission**                         | Entrega de una actividad (tema con `requiresSubmission`): texto y/o archivo, revisada por un instructor.                                                       | "Actividad" (20/9; antes "Entrega")                                     |
+| **LiveSession**                        | Clase sincrónica de una cohorte: enlace y fecha.                                                                                                               | "Clase en vivo"                                                         |
+| **Certificate**                        | Constancia de finalización de módulo o programa, con código público verificable. **No es el título de bachiller.**                                             | "Constancia" (módulo) / "Certificado" (programa)                        |
 
 ## Ajustes razonables
 

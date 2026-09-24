@@ -116,6 +116,7 @@ export async function issueDueCertificatesForEnrollment({
     select: {
       id: true,
       studentId: true,
+      startsAtModule: true,
       cohort: {
         select: {
           id: true,
@@ -174,7 +175,11 @@ export async function issueDueCertificatesForEnrollment({
 
   // Solo cuentan los módulos con algo asignado en esta cohorte: un módulo del programa sin
   // temas ni evaluaciones asignados no se puede «completar», y tampoco debe bloquear.
+  // Y solo desde el grado de entrada (20/9): los módulos anteriores a `startsAtModule` no
+  // son parte de su ruta, así que ni piden constancia ni frenan la de programa.
+  const fromModule = e.startsAtModule ?? 1;
   const modules: ModuleInput[] = e.cohort.program.modules
+    .filter((m) => m.position >= fromModule)
     .map((m) => ({
       id: m.id,
       position: m.position,

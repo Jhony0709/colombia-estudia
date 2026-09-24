@@ -19,10 +19,11 @@ describe('buildStaffNav', () => {
         caps('people.manage', 'cohort.manage', 'lesson.author', 'institution.manage')
       ).map((i) => i.href)
     ).toEqual([
+      '/inicio',
       '/contenido/asignaturas',
       '/contenido/programas',
       '/contenido/temas',
-      '/contenido/evaluaciones',
+      '/contenido/examenes',
       '/cohortes',
       '/personas',
       '/admin/institucion',
@@ -34,20 +35,22 @@ describe('buildStaffNav', () => {
   // evaluaciones, pero programas y asignaturas siguen pidiendo institution.manage.
   it('a un INSTRUCTOR le enseña lo que escribe, no la forma del programa', () => {
     expect(buildStaffNav(caps('lesson.author', 'lesson.read')).map((i) => i.href)).toEqual([
+      '/inicio',
       '/contenido/temas',
-      '/contenido/evaluaciones',
+      '/contenido/examenes',
     ]);
   });
 
   it('hides the institution link from OPERATIONS', () => {
     expect(
       buildStaffNav(caps('people.manage', 'cohort.manage', 'billing.manage')).map((i) => i.href)
-    ).toEqual(['/cohortes', '/personas', '/cartera']);
+    ).toEqual(['/inicio', '/cohortes', '/personas', '/cartera']);
   });
 
   // INCLUSION_COORDINATOR solo tiene accommodation.manage: ve el reporte de inclusión y nada más (19/9).
   it('a coordinación de inclusión le enseña solo su reporte', () => {
     expect(buildStaffNav(caps('accommodation.manage')).map((i) => i.href)).toEqual([
+      '/inicio',
       '/admin/inclusion/reporte',
     ]);
   });

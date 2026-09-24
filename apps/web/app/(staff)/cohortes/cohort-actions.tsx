@@ -5,8 +5,11 @@
  * SSOT: plan/06-cohortes-y-personas.md:23-30.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CircleAlert, CircleCheck } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
 import { Button } from '@/components/atoms/button';
@@ -59,15 +62,19 @@ export function CohortStatusAction({
   status,
   code,
   prominent = false,
+  programId = null,
 }: {
   cohortId: string;
   status: string;
   code: string;
   /** En la cabecera de la ficha es LA acción: relleno. En una fila de la lista, discreto. */
   prominent?: boolean;
+  /** Para el enlace «Volver al contenido» de la revisión previa. */
+  programId?: string | null;
 }) {
   const t = useTranslations('cohorts');
   const { busy, error, missing, send } = useCohortMutation();
+  const [reviewing, setReviewing] = useState(false);
 
   if (status !== 'PLANNED' && status !== 'OPEN') return null;
 
@@ -79,10 +86,24 @@ export function CohortStatusAction({
         variant={prominent ? (op === 'open' ? 'primary' : 'secondary') : 'quiet'}
         disabled={busy}
         aria-label={op === 'open' ? t('openNamed', { code }) : t('closeNamed', { code })}
-        onClick={() => send(`/api/cohorts/${cohortId}`, 'PATCH', { op })}
+        onClick={() =>
+          op === 'open' ? setReviewing(true) : send(`/api/cohorts/${cohortId}`, 'PATCH', { op })
+        }
       >
         {op === 'open' ? t('open') : t('close')}
       </Button>
+
+      {/* Abrir pasa por la revisión previa (23/9): qué se asigna, quién entra, qué se
+          queda fuera. Es la misma regla que ejecuta la apertura. */}
+      {op === 'open' && (
+        <OpeningPreflightSheet
+          cohortId={cohortId}
+          code={code}
+          programId={programId}
+          open={reviewing}
+          onOpenChange={setReviewing}
+        />
+      )}
 
       {error && (
         <div role="alert">
@@ -99,6 +120,185 @@ export function CohortStatusAction({
         </div>
       )}
     </div>
+  );
+}
+
+interface Preflight {
+  programName: string;
+  modules: number;
+  lessonsPublished: number;
+  assessmentsPublished: number;
+  enrollments: number;
+  cohort: { startsOn: string; endsOn: string; progression: string };
+  missing: Missing[];
+}
+
+/**
+ * La revisión antes de abrir (23/9): el equivalente de una lista de comprobación antes de
+ * publicar. Se carga al abrir la hoja, del mismo `planCohortOpening` que usa la apertura.
+ * Con piezas en borrador, la acción cambia a «Abrir sin lo pendiente» y dice adónde irán.
+ */
+function OpeningPreflightSheet({
+  cohortId,
+  code,
+  programId,
+  open,
+  onOpenChange,
+}: {
+  cohortId: string;
+  code: string;
+  programId: string | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const t = useTranslations('cohorts.preflight');
+  const tc = useTranslations('cohorts');
+  const router = useRouter();
+  const [data, setData] = useState<Preflight | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    setData(null);
+    setLoadError(null);
+    setDone(null);
+    fetch(`/api/cohorts/${cohortId}/preflight`)
+      .then(async (res) => {
+        const payload = await res.json();
+        if (!res.ok) throw new Error(payload?.error?.message ?? 'error');
+        if (!cancelled) setData((payload.data ?? payload) as Preflight);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError(tc('error'));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, cohortId, tc]);
+
+  const confirm = async (skipUnpublished: boolean) => {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/cohorts/${cohortId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ op: 'open', skipUnpublished }),
+      });
+      const payload = await res.json();
+      if (!res.ok) {
+        setError(payload?.error?.message ?? tc('error'));
+        return;
+      }
+      const result = (payload.data ?? payload) as { assigned: number };
+      setDone(t('opened', { assigned: result.assigned }));
+      router.refresh();
+      setTimeout(() => onOpenChange(false), 1200);
+    } catch {
+      setError(tc('error'));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const nothing = data !== null && data.lessonsPublished + data.assessmentsPublished === 0;
+  const hasMissing = data !== null && data.missing.length > 0;
+
+  return (
+    <Sheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('title', { code })}
+      description={t('description')}
+    >
+      {loadError && <Alert severity="error">{loadError}</Alert>}
+      {!data && !loadError && <p className="type-body text-text-muted">{t('loading')}</p>}
+      {data && (
+        <div className="space-y-4">
+          <ul className="space-y-2">
+            <Check ok label={t('program', { name: data.programName })} />
+            <Check ok={data.modules > 0} label={t('modules', { count: data.modules })} />
+            <Check
+              ok={data.lessonsPublished > 0}
+              label={t('lessons', { count: data.lessonsPublished })}
+            />
+            <Check
+              ok={data.assessmentsPublished > 0}
+              label={t('assessments', { count: data.assessmentsPublished })}
+            />
+            <Check
+              ok={data.enrollments > 0}
+              label={t('enrollments', { count: data.enrollments })}
+            />
+            <Check
+              ok
+              label={t('dates', {
+                startsOn: data.cohort.startsOn,
+                endsOn: data.cohort.endsOn,
+                progression:
+                  data.cohort.progression === 'FREE'
+                    ? tc('progressionFree')
+                    : tc('progressionLinear'),
+              })}
+            />
+          </ul>
+
+          {hasMissing && (
+            <Alert severity="warning">
+              <p className="type-body-emphasis m-0">
+                {t('missingTitle', { count: data.missing.length })}
+              </p>
+              <ul className="type-caption mt-1 list-disc space-y-0.5 pl-5">
+                {data.missing.map((m) => (
+                  <li key={`${m.kind}-${m.title}`}>
+                    {tc(`missingKind.${m.kind}`)}: {m.title}
+                  </li>
+                ))}
+              </ul>
+              <p className="type-caption mt-2">{t('missingHint')}</p>
+            </Alert>
+          )}
+          {nothing && <Alert severity="error">{t('nothingToAssign')}</Alert>}
+          {error && <Alert severity="error">{error}</Alert>}
+          {done && <Alert severity="success">{done}</Alert>}
+
+          <div className="flex flex-wrap justify-end gap-2 pt-2">
+            {programId && (hasMissing || nothing) && (
+              <Button asChild variant="quiet">
+                <Link href={`/contenido/programas/${programId}`}>{t('goToBuilder')}</Link>
+              </Button>
+            )}
+            <Button
+              onClick={() => confirm(hasMissing)}
+              loading={busy}
+              disabled={nothing || done !== null}
+            >
+              {hasMissing ? t('confirmSkipping') : t('confirm')}
+            </Button>
+          </div>
+        </div>
+      )}
+    </Sheet>
+  );
+}
+
+function Check({ ok, label }: { ok: boolean; label: string }) {
+  const Icon = ok ? CircleCheck : CircleAlert;
+  return (
+    <li className="type-body flex items-start gap-2">
+      <Icon
+        aria-hidden
+        className={cn(
+          'mt-0.5 size-4 shrink-0',
+          ok ? 'text-status-success-base' : 'text-status-warning-base'
+        )}
+      />
+      <span className={cn(!ok && 'text-text-muted')}>{label}</span>
+    </li>
   );
 }
 

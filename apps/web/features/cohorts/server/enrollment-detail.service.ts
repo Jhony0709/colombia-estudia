@@ -56,8 +56,18 @@ export interface EnrollmentDetail {
   completedAt: string | null;
   withdrawnAt: string | null;
   withdrawReason: string | null;
+  /** Grado de entrada (20/9): posición del primer módulo de su ruta. Nulo = desde el primero. */
+  startsAtModule: number | null;
   student: { id: string; name: string };
-  cohort: { id: string; code: string; name: string; programName: string; status: string };
+  /** `startsOn` como día (`YYYY-MM-DD`): «no ha empezado» solo tiene sentido si la cohorte ya empezó. */
+  cohort: {
+    id: string;
+    code: string;
+    name: string;
+    programName: string;
+    status: string;
+    startsOn: string;
+  };
   lessons: EnrollmentLessonRow[];
   assessments: EnrollmentAssessmentRow[];
   progress: { completed: number; total: number };
@@ -85,6 +95,7 @@ export async function getEnrollmentDetail({
       completedAt: true,
       withdrawnAt: true,
       withdrawReason: true,
+      startsAtModule: true,
       student: { select: { id: true, givenName: true, familyName: true } },
       cohort: {
         select: {
@@ -92,6 +103,7 @@ export async function getEnrollmentDetail({
           code: true,
           name: true,
           status: true,
+          startsOn: true,
           program: { select: { name: true } },
         },
       },
@@ -157,7 +169,11 @@ export async function getEnrollmentDetail({
     }),
   ]);
 
+  // Su ruta empieza en su grado de entrada (20/9): lo anterior no se lista ni se cuenta.
+  const fromModule = e.startsAtModule ?? 1;
+
   const lessons: EnrollmentLessonRow[] = lessonAssignments
+    .filter((a) => a.lesson.module.position >= fromModule)
     .map((a) => {
       const p = a.progress[0];
       return {
@@ -179,6 +195,7 @@ export async function getEnrollmentDetail({
     .sort((x, y) => x.modulePosition - y.modulePosition || x.position - y.position);
 
   const assessments: EnrollmentAssessmentRow[] = assessmentAssignments
+    .filter((a) => (a.assessment.module?.position ?? fromModule) >= fromModule)
     .map((a) => ({
       assignmentId: a.id,
       moduleName: a.assessment.module?.name ?? '',
@@ -213,6 +230,7 @@ export async function getEnrollmentDetail({
     completedAt: e.completedAt ? e.completedAt.toISOString() : null,
     withdrawnAt: e.withdrawnAt ? e.withdrawnAt.toISOString() : null,
     withdrawReason: e.withdrawReason,
+    startsAtModule: e.startsAtModule,
     student: { id: e.student.id, name: `${e.student.givenName} ${e.student.familyName}` },
     cohort: {
       id: e.cohort.id,
@@ -220,6 +238,7 @@ export async function getEnrollmentDetail({
       name: e.cohort.name,
       programName: e.cohort.program.name,
       status: e.cohort.status,
+      startsOn: e.cohort.startsOn.toISOString().slice(0, 10),
     },
     lessons,
     assessments,

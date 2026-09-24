@@ -24,6 +24,9 @@ describe('isProtected', () => {
       '/api/jobs/daily',
       // La portada (19/9): pública sin sesión; con sesión redirige (app/page.tsx).
       '/',
+      // Registro público (Fase B, 23/9): con sesión redirige (app/(public)/registro/page.tsx).
+      '/registro',
+      '/api/auth/register',
     ])('%s is NOT protected', (path) => {
       expect(isProtected(path)).toBe(false);
     });
@@ -32,9 +35,10 @@ describe('isProtected', () => {
   describe('protected routes', () => {
     it.each([
       '/ingresar',
+      '/inicio',
       '/aprender',
       '/aprender/tema/123',
-      '/aprender/evaluacion/456',
+      '/aprender/examen/456',
       '/aprender/resultados',
       '/aprender/mi-cuenta',
       '/contenido',

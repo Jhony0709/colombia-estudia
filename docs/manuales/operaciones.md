@@ -20,9 +20,9 @@ Cada persona recibe un correo con un enlace de 7 días para crear su contraseña
 pago» → lee el resumen → «Confirmar». Te equivocaste: «Anular» con motivo (queda el
 rastro, nunca se borra). Acuerdo de pago: cuotas nuevas → «Ver el calendario» → «Firmar».
 
-## Entregas
+## Actividades
 
-`/cohortes/[cohorte]/entregas`: abre una entrega, lee el texto o descarga el archivo,
+`/cohortes/[cohorte]/actividades`: abre una actividad, lee el texto o descarga el archivo,
 «Aprobar» (completa el tema) o «Devolver» con comentario (obligatorio).
 
 ## Avance

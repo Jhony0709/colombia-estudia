@@ -2,13 +2,14 @@
  * Auth layout.
  * SSOT: plan/03-identidad-y-acceso.md §Flujos
  *
- * Centered container for auth pages. No navigation.
+ * 23/9: el cascarón a dos columnas (`AuthShell`), con la foto según la pantalla
+ * (`AuthFrame`). Sin navegación. La política de datos de la institución va al pie.
  */
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="bg-surface-canvas flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">{children}</div>
-    </div>
-  );
+import { getRequestContext } from '@/lib/authz/request-context';
+import { AuthFrame } from './auth-frame';
+
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const ctx = await getRequestContext();
+  return <AuthFrame dataPolicyUrl={ctx.institution.dataPolicyUrl ?? null}>{children}</AuthFrame>;
 }

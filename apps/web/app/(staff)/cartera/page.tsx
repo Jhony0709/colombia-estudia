@@ -28,16 +28,9 @@ import { FilterChips, type FilterChip } from '@/components/molecules/filter-chip
 import { StatCard, StatGrid } from '@/components/molecules/stat-card';
 import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
 import { Button } from '@/components/atoms/button';
-import { Badge, type BadgeVariant } from '@/components/atoms/badge';
+import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 
 export const metadata: Metadata = { title: 'Cartera' };
-
-const STATUS_BADGE: Record<string, BadgeVariant> = {
-  CURRENT: 'success',
-  OVERDUE: 'error',
-  IN_AGREEMENT: 'warning',
-  PARTNER_PAID: 'info',
-};
 
 function hrefFor(f: {
   cohortId?: string | null;
@@ -83,6 +76,14 @@ export default async function BillingPage({
 
   const cop = (v: number) =>
     format.number(v, { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+  // `dueOn` es un día (`YYYY-MM-DD`): en UTC, o Bogotá lo pinta un día antes.
+  const dayOf = (iso: string) =>
+    format.dateTime(new Date(`${iso}T00:00:00Z`), {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
   const count = (s: string) => all.filter((r) => r.status === s).length;
   const noPlan = all.filter((r) => r.status === null).length;
   const overdueTotal = all.reduce((s, r) => s + r.overdue, 0);
@@ -239,6 +240,7 @@ export default async function BillingPage({
 
       <DataTable<BillingRow>
         caption={t('tableCaption')}
+        compactRows
         rows={rows}
         rowKey={(r) => r.enrollmentId}
         empty={
@@ -271,11 +273,7 @@ export default async function BillingPage({
             key: 'status',
             header: t('status'),
             narrow: true,
-            cell: (r) => (
-              <Badge variant={r.status ? STATUS_BADGE[r.status] : 'neutral'}>
-                {t(`statuses.${r.status ?? 'NO_PLAN'}`)}
-              </Badge>
-            ),
+            cell: (r) => <StatusBadge domain="account" status={r.status ?? 'NO_PLAN'} />,
           },
           {
             key: 'paid',
@@ -299,7 +297,7 @@ export default async function BillingPage({
             header: t('next'),
             cell: (r) =>
               r.nextDueOn
-                ? t('nextValue', { date: r.nextDueOn, amount: cop(r.nextAmount ?? 0) })
+                ? t('nextValue', { date: dayOf(r.nextDueOn), amount: cop(r.nextAmount ?? 0) })
                 : '—',
           },
         ]}

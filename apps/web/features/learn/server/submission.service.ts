@@ -93,10 +93,10 @@ export async function submitLesson({
   now?: Date;
 }): Promise<SubmissionView> {
   if (!text && !fileAssetId) {
-    throw new APIError('La entrega necesita un texto o un archivo', 'VALIDATION_ERROR');
+    throw new APIError('La actividad necesita un texto o un archivo', 'VALIDATION_ERROR');
   }
 
-  const outline = await getCohortOutline({ institutionId, personId, now });
+  const outline = await getCohortOutline({ institutionId, personId, assignmentId, now });
   if (outline.gate || !outline.cohort || !outline.enrollmentId) {
     throw new APIError('No hay una cohorte en la que entregar', 'ACCESS_EXPIRED');
   }
@@ -111,12 +111,27 @@ export async function submitLesson({
     where: { id: assignmentId, cohortId: outline.cohort.id },
     select: {
       lessonVersionId: true,
-      lesson: { select: { id: true, title: true, requiresSubmission: true } },
+      lesson: {
+        select: { id: true, title: true, requiresSubmission: true, activityAccepts: true },
+      },
     },
   });
   if (!assignment) throw new APIError('Not found', 'NOT_FOUND');
   if (!assignment.lesson.requiresSubmission) {
-    throw new APIError('Este tema no se completa con una entrega', 'CONFLICT');
+    throw new APIError('Este tema no se completa con una actividad', 'CONFLICT');
+  }
+
+  // Lo que el autor dijo que se acepta (23/9): el formulario ya lo enseña, pero la regla
+  // vive aquí. Un texto donde se pidió un archivo no es una entrega a medias, es otra cosa.
+  const accepts = assignment.lesson.activityAccepts;
+  if (accepts === 'FILE' && !fileAssetId) {
+    throw new APIError('Esta actividad se entrega con un archivo', 'VALIDATION_ERROR');
+  }
+  if (accepts === 'TEXT' && !text) {
+    throw new APIError('Esta actividad se entrega con un texto', 'VALIDATION_ERROR');
+  }
+  if (accepts === 'TEXT' && fileAssetId) {
+    throw new APIError('Esta actividad no admite archivos', 'VALIDATION_ERROR');
   }
 
   if (fileAssetId) {
@@ -140,11 +155,11 @@ export async function submitLesson({
     orderBy: { submittedAt: 'desc' },
     select: { id: true, status: true },
   });
-  if (existing?.status === 'SUBMITTED') {
-    throw new APIError('Tu entrega ya está en revisión', 'CONFLICT');
-  }
+  // Una entrega en revisión se puede reemplazar hasta que alguien la revise (23/9): la
+  // revisión empieza cuando el instructor decide, no cuando el estudiante pulsa enviar. Lo que
+  // no se toca es una aprobada: eso ya completó el tema.
   if (existing?.status === 'APPROVED') {
-    throw new APIError('Esta entrega ya fue aprobada', 'CONFLICT');
+    throw new APIError('Esta actividad ya fue aprobada', 'CONFLICT');
   }
 
   const id = await db.$transaction(async (tx) => {
@@ -207,9 +222,9 @@ export async function submitLesson({
     const reviewers = await staffPersonIds(institutionId, ['INSTRUCTOR', 'ADMIN']);
     await notifyMany(institutionId, reviewers, {
       type: 'submission_received',
-      title: existing ? 'Entrega reenviada' : 'Entrega nueva por revisar',
+      title: existing ? 'Actividad reenviada' : 'Actividad nueva por revisar',
       body: `${assignment.lesson.title} · ${outline.cohort.code}`,
-      href: `/cohortes/${outline.cohort.id}/entregas?estado=SUBMITTED`,
+      href: `/cohortes/${outline.cohort.id}/actividades?estado=SUBMITTED`,
       dedupeKey: `submission_received:${id}:${now.toISOString().slice(0, 10)}`,
     });
   } catch {
@@ -217,6 +232,6 @@ export async function submitLesson({
   }
 
   const view = await getSubmissionForStudent({ institutionId, enrollmentId, assignmentId });
-  if (!view) throw new APIError('No se pudo leer la entrega', 'INTERNAL');
+  if (!view) throw new APIError('No se pudo leer la actividad', 'INTERNAL');
   return view;
 }

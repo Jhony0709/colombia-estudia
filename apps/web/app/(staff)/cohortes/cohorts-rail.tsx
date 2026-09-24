@@ -11,6 +11,7 @@ const KNOWN = new Set([
   'cohort_created',
   'cohort_opened',
   'cohort_closed',
+  'cohort_content_added',
   'enrollment_created',
   'enrollment_withdrawn',
   'enrollment_extended',
@@ -41,7 +42,10 @@ export async function CohortsRail({
                   {c.code}
                 </Link>
                 <span className="type-caption text-text-muted">
-                  {t(c.kind, { date: format.dateTime(c.on, { dateStyle: 'medium' }) })}
+                  {/* `startsOn`/`endsOn` son `@db.Date` (medianoche UTC): en Bogotá salía un día antes. */}
+                  {t(c.kind, {
+                    date: format.dateTime(c.on, { dateStyle: 'medium', timeZone: 'UTC' }),
+                  })}
                 </span>
               </li>
             ))}

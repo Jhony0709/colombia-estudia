@@ -67,29 +67,19 @@ export default function RestablecerPage() {
 
   if (success) {
     return (
-      <section>
-        <h1
-          ref={headingRef}
-          tabIndex={-1}
-          className="type-heading text-text text-center outline-none"
-        >
+      <section className="space-y-6">
+        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
           {t('reset')}
         </h1>
         <Alert severity="success">{t('resetSuccess')}</Alert>
-        <p className="type-body text-text-muted text-center">
-          Serás redirigido al inicio de sesión...
-        </p>
+        <p className="type-body text-text-muted">Serás redirigido al inicio de sesión...</p>
       </section>
     );
   }
 
   return (
-    <section>
-      <h1
-        ref={headingRef}
-        tabIndex={-1}
-        className="type-heading text-text text-center outline-none"
-      >
+    <section className="space-y-6">
+      <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
         {t('reset')}
       </h1>
 

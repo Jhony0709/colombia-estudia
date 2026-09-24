@@ -46,6 +46,8 @@ export interface LessonListItem {
   hasPublished: boolean;
 }
 
+export type ActivityAccepts = 'TEXT' | 'FILE' | 'TEXT_OR_FILE';
+
 export interface DraftView {
   lessonId: string;
   title: string;
@@ -56,6 +58,9 @@ export interface DraftView {
   subjectId: string;
   learningObjective: string | null;
   requiresSubmission: boolean;
+  /** La actividad (23/9): instrucciones y qué se acepta. Del tema, no de la versión. */
+  activityInstructions: string | null;
+  activityAccepts: ActivityAccepts;
   /**
    * Si ya hay alguna versión publicada. Cierra el módulo y la forma de completado: moverlos
    * con gente estudiando reordena la ruta o cambia qué da el tema por hecho.
@@ -414,6 +419,67 @@ export async function listLessons({
 }
 
 /**
+ * La actividad del tema (23/9): instrucciones y qué se acepta como entrega.
+ *
+ * Aparte de `updateLessonDetails` porque no comparte sus candados: las instrucciones no
+ * están versionadas (decisión de Jhonny) y se pueden corregir con el tema publicado; lo que
+ * sigue cerrado con gente estudiando es la **forma** de completar (`requiresSubmission`).
+ * Solo tiene sentido en un tema con actividad; en otro, es un error de quien llama.
+ */
+export async function updateLessonActivity({
+  institutionId,
+  actorId,
+  lessonId,
+  instructions,
+  accepts,
+}: {
+  institutionId: string;
+  actorId: string;
+  lessonId: string;
+  instructions: string | null;
+  accepts: ActivityAccepts;
+}): Promise<{ lessonId: string }> {
+  const db = createTenantClient(institutionId);
+
+  const lesson = await db.lesson.findFirst({
+    where: { id: lessonId, archivedAt: null },
+    select: {
+      id: true,
+      requiresSubmission: true,
+      activityInstructions: true,
+      activityAccepts: true,
+    },
+  });
+  if (!lesson) throw new APIError('Lesson not found', 'NOT_FOUND');
+  if (!lesson.requiresSubmission) {
+    throw new APIError('Este tema no se completa con una actividad', 'CONFLICT');
+  }
+
+  await db.$transaction(async (tx) => {
+    await tx.lesson.update({
+      where: { id: lessonId },
+      data: { activityInstructions: instructions, activityAccepts: accepts },
+    });
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'lesson',
+        entityId: lessonId,
+        action: 'activity_updated',
+        before: {
+          activityAccepts: lesson.activityAccepts,
+          hadInstructions: lesson.activityInstructions !== null,
+        },
+        after: { activityAccepts: accepts, hasInstructions: instructions !== null },
+      },
+    });
+  });
+
+  return { lessonId };
+}
+
+/**
  * El DRAFT sobre el que se edita, creándolo si hace falta.
  *
  * Si la versión más alta está publicada, se abre la siguiente **copiando su contenido**:
@@ -438,6 +504,8 @@ export async function openDraft({
       subjectId: true,
       learningObjective: true,
       requiresSubmission: true,
+      activityInstructions: true,
+      activityAccepts: true,
       subject: { select: { name: true } },
       versions: {
         orderBy: { number: 'desc' },
@@ -470,6 +538,8 @@ export async function openDraft({
     subjectId: lesson.subjectId,
     learningObjective: lesson.learningObjective,
     requiresSubmission: lesson.requiresSubmission,
+    activityInstructions: lesson.activityInstructions,
+    activityAccepts: lesson.activityAccepts,
     hasPublished: publishedCount > 0,
   };
 

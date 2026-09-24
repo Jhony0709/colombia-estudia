@@ -23,6 +23,7 @@
 'use client';
 
 import Link from 'next/link';
+import { LogoutButton } from '@/components/organisms/logout-dialog';
 import { usePathname } from 'next/navigation';
 import type { NavDestination } from '@/lib/nav/staff-nav';
 
@@ -99,12 +100,10 @@ export function AppHeader({
               ? `Notificaciones (${unreadNotifications} sin leer)`
               : 'Notificaciones'}
           </Link>
-          <Link
-            href="/auth/logout"
+          <LogoutButton
+            icon={false}
             className="type-body text-text-link min-h-touch flex items-center underline"
-          >
-            Cerrar sesión
-          </Link>
+          />
         </div>
       </div>
     </header>

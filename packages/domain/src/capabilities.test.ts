@@ -457,6 +457,46 @@ describe('capabilities.ts - GUARDIAN (Decision 7)', () => {
     expect(hasCapability(result, 'score.read.own')).toBe(false);
     expect(result.size).toBe(0);
   });
+
+  // Fase C (23/9): lo que sí ve, matrícula a matrícula.
+  it('lee el avance de cada pupilo y la cartera solo si es responsable y paga una persona', () => {
+    const result = resolveCapabilities(
+      baseInput({
+        memberships: [createMembership('GUARDIAN')],
+        guardianships: [{ guardianId: 'person-1', studentId: 'student-1' }],
+        wardEnrollments: [
+          {
+            enrollmentId: 'ward-enr-1',
+            cohortId: 'cohort-1',
+            payerType: 'PERSON',
+            isFinancialResponsible: true,
+          },
+          {
+            enrollmentId: 'ward-enr-2',
+            cohortId: 'cohort-2',
+            payerType: 'PERSON',
+            isFinancialResponsible: false,
+          },
+          {
+            enrollmentId: 'ward-enr-3',
+            cohortId: 'cohort-3',
+            payerType: 'PARTNER',
+            isFinancialResponsible: true,
+          },
+        ],
+      })
+    );
+
+    expect(getScopes(result, 'progress.read.ward')).toEqual([
+      { enrollmentId: 'ward-enr-1' },
+      { enrollmentId: 'ward-enr-2' },
+      { enrollmentId: 'ward-enr-3' },
+    ]);
+    expect(getScopes(result, 'billing.read.own')).toEqual([{ enrollmentId: 'ward-enr-1' }]);
+    expect(hasCapability(result, 'lesson.read')).toBe(false);
+    expect(hasCapability(result, 'assessment.take')).toBe(false);
+    expect(hasCapability(result, 'progress.override')).toBe(false);
+  });
 });
 
 // ─────────────────────────── INCLUSION_COORDINATOR ───────────────────────────

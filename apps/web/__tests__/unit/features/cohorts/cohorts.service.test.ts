@@ -118,7 +118,7 @@ describe('openCohort', () => {
 
     const result = await openCohort({ ...BASE, cohortId: 'cohort-1' });
 
-    expect(result).toEqual({ id: 'cohort-1', assigned: 2 });
+    expect(result).toEqual({ id: 'cohort-1', assigned: 2, skipped: 0 });
     expect(tx.lessonAssignment.createMany).toHaveBeenCalledWith({
       data: [
         expect.objectContaining({
@@ -150,6 +150,27 @@ describe('openCohort', () => {
     });
     expect(tx.lessonAssignment.createMany).not.toHaveBeenCalled();
     expect(tx.cohort.update).not.toHaveBeenCalled();
+  });
+
+  // 23/9: la revisión previa deja abrir sin lo que sigue en borrador; entra después por
+  // «Actualizaciones del programa».
+  it('opens skipping unpublished content when asked, and audits how much it skipped', async () => {
+    tx.cohort.findFirst.mockResolvedValue(cohort);
+    tx.lesson.findMany.mockResolvedValue([
+      { id: 'l1', title: 'T1', versions: [{ id: 'v1', status: 'PUBLISHED', number: 1 }] },
+      { id: 'l2', title: 'Tema sin publicar', versions: [] },
+    ]);
+    tx.assessment.findMany.mockResolvedValue([]);
+
+    const result = await openCohort({ ...BASE, cohortId: 'cohort-1', skipUnpublished: true });
+
+    expect(result).toEqual({ id: 'cohort-1', assigned: 1, skipped: 1 });
+    expect(tx.lessonAssignment.createMany).toHaveBeenCalledWith({
+      data: [expect.objectContaining({ lessonId: 'l1' })],
+    });
+    expect(tx.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ after: expect.objectContaining({ skippedUnpublished: 1 }) }),
+    });
   });
 
   it('refuses a program with no content at all', async () => {

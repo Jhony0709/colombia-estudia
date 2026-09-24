@@ -178,6 +178,19 @@ llega a él después del contenido, que es donde uno pide ayuda. Sin temas, no h
 chuleta del formato del editor vivía plegada entre el texto y los minutos; una ayuda es algo
 que se pide, no algo que se lee de paso.
 
+### LogoutDialog: «Cerrar sesión» pregunta en el sitio (23/9)
+
+`components/organisms/logout-dialog`. La misma pieza de Radix que `Sheet`, centrada, con
+overlay oscurecido **y desenfocado** (`bg-black/40 backdrop-blur-sm`): lo de detrás se ve que
+está, pero no compite con la pregunta. Confirmar es un `<form method="POST">` a
+`/api/auth/logout`, nunca GET. `LogoutButton` es el `<button>` que lo abre y es el único
+«Cerrar sesión» de la navegación (`SideNav`, `StudentTopNav`, cabecera del aliado): no es un
+`NavItem` porque ya no lleva a ningún sitio (§5). Desde un menú Radix se abre **diferido**
+(`setTimeout(…, 0)`) o el menú se queda abierto detrás. `/auth/logout` sigue existiendo para
+quien llegue por URL. Motion: `.dialog-overlay` / `.dialog-panel` (`globals.css`) por
+`data-state` de Radix, entrada grow + salida fade con los tokens de `duration`/`easing`; son
+las clases que debe usar cualquier diálogo centrado nuevo.
+
 ### Tooltip: el nombre de un botón de icono, a la vista
 
 `Tooltip` (`atoms/tooltip`) envuelve un botón que solo enseña un icono y muestra su nombre al
@@ -202,6 +215,14 @@ no hay una variante que sea solo color y `children` es texto, nunca un icono sue
 
 Cinco variantes —`neutral`, `info`, `success`, `warning`, `error`— y las cinco con su par de
 contraste en el contrato (`design-tokens/src/contract/pairs.ts`), no solo medido una vez.
+
+**StatusBadge (23/9, ola 2)**: para el estado de una entidad del dominio —cohorte,
+matrícula, cuenta, cuota, acuerdo, entrega, avance de un tema, intento— no se arma el
+`Badge` en la pantalla: `<StatusBadge domain="cohort" status={cohort.status} />`
+(`components/molecules/status-badge`). Un dominio decide una vez su tabla de tonos y sus
+textos (`status.<dominio>.<ESTADO>` en `messages/`), así «Abierta» es verde en la lista, en
+la cabecera y en la ficha. `Badge` a secas queda para juicios de una pantalla (aprobado o
+no, confirmado o no, con subtítulos o sin ellos).
 
 ---
 

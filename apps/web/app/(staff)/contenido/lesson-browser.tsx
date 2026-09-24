@@ -242,7 +242,11 @@ export function LessonBrowser({
                         <Badge variant="neutral">{t('statusNone')}</Badge>
                       ) : (
                         <Badge variant={lesson.hasPublished ? 'success' : 'neutral'}>
-                          {t(`status.${lesson.latestStatus}`, { number: lesson.latestNumber ?? 0 })}
+                          {/* Un borrador sobre una publicada lo dice: la píldora era verde y decía «Borrador» (23/9). */}
+                          {t(
+                            `status.${lesson.hasPublished && lesson.latestStatus === 'DRAFT' ? 'DRAFT_OVER_PUBLISHED' : lesson.latestStatus}`,
+                            { number: lesson.latestNumber ?? 0 }
+                          )}
                         </Badge>
                       ),
                   },

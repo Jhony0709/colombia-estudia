@@ -1,7 +1,7 @@
 /**
  * La cola de entregas de una cohorte y su revisión.
  * SSOT: plan/08-aprender-y-evaluar.md:72-76 (§4), reference/02-api/endpoints.md:79,
- * reference/01-routing/routes.md (`/cohortes/[id]/entregas`).
+ * reference/01-routing/routes.md (`/cohortes/[id]/actividades`).
  *
  * Aprobar completa el tema: escribe el `LessonProgress` en `COMPLETED` con `source =
  * EVIDENCE` (la entrega ES la evidencia, contenido-y-evaluaciones.md:150), emite
@@ -43,6 +43,8 @@ export interface SubmissionDetail extends SubmissionRow {
   text: string | null;
   file: { name: string; url: string } | null;
   feedback: string | null;
+  /** Lo que el autor pidió (23/9): quien revisa lo ve al lado de lo entregado. Markdown crudo. */
+  activityInstructions: string | null;
 }
 
 export interface SubmissionCounts {
@@ -191,7 +193,14 @@ export async function getSubmission({
       },
       assignment: {
         select: {
-          lesson: { select: { id: true, title: true, module: { select: { name: true } } } },
+          lesson: {
+            select: {
+              id: true,
+              title: true,
+              activityInstructions: true,
+              module: { select: { name: true } },
+            },
+          },
         },
       },
     },
@@ -217,6 +226,7 @@ export async function getSubmission({
     submittedAt: r.submittedAt,
     reviewedAt: r.reviewedAt,
     reviewerName: r.reviewedBy ? fullName(r.reviewedBy) : null,
+    activityInstructions: r.assignment.lesson.activityInstructions,
     text: r.text,
     file,
     feedback: r.feedback,
@@ -241,7 +251,7 @@ export async function reviewSubmission({
   now?: Date;
 }): Promise<{ id: string; status: SubmissionStatusFilter }> {
   if (decision === 'RETURNED' && !feedback) {
-    throw new APIError('Para devolver una entrega hay que decir qué falta', 'VALIDATION_ERROR');
+    throw new APIError('Para devolver una actividad hay que decir qué falta', 'VALIDATION_ERROR');
   }
 
   const db = createTenantClient(institutionId);
@@ -257,9 +267,9 @@ export async function reviewSubmission({
       assignment: { select: { lessonVersionId: true, lesson: { select: { title: true } } } },
     },
   });
-  if (!row) throw new APIError('Entrega no encontrada', 'NOT_FOUND');
+  if (!row) throw new APIError('Actividad no encontrada', 'NOT_FOUND');
   if (row.status !== 'SUBMITTED') {
-    throw new APIError('Solo se revisa una entrega que está en revisión', 'CONFLICT');
+    throw new APIError('Solo se revisa una actividad que está en revisión', 'CONFLICT');
   }
 
   await db.$transaction(async (tx) => {
@@ -325,7 +335,7 @@ export async function reviewSubmission({
     await notify(institutionId, {
       personId: row.enrollment.studentId,
       type: decision === 'APPROVED' ? 'submission_approved' : 'submission_returned',
-      title: decision === 'APPROVED' ? 'Tu entrega fue aprobada' : 'Tu entrega fue devuelta',
+      title: decision === 'APPROVED' ? 'Tu actividad fue aprobada' : 'Tu actividad fue devuelta',
       body:
         decision === 'APPROVED'
           ? `${row.assignment.lesson.title}: tema completado.`

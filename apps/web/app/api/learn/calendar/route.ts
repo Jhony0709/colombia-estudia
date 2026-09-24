@@ -6,19 +6,14 @@
 import { apiHandler } from '@/lib/http/api-handler';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { APIError } from '@/lib/core/errors';
-import { getCohortOutline } from '@/features/learn/server/cohort.service';
-import { getCalendarForEnrollment } from '@/features/cohorts/server/live-sessions.service';
+import { getCalendarForStudent } from '@/features/learn/server/calendar.service';
 
 export const GET = apiHandler({ capability: 'lesson.read' })(async () => {
   const ctx = await getRequestContext();
   if (!ctx.person) throw new APIError('Authentication required', 'UNAUTHENTICATED');
-  const outline = await getCohortOutline({
+  // Todas las cohortes activas (21/9).
+  return getCalendarForStudent({
     institutionId: ctx.institution.id,
     personId: ctx.person.id,
-  });
-  if (!outline.enrollmentId) return [];
-  return getCalendarForEnrollment({
-    institutionId: ctx.institution.id,
-    enrollmentId: outline.enrollmentId,
   });
 });

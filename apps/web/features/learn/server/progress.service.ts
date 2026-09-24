@@ -97,7 +97,7 @@ export async function recordEvidence({
   input: EvidenceInput;
   now?: Date;
 }): Promise<EvidenceResult> {
-  const outline = await getCohortOutline({ institutionId, personId, now });
+  const outline = await getCohortOutline({ institutionId, personId, assignmentId, now });
   if (outline.gate || !outline.cohort || !outline.enrollmentId) {
     throw new APIError('No hay una cohorte en la que estudiar', 'ACCESS_EXPIRED');
   }

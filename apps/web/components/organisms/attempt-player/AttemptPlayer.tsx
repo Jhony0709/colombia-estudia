@@ -28,6 +28,8 @@ import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
 import { useAnnounce } from '@/lib/a11y/announce';
+import { trackStudentEvent } from '@/lib/telemetry/student-events';
+import { SLOW_AFTER_MS } from '@/lib/net/slow-request';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { cn } from '@/lib/utils';
 
@@ -111,13 +113,14 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
 
   const flush = useCallback(async () => {
     if (inFlight.current || pending.current.size === 0 || closed.current) return;
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      setSaveState('offline');
-      return;
-    }
+    // Sin mirar `navigator.onLine` (20/9): en Chrome puede decir «sin conexión» con la red
+    // perfectamente viva (VPN, adaptadores virtuales), y entonces las respuestas no salían
+    // nunca. Se intenta siempre; un `fetch` que lanza es la señal real de que no hay red.
     inFlight.current = true;
     setSaveState('saving');
     const batch = Object.fromEntries(pending.current);
+    let sent = false;
+    const began = Date.now();
     try {
       const res = await fetch(`/api/learn/attempts/${attempt.id}`, {
         method: 'PATCH',
@@ -150,13 +153,40 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
       for (const [code, value] of Object.entries(batch)) {
         if (pending.current.get(code) === value) pending.current.delete(code);
       }
+      try {
+        if (pending.current.size === 0)
+          window.localStorage.removeItem(`ce.attempt.${attempt.id}.pending`);
+        else
+          window.localStorage.setItem(
+            `ce.attempt.${attempt.id}.pending`,
+            JSON.stringify([...pending.current])
+          );
+      } catch {
+        // Ídem.
+      }
       setSavedAt(new Date(payload.data.savedAt));
       setSaveState(pending.current.size > 0 ? 'saving' : 'saved');
+      sent = true;
     } catch {
-      setSaveState(typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'error');
+      // El `fetch` lanzó: no hubo respuesta. Eso es «sin conexión», diga lo que diga el
+      // navegador; se reintenta al evento `online` y cada 15 s (efecto de abajo).
+      setSaveState('offline');
     } finally {
       inFlight.current = false;
-      if (pending.current.size > 0 && !closed.current) setTimeout(() => void flush(), 250);
+      // E1 (23/9): cuánto tardó cada guardado y si llegó. De aquí saldrán los umbrales.
+      const ms = Date.now() - began;
+      trackStudentEvent('student.request.finished', {
+        screen: 'assessment',
+        action: 'attempt_continue',
+        request: 'attempt_save',
+        outcome: sent ? (ms >= SLOW_AFTER_MS ? 'slow_ok' : 'ok') : 'failed',
+        durationMs: ms,
+      });
+      // Solo tras un envío que llegó se manda enseguida lo que entró mientras viajaba. Tras
+      // un fallo no: reintentar cada 250 ms contra una red caída es un bucle, no una cola.
+      if (sent && pending.current.size > 0 && !closed.current) {
+        setTimeout(() => void flush(), 250);
+      }
     }
   }, [attempt.id, announce, router, t]);
 
@@ -186,9 +216,42 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
     return () => document.removeEventListener('visibilitychange', onHide);
   }, [attempt.id]);
 
+  // Lo pendiente también en el aparato (E1, 23/9): una recarga o un cierre con la red caída
+  // no se lleva respuestas que el servidor aún no confirmó. Al montar se recupera y se
+  // manda; al confirmar se borra.
+  const pendingKey = `ce.attempt.${attempt.id}.pending`;
+  const persistPending = () => {
+    try {
+      if (pending.current.size === 0) window.localStorage.removeItem(pendingKey);
+      else window.localStorage.setItem(pendingKey, JSON.stringify([...pending.current]));
+    } catch {
+      // Sin almacenamiento: la cola en memoria sigue funcionando.
+    }
+  };
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(pendingKey);
+      if (!raw) return;
+      const saved = JSON.parse(raw) as Array<[string, Answer]>;
+      if (!Array.isArray(saved) || saved.length === 0) return;
+      const known = new Set(attempt.questions.map((q) => q.code));
+      for (const [code, value] of saved) {
+        if (!known.has(code)) continue;
+        pending.current.set(code, value);
+        setAnswers((prev) => ({ ...prev, [code]: value }));
+      }
+      void flush();
+    } catch {
+      // Un JSON roto no vale nada: se ignora.
+    }
+    // Solo al montar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingKey]);
+
   const setAnswer = (code: string, value: Answer, debounce = false) => {
     setAnswers((prev) => ({ ...prev, [code]: value }));
     pending.current.set(code, value);
+    persistPending();
     if (textTimer.current) clearTimeout(textTimer.current);
     if (debounce) {
       textTimer.current = setTimeout(() => void flush(), TEXT_DEBOUNCE_MS);
@@ -243,13 +306,20 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-surface-base border-border-muted rounded-card sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border px-4 py-3">
+      <div className="bg-surface-base border-border-muted rounded-card sticky top-14 z-[5] flex flex-wrap items-center justify-between gap-3 border px-4 py-3">
         <p className="type-body m-0" role="status">
           {t('progress', { answered: answeredCount, total })}
           <span className="text-text-muted"> · </span>
           <SaveStatus state={saveState} savedAt={savedAt} />
         </p>
-        {attempt.deadlineAt && (
+        {/*
+          El reloj solo cuando el plazo es de esta sesión (23/9). `deadlineAt` es el mínimo de
+          límite de tiempo, fecha de entrega y fin de acceso (`getAttemptDeadline`); sin límite
+          de tiempo, el fin de acceso a tres meses salía como «124440:38» y parecía una cuenta
+          atrás. Un plazo a más de un día no es un reloj: es una fecha, y ya está en «Antes de
+          empezar» y en el calendario. El servidor sigue cerrando el intento al vencer.
+        */}
+        {attempt.deadlineAt && isSessionDeadline(attempt.deadlineAt) && (
           <Timer deadlineAt={attempt.deadlineAt} offset={offset} onExpired={onExpired} />
         )}
       </div>
@@ -432,6 +502,10 @@ function SaveStatus({ state, savedAt }: { state: SaveState; savedAt: Date | null
  * Cuenta atrás con `deadlineAt` del servidor. El cliente no decide el vencimiento: cuando
  * llega a cero avisa y recarga, y es el servidor quien cierra el intento.
  */
+/** Un plazo dentro de las próximas 24 h se enseña como reloj; más lejos, no. */
+const isSessionDeadline = (deadlineAt: string) =>
+  new Date(deadlineAt).getTime() - Date.now() <= 24 * 60 * 60 * 1000;
+
 function Timer({
   deadlineAt,
   offset,
@@ -470,16 +544,20 @@ function Timer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deadline]);
 
-  const mm = Math.floor(left / 60);
+  const hh = Math.floor(left / 3600);
+  const mm = Math.floor((left % 3600) / 60);
   const ss = left % 60;
-  const label = `${mm}:${ss.toString().padStart(2, '0')}`;
+  const label =
+    hh > 0
+      ? `${hh}:${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`
+      : `${mm}:${ss.toString().padStart(2, '0')}`;
 
   return (
     <div className="flex items-center gap-2">
       <span
         role="timer"
         aria-live="off"
-        aria-label={t('label', { minutes: mm, seconds: ss })}
+        aria-label={t('label', { minutes: hh * 60 + mm, seconds: ss })}
         className={cn(
           'type-label inline-flex items-center gap-1.5 tabular-nums',
           left <= 60

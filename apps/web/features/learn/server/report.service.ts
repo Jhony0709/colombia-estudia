@@ -46,7 +46,7 @@ export async function reportLessonProblem({
   details: string | null;
   now?: Date;
 }): Promise<{ notified: number }> {
-  const outline = await getCohortOutline({ institutionId, personId, now });
+  const outline = await getCohortOutline({ institutionId, personId, assignmentId, now });
   const item = outline.modules.flatMap((m) => m.items).find((i) => i.assignmentId === assignmentId);
   if (!item || item.kind !== 'LESSON') throw new APIError('Not found', 'NOT_FOUND');
 

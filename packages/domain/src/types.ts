@@ -63,6 +63,30 @@ export interface Guardianship {
   studentId: string;
 }
 
+/**
+ * Una matrícula de un pupilo, vista por su acudiente (Fase C, 23/9).
+ * `payerType` es nulo sin plan de pagos; `isFinancialResponsible` viene de la acudencia
+ * (schema: Guardianship.isFinancialResponsible).
+ */
+export interface WardEnrollment {
+  enrollmentId: string;
+  cohortId: string;
+  payerType: PayerType | null;
+  isFinancialResponsible: boolean;
+}
+
+/**
+ * Una matrícula de un pupilo, vista por su acudiente (Fase C, 23/9).
+ * `payerType` es nulo sin plan de pagos; `isFinancialResponsible` viene de la acudencia
+ * (schema: Guardianship.isFinancialResponsible).
+ */
+export interface WardEnrollment {
+  enrollmentId: string;
+  cohortId: string;
+  payerType: PayerType | null;
+  isFinancialResponsible: boolean;
+}
+
 // ─────────────────────────── Partner Contact ───────────────────────────
 
 /**

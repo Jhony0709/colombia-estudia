@@ -46,6 +46,12 @@ export async function SiteHeader({
           >
             {signedIn ? t('nav.enter') : t('nav.login')}
           </Link>
+          {/* Registro público (Fase B): solo para quien no ha entrado. */}
+          {!signedIn && (
+            <Link href="/registro" className="site-btn site-btn--primary site-btn--sm">
+              {t('nav.register')}
+            </Link>
+          )}
           {/* `hidden` no puede ir en el propio .site-btn: site.css fija su display después. */}
           <span className="hidden sm:block">
             <CtaLink contact={contact} size="sm">

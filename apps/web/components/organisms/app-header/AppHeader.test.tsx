@@ -77,9 +77,7 @@ describe('AppHeader', () => {
     render(<AppHeader institutionName="Colombia Estudia" items={items} personName="Ana" />);
 
     expect(screen.getByRole('navigation', { name: 'Principal' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Cerrar sesión' })).toHaveAttribute(
-      'href',
-      '/auth/logout'
-    );
+    // Desde el 23/9 «Cerrar sesión» es un botón que abre un diálogo, no un enlace.
+    expect(screen.getByRole('button', { name: 'Cerrar sesión' })).toBeInTheDocument();
   });
 });

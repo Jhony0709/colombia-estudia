@@ -70,12 +70,15 @@ export async function startCheckout({
   scopes,
   origin,
   customerEmail,
+  returnPath = '/aprender/mi-cuenta',
 }: {
   institutionId: string;
   installmentId: string;
   scopes: readonly Scope[];
   origin: string;
   customerEmail: string | null;
+  /** Adónde vuelve Wompi (Fase C, 23/9): el acudiente paga desde `/familia/[enrollmentId]`. */
+  returnPath?: string;
 }): Promise<{ url: string; reference: string; amount: number }> {
   if (!isWompiConfigured()) {
     throw new APIError('El pago en línea no está habilitado en esta institución', 'CONFLICT');
@@ -114,7 +117,7 @@ export async function startCheckout({
   const url = buildCheckoutUrl({
     reference,
     amountCop: pending,
-    redirectUrl: `${origin}/aprender/mi-cuenta?pago=${encodeURIComponent(reference)}`,
+    redirectUrl: `${origin}${returnPath}?pago=${encodeURIComponent(reference)}`,
     customerEmail,
   });
   return { url, reference, amount: pending };

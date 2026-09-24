@@ -25,23 +25,24 @@ resolveCapabilities({
 verifica que esté entre los permitidos. El serializador quita después lo que el rol no
 debe ver; **no es** el mecanismo de autorización, es la segunda línea.
 
-| Capacidad              | Quién la tiene                                                                                                         | Alcance               |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `lesson.read`          | Estudiante con matrícula activa; instructor; admin. (Acudiente: fuera del MVP, decisión 7)                             | cohorte / institución |
-| `lesson.progress.own`  | **Solo** el estudiante de la matrícula: genera evidencia e intentos                                                    | matrícula             |
-| `lesson.author`        | Instructor del programa, admin                                                                                         | institución           |
-| `lesson.publish`       | Instructor con permiso de publicación, admin                                                                           | institución           |
-| `assessment.take`      | Estudiante con matrícula activa                                                                                        | matrícula             |
-| `assessment.grade`     | Instructor, admin: calificar abiertas                                                                                  | cohorte               |
-| `progress.read.cohort` | Operaciones, admin, instructor; contacto de aliado para su cohorte                                                     | cohorte               |
-| `progress.override`    | Operaciones, admin: marcar un tema completado con motivo (auditado)                                                    | cohorte               |
-| `score.read.own`       | Estudiante. **Sobrevive al vencimiento del acceso** e incluye certificados                                             | matrícula             |
-| `accommodation.manage` | Coordinación de inclusión, admin                                                                                       | institución           |
-| `billing.manage`       | Operaciones, admin                                                                                                     | institución           |
-| `billing.read.own`     | Quien paga: estudiante adulto (`payerType PERSON`), contacto del aliado si `payerType PARTNER`. Incluye pagar en línea | matrícula / aliado    |
-| `people.manage`        | Operaciones, admin: personas, vinculaciones, acudencias, invitaciones, consentimientos en papel                        | institución           |
-| `cohort.manage`        | Operaciones, admin: cohortes, matrículas y su ciclo de vida, asignaciones, aliados                                     | institución           |
-| `institution.manage`   | Admin: programas, módulos, asignaturas, políticas, auditoría, importación                                              | institución           |
+| Capacidad              | Quién la tiene                                                                                                                                                                                                                                  | Alcance               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `lesson.read`          | Estudiante con matrícula activa; instructor; admin. (Acudiente: nunca — mira, no estudia; decisión 7 revisada el 23/9)                                                                                                                          | cohorte / institución |
+| `lesson.progress.own`  | **Solo** el estudiante de la matrícula: genera evidencia e intentos                                                                                                                                                                             | matrícula             |
+| `lesson.author`        | Instructor del programa, admin                                                                                                                                                                                                                  | institución           |
+| `lesson.publish`       | Instructor con permiso de publicación, admin                                                                                                                                                                                                    | institución           |
+| `assessment.take`      | Estudiante con matrícula activa                                                                                                                                                                                                                 | matrícula             |
+| `assessment.grade`     | Instructor, admin: calificar abiertas                                                                                                                                                                                                           | cohorte               |
+| `progress.read.cohort` | Operaciones, admin, instructor; contacto de aliado para su cohorte                                                                                                                                                                              | cohorte               |
+| `progress.override`    | Operaciones, admin: marcar un tema completado con motivo (auditado)                                                                                                                                                                             | cohorte               |
+| `progress.read.ward`   | **Fase C (23/9)**: acudiente sobre cada matrícula de sus pupilos (`Guardianship`). Solo lectura: avance, exámenes con la nota que el estudiante ya puede ver (`reviewPolicy`), notas. Nunca `lesson.read` ni `assessment.take`                  | matrícula             |
+| `score.read.own`       | Estudiante. **Sobrevive al vencimiento del acceso** e incluye certificados                                                                                                                                                                      | matrícula             |
+| `accommodation.manage` | Coordinación de inclusión, admin                                                                                                                                                                                                                | institución           |
+| `billing.manage`       | Operaciones, admin                                                                                                                                                                                                                              | institución           |
+| `billing.read.own`     | Quien paga: estudiante adulto (`payerType PERSON`), contacto del aliado si `payerType PARTNER`; **desde el 23/9** también el acudiente con `isFinancialResponsible` sobre la matrícula del pupilo si `payerType PERSON`. Incluye pagar en línea | matrícula / aliado    |
+| `people.manage`        | Operaciones, admin: personas, vinculaciones, acudencias, invitaciones, consentimientos en papel                                                                                                                                                 | institución           |
+| `cohort.manage`        | Operaciones, admin: cohortes, matrículas y su ciclo de vida, asignaciones, aliados                                                                                                                                                              | institución           |
+| `institution.manage`   | Admin: programas, módulos, asignaturas, políticas, auditoría, importación                                                                                                                                                                       | institución           |
 
 En Valida YA hoy solo hay administradores. El rol `INSTRUCTOR` existe para cuando haga
 falta; el MVP funciona con `ADMIN` + `OPERATIONS`. `INCLUSION_COORDINATOR` es un rol, no
@@ -162,8 +163,9 @@ servicio prestado, no el futuro). Repetir cohorte = nueva matrícula, progreso d
 con `requireAgreementForNextCohort` verificado si aplica.
 
 **Menores**: no se matricula un menor sin `Guardianship` previa; el `Consent` del menor lo
-firma un acudiente de esa acudencia. Sin `/familia` en el MVP (decisión 7), la firma es
-**en papel** y operaciones la registra (`channel PAPER`, `signedById` = el acudiente). El
+firma un acudiente de esa acudencia. La firma sigue siendo **en papel** y operaciones la
+registra (`channel PAPER`, `signedById` = el acudiente); `/familia` (Fase C, 23/9) es de
+solo lectura y no firma nada. El
 menor no entra a `/aprender` sin `Consent` vigente. Se verifica en el servidor.
 
 **`birthDate` es obligatoria para matricular.** El CSV rechaza la fila sin fecha con motivo.

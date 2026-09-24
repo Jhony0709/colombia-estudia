@@ -2905,7 +2905,7 @@ un tema publicado contenga HTML activo. No es una dependencia de comodidad.
 Tocados: `packages/domain/src/publish-validation.ts` (+ regla), su test (+2),
 `plan/07-contenido-y-migracion.md` (CodeMirror tachado), `PRODUCT_DECISIONS.md` (+2
 decisiones), `messages/es-CO.json`.
-Nuevos: `app/(staff)/contenido/evaluaciones/[assessmentId]/` (página y editor con el panel de
+Nuevos: `app/(staff)/contenido/examenes/[assessmentId]/` (página y editor con el panel de
 clave).
 
 ---
@@ -4057,7 +4057,7 @@ mismo que se ejecutó aquí con `node`, así que pasará con 10 casos más.
 lista de revalidación no se enteró: crear un programa devolvía 200 y caducaba cinco páginas,
 ninguna de ellas la que lo enseñaba. Es exactamente lo que la cabecera de ese archivo advierte
 —«se rompe la primera vez que alguien mueva una pantalla»— y lo que existe para evitar. Entran
-las dos, y también `/contenido/temas/nuevo` y `/contenido/evaluaciones/nuevo`, que leen el
+las dos, y también `/contenido/temas/nuevo` y `/contenido/examenes/nuevo`, que leen el
 currículo para sus desplegables.
 
 **`themeColorScheme` estaba definida y sin usar.** El plugin ya declara `color-scheme` por clase,
@@ -4247,7 +4247,7 @@ mismo que se ejecutó aquí con `node`, así que pasará con 10 casos más.
 lista de revalidación no se enteró: crear un programa devolvía 200 y caducaba cinco páginas,
 ninguna de ellas la que lo enseñaba. Es exactamente lo que la cabecera de ese archivo advierte
 —«se rompe la primera vez que alguien mueva una pantalla»— y lo que existe para evitar. Entran
-las dos, y también `/contenido/temas/nuevo` y `/contenido/evaluaciones/nuevo`, que leen el
+las dos, y también `/contenido/temas/nuevo` y `/contenido/examenes/nuevo`, que leen el
 currículo para sus desplegables.
 
 **`themeColorScheme` estaba definida y sin usar.** El plugin ya declara `color-scheme` por clase,
@@ -4592,7 +4592,7 @@ corregir / APPROVED); `getLessonForStudent` devuelve `submission`. Staff:
 `features/cohorts/server/submissions.service.ts` (conteos, lista con filtros, detalle con
 URL firmada, `reviewSubmission` —devolver exige comentario; aprobar completa el tema con
 `source EVIDENCE` y `lesson.completed`; `AuditLog`; notifica al estudiante—), `GET/PATCH
-/api/cohorts/[id]/submissions[...]`, página `/cohortes/[id]/entregas` (stats, filtros por
+/api/cohorts/[id]/submissions[...]`, página `/cohortes/[id]/actividades` (stats, filtros por
 estado y tema, tabla, carril con la entrega abierta y `review-actions.tsx`), botón
 «Entregas (N por revisar)» en la ficha de la cohorte. La subida de medios ahora exige la
 capacidad según el tipo (`SUBMISSION` → `lesson.progress.own`) y `confirm` acepta al
@@ -4611,8 +4611,8 @@ idempotente por código; valida forma por tipo; `ATTEMPT_EXPIRED` si venció),
 attempt_graded`), `expireIfDue` (cierre por plazo al primer request), `getAttemptForStudent`
 (revisión según `reviewPolicy`), `getResultsForStudent` (funciona con acceso vencido).
 Rutas: `POST /api/learn/assessments/[id]/attempts`, `PATCH /api/learn/attempts/[id]`,
-`POST …/submit`. Pantallas: `/aprender/evaluacion/[id]` (previa + historial +
-`start-attempt.tsx`), `/aprender/evaluacion/[id]/intento/[attemptId]` con el organismo
+`POST …/submit`. Pantallas: `/aprender/examen/[id]` (previa + historial +
+`start-attempt.tsx`), `/aprender/examen/[id]/intento/[attemptId]` con el organismo
 `AttemptPlayer` (fieldset/legend por pregunta con «Pregunta n de N», controles nativos,
 una por pantalla en móvil / columna en escritorio, índice con estado, autosave con cola
 `Map` + reintento al reconectar y cada 15 s + `keepalive` al ocultarse, `role="timer"`
@@ -4634,7 +4634,7 @@ biblioteca. Siguen en la cola de la Fase 4.
 
 **Para Jhonny**: probar con `estudiante1@yopmail.com` en COC-2026-2 (leer un tema hasta el
 final → «Tema completado»; entregar en «Como hacer un arroz con buena pega» → revisar en
-`/cohortes/…/entregas`; una evaluación publicada y asignada → empezar, responder, entregar,
+`/cohortes/…/actividades`; una evaluación publicada y asignada → empezar, responder, entregar,
 ver resultado). Correr `pnpm test:unit`, eslint, knip, `lint:arch`, `pa11y-ci`: aquí no
 corren.
 
@@ -4823,6 +4823,1185 @@ la deuda fichada, resumida:
 | «Menor sin consentimiento» en `/aprender`             | Sin modelo `Consent` en el schema     |
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
+
+## 23/9 — Barrido de staff, segunda pasada: cartera y contenido
+
+Jhonny: «continua». Dos cosas que decían una cosa y significaban otra:
+
+- **`/cartera`, «Próxima cuota»**: decía «2026-09-18 · $ 300.000» para una cuota con un
+  abono de $ 100.000. `BillingRow.nextAmount` era el monto nominal de la cuota; ahora es
+  **lo que falta** de ella (`billing.service.ts`, monto menos abonos), y la fecha va en
+  palabras y en UTC («18 de sept de 2026 · $ 200.000»). El CSV exporta el mismo campo, así
+  que también cambia de significado: lo dice el comentario del tipo.
+- **`/contenido/temas` y `/contenido/examenes`, píldora de estado**: un tema publicado en
+  v1 con borrador v2 salía como píldora **verde** con el texto «Borrador (v2)»: el color
+  decía publicado y la palabra decía borrador, y los contadores de arriba («6 publicados,
+  0 solo borrador») parecían contradecir la tabla. Nuevo texto
+  `content.status.DRAFT_OVER_PUBLISHED` = «Publicado · borrador v2» cuando
+  `hasPublished && latestStatus === 'DRAFT'` (el builder de programas ya tenía esa
+  distinción: `status.draftOverPublished`). En exámenes, el color pasa a depender de
+  `hasPublished`, como en temas.
+- `/personas` bien (dos personas, roles, actividad reciente).
+- Verificado en Chrome: cartera con «18 de sept de 2026 · $ 200.000»; temas con tres
+  píldoras «Publicado · borrador v2/v3». `tsc` en cero.
+
+## 23/9 — Barrido de staff con la sesión de admin
+
+Jhonny: «Continua». Pasada por `/cohortes`, `/cohortes/[id]`, `/cartera` con su sesión:
+
+- **«Próximos 30 días» mentía**: en `/cohortes` y en `/inicio` decía «ninguna cohorte
+  empieza ni termina» con RAP-TEST a ocho días de empezar. `listUpcomingCohorts`
+  (`cohorts.service.ts`) solo contaba como «empiezan» las `PLANNED`, y RAP-TEST está
+  `OPEN` con inicio futuro (se abrió el 23/9 para empezar el 1/10). Ahora cuentan
+  `PLANNED` y `OPEN` con `startsOn` en la ventana. Y al aparecer decía «empieza el
+  30/09/2026»: `startsOn` es `@db.Date` y el carril lo pintaba en Bogotá; `timeZone: 'UTC'`
+  en `cohorts-rail.tsx`. Misma lección del calendario, tercer sitio hoy.
+- `/cohortes/[id]`: «Abierta · Lineal · … · Abierta por Jhonny Quinones el 20/09/2026»
+  (auditoría contextual de la ola 2) y «Requiere atención» con la actividad y la pieza
+  desactualizada. Bien.
+- `/cartera`: los cuatro contadores y «Vencido en total: $ 200.000». **Sin tocar**: la
+  columna «Próxima cuota» de la matrícula vencida dice «2026-09-18 · $ 300.000» (el monto
+  de la cuota, no los $ 200.000 que faltan) y la fecha en ISO; es tabla de datos y no
+  estaba en ninguna ola, lo anoto como deuda.
+- `tsc` en cero. `listUpcomingCohorts` no tiene test.
+
+## 23/9 — Verificación con la sesión de admin (y tres errores que salieron)
+
+Jhonny: «Ya entré como admin, puedes continuar». Lo pendiente que necesitaba su sesión:
+
+- **`/inicio`**: «Requiere atención» (1 actividad, 1 cuota vencida), los tres embudos y
+  **«El recorrido del estudiante»** con datos reales de E0: los seis pasos con 1 persona
+  (Estudiante Uno) al 100 %. La telemetría fluye del cliente al servidor y a la portada.
+- **`/notificaciones` (staff)**: hereda los grupos («Hoy» con «Actividad nueva por revisar
+  · 12:20», «domingo, 20 de septiembre») y el verbo «Revisar actividades». Primer «Hoy»
+  visto.
+- **«Cerrar sesión» desde `SideNav`**: abre el diálogo con el fondo desenfocado. Al
+  buscarlo salió un **error previo**: la columna es `h-screen` sin `overflow-y-auto`, y con
+  una ventana de 716 px de alto «Cerrar sesión» y el nombre quedaban debajo del borde sin
+  forma de llegar (el `NavItem` de antes tenía el mismo problema). `lg:overflow-y-auto` en
+  la columna de escritorio (`SideNav.tsx`).
+- **`/familia`** (Jhonny es acudiente de Estudiante Uno): dos errores de la ola 3 que no
+  vi entonces porque no tenía la sesión: **«Estudiante Uno: 200.000 cuotas vencidas»**
+  (`account.summary.overdue` es el monto, no el número; la portada lo pasaba como
+  `count`) y **«Acceso hasta el 2027-09-23»** en ISO crudo. Ahora `WardSummary.account`
+  lleva `overdueCount` además del monto (`family.service.ts`), la frase es «Estudiante Uno
+  tiene 1 cuota vencida en IVY-2026-1 ($ 200.000)» y las fechas van en palabras, en UTC.
+  Tercero: «todavía no ha empezado y la cohorte ya está abierta» salía para RAP-TEST, que
+  empieza el 1/10; `EnrollmentDetail.cohort.startsOn` (nuevo, `YYYY-MM-DD`) y la condición
+  exige `startsOn <= hoy`. Las tres frases de atención llevan ahora el código de la cohorte,
+  porque con cuatro matrículas del mismo pupilo no se sabía de cuál hablaban.
+- **`/familia/[enrollmentId]`** con `AccountSummary` (E4): «Con cuota vencida · Tienes una
+  cuota vencida desde el 18 de septiembre: te faltan $ 200.000 · Has pagado $ 100.000 de
+  $ 300.000 · Datos para transferencia». Sin «Pagar en línea» (Wompi no configurado).
+- `tsc` en cero. No hay tests que fijen `listWards` ni `getEnrollmentDetail`.
+
+## 23/9 — La verificación en dos pasos, escenario por escenario
+
+Jhonny: «mejora la UI del código de verificación y sus diferentes escenarios». Rehecho
+`app/(public)/auth/mfa/mfa-content.tsx` (y el fallback de `page.tsx`), mensajes en
+`auth.mfaScreen.*`:
+
+- **Comprobando**: «Comprobando tu configuración.» con `role="status"`, quieto. Se va el
+  `animate-pulse` en texto (motion-colombia-estudia lo veta) y el «Cargando...».
+- **Antes de configurar**: por qué («tu cuenta tiene acceso a datos de estudiantes»), qué
+  necesitas (una aplicación de códigos, con tres nombres), cuánto tarda, y «Configurar
+  ahora».
+- **Configurando**: dos pasos numerados. 1) El QR con borde y fondo blanco (el QR no puede
+  ir sobre una superficie tintada), y debajo «No puedo escanear el código» (`<details>`)
+  con la clave para escribirla a mano en grupos de cuatro y «Copiar la clave». La API ya
+  devolvía `secret` (`enroll/route.ts:41`) y la pantalla no lo usaba: sin cámara no se
+  podía configurar. 2) El campo del código y «Confirmar y entrar».
+- **Verificar**: «Abre tu aplicación de códigos y escribe el que muestra para Colombia
+  Estudia», el campo y «Verificar y entrar».
+- **El campo**: uno solo de seis dígitos (se pega de un golpe, `one-time-code` funciona,
+  el lector lee un campo y no seis), grande (`--type-display-size` con `!`, porque el
+  `type-body` del `Input` gana por orden de hoja: sin `!`, 16 px), monoespaciado con aire,
+  `block` (un `<input>` es inline y se pegaba a la etiqueta), foco al aparecer. Validación
+  propia: menos de seis dígitos → «Escribe los 6 dígitos.» en el campo, sin la burbuja
+  nativa de `pattern`.
+- **Errores**: código malo → `Alert` «El código no es válido. El código cambia cada 30
+  segundos: escribe el que muestra ahora», campo vacío y foco en el campo (el `role="alert"`
+  lo anuncia solo); desde el tercer fallo, «comprueba que la hora del teléfono esté en
+  automático»; 429 → «Demasiados intentos seguidos»; sin red → «No pudimos comprobar el
+  código. Revisa tu conexión»; fallo al configurar → foco en la alerta. Verificado bien →
+  «Listo. Entrando.» (`role="status"`) mientras llega la navegación completa, botón fuera.
+- **«Entrar con otra cuenta»** (`LogoutButton`, diálogo del 23/9) en las tres pantallas:
+  quien entró con la cuenta equivocada no se quedaba atrapado.
+- **Error mío corregido antes de que lo vieras**: la primera versión definía `CodeForm`,
+  `Heading`… como componentes dentro del render; React los desmonta en cada tecla y el
+  campo perdía el foco. Son funciones de render (`codeForm(...)`).
+- **Verificado en Chrome**: la fase «verificar» real con la sesión de Estudiante Uno (tiene
+  factor verificado; el código 123456 dio el error esperado sin tocar su cuenta); «antes
+  de configurar», «configurando» con clave manual y el aviso del tercer fallo, con `fetch`
+  simulado desde la consola (no se creó ningún factor). Sin ver: 429 real, «Listo.
+  Entrando.», y `/auth/mfa` a 360 px.
+- `tsc` en cero. Los tests de `mfa` (`__tests__/unit/api/auth/mfa.test.ts`) son de la API y
+  no cambian; el e2e solo espera la URL.
+
+## 23/9 — «Cerrar sesión» pregunta en el sitio
+
+Jhonny: «cambiemos el Cerrar sesión a que abra un diálogo, además el diálogo debe tener un
+overlay detrás, puede ser uno en blur». Lo hecho:
+
+- **`components/organisms/logout-dialog/LogoutDialog.tsx`** (cliente): `LogoutDialog({open,
+onOpenChange})` con Radix Dialog —la misma pieza que `Sheet` y la confirmación del
+  examen—, overlay `bg-black/40 backdrop-blur-sm`, tarjeta centrada de 24rem, «¿Cerrar
+  sesión?» + «Para volver a entrar tendrás que iniciar sesión otra vez», «Cancelar» y
+  «Cerrar sesión» como `<form method="POST" action="/api/auth/logout">` (nada se cierra por
+  GET; el botón entra en `loading` al enviar y el diálogo no se cierra mientras tanto).
+  `LogoutButton({className, children, icon})` es el `<button>` que lo abre, con su diálogo.
+- **Conectado en los cuatro sitios**: `SideNav` (el `NavItem` de abajo pasa a
+  `LogoutButton` con las mismas clases de fila; deja de ser enlace porque ya no lleva a
+  ningún sitio), `StudentTopNav` (el `DropdownItem` abre el diálogo, que vive **fuera** del
+  menú; apertura diferida con `setTimeout(…, 0)` porque en el mismo tic el menú se quedaba
+  abierto detrás del diálogo —visto—), `(partner)/layout.tsx` (`LogoutButton` en la
+  cabecera) y `AppHeader` (sin uso en `app/`, pero cambiado por coherencia; su test pasa de
+  «link» a «button»).
+- `/auth/logout` y `POST /api/auth/logout` **no cambian**: la página sigue para quien llegue
+  por URL.
+- **Verificado con Estudiante Uno**: menú de la persona → Cerrar sesión → diálogo centrado
+  con el fondo desenfocado y el menú ya cerrado; «Cancelar» y Escape cierran y devuelven el
+  foco; no se confirmó el cierre (es tu sesión). Sin verificar: `SideNav` (staff, necesita
+  tu sesión) y el aliado.
+- `tsc` en cero; jest no corre en la VM (el test de `AppHeader` quedó actualizado sin
+  ejecutarlo).
+- **Motion** (Jhonny: «dale un motion breve y smooth de visibilidad»): `.dialog-overlay` y
+  `.dialog-panel` en `globals.css`, por `data-state` de Radix. Entrada = grow (96 % → 100 %
+  con fade, `--easing-enter`, `--duration-normal`); salida = fade (`--easing-exit`,
+  `--duration-normal`), según `.claude/skills/motion-colombia-estudia` (grow entra, fade
+  sale, solo `opacity`/`transform`, tokens y nada literal). El desenfoque no se anima: se
+  funde con la opacidad del velo. `prefers-reduced-motion` = corte seco por la regla global.
+  Radix espera al `animationend` antes de desmontar, así que la salida se ve. Verificado
+  por `getComputedStyle`: `dialog-grow-in 0.3s cubic-bezier(0,0,0.2,1)` al abrir,
+  `dialog-fade-out 0.3s` al cerrar, y el nodo desmontado después; `body` sin
+  `pointer-events` colgado. Las clases sirven para cualquier diálogo centrado (la
+  confirmación del examen sigue sin motion; no se tocó).
+
+## 23/9 — E6 del estudiante: la biblioteca, condicionada al volumen
+
+Jhonny: «continua». La decisión (§9) dice «buscador + filtro cuando haya más de ~10
+recursos», así que lo hecho es lo mínimo que respeta esa condición, en
+`app/(student)/aprender/biblioteca/page.tsx`:
+
+- **Una acción con nombre por fila**: «Descargar» (documentos y audios, con `download`) y
+  «Ver la grabación» (Vimeo, otra pestaña), a la derecha; el título deja de ser el enlace.
+  El nombre accesible del enlace lleva el título («Descargar: Guía del arroz») para que un
+  lector de pantalla no oiga diez «Descargar» iguales.
+- **Filtro por tipo solo desde diez recursos** (`FILTER_FROM = 10`): «Todo (N)» /
+  Documentos / Audios / Grabaciones como enlaces `?tipo=` (sin JavaScript, `aria-current`).
+  Con menos de diez no se pinta nada: la lista entera se lee de un vistazo. Un filtro sin
+  resultados dice «No hay recursos de ese tipo». **Sin buscador**: se diseña con contenido
+  real, no antes.
+- Mensajes `learn.library.action.*` y `learn.library.filter.*`.
+- **No verificado en Chrome**: la extensión se quedó en «browser-internal URL» tres veces
+  seguidas con `/aprender/biblioteca` y paré (el resto de la sesión sí cargó). `tsc` en
+  cero. Queda para la siguiente pasada: ver la biblioteca de Estudiante Uno (pocos recursos:
+  no debería salir el filtro) y, con datos, el filtro.
+
+## 23/9 — E5 del estudiante: el calendario como agenda
+
+Jhonny: «continua». Lo hecho en `app/(student)/aprender/calendario/page.tsx`:
+
+- **Tres tramos en vez de una lista**: «Hoy» / «Próximos 7 días» / «Después» (este último
+  solo si tiene algo), con su vacío propio («Nada para hoy», «Nada en los próximos 7 días»).
+  Los días se cuentan en Bogotá para los instantes (sesiones, plazos) y en UTC para las
+  fechas solas (`@db.Date`), con la misma lección del 23/9.
+- **Distancia en cada fila**: «Inicio de la cohorte · en 8 días», «Sesión en vivo · hace 3
+  días» en lo pasado (`learn.calendar.distance` / `distancePast`, plural ICU: hoy, mañana,
+  ayer, en N días, hace N días).
+- **Una acción por fila, a la derecha**: «Unirse» (solo con `joinable`) o «El enlace se
+  activa 15 minutos antes» para la sesión; «Abrir el examen» (botón secundario) para el
+  plazo; nada para inicio/fin de cohorte. El título del examen deja de ser el enlace.
+  Una sesión que ya terminó **no** dice «se activa 15 minutos antes» (lo decía; error
+  anterior a esta ola, visto con la del 20/9).
+- **El fin de acceso una sola vez**, arriba, con distancia y año: «Tu acceso a COC-2026-2
+  termina el 18 de diciembre de 2026: faltan 86 días» (`accessUntil`); sale de la lista de
+  plazos. Con varias cohortes activas, una línea por cohorte (Estudiante Uno tiene cuatro y
+  se ve como un bloque; un estudiante real tiene una o dos). El año va porque «20 de
+  septiembre: faltan 362 días» sin año se leía como hoy.
+- **No hecho**: las cuotas no están en el calendario (`CalendarItem` no las trae) y no las
+  metí: mezclar «revisar pago» en la agenda académica roza la frontera menor/adulto de E4 y
+  es decisión de producto, no de UX. Sección «Próximamente» pasa a llamarse «Agenda».
+- **Verificado con Estudiante Uno**: los tres tramos con sus vacíos, «en 8 días» para el
+  inicio de RAP-TEST (1/10), lo pasado con «hace 3/4/5 días», la sesión pasada sin la
+  promesa del enlace. Sin datos de «Hoy» ni de examen con plazo para ver «Abrir el examen».
+- `tsc` en cero.
+
+## 23/9 — E4 del estudiante: la cuenta en lenguaje de persona y avisos con una acción
+
+Jhonny: «continua». Lo hecho:
+
+- **`AccountSummary`** (`features/billing/components/account-summary.tsx`, servidor): un
+  componente que dice la situación de la cuenta en **una frase** en vez de badge + «próxima
+  cuota» + totales: «Tienes una cuota vencida desde el 18 de septiembre: te faltan
+  $ 200.000», «Estás al día. La siguiente cuota es la 2, $ 100.000, y vence el 15 de
+  octubre», «Tienes un acuerdo de pago desde el … y vas al día con él», «Esta matrícula la
+  paga una entidad aliada», «No te queda ninguna cuota pendiente»; debajo, «Has pagado X de
+  Y». Las fechas `@db.Date` se pintan en UTC (misma lección del calendario). Mensajes en
+  `billingSummary.*`.
+- **La frontera menor/adulto está en el componente**, no solo en dominio: la consecuencia
+  («Para matricularte en una cohorte nueva con cuotas vencidas necesitarás un acuerdo de
+  pago») solo se pinta si `!isMinor && overdue && policy.requireAgreementForNextCohort`; al
+  menor se le pinta siempre «El acceso a las clases nunca depende de los pagos» y **no existe
+  rama** que junte deuda y acceso. `/aprender/mi-cuenta` y `/familia/[enrollmentId]` cargan
+  `getPolicy` y usan el mismo componente; el badge de cuenta y el bloque de totales se van
+  de ambas. La tabla de cuotas pinta `dueOn` en UTC.
+- **Avisos con una acción y por día** (`NotificationList.tsx`): cada tipo lleva su verbo
+  (`ACTION_BY_TYPE`: «Ver la nota», «Ir al tema», «Ver la sesión», «Ver la constancia», «Ver
+  mi cuenta», «Revisar el pago», «Ver el acuerdo», «Corregir la actividad», «Ver el tema»,
+  «Revisar actividades», «Ver la persona»; un tipo sin entrada cae en «Ver»); la lista se
+  agrupa por día en Bogotá (Hoy / Ayer / «domingo, 20 de septiembre») con `<h3>` por grupo y
+  la hora sola en cada aviso. Marcar leída sigue siendo lo único que se hace en el feed. El
+  encabezado «Hoy» lleva `suppressHydrationWarning` (medianoche). Al listar los tipos
+  encontré `submission_approved` / `submission_returned` (`cohorts/server/submissions.service.ts:337`),
+  que el grep por literal no veía: ahora tienen verbo. El centro de staff usa la misma lista,
+  así que hereda los grupos y los verbos de sus tipos.
+- **Verificado con Estudiante Uno**: `/aprender/notificaciones` con dos grupos («domingo, 20
+  de septiembre» → «Tu entrega fue aprobada · 10:59 · Ver el tema»; «sábado, 19 de
+  septiembre» → «Pago confirmado · 14:58 · Ver mi cuenta»); `/aprender/mi-cuenta` con «Con
+  cuota vencida · Tienes una cuota vencida desde el 18 de septiembre: te faltan $ 200.000 ·
+  Has pagado $ 100.000 de $ 300.000». Sin consecuencia porque la política está apagada y el
+  estudiante no es menor (coherente). Sin errores de consola ni de hidratación.
+- **Sin verificar**: `/familia/[enrollmentId]` con el componente (necesita la sesión de
+  Jhonny) y un aviso de «Hoy»/«Ayer» (los de la base son del 19 y 20).
+- `tsc` en cero. jest/eslint/pa11y siguen sin poder correr en la VM.
+
+## 23/9 — E3 del estudiante: el examen dice la verdad humana
+
+Jhonny: «Continua». Lo hecho:
+
+- **«Antes de empezar»** (`examen/[assignmentId]/page.tsx`): con un intento abierto, el
+  texto de la tarjeta pasa a «Tienes un intento en curso: tus respuestas están guardadas y
+  puedes seguir donde lo dejaste», y en «Qué esperar» los intentos dicen «Tienes un intento
+  en curso. Cuando lo entregues, habrás usado tu único intento» (o «te quedarán N más»;
+  `learn.assessment.attemptsInProgress`, plural ICU sobre `allowed − used`). «Te quedan 0 de
+  1» era verdad contable y mentira humana. Sin intento abierto, lo de siempre.
+- **`/resultados` en tarjetas** (`ExamCard` en `resultados/page.tsx`): una por examen, con
+  el título, programa · módulo, **una frase** de situación y una acción: bloqueado → «Se
+  habilita al completar “…”» / «Todavía no está disponible» / «La cohorte ya cerró» (nuevo
+  `unavailableReason` en `ResultsForStudent.assessments`); pendiente → «Pendiente. Vence el
+  …» o «Puedes presentarlo cuando quieras»; en curso → «Tienes un intento en curso…» +
+  «Continuar el intento» (borde `info`); entregado con nota → «Se conserva tu mejor intento
+  de N: 82 %. Aprobado / No aprobado» (nuevo `visibleAttempts`; borde `success`/`warning`);
+  entregado sin nota visible → «La nota se mostrará cuando el instructor la revise o cuando
+  pase la fecha límite». La composición se dice tal cual, sin texto pedagógico inventado.
+  «Notas por asignatura» e «Intentos» siguen como tablas con su vacío.
+- **Verificado con Estudiante Uno**: `/resultados` con dos tarjetas («Cuestionario Arroz»
+  en curso con «Continuar el intento»; «Cuestionario Inteligencia Financiera» con «Se
+  habilita al completar “Bienvenidos a VALIDA YA!…”»); la previa del examen con «Tienes un
+  intento en curso. Cuando lo entregues, habrás usado tu único intento».
+
+## 23/9 — E2 del estudiante: modo tarea y `/aprender` como «hoy»
+
+Jhonny: «Continua». Lo hecho:
+
+- **Modo tarea** (`components/organisms/task-mode`): `TaskMode` pone `<html class="task-mode">`
+  mientras el player o el intento están montados; `globals.css` esconde la barra global del
+  estudiante (`[data-student-nav]`, `StudentTopNav`) por debajo de `lg`; `TaskBar` la
+  sustituye: «‹ Volver a la ruta», «1. Tus primeras rimas · Tema 2 de 2» y, en el player, el
+  menú Opciones como icono (`LessonTools compact`). En escritorio no cambia nada. Una clase
+  en `<html>` y no una prop del layout: el layout es de servidor y no sabe la ruta.
+- **Rail plegable en escritorio** (`app/(student)/aprender/route-rail-frame.tsx`): 15 rem
+  (antes 18) con «Ocultar / Mostrar la ruta» y la preferencia en `localStorage`
+  (`ce.rail.collapsed`). Cliente por el estado; `rail` y `children` llegan pintados del
+  servidor. El `<details>` de móvil se queda en `WithRouteRail`.
+- **`/aprender` como «hoy»**: la lista «Tus otros programas» se va; con dos o más
+  matrículas la tarjeta de la tarea lleva un selector (`enrollment-switcher.tsx`, `Dropdown`
+  con avance en la descripción de cada opción) que navega a `?matricula=`; con una, el
+  overline de siempre. La ruta se **resume**: abierto solo el módulo por el que se va (el
+  del ítem a retomar o del primero sin completar; el último si todo está completo), los
+  demás en su línea «x de y · min» o «se abre al completar “…”».
+- La tarjeta de estado del intento pasa de `sticky top-0` a `top-14` con `z-[5]`: se metía
+  bajo la barra superior (visto ayer).
+- **Verificado con Estudiante Uno (escritorio)**: selector en la tarjeta con las cuatro
+  matrículas y su avance, cambio a IVY-2026-1 → módulo 1 abierto, módulo 2 resumido y
+  bloqueado; player con la ruta en 15 rem, «Ocultar la ruta» pliega y «Mostrar» la vuelve;
+  la clase `task-mode` entra en el player y sale en `/aprender`; la regla CSS está compilada
+  y la `TaskBar` está en el DOM con «Volver a la ruta · 1. Tus primeras rimas · Tema 2 de
+  2». **No visto en móvil**: la ventana de Chrome está a pantalla completa y no se deja
+  redimensionar hoy (sí se dejó antes). Queda en confianza media, como estaba.
+
+## 23/9 — E1 del estudiante: la espera que se ve y nada se pierde
+
+Jhonny: «continua». Lo hecho:
+
+- **`lib/net/slow-request.ts`** — `useSlowRequest({ screen, action, request })`: envuelve
+  una petición; `busy` → `slow` al pasar `SLOW_AFTER_MS` (6 s, **provisional**: es un solo
+  valor en un solo sitio hasta que la telemetría diga cuánto tarda cada acción) → `failed`
+  si el `fetch` lanza. No aborta: una petición lenta puede llegar y repetirla es la forma de
+  crear entregas dobles. Cada petición manda `student.request.finished` con `request`
+  (`submission`, `attempt_start`, `attempt_save`, `evidence`), `outcome`
+  (`ok`/`slow_ok`/`failed`) y `durationMs` (vocabulario en `student-events.ts`, validado
+  en la ruta; `durationMs` entero ≤ 1 día).
+- **`components/molecules/request-status`** — `role="status"` junto al botón: en `slow`
+  «Está tardando más de lo normal (14 s). No cierres esta pantalla. Lo que escribiste sigue
+  aquí.»; en `failed` «No pudimos confirmarlo. Lo que escribiste sigue aquí.» + Reintentar.
+  Sin códigos ni «error de red».
+- **`lib/net/draft.ts`** — `useDraft(key, initial)`: el texto se guarda en `localStorage`
+  al escribir y se recupera al volver («Recuperamos lo que habías escrito en este
+  aparato»); se borra al confirmar el envío. Un archivo no se puede guardar así: se queda en
+  memoria mientras la pantalla siga abierta, y en `failed` se dice.
+- **Aplicado**: `submission-form.tsx` (borrador + espera + reintento con el texto y el
+  archivo intactos; los errores del servidor siguen con su texto), `start-attempt.tsx`
+  (espera + reintento; reintentar es seguro porque `startAttempt` devuelve el intento
+  abierto), `AttemptPlayer.tsx` (la cola de respuestas pendientes también en `localStorage`,
+  se recupera y se manda al montar; duración de cada autosave a telemetría). La evidencia
+  (`evidence-recorder.tsx`) ya reintentaba a los 20 s y al volver la red, y es silenciosa
+  a propósito: no se toca.
+- **Verificado con Estudiante Uno**: escribir en «Corregir tu actividad», recargar → el
+  texto vuelve con el aviso; con `fetch` retrasado 25 s → a los 6 s «Está tardando… (14 s)»
+  con el botón en «Enviando…»; con `fetch` que lanza → «No pudimos confirmarlo» + Reintentar
+  y el texto intacto. El borrador de prueba se borró. Pendiente de ver: intento con red
+  caída (cola persistida) y un archivo en `failed`.
+
+## 23/9 — E0 del estudiante: medir antes de rediseñar
+
+Jhonny: «arranca». Lo hecho:
+
+- **Vocabulario cerrado** en `lib/telemetry/student-events.ts`: dos tipos
+  (`student.primary_action.shown` / `.clicked`), tres pantallas (`aprender`, `lesson`,
+  `assessment`), ocho acciones (`start`, `resume`, `next`, `exam`, `submit`, `blocked`,
+  `attempt_start`, `attempt_continue`), forma del ítem. Vive en `lib/` y no en
+  `features/*/server` para que el componente no dependa de servidor
+  (`.dependency-cruiser.js`). `trackStudentEvent` manda con `fetch keepalive`, sin esperar y
+  sin reintentos: un evento perdido es una cifra menos.
+- **`POST /api/learn/events`** (`lesson.progress.own`, 120/min por persona) →
+  `features/learn/server/events.service.ts#recordStudentEvent`: solo las claves conocidas
+  del payload; una matrícula que no es de la persona se descarta sin error. Test
+  `events.service.test.ts` (3 casos). Probado en Chrome: 200 con payload válido, 400 con
+  tipo desconocido, las claves extra se ignoran.
+- **`components/molecules/primary-action-tracker`**: envuelve la acción principal
+  (`display: contents`, `onClickCapture`), una impresión por combinación y carga de página
+  (en desarrollo StrictMode montaba dos veces y salían dos `shown`). En tres sitios:
+  `/aprender` (`ContinueCard`, `start`/`resume`), la barra del player (`submit`, `next`,
+  `exam`, `blocked`) y «Antes de empezar» (`attempt_start`/`attempt_continue`).
+- **`/inicio` → «El recorrido del estudiante»**: seis pasos con personas distintas en 30
+  días (vio la acción → la pulsó → abrió un tema → llegó al final → completó/envió → siguió
+  desde la barra), barras SVG con porcentaje sobre el primer paso
+  (`inbox.service.ts#journey`, filtros JSON de Prisma con `path`/`equals`; `in` no existe
+  para JSON, por eso el `OR`). Documentado en `reportes.md`.
+- **Verificado con Estudiante Uno**: al cargar `/aprender` sale un `shown`; al pulsar
+  «Seguir con “Rimas y ritmo”» sale un `clicked` y navega; en «Qué significa R A P» la barra
+  manda un `shown` con `next` y el clic en «Siguiente» un `clicked`. En «Rimas y ritmo» (en
+  revisión, último del módulo) no hay acción y no se manda nada: correcto. `/inicio` no se
+  vio (sesión de admin).
+- No hay nada de PII: ni títulos, ni nombres, ni texto libre; ids de asignación y
+  enumeraciones.
+
+## 23/9 — Decisión UX del estudiante (con la opinión externa)
+
+Jhonny devolvió una opinión sobre `brief-estudiante-2309.md`; consolidada en
+`docs/ux/decision-estudiante-2309.md` con veredicto, **confianza** y ola. Lo que cambia
+respecto a la propuesta §8: la instrumentación pasa de última a **primera** (E0, eventos en
+`LearningEvent`, sin PII); los umbrales 8 s / 30 s no se fijan (salen de medir); el
+calendario semanal se rechaza a favor de una agenda «Hoy / 7 días» con acción por fila; la
+biblioteca con buscador se condiciona al volumen real; player y `/aprender` se matizan
+(«modo tarea», ruta resumida y no escondida). Regla nueva para juzgar cada pantalla del
+estudiante: qué hago ahora, qué pasa con lo que hice, qué viene después.
+
+Antes de consolidar se cerró parte de lo provisional: el intento se vio (escritorio y 500
+px) y tenía un fallo —sin límite de tiempo, el reloj contaba hasta el fin de acceso,
+«124440:38»— arreglado en `AttemptPlayer.tsx` (`isSessionDeadline`: reloj solo si el plazo
+cae en 24 h; formato con horas). 360 px reales no se pudieron reproducir (Chrome no baja de
+500 y la CSP bloquea `iframe`); transcripción y archivo siguen sin verse. Olas E0–E6 en la
+decisión.
+
+## 23/9 — Brief de UI/UX del área del estudiante
+
+Jhonny: «el mismo ejercicio de la UI/UX pero ahora con la vista del estudiante». Se recorrió
+cada pantalla con la sesión de Estudiante Uno y salió `docs/ux/brief-estudiante-2309.md`
+(pantallas 4.1–4.11 con layout, funcionalidad, estados y archivo; flujos; reglas; deuda vista
+hoy; propuesta §8 en diez puntos; prompt §9 para una segunda opinión; §10 cómo devolverla).
+Las opiniones se consolidarán en `docs/ux/decision-estudiante-2309.md`.
+
+Arreglos de paso, vistos en el recorrido:
+
+- `/aprender/calendario`: inicio/fin de cohorte y fin de acceso salían un día antes en
+  Bogotá (`@db.Date`); las fechas sin hora se pintan en UTC.
+- `StudentTopNav#isActive`: «Mis programas» quedaba marcado en Resultados, Constancias y Mi
+  cuenta; un destino con `activeUnder` se marca solo por ruta exacta y sus prefijos.
+- `NotificationList`: desajuste de hidratación en `<time>` (el navegador pone un espacio
+  fino en «a. m.» y Node uno normal); `suppressHydrationWarning` en ese nodo.
+- No se pudo abrir el intento de examen: «Continuar el intento» tardó más de un minuto en el
+  servidor de desarrollo y volvió sin mensaje. Está anotado en el brief (§4.3, §7 y §8.3) como
+  el fallo más caro con datos móviles: las esperas de red no se ven.
+
+## 23/9 — Ola 3 de la dirección UX: coherencia multirol
+
+Jhonny: «ve con la ola 3» (`docs/ux/decision-ux-2309.md` §5). Lo hecho:
+
+- **`/inicio`** (`app/(staff)/inicio/page.tsx`, `features/staff/server/inbox.service.ts`):
+  «Requiere atención» con cinco clases de línea —entregas por revisar (una por cohorte, la
+  que más tiene primero), cohortes planificadas a las que abrir dejaría piezas fuera (misma
+  `planCohortOpening` que usa Abrir), cohortes abiertas con contenido publicado que no tienen,
+  invitaciones que vencen en 7 días, cuotas vencidas sin pagar—, cada una filtrada por la
+  capacidad que la resuelve (`assessment.grade`, `cohort.manage`, `people.manage`,
+  `billing.manage`) y enlazada a su pantalla. Debajo, **los tres embudos de la ola 1** en 30
+  días con datos que ya se guardan: personas nuevas con rol de estudiante → con un tema
+  completado; temas empezados → completados; actividades enviadas → aprobadas. El tercer
+  embudo original («sesiones con error no recuperado») no se puede medir sin telemetría y
+  la página lo dice. Con `cohort.manage`, el rail de `/cohortes` (próximas + actividad).
+  `home.ts`: ADMIN y OPERATIONS aterrizan en `/inicio`; INSTRUCTOR sigue en `/contenido`.
+  `staff-nav.ts`: «Inicio» arriba de la barra, sección «Hoy», para cualquier capacidad de
+  staff (`capability: 'staff'`); tests de nav y de `home` actualizados.
+- **Conmutador de espacios** (`lib/nav/spaces.ts` + `components/molecules/space-switcher`):
+  `buildSpaces(capabilities)` lista Gestión (`/inicio`), Aprender, Mi familia y Aliado según
+  lo que la persona puede hacer (el aliado, por el alcance `partnerId` de
+  `progress.read.cohort`); `spaceOf` marca el actual por prefijo de ruta. Con dos o más, la
+  marca de las tres barras (`SideNav`, `StudentTopNav` en estudiante y familia, cabecera del
+  aliado) es un `Dropdown` con el nombre de la institución, el espacio actual en pequeño y
+  la lista; con uno, el enlace de siempre. Test `spaces.test.ts` (6 casos).
+- **`DataTable compactRows`**: filas de 8 px en vez de 12; aplicado a `/cohortes`,
+  `/personas` y `/cartera` (las listas largas que se recorren). Los enlaces de las celdas
+  conservan `min-h-touch`.
+- **`/familia` priorizada**: bloque «Requiere tu atención» arriba (cuota vencida si la paga,
+  pupilo sin empezar con la cohorte abierta, acceso que termina en 14 días), cada línea a la
+  ficha del pupilo. `/familia/[id]` ya tenía la cartera al final y separada en su propia
+  tarjeta; no se tocó.
+- **`StatusBadge`**: los `Badge` que quedan son juicios de pantalla (aprobado/no, confirmado/
+  no, subtítulos) o llevan número («Borrador, versión 3», «Publicado (v2)»); ninguno es una
+  enumeración sin más. La migración se da por completa salvo que quieras un dominio
+  `version` con número.
+- **Verificado en Chrome**: solo `/aprender` con la sesión de Estudiante Uno (un espacio →
+  marca normal; todo sigue igual). `/inicio` y el conmutador necesitan tu sesión de admin
+  (tú tienes Gestión y Mi familia: verás el conmutador). El servidor de desarrollo tardó
+  medio minuto en recompilar tras estos cambios; la primera carga puede parecer colgada.
+- No hecho de la ola 3: nada más estaba en el alcance. Sigue pendiente `atRisk`
+  (protegido) y «Ver como estudiante» (decisión).
+
+## 23/9 — Con la sesión del estudiante: lo que no se había podido ver, y dos fallos
+
+Jhonny entró como Estudiante Uno en la pestaña de Chrome. Recorrido: `/aprender`, el
+player de un vídeo («Qué significa R A P», RAP-1), el tema con actividad («Rimas y ritmo»),
+la entrega y su corrección.
+
+- **Un vídeo nunca completaba el tema por verlo.** `evidence-recorder.tsx` escuchaba el
+  evento `timeupdate` del player de Vimeo, pero el protocolo de `postMessage` sin SDK (el
+  que usa el iframe saneado) emite **`playProgress`** (`{ seconds, percent, duration }`) y
+  contesta `getDuration` en `value`, no en `data`. Visto en vivo: reproduciendo el final del
+  vídeo llegaban solo `playProgress`; el estado seguía «En curso» y nunca se mandaba la
+  evidencia. Solo la transcripción leída completaba un tema con vídeo. Arreglado: se
+  suscribe a los dos nombres y acepta las dos formas; verificado: al cruzar el 90 % el tema
+  pasa a «Tema completado» y la barra ofrece «Siguiente: Rimas y ritmo». Estaba así desde
+  la fase 4 (19/9); ninguna verificación anterior había reproducido un vídeo.
+- **«Empieza por aquí» sin nada que decir.** En RAP-TEST (empieza el 1/10) la tarjeta solo
+  tenía el título: `resume` es nulo cuando nada está habilitado. `outline.ts#nextPoint`
+  (el primer ítem sin completar, habilitado o no) → `upcoming` en `CohortOutline` y
+  `MyEnrollment`; la tarjeta dice «Tu primer tema es “…”. Se habilita el 1 de octubre de
+  2026.» (o «se habilita al completar “…”», o «la cohorte ya cerró»). La fecha de inicio
+  de la cohorte es `@db.Date` (medianoche UTC) y en Bogotá se pintaba como 30 de
+  septiembre: una fecha sin hora se formatea en UTC (`isDayOnly`). Test `nextPoint` en
+  `outline.test.ts`; `lesson.service.test.ts` con el campo nuevo.
+- «La enviaste el 23 de septiembre, 12:20 p. m..»: la abreviatura termina en punto y la
+  frase también. La hora del envío pasa a 24 h.
+- **Visto bien**: la tarjeta «Empieza por aquí» de RAP-1 con «Empezar con “Qué significa R
+  A P”» (Vídeo · 5 min); el player con la cabecera compacta («1. Tus primeras rimas · Tema
+  1 de 2 · 5 min de estudio»), el menú Opciones → «Cómo leer» con «Transcripción siempre
+  desplegada»; la barra fija con estado, «Volver a la ruta» y el bloqueo explicado; el
+  bloque Practica con las instrucciones en Markdown y «Se entrega escribiendo la respuesta
+  aquí»; el envío de texto → «Actividad en revisión» con «Ver lo que enviaste» y «Corregir
+  antes de la revisión» (formulario con el texto anterior, «Enviar de nuevo» / «Dejarla como
+  está»); la barra «Tu actividad está en revisión…». El `POST …/submission` tardó ~15 s en
+  el servidor de desarrollo (compilación de la ruta), no es del formulario.
+- **Datos de prueba**: Estudiante Uno tiene «Qué significa R A P» completado en RAP-1 y una
+  entrega **SUBMITTED** en «Rimas y ritmo» (RAP-1): aparece en `/cohortes/…/actividades` y
+  en «Requiere atención» de RAP-1 para que la revises desde tu sesión de admin.
+- No verificado aún: la transcripción plegada (el vídeo de prueba no tiene transcripción),
+  archivo como entrega, `/registro` sin sesión.
+
+## 23/9 — Las pantallas de acceso dejan de ser anónimas
+
+Jhonny trajo un mockup del login (foto a la izquierda, formulario a la derecha) y generó las
+cuatro fotos con los prompts del día (`baseCE`, `registroCE`, `authCE`, `mobileCE`, PNG en la
+raíz → `_to_delete/`). Lo hecho:
+
+- **Fotos** a JPEG (calidad 82, progresivo; 153–169 KB cada una) en
+  `apps/web/public/photos/`: `login-woman.jpg`, `register-man.jpg`, `recover-bus.jpg`
+  (1086 × 1448) y `login-strip.jpg` (2172 × 724, sin caras). Declaradas en `MEDIA`
+  (`features/marketing/media.ts`: `auth-login`, `auth-register`, `auth-recover`,
+  `auth-strip`, con `alt` descriptivo y punto focal a la derecha); relaciones `3/4` y `3/1`
+  nuevas en `AspectRatio` y `RATIO_CLASS`.
+- **`components/templates/auth-shell`**: dos columnas desde `lg` (5/11 foto, 6/11
+  formulario). Izquierda: la foto con un velo (`auth-photo-scrim`, globals.css: 0,85–0,9
+  en el tercio inferior) y un titular + línea amarilla + una frase, en blanco
+  (`text-text-on-accent`). Derecha: banda `auth-strip` solo en móvil (`lg:hidden`), logo
+  enlazado a `/`, el formulario, y un pie con «Privacidad»
+  (`institution.dataPolicyUrl`, solo si existe; «Ayuda» se quitó a petición de Jhonny). Titulares en `auth.shell.*` (de la
+  plataforma; el de la institución saldría de `settings.ts` cuando lo quiera).
+- `app/(public)/auth/layout.tsx` → `AuthFrame` (cliente, `useSelectedLayoutSegment`):
+  `login` con su foto; `recuperar`, `restablecer` y `mfa` con la de «volver a entrar»;
+  `app/(public)/registro/layout.tsx` con la de registro. Los formularios pasan de centrado a
+  alineado a la izquierda, con `space-y-6` entre título, texto y campos; en el login,
+  «Regístrate» sube al primer enlace (es la salida más frecuente de quien llega por primera
+  vez), luego «¿Olvidaste tu contraseña?» y al final el enlace por correo.
+- **Lo que el mockup traía y se dejó fuera, con razón**: el flujo «solo correo → Continuar»
+  (contraseña primero sigue siendo la decisión del 16/9), «Miles de colombianos» con tres
+  retratos (cifra que no sostenemos, personas que no existen), «Bienvenido» (genérico
+  masculino), el selector «ES ▾» (solo hay `es-CO`), «Termina tu bachillerato» cableado (es de
+  una institución, no de la plataforma).
+- **Verificado en Chrome**: `/auth/login` y `/auth/recuperar` a 1568 px (foto, velo, titular
+  blanco legible sobre la ventana, logo, pie) y `/auth/login` a ~600 px (banda, logo,
+  formulario a todo el ancho). `/registro` no se pudo ver: con tu sesión redirige a
+  `/ingresar`. El anillo de foco que se ve alrededor del `h1` al cargar es de siempre (el
+  foco programático de `headingRef`), no de este cambio.
+- No tocado: nada protegido. pa11y no corre aquí: el contraste del titular sobre la foto
+  está calculado (velo 0,85 sobre la zona más clara → > 7:1), no medido.
+
+## 23/9 — Ola 2 de la dirección UX: la cohorte y los editores
+
+Jhonny: «continua» (misma dirección: `docs/ux/decision-ux-2309.md`, ola 2). Lo hecho:
+
+- **La cohorte se lee por secciones** (`app/(staff)/cohortes/[cohortId]/page.tsx`,
+  `?seccion=resumen|ruta|personas|sesiones`; sin parámetro, Resumen). La navegación es
+  `components/molecules/section-nav` (pestañas en escritorio, `<select>` en móvil; el
+  actual se decide por ruta y query): Resumen · Ruta (cuenta actualizaciones pendientes y
+  asignaciones desactualizadas) · Personas (matrículas) · Actividades (por revisar) · Avance
+  (si `progress.read.cohort`) · Sesiones (próximas) · Cartera (`/cartera?cohorte=`). Las
+  páginas hijas (`/actividades`, `/avance`, `/importar`) siguen siendo rutas propias; la
+  barra las enlaza.
+  - Cabecera con **una** acción primaria según el estado: PLANNED → «Abrir la cohorte»
+    (`CohortStatusAction prominent`); abierta → «Matricular» (`EnrollSheet prominent`). El
+    resto (importar CSV, exportar, cerrar con confirmación en `Sheet`) va en el menú
+    «Gestión» (`cohort-management.tsx`, `Dropdown`).
+  - Resumen: lista **«Requiere atención»** (entregas por revisar, actualizaciones del
+    programa, asignaciones desactualizadas, sin matrículas, en riesgo), cada línea con su
+    enlace a la sección; debajo el `StatGrid` del 23/9.
+  - Ruta: «Actualizaciones del programa» (segunda pieza) y, por módulo, la lista de
+    asignaciones con su versión (`assignment-rows.tsx`): «vN · publicada vM» y el botón
+    **«Actualizar a vM»** con la nota «reabre los temas completados» / «conserva el avance»
+    según `invalidatesProgress`. Cohorte PLANNED → estado vacío: se congela al abrir.
+- **`PATCH /api/cohorts/assignments/[assignmentId]` existe por fin.** Estaba en
+  `reference/02-api/endpoints.md` desde el principio y no había ruta ni servicio.
+  `features/cohorts/server/assignments.service.ts`: `listCohortAssignments` (módulos,
+  piezas del programa, `outdated`) y `updateAssignmentToLatest({ kind, assignmentId })` →
+  `{ from, to, reopened }`. Cambia a la versión publicada más reciente (CONFLICT si ya la
+  tiene), audita `version_changed` con antes/después, y si la versión nueva del tema
+  `invalidatesProgress`, reabre los `COMPLETED` a `IN_PROGRESS` y notifica
+  **`lesson_reopened`** al estudiante (con `dedupeKey` por asignación, versión y día). Una
+  versión de examen nunca reabre nada: los intentos hechos se conservan.
+- **El editor con panel lateral** (`app/(staff)/contenido/editor-layout.tsx`): en escritorio
+  (`lg`) el contenido a la izquierda y «Preparación» (`ReadinessPanel layout="rail"`) fijo
+  a la derecha (`sticky top-4`, 20 rem); en móvil el panel es un `<details>` con resumen
+  «N cosas por resolver» (`pendingChecks`, `readiness.summary`). Las dos páginas de editor
+  pasan a `<Page wide>`.
+- Textos nuevos: `cohorts.sections.*`, `cohorts.attention.*`, `cohorts.management.*`,
+  `cohorts.route.*`, `editor.readiness.summary`, `assessmentEditor.readiness.summary`. El
+  texto del aviso `lesson_reopened` va en el servicio, como los demás de
+  `notifications.service.ts` (no pasan por `messages/`).
+- **Verificado en Chrome (admin)**: RAP-TEST en Resumen y Ruta; «Rimas y ritmo» v2
+  publicada (con «reabre» marcado) y la asignación de RAP-TEST actualizada a v2 con el
+  botón (persistió tras recargar; el `router.refresh()` no repintó en los 6 s que esperé,
+  no lo doy por fallo). Los dos editores con el panel a la derecha y fijo al hacer scroll;
+  en el examen «Avisos» tarda unos segundos en pasar de «Revisando…» a «1 problema impide
+  publicar» (latencia del servidor de desarrollo, no del panel). **No verificado**: el
+  `<details>` del panel en móvil (no redimensioné la ventana).
+- **Datos de prueba** que quedan en tu base local: RAP-TEST sobre «Rimas y ritmo» v2.
+- **Pendiente de la ola 2** (tras la segunda tanda, abajo): el cambio de `atRisk` en
+  `packages/domain/src/metrics.ts` (protegido: espera tu confirmación; hoy RAP-TEST, abierta
+  el mismo día, ya marca «1 estudiante lleva más de dos semanas sin actividad»); «Ver como
+  estudiante» (necesita una decisión de suplantación: no se construye sin ella).
+
+### Ola 2, segunda tanda: StatusBadge, auditoría en cabeceras, aterrizaje de ADMIN
+
+- **`components/molecules/status-badge`**: `<StatusBadge domain status />`. Un dominio →
+  una tabla de tonos y un espacio de textos nuevo `status.<dominio>.<ESTADO>`
+  (`cohort`, `enrollment`, `account`, `installment`, `agreement`, `submission`, `lesson`,
+  `attempt`). Sustituye seis copias del mapa de la cartera, tres de la matrícula y los
+  ternarios de `/cohortes` y de la tabla de matrículas; «Devueltas» (plural del filtro)
+  deja de ser la etiqueta de una entrega («Devuelta»). Un estado desconocido sale en neutro
+  con la clave cruda. Migradas: `/cohortes`, `/cohortes/[id]` (matrículas), `/actividades`,
+  `/matriculas/[id]` (avance por tema), `/cartera`, `/cartera/[id]` (cuenta y cuotas),
+  `/aprender/mi-cuenta`, `/familia`, `/familia/[id]`, `/aliado`. Los demás `Badge` son
+  juicios de pantalla (aprobado/no, confirmado/no, subtítulos), no enumeraciones: se quedan.
+  Prueba `StatusBadge.test.tsx`. Los espacios viejos (`billing.statuses`,
+  `enrollments.statuses`, …) siguen en uso en filtros y descripciones.
+- **Auditoría contextual**: `readiness.service.ts#published` pasa a
+  `{ number, at, by }` (`publishedAt`/`publishedById` de la versión + nombre de la
+  persona); `app/(staff)/contenido/published-line.tsx` pinta «Versión N publicada por X el
+  …» junto a la píldora de versión en los dos editores (`readiness.publishedBy/At`).
+  `getCohortDetail` gana `lastTransition` (`AuditLog` entity `cohort`, action
+  `opened|closed`, la última) y la cabecera de la cohorte dice «Abierta por X el …» /
+  «Cerrada por X el …» (`cohorts.audit.*`). Sin actor, solo la fecha.
+- **ADMIN aterriza en `/cohortes`** (`lib/authz/home.ts`; `home.test.ts` y `routes.md`
+  actualizados). Decidido en la ola 1, hecho ahora.
+- **`__tests__/unit/features/cohorts/assignments.service.test.ts`**: siete casos
+  (conserva si no invalida; reabre + avisa una vez por persona si invalida; sin completados
+  no toca nada; CONFLICT al día / sin publicada; NOT_FOUND; examen no reabre). Escrita, no
+  ejecutada (jest no corre aquí).
+- **Verificado en Chrome (admin)**: cabecera de RAP-TEST «Abierta · Lineal · … · Abierta
+  por Jhonny Quinones el 23/09/2026»; Personas con «Activa» en verde; `/cohortes` con
+  «Abierta» por fila; editor de «Rimas y ritmo» con «Versión 2 publicada por Jhonny Quinones
+  el 23/09/2026»; `/ingresar` → `/cohortes`.
+
+## 23/9 — Ola 1 de la dirección UX: aprender sin perderse (parte 1)
+
+Jhonny: «arranca con estas dos opiniones» (`docs/ux/decision-ux-2309.md`, consolidación del
+brief §9 y de la auditoría externa). Lo hecho de la ola 1:
+
+- **`/aprender`** (`app/(student)/aprender/page.tsx`): arriba la tarea —tarjeta «Continúa
+  donde quedaste» con «Seguir con “…”» (forma · minutos) y la barra de avance; si no hay
+  nada completado, «Empieza por aquí» con qué es el primer tema y cómo se completa
+  (`startHere.how.*`); con estado terminal, el mensaje de la puerta—; debajo, «Tus otros
+  programas» como **lista compacta** (una fila por matrícula: programa, cohorte, avance o
+  estado, «Ver su ruta») — todas siguen visibles, como pediste el 21/9, pero ya no empujan
+  la tarea fuera de la primera pantalla; debajo, la ruta como antes (sin repetir el «seguir
+  con»). `EnrollmentCard` desaparece.
+- **Player** (`aprender/tema/[assignmentId]`):
+  - cabecera compacta: overline «N. Módulo · Tema x de y · 12 min» (`placeInRoute` sobre
+    `view.route`, cuenta solo temas) y un menú «Opciones» (`lesson-tools.tsx`, `Dropdown`)
+    con «Cómo leer» y «Reportar un problema», cada uno en su `Sheet`. Las preferencias ya
+    no van en línea entre el título y el texto ni el reporte al pie de cada tema.
+  - «Cómo leer» gana **«Transcripción siempre desplegada»** (plan/11-ux); la transcripción
+    pasa a `<details>` plegado por defecto bajo el artículo, con «Mostrar/Ocultar», y se
+    abre sola con esa preferencia (`TRANSCRIPT_PREF_EVENT`).
+  - **«Practica»**: la actividad y la entrega son un bloque propio (`#practica`, overline
+    «Practica», borde superior y 48 px de separación: cambio de área).
+  - **Barra fija al pie** (`components/organisms/sticky-action-bar`, `sticky`, no `fixed`,
+    por 2.4.11): izquierda el estado en palabras (evidencia: «Se completa al leer hasta el
+    final» / «Tema completado»; actividad: «Te falta enviar la actividad…», «en revisión»,
+    «tu instructor pidió cambios»); en medio «Anterior» y «Volver a la ruta» en texto; derecha
+    **una** acción según el estado: «Enviar actividad» / «Enviar nueva versión» (baja a
+    Practica), «Siguiente: …» o «Ir al examen: …», o el texto de qué falta si está
+    bloqueado. `EvidenceRecorder` deja el estado visible a la barra (que el servidor vuelve a
+    pintar tras `router.refresh()`) y conserva solo el anuncio `sr-only`.
+  - El aviso azul «este tema se completa con una actividad» desaparece: lo dice la barra.
+- **Sin conexión** (`components/organisms/connectivity-banner`): banner `role="status"`
+  arriba de las áreas de estudiante y familia mientras `navigator.onLine` sea falso; la
+  evidencia reintenta al volver (`online` → `flush()`; nunca se perdía, pero esperaba 20 s).
+  No es offline real: contenido descargable queda como decisión de negocio.
+- Textos nuevos: `learn.continue`, `learn.startHere.*`, `learn.othersTitle`,
+  `learn.lesson.place/nextExam`, `learn.activity.step`, `learn.bar.*`, `learn.tools.*`,
+  `learn.reading.hint/transcriptOpen*`, `learn.transcript.show/hide`, `connectivity.offline`.
+- **No verificado en Chrome**: la pestaña sigue con tu sesión de admin, que no entra a
+  `/aprender`. Con la sesión de Estudiante Uno: `/aprender` (tarjeta «Continúa» + lista +
+  ruta) y un tema con actividad («Rimas y ritmo» en RAP-TEST o RAP-2026-2: menú Opciones,
+  transcripción plegada si hay vídeo, bloque Practica, barra con «Enviar actividad»).
+- Pendiente de la ola 1: telemetría de los tres embudos (se puede derivar de
+  `AuditLog`/`LessonProgress`/`Submission` sin eventos nuevos; va con el `/inicio` de staff
+  de la ola 3 salvo que quieras un endpoint antes).
+
+## 23/9 — Fase C de la redefinición: la cuenta del acudiente
+
+Jhonny confirmó tocar `packages/domain` con este diseño (pregunta previa, opción «Sí, sigue
+así»).
+
+- `packages/domain/src/types.ts`: `WardEnrollment { enrollmentId, cohortId, payerType,
+isFinancialResponsible }`. `capabilities.ts`: capacidad nueva **`progress.read.ward`**;
+  `ResolveCapabilitiesInput.wardEnrollments?` (opcional: quien llama con la firma vieja
+  sigue igual); por cada matrícula de pupilo → `progress.read.ward {enrollmentId}` y
+  `billing.read.own {enrollmentId}` si `isFinancialResponsible && payerType === 'PERSON'`.
+  Nunca `lesson.read` ni `assessment.take`. Test nuevo en `capabilities.test.ts`.
+- `lib/authz/request-context.ts`: `guardianOf` trae `isFinancialResponsible` y las
+  matrículas del pupilo (con `paymentPlan.payerType`) → `wardEnrollments`.
+- `features/family/server/family.service.ts`: `listWards` y `getWardDetail`. **No calcula
+  nada propio**: avance de `getEnrollmentDetail` (la vista de operación, con grado de
+  entrada), exámenes y notas de `getResultsForStudent` (la vista del propio estudiante:
+  respeta `reviewPolicy`, el acudiente no ve una nota que el estudiante aún no puede ver),
+  cartera de `getAccount`. El alcance decide (`scopeAllows`): una matrícula ajena es «no
+  existe».
+- Área `app/(familia)`: layout con `StudentTopNav` (`homeHref="/familia"`,
+  `notificationsHref="/familia/notificaciones"`), guardia `lib/authz/guardian.ts`
+  (membresía GUARDIAN o algún `progress.read.ward`), `lib/nav/family-nav.ts` («Mi familia»
+  - «Mis programas» si además estudia); `/familia` (tarjetas por matrícula de pupilo:
+    programa, cohorte, estado, cuota si aplica, barra de avance SVG, acceso hasta);
+    `/familia/[enrollmentId]` (avance por módulo, exámenes con mejor nota visible, notas por
+    asignatura, cuotas con «Pagar en línea» si es responsable); `/familia/notificaciones`
+    reexporta la página del estudiante. `home.ts`: `GUARDIAN → /familia`, detrás de
+    `STUDENT` (quien estudia y es acudiente entra a estudiar y tiene «Mi familia» en su
+    menú: `student-nav.ts`, icono `Users`). Test `home.test.ts` actualizado.
+- `PayButton` se movió a `features/billing/components/pay-button.tsx` (el de
+  `mi-cuenta` reexporta); `startCheckout` y `POST /api/learn/account/pay` aceptan
+  `returnPath` (validado con `isValidNextUrl`) para que Wompi vuelva a `/familia/[id]`.
+- C.3: en la ficha del estudiante, cada acudiente dice si «Ya tiene cuenta y ve el avance
+  en «Mi familia»» o «Todavía no tiene cuenta · Enviarle la invitación desde su ficha»
+  (enlace a `/personas/[guardianId]`, donde la sección de invitación ya existía).
+  `PersonDetail.guardians[].hasAccount`.
+- Docs: `acceso-y-cartera.md` (tabla: `progress.read.ward`, `billing.read.own`,
+  `lesson.read`; párrafo de menores), `routes.md` (`/familia`), `endpoints.md`
+  (`returnPath`), `plan-redefinicion-2009.md` (C hecha), `PRODUCT_DECISIONS.md`.
+- Probado en Chrome como admin: **vinculé a Jhonny Quinones como acudiente de prueba de
+  Estudiante Uno** (parentesco «Prueba 23/9», responsable de pago) desde su ficha; la fila
+  nueva dice «Ya tiene cuenta y ve el avance en «Mi familia»»; `/familia` enseña las
+  cuatro matrículas de Estudiante Uno con avance y «Cuota vencida» en IVY-2026-1;
+  `/familia/<IVY>` enseña avance por módulo (0/2, 0/1), «Cuestionario Inteligencia
+  Financiera · Sin nota todavía» y las cuotas (vencida, $300.000, pagado $100.000).
+  **Esa acudencia de prueba queda en tu base local**: «Desvincular» en la ficha de
+  Estudiante Uno si no la quieres.
+- No hecho: el acudiente no firma el consentimiento del menor desde `/familia` (sigue en
+  papel, `acceso-y-cartera.md`); no probado con un acudiente puro (sin otros roles) porque
+  no creo cuentas — la guardia cubre ese caso (`requireGuardianSession`).
+
+## 23/9 — Fase B de la redefinición: registro público y cohorte de introducción
+
+Jhonny eligió seguir con la Fase B (`docs/plan-redefinicion-2009.md`).
+
+- `lib/institution/settings.ts`: el JSON `Institution.settings` por fin tiene lector y
+  esquema (`introCohortId`, `passthrough` para lo que venga después). Nadie lo leía.
+- `features/admin/server/registration.service.ts` (`getRegistrationSettings`,
+  `updateRegistrationSettings`: solo cohortes PLANNED/OPEN, audita
+  `institution.registration_updated`) + `PUT /api/admin/institution/registration` +
+  sección «Registro público» en `/admin/institucion` (`registration-form.tsx`, con su propio
+  botón: cambia cada vez que se abre una cohorte de introducción; aviso si la elegida ya
+  no admite matrículas).
+- `features/auth/server/registration.service.ts#registerPerson`: correo ya conocido →
+  `CONFLICT` (con cuenta: «inicia sesión»; sin cuenta: «pide tu invitación» — registrarse
+  encima sería tomar una ficha ajena sabiendo un correo); usuario Auth
+  (`email_confirm: true`, misma regla que la invitación, **decisión abierta**: no hay
+  prueba del correo), `Person` + `STUDENT` + `Consent` (solo mayores) en una transacción
+  (si falla, se borra el usuario Auth); la matrícula pasa por **`enrollPerson`**, la misma
+  función de operación, fuera de la transacción: si falla, la cuenta queda y se audita
+  `registration_enrollment_failed`. Menor: sin consentimiento y sin matrícula
+  (`MINOR_NEEDS_GUARDIAN`).
+- `POST /api/auth/register` (público, 5 por 10 min por IP, arranca la sesión en servidor
+  como el accept de invitación). `/registro` (`app/(public)/registro`): un paso, casilla de
+  política solo para mayores, pantalla de éxito que dice qué pasó con la matrícula.
+  Enlaces «Regístrate» en el login y en la cabecera de la portada (solo sin sesión).
+  `lib/authz/routes.ts` + tests (`routes.test.ts`, `route-guard.test.ts`).
+- Test nuevo `__tests__/unit/features/auth/registration.service.test.ts` (7 casos).
+- **Desviaciones del plan**: se pide **fecha de nacimiento** (el plan no la listaba; sin
+  ella `enrollPerson` no matricula y no se sabe si firma la persona o el acudiente);
+  contraseña **≥12** y no 8 (el mínimo de la invitación; dos mínimos para la misma cuenta
+  serían dos reglas).
+- Docs: `routes.md`, `endpoints.md`, `docs/onboarding-institucion.md` §4 «Registro
+  público», `plan-redefinicion-2009.md` (Fase B hecha), `PRODUCT_DECISIONS.md`.
+- Probado en Chrome como admin: «Registro público» → RAP-TEST → «Registro público
+  guardado»; `/registro` con sesión redirige a `/`. **El formulario sin sesión y el
+  registro real no están probados**: la pestaña hereda tu sesión y no cierro sesiones
+  tuyas. Para probarlo: ventana de incógnito → `/registro` → una persona nueva (correo que
+  no exista) → debería quedar en RAP-TEST y entrar a `/aprender`.
+- **Queda RAP-TEST como cohorte de introducción en tu base local**; cámbiala o quítala en
+  `/admin/institucion`.
+
+## 23/9 — Resumen de la cohorte y matrícula en hoja (quinta pieza)
+
+Jhonny: «ya lo hice, puedes continuar». Cierra el orden de la revisión UX del 23/9.
+
+- **Resumen** arriba de la ficha de la cohorte (`cohortes/[cohortId]/page.tsx`): seis
+  cifras con `StatCard`, cada una enlazada a donde se actúa: matrículas activas y menores
+  de edad (→ `#matriculas`), actividades por revisar (→ `/actividades`, ámbar si hay),
+  sesiones próximas (→ `#sesiones`; las no archivadas que aún no terminaron), y —solo con
+  `progress.read.cohort`, que es la capacidad de `/avance`— avance medio (%) y en riesgo
+  (→ `/avance`). Sin esa capacidad no se piden ni se pintan. `StatGrid` gana
+  `columns?: 3 | 4` para que seis cifras no dejen una fila coja.
+- **Matricular en hoja** (`enrollment-actions.tsx#EnrollSheet`, sustituye a `EnrollForm`):
+  «Matricular a alguien» abre una `Sheet` en dos pasos. «Comprobar» llama a
+  `POST /api/cohorts/[cohortId]/enrollments/preview` (`enrollments.service.ts#previewEnrollment`:
+  la misma persona y las mismas reglas que `enrollPerson`, sin escribir ni auditar) y enseña
+  a quién: nombre, mayor/menor de edad, acudiente (con «Registrar acudiente» → `/personas/[id]`
+  si falta), sin fecha de nacimiento («Completar la ficha»), ya matriculada aquí, qué más
+  cursa, hasta cuándo tendría acceso, y el aviso de cartera. Con algún `blocker`,
+  «Matricular» queda deshabilitado y el motivo está a la vista. El grado de entrada solo
+  aparece cuando ya hay persona. `POST` y no `GET`: el documento o correo no va en la URL.
+- Test: `enrollments.service.test.ts` → `previewEnrollment` (menor sin acudiente + ya
+  matriculada, `NOT_FOUND` sin excepción, adulto sin bloqueos; no escribe).
+- Probado en Chrome como admin en RAP-TEST: comprobé a `estudiante1@yopmail.com`
+  («Mayor de edad · No está en esta cohorte · Cursa también: IVY-2026-1, COC-2026-2, RAP-1
+  · Tendría acceso hasta el 2027-09-23»), matriculé, el resumen pasó a «1 activa», y al
+  comprobar de nuevo salió «Ya está matriculada en esta cohorte» con el botón deshabilitado.
+  **Estudiante Uno queda matriculado en RAP-TEST** (dato de prueba).
+- Observación, no tocada (`packages/domain`, protegido): «En riesgo» marca **1** porque
+  `metrics.ts#atRisk` cuenta como riesgo a toda matrícula activa sin ningún evento de
+  aprendizaje (`metrics.ts:147-149`), también el día que se matricula y aunque la cohorte
+  empiece dentro de una semana. Para el resumen de una cohorte que aún no empezó es ruido;
+  si quieres, la regla podría ignorar matrículas de menos de N días o cohortes con
+  `startsOn` futuro. Decisión tuya.
+- `reference/02-api/endpoints.md`: fila `enrollments/preview`.
+
+## 23/9 — La actividad como sección propia del tema (cuarta pieza)
+
+Jhonny: «puedes continuar»; esquema elegido: **en `Lesson`, sin versionar**.
+
+- `prisma/schema.prisma` (protegido, confirmado): enum `ActivityAccepts { TEXT, FILE,
+TEXT_OR_FILE }`; `Lesson.activityInstructions String?` y `Lesson.activityAccepts
+@default(TEXT_OR_FILE)`. Migración `20260923000000_lesson_activity` (aditiva, sin datos
+  que mover). **Te toca**: `pnpm db:generate` + `prisma migrate` (o `db push`) + reiniciar
+  `dev`. Hasta entonces `tsc` da 42 errores, todos en `lessons.service.ts`,
+  `learn/lesson.service.ts`, `learn/submission.service.ts` y
+  `cohorts/submissions.service.ts`, y todos por el cliente Prisma viejo (los `select` con
+  los campos nuevos y su cascada). No pude correr `prisma format` (motores) — la alineación
+  de columnas del bloque nuevo la deja tu `format`.
+- `features/content/server/lessons.service.ts#updateLessonActivity` + `PUT
+/api/content/lessons/[lessonId]/activity` (`lesson.author`; `{ instructions, accepts }`;
+  `CONFLICT` si el tema no es de actividad; audita `activity_updated`). Aparte de
+  `/details` porque no comparte candados: se corrige con el tema publicado.
+  `DraftView.activityInstructions/activityAccepts`.
+- `app/(staff)/contenido/temas/[lessonId]/lesson-activity.tsx`: sección «Actividad» en el
+  editor, solo si `requiresSubmission`: instrucciones (textarea Markdown) + «Qué entrega»
+  (Texto / Archivo / Texto o archivo, con pista) + «Guardar la actividad» (solo con
+  cambios). Panel de preparación: check «Actividad» (sin instrucciones = atención).
+- Estudiante: `learn/lesson.service.ts` devuelve `lesson.activity { html, accepts }`
+  (instrucciones por el mismo `renderLessonHtml`, sin assets); la página pinta la sección
+  «Actividad» antes del formulario (o «todavía no escribió las instrucciones»), y una línea
+  con qué se acepta. `SubmissionForm` recibe `accepts`: solo texto, solo archivo o los
+  dos; errores `needText` / `needFile`.
+- **Reemplazar hasta que la revisen**: `submission.service.ts#submitLesson` ya no rechaza
+  una `SUBMITTED` (solo `APPROVED`), comprueba `activityAccepts` en el servidor, y el
+  panel «Actividad en revisión» tiene «Corregir antes de la revisión» (texto conservado,
+  archivo nuevo sustituye al anterior; «Dejarla como está» vuelve).
+- Revisión (`/cohortes/[id]/actividades`): `SubmissionDetail.activityInstructions`; en la
+  hoja de la entrega, «Ver lo que se pidió» plegado.
+- `reference/04-business-logic/contenido-y-evaluaciones.md` (párrafo nuevo en «Entregas
+  de actividad»), `reference/02-api/endpoints.md` (fila `activity`, `submission`
+  actualizada; y la fila de `/details`, que faltaba desde el 18/9).
+- **No probado en Chrome**: sin `db:generate` + migración el dev server no conoce los
+  campos. Cuando lo corras, el recorrido es: editor de «Rimas y ritmo» → sección
+  «Actividad» → guardar → estudiante en RAP-TEST/RAP-2026-2 (hay que añadir el tema a
+  RAP-2026-2 o matricular a alguien en RAP-TEST) → entregar → «Corregir antes de la
+  revisión».
+- Sin test nuevo: no hay `submission.service.test.ts` y montar el mock de Prisma para dos
+  ramas nuevas era más test que código; lo dejo dicho.
+
+## 23/9 — «Preparación» en los editores (tercera pieza)
+
+Jhonny: «puedes continuar». Tercera pieza del orden acordado: quien escribe un tema o un
+examen ve arriba dónde está la pieza en la ruta, qué le falta y a quién le llegará.
+
+- `features/content/server/readiness.service.ts`: `getLessonReadiness` (programa, módulo,
+  tema anterior, exámenes colgados con su estado, versión publicada, cohortes abiertas
+  divididas en las que ya lo tienen y las que podrían añadirlo) y `getAssessmentReadiness`
+  (lo mismo, con el tema del que es examen o «del módulo» / «del programa»). Solo lo que la
+  base sabe: el texto, los avisos, los vídeos y las reglas se leen del estado del editor.
+- `app/(staff)/contenido/readiness-panel.tsx`: panel presentacional («Preparación»),
+  rejilla de comprobaciones con icono **y** palabra (`sr-only` «Listo / Atención /
+  Pendiente / Dato»), enlace donde hay remedio. Sin color como único canal.
+- Tema (`lesson-editor.tsx#readinessChecks`): En la ruta (con «después de «…»» y «Ver la
+  ruta» al constructor) · Contenido (vacío / revisando / N problemas / sin errores · N
+  avisos) · Vídeos (sin vídeos / N accesibles / M de N sin subtítulos ni transcripción,
+  del mismo catálogo que enseña cada bloque) · Duración (minutos) · Examen del tema
+  (ninguno → «Añadir desde la ruta»; uno con su estado; varios con cuántos publicados) ·
+  Publicación (vN o sin versión · en K cohortes abiertas · M podrán añadirlo).
+- Examen (`assessment-editor.tsx#readinessChecks`): En la ruta · Preguntas · Avisos ·
+  Reglas del intento (intentos · % para aprobar; sin % = atención) · Publicación.
+- **Texto falso corregido en los dos diálogos de publicar.** Decían «Las cohortes con el
+  tema asignado pasarán a verla» / «esta versión pasa a las cohortes que lo tengan
+  asignado». No es verdad: `publishLesson` (`lessons.service.ts:645-728`) y
+  `publishAssessment` (`assessments.service.ts:483+`) solo cambian la versión, sus assets
+  y la auditoría; el player lee la versión **asignada** (`learn/lesson.service.ts:219-222`)
+  y cambiarla es `PATCH /api/cohorts/assignments/[id]`. Ahora dicen que las cohortes siguen
+  con la versión asignada hasta que se cambie desde la cohorte, y —si hay cohortes abiertas
+  sin la pieza— una línea `confirmPending` con sus códigos: «podrán añadirlo desde
+  «Actualizaciones del programa»».
+- Textos: `readiness.*`, `editor.readiness.*`, `editor.confirmPending`,
+  `assessmentEditor.readiness.*`, `assessmentEditor.confirmPending`, `readyToPublish`.
+- Probado en Chrome como admin: «Rimas y ritmo» (abre el borrador v2 sobre la v1
+  publicada, como manda `openDraft`) enseña «Publicado v1 · en 1 cohorte abierta · 1
+  cohorte abierta podrá añadirlo», «Sin minutos estimados», «Examen del tema: Ninguno
+  todavía · Añadir desde la ruta»; el diálogo de publicar lista «La cohorte abierta RAP-1
+  no tiene este tema todavía…». «Examen: qué significa R A P»: «examen de «Qué significa
+  R A P»», «Ninguna todavía», «1 problema impide publicar», «Sin % para aprobar», «2
+  cohortes abiertas podrán añadirlo». Las comprobaciones que dependen de la API
+  («Revisando…», «Buscando…») tardan lo que tarde el dev server en compilar la ruta la
+  primera vez.
+- No hecho: la accesibilidad de vídeo al insertar ya existía (badge «Accesible» / «Sin
+  subtítulos ni transcripción» en el bloque, `BlockEditor.tsx:870`), así que no se tocó.
+
+## 23/9 — Revisión antes de abrir y actualizaciones del programa (segunda pieza)
+
+Jhonny: «sigue» sobre el orden acordado. Cierra el hueco de ayer: al abrir, lo que no
+estaba publicado se perdía en silencio (o bloqueaba la apertura con un 409), y una vez
+abierta la cohorte no había forma de que un tema publicado después llegara a ella.
+
+- `features/cohorts/server/cohorts.service.ts`:
+  - `openCohort({…, skipUnpublished})` devuelve `{ id, assigned, skipped }`. Sin la opción
+    sigue rechazando con `CONFLICT` y `details.missing`; con ella abre con lo publicado y
+    audita `after.skippedUnpublished`.
+  - `getOpeningPreflight`: lo que verá la persona antes de abrir —programa, módulos, temas
+    y exámenes publicados, matrículas, fechas y la lista `missing`—, calculado con el mismo
+    `planCohortOpening` que usa la apertura. Nada de dos fuentes.
+  - `listPendingContentUpdates`: para una cohorte **abierta**, las piezas publicadas del
+    programa que la cohorte aún no tiene asignadas (solo piezas nuevas; una versión nueva de
+    algo ya asignado sigue siendo `PATCH /api/cohorts/assignments/[id]`).
+  - `assignPublishedContent({ items })`: crea las asignaciones con la versión publicada
+    vigente y `availableFrom = ahora`; `items` vacío = todo lo pendiente; `skipDuplicates`;
+    audita `cohort.content_added`.
+- API: `GET /api/cohorts/[cohortId]/preflight`, `GET/POST /api/cohorts/[cohortId]/content`
+  (`{ items: [{ kind, id }] }`, máx. 200), `PATCH /api/cohorts/[cohortId]` acepta
+  `skipUnpublished`. Todas `cohort.manage`.
+- `app/(staff)/cohortes/cohort-actions.tsx`: «Abrir» ya no es un clic ciego. Abre
+  `OpeningPreflightSheet`: seis comprobaciones con icono (programa, módulos, temas
+  publicados, exámenes publicados, matrículas, fechas), aviso amarillo con las piezas en
+  borrador y la pista de que se podrán añadir después, botón «Volver al contenido» al
+  constructor y «Abrir la cohorte» / «Abrir sin lo pendiente» según haya faltantes. Si no
+  hay nada publicado, no deja abrir.
+- `app/(staff)/cohortes/[cohortId]/content-updates.tsx` + sección «Actualizaciones del
+  programa» en la página de la cohorte (solo cuando hay algo pendiente): badge con el
+  conteo, «Añadir todo» y «Añadir a la cohorte» por pieza. `CohortDetail.programId` nuevo
+  para el enlace al constructor. Evento `cohort_content_added` en el rail de cohortes.
+- Tests: `cohorts.service.test.ts` cubre el `assigned/skipped` y la apertura saltando lo
+  no publicado (jest no corre aquí; queda para ti).
+- Arreglo al paso: `lesson-editor.tsx:272` leía `payload.number` y el `apiHandler`
+  envuelve en `data`, así que «Publicada la versión .» salía sin número. Ahora
+  `payload.data?.number ?? payload.number`, como ya hacía el editor de examen.
+- Probado en Chrome como admin: cohorte **RAP-TEST** («Prueba de apertura», RAP-1,
+  2026-10-01 → 2026-12-15) creada y abierta con «Abrir sin lo pendiente» (1 tema asignado,
+  2 piezas en borrador listadas: «Rimas y ritmo» y «Examen: qué significa R A P»); luego
+  publiqué «Rimas y ritmo» (le puse un párrafo de texto), la cohorte mostró «1 contenido
+  nuevo disponible» y «Añadir a la cohorte» lo asignó; el rail dice «Contenido añadido a la
+  cohorte». **RAP-TEST, «Rimas y ritmo» (ya publicado) y el examen quedan en tu base
+  local**; archívalos si no los quieres. Ojo: RAP-2026-2 (la cohorte del estudiante de
+  prueba) ahora también verá «Rimas y ritmo» como actualización pendiente.
+- No hecho: aviso en el editor cuando se publica una pieza y hay cohortes abiertas que
+  podrían recibirla (es la pieza 3, «preparación» en los editores).
+
+## 23/9 — Constructor del programa (primera pieza de la revisión UX)
+
+Jhonny: «arranca» sobre la revisión UX del 23/9 (`PRODUCT_DECISIONS.md` 2026-09-23).
+
+- `features/content/server/builder.service.ts#getProgramBuilder`: programa, módulos con
+  sus ítems (temas + exámenes) ordenados con `sortItems` —ahora genérico sobre
+  `{kind, lessonId, position}`—, forma (entrega > vídeo > lectura, leída de la versión
+  publicada si la hay), minutos, asignatura, preguntas, tipo, estado de la última versión,
+  `hasPublished`, preparación por módulo y del programa; exámenes sin módulo aparte;
+  asignaturas para el alta.
+- `app/(staff)/contenido/programas/[programId]/page.tsx` (`lesson.author`) +
+  `program-builder.tsx` (cliente): bloque por módulo con «x de y publicados» y «+ Añadir
+  contenido» (Dropdown: Tema / Examen del módulo); filas con icono, meta y badge de estado
+  (Sin versión / Borrador vN / Borrador vN sobre una publicada / Publicado vN); exámenes de
+  tema colgando con línea; bajo cada tema sin examen, «Añadir el examen de este tema».
+  `CreateSheet` (`organisms/sheet`): tema = título + asignatura prellenada (la más usada en
+  el módulo) + «¿Cómo completa el estudiante este tema?» (dos radios); examen = título +
+  tipo; contexto en la descripción («En Módulo, justo después de “tema”»). POST a los
+  endpoints existentes y `router.push` al editor.
+- Programas: botón «Construir la ruta» por programa; `revalidate.ts` incluye la dinámica;
+  `routes.md` fila nueva; textos en `builder.*`.
+- Probado en Chrome como admin: árbol de «Aprende a rapear», forma coherente con la ruta
+  del estudiante («Vídeo · 5 min»), menú, hoja con «Musica urbana» prellenada; creado
+  «Rimas y ritmo» (con actividad) desde la hoja → abre su editor → vuelve al árbol con la
+  fila «Actividad · Musica urbana · Borrador (v1)» y el enlace para colgarle el examen.
+  **Ese tema queda creado en tu base local**; archívalo si no lo quieres.
+
+## 22/9 — El tema, dentro del menú de la persona
+
+Jhonny: «mueve el light/dark mode al dropdown». En la barra del estudiante ya no están los
+tres botones sueltos; el menú de la persona lleva una sección «Tema» (claro / oscuro / el de
+mi equipo) con la marca en el elegido.
+
+- `molecules/dropdown`: `DropdownSection` gana `selectionMode="single"`, `selectedKey` y
+  `onSelectionChange`; en ese modo sus `DropdownItem` se pintan como Radix `RadioItem`
+  dentro de un `RadioGroup` (`aria-checked`, «opción 2 de 3, seleccionada» para el lector) y
+  llevan `ItemIndicator` con el check.
+- `lib/theme/apply-theme.ts`: `applyTheme(next)` (clase en `<html>` + cookie) y
+  `THEME_OPTIONS`, sacados de `ThemeToggle`, que ahora los usa. `ThemeToggle` sigue en la
+  barra lateral del staff.
+- `StudentTopNav`: sin `ThemeToggle`; sección de tema en el menú, estado local `currentTheme`.
+- Segunda vuelta (Jhonny: «sin label, una fila con los tres iconos»): `DropdownSection`
+  gana `layout="row"` y `DropdownItem` gana `iconOnly` (cuadrado, `children` como nombre
+  para el lector, el elegido por fondo con `data-[state=checked]`, sin check). La sección
+  del tema va sin título, como fila de tres iconos entre «Mi historial» y «Cerrar sesión».
+- Probado como Estudiante Uno: la fila con el sol marcado; elegir la luna oscurece la
+  página al momento; se dejó en claro.
+
+## 21/9 — `molecules/dropdown`: el menú de HeroUI sobre Radix + motion
+
+Jhonny: «usando motion.dev crea el componente dropdown inspirado en el de HeroUI;
+reemplázalo donde se pueda».
+
+- `components/molecules/dropdown/Dropdown.tsx`: `Dropdown` › `DropdownTrigger` (asChild) +
+  `DropdownMenu` (`aria-label` obligatorio, `align`, `side`, `onAction(key)`) ›
+  (`DropdownSection` con `title`/`showDivider` ›) `DropdownItem` (`itemKey`, `description`,
+  `startContent`, `endContent`, `shortcut`, `color: 'default' | 'danger'`, `disabled`,
+  `onSelect`) y `DropdownSeparator`. Radix sigue debajo (teclado, foco, portal,
+  colocación); `motion/react` pone la entrada (escala 0.95 → 1, muelle) y la salida
+  (`AnimatePresence` + `forceMount`, porque Radix desmonta de golpe). Con
+  `prefers-reduced-motion` no anima. Colores solo por token; `danger` tiñe el texto.
+- `molecules/menu` pasa a ser una piel sobre `dropdown` (el «⋯» con tooltip); sus callers
+  (`people-actions.tsx`, `questions-builder.tsx`) no cambian. `StudentTopNav` usa `Dropdown`
+  directo: sección «Mi historial» con iconos y «Cerrar sesión».
+- `Dropdown.stories.tsx` con `play` (abre, ve sección y descripción, elige, `onAction`).
+- **`package.json` (protegido)**: `"motion": "^12.43.0"`. En el VM no hay pnpm; para que
+  `tsc` viera el paquete se instaló con npm en `$HOME/motion-tmp` y se dejó un **enlace
+  simbólico** `apps/web/node_modules/motion` → ese directorio; Jhonny corrió `pnpm install`
+  y lo reemplazó. Probado en Chrome como Estudiante Uno: el menú de la persona entra con
+  la animación (una captura lo pilló a media opacidad), sección «Mi historial» con iconos,
+  «Resultados» navega, sin errores de consola. `tsc` limpio.
+
+## 21/9 — El estudiante vuelve a una barra superior (a la manera de Coursera)
+
+Jhonny: «cambiemos el sidenav por un top nav». Es la vuelta atrás del 20/9 («el nav para el
+estudiante debe ser sidenav»), con motivo nuevo: la ruta del player (`RouteRail`) ya ocupa
+la columna izquierda, y quien estudia suele hacerlo desde un celular.
+
+- `components/organisms/student-top-nav/StudentTopNav.tsx` (cliente): marca → pestañas de
+  «Estudiar» (`section: 'estudiar'`) → campana con contador, tema, y menú de la persona
+  (iniciales, Radix Dropdown con `MenuItem`/`MenuSeparator` de `molecules/menu`) con «Mi
+  historial» (`section: 'historial'`) y «Cerrar sesión». Por debajo de `md`, las pestañas en
+  segunda fila con scroll horizontal, sin cajón. `sticky top-0`.
+- `app/(student)/layout.tsx` la usa en vez de `SideNav`; `STUDENT_SECTIONS` se retiró de
+  `student-nav.ts` (`section` sigue decidiendo pestaña o menú). `SideNav` conserva las props
+  genéricas del 20/9 por si otra área las quiere; el staff no cambia.
+- El `StudentHeader` del 19/9 sigue en `_to_delete/components-organisms/student-header/`:
+  esta barra parte de él pero no es él (menú de persona, `activeUnder`, contador).
+- De paso: error de hidratación preexistente en `submission-form.tsx` (la fecha se
+  formateaba en el cliente y el ICU de Chrome dice «a las» donde el de Node pone «,»); la
+  fecha ahora la formatea la página en el servidor y llega como `dateLabel`.
+- Probado como Estudiante Uno: barra con «Mis programas» activa, campana «1», menú con
+  Resultados / Constancias / Mi cuenta / Cerrar sesión; el tema de cocina sin el aviso de
+  «1 Issue» de Next.
+
+## 21/9 — Lo que se trae de Coursera (P1)
+
+Recorrido de Coursera con la sesión de Jhonny (análisis en el proyecto:
+`claude/colombia-estudia-ux-coursera-2109.md`). Lo aplicado, que es la primera tanda:
+
+- **Cada ítem dice qué es y cuánto dura.** `OutlineItem.form` (VIDEO / MARKDOWN /
+  SUBMISSION / ASSESSMENT) y `estimatedMinutes` (`LessonVersion.estimatedMinutes` para temas,
+  `timeLimitMinutes` para exámenes), rellenados en `cohort.service.ts` con la misma regla que
+  `lesson-form.ts` (entrega > vídeo > lectura; el vídeo se detecta por los `assets` de la
+  versión). `ItemRow` en `/aprender`: icono por forma (lucide `Video`, `BookOpen`, `FileUp`,
+  `ClipboardCheck`), «Vídeo · 5 min · Empezado», check verde al completar. «Seguir con…» en la
+  tarjeta y en la ruta lleva debajo «Vídeo · 5 min».
+- **El módulo se resume y se cierra si está bloqueado.** `ModuleBlock`: en el `<summary>`
+  «x de y completados · N min»; si ningún ítem está habilitado y el primero espera a otro
+  tema, candado + «Se abre al completar “…”» y el `<details>` nace cerrado.
+- **La fila por la que se retoma va resaltada** (`border-accent-base`) con la píldora
+  «Reanudar» / «Empezar aquí».
+- **Barra de navegación pegada abajo en el player** (`LessonNav`, `sticky bottom-0`):
+  «Siguiente: …» como botón primario, «Anterior» como enlace, «Volver a la ruta» en medio;
+  bloqueado → «Completa este tema para seguir con “…”» cuando quien bloquea es el propio tema.
+- Textos nuevos en `learn`: `form.*`, `minutes`, `moduleSummary`, `moduleLocked`,
+  `resumeHere`, `startHere`, `lesson.completeToContinue`.
+- Probado en Chrome como Estudiante Uno: tarjetas con «Vídeo · 5 min», ruta de IVY con el
+  módulo «Inteligencia Financiera» cerrado y con candado, «Reanudar» en la fila activa, y en
+  el tema de cocina (completado) el botón «Siguiente: Cuestionario Arroz →» fijo abajo.
+- Queda de P1: nada. P3 en el doc del proyecto.
+
+**P2 (misma sesión)**:
+
+- **Ruta lateral en el player** (`app/(student)/aprender/route-rail.tsx`): `RouteRail`
+  (módulos como `<details>`, abierto el del ítem actual; ítem actual con `aria-current` y
+  franja de acento; bloqueados con candado; «Ver toda la ruta» → `?matricula=`) y
+  `WithRouteRail` (columna de 18 rem pegada arriba en `lg`, `<details>` «Ruta del módulo» en
+  móvil). Las vistas de tema y examen llevan `route: OutlineModule[]` (`lesson.service.ts`,
+  `attempt.service.ts`) y las páginas pasan a `<Page wide>`. `FORM_ICONS`, `formOf`,
+  `hrefFor`, `itemMeta` viven ahí y `/aprender` los importa.
+- **«Qué esperar» en el examen**: `AssessmentForStudent.assessment` gana `kind` y
+  `subjectName`; la cabecera dice «Examen parcial» o «Cuenta para la nota de {asignatura}»;
+  la tarjeta «Antes de empezar» es dos columnas: acción + reglas a la izquierda, panel «Qué
+  esperar» con iconos (vence, intentos, tiempo, preguntas, para aprobar, al terminar) a la
+  derecha. Textos `learn.assessment.{whatToExpect,mustPass,mustTake,countsFor,kind.*}`.
+- **«Mis exámenes»** en `/aprender/resultados`: `ResultsForStudent.assessments` (uno por
+  examen de cada cohorte activa, con estado, bloqueado, `dueAt` —nuevo en `OutlineItem`— y
+  mejor nota visible según la política); tabla Examen · Estado · Vence · Mejor nota antes de
+  las notas por asignatura. Textos `learn.results.{examsTitle,…,bestScore}`.
+- Probado como Estudiante Uno: rail en el tema de IVY (módulo actual abierto, «Inteligencia
+  Financiera» con candado), examen «Cuestionario Arroz» con el panel y «Continuar el
+  intento», resultados con «Cuestionario Arroz · Empezado» y «Cuestionario Inteligencia
+  Financiera · Bloqueado».
+
+## 21/9 — El panel del estudiante muestra todas sus matrículas
+
+Jhonny: «en /aprender quiero que mejores la dashboard del estudiante, no puedo ver sino
+solo un curso aunque estoy matriculado a varios». Causa: `getCohortOutline` tomaba la
+matrícula más reciente (`cohort.service.ts`, `orderBy enrolledAt desc`) y **todo** el área
+del estudiante colgaba de ella: el panel, y peor, el player, la evidencia, la entrega y los
+intentos —un enlace a un tema de otra cohorte daba 404 aunque la matrícula estuviera activa.
+
+- `getCohortOutline` acepta `enrollmentId` (esa matrícula, si es de la persona) o
+  `assignmentId` (la matrícula de la cohorte que tiene esa asignación); sin ninguno, la más
+  reciente como antes. `lesson.service`, `attempt.service` (`resolveAssessment`),
+  `submission.service`, `progress.service` y `report.service` pasan `assignmentId`.
+- `listMyEnrollments`: una fila por matrícula con cohorte, `gate`, avance y «seguir con»,
+  activas primero. Sale de la misma ruta que pinta el panel, no de otra aritmética.
+- `/aprender` (`app/(student)/aprender/page.tsx`): «Mis programas» con una tarjeta por
+  matrícula (código y fechas, programa, cohorte, barra de avance + texto, «Seguir con…»,
+  «Ver su ruta» → `?matricula=<id>#ruta`; con `gate`, el motivo y el enlace a resultados)
+  y abajo «La ruta de {programa}» del elegido. La barra es un SVG con `width` en el
+  `<rect>`: la CSP de `middleware.ts` no admite `style` en línea y un `div` con `width:%`
+  se pintaba lleno. Tarjeta elegida con `border-accent-base`.
+- «Volver a la ruta del programa» en tema y examen lleva `?matricula=` de la matrícula por
+  la que se abrió (`lesson.enrollmentId`, `assessment.enrollmentId`, nuevos en las vistas).
+- Calendario (`features/learn/server/calendar.service.ts`, página y `GET
+/api/learn/calendar`): todas las cohortes activas mezcladas por fecha. Constancias: se
+  emiten las pendientes de cada matrícula activa. Biblioteca: todas las activas; con más
+  de una, el módulo lleva delante el programa. `GET /api/learn/cohort?enrollmentId=`.
+- Nav «Mi programa» → «Mis programas» (`student-nav.ts`); `routes.md`, `endpoints.md` y el
+  manual del estudiante actualizados. Test nuevo en `lesson.service.test.ts` (la ruta se
+  pide por asignación).
+- Probado en Chrome como Estudiante Uno (3 matrículas): tres tarjetas con su avance,
+  «Ver su ruta» cambia la ruta de abajo, un tema de la cohorte IVY (no la más reciente)
+  abre, «Volver» lleva a `?matricula=` correcta, el calendario trae las tres cohortes.
+
+## 20/9 — Fase A de la redefinición: examen del tema y grado de entrada
+
+Jhonny: «Comienza con la fase A, limpia lo necesario» sobre `docs/plan-redefinicion-2009.md`.
+Decisiones en `PRODUCT_DECISIONS.md` (2026-09-20).
+
+**Esquema** (`prisma/schema.prisma`, protegido; la orden de Jhonny es la confirmación):
+`Assessment.lessonId String?` con relación `Lesson.assessments` e índice;
+`Enrollment.startsAtModule Int?`. Migración
+`prisma/migrations/20260920000000_assessment_lesson_and_entry_module`. Comentarios de
+`Module`, `Assessment.position` y el glosario (`reference/09-glossary.md`) actualizados: ya
+no es cierto que «las evaluaciones van después de los temas».
+
+**Ruta del estudiante**: `outline.ts` — `OutlineItem.lessonId?` (el suyo en un tema; el del
+tema del que es examen en una evaluación) y `sortItems` nuevo: tema, sus exámenes, siguiente
+tema…, y al final los exámenes de módulo o los que apunten a un tema que no está en la ruta.
+`cohort.service.ts` selecciona `assessment.lessonId`, `lesson.id` y
+`enrollment.startsAtModule`, y trae solo los módulos con `position >= startsAtModule`, así
+que ni aparecen ni cuentan ni bloquean. `/aprender` sangra el examen bajo su tema.
+
+**Grado de entrada en el resto**: `certificates.service.ts` (constancias de módulo y de
+programa solo sobre los módulos visibles), `enrollment-detail.service.ts` (lista y cuenta
+desde el grado de entrada; devuelve `startsAtModule`), `progress.service.ts` (`assigned` por
+matrícula, no por cohorte). `enrollPerson` acepta `startsAtModule` (valida que el programa
+tenga un módulo en esa posición; lo guarda y lo audita); `POST /api/cohorts/[cohortId]/enrollments`
+lo admite; `EnrollForm` tiene «Empieza en: Módulo N — nombre» (solo si el programa tiene más
+de un módulo); la lista y el detalle de matrícula lo muestran.
+
+**Alta de evaluación**: `createAssessment` acepta `lessonId` (exige `moduleId` y que el tema
+sea de ese módulo); `POST /api/content/assessments` lo admite; el formulario tiene «Examen
+del tema» con los temas del módulo elegido; la lista de evaluaciones tiene la columna.
+
+**Tests escritos, no ejecutados**: `outline.test.ts` (+3), `assessments.service.test.ts`
+(+3), `enrollments.service.test.ts` (+3; el mock de cohorte lleva `program.modules`).
+`sortItems` y `sequence` sí se comprobaron compilando `outline.ts` con `tsc` y ejecutando
+con node los mismos casos.
+
+**Cliente de Prisma en el VM**: `prisma generate` no corre aquí (descarga de motor 403,
+`EPERM unlink`). Se generó aparte con los motores darwin y se copió **solo `index.d.ts`**
+al cliente real (`node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma/client/`,
+copia previa en `$HOME/prisma-backup/client` del VM), así que `tsc` ve los campos nuevos pero
+el **runtime del servidor de desarrollo no**: hasta `pnpm db:generate` + `prisma migrate dev`
+cualquier consulta que seleccione `lessonId` o `startsAtModule` falla.
+
+**Pasada en Chrome (20/9, como admin, tras `db:generate` + migración + reinicio del dev)**:
+`/contenido/examenes/nuevo` crea «Examen: qué significa R A P» con módulo «Tus primeras
+rimas» y tema «Qué significa R A P» (`POST /api/content/assessments` 200, abre el editor);
+la lista muestra la columna «Examen del tema». `POST /api/cohorts/[id]/enrollments` con
+`startsAtModule: 9` → 400 «El programa no tiene un módulo en esa posición», `0` → 400 de
+zod, repetida → 409. `EnrollForm` de IVY-2026-1 muestra «Empieza en» con los dos módulos;
+`/cohortes/[id]`, `/avance` y `matriculas/[id]` responden 200. Antes del reinicio, todo lo
+que tocaba `lessonId` daba 500: el proceso del dev conserva el cliente de Prisma viejo tras
+`generate`. Dos retoques tras la pasada: el select «Examen del tema» va en su propia fila
+(cuatro en una no cabían) y «Empieza en» ya no lista el primer módulo, que era la misma
+opción que «Desde el primer módulo».
+
+**Vocabulario del cliente (20/9, misma sesión)**: decisión 5 de `PRODUCT_DECISIONS.md`.
+Carpetas movidas con `mv` (git las ve como borrado + sin seguimiento hasta el `add`):
+`app/(staff)/contenido/evaluaciones` → `examenes`, `app/(student)/aprender/evaluacion` →
+`examen`, `app/(staff)/cohortes/[cohortId]/entregas` → `actividades`. `next.config.ts`
+(protegido; la elección de «con redirecciones» es la confirmación) gana `redirects()`.
+Rutas actualizadas en `lib/nav/*`, `SideNav.tsx` (ICONS), `lib/http/revalidate.ts`, los
+servicios que arman enlaces (`submission.service.ts`, `attempt.service.ts`,
+`submissions.service.ts`, `live-sessions.service.ts`), tests de nav y authz,
+`reference/01-routing/routes.md` (nota nueva), manuales y onboarding. ~110 textos en
+`es-CO.json` (evaluación→examen con concordancia, entrega→actividad, tipos, «Última
+conexión»), `metadata.title` de las páginas movidas, mensajes de error de los servicios y
+`lib/http/api-error-text.ts`, cabeceras del CSV de avance (`examenes_presentados`,
+`examenes_aprobados`), `?entrega=` → `?actividad=` en la cola de actividades. Glosario con
+el término de UI nuevo. `tsc` limpio (`typedRoutes` cubre los `href`). En Chrome:
+`/contenido/examenes` y `/contenido/examenes/nuevo` 200 con títulos nuevos,
+`/cohortes/[id]/actividades` 200, y `/contenido/evaluaciones` aterriza en
+`/contenido/examenes`. Los bloques históricos de este archivo y de `PRODUCT_DECISIONS.md`
+quedaron con las rutas nuevas por el `sed`: léanse con eso en mente.
+
+### Lo que falta de la fase A
+
+1. Jhonny: jest, eslint, pa11y.
+2. Probar como estudiante: matricular a alguien con «Empieza en» (solo hay una persona
+   estudiante y ya está en las tres cohortes) y ver `/aprender` con el examen bajo su tema y
+   sin los módulos anteriores.
+3. Editar el grado de entrada de una matrícula ya creada: no existe (decisión 3).
 
 ## 20/9 — El estudiante también navega por la barra lateral
 

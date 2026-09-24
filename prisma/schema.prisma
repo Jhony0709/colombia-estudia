@@ -268,8 +268,9 @@ model Program {
   @@unique([institutionId, sourceRef])
 }
 
-/// Sección del programa: "Módulo Mes 1". Ordena el contenido. Las evaluaciones de un módulo
-/// van después de sus temas y, en progresión LINEAR, bloquean el módulo siguiente.
+/// Sección del programa: "Módulo Mes 1". Ordena el contenido. Cada tema lleva detrás sus
+/// exámenes (Assessment.lessonId, 20/9); las evaluaciones sin tema van al final del módulo y,
+/// en progresión LINEAR, bloquean el módulo siguiente.
 model Module {
   id            String    @id @default(cuid())
   institutionId String
@@ -366,6 +367,10 @@ model Enrollment {
   cohortId            String
   status              EnrollmentStatus @default(ACTIVE)
   isMinorAtEnrollment Boolean
+  /// Grado de entrada (20/9): posición del primer módulo que ve esta matrícula; nulo = todos.
+  /// Quien entra desde 10° empieza en el módulo 5 sin repetir los anteriores. La asignación es
+  /// de la cohorte; lo que se oculta es la vista, el avance y las constancias de esta matrícula.
+  startsAtModule      Int?
   enrolledAt          DateTime         @default(now())
   accessUntil         DateTime         @db.Date
   completedAt         DateTime?
@@ -400,6 +405,13 @@ enum PublishStatus {
 }
 
 /// Un tema del programa ("Física – Magnitudes escalares y vectoriales"). Contenedor editable.
+/// Qué se acepta como entrega de una actividad.
+enum ActivityAccepts {
+  TEXT
+  FILE
+  TEXT_OR_FILE
+}
+
 model Lesson {
   id                String    @id @default(cuid())
   institutionId     String
@@ -414,6 +426,11 @@ model Lesson {
   learningObjective String?
   /// Tema de tipo ACTIVIDAD: se completa con una entrega (Submission) revisada, no con evidencia de lectura.
   requiresSubmission Boolean  @default(false)
+  /// Instrucciones de la actividad (Markdown), solo con requiresSubmission. En el tema y no en la versión
+  /// (23/9, decisión de Jhonny): se corrigen en caliente y las cohortes abiertas las ven al momento.
+  activityInstructions String?
+  /// Qué entrega el estudiante en la actividad.
+  activityAccepts    ActivityAccepts @default(TEXT_OR_FILE)
   authorId          String
   sourceRef         String?
   createdAt         DateTime  @default(now())
@@ -427,6 +444,8 @@ model Lesson {
 
   versions    LessonVersion[]
   assignments LessonAssignment[]
+  /// Los exámenes de este tema (Assessment.lessonId).
+  assessments Assessment[]
 
   @@unique([moduleId, position])
   @@unique([institutionId, sourceRef])
@@ -491,7 +510,10 @@ model Assessment {
   moduleId          String?
   subjectId         String?
   kind              AssessmentKind @default(SUBJECT)
-  /// Orden dentro del módulo, después de los temas. Único por módulo.
+  /// El tema del que es examen (20/9): con valor, la secuencia la pone justo después de ese tema;
+  /// sin valor, al final del módulo. Tiene que ser un tema del mismo módulo.
+  lessonId          String?
+  /// Orden dentro del módulo (entre las evaluaciones de módulo, o entre las de un mismo tema). Único por módulo.
   position          Int            @default(0)
   title             String
   language          String         @default("es-CO")
@@ -505,6 +527,7 @@ model Assessment {
   program     Program     @relation(fields: [programId], references: [id])
   module      Module?     @relation(fields: [moduleId], references: [id])
   subject     Subject?    @relation(fields: [subjectId], references: [id])
+  lesson      Lesson?     @relation(fields: [lessonId], references: [id])
   author      Person      @relation(fields: [authorId], references: [id])
 
   versions    AssessmentVersion[]
@@ -513,6 +536,7 @@ model Assessment {
   @@unique([moduleId, position])
   @@unique([institutionId, sourceRef])
   @@index([institutionId, programId])
+  @@index([lessonId])
 }
 
 enum ReviewPolicy {

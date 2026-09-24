@@ -50,6 +50,23 @@ export function StatCard({ label, value, icon: Icon, href, tone = 'info' }: Stat
   );
 }
 
-export function StatGrid({ children }: { children: React.ReactNode }) {
-  return <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{children}</div>;
+export function StatGrid({
+  children,
+  columns = 4,
+}: {
+  children: React.ReactNode;
+  /** Cuántas tarjetas por fila en pantallas anchas. Seis cifras en filas de cuatro dejan una fila coja. */
+  columns?: 3 | 4;
+}) {
+  return (
+    <div
+      className={
+        columns === 3
+          ? 'grid gap-4 sm:grid-cols-2 xl:grid-cols-3'
+          : 'grid gap-4 sm:grid-cols-2 xl:grid-cols-4'
+      }
+    >
+      {children}
+    </div>
+  );
 }

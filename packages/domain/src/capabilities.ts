@@ -15,12 +15,13 @@ import type {
   PartnerContact,
   PayerType,
   RestrictionPolicy,
+  WardEnrollment,
 } from './types';
 
 // ─────────────────────────── Types ───────────────────────────
 
 /**
- * The 15 capabilities from acceso-y-cartera.md §1 table.
+ * The 15 capabilities from acceso-y-cartera.md §1 table, plus `progress.read.ward` (Fase C, 23/9).
  */
 export type Capability =
   | 'lesson.read'
@@ -30,6 +31,8 @@ export type Capability =
   | 'assessment.take'
   | 'assessment.grade'
   | 'progress.read.cohort'
+  /** Acudiente sobre las matrículas de sus pupilos (Fase C, 23/9). Lectura, nunca acción. */
+  | 'progress.read.ward'
   | 'progress.override'
   | 'score.read.own'
   | 'accommodation.manage'
@@ -77,6 +80,12 @@ export interface ResolveCapabilitiesInput {
   memberships: Membership[];
   enrollments: EnrollmentWithPayerType[];
   guardianships: Guardianship[];
+  /**
+   * Las matrículas de los pupilos (Fase C, 23/9). Opcional para no romper a quien ya llama
+   * con la firma de acceso-y-cartera.md:18-21; sin ellas el acudiente no obtiene nada, como
+   * antes (decisión 7 original).
+   */
+  wardEnrollments?: WardEnrollment[];
   partnerContactOf: PartnerContact[];
   accountStatusByEnrollment: Map<string, AccountStatus>;
   restrictionPolicy: RestrictionPolicy | null;
@@ -129,6 +138,7 @@ export function resolveCapabilities(input: ResolveCapabilitiesInput): Map<Capabi
     memberships,
     enrollments,
     guardianships,
+    wardEnrollments = [],
     partnerContactOf,
     // accountStatusByEnrollment and restrictionPolicy are accepted but do not alter capabilities
     // Test: OVERDUE does not change any capability for minor or adult
@@ -182,7 +192,8 @@ export function resolveCapabilities(input: ResolveCapabilitiesInput): Map<Capabi
         break;
 
       case 'GUARDIAN':
-        // Decision 7: Guardian gets NO academic capabilities
+        // Decisión 7, revisada el 23/9 (Fase C): la membresía no da nada por sí sola; lo que
+        // el acudiente ve sale de `wardEnrollments`, matrícula a matrícula, más abajo.
         break;
 
       case 'STUDENT':
@@ -243,9 +254,19 @@ export function resolveCapabilities(input: ResolveCapabilitiesInput): Map<Capabi
     // If payerType === null (no PaymentPlan yet), there is no cartera to read.
   }
 
-  // Process guardianships - Decision 7: Guardian gets no academic capabilities
-  // Guardianships are tracked but don't grant capabilities in MVP
+  // Acudencias (decisión 7, revisada el 23/9 — Fase C): lectura del avance de cada pupilo,
+  // matrícula a matrícula, y la cartera solo si es el responsable financiero y paga una
+  // persona (con aliado, la cartera es del aliado). Nunca `lesson.read` ni `assessment.take`:
+  // el acudiente mira, no estudia por el pupilo. `guardianships` sigue en la firma por
+  // compatibilidad; lo que decide es `wardEnrollments`, que ya viene filtrado por ellas.
   void guardianships;
+  for (const ward of wardEnrollments) {
+    const enrollmentScope: Scope = { enrollmentId: ward.enrollmentId };
+    addCapability(capabilities, 'progress.read.ward', enrollmentScope);
+    if (ward.isFinancialResponsible && ward.payerType === 'PERSON') {
+      addCapability(capabilities, 'billing.read.own', enrollmentScope);
+    }
+  }
 
   // Process partner contacts
   for (const contact of partnerContactOf) {

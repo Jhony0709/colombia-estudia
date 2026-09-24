@@ -10,6 +10,7 @@ import type { Metadata } from 'next';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { requireCapability } from '@/lib/authz/with-capability';
 import { openDraft } from '@/features/content/server/lessons.service';
+import { getLessonReadiness } from '@/features/content/server/readiness.service';
 import { listCurriculum } from '@/features/admin/server/curriculum.service';
 import { Page } from '@/components/templates/page';
 import { LessonEditor } from './lesson-editor';
@@ -23,9 +24,10 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
   const ctx = await getRequestContext();
   const { lessonId } = await params;
 
-  const [draft, curriculum] = await Promise.all([
+  const [draft, curriculum, readiness] = await Promise.all([
     openDraft({ institutionId: ctx.institution.id, lessonId }),
     listCurriculum(ctx.institution.id),
+    getLessonReadiness({ institutionId: ctx.institution.id, lessonId }),
   ]);
 
   // El módulo se elige con el nombre del programa delante: con varios programas, «Módulo 1»
@@ -43,7 +45,7 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
   const canPublish = (ctx.capabilities.get('lesson.publish')?.length ?? 0) > 0;
 
   return (
-    <Page>
+    <Page wide>
       {/*
         La cabecera la pinta `LessonEditor`, no esta página: sus dos acciones —vista previa y
         publicar— dependen de lo escrito y sin guardar, que vive en el cliente. El `h1` sigue
@@ -62,6 +64,12 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
         initialEstimatedMinutes={draft.estimatedMinutes}
         initialInvalidatesProgress={draft.invalidatesProgress}
         canPublish={canPublish}
+        readiness={readiness}
+        activity={
+          draft.requiresSubmission
+            ? { instructions: draft.activityInstructions, accepts: draft.activityAccepts }
+            : null
+        }
         details={{
           modules,
           subjects,

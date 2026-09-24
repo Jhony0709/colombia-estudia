@@ -11,6 +11,7 @@ const mockAssessmentFindFirst = jest.fn();
 const mockAssessmentCreate = jest.fn();
 const mockProgramFindFirst = jest.fn();
 const mockModuleFindFirst = jest.fn();
+const mockLessonFindFirst = jest.fn();
 const mockVersionFindFirst = jest.fn();
 const mockVersionCreate = jest.fn();
 const mockVersionUpdate = jest.fn();
@@ -28,6 +29,7 @@ jest.mock('@/lib/db/tenant', () => ({
       },
       program: { findFirst: mockProgramFindFirst },
       module: { findFirst: mockModuleFindFirst },
+      lesson: { findFirst: mockLessonFindFirst },
       assessmentVersion: {
         findFirst: mockVersionFindFirst,
         create: mockVersionCreate,
@@ -108,6 +110,60 @@ describe('createAssessment', () => {
 
     expect(mockAssessmentCreate.mock.calls[0]?.[0]?.data?.moduleId).toBeNull();
     expect(mockModuleFindFirst).not.toHaveBeenCalled();
+  });
+
+  // Examen de un tema (20/9): se guarda el tema y va justo después de él en la ruta.
+  it('guarda el tema del que es examen', async () => {
+    mockLessonFindFirst.mockResolvedValue({ id: 'l1' });
+
+    await createAssessment({
+      institutionId: 'i1',
+      actorId: 'p1',
+      programId: 'prog1',
+      moduleId: 'm1',
+      lessonId: 'l1',
+      kind: 'SUBJECT',
+      title: 'Examen del tema 1',
+    });
+
+    expect(mockLessonFindFirst.mock.calls[0]?.[0]?.where).toMatchObject({
+      id: 'l1',
+      moduleId: 'm1',
+    });
+    expect(mockAssessmentCreate.mock.calls[0]?.[0]?.data?.lessonId).toBe('l1');
+  });
+
+  it('el tema tiene que ser del mismo módulo', async () => {
+    mockLessonFindFirst.mockResolvedValue(null);
+
+    await expect(
+      createAssessment({
+        institutionId: 'i1',
+        actorId: 'p1',
+        programId: 'prog1',
+        moduleId: 'm1',
+        lessonId: 'deOtroModulo',
+        kind: 'SUBJECT',
+        title: 'T',
+      })
+    ).rejects.toThrow(/Lesson not found in this module/);
+
+    expect(mockAssessmentCreate).not.toHaveBeenCalled();
+  });
+
+  it('sin módulo no hay tema posible', async () => {
+    await expect(
+      createAssessment({
+        institutionId: 'i1',
+        actorId: 'p1',
+        programId: 'prog1',
+        lessonId: 'l1',
+        kind: 'FINAL',
+        title: 'T',
+      })
+    ).rejects.toThrow(/Lesson not found in this module/);
+
+    expect(mockLessonFindFirst).not.toHaveBeenCalled();
   });
 
   // Si no, la evaluación aparecería en un sitio y contaría en otro.

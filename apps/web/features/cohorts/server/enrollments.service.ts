@@ -19,6 +19,14 @@ export interface CohortDetail {
   startsOn: string;
   endsOn: string;
   programName: string;
+  programId: string;
+  /** Los módulos del programa, en orden: para elegir el grado de entrada al matricular (20/9). */
+  modules: Array<{ id: string; name: string; position: number }>;
+  /**
+   * La última apertura o cierre, para la cabecera («Abierta por X el …»; ola 2, 23/9). Sale
+   * del `AuditLog` porque la cohorte no guarda quién la abrió; `by` nulo si no hay actor.
+   */
+  lastTransition: { action: 'opened' | 'closed'; at: string; by: string | null } | null;
   enrollments: Array<{
     id: string;
     personId: string;
@@ -27,6 +35,8 @@ export interface CohortDetail {
     isMinorAtEnrollment: boolean;
     accessUntil: string;
     withdrawReason: string | null;
+    /** Posición del módulo por el que empieza; nulo = desde el primero. */
+    startsAtModule: number | null;
   }>;
 }
 
@@ -77,7 +87,17 @@ export async function getCohortDetail({
       progression: true,
       startsOn: true,
       endsOn: true,
-      program: { select: { name: true } },
+      program: {
+        select: {
+          id: true,
+          name: true,
+          modules: {
+            where: { archivedAt: null },
+            orderBy: { position: 'asc' },
+            select: { id: true, name: true, position: true },
+          },
+        },
+      },
       enrollments: {
         orderBy: { enrolledAt: 'desc' },
         select: {
@@ -86,6 +106,7 @@ export async function getCohortDetail({
           isMinorAtEnrollment: true,
           accessUntil: true,
           withdrawReason: true,
+          startsAtModule: true,
           student: { select: { id: true, givenName: true, familyName: true } },
         },
       },
@@ -94,15 +115,36 @@ export async function getCohortDetail({
 
   if (!cohort) return null;
 
+  const transition = await db.auditLog.findFirst({
+    where: { entity: 'cohort', entityId: cohortId, action: { in: ['opened', 'closed'] } },
+    orderBy: { occurredAt: 'desc' },
+    select: { action: true, occurredAt: true, actorId: true },
+  });
+  const actor = transition?.actorId
+    ? await db.person.findUnique({
+        where: { id: transition.actorId },
+        select: { givenName: true, familyName: true },
+      })
+    : null;
+
   return {
     id: cohort.id,
     code: cohort.code,
     name: cohort.name,
     status: cohort.status,
     progression: cohort.progression,
+    lastTransition: transition
+      ? {
+          action: transition.action as 'opened' | 'closed',
+          at: transition.occurredAt.toISOString(),
+          by: actor ? `${actor.givenName} ${actor.familyName}` : null,
+        }
+      : null,
     startsOn: isoDay(cohort.startsOn),
     endsOn: isoDay(cohort.endsOn),
     programName: cohort.program.name,
+    programId: cohort.program.id,
+    modules: cohort.program.modules,
     enrollments: cohort.enrollments.map((e) => ({
       id: e.id,
       personId: e.student.id,
@@ -111,6 +153,7 @@ export async function getCohortDetail({
       isMinorAtEnrollment: e.isMinorAtEnrollment,
       accessUntil: isoDay(e.accessUntil),
       withdrawReason: e.withdrawReason,
+      startsAtModule: e.startsAtModule,
     })),
   };
 }
@@ -121,18 +164,24 @@ export async function getCohortDetail({
  * `birthDate` is required (endpoints.md:65): without it there is no way to know whether the
  * person was a minor when they enrolled, and that single flag drives consent, guardianship
  * and the whole access-suspension policy later on.
+ *
+ * `startsAtModule` (20/9) is the entry grade: the position of the first module in this
+ * student's route. Modules before it stay hidden from them and out of their progress.
+ * `null` means the whole program.
  */
 export async function enrollPerson({
   institutionId,
   actorId,
   cohortId,
   personHandle,
+  startsAtModule = null,
   now = new Date(),
 }: {
   institutionId: string;
   actorId: string | null;
   cohortId: string;
   personHandle: string;
+  startsAtModule?: number | null;
   now?: Date;
 }): Promise<{ enrollmentId: string; warning: string | null }> {
   const db = createTenantClient(institutionId);
@@ -179,7 +228,12 @@ export async function enrollPerson({
       id: true,
       status: true,
       accessUntil: true,
-      program: { select: { defaultAccessDays: true } },
+      program: {
+        select: {
+          defaultAccessDays: true,
+          modules: { where: { archivedAt: null }, select: { position: true } },
+        },
+      },
     },
   });
   if (!cohort) {
@@ -187,6 +241,15 @@ export async function enrollPerson({
   }
   if (cohort.status !== 'PLANNED' && cohort.status !== 'OPEN') {
     throw new APIError('La cohorte ya no admite matrículas', 'CONFLICT');
+  }
+
+  // The entry module has to exist in the program: an enrollment starting past the last
+  // module would show the student an empty route with nothing to explain it.
+  if (
+    startsAtModule !== null &&
+    !cohort.program.modules.some((m) => m.position === startsAtModule)
+  ) {
+    throw new APIError('El programa no tiene un módulo en esa posición', 'VALIDATION_ERROR');
   }
 
   const accessUntil = resolveAccessUntil({
@@ -208,6 +271,7 @@ export async function enrollPerson({
           studentId: person.id,
           isMinorAtEnrollment: isMinor,
           accessUntil,
+          startsAtModule,
         },
         select: { id: true },
       });
@@ -244,6 +308,7 @@ export async function enrollPerson({
             studentId: person.id,
             isMinorAtEnrollment: isMinor,
             accessUntil: isoDay(accessUntil),
+            startsAtModule,
           },
         },
       });
@@ -256,6 +321,122 @@ export async function enrollPerson({
     }
     throw err;
   }
+}
+
+export interface EnrollmentPreview {
+  person: {
+    id: string;
+    name: string;
+    /** Sin fecha de nacimiento no se puede matricular; se dice antes de intentarlo. */
+    hasBirthDate: boolean;
+    isMinor: boolean;
+    /** Solo con menor de edad: si tiene acudiente registrado, y quién. */
+    guardianName: string | null;
+  } | null;
+  /** Ya matriculada en esta cohorte (cualquier estado). */
+  alreadyEnrolled: boolean;
+  /** Otras matrículas activas, para que quien matricula sepa qué más está cursando. */
+  activeElsewhere: Array<{ cohortCode: string; programName: string }>;
+  /** Hasta cuándo tendría acceso si se matricula hoy. */
+  accessUntil: string | null;
+  /** El aviso de cartera (`requireAgreementForNextCohort`), si aplica. */
+  warning: string | null;
+  /** Lo que impide matricular, en el orden en que `enrollPerson` lo rechazaría. */
+  blockers: Array<'NOT_FOUND' | 'NO_BIRTH_DATE' | 'MINOR_WITHOUT_GUARDIAN' | 'ALREADY_ENROLLED'>;
+}
+
+/**
+ * Lo que pasaría al matricular, sin matricular (23/9, pieza 5): la misma persona y las
+ * mismas reglas que `enrollPerson`, para que la hoja de matrícula enseñe a quién va a
+ * matricular y qué lo impide **antes** de pulsar. No escribe nada ni audita: es una lectura.
+ */
+export async function previewEnrollment({
+  institutionId,
+  cohortId,
+  personHandle,
+  now = new Date(),
+}: {
+  institutionId: string;
+  cohortId: string;
+  personHandle: string;
+  now?: Date;
+}): Promise<EnrollmentPreview> {
+  const db = createTenantClient(institutionId);
+  const handle = personHandle.trim();
+
+  const empty: EnrollmentPreview = {
+    person: null,
+    alreadyEnrolled: false,
+    activeElsewhere: [],
+    accessUntil: null,
+    warning: null,
+    blockers: ['NOT_FOUND'],
+  };
+  if (handle === '') return empty;
+
+  const person = await db.person.findFirst({
+    where: {
+      anonymizedAt: null,
+      OR: [{ documentNumber: handle }, { email: handle.toLowerCase() }],
+    },
+    select: {
+      id: true,
+      givenName: true,
+      familyName: true,
+      birthDate: true,
+      guardians: {
+        take: 1,
+        select: { guardian: { select: { givenName: true, familyName: true } } },
+      },
+      enrollments: {
+        where: { OR: [{ cohortId }, { status: 'ACTIVE' }] },
+        select: {
+          cohortId: true,
+          status: true,
+          cohort: { select: { code: true, program: { select: { name: true } } } },
+        },
+      },
+    },
+  });
+  if (!person) return empty;
+
+  const cohort = await db.cohort.findFirst({
+    where: { id: cohortId },
+    select: { accessUntil: true, program: { select: { defaultAccessDays: true } } },
+  });
+  if (!cohort) throw new APIError('Cohort not found', 'NOT_FOUND');
+
+  const isMinor = person.birthDate ? calculateAgeAt(person.birthDate, now) < 18 : false;
+  const guardian = person.guardians[0]?.guardian ?? null;
+  const alreadyEnrolled = person.enrollments.some((e) => e.cohortId === cohortId);
+
+  const blockers: EnrollmentPreview['blockers'] = [];
+  if (!person.birthDate) blockers.push('NO_BIRTH_DATE');
+  if (isMinor && !guardian) blockers.push('MINOR_WITHOUT_GUARDIAN');
+  if (alreadyEnrolled) blockers.push('ALREADY_ENROLLED');
+
+  return {
+    person: {
+      id: person.id,
+      name: `${person.givenName} ${person.familyName}`,
+      hasBirthDate: person.birthDate !== null,
+      isMinor,
+      guardianName: guardian ? `${guardian.givenName} ${guardian.familyName}` : null,
+    },
+    alreadyEnrolled,
+    activeElsewhere: person.enrollments
+      .filter((e) => e.cohortId !== cohortId && e.status === 'ACTIVE')
+      .map((e) => ({ cohortCode: e.cohort.code, programName: e.cohort.program.name })),
+    accessUntil: isoDay(
+      resolveAccessUntil({
+        cohortAccessUntil: cohort.accessUntil,
+        defaultAccessDays: cohort.program.defaultAccessDays,
+        enrolledAt: now,
+      })
+    ),
+    warning: await overdueWithoutAgreementWarning({ institutionId, personId: person.id, now }),
+    blockers,
+  };
 }
 
 /**

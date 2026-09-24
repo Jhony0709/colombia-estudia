@@ -648,7 +648,7 @@ así, y se cambia si Jhonny dice otra cosa:
    siguiente revisión, para que el revisor vea qué pidió. El rastro completo está en
    `LearningEvent lesson.submission.sent` y en `AuditLog submission.approved|returned`.
 2. **La cola de entregas no tiene endpoint de detalle: la página es el detalle**
-   (`/cohortes/[id]/entregas?entrega=<id>`). Así la notificación `submission_received`
+   (`/cohortes/[id]/actividades?entrega=<id>`). Así la notificación `submission_received`
    enlaza a una entrega concreta y todo llega en una petición, con la URL firmada del
    archivo generada en el servidor.
 3. **`FULL_AFTER_DUE` sin `dueAt` se comporta como `FULL_AFTER_GRADED`.** No hay un
@@ -773,3 +773,206 @@ pantallas del estudiante:
    capacitación** no se pueden hacer desde aquí: quedan como runbooks
    (`docs/runbooks/*.md`, `docs/onboarding-institucion.md`, `docs/manuales/*.md`) con los
    pasos y tablas de tiempos vacías para el ensayo.
+
+## 2026-09-20 — Fase A de la redefinición: el examen es del tema y la matrícula tiene grado de entrada
+
+Origen: reunión con Valida YA del 20/9 (`docs/plan-redefinicion-2009.md`). Cada tema lleva
+información, actividad y **examen**; y el bachillerato se vende por grado de entrada (10, 8 o
+6 módulos). Se cambió el mínimo de esquema que lo permite, sin tocar el modelo de programas.
+
+1. **Un examen puede ser de un tema** (`Assessment.lessonId String?`): con valor, la ruta del
+   estudiante lo pone justo después de ese tema; sin valor, al final del módulo, como hasta
+   ahora. El tema tiene que ser del mismo módulo (`createAssessment` lo comprueba). No se
+   creó un tipo nuevo de evaluación ni se movió el examen dentro del contenido del tema: un
+   examen sigue siendo una `Assessment` con versiones, clave e intentos, y así no se toca el
+   motor de intentos ni las notas.
+2. **`Assessment.position` ordena solo entre iguales**: entre los exámenes de un mismo tema
+   o entre las evaluaciones de módulo. El sitio respecto a los temas lo decide `lessonId`
+   (`features/learn/server/outline.ts#sortItems`). Con progresión `LINEAR` el examen del
+   tema 1 bloquea el tema 2, que es lo que pidió el cliente.
+3. **El grado de entrada es de la matrícula, no de la cohorte ni del programa**
+   (`Enrollment.startsAtModule Int?`): una misma cohorte admite a quien entra en el módulo
+   1 y a quien entra en el 5. `openCohort` sigue asignando todo el programa a la cohorte; la
+   matrícula es la que oculta los módulos anteriores al estudiante, los deja fuera de su
+   avance, de las constancias y del «asignado» del avance de cohorte. Nulo = todo el
+   programa. Se fija al matricular y no se edita después (si hace falta, es una decisión
+   aparte).
+4. **No se modela la «venta por grado» como programas distintos**: los tres precios (10, 8,
+   6 módulos) son un mismo programa con distinto `startsAtModule`. El precio queda en el plan
+   de pagos, como ya estaba.
+5. **La UI y las URL hablan como el cliente; el código no cambia** (Jhonny, 20/9: «renombrar
+   y reorganizar lo necesario acomodándonos a su esquema», alcance «textos + URL»). En
+   pantalla: «examen» en vez de «evaluación» (tipos **Diagnóstico**, **Parcial**, **Final**;
+   «parcial» porque es el que suma a la nota de la asignatura, y es la palabra del colegio) y
+   «actividad» en vez de «entrega» (el verbo «entregar» se queda). URL: `/contenido/examenes`,
+   `/aprender/examen/…`, `/cohortes/[id]/actividades`, con redirección 308 de las viejas en
+   `next.config.ts` porque ya salieron enlaces por correo y notificación. `Assessment`,
+   `Submission`, las capacidades y las rutas de API siguen igual: renombrar modelos con
+   datos es una migración sin beneficio para nadie que no lea el código. «Última actividad»
+   del avance pasa a «Última conexión» para no chocar con la palabra nueva.
+
+## 2026-09-23 — El administrador construye la misma ruta que recorre el estudiante
+
+Origen: revisión UX del 23/9 sobre el recorrido de crear un tema con examen (cinco CRUDs y
+las relaciones en la cabeza). Se adopta el principio y su primera pieza.
+
+1. **El constructor del programa** (`/contenido/programas/[programId]`) es la pantalla de
+   producción académica: enseña módulo → tema → sus exámenes → siguiente tema con **la
+   misma función** que ordena la ruta del estudiante (`outline.ts#sortItems`, ahora
+   genérica). Si el admin ve otra cosa que el estudiante, es un bug, no un diseño.
+2. **No se pregunta lo que el contexto ya sabe.** Desde el constructor, un tema nace con
+   título, asignatura (prellenada con la más usada en el módulo) y «¿cómo completa el
+   estudiante este tema?»; un examen, con título y tipo. Programa, módulo y tema se
+   enseñan, no se piden. Las páginas `/temas/nuevo` y `/examenes/nuevo` siguen para quien
+   llega desde las listas.
+3. **«¿Cómo se completa?» tiene dos respuestas, no cuatro**: «al revisar el contenido» o
+   «con una actividad aprobada» (las dos formas de `lesson-completion.ts`). El examen no es
+   una forma de completar el tema: es el paso siguiente de la unidad (aprende → practica →
+   demuestra) y se añade como tal. No se crea un cuarto estado en el motor.
+4. Lo que viene detrás, en este orden: ~~actualizaciones de contenido a cohortes abiertas +
+   revisión antes de abrir~~ (hecho, abajo); ~~«preparación» visible en los editores~~
+   (hecho, abajo); ~~la actividad como sección propia del tema (esquema, con
+   confirmación)~~ (hecho, abajo); ~~resumen de cohorte y matrícula en hoja~~ (hecho, abajo).
+
+## 2026-09-23 — Abrir una cohorte se revisa antes, y el contenido nuevo llega después
+
+Origen: segunda pieza de la revisión UX del 23/9. Hasta hoy, abrir con piezas sin publicar
+era un 409 seco, y una cohorte abierta se quedaba con la foto del día de apertura para
+siempre.
+
+1. **Abrir enseña primero lo que va a pasar.** La hoja de apertura lista qué se asigna
+   (temas y exámenes publicados), quién entra (matrículas) y qué se queda fuera (piezas sin
+   versión publicada), con el mismo cálculo que ejecuta la apertura. Si hay faltantes, la
+   persona elige: volver al constructor a publicar, o **abrir sin lo pendiente**. La opción
+   es explícita (`skipUnpublished`) y queda auditada con el número de piezas saltadas; el
+   comportamiento por defecto sigue siendo rechazar. Sin nada publicado no se abre.
+2. **Lo que se publica después se ofrece a la cohorte, no se cuela.** Una cohorte abierta
+   muestra «Actualizaciones del programa» con las piezas publicadas que aún no tiene, y el
+   admin las añade una a una o todas. Añadir crea la asignación con la versión publicada
+   vigente y disponible desde ese momento; el estudiante la ve en su sitio de la ruta
+   (`sortItems`, la misma función del constructor). Nada se asigna solo: la cohorte es de
+   quien la opera.
+3. **Pieza nueva ≠ versión nueva.** Las actualizaciones son solo piezas que la cohorte no
+   tiene. Cambiar la versión de algo ya asignado sigue siendo la decisión de
+   `PATCH /api/cohorts/assignments/[id]` (con `invalidatesProgress`), porque ahí sí hay
+   avance de estudiantes en juego.
+
+## 2026-09-23 — El editor dice dónde está la pieza, qué le falta y a quién le llega
+
+Origen: tercera pieza de la revisión UX del 23/9.
+
+1. **«Preparación» arriba del editor, no un semáforo.** Un tema y un examen enseñan una
+   rejilla de comprobaciones —en la ruta, contenido, vídeos, duración, examen del tema,
+   publicación; en el examen: preguntas, avisos, reglas del intento, publicación— cada una
+   con icono y palabra, y con enlace cuando hay sitio adonde ir (el constructor). Lo que la
+   base sabe viene del servidor; lo que cambia mientras se escribe se lee del editor. No
+   bloquea nada: publicar sigue bloqueado solo por los errores de validación.
+2. **Publicar no mueve a nadie de versión.** Los diálogos de publicar decían lo contrario y
+   era falso: las cohortes siguen con la versión asignada hasta que se cambie desde la
+   cohorte (`PATCH /api/cohorts/assignments/[id]`). Lo que publicar abre es que las
+   cohortes abiertas sin la pieza puedan añadirla, y el diálogo las nombra por código.
+
+## 2026-09-23 — La actividad es una sección del tema, y vive en el tema
+
+Origen: cuarta pieza de la revisión UX del 23/9. Esquema elegido por Jhonny entre tres.
+
+1. **Instrucciones y «qué entrega» van en `Lesson`, no en `LessonVersion`.** Se corrigen en
+   caliente y las cohortes abiertas las ven al momento. Es la excepción consciente a «lo que
+   estudia una cohorte está congelado»: una instrucción mal escrita se arregla hoy, no en
+   la próxima versión. Lo que sigue congelado es el texto; lo que sigue cerrado con el tema
+   publicado es la forma de completar (`requiresSubmission`).
+2. **El autor fija qué se acepta** (`TEXT` | `FILE` | `TEXT_OR_FILE`) y el servidor lo hace
+   cumplir. El formulario del estudiante solo enseña lo que aplica.
+3. **Una entrega en cola es del estudiante hasta que alguien la revisa.** `SUBMITTED` se
+   puede reemplazar (texto conservado, archivo sustituido); `APPROVED` no. La revisión
+   empieza cuando el instructor decide, no cuando el estudiante pulsa enviar.
+4. Quien revisa ve lo que se pidió al lado de lo entregado (plegado).
+
+## 2026-09-23 — Matricular se comprueba antes; la cohorte se resume arriba
+
+Origen: quinta y última pieza de la revisión UX del 23/9.
+
+1. **Antes de matricular se enseña a quién y qué pasaría.** La hoja de matrícula comprueba
+   con las mismas reglas que la matrícula (persona, fecha de nacimiento, menor con
+   acudiente, ya matriculada, acceso hasta, aviso de cartera) y no deja pulsar con un
+   impedimento a la vista; cada impedimento lleva a donde se arregla (la ficha de la
+   persona). El error después de pulsar deja de ser la forma de enterarse.
+2. **El documento o el correo nunca va en una URL.** La comprobación es `POST` aunque solo
+   lea: una URL acaba en el historial y en los logs (Ley 1581).
+3. **El resumen de la cohorte enseña lo que se opera, no lo que se calcula.** Seis cifras,
+   cada una un enlace a donde se actúa; las de avance solo para quien tiene la capacidad de
+   ver el avance. Sin gráficas: una cohorte de un colegio se opera, no se analiza.
+
+## 2026-09-23 — Fase B: registrarse solo, entrar a la cohorte de introducción
+
+Origen: `docs/plan-redefinicion-2009.md` Fase B (reunión del 20/9).
+
+1. **Una sola regla de matrícula.** El registro público matricula con `enrollPerson`, la
+   misma función que usa operación: menor sin acudiente, cohorte cerrada, acceso hasta
+   cuándo, aviso de cartera. Si la matrícula falla, la cuenta queda y operación lo ve en la
+   auditoría; una persona sin cuenta porque la cohorte estaba cerrada sería peor.
+2. **Se pide fecha de nacimiento.** El plan no la listaba, pero sin ella no hay matrícula y
+   no se sabe quién firma la política de datos. Un menor no firma (Ley 1581) y no se
+   matricula solo: cuenta sí, matrícula cuando operación registre al acudiente.
+3. **Un correo conocido no se registra encima.** Con cuenta, «inicia sesión»; con ficha sin
+   cuenta, «pide tu invitación» (que sí prueba el correo). Lo contrario sería tomar una ficha
+   ajena sabiendo un correo.
+4. **El correo no se verifica al registrarse (decisión abierta).** `email_confirm: true`,
+   como en la invitación, donde el enlace lo prueba. Aquí no hay prueba: el daño posible es
+   ocupar un correo ajeno, y quien lo posee lo recupera por «Olvidé mi contraseña». Si se
+   quiere verificación, es el flujo de confirmación de Supabase y un correo configurado.
+5. **Sin clave «nombre + dos últimos dígitos de la cédula»** (ya en el plan): adivinable y
+   usa un dato personal. El equivalente en fricción es el enlace de invitación.
+
+## 2026-09-23 — Fase C: el acudiente mira, no estudia (decisión 7, revisada)
+
+Origen: `docs/plan-redefinicion-2009.md` Fase C. Jhonny confirmó tocar `packages/domain`.
+
+1. **La decisión 7 («GUARDIAN sin capacidades académicas») pasa a «GUARDIAN sin capacidades
+   de acción».** Capacidad nueva `progress.read.ward`, por matrícula de pupilo: avance,
+   exámenes y notas. Nunca `lesson.read` ni `assessment.take`: el acudiente no abre el
+   player ni presenta nada por el pupilo. Se resuelve desde las matrículas del pupilo
+   (`wardEnrollments`), no desde la membresía: un acudiente sin pupilo matriculado ve
+   `/familia` vacía y un mensaje.
+2. **La cartera solo para quien la paga.** `billing.read.own` sobre la matrícula del pupilo
+   únicamente con `isFinancialResponsible` y `payerType PERSON`; con aliado, la cartera es
+   del aliado. Con ella, «Pagar en línea» desde `/familia`.
+3. **El acudiente ve lo que el estudiante ya puede ver, ni más.** Las notas pasan por la
+   misma `reviewPolicy` que en `/aprender/resultados`; el avance es la misma vista que
+   operación. No hay una tercera versión de la verdad.
+4. **El consentimiento del menor sigue en papel.** `/familia` no firma nada; la firma
+   digital del acudiente es una decisión aparte (canal, prueba de identidad).
+
+## 2026-09-23 — La cohorte se opera por secciones y la versión se cambia con sus consecuencias a la vista
+
+Origen: `docs/ux/decision-ux-2309.md`, ola 2.
+
+1. **Una cohorte tiene una acción primaria a la vez.** Planificada: abrir. Abierta:
+   matricular. Importar, exportar y cerrar viven en «Gestión». Cerrar pide confirmación
+   porque no se deshace.
+2. **El detalle se lee por secciones, no en una sola página larga.** Resumen (qué requiere
+   atención), Ruta (contenido y versiones), Personas, Sesiones; las páginas que ya eran
+   rutas propias (actividades, avance, importar) se enlazan desde la misma barra. La URL
+   (`?seccion=`) es compartible.
+3. **Cambiar la versión de una asignación dice antes qué pasa con el avance.** El botón
+   «Actualizar a vN» avisa si la versión reabre los temas completados
+   (`invalidatesProgress`) o conserva el avance. Si reabre, el estudiante recibe
+   `lesson_reopened` con el enlace al tema. Una versión nueva de examen nunca borra
+   intentos.
+4. **«Ver como estudiante» no se construye sin una decisión de suplantación.** Mostrar la
+   vista del estudiante con la sesión del staff exige decidir qué se registra, qué se
+   bloquea (no presentar exámenes, no enviar actividades) y cómo se sale. Queda como
+   decisión abierta.
+
+## 2026-09-23 — El staff aterriza en una pantalla de situación, y cada persona ve sus espacios
+
+Origen: `docs/ux/decision-ux-2309.md`, ola 3.
+
+1. **`/inicio` dice qué requiere atención y nada más.** Ni configuración ni atajos: una
+   lista de lo pendiente que la persona puede resolver, con el enlace a donde se resuelve, y
+   tres cifras de cómo va el aprendizaje en 30 días. ADMIN y OPERATIONS aterrizan ahí; el
+   instructor sigue en el constructor.
+2. **Los embudos se miden con lo que ya se guarda.** Sin eventos de telemetría propios: el
+   embudo de errores no se mide y la página lo declara en vez de inventar una cifra.
+3. **Los espacios salen de las capacidades, no del rol.** Quien puede hacer algo en un área
+   la tiene en el conmutador; con un solo espacio no hay conmutador.

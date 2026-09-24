@@ -19,7 +19,7 @@ import {
   listCertificatesForStudent,
   issueDueCertificatesForEnrollment,
 } from '@/features/certificates/server/certificates.service';
-import { getCohortOutline } from '@/features/learn/server/cohort.service';
+import { listMyEnrollments } from '@/features/learn/server/cohort.service';
 import { Page, PageHeader } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { Badge } from '@/components/atoms/badge';
@@ -41,14 +41,17 @@ export default async function CertificatesPage() {
     );
   }
 
-  const outline = await getCohortOutline({
+  // Cada matrícula activa puede tener constancias pendientes de emitir (21/9): antes solo se
+  // miraba la más reciente y las de otro programa no salían hasta que alguien las pidiera.
+  const mine = await listMyEnrollments({
     institutionId: ctx.institution.id,
     personId: ctx.person.id,
   });
-  if (outline.enrollmentId && !outline.gate) {
+  for (const row of mine) {
+    if (row.gate) continue;
     await issueDueCertificatesForEnrollment({
       institutionId: ctx.institution.id,
-      enrollmentId: outline.enrollmentId,
+      enrollmentId: row.enrollmentId,
     });
   }
 

@@ -39,6 +39,8 @@ export const NOTIFICATION_TYPES = [
   'overdue_reminder',
   'agreement_overdue',
   'live_session_soon',
+  // Ola 2 UX (23/9): la cohorte cambió de versión un tema que ya habías completado y se reabre.
+  'lesson_reopened',
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

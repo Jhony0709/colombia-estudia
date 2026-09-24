@@ -17,18 +17,13 @@ import { isWompiConfigured } from '@/lib/billing/wompi';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { DataTable } from '@/components/molecules/data-table';
-import { Badge, type BadgeVariant } from '@/components/atoms/badge';
+import { Badge } from '@/components/atoms/badge';
+import { AccountSummary } from '@/features/billing/components/account-summary';
+import { getPolicy } from '@/features/admin/server/policies.service';
 import { Alert } from '@/components/atoms/alert';
 import { PayButton } from './pay-button';
 
 export const metadata: Metadata = { title: 'Mi cuenta' };
-
-const STATUS_BADGE: Record<string, BadgeVariant> = {
-  CURRENT: 'success',
-  OVERDUE: 'error',
-  IN_AGREEMENT: 'warning',
-  PARTNER_PAID: 'info',
-};
 
 export default async function MyAccountPage({
   searchParams,
@@ -43,11 +38,21 @@ export default async function MyAccountPage({
   const sp = await searchParams;
   const returned = typeof sp.pago === 'string' ? sp.pago : null;
 
-  const accounts = await listOwnAccounts({ institutionId: ctx.institution.id, scopes });
+  const [accounts, policy] = await Promise.all([
+    listOwnAccounts({ institutionId: ctx.institution.id, scopes }),
+    getPolicy({ institutionId: ctx.institution.id }),
+  ]);
   const cop = (v: number) =>
     format.number(v, { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
   const when = (iso: string) =>
     format.dateTime(new Date(iso), { day: 'numeric', month: 'short', year: 'numeric' });
+  const dayOf = (day: string) =>
+    format.dateTime(new Date(`${day}T00:00:00Z`), {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
   const online = isWompiConfigured();
 
   return (
@@ -66,7 +71,6 @@ export default async function MyAccountPage({
         accounts.map((a) => {
           type Installment = (typeof a.installments)[number];
           type Payment = (typeof a.payments)[number];
-          const active = a.agreements.find((g) => g.status === 'ACTIVE');
           return (
             <section
               key={a.enrollmentId}
@@ -77,30 +81,13 @@ export default async function MyAccountPage({
                 <h2 id={`cuenta-${a.enrollmentId}`} className="type-heading">
                   {a.cohort.code} — {a.cohort.name}
                 </h2>
-                <p className="type-body mt-2">
-                  <Badge variant={STATUS_BADGE[a.status ?? 'CURRENT']}>
-                    {t(`statuses.${a.status}`)}
-                  </Badge>{' '}
-                  {a.summary.next
-                    ? t('nextInstallment', {
-                        position: a.summary.next.position,
-                        amount: cop(a.summary.next.amount),
-                        dueOn: a.summary.next.dueOn,
-                      })
-                    : t('allPaid')}
-                </p>
-                <p className="type-caption text-text-muted mt-1">
-                  {t('totals', {
-                    paid: cop(a.summary.paid),
-                    total: cop(a.plan?.totalAmount ?? 0),
-                    overdue: cop(a.summary.overdue),
-                  })}
-                </p>
-                {active && (
-                  <p className="type-caption text-text-muted mt-1">
-                    {t('agreementActive', { date: when(active.signedAt) })}
-                  </p>
-                )}
+                {/* E4 (23/9): la cuenta en lenguaje de persona; la frontera menor/adulto va dentro. */}
+                <div className="mt-2">
+                  <AccountSummary
+                    account={a}
+                    requireAgreementForNextCohort={policy.requireAgreementForNextCohort}
+                  />
+                </div>
                 {a.summary.next && (
                   <div className="mt-4 flex flex-wrap items-start gap-4">
                     {online ? <PayButton installmentId={a.summary.next.id} /> : null}
@@ -129,7 +116,9 @@ export default async function MyAccountPage({
                       narrow: true,
                       cell: (i) => i.position,
                     },
-                    { key: 'dueOn', header: t('dueOn'), cell: (i) => i.dueOn },
+                    // Fecha en palabras (E4): «2026-09-18» al lado de «19 de sept de 2026»
+                    // era el ISO que la opinión señaló. `dueOn` es un día: se pinta en UTC.
+                    { key: 'dueOn', header: t('dueOn'), cell: (i) => dayOf(i.dueOn) },
                     {
                       key: 'amount',
                       header: t('amount'),

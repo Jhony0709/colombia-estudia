@@ -9,12 +9,10 @@ import { Button } from '@/components/atoms/button';
 
 export default function LogoutPage() {
   return (
-    <section>
-      <h1 className="type-heading text-text text-center">Cerrar sesión</h1>
+    <section className="space-y-6">
+      <h1 className="type-heading text-text">Cerrar sesión</h1>
 
-      <p className="type-body text-text-muted text-center">
-        ¿Estás seguro de que deseas cerrar tu sesión?
-      </p>
+      <p className="type-body text-text-muted">¿Estás seguro de que deseas cerrar tu sesión?</p>
 
       <form action="/api/auth/logout" method="POST" className="flex flex-col gap-3">
         <Button type="submit">Cerrar sesión</Button>
