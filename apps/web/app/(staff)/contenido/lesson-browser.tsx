@@ -15,6 +15,14 @@
  * Los filtros viven en el cliente y no en la URL: son 110 filas, no 11.000, y traerlas todas
  * una vez es más rápido que ir al servidor por cada tecla. Si esto llega a varios miles de
  * temas, el sitio de los filtros es la URL y la consulta.
+ *
+ * 24/9 (Jhonny: «igual para el resto de páginas con el mismo estilo, como Temas»): los
+ * grupos `<details>` apilados pasan a **una tabla de módulos con filas expandibles**
+ * (`DataTable.expandable`, el patrón de Programas): una fila por módulo —módulo, programa,
+ * temas, publicados— y al abrirla los temas como subtabla. Sin filtro las filas vienen
+ * cerradas y hay «Abrir todos»; al buscar o filtrar se abren solas las que tienen
+ * coincidencias, que es lo que se vino a ver. El texto de búsqueda se pliega una vez por
+ * tema (`index`), no en cada tecla por cada fila.
  */
 
 import type { PublishStatus } from '@colombia-estudia/domain';
@@ -24,6 +32,7 @@ import { useTranslations } from 'next-intl';
 import { DataTable } from '@/components/molecules/data-table';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { Badge } from '@/components/atoms/badge';
+import { Button } from '@/components/atoms/button';
 import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
 import { cn } from '@/lib/utils';
 
@@ -60,6 +69,19 @@ export function LessonBrowser({
   const [query, setQuery] = useState('');
   const [programId, setProgramId] = useState('ALL');
   const [status, setStatus] = useState<StatusFilter>('ALL');
+  const [open, setOpen] = useState<Set<string>>(() => new Set());
+
+  // Lo que se busca, plegado una vez por tema: título, módulo y asignatura.
+  const index = useMemo(
+    () =>
+      new Map(
+        lessons.map((lesson) => [
+          lesson.id,
+          `${fold(lesson.title)}\n${fold(lesson.moduleName)}\n${fold(lesson.subjectName)}`,
+        ])
+      ),
+    [lessons]
+  );
 
   const filtered = useMemo(() => {
     const needle = fold(query.trim());
@@ -71,38 +93,29 @@ export function LessonBrowser({
       if (status === 'DRAFT' && lesson.latestStatus !== 'DRAFT') return false;
       if (status === 'NONE' && lesson.hasPublished) return false;
 
-      if (needle === '') return true;
-
-      // Se busca por lo que la gente recuerda: el título, el módulo y la asignatura.
-      return (
-        fold(lesson.title).includes(needle) ||
-        fold(lesson.moduleName).includes(needle) ||
-        fold(lesson.subjectName).includes(needle)
-      );
+      return needle === '' || (index.get(lesson.id)?.includes(needle) ?? false);
     });
-  }, [lessons, programId, status, query]);
+  }, [lessons, index, programId, status, query]);
 
   // Los temas ya vienen ordenados (programa, posición del módulo, posición del tema), así que
   // agrupar en ese recorrido conserva el orden sin volver a ordenar nada.
   const groups = useMemo(() => {
-    const out: Array<{
-      key: string;
-      programName: string;
-      moduleName: string;
-      rows: BrowsableLesson[];
-    }> = [];
+    const out: ModuleGroup[] = [];
 
     for (const lesson of filtered) {
       const last = out[out.length - 1];
       if (last && last.key === lesson.moduleId) {
         last.rows.push(lesson);
+        if (lesson.hasPublished) last.published += 1;
         continue;
       }
       out.push({
         key: lesson.moduleId,
         programName: lesson.programName,
         moduleName: lesson.moduleName,
+        modulePosition: lesson.modulePosition,
         rows: [lesson],
+        published: lesson.hasPublished ? 1 : 0,
       });
     }
 
@@ -110,6 +123,9 @@ export function LessonBrowser({
   }, [filtered]);
 
   const filtering = query.trim() !== '' || programId !== 'ALL' || status !== 'ALL';
+  // Al filtrar, lo que coincide se abre solo; sin filtro, manda lo que abrió la persona.
+  const isOpen = (group: ModuleGroup) => filtering || open.has(group.key);
+  const allOpen = groups.every(isOpen);
 
   return (
     <div className="space-y-4">
@@ -168,16 +184,29 @@ export function LessonBrowser({
         </div>
       </div>
 
-      {/*
-        El recuento se anuncia: quien filtra con lector de pantalla necesita saber cuántos
-        quedaron sin tener que recorrer la tabla. Sin filtro no se DIBUJA —el título de la
-        sección ya da el total y verlo dos veces a 60px de distancia no informa de nada—, pero
-        sigue en el DOM con su texto: una región viva tiene que existir antes de cambiar, y
-        montarla al filtrar no anuncia nada.
-      */}
-      <p className={cn('type-caption text-text-muted', !filtering && 'sr-only')} role="status">
-        {t('filterCount', { shown: filtered.length, total: lessons.length })}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {/*
+          El recuento se anuncia: quien filtra con lector de pantalla necesita saber cuántos
+          quedaron sin tener que recorrer la tabla. Sin filtro no se DIBUJA —el título de la
+          sección ya da el total—, pero sigue en el DOM con su texto: una región viva tiene
+          que existir antes de cambiar, y montarla al filtrar no anuncia nada.
+        */}
+        <p
+          className={cn('type-caption text-text-muted m-0', !filtering && 'sr-only')}
+          role="status"
+        >
+          {t('filterCount', { shown: filtered.length, total: lessons.length })}
+        </p>
+        {!filtering && groups.length > 1 && (
+          <Button
+            variant="quiet"
+            className="ml-auto"
+            onClick={() => setOpen(allOpen ? new Set() : new Set(groups.map((group) => group.key)))}
+          >
+            {allOpen ? t('table.closeAll') : t('table.openAll')}
+          </Button>
+        )}
+      </div>
 
       {groups.length === 0 ? (
         lessons.length === 0 ? (
@@ -186,81 +215,130 @@ export function LessonBrowser({
           <EmptyState title={t('noMatchesTitle')} description={t('noMatchesHint')} />
         )
       ) : (
-        groups.map((group) => (
-          <details
-            key={group.key}
-            open
-            className="bg-surface-base border-border-muted rounded-card elevation-resting border p-5"
-          >
-            <summary className="type-subheading text-text min-h-touch flex cursor-pointer items-center">
-              {group.moduleName}
-              <span className="type-caption text-text-muted ml-2">
-                {group.programName} · {t('groupCount', { count: group.rows.length })}
-              </span>
-            </summary>
-
-            <div className="mt-3">
-              <DataTable<BrowsableLesson>
-                plain
-                caption={t('groupCaption', { module: group.moduleName })}
-                rowKey={(lesson) => lesson.id}
-                rows={group.rows}
-                // Un grupo vacío no se pinta: solo existe si tiene filas.
-                empty={null}
-                columns={[
-                  {
-                    key: 'position',
-                    header: t('colPosition'),
-                    numeric: true,
-                    cell: (lesson) => lesson.position,
-                  },
-                  {
-                    key: 'title',
-                    header: t('colTitle'),
-                    cell: (lesson) => (
-                      <Link
-                        href={`/contenido/temas/${lesson.id}`}
-                        className="text-text-link underline underline-offset-4"
-                      >
-                        {lesson.title}
-                      </Link>
-                    ),
-                  },
-                  { key: 'subject', header: t('colSubject'), cell: (l) => l.subjectName },
-                  {
-                    key: 'status',
-                    header: t('colStatus'),
-                    /*
-                      El estado sigue siendo la PALABRA: el color nunca carga solo el
-                      significado (DESIGN.md §Color semántico). La píldora es forma y fondo
-                      alrededor del mismo texto que había antes, para que publicado y borrador
-                      se distingan de un vistazo en una tabla larga sin tener que leer columna
-                      abajo. Quitarle el color no cambiaría lo que dice la celda.
-                    */
-                    cell: (lesson) =>
-                      lesson.latestStatus === null ? (
-                        <Badge variant="neutral">{t('statusNone')}</Badge>
-                      ) : (
-                        <Badge variant={lesson.hasPublished ? 'success' : 'neutral'}>
-                          {/* Un borrador sobre una publicada lo dice: la píldora era verde y decía «Borrador» (23/9). */}
-                          {t(
-                            `status.${lesson.hasPublished && lesson.latestStatus === 'DRAFT' ? 'DRAFT_OVER_PUBLISHED' : lesson.latestStatus}`,
-                            { number: lesson.latestNumber ?? 0 }
-                          )}
-                        </Badge>
-                      ),
-                  },
-                  {
-                    key: 'flags',
-                    header: t('colFlags'),
-                    cell: (lesson) => (lesson.requiresSubmission ? t('flagSubmission') : '—'),
-                  },
-                ]}
-              />
-            </div>
-          </details>
-        ))
+        <DataTable<ModuleGroup>
+          align="middle"
+          caption={t('table.modulesCaption')}
+          rowKey={(group) => group.key}
+          rows={groups}
+          empty={null}
+          expandable={{
+            isExpanded: isOpen,
+            onToggle: (group) =>
+              setOpen((prev) => {
+                const next = new Set(prev);
+                if (next.has(group.key)) next.delete(group.key);
+                else next.add(group.key);
+                return next;
+              }),
+            label: (group, expanded) =>
+              t(expanded ? 'table.collapseModule' : 'table.expandModule', {
+                module: group.moduleName,
+              }),
+            content: (group) => <LessonRows group={group} />,
+          }}
+          columns={[
+            {
+              key: 'position',
+              header: t('colPosition'),
+              numeric: true,
+              narrow: true,
+              cell: (group) => group.modulePosition,
+            },
+            {
+              key: 'module',
+              header: t('colModule'),
+              cell: (group) => <span className="type-body-emphasis">{group.moduleName}</span>,
+            },
+            { key: 'program', header: t('table.program'), cell: (group) => group.programName },
+            {
+              key: 'lessons',
+              header: t('table.lessons'),
+              numeric: true,
+              narrow: true,
+              cell: (group) => group.rows.length,
+            },
+            {
+              key: 'published',
+              header: t('table.published'),
+              numeric: true,
+              narrow: true,
+              cell: (group) => group.published,
+            },
+          ]}
+        />
       )}
     </div>
+  );
+}
+
+interface ModuleGroup {
+  key: string;
+  programName: string;
+  moduleName: string;
+  modulePosition: number;
+  rows: BrowsableLesson[];
+  published: number;
+}
+
+/** Los temas de un módulo, dentro de su fila. */
+function LessonRows({ group }: { group: ModuleGroup }) {
+  const t = useTranslations('content');
+  return (
+    <DataTable<BrowsableLesson>
+      plain
+      compactRows
+      align="middle"
+      caption={t('groupCaption', { module: group.moduleName })}
+      rowKey={(lesson) => lesson.id}
+      rows={group.rows}
+      empty={null}
+      columns={[
+        {
+          key: 'position',
+          header: t('colPosition'),
+          numeric: true,
+          narrow: true,
+          cell: (lesson) => lesson.position,
+        },
+        {
+          key: 'title',
+          header: t('colTitle'),
+          cell: (lesson) => (
+            <Link
+              href={`/contenido/temas/${lesson.id}`}
+              className="text-text-link underline underline-offset-4"
+            >
+              {lesson.title}
+            </Link>
+          ),
+        },
+        { key: 'subject', header: t('colSubject'), cell: (l) => l.subjectName },
+        {
+          key: 'status',
+          header: t('colStatus'),
+          /*
+            El estado sigue siendo la PALABRA: el color nunca carga solo el significado
+            (DESIGN.md §Color semántico). La píldora es forma y fondo alrededor del mismo
+            texto, para que publicado y borrador se distingan de un vistazo.
+          */
+          cell: (lesson) =>
+            lesson.latestStatus === null ? (
+              <Badge variant="neutral">{t('statusNone')}</Badge>
+            ) : (
+              <Badge variant={lesson.hasPublished ? 'success' : 'neutral'}>
+                {t(
+                  `status.${lesson.hasPublished && lesson.latestStatus === 'DRAFT' ? 'DRAFT_OVER_PUBLISHED' : lesson.latestStatus}`,
+                  { number: lesson.latestNumber ?? 0 }
+                )}
+              </Badge>
+            ),
+        },
+        {
+          key: 'flags',
+          header: t('colFlags'),
+          cell: (lesson) => (lesson.requiresSubmission ? t('flagSubmission') : '—'),
+        },
+      ]}
+    />
   );
 }

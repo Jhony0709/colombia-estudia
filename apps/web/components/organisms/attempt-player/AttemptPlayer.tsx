@@ -20,6 +20,7 @@
  */
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useFormatter } from 'next-intl';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -769,6 +770,29 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
           </p>
         )}
       </section>
+
+      {/*
+        El cierre «tirando la buena» (24/9, pedido de los clientes: «al enviar la evaluación
+        sale ese texto y pasa al siguiente componente»). Es general, no se guarda en la base
+        (decisión de Jhonny): felicita por terminar y manda a «Mis programas», que ya sabe
+        cuál es el siguiente paso (E2). Solo tras una entrega, nunca tras un vencimiento.
+      */}
+      {attempt.status !== 'EXPIRED' && (
+        <section
+          aria-labelledby="attempt-closing-title"
+          className="border-border-muted bg-surface-base rounded-card border p-5"
+        >
+          <h2 id="attempt-closing-title" className="type-subheading text-text">
+            {t('closing.title')}
+          </h2>
+          <p className="type-body text-text-muted max-w-reading mt-2">{t('closing.body')}</p>
+          <div className="mt-4">
+            <Button asChild>
+              <Link href="/aprender">{t('closing.next')}</Link>
+            </Button>
+          </div>
+        </section>
+      )}
 
       {attempt.review === 'FULL' && (
         <ol className="space-y-6">

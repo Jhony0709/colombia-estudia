@@ -12,6 +12,8 @@ import { submitLesson } from '@/features/learn/server/submission.service';
 
 const schema = z.object({
   text: optionalText(20_000).optional(),
+  /** Respuestas por enunciado (24/9), en el orden de los enunciados del tema. */
+  answers: z.array(z.string().max(5_000)).max(20).optional(),
   fileAssetId: z.string().cuid().nullable().optional(),
 });
 
@@ -30,6 +32,7 @@ export const POST = apiHandler<Input>({ schema, capability: 'lesson.progress.own
     personId: ctx.person.id,
     assignmentId: await routeParam(routeCtx.params, 'assignmentId'),
     text: input.text ? blankToNull(input.text) : null,
+    answers: input.answers ?? null,
     fileAssetId: input.fileAssetId ?? null,
   });
 });

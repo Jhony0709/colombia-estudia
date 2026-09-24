@@ -15,6 +15,12 @@
  * Nada se borra: solo se archiva, y cada acción que parece destructiva pide confirmación en
  * línea (un segundo botón) en vez de un diálogo nativo — anunciable, operable con teclado y
  * comprobable sin manejadores de diálogo.
+ *
+ * 24/9 (Jhonny: «no me gusta el layout de Programas… tabla y rows expandibles como en
+ * Basikon»): una tabla con una fila por programa (código, nombre, módulos, temas, días de
+ * acceso, acciones) y, al abrir la fila, los módulos como subtabla y el alta de módulo.
+ * Antes era una pila de tarjetas con todo abierto a la vez —cuatro formularios de «nuevo
+ * módulo» en pantalla sin que nadie los pidiera—. El patrón es `DataTable.expandable`.
  */
 
 import Link from 'next/link';
@@ -23,113 +29,213 @@ import { useTranslations } from 'next-intl';
 import { FormField, FormInput } from '@/components/atoms/form-field';
 import { Button } from '@/components/atoms/button';
 import { Tooltip } from '@/components/atoms/tooltip';
-import type { CurriculumProgram } from '@/features/admin/server/curriculum.service';
+import { DataTable } from '@/components/molecules/data-table';
+import { Menu, MenuItem, MenuSeparator } from '@/components/molecules/menu';
+import type {
+  CurriculumModule,
+  CurriculumProgram,
+} from '@/features/admin/server/curriculum.service';
 import { CurriculumFeedback, useCurriculumSend, type Send } from '../curriculum-send';
 
 export function ProgramsManager({ programs }: { programs: CurriculumProgram[] }) {
   const t = useTranslations('admin.curriculum');
   const { busy, feedback, send } = useCurriculumSend();
+  // Con un solo programa no hay nada que elegir: abierto. Con varios, cerrados y se abre el
+  // que se mira; «Editar» abre la fila si hacía falta.
+  const [open, setOpen] = useState<Set<string>>(
+    () => new Set(programs.length === 1 ? [programs[0]!.id] : [])
+  );
+  const [editing, setEditing] = useState<string | null>(null);
+  const [confirmArchive, setConfirmArchive] = useState<string | null>(null);
+
+  const toggle = (id: string) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  const expand = (id: string) => setOpen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+
+  const lessonsOf = (program: CurriculumProgram) =>
+    program.modules.reduce((n, m) => n + m.lessonCount, 0);
 
   return (
     <div className="space-y-6">
       <CurriculumFeedback feedback={feedback} />
 
-      {programs.length === 0 ? (
-        <p className="type-body text-text-muted">{t('programsEmpty')}</p>
-      ) : (
-        <ul className="space-y-8">
-          {programs.map((program) => (
-            <li key={program.id}>
-              <ProgramCard program={program} busy={busy} send={send} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <DataTable
+        align="middle"
+        caption={t('table.caption')}
+        rows={programs}
+        rowKey={(program) => program.id}
+        empty={<p className="type-body text-text-muted">{t('programsEmpty')}</p>}
+        expandable={{
+          isExpanded: (program) => open.has(program.id),
+          onToggle: (program) => toggle(program.id),
+          label: (program, expanded) =>
+            t(expanded ? 'table.collapse' : 'table.expand', { name: program.code }),
+          content: (program) => (
+            <ProgramDetail
+              program={program}
+              busy={busy}
+              send={send}
+              editing={editing === program.id}
+              onEditingDone={() => setEditing(null)}
+            />
+          ),
+        }}
+        columns={[
+          {
+            key: 'code',
+            header: t('table.code'),
+            narrow: true,
+            cell: (program) => (
+              <Link
+                href={`/contenido/programas/${program.id}`}
+                className="text-text-link type-body-emphasis underline underline-offset-4"
+              >
+                {program.code}
+              </Link>
+            ),
+          },
+          {
+            key: 'name',
+            header: t('table.program'),
+            cell: (program) => (
+              <div className="min-w-0">
+                <p className="type-body text-text m-0">{program.name}</p>
+                {program.description && (
+                  <p className="type-caption text-text-muted m-0">{program.description}</p>
+                )}
+              </div>
+            ),
+          },
+          {
+            key: 'modules',
+            header: t('table.modules'),
+            numeric: true,
+            narrow: true,
+            cell: (program) => program.modules.length,
+          },
+          {
+            key: 'lessons',
+            header: t('table.lessons'),
+            numeric: true,
+            narrow: true,
+            cell: (program) => lessonsOf(program),
+          },
+          {
+            key: 'access',
+            header: t('table.access'),
+            numeric: true,
+            narrow: true,
+            cell: (program) => t('table.accessDays', { count: program.defaultAccessDays }),
+          },
+          {
+            key: 'actions',
+            header: t('table.actions'),
+            narrow: true,
+            cell: (program) => (
+              // §7: la acción frecuente a la vista; editar y archivar bajo «⋯», y archivar
+              // confirma en línea al elegirlo. Sin envolver: la celda es estrecha.
+              <div className="flex items-center justify-end gap-1 whitespace-nowrap">
+                {confirmArchive === program.id ? (
+                  <>
+                    <Button
+                      variant="secondary"
+                      disabled={busy}
+                      onClick={async () => {
+                        const ok = await send(
+                          `/api/admin/programs/${program.id}`,
+                          'PATCH',
+                          { op: 'archive' },
+                          t('programArchived')
+                        );
+                        if (ok) setConfirmArchive(null);
+                      }}
+                    >
+                      {t('confirmArchive')}
+                      <span className="sr-only"> {program.code}</span>
+                    </Button>
+                    <Button variant="quiet" disabled={busy} onClick={() => setConfirmArchive(null)}>
+                      {t('cancel')}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button asChild variant="secondary">
+                      <Link href={`/contenido/programas/${program.id}`}>
+                        {t('openBuilder')}
+                        <span className="sr-only"> {program.code}</span>
+                      </Link>
+                    </Button>
+                    <Menu label={t('table.menuFor', { name: program.code })}>
+                      <MenuItem
+                        onSelect={() => {
+                          if (editing === program.id) {
+                            setEditing(null);
+                          } else {
+                            setEditing(program.id);
+                            expand(program.id);
+                          }
+                        }}
+                      >
+                        {editing === program.id ? t('cancel') : t('edit')}
+                      </MenuItem>
+                      <MenuSeparator />
+                      <MenuItem destructive onSelect={() => setConfirmArchive(program.id)}>
+                        {t('archive')}
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )}
+              </div>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }
 
-function ProgramCard({
+/** Lo que cuelga de la fila: el formulario si se está editando, y los módulos. */
+function ProgramDetail({
   program,
   busy,
   send,
+  editing,
+  onEditingDone,
 }: {
   program: CurriculumProgram;
   busy: boolean;
   send: Send;
+  editing: boolean;
+  onEditingDone: () => void;
 }) {
   const t = useTranslations('admin.curriculum');
-  const [editing, setEditing] = useState(false);
-  const [confirmArchive, setConfirmArchive] = useState(false);
-  const headingId = useId();
-
   return (
-    <article
-      aria-labelledby={headingId}
-      className="bg-surface-base border-border-muted rounded-card elevation-resting space-y-4 border p-5"
-    >
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 id={headingId} className="type-body-emphasis text-text">
-          <span className="text-text-muted">{program.code}</span> — {program.name}
-        </h3>
-        <div className="flex gap-2">
-          {/* El constructor (23/9): la ruta del programa como la verá el estudiante. */}
-          <Button asChild variant="secondary">
-            <Link href={`/contenido/programas/${program.id}`}>{t('openBuilder')}</Link>
-          </Button>
-          <Button variant="quiet" onClick={() => setEditing((v) => !v)} disabled={busy}>
-            {editing ? t('cancel') : t('edit')}
-          </Button>
-          {confirmArchive ? (
-            <>
-              <Button
-                variant="secondary"
-                disabled={busy}
-                onClick={async () => {
-                  const ok = await send(
-                    `/api/admin/programs/${program.id}`,
-                    'PATCH',
-                    { op: 'archive' },
-                    t('programArchived')
-                  );
-                  if (ok) setConfirmArchive(false);
-                }}
-              >
-                {t('confirmArchive')}
-              </Button>
-              <Button variant="quiet" onClick={() => setConfirmArchive(false)} disabled={busy}>
-                {t('cancel')}
-              </Button>
-            </>
-          ) : (
-            <Button variant="quiet" onClick={() => setConfirmArchive(true)} disabled={busy}>
-              {t('archive')}
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {program.description && <p className="type-caption text-text-muted">{program.description}</p>}
-
+    <div className="space-y-5">
       {editing && (
-        <ProgramForm
-          initial={program}
-          submitLabel={t('save')}
-          busy={busy}
-          onSubmit={async (values) => {
-            const ok = await send(
-              `/api/admin/programs/${program.id}`,
-              'PATCH',
-              { op: 'update', ...values },
-              t('programSaved')
-            );
-            if (ok) setEditing(false);
-          }}
-        />
+        <div className="bg-surface-base border-border-muted rounded-card border p-4">
+          <ProgramForm
+            initial={program}
+            submitLabel={t('save')}
+            busy={busy}
+            onSubmit={async (values) => {
+              const ok = await send(
+                `/api/admin/programs/${program.id}`,
+                'PATCH',
+                { op: 'update', ...values },
+                t('programSaved')
+              );
+              if (ok) onEditingDone();
+            }}
+          />
+        </div>
       )}
-
       <ModuleList program={program} busy={busy} send={send} />
-    </article>
+    </div>
   );
 }
 
@@ -245,107 +351,112 @@ function ModuleList({
   const [name, setName] = useState('');
   const [confirming, setConfirming] = useState<string | null>(null);
   const listId = useId();
+  const last = program.modules.length - 1;
+
+  const move = (module: CurriculumModule, direction: 'up' | 'down') =>
+    send(`/api/admin/modules/${module.id}`, 'PATCH', { op: 'move', direction }, t('moduleMoved'));
 
   return (
     <div className="space-y-3">
-      <h4 id={listId} className="type-overline text-text-muted uppercase">
+      <h4 id={listId} className="type-overline text-text-muted m-0 uppercase">
         {t('modules')}
       </h4>
 
-      {program.modules.length === 0 ? (
-        <p className="type-caption text-text-muted">{t('modulesEmpty')}</p>
-      ) : (
-        <ol aria-labelledby={listId} className="divide-border-muted divide-y">
-          {program.modules.map((module, index) => (
-            <li key={module.id} className="flex flex-wrap items-center gap-2 py-2">
-              <span className="type-body text-text min-w-0 flex-1">{module.name}</span>
-              {/* El recuento a la derecha, alineado con el de las demás filas. */}
-              <span className="type-caption text-text-muted text-right tabular-nums">
-                {t('lessonCount', { count: module.lessonCount })}
-              </span>
-              {/*
-                La flecha es decorativa y el nombre del módulo va en un `sr-only`. Antes el
-                rótulo visible era «Subir Bienvenida Valida Ya y Metodología»: la fila la
-                ocupaban dos veces el título del módulo en vez del módulo. El nombre accesible
-                no cambia —sigue diciendo de qué módulo se habla, que es lo que exige tener
-                tres «Subir» seguidos (WCAG 2.4.6)—.
-              */}
-              <Tooltip label={t('moveUp')}>
-                <Button
-                  variant="quiet"
-                  disabled={busy || index === 0}
-                  onClick={() =>
-                    send(
-                      `/api/admin/modules/${module.id}`,
-                      'PATCH',
-                      { op: 'move', direction: 'up' },
-                      t('moduleMoved')
-                    )
-                  }
-                >
-                  <span aria-hidden="true">↑</span>
-                  <span className="sr-only">{t('moveUpNamed', { name: module.name })}</span>
-                </Button>
-              </Tooltip>
-              <Tooltip label={t('moveDown')}>
-                <Button
-                  variant="quiet"
-                  disabled={busy || index === program.modules.length - 1}
-                  onClick={() =>
-                    send(
-                      `/api/admin/modules/${module.id}`,
-                      'PATCH',
-                      { op: 'move', direction: 'down' },
-                      t('moduleMoved')
-                    )
-                  }
-                >
-                  <span aria-hidden="true">↓</span>
-                  <span className="sr-only">{t('moveDownNamed', { name: module.name })}</span>
-                </Button>
-              </Tooltip>
-              {/*
-                Archivar un módulo pide confirmación igual que archivar el programa. Hasta el
-                18/9 el módulo se archivaba al primer clic mientras el programa —tres líneas
-                más arriba, en la misma tarjeta— pedía confirmar: la misma palabra hacía dos
-                cosas distintas según dónde se pulsara.
-              */}
-              {confirming === module.id ? (
-                <>
-                  <Button
-                    variant="secondary"
-                    disabled={busy}
-                    onClick={async () => {
-                      const ok = await send(
-                        `/api/admin/modules/${module.id}`,
-                        'PATCH',
-                        { op: 'archive' },
-                        t('moduleArchived')
-                      );
-                      if (ok) setConfirming(null);
-                    }}
-                  >
-                    {t('confirmArchive')}
-                    <span className="sr-only"> {module.name}</span>
-                  </Button>
-                  <Button variant="quiet" onClick={() => setConfirming(null)} disabled={busy}>
-                    {t('cancel')}
-                  </Button>
-                </>
-              ) : (
-                <Button variant="quiet" disabled={busy} onClick={() => setConfirming(module.id)}>
-                  {t('archive')}
-                  <span className="sr-only"> {module.name}</span>
-                </Button>
-              )}
-            </li>
-          ))}
-        </ol>
-      )}
+      <DataTable
+        plain
+        compactRows
+        align="middle"
+        caption={t('table.modulesCaption', { name: program.name })}
+        rows={program.modules}
+        rowKey={(module) => module.id}
+        empty={<p className="type-caption text-text-muted m-0">{t('modulesEmpty')}</p>}
+        columns={[
+          {
+            key: 'position',
+            header: t('table.order'),
+            numeric: true,
+            narrow: true,
+            cell: (module) => module.position,
+          },
+          { key: 'name', header: t('table.module'), cell: (module) => module.name },
+          {
+            key: 'lessons',
+            header: t('table.lessons'),
+            numeric: true,
+            narrow: true,
+            cell: (module) => t('lessonCount', { count: module.lessonCount }),
+          },
+          {
+            key: 'actions',
+            header: t('table.actions'),
+            narrow: true,
+            cell: (module) => {
+              const index = program.modules.indexOf(module);
+              return (
+                <div className="flex items-center justify-end gap-1">
+                  {/*
+                    La flecha es decorativa y el nombre del módulo va en un `sr-only`: el
+                    nombre accesible sigue diciendo de qué módulo se habla (WCAG 2.4.6).
+                  */}
+                  <Tooltip label={t('moveUp')}>
+                    <Button
+                      variant="quiet"
+                      disabled={busy || index === 0}
+                      onClick={() => move(module, 'up')}
+                    >
+                      <span aria-hidden="true">↑</span>
+                      <span className="sr-only">{t('moveUpNamed', { name: module.name })}</span>
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label={t('moveDown')}>
+                    <Button
+                      variant="quiet"
+                      disabled={busy || index === last}
+                      onClick={() => move(module, 'down')}
+                    >
+                      <span aria-hidden="true">↓</span>
+                      <span className="sr-only">{t('moveDownNamed', { name: module.name })}</span>
+                    </Button>
+                  </Tooltip>
+                  {confirming === module.id ? (
+                    <>
+                      <Button
+                        variant="secondary"
+                        disabled={busy}
+                        onClick={async () => {
+                          const ok = await send(
+                            `/api/admin/modules/${module.id}`,
+                            'PATCH',
+                            { op: 'archive' },
+                            t('moduleArchived')
+                          );
+                          if (ok) setConfirming(null);
+                        }}
+                      >
+                        {t('confirmArchive')}
+                        <span className="sr-only"> {module.name}</span>
+                      </Button>
+                      <Button variant="quiet" onClick={() => setConfirming(null)} disabled={busy}>
+                        {t('cancel')}
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="quiet"
+                      disabled={busy}
+                      onClick={() => setConfirming(module.id)}
+                    >
+                      {t('archive')}
+                      <span className="sr-only"> {module.name}</span>
+                    </Button>
+                  )}
+                </div>
+              );
+            },
+          },
+        ]}
+      />
 
-      {/* La línea separa el alta de la lista y por eso va a lo ancho de la tarjeta; el
-          formulario sigue limitado a `max-w-reading`, que es donde se escribe. */}
-      <div className="border-border-muted border-t pt-3" />
       <form
         className="max-w-reading flex flex-wrap items-end gap-2"
         noValidate

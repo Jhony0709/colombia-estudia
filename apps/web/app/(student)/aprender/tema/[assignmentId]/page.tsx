@@ -233,6 +233,7 @@ export default async function LessonPage({
             assignmentId={lesson.assignmentId}
             submission={submission}
             accepts={lesson.activity.accepts}
+            prompts={lesson.activity.prompts}
             dateLabel={
               submission
                 ? format.dateTime(new Date(submission.reviewedAt ?? submission.submittedAt), {

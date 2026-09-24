@@ -10,7 +10,25 @@
  */
 
 import type { ReactNode } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+/**
+ * Filas expandibles (24/9, pedido de Jhonny: «como en Basikon»). Es el patrón de
+ * `TableExtended` de basikon-client: una primera columna estrecha con un chevron, y al abrir
+ * una fila hija a todo lo ancho (`colSpan`) con lo que cuelga de esa fila —una subtabla, un
+ * formulario—. El estado vive en quien usa la tabla (`isExpanded`/`onToggle`), así que el
+ * `DataTable` sigue sin ser cliente. El botón lleva `aria-expanded` y `aria-controls` a la
+ * fila hija; el nombre accesible dice de qué fila se trata («Mostrar módulos de COC-1»).
+ */
+export interface DataTableExpandable<T> {
+  isExpanded: (row: T) => boolean;
+  onToggle: (row: T) => void;
+  /** Lo que se pinta debajo de la fila cuando está abierta. */
+  content: (row: T) => ReactNode;
+  /** Nombre accesible del botón, según esté abierta o cerrada. */
+  label: (row: T, expanded: boolean) => string;
+}
 
 export interface DataTableColumn<T> {
   /** Stable key, used for React and nothing else. */
@@ -47,6 +65,14 @@ export interface DataTableProps<T> {
    * `min-h-touch` por el enlace, no por la fila. La tabla por defecto sigue en 12.
    */
   compactRows?: boolean;
+  /** Filas con hija desplegable. Ver `DataTableExpandable`. */
+  expandable?: DataTableExpandable<T>;
+  /**
+   * Alineación vertical de las celdas. `top` (por defecto) para tablas donde una celda de
+   * dos líneas se lee de arriba abajo con las demás; `middle` cuando la fila lleva botones,
+   * chevrones o menús, que centrados quedan a la altura del texto (24/9, Programas).
+   */
+  align?: 'top' | 'middle';
 }
 
 export function DataTable<T>({
@@ -57,7 +83,10 @@ export function DataTable<T>({
   empty,
   plain = false,
   compactRows = false,
+  expandable,
+  align = 'top',
 }: DataTableProps<T>) {
+  const alignClass = align === 'middle' ? 'align-middle' : 'align-top';
   if (rows.length === 0) {
     return <>{empty}</>;
   }
@@ -84,6 +113,11 @@ export function DataTable<T>({
         <caption className="sr-only">{caption}</caption>
         <thead>
           <tr className="border-border border-b">
+            {expandable && (
+              <th scope="col" className="w-px px-2 py-3 first:pl-0">
+                <span className="sr-only">{caption}</span>
+              </th>
+            )}
             {columns.map((column) => (
               <th
                 key={column.key}
@@ -100,23 +134,55 @@ export function DataTable<T>({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
-            <tr key={rowKey(row)} className="border-border border-b align-top">
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  className={cn(
-                    'text-text px-2 first:pl-0 last:pr-0',
-                    compactRows ? 'py-2' : 'py-3',
-                    column.numeric ? 'type-data' : 'type-body',
-                    column.narrow && 'w-px whitespace-nowrap'
-                  )}
-                >
-                  {column.cell(row)}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {rows.map((row) => {
+            const key = rowKey(row);
+            const expanded = expandable ? expandable.isExpanded(row) : false;
+            const childId = `${key}-expanded`;
+            return [
+              <tr key={key} className={cn('border-border', alignClass, !expanded && 'border-b')}>
+                {expandable && (
+                  <td className={cn('w-px px-2 first:pl-0', compactRows ? 'py-1' : 'py-2')}>
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-controls={expanded ? childId : undefined}
+                      onClick={() => expandable.onToggle(row)}
+                      className="text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch min-w-touch inline-flex items-center justify-center"
+                    >
+                      {expanded ? (
+                        <ChevronDown className="size-4" aria-hidden="true" />
+                      ) : (
+                        <ChevronRight className="size-4" aria-hidden="true" />
+                      )}
+                      <span className="sr-only">{expandable.label(row, expanded)}</span>
+                    </button>
+                  </td>
+                )}
+                {columns.map((column) => (
+                  <td
+                    key={column.key}
+                    className={cn(
+                      'text-text px-2 first:pl-0 last:pr-0',
+                      compactRows ? 'py-2' : 'py-3',
+                      column.numeric ? 'type-data' : 'type-body',
+                      column.narrow && 'w-px whitespace-nowrap'
+                    )}
+                  >
+                    {column.cell(row)}
+                  </td>
+                ))}
+              </tr>,
+              expandable && expanded ? (
+                // La fila hija: a todo lo ancho, con fondo hundido para que se lea como
+                // «lo de dentro» de la fila de arriba y no como una fila más.
+                <tr key={childId} id={childId} className="border-border border-b">
+                  <td colSpan={columns.length + 1} className="bg-surface-canvas px-3 py-4">
+                    {expandable.content(row)}
+                  </td>
+                </tr>
+              ) : null,
+            ];
+          })}
         </tbody>
       </table>
     </div>

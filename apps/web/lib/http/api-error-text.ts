@@ -20,7 +20,7 @@ const FIELD_NAMES: Record<string, string> = {
   code: 'Código',
   description: 'Descripción',
   learningObjective: 'Objetivo de aprendizaje',
-  moduleId: 'Módulo',
+  moduleId: 'Componente',
   subjectId: 'Asignatura',
   programId: 'Programa',
   kind: 'Tipo',

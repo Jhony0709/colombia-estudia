@@ -4824,6 +4824,112 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 24/9 — Los tres huecos de la nota de voz: preguntas en la plataforma, cierre y «componente»
+
+Jhonny: «Hueco 1: ve con prompts: string[]. Hueco 2: texto general, sin base. Hueco 3:
+cámbialo a componente. Haz los cambios».
+
+- **Esquema (archivo protegido, con su sí)**: `Lesson.activityPrompts Json?` (`string[]`)
+  y `Submission.answers Json?` (`{prompt, answer}[]`), migración
+  `20260924000000_activity_prompts`. **Falta aplicarla en tu base**: `pnpm prisma migrate
+deploy` (o `migrate dev`) desde la raíz; hasta entonces el editor de un tema con actividad,
+  el tema del estudiante y las entregas fallan con «Algo salió mal» porque la consulta pide
+  una columna que no existe (lo vi al abrir «Rimas y ritmo»). El cliente de Prisma sí lo
+  regeneré en la VM (con el motor darwin que ya tenías; `prisma generate` en tu Mac lo deja
+  igual). Para eso pedí permiso de borrado en la carpeta: solo se usó para que `prisma
+generate` reemplazara `node_modules/.prisma/client`.
+- **Autor** (`lesson-activity.tsx`, `PUT …/activity`): «Preguntas para responder en la
+  plataforma», hasta 20, añadir/quitar; con `accepts: FILE` no se muestran y se guardan
+  vacías. `updateLessonActivity` las limpia y audita cuántas hay.
+- **Estudiante** (`submission-form.tsx`, `POST …/submission`): con enunciados, un campo por
+  pregunta (numerado, con el enunciado como etiqueta), todas obligatorias, el borrador
+  guarda la lista en JSON en el mismo `useDraft`, y al corregir cada respuesta vuelve a su
+  pregunta. `submitLesson` valida largo y vacíos, guarda `{prompt, answer}` y deja `text`
+  en NULL. `lib/db/prisma.ts` exporta `JsonValue` y `JSON_NULL` para no importar
+  `@prisma/client` en `features/`.
+- **Revisión** (`/cohortes/[id]/actividades`): las respuestas se pintan pregunta por
+  pregunta; `hasText` cuenta las respuestas.
+- **Cierre del cuestionario** (`AttemptPlayer.tsx`): tras un intento entregado (no
+  vencido), «Aprender es avanzar» + «Seguir con el siguiente paso» → `/aprender`. Texto
+  general, sin base (decisión).
+- **«Componente»**: 61 apariciones en `messages/es-CO.json` y cinco errores de la API
+  (`curriculum.service.ts`, `lessons.service.ts`, `assessments.service.ts`,
+  `enrollments.service.ts`, `api-error-text.ts`). Identificadores, rutas y `reference/`
+  siguen con `module`/«módulo». Visto en `/contenido/temas`: «COMPONENTE» en la tabla.
+- **Resumen de negocio**: `docs/negocio/resumen.md`, con cinco diagramas Mermaid (estructura
+  del componente, espacios y roles, modelo de contenido y estudio, ruta del estudiante,
+  estados de cobro) y las decisiones abiertas. Al escribirlo comprobé que el registro
+  público **ya matricula** en la cohorte de introducción (`registration.service.ts`,
+  `Institution.settings.introCohortId`): en mi respuesta anterior dije que faltaba la
+  automatrícula, y era falso; lo que falta es designar esa cohorte cuando el componente
+  gratis esté cargado.
+- **Sin ver**: el formulario del estudiante con preguntas y la revisión con respuestas
+  (necesitan la migración y una sesión de estudiante). `tsc` en cero.
+
+## 24/9 — Temas, Asignaturas y Exámenes con el mismo patrón
+
+Jhonny: «igual para el resto de páginas con el mismo estilo, como Temas, de paso si se
+puede optimizar la UI/UX y optimización mucho mejor».
+
+- **`/contenido/temas`** (`lesson-browser.tsx`): los `<details>` apilados (uno por módulo,
+  todos abiertos) pasan a **una tabla de módulos con filas expandibles**: orden, módulo,
+  programa, temas, publicados; al abrir, los temas como subtabla (orden, tema, asignatura,
+  estado, notas). Sin filtro las filas vienen cerradas y hay «Abrir todos / Cerrar todos»;
+  al buscar o filtrar **se abren solas las que tienen coincidencias** (`isOpen = filtering
+|| open.has(key)`), que es lo que se vino a ver. Optimización: el texto de búsqueda
+  (título, módulo, asignatura) se pliega **una vez por tema** en un `Map` (`index`) en vez
+  de tres `normalize` por fila en cada tecla; con 110 temas eran 330 normalizaciones por
+  pulsación. Mensajes `content.table.*`.
+- **`/contenido/asignaturas`** (`subjects-manager.tsx`): la lista en tarjeta pasa a tabla
+  (nombre, código, temas, acciones); «Editar» abre la fila con el formulario dentro (el
+  chevron hace lo mismo y su nombre accesible es «Editar X»); **archivar ahora confirma en
+  línea**, como programas y módulos —aquí archivaba al primer clic, la misma palabra con
+  dos comportamientos—. El alta sigue en su tarjeta debajo: se añaden varias seguidas.
+- **`/contenido/examenes`**: ya era una tabla; `align="middle"` y `compactRows`.
+- Verificado con la sesión de admin: temas con cuatro módulos cerrados y «Abrir todos»;
+  buscar «arroz» abre solo «1 - Lo primero en la cocina» con su tema; asignaturas con
+  «Editar» abriendo el formulario en la fila; exámenes compactos. `tsc` en cero.
+- **Sin tocar**: el foco del contenedor con scroll de la tabla (`role="region"
+tabIndex=0`) pinta el anillo de foco alrededor de toda la tabla al hacer clic en ella;
+  es correcto (WCAG 2.1.1) y viene de antes, pero se ve pesado; si molesta, `:focus-visible`
+  en vez de `:focus` lo limita al teclado.
+
+## 24/9 — Programas como tabla con filas expandibles (patrón Basikon)
+
+Jhonny: «No me gusta el layout de Programas, es posible que para este tipo de layouts
+podamos inspirarnos en lo que tenemos en basikon? tipo Tabla y rows expandibles con sub
+elementos». Miré `basikon-client/src/_components/TableExtended.jsx`: una primera columna
+«expanded» con un chevron (`icn-chevron-right` / `icn-chevron-down`, `data-is-expanded`) y,
+al abrir, una fila hija a todo lo ancho (`colSpan`) con lo que cuelga —otra tabla, un
+formulario, paneles—. Eso mismo, en nuestro vocabulario:
+
+- **`DataTable.expandable`** (`components/molecules/data-table/DataTable.tsx`):
+  `{ isExpanded, onToggle, content, label }`. Columna estrecha con el chevron
+  (`aria-expanded`, `aria-controls` a la fila hija, nombre accesible «Mostrar los módulos de
+  COC-1»), fila hija `<tr id>` con `<td colSpan>` sobre `bg-surface-canvas` para que se lea
+  como «lo de dentro». El estado vive en quien usa la tabla, así que `DataTable` sigue sin
+  ser cliente. Sirve para cualquier lista con hijos (cohortes → matrículas, aliados →
+  contactos…).
+- **`/contenido/programas`** (`programs-manager.tsx`): una fila por programa —código
+  (enlace al constructor), nombre con la descripción debajo, módulos, temas, días de
+  acceso, acciones— y al abrir la fila, los módulos como subtabla (`plain compactRows`:
+  orden, módulo, temas, ↑ ↓ archivar) y el alta de módulo. Acciones según §7 de
+  `layout-y-componentes.md`: «Construir la ruta» a la vista, «Editar» y «Archivar» bajo
+  «⋯» (`Menu`), archivar confirma en línea al elegirlo. «Editar» abre la fila y pinta el
+  formulario dentro de ella. Con un solo programa la fila viene abierta; con varios,
+  cerradas. Antes: cuatro tarjetas apiladas con la lista de módulos y el formulario de
+  «nuevo módulo» abiertos en todas a la vez.
+- Mensajes `admin.curriculum.table.*`. `ProgramForm` no cambia (lo usa `/programas/nuevo`).
+- **Verificado con la sesión de admin**: tabla con los cuatro programas; abrir INTRO-VY
+  muestra la subtabla de dos módulos y el alta; «⋯ → Editar» abre la fila con el
+  formulario. No tocado: el constructor `/contenido/programas/[programId]`.
+- `tsc` en cero. `DataTable.test.tsx`, si existe, no cubre `expandable`; queda para jest.
+- **`align="middle"`** (Jhonny: «alinea filas y subfilas centrando verticalmente»): nueva
+  prop `align: 'top' | 'middle'` en `DataTable`, `top` por defecto (las tablas con celdas de
+  dos líneas siguen leyéndose de arriba abajo); `middle` en la tabla de programas y en la
+  subtabla de módulos, donde la fila lleva chevron, botones y menú y centrados quedan a la
+  altura del texto. Verificado.
+
 ## 23/9 — Barrido de staff, segunda pasada: cartera y contenido
 
 Jhonny: «continua». Dos cosas que decían una cosa y significaban otra:

@@ -88,6 +88,8 @@ export default async function AssessmentsPage() {
 
       <PageSection title={t('assessmentsTitle', { count: assessments.length })} id="examenes">
         <DataTable<AssessmentListItem>
+          align="middle"
+          compactRows
           caption={t('assessmentsCaption')}
           rowKey={(assessment) => assessment.id}
           rows={assessments}

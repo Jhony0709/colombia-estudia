@@ -387,7 +387,7 @@ export async function moveModule({
       select: { id: true, position: true },
     });
     if (!neighbour) {
-      throw new APIError('El módulo ya está en el extremo de la lista', 'CONFLICT');
+      throw new APIError('El componente ya está en el extremo de la lista', 'CONFLICT');
     }
 
     await tx.module.update({ where: { id: current.id }, data: { position: TEMP_POSITION } });

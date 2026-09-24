@@ -16,6 +16,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { createReadUrl } from '@/lib/media/storage';
 import { notify } from '@/features/notifications/server/notifications.service';
+import { answersOf, type SubmissionAnswer } from '@/features/learn/server/submission.service';
 
 export type SubmissionStatusFilter = 'SUBMITTED' | 'RETURNED' | 'APPROVED';
 export const SUBMISSION_STATUSES: readonly SubmissionStatusFilter[] = [
@@ -41,6 +42,8 @@ export interface SubmissionRow {
 
 export interface SubmissionDetail extends SubmissionRow {
   text: string | null;
+  /** Respuestas por enunciado (24/9), con el enunciado tal como se preguntó. */
+  answers: SubmissionAnswer[];
   file: { name: string; url: string } | null;
   feedback: string | null;
   /** Lo que el autor pidió (23/9): quien revisa lo ve al lado de lo entregado. Markdown crudo. */
@@ -137,6 +140,7 @@ export async function listSubmissions({
       id: true,
       status: true,
       text: true,
+      answers: true,
       fileAssetId: true,
       submittedAt: true,
       reviewedAt: true,
@@ -160,7 +164,7 @@ export async function listSubmissions({
     lessonTitle: r.assignment.lesson.title,
     moduleName: r.assignment.lesson.module.name,
     hasFile: Boolean(r.fileAssetId),
-    hasText: Boolean(r.text),
+    hasText: Boolean(r.text) || answersOf(r.answers).length > 0,
     submittedAt: r.submittedAt,
     reviewedAt: r.reviewedAt,
     reviewerName: r.reviewedBy ? fullName(r.reviewedBy) : null,
@@ -183,6 +187,7 @@ export async function getSubmission({
       id: true,
       status: true,
       text: true,
+      answers: true,
       feedback: true,
       submittedAt: true,
       reviewedAt: true,
@@ -222,12 +227,13 @@ export async function getSubmission({
     lessonTitle: r.assignment.lesson.title,
     moduleName: r.assignment.lesson.module.name,
     hasFile: file !== null,
-    hasText: Boolean(r.text),
+    hasText: Boolean(r.text) || answersOf(r.answers).length > 0,
     submittedAt: r.submittedAt,
     reviewedAt: r.reviewedAt,
     reviewerName: r.reviewedBy ? fullName(r.reviewedBy) : null,
     activityInstructions: r.assignment.lesson.activityInstructions,
     text: r.text,
+    answers: answersOf(r.answers),
     file,
     feedback: r.feedback,
   };

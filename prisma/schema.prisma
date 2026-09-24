@@ -431,6 +431,9 @@ model Lesson {
   activityInstructions String?
   /// Qué entrega el estudiante en la actividad.
   activityAccepts    ActivityAccepts @default(TEXT_OR_FILE)
+  /// Enunciados de la actividad (`string[]`, 24/9): con uno o más, el estudiante responde en la
+  /// plataforma pregunta por pregunta en vez de en un solo texto. Sin versionar, como las instrucciones.
+  activityPrompts    Json?
   authorId          String
   sourceRef         String?
   createdAt         DateTime  @default(now())
@@ -1019,6 +1022,9 @@ model Submission {
   lessonAssignmentId String
   status             SubmissionStatus @default(SUBMITTED)
   text               String?
+  /// Respuestas por enunciado (`{ prompt, answer }[]`, 24/9), con el enunciado tal como se preguntó:
+  /// si el autor cambia las preguntas después, la revisión sigue viendo lo que se respondió.
+  answers            Json?
   fileAssetId        String?
   submittedAt        DateTime         @default(now())
   reviewedById       String?

@@ -226,6 +226,17 @@ no, confirmado o no, con subtítulos o sin ellos).
 
 ---
 
+### DataTable con filas expandibles (24/9)
+
+`DataTable.expandable = { isExpanded, onToggle, content, label }`. Es el patrón de
+`TableExtended` de Basikon: una primera columna estrecha con un chevron (`aria-expanded`,
+`aria-controls`) y, al abrir, una fila hija a todo lo ancho con lo que cuelga de esa fila
+—una subtabla `plain compactRows`, un formulario—. El estado lo lleva quien usa la tabla.
+Con `align="middle"` cuando la fila lleva chevron, botones o menú (por defecto `top`).
+Para una lista cuyas filas tienen hijos que se consultan de vez en cuando (programas →
+módulos); si los hijos se leen siempre, es una tabla agrupada, no una expandible. Primer uso:
+`/contenido/programas`.
+
 ## 4. Filas o tarjetas
 
 | Lo que enseñas                                                  | Forma     |

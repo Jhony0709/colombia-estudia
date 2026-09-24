@@ -17,6 +17,8 @@ import { updateLessonActivity } from '@/features/content/server/lessons.service'
 const schema = z.object({
   instructions: z.string().trim().max(10_000),
   accepts: z.enum(['TEXT', 'FILE', 'TEXT_OR_FILE']),
+  /** Enunciados (24/9); vacío = un solo texto. */
+  prompts: z.array(z.string().trim().max(1_000)).max(20).optional(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -35,5 +37,6 @@ export const PUT = apiHandler<Input>({ schema, capability: 'lesson.author' })(as
     lessonId: await routeParam(routeCtx.params, 'lessonId'),
     instructions: input.instructions === '' ? null : input.instructions,
     accepts: input.accepts,
+    prompts: input.prompts ?? [],
   });
 });

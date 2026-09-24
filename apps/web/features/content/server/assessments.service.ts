@@ -184,7 +184,7 @@ export async function createAssessment({
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new APIError(
-          'Otro examen ocupó esa posición en el módulo mientras se creaba este. Inténtalo otra vez.',
+          'Otro examen ocupó esa posición en el componente mientras se creaba este. Inténtalo otra vez.',
           'CONFLICT'
         );
       }

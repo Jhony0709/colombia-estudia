@@ -28,19 +28,24 @@ export function LessonActivity({
   initial,
 }: {
   lessonId: string;
-  initial: { instructions: string | null; accepts: ActivityAccepts };
+  initial: { instructions: string | null; accepts: ActivityAccepts; prompts: string[] };
 }) {
   const t = useTranslations('editor.activity');
   const router = useRouter();
-  const ids = { instructions: useId(), title: useId() };
+  const ids = { instructions: useId(), title: useId(), prompt: useId() };
 
   const [instructions, setInstructions] = useState(initial.instructions ?? '');
   const [accepts, setAccepts] = useState<ActivityAccepts>(initial.accepts);
+  // Enunciados (24/9): con uno o más, el estudiante responde pregunta por pregunta.
+  const [prompts, setPrompts] = useState<string[]>(initial.prompts);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const dirty = instructions !== (initial.instructions ?? '') || accepts !== initial.accepts;
+  const dirty =
+    instructions !== (initial.instructions ?? '') ||
+    accepts !== initial.accepts ||
+    prompts.join('\n') !== initial.prompts.join('\n');
 
   const save = async () => {
     setBusy(true);
@@ -50,7 +55,11 @@ export function LessonActivity({
       const res = await fetch(`/api/content/lessons/${lessonId}/activity`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instructions: instructions.trim(), accepts }),
+        body: JSON.stringify({
+          instructions: instructions.trim(),
+          accepts,
+          prompts: accepts === 'FILE' ? [] : prompts.map((q) => q.trim()).filter(Boolean),
+        }),
       });
       if (!res.ok) {
         setError(apiErrorText(await res.json().catch(() => null), t('error')));
@@ -128,6 +137,65 @@ export function LessonActivity({
           ))}
         </div>
       </fieldset>
+
+      {accepts !== 'FILE' && (
+        <fieldset className="space-y-2">
+          <legend className="type-label text-text">{t('prompts.title')}</legend>
+          <p className="type-caption text-text-muted max-w-reading">{t('prompts.hint')}</p>
+          {prompts.length > 0 && (
+            <ol className="max-w-reading space-y-2">
+              {prompts.map((prompt, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <span className="type-body text-text-muted min-h-touch inline-flex w-6 shrink-0 items-center justify-end tabular-nums">
+                    {index + 1}.
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <label htmlFor={`${ids.prompt}-${index}`} className="sr-only">
+                      {t('prompts.label', { number: index + 1 })}
+                    </label>
+                    <textarea
+                      id={`${ids.prompt}-${index}`}
+                      rows={2}
+                      value={prompt}
+                      maxLength={1000}
+                      onChange={(event) => {
+                        const next = [...prompts];
+                        next[index] = event.target.value;
+                        setPrompts(next);
+                        setSaved(false);
+                      }}
+                      className="border-border bg-surface-base text-text type-body rounded-control w-full border p-2"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="quiet"
+                    disabled={busy}
+                    onClick={() => {
+                      setPrompts(prompts.filter((_, i) => i !== index));
+                      setSaved(false);
+                    }}
+                  >
+                    {t('prompts.remove')}
+                    <span className="sr-only"> {t('prompts.label', { number: index + 1 })}</span>
+                  </Button>
+                </li>
+              ))}
+            </ol>
+          )}
+          <Button
+            type="button"
+            variant="quiet"
+            disabled={busy || prompts.length >= 20}
+            onClick={() => {
+              setPrompts([...prompts, '']);
+              setSaved(false);
+            }}
+          >
+            {t('prompts.add')}
+          </Button>
+        </fieldset>
+      )}
 
       <div>
         <Button type="button" variant="secondary" loading={busy} disabled={!dirty} onClick={save}>

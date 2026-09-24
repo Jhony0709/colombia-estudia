@@ -15,6 +15,8 @@
 
 import 'server-only';
 
+import { promptsOf } from '@/features/content/server/lessons.service';
+
 import { renderLessonHtml, parseLessonMarkdown } from '@colombia-estudia/types';
 import type { LessonForm } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
@@ -80,7 +82,12 @@ export interface LessonForStudent {
      * La actividad (23/9), solo con `requiresSubmission`: las instrucciones ya en HTML
      * saneado (mismo `renderLessonHtml`, sin assets) y qué se acepta como entrega.
      */
-    activity: { html: string | null; accepts: 'TEXT' | 'FILE' | 'TEXT_OR_FILE' } | null;
+    activity: {
+      html: string | null;
+      accepts: 'TEXT' | 'FILE' | 'TEXT_OR_FILE';
+      /** Enunciados (24/9): con uno o más, un campo por pregunta en vez de un solo texto. */
+      prompts: string[];
+    } | null;
     /** Qué evidencia la completa. `lesson-form.ts` explica por qué se decide así. */
     form: LessonForm;
     /** HTML ya saneado por `renderLessonHtml`: es lo que sostiene el `dangerouslySetInnerHTML`. */
@@ -220,6 +227,7 @@ export async function getLessonForStudent({
           requiresSubmission: true,
           activityInstructions: true,
           activityAccepts: true,
+          activityPrompts: true,
           module: { select: { name: true } },
         },
       },
@@ -275,6 +283,10 @@ export async function getLessonForStudent({
                 })
               : null,
             accepts: assignment.lesson.activityAccepts,
+            prompts:
+              assignment.lesson.activityAccepts === 'FILE'
+                ? []
+                : promptsOf(assignment.lesson.activityPrompts),
           }
         : null,
       form: lessonFormOf({ parsed, requiresSubmission: assignment.lesson.requiresSubmission }),

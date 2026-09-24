@@ -67,7 +67,11 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
         readiness={readiness}
         activity={
           draft.requiresSubmission
-            ? { instructions: draft.activityInstructions, accepts: draft.activityAccepts }
+            ? {
+                instructions: draft.activityInstructions,
+                accepts: draft.activityAccepts,
+                prompts: draft.activityPrompts,
+              }
             : null
         }
         details={{

@@ -151,7 +151,7 @@
     },
     "curriculum": {
       "programs": "Programas",
-      "programsHint": "{count, plural, =0 {Todavía no hay ningún programa} one {Un programa} other {# programas}}. Un programa agrupa los módulos que recorre una cohorte.",
+      "programsHint": "{count, plural, =0 {Todavía no hay ningún programa} one {Un programa} other {# programas}}. Un programa agrupa los componentes que recorre una cohorte.",
       "programsEmpty": "Aún no hay programas. Crea el primero.",
       "newProgram": "Nuevo programa",
       "openBuilder": "Construir la ruta",
@@ -165,11 +165,11 @@
       "programCreated": "Programa creado.",
       "programSaved": "Programa actualizado.",
       "programArchived": "Programa archivado.",
-      "modules": "Módulos",
-      "modulesEmpty": "Este programa aún no tiene módulos.",
-      "newModule": "Nombre del nuevo módulo",
-      "moduleCreated": "Módulo creado.",
-      "moduleArchived": "Módulo archivado.",
+      "modules": "Componentes",
+      "modulesEmpty": "Este programa aún no tiene componentes.",
+      "newModule": "Nombre del nuevo componente",
+      "moduleCreated": "Componente creado.",
+      "moduleArchived": "Componente archivado.",
       "moduleMoved": "Orden actualizado.",
       "lessonCount": "{count, plural, =0 {sin temas} one {# tema} other {# temas}}",
       "subjects": "Asignaturas",
@@ -196,7 +196,23 @@
       "moveUp": "Subir",
       "moveDown": "Bajar",
       "newSubjectTitle": "Nueva asignatura",
-      "subjectsListTitle": "Asignaturas de la institución"
+      "subjectsListTitle": "Asignaturas de la institución",
+      "table": {
+        "caption": "Programas de la institución, con sus componentes, temas y días de acceso",
+        "modulesCaption": "Componentes de {name}",
+        "code": "Código",
+        "program": "Programa",
+        "modules": "Componentes",
+        "lessons": "Temas",
+        "access": "Acceso",
+        "accessDays": "{count, plural, one {# día} other {# días}}",
+        "actions": "Acciones",
+        "order": "Orden",
+        "module": "Componente",
+        "expand": "Mostrar los componentes de {name}",
+        "collapse": "Ocultar los componentes de {name}",
+        "menuFor": "Más acciones para {name}"
+      }
     },
     "registration": {
       "title": "Registro público",
@@ -412,7 +428,7 @@
       "description": "Antes de abrir: esto es lo que se asigna y quién entra. Abrir congela la versión publicada de cada pieza.",
       "loading": "Revisando el programa…",
       "program": "Programa: {name}",
-      "modules": "{count, plural, one {# módulo} other {# módulos}}",
+      "modules": "{count, plural, one {# componente} other {# componentes}}",
       "lessons": "{count, plural, =0 {Ningún tema publicado} one {# tema publicado} other {# temas publicados}}",
       "assessments": "{count, plural, =0 {Ningún examen publicado} one {# examen publicado} other {# exámenes publicados}}",
       "enrollments": "{count, plural, =0 {Nadie matriculado todavía} one {# persona matriculada} other {# personas matriculadas}}",
@@ -545,7 +561,7 @@
       "title": "La ruta de esta cohorte",
       "plannedTitle": "Todavía no hay nada asignado",
       "plannedHint": "Al abrir la cohorte se asigna la versión publicada de cada tema y examen. Hasta entonces, la ruta vive en el constructor del programa.",
-      "emptyModule": "Este módulo no tiene nada asignado en esta cohorte.",
+      "emptyModule": "Este componente no tiene nada asignado en esta cohorte.",
       "programItems": "Exámenes del programa",
       "version": "v{number}",
       "updateTo": "Actualizar a v{number}",
@@ -569,10 +585,10 @@
     "enrol": "Matricular",
     "enrolled": "Persona matriculada.",
     "startsAt": "Empieza en",
-    "startsAtHint": "Grado de entrada: los módulos anteriores no se le muestran ni cuentan en su avance.",
-    "startsAtFirst": "Desde el primer módulo",
-    "moduleOption": "Módulo {position} — {name}",
-    "startsAtModule": "Empieza en el módulo {position}",
+    "startsAtHint": "Grado de entrada: los componentes anteriores no se le muestran ni cuentan en su avance.",
+    "startsAtFirst": "Desde el primer componente",
+    "moduleOption": "Componente {position} — {name}",
+    "startsAtModule": "Empieza en el componente {position}",
     "closedForEnrolment": "La cohorte ya no admite matrículas.",
     "listTitle": "{count, plural, =0 {Sin matrículas} one {# matrícula} other {# matrículas}}",
     "empty": "Aún no hay nadie matriculado en esta cohorte.",
@@ -715,7 +731,7 @@
     "listTitle": "{count, plural, one {1 tema} other {# temas}}",
     "listCaption": "Temas del programa con su estado de publicación",
     "colTitle": "Tema",
-    "colModule": "Módulo",
+    "colModule": "Componente",
     "colLesson": "Examen del tema",
     "colSubject": "Asignatura",
     "colPosition": "Orden",
@@ -749,19 +765,19 @@
     "createLesson": "Crear el tema y empezar a escribir",
     "createAssessment": "Crear el examen",
     "formTitle": "Título",
-    "formModule": "Módulo",
+    "formModule": "Componente",
     "formSubject": "Asignatura",
     "formProgram": "Programa",
     "formKind": "Tipo",
-    "formNoModule": "Sin módulo",
+    "formNoModule": "Sin componente",
     "formLesson": "Examen del tema",
-    "formLessonHint": "Con un tema, el examen aparece justo después de ese tema. Sin tema, al final del módulo.",
-    "formNoLesson": "Del módulo (al final)",
+    "formLessonHint": "Con un tema, el examen aparece justo después de ese tema. Sin tema, al final del componente.",
+    "formNoLesson": "Del componente (al final)",
     "formRequiresSubmission": "Este tema se completa con una actividad revisada, no leyéndolo",
-    "createNeedsCurriculum": "Para crear un tema hacen falta al menos un módulo y una asignatura. Los módulos se crean dentro de su programa, en Programas; las asignaturas, en Asignaturas.",
+    "createNeedsCurriculum": "Para crear un tema hacen falta al menos un componente y una asignatura. Los componentes se crean dentro de su programa, en Programas; las asignaturas, en Asignaturas.",
     "createNeedsProgram": "Para crear un examen hace falta al menos un programa. Se crea en Programas.",
     "filterSearch": "Buscar un tema",
-    "filterSearchHint": "Por título, módulo o asignatura. Las tildes dan igual.",
+    "filterSearchHint": "Por título, componente o asignatura. Las tildes dan igual.",
     "filterProgram": "Programa",
     "filterProgramAll": "Todos los programas",
     "filterStatus": "Estado",
@@ -771,7 +787,17 @@
     "filterStatusUnpublished": "Sin publicar nunca",
     "filterCount": "{shown, plural, =0 {Ningún tema coincide} one {1 tema} other {# temas}} de {total}.",
     "groupCount": "{count, plural, one {1 tema} other {# temas}}",
-    "groupCaption": "Temas del módulo {module}",
+    "groupCaption": "Temas del componente {module}",
+    "table": {
+      "modulesCaption": "Componentes con sus temas, en el orden de la ruta",
+      "program": "Programa",
+      "lessons": "Temas",
+      "published": "Publicados",
+      "expandModule": "Mostrar los temas de {module}",
+      "collapseModule": "Ocultar los temas de {module}",
+      "openAll": "Abrir todos",
+      "closeAll": "Cerrar todos"
+    },
     "noMatchesTitle": "Ningún tema coincide",
     "noMatchesHint": "Prueba con otra palabra, o quita los filtros.",
     "lessonsTitle": "Temas",
@@ -827,7 +853,7 @@
     "detailsFieldObjective": "Objetivo de aprendizaje",
     "detailsObjectiveHint": "Qué debe poder hacer el estudiante al terminar. Aparece bajo el título en la pantalla del estudiante.",
     "detailsFieldSubject": "Asignatura",
-    "detailsFieldModule": "Módulo",
+    "detailsFieldModule": "Componente",
     "detailsRequiresSubmission": "Este tema se completa con una actividad revisada, no leyéndolo",
     "detailsLockedPublished": "No se puede cambiar: el tema ya tiene una versión publicada, y cambiarlo ahora reordenaría la ruta o cambiaría qué lo da por completado a quien lo está estudiando.",
     "detailsSave": "Guardar los datos",
@@ -882,8 +908,8 @@
     "confirmPending": "{count, plural, one {La cohorte abierta {list} no tiene este tema todavía: podrá añadirlo} other {Las cohortes abiertas {list} no tienen este tema todavía: podrán añadirlo}} desde «Actualizaciones del programa».",
     "readiness": {
       "route": "En la ruta",
-      "routeDetail": "{program} · Módulo {position} «{module}»",
-      "routeFirst": "primero del módulo",
+      "routeDetail": "{program} · Componente {position} «{module}»",
+      "routeFirst": "primero del componente",
       "routeAfter": "después de «{title}»",
       "routeLink": "Ver la ruta",
       "content": "Contenido",
@@ -930,6 +956,13 @@
         "TEXT": "Escribe la respuesta en la plataforma.",
         "FILE": "Sube una foto, imagen o PDF (hasta 20 MB).",
         "TEXT_OR_FILE": "Lo que prefiera; puede mandar los dos."
+      },
+      "prompts": {
+        "title": "Preguntas para responder en la plataforma",
+        "hint": "Opcional. Con una o más preguntas, el estudiante responde cada una en su propio campo y lo envía todo junto, sin tener que escribir aparte ni subir un archivo. Sin preguntas, responde en un solo texto.",
+        "label": "Pregunta {number}",
+        "add": "Añadir una pregunta",
+        "remove": "Quitar"
       },
       "save": "Guardar la actividad",
       "saved": "Actividad guardada.",
@@ -1039,9 +1072,9 @@
     "confirmPending": "{count, plural, one {La cohorte abierta {list} no tiene este examen todavía: podrá añadirlo} other {Las cohortes abiertas {list} no tienen este examen todavía: podrán añadirlo}} desde «Actualizaciones del programa».",
     "readiness": {
       "route": "En la ruta",
-      "routeDetail": "{program} · Módulo {position} «{module}»",
+      "routeDetail": "{program} · Componente {position} «{module}»",
       "routeOfLesson": "examen de «{title}»",
-      "routeOfModule": "examen del módulo",
+      "routeOfModule": "examen del componente",
       "routeOfProgram": "examen del programa, fuera de la ruta",
       "routeLink": "Ver la ruta",
       "questions": "Preguntas",
@@ -1077,7 +1110,7 @@
     "resumeTitle": "Continuar donde ibas",
     "resumeAction": "Seguir con “{title}”",
     "outlineTitle": "La ruta del programa",
-    "moduleEmpty": "Este módulo todavía no tiene temas asignados.",
+    "moduleEmpty": "Este componente todavía no tiene temas asignados.",
     "moduleSummary": "{completed} de {total} completados{minutes, plural, =0 {} other { · # min}}",
     "moduleLocked": "Se abre al completar “{title}”",
     "form": {
@@ -1107,7 +1140,7 @@
     "rail": {
       "label": "Ruta del programa",
       "allRoute": "Ver toda la ruta",
-      "toggle": "Ruta del módulo",
+      "toggle": "Ruta del componente",
       "hide": "Ocultar la ruta",
       "show": "Mostrar la ruta"
     },
@@ -1192,6 +1225,7 @@
     "submission": {
       "title": "Tu actividad",
       "textLabel": "Texto de la actividad",
+      "answersHint": "Responde cada pregunta en su campo. Lo que escribas se guarda en este aparato hasta que envíes.",
       "textHint": {
         "TEXT": "Escribe aquí tu respuesta.",
         "TEXT_OR_FILE": "Escribe aquí tu respuesta, o adjunta un archivo, o las dos cosas."
@@ -1230,6 +1264,7 @@
         "upload": "No se pudo subir el archivo. Inténtalo de nuevo.",
         "send": "No se pudo enviar la actividad. Inténtalo de nuevo.",
         "needText": "Esta actividad se entrega con un texto: escribe tu respuesta.",
+        "answerAll": "Responde todas las preguntas antes de enviar.",
         "needFile": "Esta actividad se entrega con un archivo: adjúntalo antes de enviar."
       },
       "replacing": {
@@ -1241,8 +1276,8 @@
     "assessment": {
       "beforeTitle": "Antes de empezar",
       "whatToExpect": "Qué esperar",
-      "mustPass": "Para completar este examen necesitas {percent} % o más. Puedes prepararte repasando los temas del módulo antes de empezar.",
-      "mustTake": "Este examen se completa al entregarlo. Puedes prepararte repasando los temas del módulo antes de empezar.",
+      "mustPass": "Para completar este examen necesitas {percent} % o más. Puedes prepararte repasando los temas del componente antes de empezar.",
+      "mustTake": "Este examen se completa al entregarlo. Puedes prepararte repasando los temas del componente antes de empezar.",
       "countsFor": "Cuenta para la nota de {subject}",
       "kind": {
         "DIAGNOSTIC": "Examen diagnóstico",
@@ -1350,6 +1385,11 @@
         "passed": "Aprobado",
         "notPassed": "No aprobado",
         "hidden": "Tu institución decidió no mostrar la nota de este examen."
+      },
+      "closing": {
+        "title": "Aprender es avanzar",
+        "body": "Terminaste este cuestionario. Cada componente completado es un paso hacia una meta mayor, y el siguiente paso no tiene que ser enorme: lo importante es seguir avanzando.",
+        "next": "Seguir con el siguiente paso"
       }
     },
     "results": {
@@ -1428,11 +1468,11 @@
     },
     "certificates": {
       "title": "Constancias",
-      "description": "Se emiten solas cuando completas un módulo o el programa. Cada una tiene un enlace público para compartirla o verificarla.",
+      "description": "Se emiten solas cuando completas un componente o el programa. Cada una tiene un enlace público para compartirla o verificarla.",
       "empty": "Todavía no tienes constancias",
-      "emptyHint": "Cuando completes un módulo entero (sus temas y sus exámenes) aparecerá aquí su constancia.",
+      "emptyHint": "Cuando completes un componente entero (sus temas y sus exámenes) aparecerá aquí su constancia.",
       "kindProgram": "Constancia de programa",
-      "kindModule": "Constancia de módulo",
+      "kindModule": "Constancia de componente",
       "issuedOn": "Emitida el {date}",
       "revoked": "Revocada",
       "openPublic": "Ver y compartir"
@@ -1791,23 +1831,23 @@
   "help": {
     "lessons": {
       "whatTitle": "Qué es un tema",
-      "whatBody": "Un tema es una unidad de un módulo: lo que un estudiante lee, ve y hace en una sesión. Cada tema tiene versiones. La que está publicada es la que ven las cohortes; abrir un tema para editarlo abre siempre un borrador, nunca lo publicado.",
+      "whatBody": "Un tema es una unidad de un componente: lo que un estudiante lee, ve y hace en una sesión. Cada tema tiene versiones. La que está publicada es la que ven las cohortes; abrir un tema para editarlo abre siempre un borrador, nunca lo publicado.",
       "statesTitle": "Los estados",
       "statesBody": "«Borrador» es una versión que se está escribiendo. «Publicado» es la que las cohortes ven. «Sin publicar» es un tema que aún no ha salido nunca. Publicar un borrador sobre una versión publicada la sustituye para todos.",
       "findTitle": "Buscar y filtrar",
-      "findBody": "El buscador mira el título, el módulo y la asignatura, sin distinguir tildes. Los grupos son los módulos, en el orden en que un estudiante los recorre."
+      "findBody": "El buscador mira el título, el componente y la asignatura, sin distinguir tildes. Los grupos son los componentes, en el orden en que un estudiante los recorre."
     },
     "assessments": {
       "whatTitle": "Qué es un examen",
-      "whatBody": "Un examen es un cuestionario de un tema, de un módulo o del programa entero. Nace vacío y sin clave de respuestas.",
+      "whatBody": "Un examen es un cuestionario de un tema, de un componente o del programa entero. Nace vacío y sin clave de respuestas.",
       "publishTitle": "Publicar un examen",
       "publishBody": "No se puede publicar hasta que tenga al menos una pregunta y todas tengan su respuesta correcta marcada. El panel del examen dice qué falta, pregunta por pregunta."
     },
     "programs": {
-      "whatTitle": "Programas y módulos",
-      "whatBody": "Un programa agrupa los módulos que recorre una cohorte, en orden. «Subir» y «bajar» cambian ese orden, y por tanto la ruta que sigue el estudiante. Los temas se crean dentro de un módulo.",
+      "whatTitle": "Programas y componentes",
+      "whatBody": "Un programa agrupa los componentes que recorre una cohorte, en orden. «Subir» y «bajar» cambian ese orden, y por tanto la ruta que sigue el estudiante. Los temas se crean dentro de un componente.",
       "archiveTitle": "Archivar no borra",
-      "archiveBody": "Un programa o un módulo archivado sale de las listas y de los desplegables, pero sigue existiendo para las cohortes que ya lo tienen asignado."
+      "archiveBody": "Un programa o un componente archivado sale de las listas y de los desplegables, pero sigue existiendo para las cohortes que ya lo tienen asignado."
     },
     "subjects": {
       "whatTitle": "Para qué sirve una asignatura",
@@ -1935,12 +1975,12 @@
         "bachillerato": {
           "name": "Bachillerato acelerado",
           "description": "Termina tu bachillerato en menos tiempo, con clases en vídeo, lecturas y exámenes que te dicen en qué mejorar. Pensado para quien trabaja o tiene familia.",
-          "meta": "Seis módulos · 100 % virtual · Cohortes cada seis meses"
+          "meta": "Seis componentes · 100 % virtual · Cohortes cada seis meses"
         }
       },
       "includesTitle": "Lo que incluye",
       "includes": {
-        "modules": "Seis módulos: Español, Matemáticas, Inglés, Sociales, Física, Economía, Educación financiera y Proyecto de vida",
+        "modules": "Seis componentes: Español, Matemáticas, Inglés, Sociales, Física, Economía, Educación financiera y Proyecto de vida",
         "tutor": "Tutor profesional y clases en vídeo con transcripción",
         "pace": "100 % virtual, disponible las 24 horas, a tu ritmo",
         "diploma": "Diploma y acta de grado registrados ante el Ministerio de Educación"
@@ -2015,7 +2055,7 @@
         },
         "schedule": {
           "q": "¿Tengo que conectarme a una hora fija?",
-          "a": "No. El programa es 100 % virtual: los módulos están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
+          "a": "No. El programa es 100 % virtual: los componentes están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
         },
         "icfes": {
           "q": "¿Necesito presentar el ICFES para graduarme?",
@@ -2114,7 +2154,7 @@
   "enrollmentDetail": {
     "accessUntil": "Acceso hasta {date}",
     "minor": "Menor de edad al matricular",
-    "startsAtModule": "Empieza en el módulo {position}",
+    "startsAtModule": "Empieza en el componente {position}",
     "personLink": "Ver la persona",
     "withdrawn": "Retirada. Motivo: {reason}",
     "progressTitle": "Progreso",
@@ -2211,7 +2251,7 @@
     "no": "No",
     "certificates": {
       "title": "Constancias",
-      "hint": "Se emiten solas al completar un módulo o el programa. Revocar exige motivo y queda auditado.",
+      "hint": "Se emiten solas al completar un componente o el programa. Revocar exige motivo y queda auditado.",
       "empty": "Todavía no se ha emitido ninguna.",
       "program": "Constancia de programa",
       "revokedOn": "revocada el {date}",
@@ -2316,7 +2356,7 @@
     "revoked": "Esta constancia fue revocada por la institución y ya no es válida.",
     "certifies": "Se hace constar que",
     "completedProgram": "completó el programa «{program}».",
-    "completedModule": "completó el módulo «{module}» del programa «{program}».",
+    "completedModule": "completó el componente «{module}» del programa «{program}».",
     "issuedAt": "Fecha de emisión",
     "code": "Código",
     "status": "Estado",
@@ -2531,20 +2571,20 @@
   },
   "builder": {
     "readiness": "{published} de {total} piezas publicadas. Lo que no está publicado no entra en una cohorte al abrirla.",
-    "noModulesTitle": "Este programa todavía no tiene módulos",
-    "noModulesHint": "Los módulos se crean en Programas. Vuelve aquí para llenarlos.",
-    "manageModules": "Gestionar los módulos del programa",
+    "noModulesTitle": "Este programa todavía no tiene componentes",
+    "noModulesHint": "Los componentes se crean en Programas. Vuelve aquí para llenarlos.",
+    "manageModules": "Gestionar los componentes del programa",
     "programAssessments": "Exámenes del programa",
-    "programAssessmentsHint": "Sin módulo (diagnósticos): no van en la ruta, se asignan aparte.",
-    "moduleN": "Módulo {position}",
+    "programAssessmentsHint": "Sin componente (diagnósticos): no van en la ruta, se asignan aparte.",
+    "moduleN": "Componente {position}",
     "moduleEmpty": "Vacío",
     "moduleReadiness": "{published} de {total} publicados",
     "addContent": "Añadir contenido",
     "addContentIn": "Añadir contenido en {module}",
     "addLesson": "Tema",
     "addLessonHint": "Contenido para aprender, con o sin actividad",
-    "addModuleExam": "Examen del módulo",
-    "addModuleExamHint": "Va al final del módulo, después de todos los temas",
+    "addModuleExam": "Examen del componente",
+    "addModuleExamHint": "Va al final del componente, después de todos los temas",
     "addLessonExam": "Añadir el examen de este tema",
     "status": {
       "none": "Sin versión",
@@ -2632,10 +2672,10 @@
     "progress": "{completed} de {total} temas · {percent}%",
     "accessUntil": "Acceso hasta el {date}",
     "open": "Ver el avance de {name}",
-    "progressTitle": "Avance por módulo",
+    "progressTitle": "Avance por componente",
     "progressHint": "{completed} de {total} temas completados en total.",
-    "progressCaption": "Temas completados por módulo",
-    "module": "Módulo",
+    "progressCaption": "Temas completados por componente",
+    "module": "Componente",
     "lessonsDone": "Temas",
     "noLessons": "Esta cohorte todavía no tiene temas asignados",
     "assessmentsTitle": "Exámenes",

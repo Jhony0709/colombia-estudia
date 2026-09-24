@@ -58,3 +58,6 @@ if (process.env.NODE_ENV !== 'production') {
 export type { PrismaClient };
 /** El tipo de una columna `Json` al escribirla. Se reexporta para que `features/` no importe `@prisma/client` (regla `prisma-solo-en-lib-db`). */
 export type JsonObject = Prisma.InputJsonObject;
+/** Ídem para una lista (`string[]`, `{…}[]`) y para poner una columna `Json?` a NULL de base. */
+export type JsonValue = Prisma.InputJsonValue;
+export const JSON_NULL = Prisma.DbNull;

@@ -976,3 +976,29 @@ Origen: `docs/ux/decision-ux-2309.md`, ola 3.
    embudo de errores no se mide y la página lo declara en vez de inventar una cifra.
 3. **Los espacios salen de las capacidades, no del rol.** Quien puede hacer algo en un área
    la tiene en el conmutador; con un solo espacio no hay conmutador.
+
+## 2026-09-24 — La actividad se responde pregunta por pregunta, en la plataforma
+
+Los clientes (nota de voz del 24/9) no quieren que el estudiante escriba las respuestas
+aparte y suba un PDF: «ahí mismo, cuadrito por cuadrito, y al final enviar». Decisión de
+Jhonny: `Lesson.activityPrompts: string[]` (enunciados, sin versionar como las
+instrucciones) y `Submission.answers: {prompt, answer}[]` con el enunciado guardado junto
+a la respuesta, para que la revisión vea lo que se preguntó aunque el autor lo cambie
+después. Con enunciados, todas las respuestas son obligatorias y `text` queda en NULL; sin
+enunciados, nada cambia. El borrador del estudiante guarda las respuestas juntas en el
+aparato hasta enviar.
+
+## 2026-09-24 — El texto de cierre del componente es general y no vive en la base
+
+«Al enviar la evaluación sale ese texto y pasa al siguiente componente» (clientes, 24/9).
+Decisión de Jhonny: un solo texto de cierre para toda la plataforma, felicitando por
+terminar («Aprender es avanzar»), en la pantalla del intento entregado, con un botón a
+`/aprender`, que ya sabe cuál es el siguiente paso. Nada nuevo en el esquema; si algún
+día cada componente quiere su propio cierre, será un campo del examen.
+
+## 2026-09-24 — «Componente», no «módulo»
+
+Los clientes usan «componente» para la unidad del programa. Decisión de Jhonny: la
+palabra cambia en todos los textos que ve la gente (mensajes y errores de la API); el
+modelo, las rutas y los identificadores siguen diciendo `module`. La documentación de
+`reference/` conserva «módulo» donde nombra el modelo.

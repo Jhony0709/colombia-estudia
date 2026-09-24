@@ -19,6 +19,11 @@
  *
  * Qué pide el formulario lo decide el autor del tema (`accepts`, 23/9): solo texto, solo
  * archivo, o cualquiera de los dos. El servidor vuelve a comprobarlo.
+ *
+ * Con enunciados (`prompts`, 24/9, pedido de los clientes: «que no tengan que escribir en
+ * otro lado y subir un PDF, sino ahí mismo, cuadrito por cuadrito, y al final enviar»): un
+ * campo por pregunta en vez del texto único, el borrador guarda las respuestas juntas (JSON
+ * en el mismo `useDraft`), y se envían como `answers[]` en el orden de los enunciados.
  */
 
 import { useId, useRef, useState, type FormEvent } from 'react';
@@ -41,6 +46,8 @@ export interface SubmissionViewProps {
   id: string;
   status: 'SUBMITTED' | 'RETURNED' | 'APPROVED';
   text: string | null;
+  /** Respuestas por enunciado; vacío cuando la actividad era de un solo texto. */
+  answers: Array<{ prompt: string; answer: string }>;
   file: { name: string; url: string } | null;
   feedback: string | null;
   submittedAt: string;
@@ -58,16 +65,36 @@ async function readJson(res: Response): Promise<unknown> {
   return res.json().catch(() => null);
 }
 
+/** Las respuestas del borrador: una lista del largo de los enunciados, o nada si no cuadra. */
+function parseAnswers(raw: string, count: number): string[] | null {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      Array.isArray(parsed) &&
+      parsed.length === count &&
+      parsed.every((a) => typeof a === 'string')
+    ) {
+      return parsed as string[];
+    }
+  } catch {
+    // No era JSON: era el texto único de antes; se ignora.
+  }
+  return null;
+}
+
 export function SubmissionForm({
   assignmentId,
   submission,
   dateLabel,
   accepts,
+  prompts = [],
 }: {
   assignmentId: string;
   submission: SubmissionViewProps | null;
   /** Qué entrega el estudiante, según el autor del tema. */
   accepts: ActivityAccepts;
+  /** Enunciados (24/9): con uno o más, un campo por pregunta. */
+  prompts?: string[];
   /**
    * La fecha de la entrega ya escrita, formateada en el servidor (21/9). Formatearla aquí
    * daba un error de hidratación: el ICU de Node dice «20 de septiembre, 10:59» y el de
@@ -86,14 +113,37 @@ export function SubmissionForm({
   // Lo escrito se conserva para corregirlo, tanto si la devolvieron como si la quiere
   // reemplazar antes de que la revisen. Y se guarda en el aparato mientras se escribe (E1,
   // 23/9): una recarga o una petición que nunca contesta no se lo llevan.
+  const hasPrompts = accepts !== 'FILE' && prompts.length > 0;
+  const editable = submission?.status === 'RETURNED' || submission?.status === 'SUBMITTED';
   const draft = useDraft(
     `submission.${assignmentId}`,
-    submission?.status === 'RETURNED' || submission?.status === 'SUBMITTED'
-      ? (submission.text ?? '')
-      : ''
+    hasPrompts
+      ? JSON.stringify(
+          // Al corregir, cada respuesta vuelve a su pregunta (por texto, y por posición si el
+          // autor la reescribió mientras tanto).
+          prompts.map((prompt, i) =>
+            editable
+              ? (submission.answers.find((a) => a.prompt === prompt)?.answer ??
+                submission.answers[i]?.answer ??
+                '')
+              : ''
+          )
+        )
+      : editable
+        ? (submission.text ?? '')
+        : ''
   );
   const text = draft.text;
   const setText = draft.setText;
+  // Con enunciados, el borrador es la lista de respuestas en JSON; se lee y escribe entera.
+  const answers = hasPrompts
+    ? (parseAnswers(draft.text, prompts.length) ?? prompts.map(() => ''))
+    : [];
+  const setAnswer = (index: number, value: string) => {
+    const next = [...answers];
+    next[index] = value;
+    setText(JSON.stringify(next));
+  };
   // La espera que se ve: «está tardando», «no pudimos», reintentar (E1).
   const wait = useSlowRequest({ screen: 'lesson', action: 'submit', request: 'submission' });
   const [file, setFile] = useState<File | null>(null);
@@ -103,7 +153,7 @@ export function SubmissionForm({
   const fileInput = useRef<HTMLInputElement>(null);
 
   const date = (_iso: string) => dateLabel ?? '';
-  const wantsText = accepts !== 'FILE';
+  const wantsText = accepts !== 'FILE' && !hasPrompts;
   const wantsFile = accepts !== 'TEXT';
 
   if (submission?.status === 'SUBMITTED' && !replacing) {
@@ -155,9 +205,13 @@ export function SubmissionForm({
     setError(null);
     wait.reset();
     const trimmed = wantsText ? text.trim() : '';
+    const trimmedAnswers = hasPrompts ? answers.map((a) => a.trim()) : [];
     if (accepts === 'FILE' && !file) return setError(t('errors.needFile'));
-    if (accepts === 'TEXT' && !trimmed) return setError(t('errors.needText'));
-    if (!trimmed && !file) return setError(t('errors.empty'));
+    if (hasPrompts && trimmedAnswers.some((a) => a === '')) {
+      return setError(t('errors.answerAll'));
+    }
+    if (!hasPrompts && accepts === 'TEXT' && !trimmed) return setError(t('errors.needText'));
+    if (!hasPrompts && !trimmed && !file) return setError(t('errors.empty'));
 
     // Un fallo de servidor (respuesta con error) se dice con su texto; un `fetch` que
     // lanza (sin respuesta) lo recoge `wait` como `failed` con «Reintentar». En los dos
@@ -207,7 +261,11 @@ export function SubmissionForm({
       const res = await fetch(`/api/learn/lessons/${assignmentId}/submission`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: trimmed || undefined, fileAssetId }),
+        body: JSON.stringify({
+          text: trimmed || undefined,
+          answers: hasPrompts ? trimmedAnswers : undefined,
+          fileAssetId,
+        }),
       });
       const payload = await readJson(res);
       if (!res.ok) {
@@ -250,6 +308,35 @@ export function SubmissionForm({
       )}
 
       <form onSubmit={onSubmit} noValidate className="space-y-4">
+        {hasPrompts && (
+          <ol className="space-y-4">
+            {prompts.map((prompt, index) => (
+              <li key={index} className="space-y-1.5">
+                <Label htmlFor={`${ids.text}-${index}`}>
+                  <span className="text-text-muted mr-1 tabular-nums">{index + 1}.</span>
+                  {prompt}
+                </Label>
+                <textarea
+                  id={`${ids.text}-${index}`}
+                  name={`answer-${index}`}
+                  value={answers[index] ?? ''}
+                  onChange={(e) => setAnswer(index, e.target.value)}
+                  rows={4}
+                  maxLength={5_000}
+                  disabled={busy}
+                  aria-describedby={error ? ids.error : undefined}
+                  className={cn(
+                    'rounded-control border-border bg-surface-sunken text-text type-body w-full border px-3 py-2',
+                    'focus:border-accent-base duration-fast ease-standard transition-colors',
+                    busy && 'text-text-subtle cursor-not-allowed'
+                  )}
+                />
+              </li>
+            ))}
+            <li className="type-caption text-text-muted list-none">{t('answersHint')}</li>
+          </ol>
+        )}
+
         {wantsText && (
           <div className="space-y-1.5">
             <Label htmlFor={ids.text}>{t('textLabel')}</Label>
@@ -308,7 +395,7 @@ export function SubmissionForm({
           phase={wait.phase}
           elapsedSeconds={wait.elapsedSeconds}
           onRetry={() => void onSubmit()}
-          kept={wantsText ? 'text' : 'nothing'}
+          kept={wantsText || hasPrompts ? 'text' : 'nothing'}
         />
         {wait.phase === 'failed' && file && (
           <p className="type-caption text-text-muted">{tn('fileKept')}</p>
@@ -387,13 +474,25 @@ function Quote({ label, text }: { label: string; text: string }) {
 
 function Summary({ submission }: { submission: SubmissionViewProps }) {
   const t = useTranslations('learn.submission');
-  if (!submission.text && !submission.file) return null;
+  if (!submission.text && !submission.file && submission.answers.length === 0) return null;
   return (
     <details className="type-body">
       <summary className="text-text-link min-h-touch inline-flex cursor-pointer items-center underline">
         {t('viewMine')}
       </summary>
       <div className="mt-2 space-y-2">
+        {submission.answers.length > 0 && (
+          <ol className="space-y-2">
+            {submission.answers.map((a, i) => (
+              <li key={i}>
+                <p className="type-caption text-text-muted m-0">
+                  {i + 1}. {a.prompt}
+                </p>
+                <p className="m-0 whitespace-pre-wrap">{a.answer}</p>
+              </li>
+            ))}
+          </ol>
+        )}
         {submission.text && <p className="whitespace-pre-wrap">{submission.text}</p>}
         {submission.file && (
           <a

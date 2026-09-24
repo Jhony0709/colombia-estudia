@@ -249,7 +249,7 @@ export async function enrollPerson({
     startsAtModule !== null &&
     !cohort.program.modules.some((m) => m.position === startsAtModule)
   ) {
-    throw new APIError('El programa no tiene un módulo en esa posición', 'VALIDATION_ERROR');
+    throw new APIError('El programa no tiene un componente en esa posición', 'VALIDATION_ERROR');
   }
 
   const accessUntil = resolveAccessUntil({

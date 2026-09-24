@@ -82,7 +82,7 @@ export interface LessonWorkspaceProps {
   /** Dónde está el tema en la ruta, sus exámenes, su versión publicada y las cohortes abiertas. */
   readiness: LessonReadiness | null;
   /** La actividad, solo en un tema que se completa con una; `null` en los demás. */
-  activity: { instructions: string | null; accepts: ActivityAccepts } | null;
+  activity: { instructions: string | null; accepts: ActivityAccepts; prompts: string[] } | null;
   details: {
     modules: ModuleChoice[];
     subjects: SubjectChoice[];
@@ -657,7 +657,7 @@ function readinessChecks({
   minutes: string;
   validation: Validation | null;
   media: Array<{ missingCaptions: boolean }> | null;
-  activity: { instructions: string | null; accepts: ActivityAccepts } | null;
+  activity: { instructions: string | null; accepts: ActivityAccepts; prompts: string[] } | null;
   publishedNumber: number | null;
 }): ReadinessCheck[] {
   if (readiness === null) return [];

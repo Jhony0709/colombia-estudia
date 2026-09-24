@@ -61,6 +61,8 @@ export interface DraftView {
   /** La actividad (23/9): instrucciones y qué se acepta. Del tema, no de la versión. */
   activityInstructions: string | null;
   activityAccepts: ActivityAccepts;
+  /** Enunciados (24/9): con uno o más, el estudiante responde pregunta por pregunta. */
+  activityPrompts: string[];
   /**
    * Si ya hay alguna versión publicada. Cierra el módulo y la forma de completado: moverlos
    * con gente estudiando reordena la ruta o cambia qué da el tema por hecho.
@@ -168,7 +170,7 @@ export async function createLesson({
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new APIError(
-          'Otro tema ocupó esa posición en el módulo mientras se creaba este. Inténtalo otra vez.',
+          'Otro tema ocupó esa posición en el componente mientras se creaba este. Inténtalo otra vez.',
           'CONFLICT'
         );
       }
@@ -426,18 +428,26 @@ export async function listLessons({
  * sigue cerrado con gente estudiando es la **forma** de completar (`requiresSubmission`).
  * Solo tiene sentido en un tema con actividad; en otro, es un error de quien llama.
  */
+/** El JSON de la base como `string[]`, tolerante: lo que no sea lista de textos es «sin enunciados». */
+export function promptsOf(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((q): q is string => typeof q === 'string') : [];
+}
+
 export async function updateLessonActivity({
   institutionId,
   actorId,
   lessonId,
   instructions,
   accepts,
+  prompts,
 }: {
   institutionId: string;
   actorId: string;
   lessonId: string;
   instructions: string | null;
   accepts: ActivityAccepts;
+  /** Enunciados; vacío = un solo texto. Sin sentido con `accepts: 'FILE'`, y se guarda vacío. */
+  prompts: string[];
 }): Promise<{ lessonId: string }> {
   const db = createTenantClient(institutionId);
 
@@ -448,6 +458,7 @@ export async function updateLessonActivity({
       requiresSubmission: true,
       activityInstructions: true,
       activityAccepts: true,
+      activityPrompts: true,
     },
   });
   if (!lesson) throw new APIError('Lesson not found', 'NOT_FOUND');
@@ -455,10 +466,16 @@ export async function updateLessonActivity({
     throw new APIError('Este tema no se completa con una actividad', 'CONFLICT');
   }
 
+  const cleanPrompts = accepts === 'FILE' ? [] : prompts.map((q) => q.trim()).filter(Boolean);
+
   await db.$transaction(async (tx) => {
     await tx.lesson.update({
       where: { id: lessonId },
-      data: { activityInstructions: instructions, activityAccepts: accepts },
+      data: {
+        activityInstructions: instructions,
+        activityAccepts: accepts,
+        activityPrompts: cleanPrompts,
+      },
     });
     await tx.auditLog.create({
       data: {
@@ -470,8 +487,13 @@ export async function updateLessonActivity({
         before: {
           activityAccepts: lesson.activityAccepts,
           hadInstructions: lesson.activityInstructions !== null,
+          prompts: promptsOf(lesson.activityPrompts).length,
         },
-        after: { activityAccepts: accepts, hasInstructions: instructions !== null },
+        after: {
+          activityAccepts: accepts,
+          hasInstructions: instructions !== null,
+          prompts: cleanPrompts.length,
+        },
       },
     });
   });
@@ -506,6 +528,7 @@ export async function openDraft({
       requiresSubmission: true,
       activityInstructions: true,
       activityAccepts: true,
+      activityPrompts: true,
       subject: { select: { name: true } },
       versions: {
         orderBy: { number: 'desc' },
@@ -540,6 +563,7 @@ export async function openDraft({
     requiresSubmission: lesson.requiresSubmission,
     activityInstructions: lesson.activityInstructions,
     activityAccepts: lesson.activityAccepts,
+    activityPrompts: promptsOf(lesson.activityPrompts),
     hasPublished: publishedCount > 0,
   };
 

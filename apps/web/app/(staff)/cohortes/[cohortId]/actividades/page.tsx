@@ -202,6 +202,21 @@ export default async function SubmissionsPage({
                   </details>
                 )}
 
+                {open.answers.length > 0 && (
+                  <ol className="space-y-3">
+                    {open.answers.map((a, i) => (
+                      <li key={i}>
+                        <p className="type-caption text-text-muted m-0">
+                          {i + 1}. {a.prompt}
+                        </p>
+                        <p className="type-body m-0 max-h-60 overflow-y-auto whitespace-pre-wrap">
+                          {a.answer}
+                        </p>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+
                 {open.text && (
                   <div>
                     <p className="type-caption text-text-muted">{t('textLabel')}</p>

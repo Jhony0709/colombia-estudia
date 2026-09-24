@@ -15,18 +15,41 @@
 
 import 'server-only';
 
+import { JSON_NULL, type JsonValue } from '@/lib/db/prisma';
+
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { createReadUrl } from '@/lib/media/storage';
 import { notifyMany, staffPersonIds } from '@/features/notifications/server/notifications.service';
 import { getCohortOutline } from './cohort.service';
+import { promptsOf } from '@/features/content/server/lessons.service';
 
 export type SubmissionState = 'SUBMITTED' | 'RETURNED' | 'APPROVED';
+
+/** Una respuesta con su enunciado tal como se preguntó (24/9). */
+export interface SubmissionAnswer {
+  prompt: string;
+  answer: string;
+}
+
+/** El JSON de la base como respuestas, tolerante con lo que no lo sea. */
+export function answersOf(value: unknown): SubmissionAnswer[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (a): a is SubmissionAnswer =>
+      typeof a === 'object' &&
+      a !== null &&
+      typeof (a as SubmissionAnswer).prompt === 'string' &&
+      typeof (a as SubmissionAnswer).answer === 'string'
+  );
+}
 
 export interface SubmissionView {
   id: string;
   status: SubmissionState;
   text: string | null;
+  /** Respuestas por enunciado; vacío cuando la actividad era de un solo texto. */
+  answers: SubmissionAnswer[];
   file: { name: string; url: string } | null;
   feedback: string | null;
   submittedAt: string;
@@ -55,6 +78,7 @@ export async function getSubmissionForStudent({
       id: true,
       status: true,
       text: true,
+      answers: true,
       feedback: true,
       submittedAt: true,
       reviewedAt: true,
@@ -70,6 +94,7 @@ export async function getSubmissionForStudent({
     id: row.id,
     status: row.status as SubmissionState,
     text: row.text,
+    answers: answersOf(row.answers),
     file,
     feedback: row.feedback,
     submittedAt: row.submittedAt.toISOString(),
@@ -82,6 +107,7 @@ export async function submitLesson({
   personId,
   assignmentId,
   text,
+  answers,
   fileAssetId,
   now = new Date(),
 }: {
@@ -89,10 +115,12 @@ export async function submitLesson({
   personId: string;
   assignmentId: string;
   text: string | null;
+  /** Respuestas en el orden de los enunciados del tema (24/9); `null` si no hay enunciados. */
+  answers: string[] | null;
   fileAssetId: string | null;
   now?: Date;
 }): Promise<SubmissionView> {
-  if (!text && !fileAssetId) {
+  if (!text && !answers?.length && !fileAssetId) {
     throw new APIError('La actividad necesita un texto o un archivo', 'VALIDATION_ERROR');
   }
 
@@ -112,7 +140,13 @@ export async function submitLesson({
     select: {
       lessonVersionId: true,
       lesson: {
-        select: { id: true, title: true, requiresSubmission: true, activityAccepts: true },
+        select: {
+          id: true,
+          title: true,
+          requiresSubmission: true,
+          activityAccepts: true,
+          activityPrompts: true,
+        },
       },
     },
   });
@@ -124,14 +158,25 @@ export async function submitLesson({
   // Lo que el autor dijo que se acepta (23/9): el formulario ya lo enseña, pero la regla
   // vive aquí. Un texto donde se pidió un archivo no es una entrega a medias, es otra cosa.
   const accepts = assignment.lesson.activityAccepts;
+  const prompts = accepts === 'FILE' ? [] : promptsOf(assignment.lesson.activityPrompts);
   if (accepts === 'FILE' && !fileAssetId) {
     throw new APIError('Esta actividad se entrega con un archivo', 'VALIDATION_ERROR');
   }
-  if (accepts === 'TEXT' && !text) {
-    throw new APIError('Esta actividad se entrega con un texto', 'VALIDATION_ERROR');
-  }
   if (accepts === 'TEXT' && fileAssetId) {
     throw new APIError('Esta actividad no admite archivos', 'VALIDATION_ERROR');
+  }
+  // Con enunciados (24/9), lo escrito va pregunta por pregunta: todas respondidas, y el
+  // enunciado se guarda junto a la respuesta para que la revisión vea lo que se preguntó.
+  let answerRows: SubmissionAnswer[] | null = null;
+  if (prompts.length > 0) {
+    const given = (answers ?? []).map((a) => a.trim());
+    if (given.length !== prompts.length || given.some((a) => a === '')) {
+      throw new APIError('Responde todas las preguntas de la actividad', 'VALIDATION_ERROR');
+    }
+    answerRows = prompts.map((prompt, i) => ({ prompt, answer: given[i]! }));
+    text = null;
+  } else if (accepts === 'TEXT' && !text) {
+    throw new APIError('Esta actividad se entrega con un texto', 'VALIDATION_ERROR');
   }
 
   if (fileAssetId) {
@@ -166,6 +211,8 @@ export async function submitLesson({
     const data = {
       status: 'SUBMITTED' as const,
       text,
+      // Prisma quiere un JSON «plano»; un `Array` de objetos con tipo propio no le sirve tal cual.
+      answers: answerRows ? (answerRows.map((a) => ({ ...a })) as JsonValue) : JSON_NULL,
       fileAssetId,
       submittedAt: now,
       reviewedById: null,
