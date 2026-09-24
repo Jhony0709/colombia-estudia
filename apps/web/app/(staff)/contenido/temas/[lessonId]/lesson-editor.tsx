@@ -21,6 +21,13 @@
  * nativo, y lo que llega aquí es Markdown, que es lo que se guarda. Todo lo demás
  * —autoguardado, avisos, ir a la línea, publicar— no sabe qué widget hay debajo.
  *
+ * **Dos vistas del mismo texto (24/9, Jhonny).** La tarjeta del contenido lleva un control
+ * segmentado —los botones contextuales de `Card`— para alternar entre bloques y Markdown
+ * crudo. Las dos editan `content`: la de bloques lo parsea al entrar (`key` la remonta) y lo
+ * serializa al salir; la de Markdown es un `<textarea>` a pelo, para quien pega un documento
+ * entero o quiere ver exactamente lo que se guarda. La elegida se recuerda en el navegador
+ * (`localStorage`), porque es una preferencia de quien escribe y no del tema.
+ *
  * La vista previa usa `renderLessonHtml`, **la misma función que usa el player**. Una vista
  * previa que renderizara por su cuenta sería la vista previa de algo que no existe.
  */
@@ -32,6 +39,7 @@ import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
 import { Button } from '@/components/atoms/button';
 import { Card } from '@/components/atoms/card';
+import { SegmentedControl, type SegmentedOption } from '@/components/molecules/segmented-control';
 import { PageHeader } from '@/components/templates/page';
 import { PageHelp } from '@/components/organisms/page-help';
 import { Sheet } from '@/components/organisms/sheet';
@@ -43,10 +51,44 @@ import { MediaSettingsDialog, useLessonMedia } from './lesson-media';
 import { LessonActivity, type ActivityAccepts } from './lesson-activity';
 import { BlockEditor, type BlockEditorHandle } from '@/features/content/editor/BlockEditor';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
+import { LessonPager } from './lesson-pager';
+import { Code, LayoutList } from 'lucide-react';
 import { pendingChecks, ReadinessPanel, type ReadinessCheck } from '../../readiness-panel';
 import { PublishedLine } from '../../published-line';
 import { EditorLayout } from '../../editor-layout';
 import type { LessonReadiness } from '@/features/content/server/readiness.service';
+
+type EditorView = 'blocks' | 'markdown';
+
+const VIEW_STORAGE_KEY = 'ce.editor.view';
+
+function readStoredView(): EditorView | null {
+  try {
+    const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
+    return stored === 'markdown' || stored === 'blocks' ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+function storeView(view: EditorView) {
+  try {
+    window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+  } catch {
+    // Sin almacenamiento (modo privado, cuota): la vista dura lo que dure la pantalla.
+  }
+}
+
+/** El índice del primer carácter de una línea (1-based) en un texto. */
+function offsetOfLine(text: string, line: number): number {
+  let offset = 0;
+  for (let current = 1; current < line; current += 1) {
+    const next = text.indexOf('\n', offset);
+    if (next === -1) return text.length;
+    offset = next + 1;
+  }
+  return offset;
+}
 
 interface Issue {
   rule?: string;
@@ -115,6 +157,13 @@ export function LessonEditor({
   const tc = useTranslations('crumbs');
   const minutesId = useId();
   const blockEditor = useRef<BlockEditorHandle>(null);
+  const markdownArea = useRef<HTMLTextAreaElement>(null);
+  // La vista del contenido. Arranca en bloques en el servidor y en el primer render del
+  // cliente, y la guardada se aplica después de montar: leerla en el `useState` inicial
+  // pintaría distinto en cliente y servidor.
+  const [view, setView] = useState<EditorView>('blocks');
+  // Cada vuelta a bloques remonta `BlockEditor`, para que parsee lo que se escribió en Markdown.
+  const [blocksKey, setBlocksKey] = useState(0);
   const media = useLessonMedia(lessonId, versionId);
   const [mediaSettings, setMediaSettings] = useState<string | null>(null);
 
@@ -249,7 +298,35 @@ export function LessonEditor({
   };
 
   /** Lleva el cursor al bloque de una línea y le da el foco: el enlace del panel de avisos. */
-  const goToLine = (line: number) => blockEditor.current?.goToLine(line);
+  const goToLine = (line: number) => {
+    if (view === 'blocks') {
+      blockEditor.current?.goToLine(line);
+      return;
+    }
+    const area = markdownArea.current;
+    if (!area) return;
+    const offset = offsetOfLine(area.value, line);
+    area.focus();
+    area.setSelectionRange(offset, offset);
+    area.scrollIntoView({ block: 'center' });
+  };
+
+  useEffect(() => {
+    const stored = readStoredView();
+    if (stored) setView(stored);
+  }, []);
+
+  const changeView = (next: EditorView) => {
+    if (next === view) return;
+    if (next === 'blocks') setBlocksKey((key) => key + 1);
+    setView(next);
+    storeView(next);
+  };
+
+  const viewOptions: readonly SegmentedOption<EditorView>[] = [
+    { value: 'blocks', label: t('view.blocks'), icon: LayoutList },
+    { value: 'markdown', label: t('view.markdown'), icon: Code },
+  ];
 
   /**
    * Registra un vídeo de Vimeo y recarga el catálogo, para que el bloque recién insertado
@@ -360,14 +437,24 @@ export function LessonEditor({
         overline={header.subjectName}
         title={header.title}
         back={
-          <Breadcrumb
-            label={tc('label')}
-            items={[
-              { label: tc('home'), href: '/ingresar' },
-              { label: tc('lessons'), href: '/contenido/temas' },
-              { label: header.title },
-            ]}
-          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Breadcrumb
+              label={tc('label')}
+              items={[
+                { label: tc('home'), href: '/ingresar' },
+                { label: tc('lessons'), href: '/contenido/temas' },
+                { label: header.title },
+              ]}
+            />
+            {/* El navegador entre temas de la ruta (24/9): navegación, junto a la miga y no
+                entre las acciones. Guarda antes de irse si hay cambios. */}
+            {readiness && (
+              <LessonPager
+                route={readiness.route}
+                beforeNavigate={async () => (dirty ? save() : true)}
+              />
+            )}
+          </div>
         }
         action={
           <div className="flex flex-wrap items-center gap-2">
@@ -436,23 +523,55 @@ export function LessonEditor({
         de un `fieldset`. Convertirlo en el `h2` del template haría que el grupo se llamara
         como una sección en vez de como lo que se escribe. Por eso `Card` recibe `labelledBy`.
       */}
-        <Card labelledBy="editor-texto">
-          <p id="editor-texto" className="type-subheading text-text">
-            {t('contentLabel')}
-          </p>
-
-          <BlockEditor
-            ref={blockEditor}
-            labelledBy="editor-texto"
-            initialMarkdown={initialContent}
-            media={media.items ?? []}
-            onRegisterVideo={registerVideo}
-            onMediaSettings={setMediaSettings}
-            onChange={(markdown) => {
-              setContent(markdown);
-              setDirty(true);
-            }}
-          />
+        <Card
+          labelledBy="editor-texto"
+          label={
+            <p id="editor-texto" className="type-subheading text-text">
+              {t('contentLabel')}
+            </p>
+          }
+          actions={
+            <SegmentedControl
+              label={t('view.label')}
+              options={viewOptions}
+              value={view}
+              onChange={changeView}
+            />
+          }
+        >
+          {view === 'blocks' ? (
+            <BlockEditor
+              key={blocksKey}
+              ref={blockEditor}
+              labelledBy="editor-texto"
+              initialMarkdown={content}
+              media={media.items ?? []}
+              onRegisterVideo={registerVideo}
+              onMediaSettings={setMediaSettings}
+              onChange={(markdown) => {
+                setContent(markdown);
+                setDirty(true);
+              }}
+            />
+          ) : (
+            <div className="space-y-2">
+              <textarea
+                ref={markdownArea}
+                aria-labelledby="editor-texto"
+                aria-describedby="editor-markdown-hint"
+                value={content}
+                spellCheck={false}
+                onChange={(event) => {
+                  setContent(event.target.value);
+                  setDirty(true);
+                }}
+                className="border-border bg-surface-base text-text rounded-control min-h-[24rem] w-full resize-y border px-3 py-2 font-mono text-[0.875rem] leading-relaxed"
+              />
+              <p id="editor-markdown-hint" className="type-caption text-text-muted">
+                {t('view.markdownHint')}
+              </p>
+            </div>
+          )}
 
           {/* Los minutos son de la versión, como el texto, y se guardan con él. */}
           <div className="w-40">

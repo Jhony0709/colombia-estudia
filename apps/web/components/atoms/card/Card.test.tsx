@@ -94,4 +94,30 @@ describe('Card', () => {
 
     expect(screen.getByRole('button', { name: 'Quitar' })).toBeInTheDocument();
   });
+
+  it('con labelledBy y label, el nombre de fuera y los botones contextuales comparten la fila', () => {
+    render(
+      <Card
+        labelledBy="editor-texto"
+        label={<p id="editor-texto">Contenido del tema</p>}
+        actions={
+          <div role="group" aria-label="Vista">
+            <button type="button" aria-pressed="true">
+              Bloques
+            </button>
+            <button type="button" aria-pressed="false">
+              Markdown
+            </button>
+          </div>
+        }
+      >
+        <textarea aria-labelledby="editor-texto" />
+      </Card>
+    );
+
+    expect(screen.getByRole('region', { name: 'Contenido del tema' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Vista' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Markdown', pressed: false })).toBeInTheDocument();
+  });
 });

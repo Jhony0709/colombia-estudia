@@ -235,6 +235,17 @@ no, confirmado o no, con subtítulos o sin ellos).
 
 ---
 
+### Card con botones contextuales (24/9)
+
+`Card` tiene dos ranuras en el encabezado y no son la misma: `action` es **la** acción de la
+tarjeta —hace algo con lo de dentro, y si hacen falta tres es una sección—; `actions` son
+**botones contextuales**: cambian cómo se ve lo de dentro sin cambiar lo que es (la vista
+Bloques/Markdown del editor, un intervalo, un filtro). Para `actions` se usa
+`molecules/segmented-control`: botones de alternancia con `aria-pressed` en un
+`role="group"` con nombre, texto siempre e icono opcional, sin tooltips. Con `labelledBy`, la
+tarjeta acepta `label` (el elemento de fuera que la nombra) para pintarlo en la misma fila que
+los botones. Primer uso: la tarjeta «Contenido del tema» del editor.
+
 ### DataTable con filas expandibles (24/9)
 
 `DataTable.expandable = { isExpanded, onToggle, content, label }`. Es el patrón de
@@ -384,7 +395,8 @@ parecerse por casualidad.
 | `molecules/empty-state`            | estable                                           |
 | `organisms/app-header`             | estable                                           |
 | `templates/page`                   | estable                                           |
-| `atoms/card`                       | estable                                           |
+| `atoms/card`                       | estable (`actions` y `label`, 24/9)               |
+| `molecules/segmented-control`      | nuevo 24/9                                        |
 | `atoms/nav-item`                   | estable                                           |
 | `organisms/side-nav`               | estable                                           |
 | `organisms/app-header`             | **retirado** el 18/9 (ver `PRODUCT_DECISIONS.md`) |

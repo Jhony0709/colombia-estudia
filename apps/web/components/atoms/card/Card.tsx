@@ -14,6 +14,12 @@
  * y distintos entre sí.
  *
  * **No se anidan.** Una tarjeta dentro de una tarjeta no crea jerarquía, crea ruido (§3).
+ *
+ * **Botones contextuales (24/9).** Además de `action` —la acción de la tarjeta, la que hace
+ * algo con lo que hay dentro— una tarjeta puede llevar `actions`: controles que cambian CÓMO
+ * se ve lo de dentro, no lo que es (la vista bloques/Markdown del editor, un filtro, un
+ * colapsar). Van en la fila del encabezado, a la derecha, y con `labelledBy` la tarjeta acepta
+ * `label` para pintar en esa misma fila el elemento de fuera que la nombra.
  */
 
 import type { ReactNode } from 'react';
@@ -28,6 +34,12 @@ export interface CardProps {
   description?: string;
   /** Una acción, la de la tarjeta. Si hacen falta tres, es una sección, no una tarjeta. */
   action?: ReactNode;
+  /**
+   * Botones contextuales: cambian cómo se ve la tarjeta (una vista, un filtro), no lo que
+   * hay en ella. Van a la derecha del encabezado; el que los pasa ya los agrupa
+   * (`SegmentedControl`, un `role="group"`).
+   */
+  actions?: ReactNode;
   children: ReactNode;
   className?: string;
   /** El nivel del encabezado, según dónde cuelgue. Por defecto `h3`: vive dentro de una sección. */
@@ -39,23 +51,31 @@ export interface CardProps {
    * lo duplique. Excluyente con `title`.
    */
   labelledBy?: string;
+  /**
+   * Con `labelledBy`: el elemento que nombra a la tarjeta (el `<p id>` o `<label>` de fuera),
+   * para que se pinte en la fila del encabezado, en línea con `actions`. Sin `actions` da igual
+   * pasarlo aquí o como primer hijo.
+   */
+  label?: ReactNode;
 }
 
 export function Card({
   title,
   description,
   action,
+  actions,
   children,
   className,
   as = 'h3',
   labelledBy,
+  label,
 }: CardProps) {
   const Heading = as;
   const headingId = title ? `card-${title.toLowerCase().replace(/\s+/g, '-')}` : undefined;
 
   const body = (
     <>
-      {(title || action) && (
+      {(title || label || action || actions) && (
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div className="space-y-1">
             {title && (
@@ -63,9 +83,15 @@ export function Card({
                 {title}
               </Heading>
             )}
+            {!title && label}
             {description && <p className="type-caption text-text-muted">{description}</p>}
           </div>
-          {action}
+          {(action || actions) && (
+            <div className="flex flex-wrap items-center gap-2">
+              {actions}
+              {action}
+            </div>
+          )}
         </div>
       )}
       {children}

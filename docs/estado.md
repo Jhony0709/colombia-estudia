@@ -4824,6 +4824,49 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 24/9 — Navegador entre temas en el editor
+
+Jhonny: «agreguemos un navegador (dos flechas) entre temas para el admin». Hecho:
+
+- `getLessonReadiness` (`readiness.service.ts`) devuelve `route: { index, total, previous,
+next }`: la ruta del programa entera, en el orden del estudiante (componente, tema), con los
+  archivados fuera. «Después de …» sale ahora de la misma consulta (vecino anterior dentro
+  del componente) en vez de una consulta aparte.
+- `LessonPager` (`temas/[lessonId]/lesson-pager.tsx`): «‹ n de N ›» en la fila de la miga,
+  a la derecha —navegación, no acción (§5)—. Las flechas son enlaces con tooltip («Tema
+  siguiente: …»); en un extremo la flecha queda apagada con texto solo para lector de
+  pantalla, para que la otra no se mueva. Antes de navegar en la misma pestaña, si hay
+  cambios sin guardar, guarda (`save()`) y solo entonces cambia de tema; con modificador o
+  botón central abre aparte sin tocar nada.
+- Verificado en Chrome: 1 → 2 y 2 → 1 con el estado del editor reseteado (título, contenido,
+  «2 de 2» con la derecha apagada); un cambio hecho justo antes de pulsar la flecha aparece
+  al volver al tema. `tsc` en cero.
+
+## 24/9 — Botones contextuales en `Card` y la vista Markdown del editor
+
+Jhonny: «que la Card pueda recibir botones contextuales; para BlockEditor, un botón para
+cambiar el tipo de vista, GUI o Markdown». Hecho:
+
+- `Card` (`components/atoms/card/Card.tsx`) recibe `actions` —botones contextuales: cambian
+  cómo se ve la tarjeta, no lo que hay en ella— además de la `action` de siempre, y con
+  `labelledBy` acepta `label` (el `<p id>` de fuera) para que el nombre y los botones
+  compartan la fila del encabezado. Test añadido en `Card.test.tsx` (no ejecutado aquí).
+- Nueva molécula `SegmentedControl` (`components/molecules/segmented-control`): botones de
+  alternancia con `aria-pressed` en un `role="group"` con nombre, el patrón de `ThemeToggle`
+  generalizado; texto siempre, icono opcional, alto a ras de `min-h-control`.
+- Editor del tema (`lesson-editor.tsx`): la tarjeta «Contenido del tema» lleva el control
+  «Bloques | Markdown». Bloques es `BlockEditor` como hasta ahora; Markdown es un `<textarea>`
+  monoespaciado sobre el mismo `content`. Al volver a Bloques se remonta el editor (`key`) y
+  parsea lo escrito; «ir a la línea» de los avisos funciona en las dos (en Markdown pone el
+  cursor al inicio de la línea). La vista elegida se guarda en `localStorage`
+  (`ce.editor.view`) tras montar, para no diferir del servidor en el primer render.
+- `BlockEditor`: al desmontar vuelca lo que quedara en el retraso de 300 ms; si no, los
+  últimos caracteres escritos justo antes de cambiar a Markdown se perdían.
+- Verificado en Chrome sobre «Aprender es avanzar»: ida y vuelta de un cambio en cada vista,
+  el vuelco al desmontar (edición 30 ms antes del cambio llega al textarea), «Sin cambios» al
+  solo alternar, la preferencia sobrevive a la recarga, y a 400 px el control cabe junto al
+  nombre. `tsc` en cero.
+
 ## 24/9 — Eliminar un componente vacío
 
 Jhonny: «¿dónde puedo borrar los temas o componentes?». Los temas ya tenían su «Eliminar»

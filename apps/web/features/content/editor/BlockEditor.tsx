@@ -141,6 +141,22 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
     };
   }, [blocks, onChange]);
 
+  // Al desmontar, lo que quedaba en el retraso sale igualmente: la pantalla cambia el editor
+  // por el área de Markdown (24/9) y los últimos 300 ms de escritura no pueden perderse.
+  // En desarrollo React monta y desmonta los efectos dos veces; el primer desmontaje no
+  // emite nada porque el Markdown coincide con lo ya emitido.
+  const latest = useRef({ blocks, onChange });
+  latest.current = { blocks, onChange };
+  useEffect(
+    () => () => {
+      const markdown = blocksToMarkdown(latest.current.blocks);
+      if (markdown === emitted.current) return;
+      emitted.current = markdown;
+      latest.current.onChange(markdown);
+    },
+    []
+  );
+
   // El foco va al bloque recién creado, movido o señalado por un aviso.
   useEffect(() => {
     if (!focusId) return;

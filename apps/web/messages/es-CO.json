@@ -824,7 +824,21 @@
   "editor": {
     "versionLine": "Borrador, versión {number}",
     "contentLabel": "Contenido del tema",
+    "view": {
+      "label": "Vista del contenido",
+      "blocks": "Bloques",
+      "markdown": "Markdown",
+      "markdownHint": "Es el texto tal como se guarda. Los videos, las imágenes y el código van en Markdown; al volver a Bloques se leen de nuevo."
+    },
     "minutesLabel": "Minutos estimados",
+    "pager": {
+      "label": "Temas de la ruta",
+      "position": "{index} de {total}",
+      "previous": "Tema anterior: {title}",
+      "next": "Tema siguiente: {title}",
+      "previousNone": "Es el primer tema de la ruta",
+      "nextNone": "Es el último tema de la ruta"
+    },
     "unsaved": "Cambios sin guardar",
     "savedAt": "Guardado a las {time}",
     "noChanges": "Sin cambios",

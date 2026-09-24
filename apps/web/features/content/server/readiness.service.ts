@@ -29,11 +29,24 @@ export interface LessonReadiness {
   module: { id: string; name: string; position: number };
   /** El tema justo anterior en el módulo, para decir «después de …». */
   previousTitle: string | null;
+  /**
+   * El sitio del tema en la ruta del programa y sus vecinos, para el navegador de la
+   * cabecera (24/9): la ruta entera, componente a componente, no solo el módulo.
+   */
+  route: LessonRouteNeighbors;
   /** Los exámenes colgados de este tema, en orden. */
   exams: Array<{ id: string; title: string; hasPublished: boolean }>;
   /** La versión publicada más alta, si la hay, con quién la publicó y cuándo. */
   published: PublishedVersion | null;
   cohorts: ReadinessCohorts;
+}
+
+export interface LessonRouteNeighbors {
+  /** Posición 1-based del tema en la ruta del programa, contando solo los no archivados. */
+  index: number;
+  total: number;
+  previous: { id: string; title: string } | null;
+  next: { id: string; title: string } | null;
 }
 
 /**
@@ -111,11 +124,13 @@ export async function getLessonReadiness({
 
   if (!lesson) return null;
 
-  const [previous, cohorts, published] = await Promise.all([
-    db.lesson.findFirst({
-      where: { moduleId: lesson.module.id, archivedAt: null, position: { lt: lesson.position } },
-      orderBy: { position: 'desc' },
-      select: { title: true },
+  const [route, cohorts, published] = await Promise.all([
+    // La ruta del programa en el orden en que la recorre el estudiante (componente, tema):
+    // de aquí salen «después de …» (dentro del componente) y los vecinos del navegador.
+    db.lesson.findMany({
+      where: { programId: lesson.program.id, archivedAt: null },
+      orderBy: [{ module: { position: 'asc' } }, { position: 'asc' }],
+      select: { id: true, title: true, moduleId: true },
     }),
     db.cohort.findMany({
       where: { programId: lesson.program.id, status: 'OPEN' },
@@ -130,10 +145,22 @@ export async function getLessonReadiness({
     publishedVersion(db, lesson.versions[0]),
   ]);
 
+  const index = route.findIndex((item) => item.id === lesson.id);
+  const previous =
+    index > 0 && route[index - 1]?.moduleId === lesson.module.id ? route[index - 1] : null;
+  const pick = (item: { id: string; title: string } | undefined) =>
+    item ? { id: item.id, title: item.title } : null;
+
   return {
     program: lesson.program,
     module: { id: lesson.module.id, name: lesson.module.name, position: lesson.module.position },
     previousTitle: previous?.title ?? null,
+    route: {
+      index: index + 1,
+      total: route.length,
+      previous: index > 0 ? pick(route[index - 1]) : null,
+      next: index >= 0 ? pick(route[index + 1]) : null,
+    },
     exams: lesson.assessments.map((exam) => ({
       id: exam.id,
       title: exam.title,
