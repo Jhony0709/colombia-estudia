@@ -7,11 +7,11 @@
  */
 
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { requireCapability } from '@/lib/authz/with-capability';
-import { getPersonDetail } from '@/features/people/server/people.service';
+import { getPersonDetail, resolvePerson } from '@/features/people/server/people.service';
 import { getInvitationOverview } from '@/features/auth/server/invitations.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { AnonymizePerson } from './anonymize-person';
@@ -32,7 +32,13 @@ type Params = Promise<{ personId: string }>;
 export default async function PersonDetailPage({ params }: { params: Params }) {
   await requireCapability('people.manage');
   const ctx = await getRequestContext();
-  const { personId } = await params;
+  const { personId: ref } = await params;
+
+  // La URL lleva el código (`PER-0001`, 25/9); un enlace viejo con el `cuid` redirige.
+  const resolved = await resolvePerson({ institutionId: ctx.institution.id, ref });
+  if (!resolved) notFound();
+  if (ref !== resolved.code) redirect(`/personas/${resolved.code}`);
+  const personId = resolved.id;
 
   const [person, invitation, t, format] = await Promise.all([
     getPersonDetail({
@@ -52,7 +58,7 @@ export default async function PersonDetailPage({ params }: { params: Params }) {
   return (
     <Page>
       <PageHeader
-        overline={t('overline')}
+        overline={`${person.code} · ${t('overline')}`}
         title={`${person.givenName} ${person.familyName}`}
         description={t('auditNotice')}
         back={

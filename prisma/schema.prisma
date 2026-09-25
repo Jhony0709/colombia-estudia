@@ -92,6 +92,21 @@ model Institution {
   auditLogs             AuditLog[]
   notifications         Notification[]
   invitations           Invitation[]
+  counters              Counter[]
+}
+
+/// Contador por institución y entidad para los códigos legibles (25/9, patrón Basikon
+/// `Counter`): `next_code()` lo incrementa de forma atómica y el trigger `assign_code` lo usa en
+/// cada INSERT que llegue sin código, venga del servicio, del import o de un script.
+model Counter {
+  institutionId String
+  name          String
+  seq           Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+
+  @@id([institutionId, name])
 }
 
 /// Un ser humano. Una sola fila aunque tenga varios roles. Pertenece a UNA institución
@@ -100,25 +115,27 @@ model Institution {
 /// birthDate es opcional en la persona pero OBLIGATORIA para matricular (decide isMinorAtEnrollment).
 /// Nunca se borra: `anonymizedAt` + procedimiento que vacía la PII conservando el id.
 model Person {
-  id             String    @id @default(cuid())
-  institutionId  String
-  givenName      String
-  familyName     String
-  documentType   String?
-  documentNumber String?
-  birthDate      DateTime? @db.Date
+  id                 String    @id @default(cuid())
+  institutionId      String
+  /// Código legible `PER-0001` (25/9): lo asigna el trigger `assign_code` al insertar. Único por institución.
+  code               String    @default(dbgenerated("''::text"))
+  givenName          String
+  familyName         String
+  documentType       String?
+  documentNumber     String?
+  birthDate          DateTime? @db.Date
   /// Normalizado a minúsculas por Zod antes de guardar. Único por institución (Supabase lo exige global).
-  email          String?
-  phone          String?
+  email              String?
+  phone              String?
   /// Supabase Auth uid. Nulo para personas sin credencial.
-  authUserId     String?   @unique
+  authUserId         String?   @unique
   /// Referencia de origen para importaciones idempotentes: "learndash:user:123".
-  sourceRef      String?
+  sourceRef          String?
   /// { fontScale?, lineHeight?, width?, contrast?, motion?, transcriptAlwaysVisible? } — ver 03-ui/tokens.md.
   readingPreferences Json?
-  anonymizedAt   DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  anonymizedAt       DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   institution Institution @relation(fields: [institutionId], references: [id])
 
@@ -141,14 +158,15 @@ model Person {
   agreementsSigned    PaymentAgreement[] @relation("AgreementPayerPerson")
   learningEvents      LearningEvent[]
   notifications       Notification[]
-  uploadedMedia         MediaAsset[]
-  submissionsReviewed   Submission[]       @relation("SubmissionReviewer")
-  invitations           Invitation[]
-  invitationsCreated    Invitation[]       @relation("InvitationCreator")
+  uploadedMedia       MediaAsset[]
+  submissionsReviewed Submission[]       @relation("SubmissionReviewer")
+  invitations         Invitation[]
+  invitationsCreated  Invitation[]       @relation("InvitationCreator")
 
   @@unique([institutionId, documentType, documentNumber])
   @@unique([institutionId, email])
   @@unique([institutionId, sourceRef])
+  @@unique([institutionId, code])
   @@index([institutionId, familyName, givenName])
 }
 
@@ -274,6 +292,8 @@ model Program {
 model Module {
   id            String    @id @default(cuid())
   institutionId String
+  /// Código legible `COM-0001` (25/9), asignado por el trigger `assign_code`. Único por institución.
+  code          String    @default(dbgenerated("''::text"))
   programId     String
   position      Int
   name          String
@@ -289,6 +309,7 @@ model Module {
 
   @@unique([programId, position])
   @@unique([institutionId, sourceRef])
+  @@unique([institutionId, code])
 }
 
 model Subject {
@@ -413,31 +434,33 @@ enum ActivityAccepts {
 }
 
 model Lesson {
-  id                String    @id @default(cuid())
-  institutionId     String
-  programId         String
-  moduleId          String
-  subjectId         String
-  position          Int
-  title             String
+  id                   String          @id @default(cuid())
+  institutionId        String
+  /// Código legible `TEM-0001` (25/9), asignado por el trigger `assign_code`. Único por institución.
+  code                 String          @default(dbgenerated("''::text"))
+  programId            String
+  moduleId             String
+  subjectId            String
+  position             Int
+  title                String
   /// BCP 47. El render lo pone en el contenedor del contenido; fragmentos en otro idioma usan :lang[]{}.
-  language          String    @default("es-CO")
+  language             String          @default("es-CO")
   /// Qué debe poder hacer el estudiante al terminar. Texto libre hoy; competencia/DBA después.
-  learningObjective String?
+  learningObjective    String?
   /// Tema de tipo ACTIVIDAD: se completa con una entrega (Submission) revisada, no con evidencia de lectura.
-  requiresSubmission Boolean  @default(false)
+  requiresSubmission   Boolean         @default(false)
   /// Instrucciones de la actividad (Markdown), solo con requiresSubmission. En el tema y no en la versión
   /// (23/9, decisión de Jhonny): se corrigen en caliente y las cohortes abiertas las ven al momento.
   activityInstructions String?
   /// Qué entrega el estudiante en la actividad.
-  activityAccepts    ActivityAccepts @default(TEXT_OR_FILE)
+  activityAccepts      ActivityAccepts @default(TEXT_OR_FILE)
   /// Enunciados de la actividad (`string[]`, 24/9): con uno o más, el estudiante responde en la
   /// plataforma pregunta por pregunta en vez de en un solo texto. Sin versionar, como las instrucciones.
-  activityPrompts    Json?
-  authorId          String
-  sourceRef         String?
-  createdAt         DateTime  @default(now())
-  archivedAt        DateTime?
+  activityPrompts      Json?
+  authorId             String
+  sourceRef            String?
+  createdAt            DateTime        @default(now())
+  archivedAt           DateTime?
 
   institution Institution @relation(fields: [institutionId], references: [id])
   program     Program     @relation(fields: [programId], references: [id])
@@ -452,6 +475,7 @@ model Lesson {
 
   @@unique([moduleId, position])
   @@unique([institutionId, sourceRef])
+  @@unique([institutionId, code])
   @@index([institutionId, programId, subjectId])
 }
 
@@ -509,6 +533,8 @@ enum AssessmentKind {
 model Assessment {
   id                String         @id @default(cuid())
   institutionId     String
+  /// Código legible `EXA-0001` (25/9), asignado por el trigger `assign_code`. Único por institución.
+  code              String         @default(dbgenerated("''::text"))
   programId         String
   moduleId          String?
   subjectId         String?
@@ -538,6 +564,7 @@ model Assessment {
 
   @@unique([moduleId, position])
   @@unique([institutionId, sourceRef])
+  @@unique([institutionId, code])
   @@index([institutionId, programId])
   @@index([lessonId])
 }
@@ -925,7 +952,7 @@ model Payment {
   method        PaymentMethod
   reference     String?
   /// GATEWAY: id de la transacción en la pasarela (Wompi). Único para que el webhook sea idempotente.
-  gatewayRef    String?   @unique
+  gatewayRef    String?       @unique
   paidAt        DateTime
   confirmedById String?
   confirmedAt   DateTime?

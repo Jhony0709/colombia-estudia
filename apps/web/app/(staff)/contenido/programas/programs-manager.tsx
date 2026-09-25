@@ -380,6 +380,12 @@ function ModuleList({
             narrow: true,
             cell: (module) => module.position,
           },
+          {
+            key: 'code',
+            header: t('table.code'),
+            narrow: true,
+            cell: (module) => <span className="font-mono">{module.code}</span>,
+          },
           { key: 'name', header: t('table.module'), cell: (module) => module.name },
           {
             key: 'lessons',

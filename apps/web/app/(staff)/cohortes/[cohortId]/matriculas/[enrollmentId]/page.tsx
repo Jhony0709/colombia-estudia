@@ -103,7 +103,7 @@ export default async function EnrollmentDetailPage({
         action={
           can('cohort.manage') ? (
             <Link
-              href={`/personas/${detail.student.id}`}
+              href={`/personas/${detail.student.code}`}
               className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
             >
               {t('personLink')}

@@ -1012,3 +1012,25 @@ cada prueba. Decisión de Jhonny: `DELETE /api/content/lessons/[id]` con esas do
 condiciones en el servidor y una validación extra en la pantalla y en la API —escribir el
 título exacto—. En cualquier otro caso, archivar, y el editor lo dice en vez de ofrecer un
 botón que falla.
+
+## 2026-09-25 — Códigos legibles por entidad, asignados por la base
+
+**Decisión**: `Person`, `Module`, `Lesson` y `Assessment` llevan un código legible con
+prefijo y secuencial por institución (`PER-0001`, `COM-0001`, `TEM-0001`, `EXA-0001`),
+generado por un trigger sobre una tabla `Counter` (patrón Basikon `Counter` +
+`formatRegistration`). `Program` y `Cohort` conservan su código manual. Es el identificador
+que se dice en voz alta y se escribe en un correo; el `cuid` sigue siendo la clave.
+
+**Razón**: Jhonny (25/9): «un ID como en Basikon con registration». En la base y no en el
+servicio porque una persona la crean cuatro caminos (registro, import, scripts, seed) y un
+código que dependa de acordarse de pedirlo acaba faltando en alguno.
+
+## 2026-09-25 — Los datos del examen se corrigen después de crearlo
+
+**Decisión**: título, tipo, componente, tema del que es examen, asignatura y objetivo se
+editan en «Datos del examen», con el mismo candado que los temas: con una versión publicada
+no se cambia de componente ni de tema, porque los dos deciden dónde cae en la ruta que las
+cohortes recorren. Las reglas del intento siguen siendo de la versión.
+
+**Razón**: Jhonny (25/9). Hasta hoy lo fijado al crear era inmutable, como los temas hasta
+el 18/9.

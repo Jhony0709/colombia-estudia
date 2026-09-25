@@ -101,11 +101,17 @@ export default async function AssessmentsPage() {
           }
           columns={[
             {
+              key: 'code',
+              header: t('colCode'),
+              narrow: true,
+              cell: (assessment) => <span className="font-mono">{assessment.code}</span>,
+            },
+            {
               key: 'title',
               header: t('colAssessmentTitle'),
               cell: (assessment) => (
                 <Link
-                  href={`/contenido/examenes/${assessment.id}`}
+                  href={`/contenido/examenes/${assessment.code}`}
                   className="text-text-link underline underline-offset-4"
                 >
                   {assessment.title}

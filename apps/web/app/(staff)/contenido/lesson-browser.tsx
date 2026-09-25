@@ -38,6 +38,7 @@ import { cn } from '@/lib/utils';
 
 export interface BrowsableLesson {
   id: string;
+  code: string;
   title: string;
   position: number;
   subjectName: string;
@@ -77,7 +78,7 @@ export function LessonBrowser({
       new Map(
         lessons.map((lesson) => [
           lesson.id,
-          `${fold(lesson.title)}\n${fold(lesson.moduleName)}\n${fold(lesson.subjectName)}`,
+          `${fold(lesson.code)}\n${fold(lesson.title)}\n${fold(lesson.moduleName)}\n${fold(lesson.subjectName)}`,
         ])
       ),
     [lessons]
@@ -301,11 +302,17 @@ function LessonRows({ group }: { group: ModuleGroup }) {
           cell: (lesson) => lesson.position,
         },
         {
+          key: 'code',
+          header: t('colCode'),
+          narrow: true,
+          cell: (lesson) => <span className="font-mono">{lesson.code}</span>,
+        },
+        {
           key: 'title',
           header: t('colTitle'),
           cell: (lesson) => (
             <Link
-              href={`/contenido/temas/${lesson.id}`}
+              href={`/contenido/temas/${lesson.code}`}
               className="text-text-link underline underline-offset-4"
             >
               {lesson.title}

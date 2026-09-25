@@ -16,6 +16,7 @@ import {
 } from '@/lib/people/catalogs';
 import { calculateAgeAt, dateOnly } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
+import { byCodeOrId } from '@/lib/core/entity-code';
 import { APIError } from '@/lib/core/errors';
 import { maskEmail } from '@/lib/pii/mask';
 import { toCsv } from '@/lib/csv/serialize';
@@ -47,6 +48,8 @@ export interface PeopleFilters {
 
 export interface PersonRow {
   id: string;
+  /** Código legible `PER-0001` (25/9). */
+  code: string;
   givenName: string;
   familyName: string;
   emailMasked: string;
@@ -116,6 +119,7 @@ function whereFor(filters: PeopleFilters, now: Date) {
 
   if (filters.q) {
     where.OR = [
+      { code: { contains: filters.q, mode: 'insensitive' } },
       { givenName: { contains: filters.q, mode: 'insensitive' } },
       { familyName: { contains: filters.q, mode: 'insensitive' } },
       { documentNumber: { contains: filters.q } },
@@ -178,6 +182,7 @@ export async function listPeople({
       take: filters.pageSize,
       select: {
         id: true,
+        code: true,
         givenName: true,
         familyName: true,
         email: true,
@@ -191,6 +196,7 @@ export async function listPeople({
   return {
     rows: people.map((person) => ({
       id: person.id,
+      code: person.code,
       givenName: person.givenName,
       familyName: person.familyName,
       emailMasked: maskEmail(person.email),
@@ -257,6 +263,8 @@ export async function getPeopleStats({
 
 export interface ExpiringInvitation {
   personId: string;
+  /** Código legible de la persona, para el enlace a su ficha (25/9). */
+  personCode: string;
   givenName: string;
   familyName: string;
   expiresAt: Date;
@@ -283,11 +291,12 @@ export async function listExpiringInvitations({
     select: {
       personId: true,
       expiresAt: true,
-      person: { select: { givenName: true, familyName: true } },
+      person: { select: { code: true, givenName: true, familyName: true } },
     },
   });
   return rows.map((r) => ({
     personId: r.personId,
+    personCode: r.person.code,
     givenName: r.person.givenName,
     familyName: r.person.familyName,
     expiresAt: r.expiresAt,
@@ -392,8 +401,22 @@ export async function exportPeople({
 
 // ─────────────────────────── Detail ───────────────────────────
 
+/** De `PER-0001` o de un `cuid` al id y al código de la persona (25/9). Nulo si no existe. */
+export async function resolvePerson({
+  institutionId,
+  ref,
+}: {
+  institutionId: string;
+  ref: string;
+}): Promise<{ id: string; code: string } | null> {
+  const db = createTenantClient(institutionId);
+  return db.person.findFirst({ where: byCodeOrId(ref), select: { id: true, code: true } });
+}
+
 export interface PersonDetail {
   id: string;
+  /** Código legible `PER-0001` (25/9). */
+  code: string;
   givenName: string;
   familyName: string;
   documentType: string | null;
@@ -412,7 +435,13 @@ export interface PersonDetail {
     accessUntil: string;
   }>;
   /** `hasAccount` (Fase C, 23/9): si el acudiente ya puede entrar a `/familia` o hay que invitarlo. */
-  guardians: Array<{ id: string; name: string; relationship: string; hasAccount: boolean }>;
+  guardians: Array<{
+    id: string;
+    code: string;
+    name: string;
+    relationship: string;
+    hasAccount: boolean;
+  }>;
   wards: Array<{ id: string; name: string; relationship: string }>;
   /** Ley 1581: fecha de anonimización, si la hubo. La ficha lo dice y no ofrece nada más. */
   anonymizedAt: string | null;
@@ -452,6 +481,7 @@ export async function getPersonDetail({
     where: { id: personId },
     select: {
       id: true,
+      code: true,
       givenName: true,
       familyName: true,
       documentType: true,
@@ -474,13 +504,15 @@ export async function getPersonDetail({
       guardians: {
         select: {
           relationship: true,
-          guardian: { select: { id: true, givenName: true, familyName: true, authUserId: true } },
+          guardian: {
+            select: { id: true, code: true, givenName: true, familyName: true, authUserId: true },
+          },
         },
       },
       guardianOf: {
         select: {
           relationship: true,
-          student: { select: { id: true, givenName: true, familyName: true } },
+          student: { select: { id: true, code: true, givenName: true, familyName: true } },
         },
       },
       consentsAbout: {
@@ -511,6 +543,7 @@ export async function getPersonDetail({
 
   return {
     id: person.id,
+    code: person.code,
     givenName: person.givenName,
     familyName: person.familyName,
     documentType: person.documentType,
@@ -531,12 +564,14 @@ export async function getPersonDetail({
     })),
     guardians: person.guardians.map((g) => ({
       id: g.guardian.id,
+      code: g.guardian.code,
       name: fullName(g.guardian),
       relationship: g.relationship,
       hasAccount: g.guardian.authUserId !== null,
     })),
     wards: person.guardianOf.map((w) => ({
       id: w.student.id,
+      code: w.student.code,
       name: fullName(w.student),
       relationship: w.relationship,
     })),

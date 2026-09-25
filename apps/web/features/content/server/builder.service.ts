@@ -20,8 +20,10 @@ export type BuilderForm = 'VIDEO' | 'MARKDOWN' | 'SUBMISSION' | 'ASSESSMENT';
 
 export interface BuilderItem {
   kind: 'LESSON' | 'ASSESSMENT';
-  /** Id del tema o del examen: es lo que la URL del editor necesita. */
+  /** Id del tema o del examen, lo que la API necesita. */
   id: string;
+  /** Código legible (`TEM-0001` / `EXA-0001`, 25/9): lo que lleva la URL del editor. */
+  code: string;
   title: string;
   moduleId: string;
   /** El suyo en un tema; el del tema del que es examen en una evaluación. */
@@ -92,6 +94,7 @@ export async function getProgramBuilder({
       where: { programId, archivedAt: null },
       select: {
         id: true,
+        code: true,
         title: true,
         moduleId: true,
         position: true,
@@ -112,6 +115,7 @@ export async function getProgramBuilder({
       where: { programId, archivedAt: null },
       select: {
         id: true,
+        code: true,
         title: true,
         moduleId: true,
         lessonId: true,
@@ -140,6 +144,7 @@ export async function getProgramBuilder({
     return {
       kind: 'LESSON',
       id: lesson.id,
+      code: lesson.code,
       title: lesson.title,
       moduleId: lesson.moduleId,
       lessonId: lesson.id,
@@ -161,6 +166,7 @@ export async function getProgramBuilder({
     return {
       kind: 'ASSESSMENT',
       id: assessment.id,
+      code: assessment.code,
       title: assessment.title,
       moduleId: assessment.moduleId ?? '',
       lessonId: assessment.lessonId,

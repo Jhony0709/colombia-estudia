@@ -25,11 +25,16 @@ import {
   type ValidationResult,
 } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
+import { byCodeOrId } from '@/lib/core/entity-code';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { APIError } from '@/lib/core/errors';
 
+export type AssessmentKind = 'DIAGNOSTIC' | 'SUBJECT' | 'FINAL';
+
 export interface AssessmentListItem {
   id: string;
+  /** Código legible `EXA-0001` (25/9). */
+  code: string;
   title: string;
   kind: string;
   position: number;
@@ -45,9 +50,17 @@ export interface AssessmentListItem {
 /** El borrador tal y como lo ve el editor. **Sin la clave de respuestas.** */
 export interface AssessmentDraftView {
   assessmentId: string;
+  /** Código legible `EXA-0001` (25/9). */
+  code: string;
   title: string;
-  kind: string;
+  kind: AssessmentKind;
   language: string;
+  /** Los datos corregibles del examen (25/9), para el formulario de «Datos del examen». */
+  programId: string;
+  moduleId: string | null;
+  subjectId: string | null;
+  lessonId: string | null;
+  learningObjective: string | null;
   versionId: string;
   number: number;
   content: unknown;
@@ -95,10 +108,10 @@ export async function createAssessment({
   /** El tema del que es examen (20/9). Tiene que ser del mismo módulo. */
   lessonId?: string | null;
   subjectId?: string | null;
-  kind: 'DIAGNOSTIC' | 'SUBJECT' | 'FINAL';
+  kind: AssessmentKind;
   title: string;
   learningObjective?: string | null;
-}): Promise<{ assessmentId: string; versionId: string }> {
+}): Promise<{ assessmentId: string; code: string; versionId: string }> {
   const db = createTenantClient(institutionId);
 
   return db.$transaction(async (tx) => {
@@ -154,7 +167,7 @@ export async function createAssessment({
           learningObjective: learningObjective === '' ? null : (learningObjective ?? null),
           authorId: actorId,
         },
-        select: { id: true },
+        select: { id: true, code: true },
       });
 
       const version = await tx.assessmentVersion.create({
@@ -180,7 +193,7 @@ export async function createAssessment({
         },
       });
 
-      return { assessmentId: assessment.id, versionId: version.id };
+      return { assessmentId: assessment.id, code: assessment.code, versionId: version.id };
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new APIError(
@@ -205,6 +218,7 @@ export async function listAssessments({
     orderBy: [{ moduleId: 'asc' }, { position: 'asc' }],
     select: {
       id: true,
+      code: true,
       title: true,
       kind: true,
       position: true,
@@ -222,6 +236,7 @@ export async function listAssessments({
 
     return {
       id: assessment.id,
+      code: assessment.code,
       title: assessment.title,
       kind: assessment.kind,
       position: assessment.position,
@@ -232,6 +247,162 @@ export async function listAssessments({
       hasPublished: assessment.versions.some((v) => isVersionLive(toPublishStatus(v.status))),
       questionCount: countQuestions(latest?.content),
     };
+  });
+}
+
+/**
+ * Los datos del examen, corregibles después de crearlo (25/9, Jhonny: «los exámenes deben
+ * poderse editar una vez creados, el tipo por ejemplo»). Es el espejo de
+ * `updateLessonDetails` y con el mismo candado: con una versión publicada no se cambia de
+ * componente ni de tema, porque los dos deciden dónde cae el examen en la ruta que las
+ * cohortes están recorriendo. Título, tipo, asignatura y objetivo se corrigen siempre.
+ *
+ * Las reglas del intento (intentos, tiempo, porcentaje) no van aquí: son de la versión
+ * (`saveAssessmentContent`).
+ */
+export async function updateAssessmentDetails({
+  institutionId,
+  actorId,
+  assessmentId,
+  title,
+  kind,
+  moduleId,
+  lessonId,
+  subjectId,
+  learningObjective,
+}: {
+  institutionId: string;
+  actorId: string;
+  assessmentId: string;
+  title: string;
+  kind: AssessmentKind;
+  moduleId: string | null;
+  lessonId: string | null;
+  subjectId: string | null;
+  learningObjective: string | null;
+}): Promise<{ assessmentId: string; movedTo: string | null }> {
+  const db = createTenantClient(institutionId);
+
+  return db.$transaction(async (tx) => {
+    const assessment = await tx.assessment.findFirst({
+      where: { id: assessmentId, archivedAt: null },
+      select: {
+        id: true,
+        programId: true,
+        title: true,
+        kind: true,
+        moduleId: true,
+        lessonId: true,
+        subjectId: true,
+        position: true,
+        learningObjective: true,
+        versions: { where: { status: 'PUBLISHED' }, select: { id: true }, take: 1 },
+      },
+    });
+    if (!assessment) throw new APIError('Assessment not found', 'NOT_FOUND');
+
+    const published = assessment.versions.length > 0;
+    const movesModule = moduleId !== assessment.moduleId;
+    const movesLesson = lessonId !== assessment.lessonId;
+
+    if (published && (movesModule || movesLesson)) {
+      throw new APIError('A published assessment cannot change its place in the route', 'CONFLICT');
+    }
+
+    if (moduleId) {
+      const found = await tx.module.findFirst({
+        where: { id: moduleId, programId: assessment.programId, archivedAt: null },
+        select: { id: true },
+      });
+      if (!found) throw new APIError('Module not found in this program', 'NOT_FOUND');
+    }
+
+    if (lessonId) {
+      const lesson = moduleId
+        ? await tx.lesson.findFirst({
+            where: { id: lessonId, moduleId, archivedAt: null },
+            select: { id: true },
+          })
+        : null;
+      if (!lesson) throw new APIError('Lesson not found in this module', 'NOT_FOUND');
+    }
+
+    if (subjectId) {
+      const subject = await tx.subject.findFirst({
+        where: { id: subjectId, archivedAt: null },
+        select: { id: true },
+      });
+      if (!subject) throw new APIError('Subject not found', 'NOT_FOUND');
+    }
+
+    // Al cambiar de componente el examen va al final del nuevo, como un tema al moverse.
+    let position = assessment.position;
+    if (movesModule) {
+      const last = moduleId
+        ? await tx.assessment.findFirst({
+            where: { moduleId },
+            orderBy: { position: 'desc' },
+            select: { position: true },
+          })
+        : null;
+      position = (last?.position ?? 0) + 1;
+    }
+
+    try {
+      await tx.assessment.update({
+        where: { id: assessmentId },
+        data: {
+          title,
+          kind,
+          moduleId,
+          lessonId,
+          subjectId,
+          position,
+          learningObjective: learningObjective === '' ? null : learningObjective,
+        },
+      });
+    } catch (error) {
+      if (isUniqueViolation(error)) {
+        throw new APIError('Another assessment already occupies that position', 'CONFLICT');
+      }
+      throw error;
+    }
+
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'assessment',
+        entityId: assessmentId,
+        action: 'updated',
+        before: {
+          title: assessment.title,
+          kind: assessment.kind,
+          moduleId: assessment.moduleId,
+          lessonId: assessment.lessonId,
+          subjectId: assessment.subjectId,
+          learningObjective: assessment.learningObjective,
+        },
+        after: { title, kind, moduleId, lessonId, subjectId, learningObjective },
+      },
+    });
+
+    return { assessmentId, movedTo: movesModule ? moduleId : null };
+  });
+}
+
+/** De `EXA-0001` o de un `cuid` al id y al código del examen (25/9). Nulo si no existe. */
+export async function resolveAssessment({
+  institutionId,
+  ref,
+}: {
+  institutionId: string;
+  ref: string;
+}): Promise<{ id: string; code: string } | null> {
+  const db = createTenantClient(institutionId);
+  return db.assessment.findFirst({
+    where: { ...byCodeOrId(ref), archivedAt: null },
+    select: { id: true, code: true },
   });
 }
 
@@ -254,9 +425,15 @@ export async function openAssessmentDraft({
     where: { id: assessmentId, archivedAt: null },
     select: {
       id: true,
+      code: true,
       title: true,
       kind: true,
       language: true,
+      programId: true,
+      moduleId: true,
+      subjectId: true,
+      lessonId: true,
+      learningObjective: true,
       versions: {
         orderBy: { number: 'desc' },
         take: 1,
@@ -279,9 +456,15 @@ export async function openAssessmentDraft({
   const latest = assessment.versions[0];
   const base = {
     assessmentId: assessment.id,
+    code: assessment.code,
     title: assessment.title,
     kind: assessment.kind,
     language: assessment.language,
+    programId: assessment.programId,
+    moduleId: assessment.moduleId,
+    subjectId: assessment.subjectId,
+    lessonId: assessment.lessonId,
+    learningObjective: assessment.learningObjective,
     hasPublished: assessment.versions.some((v) => isVersionLive(toPublishStatus(v.status))),
   };
 

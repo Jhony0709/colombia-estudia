@@ -222,7 +222,7 @@ export async function requestNewInvitation(token: string): Promise<void> {
       institutionId: true,
       acceptedAt: true,
       expiresAt: true,
-      person: { select: { givenName: true, familyName: true, email: true } },
+      person: { select: { code: true, givenName: true, familyName: true, email: true } },
     },
   });
 
@@ -243,7 +243,7 @@ export async function requestNewInvitation(token: string): Promise<void> {
     title: 'Solicitud de nueva invitación',
     body: `${personName} (${invitation.person.email ?? 'sin correo'}) solicitó una nueva invitación.`,
     // routes.md:51: personas e invitaciones viven en /personas (grupo staff).
-    href: `/personas/${invitation.personId}`,
+    href: `/personas/${invitation.person.code}`,
     // Una sola solicitud por persona y día: quien insiste con el enlace vencido no debe
     // llenar el centro de notificaciones de operaciones.
     dedupeKey: `reinvite:${invitation.personId}:${today}`,

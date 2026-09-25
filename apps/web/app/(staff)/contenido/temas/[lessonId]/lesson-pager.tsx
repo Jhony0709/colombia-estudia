@@ -68,7 +68,7 @@ export function LessonPager({
       );
     }
     const label = t(key, { title: neighbor.title });
-    const href = `/contenido/temas/${neighbor.id}`;
+    const href = `/contenido/temas/${neighbor.code}`;
     return (
       <Tooltip label={label}>
         <Link

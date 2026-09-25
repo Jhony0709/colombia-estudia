@@ -53,7 +53,10 @@ export async function reportLessonProblem({
   const db = createTenantClient(institutionId);
   const assignment = await db.lessonAssignment.findFirst({
     where: { id: assignmentId },
-    select: { lesson: { select: { id: true, title: true } }, cohort: { select: { code: true } } },
+    select: {
+      lesson: { select: { id: true, code: true, title: true } },
+      cohort: { select: { code: true } },
+    },
   });
   if (!assignment) throw new APIError('Not found', 'NOT_FOUND');
 
@@ -79,7 +82,7 @@ export async function reportLessonProblem({
     type: 'problem_reported',
     title: `Problema en «${assignment.lesson.title}»`,
     body: `${who} (${assignment.cohort.code}): ${REASON_LABEL[reason]}${details ? ` — ${details}` : ''}`,
-    href: `/contenido/temas/${assignment.lesson.id}`,
+    href: `/contenido/temas/${assignment.lesson.code}`,
   });
   return { notified: result.created };
 }

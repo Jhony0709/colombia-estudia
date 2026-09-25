@@ -26,10 +26,13 @@ async function reinvite(personId: string): Promise<string | null> {
 
 export function PersonRowActions({
   personId,
+  personCode,
   name,
   canReinvite,
 }: {
   personId: string;
+  /** Código legible: la ficha se abre por él (25/9). */
+  personCode: string;
   name: string;
   canReinvite: boolean;
 }) {
@@ -52,7 +55,7 @@ export function PersonRowActions({
   return (
     <>
       <Menu label={t('menuFor', { name })}>
-        <MenuItem onSelect={() => router.push(`/personas/${personId}`)}>{t('view')}</MenuItem>
+        <MenuItem onSelect={() => router.push(`/personas/${personCode}`)}>{t('view')}</MenuItem>
         {canReinvite && (
           <>
             <MenuSeparator />

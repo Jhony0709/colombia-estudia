@@ -272,7 +272,7 @@ function PreviewCard({ preview }: { preview: EnrollmentPreview }) {
       : {
           ok: false,
           text: t('sheet.noBirthDate'),
-          href: `/personas/${person.id}`,
+          href: `/personas/${person.code}`,
           link: t('sheet.fixPerson'),
         }
   );
@@ -283,7 +283,7 @@ function PreviewCard({ preview }: { preview: EnrollmentPreview }) {
         : {
             ok: false,
             text: t('sheet.noGuardian'),
-            href: `/personas/${person.id}`,
+            href: `/personas/${person.code}`,
             link: t('sheet.addGuardian'),
           }
     );

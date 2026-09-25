@@ -9,7 +9,8 @@
 import type { Metadata } from 'next';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { requireCapability } from '@/lib/authz/with-capability';
-import { openDraft } from '@/features/content/server/lessons.service';
+import { openDraft, resolveLesson } from '@/features/content/server/lessons.service';
+import { notFound, redirect } from 'next/navigation';
 import { getLessonReadiness } from '@/features/content/server/readiness.service';
 import { listCurriculum } from '@/features/admin/server/curriculum.service';
 import { Page } from '@/components/templates/page';
@@ -22,7 +23,13 @@ type Params = Promise<{ lessonId: string }>;
 export default async function LessonEditorPage({ params }: { params: Params }) {
   await requireCapability('lesson.author');
   const ctx = await getRequestContext();
-  const { lessonId } = await params;
+  const { lessonId: ref } = await params;
+
+  // La URL lleva el código (`TEM-0001`, 25/9); un enlace viejo con el `cuid` redirige.
+  const resolved = await resolveLesson({ institutionId: ctx.institution.id, ref });
+  if (!resolved) notFound();
+  if (ref !== resolved.code) redirect(`/contenido/temas/${resolved.code}`);
+  const lessonId = resolved.id;
 
   const [draft, curriculum, readiness] = await Promise.all([
     openDraft({ institutionId: ctx.institution.id, lessonId }),
@@ -55,6 +62,7 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
         lessonId={draft.lessonId}
         versionId={draft.versionId}
         header={{
+          code: draft.code,
           title: draft.title,
           subjectName: draft.subjectName,
           number: draft.number,

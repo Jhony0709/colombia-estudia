@@ -108,6 +108,18 @@ webhook de Wompi.
 **`LearningEvent`, `AuditLog` append-only.** Sin `updatedAt`, sin `DELETE`; rol de BD sin
 UPDATE/DELETE sobre ellas en la fase de endurecimiento.
 
+## Códigos legibles (25/9)
+
+`Person`, `Module`, `Lesson` y `Assessment` llevan `code` (`PER-0001`, `COM-0001`, `TEM-0001`,
+`EXA-0001`), único por institución. Lo asigna la base, no el servicio: la tabla `Counter`
+(`institutionId`, `name`, `seq`) y la función `next_code()` incrementan de forma atómica
+(`INSERT … ON CONFLICT … RETURNING`), y el trigger `assign_code` BEFORE INSERT rellena la
+columna cuando llega vacía. Está en la base porque una persona la crean el registro, el
+import, los scripts y el seed: un camino que se olvide de pedir el código dejaría filas sin
+él. En Prisma la columna es `String @default(dbgenerated("''::text"))`, así `create()` no lo
+pide y lo devuelve ya asignado. Patrón Basikon (`Counter` + `formatRegistration`). `Program`
+y `Cohort` conservan su `code` manual.
+
 ## onDelete
 
 Por defecto `Restrict` (el de Prisma para relaciones obligatorias): borrar un módulo con

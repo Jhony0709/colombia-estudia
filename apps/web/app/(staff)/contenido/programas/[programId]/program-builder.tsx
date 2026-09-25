@@ -269,7 +269,7 @@ function ItemRow({ item, nested }: { item: BuilderItem; nested: boolean }) {
   const t = useTranslations('builder');
   const Icon = FORM_ICONS[item.form];
   const href =
-    item.kind === 'LESSON' ? `/contenido/temas/${item.id}` : `/contenido/examenes/${item.id}`;
+    item.kind === 'LESSON' ? `/contenido/temas/${item.code}` : `/contenido/examenes/${item.code}`;
   const badge = statusBadge(item, t);
 
   const meta = [
@@ -373,9 +373,7 @@ function CreateSheet({
       const data = (payload.data ?? payload) as Record<string, string>;
       reset();
       onClose();
-      router.push(
-        isLesson ? `/contenido/temas/${data.lessonId}` : `/contenido/examenes/${data.assessmentId}`
-      );
+      router.push(isLesson ? `/contenido/temas/${data.code}` : `/contenido/examenes/${data.code}`);
     } catch {
       setError(t('createError'));
     } finally {

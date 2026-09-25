@@ -106,7 +106,7 @@ export function CreateLessonForm({
         event.preventDefault();
         void send(
           { moduleId, subjectId, title, requiresSubmission },
-          (payload) => `/contenido/temas/${payload.lessonId}`
+          (payload) => `/contenido/temas/${payload.code}`
         );
       }}
     >
@@ -219,7 +219,7 @@ export function CreateAssessmentForm({
             moduleId: needsModule && moduleId !== '' ? moduleId : null,
             lessonId: needsModule && moduleId !== '' && lessonId !== '' ? lessonId : null,
           },
-          (payload) => `/contenido/examenes/${payload.assessmentId}`
+          (payload) => `/contenido/examenes/${payload.code}`
         );
       }}
     >

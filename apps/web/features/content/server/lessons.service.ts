@@ -25,11 +25,14 @@ import {
   type ValidationResult,
 } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
+import { byCodeOrId } from '@/lib/core/entity-code';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { APIError } from '@/lib/core/errors';
 
 export interface LessonListItem {
   id: string;
+  /** Código legible `TEM-0001` (25/9). */
+  code: string;
   title: string;
   position: number;
   subjectName: string;
@@ -50,6 +53,8 @@ export type ActivityAccepts = 'TEXT' | 'FILE' | 'TEXT_OR_FILE';
 
 export interface DraftView {
   lessonId: string;
+  /** Código legible `TEM-0001` (25/9). */
+  code: string;
   title: string;
   language: string;
   subjectName: string;
@@ -111,7 +116,7 @@ export async function createLesson({
   title: string;
   requiresSubmission?: boolean;
   learningObjective?: string | null;
-}): Promise<{ lessonId: string; versionId: string }> {
+}): Promise<{ lessonId: string; code: string; versionId: string }> {
   const db = createTenantClient(institutionId);
 
   return db.$transaction(async (tx) => {
@@ -146,7 +151,7 @@ export async function createLesson({
           learningObjective: learningObjective === '' ? null : (learningObjective ?? null),
           authorId: actorId,
         },
-        select: { id: true },
+        select: { id: true, code: true },
       });
 
       const version = await tx.lessonVersion.create({
@@ -171,7 +176,7 @@ export async function createLesson({
         },
       });
 
-      return { lessonId: lesson.id, versionId: version.id };
+      return { lessonId: lesson.id, code: lesson.code, versionId: version.id };
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new APIError(
@@ -443,6 +448,7 @@ export async function listLessons({
     where: { archivedAt: null, ...(subjectId ? { subjectId } : {}) },
     select: {
       id: true,
+      code: true,
       title: true,
       position: true,
       requiresSubmission: true,
@@ -468,6 +474,7 @@ export async function listLessons({
 
       return {
         id: lesson.id,
+        code: lesson.code,
         title: lesson.title,
         position: lesson.position,
         subjectName: lesson.subject.name,
@@ -572,6 +579,24 @@ export async function updateLessonActivity({
 }
 
 /**
+ * De `TEM-0001` o de un `cuid` al id y al código del tema (25/9): la URL lleva el código y
+ * los enlaces viejos, el id. Nulo si no existe o está archivado.
+ */
+export async function resolveLesson({
+  institutionId,
+  ref,
+}: {
+  institutionId: string;
+  ref: string;
+}): Promise<{ id: string; code: string } | null> {
+  const db = createTenantClient(institutionId);
+  return db.lesson.findFirst({
+    where: { ...byCodeOrId(ref), archivedAt: null },
+    select: { id: true, code: true },
+  });
+}
+
+/**
  * El DRAFT sobre el que se edita, creándolo si hace falta.
  *
  * Si la versión más alta está publicada, se abre la siguiente **copiando su contenido**:
@@ -590,6 +615,7 @@ export async function openDraft({
     where: { id: lessonId, archivedAt: null },
     select: {
       id: true,
+      code: true,
       title: true,
       language: true,
       moduleId: true,
@@ -625,6 +651,7 @@ export async function openDraft({
   const latest = lesson.versions[0];
   const base = {
     lessonId: lesson.id,
+    code: lesson.code,
     title: lesson.title,
     language: lesson.language,
     subjectName: lesson.subject.name,

@@ -10,6 +10,12 @@ import { AppHeader } from './AppHeader';
 
 const mockPathname = jest.fn();
 
+// `LogoutDialog` (23/9) trae `Button`, que lee `next-intl` para el texto de carga; el paquete
+// es ESM y Jest no lo transforma, así que se sustituye como en `Button.test.tsx`.
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
 jest.mock('next/navigation', () => ({
   usePathname: () => mockPathname(),
 }));

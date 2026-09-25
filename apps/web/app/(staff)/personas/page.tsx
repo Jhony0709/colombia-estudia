@@ -279,6 +279,12 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
                 ),
               },
               {
+                key: 'code',
+                header: t('code'),
+                narrow: true,
+                cell: (person) => <span className="font-mono">{person.code}</span>,
+              },
+              {
                 key: 'name',
                 header: t('name'),
                 cell: (person) => (
@@ -291,7 +297,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
                       {person.familyName.charAt(0)}
                     </span>
                     <Link
-                      href={`/personas/${person.id}`}
+                      href={`/personas/${person.code}`}
                       className="text-text-link underline underline-offset-4"
                     >
                       {person.familyName}, {person.givenName}
@@ -353,6 +359,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
                 cell: (person) => (
                   <PersonRowActions
                     personId={person.id}
+                    personCode={person.code}
                     name={`${person.givenName} ${person.familyName}`}
                     canReinvite={person.invitation === 'pending' || person.invitation === 'expired'}
                   />

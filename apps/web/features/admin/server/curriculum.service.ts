@@ -18,6 +18,8 @@ const TEMP_POSITION = -1;
 
 export interface CurriculumModule {
   id: string;
+  /** Código legible `COM-0001` (25/9). */
+  code: string;
   name: string;
   position: number;
   lessonCount: number;
@@ -73,7 +75,13 @@ export async function listCurriculum(institutionId: string): Promise<Curriculum>
         modules: {
           where: { archivedAt: null },
           orderBy: { position: 'asc' },
-          select: { id: true, name: true, position: true, _count: { select: { lessons: true } } },
+          select: {
+            id: true,
+            code: true,
+            name: true,
+            position: true,
+            _count: { select: { lessons: true } },
+          },
         },
       },
     }),
@@ -89,6 +97,7 @@ export async function listCurriculum(institutionId: string): Promise<Curriculum>
       ...p,
       modules: p.modules.map((m) => ({
         id: m.id,
+        code: m.code,
         name: m.name,
         position: m.position,
         lessonCount: m._count.lessons,

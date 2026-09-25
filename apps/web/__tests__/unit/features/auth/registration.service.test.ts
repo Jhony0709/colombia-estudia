@@ -20,6 +20,10 @@ const admin = {
   auth: { admin: { createUser: jest.fn(), deleteUser: jest.fn() } },
 };
 const mockEnrollPerson = jest.fn();
+// `institutionSettingsSchema` exige un cuid en `introCohortId` (`lib/institution/settings.ts`):
+// con «cohort-intro» a secas el ajuste se descartaba entero y el registro devolvía
+// NO_INTRO_COHORT.
+const INTRO_COHORT_ID = 'cmuflxkr1000213nqvodk4agt';
 
 jest.mock('server-only', () => ({}));
 jest.mock('@/lib/db/tenant', () => ({
@@ -51,7 +55,7 @@ beforeEach(() => {
   jest.clearAllMocks();
   db.person.findFirst.mockResolvedValue(null);
   db.institution.findUniqueOrThrow.mockResolvedValue({
-    settings: { introCohortId: 'cohort-intro' },
+    settings: { introCohortId: INTRO_COHORT_ID },
     dataPolicyVersion: '2',
   });
   admin.auth.admin.createUser.mockResolvedValue({ data: { user: { id: 'auth-1' } }, error: null });
@@ -79,7 +83,7 @@ describe('registerPerson', () => {
       expect.objectContaining({ data: expect.objectContaining({ policyVersion: '2' }) })
     );
     expect(mockEnrollPerson).toHaveBeenCalledWith(
-      expect.objectContaining({ cohortId: 'cohort-intro', personHandle: 'ana@example.com' })
+      expect.objectContaining({ cohortId: INTRO_COHORT_ID, personHandle: 'ana@example.com' })
     );
     expect(result.enrollment).toEqual({
       status: 'ENROLLED',

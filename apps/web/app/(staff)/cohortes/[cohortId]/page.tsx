@@ -383,7 +383,7 @@ export default async function CohortDetailPage({
                   cell: (e) => (
                     <>
                       <Link
-                        href={`/personas/${e.personId}`}
+                        href={`/personas/${e.personCode}`}
                         className="text-text-link underline underline-offset-4"
                       >
                         {e.name}

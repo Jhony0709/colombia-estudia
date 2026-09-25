@@ -30,6 +30,8 @@ export interface CohortDetail {
   enrollments: Array<{
     id: string;
     personId: string;
+    /** Código legible de la persona, para el enlace a su ficha (25/9). */
+    personCode: string;
     name: string;
     status: string;
     isMinorAtEnrollment: boolean;
@@ -107,7 +109,7 @@ export async function getCohortDetail({
           accessUntil: true,
           withdrawReason: true,
           startsAtModule: true,
-          student: { select: { id: true, givenName: true, familyName: true } },
+          student: { select: { id: true, code: true, givenName: true, familyName: true } },
         },
       },
     },
@@ -148,6 +150,7 @@ export async function getCohortDetail({
     enrollments: cohort.enrollments.map((e) => ({
       id: e.id,
       personId: e.student.id,
+      personCode: e.student.code,
       name: `${e.student.familyName}, ${e.student.givenName}`,
       status: e.status,
       isMinorAtEnrollment: e.isMinorAtEnrollment,
@@ -326,6 +329,8 @@ export async function enrollPerson({
 export interface EnrollmentPreview {
   person: {
     id: string;
+    /** Código legible, para el enlace a la ficha (25/9). */
+    code: string;
     name: string;
     /** Sin fecha de nacimiento no se puede matricular; se dice antes de intentarlo. */
     hasBirthDate: boolean;
@@ -380,6 +385,7 @@ export async function previewEnrollment({
       OR: [{ documentNumber: handle }, { email: handle.toLowerCase() }],
     },
     select: {
+      code: true,
       id: true,
       givenName: true,
       familyName: true,
@@ -418,6 +424,7 @@ export async function previewEnrollment({
   return {
     person: {
       id: person.id,
+      code: person.code,
       name: `${person.givenName} ${person.familyName}`,
       hasBirthDate: person.birthDate !== null,
       isMinor,

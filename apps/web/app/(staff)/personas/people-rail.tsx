@@ -42,7 +42,7 @@ export async function PeopleRail({
               return (
                 <li key={inv.personId} className="flex items-baseline justify-between gap-3">
                   <Link
-                    href={`/personas/${inv.personId}`}
+                    href={`/personas/${inv.personCode}`}
                     className="type-body text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
                   >
                     {inv.familyName}, {inv.givenName}

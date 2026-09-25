@@ -117,7 +117,13 @@ export interface LessonWorkspaceProps {
   lessonId: string;
   versionId: string;
   /** Lo que la cabecera necesita: el título es el `h1`, la asignatura el rótulo. */
-  header: { title: string; subjectName: string; number: number; hasPublished: boolean };
+  header: {
+    code: string;
+    title: string;
+    subjectName: string;
+    number: number;
+    hasPublished: boolean;
+  };
   initialContent: string;
   initialEstimatedMinutes: number | null;
   initialInvalidatesProgress: boolean;
@@ -434,7 +440,7 @@ export function LessonEditor({
   return (
     <>
       <PageHeader
-        overline={header.subjectName}
+        overline={`${header.code} · ${header.subjectName}`}
         title={header.title}
         back={
           <div className="flex flex-wrap items-center justify-between gap-3">

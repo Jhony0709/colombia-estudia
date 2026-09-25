@@ -58,7 +58,7 @@ export interface EnrollmentDetail {
   withdrawReason: string | null;
   /** Grado de entrada (20/9): posición del primer módulo de su ruta. Nulo = desde el primero. */
   startsAtModule: number | null;
-  student: { id: string; name: string };
+  student: { id: string; code: string; name: string };
   /** `startsOn` como día (`YYYY-MM-DD`): «no ha empezado» solo tiene sentido si la cohorte ya empezó. */
   cohort: {
     id: string;
@@ -96,7 +96,7 @@ export async function getEnrollmentDetail({
       withdrawnAt: true,
       withdrawReason: true,
       startsAtModule: true,
-      student: { select: { id: true, givenName: true, familyName: true } },
+      student: { select: { id: true, code: true, givenName: true, familyName: true } },
       cohort: {
         select: {
           id: true,
@@ -231,7 +231,11 @@ export async function getEnrollmentDetail({
     withdrawnAt: e.withdrawnAt ? e.withdrawnAt.toISOString() : null,
     withdrawReason: e.withdrawReason,
     startsAtModule: e.startsAtModule,
-    student: { id: e.student.id, name: `${e.student.givenName} ${e.student.familyName}` },
+    student: {
+      id: e.student.id,
+      code: e.student.code,
+      name: `${e.student.givenName} ${e.student.familyName}`,
+    },
     cohort: {
       id: e.cohort.id,
       code: e.cohort.code,

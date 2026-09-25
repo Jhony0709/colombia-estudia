@@ -45,8 +45,8 @@ export interface LessonRouteNeighbors {
   /** Posición 1-based del tema en la ruta del programa, contando solo los no archivados. */
   index: number;
   total: number;
-  previous: { id: string; title: string } | null;
-  next: { id: string; title: string } | null;
+  previous: { id: string; code: string; title: string } | null;
+  next: { id: string; code: string; title: string } | null;
 }
 
 /**
@@ -130,7 +130,7 @@ export async function getLessonReadiness({
     db.lesson.findMany({
       where: { programId: lesson.program.id, archivedAt: null },
       orderBy: [{ module: { position: 'asc' } }, { position: 'asc' }],
-      select: { id: true, title: true, moduleId: true },
+      select: { id: true, code: true, title: true, moduleId: true },
     }),
     db.cohort.findMany({
       where: { programId: lesson.program.id, status: 'OPEN' },
@@ -148,8 +148,8 @@ export async function getLessonReadiness({
   const index = route.findIndex((item) => item.id === lesson.id);
   const previous =
     index > 0 && route[index - 1]?.moduleId === lesson.module.id ? route[index - 1] : null;
-  const pick = (item: { id: string; title: string } | undefined) =>
-    item ? { id: item.id, title: item.title } : null;
+  const pick = (item: { id: string; code: string; title: string } | undefined) =>
+    item ? { id: item.id, code: item.code, title: item.title } : null;
 
   return {
     program: lesson.program,

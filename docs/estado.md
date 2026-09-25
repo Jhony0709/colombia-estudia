@@ -4824,6 +4824,59 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 25/9 — El código va en la URL
+
+Jhonny: «el slug de todos los cambiados debe corresponder». Las fichas se abren por el
+código legible: `/personas/PER-0001`, `/contenido/temas/TEM-0001`,
+`/contenido/examenes/EXA-0001` (los componentes no tienen ficha propia).
+
+- `lib/core/entity-code.ts` (`isEntityCode`, `byCodeOrId`) y `resolvePerson` /
+  `resolveLesson` / `resolveAssessment` en sus servicios: la página acepta código o `cuid`
+  y, si llega el `cuid`, **redirige** al código; un enlace viejo sigue abriendo.
+- Todos los enlaces a esas fichas llevan ahora el código: Temas, Exámenes, ruta del programa
+  (`builder.service` expone `code`), navegador entre temas, redirección tras crear
+  (`createLesson`/`createAssessment` devuelven `code`), Personas (lista, carril de
+  invitaciones, acudientes/estudiantes de la ficha, menú ⋯), Cohortes (lista de matrículas,
+  detalle de matrícula, hoja de matricular), y las notificaciones de «problema reportado» y
+  «solicitud de nueva invitación». La API sigue por `cuid`.
+- Sin SQL extra: la migración `20260925000000_entity_codes` ya numeró lo existente. Test
+  `request-new.test.ts` ajustado (el `href` de la notificación lleva el código).
+- Verificado en Chrome con la migración aplicada: Temas con `TEM-0001…0007` y enlaces por
+  código; editor por `/contenido/temas/TEM-0002` (cabecera «TEM-0002 · Bienestar…», «2 de 7»,
+  flechas por código); `/contenido/temas/<cuid>` redirige a `TEM-0001`; Exámenes con
+  `EXA-0001`; «Datos del examen»: el cuestionario estaba **sin componente** («examen del
+  programa, fuera de la ruta»), se le asignó «Gestión emocional…» · «Del componente (al
+  final)» y Preparación pasó a «examen del componente»; Programas con `COM-0001`; Personas
+  con `PER-0001/0002` y ficha `/personas/PER-0002` («PER-0002 · Operación»); la ruta del
+  programa enlaza los siete temas y el examen por código. `tsc` en cero.
+
+## 25/9 — Códigos legibles por entidad y datos del examen editables
+
+Jhonny: «un ID como en Basikon con registration, el código y un secuencial» (personas,
+componentes, temas y exámenes) y «los exámenes deben poderse editar una vez creados, el tipo
+por ejemplo». Hecho, con su confirmación para tocar el schema:
+
+- `prisma/schema.prisma` + `migrations/20260925000000_entity_codes`: modelo `Counter`
+  (institución, nombre, secuencia), función `next_code()` (incremento atómico) y trigger
+  `assign_code` BEFORE INSERT en `Person`/`Module`/`Lesson`/`Assessment`; columna `code`
+  única por institución (`PER-0001`, `COM-0001`, `TEM-0001`, `EXA-0001`). La migración
+  numera lo existente por fecha de creación (componentes: por programa y posición) y deja
+  el contador donde terminó. En la base y no en el servicio porque hay cuatro caminos que
+  crean personas (registro, import, scripts, seed). `reference/05-database/schema.md`.
+- El código se ve en: Temas (columna y búsqueda), Exámenes (columna), Programas → subtabla
+  de componentes, Personas (columna, búsqueda y cabecera del detalle), y en la cabecera de
+  los editores de tema y examen (`TEM-0001 · Asignatura`).
+- Examen: `updateAssessmentDetails` (`assessments.service.ts`) + `PUT
+/api/content/assessments/[id]/details` + «Datos del examen» plegado al principio del
+  editor (`assessment-details-form.tsx`): título, tipo, componente, tema del que es examen,
+  asignatura y objetivo. Con versión publicada, componente y tema quedan cerrados (mueven
+  la ruta), como el componente en los temas. `openAssessmentDraft` devuelve ahora esos datos.
+- **Antes de abrir cualquier pantalla**: `pnpm prisma migrate deploy --schema=prisma/schema.prisma`,
+  `pnpm --filter @colombia-estudia/web db:generate` y reiniciar `next dev`; todas las listas
+  seleccionan `code` y sin la columna fallan con P2022. Sin ver en Chrome por eso.
+- No tocado: `lib/db/tenant.ts` (`TENANT_SCOPED_MODELS` no incluye `Counter`; la app no lo
+  consulta, lo usa el trigger). `tsc` en cero.
+
 ## 24/9 — Navegador entre temas en el editor
 
 Jhonny: «agreguemos un navegador (dos flechas) entre temas para el admin». Hecho:

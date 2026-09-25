@@ -68,7 +68,12 @@ describe('POST /api/invitations/[token]/request-new', () => {
     mockPrismaInvitationFindFirst.mockResolvedValue({
       personId: 'person-1',
       institutionId: 'inst-1',
-      person: { givenName: 'Juan', familyName: 'Pérez', email: 'juan@example.com' },
+      person: {
+        code: 'PER-0001',
+        givenName: 'Juan',
+        familyName: 'Pérez',
+        email: 'juan@example.com',
+      },
     });
     mockPrismaMembershipFindMany.mockResolvedValue([{ personId: 'admin-1' }]);
 
@@ -83,7 +88,12 @@ describe('POST /api/invitations/[token]/request-new', () => {
     mockPrismaInvitationFindFirst.mockResolvedValue({
       personId: 'person-1',
       institutionId: 'inst-1',
-      person: { givenName: 'Juan', familyName: 'Pérez', email: 'juan@example.com' },
+      person: {
+        code: 'PER-0001',
+        givenName: 'Juan',
+        familyName: 'Pérez',
+        email: 'juan@example.com',
+      },
     });
     mockPrismaMembershipFindMany.mockResolvedValue([
       { personId: 'admin-1' },
@@ -124,7 +134,12 @@ describe('POST /api/invitations/[token]/request-new', () => {
     mockPrismaInvitationFindFirst.mockResolvedValue({
       personId: 'person-1',
       institutionId: 'inst-1',
-      person: { givenName: 'Juan', familyName: 'Pérez', email: 'juan@example.com' },
+      person: {
+        code: 'PER-0001',
+        givenName: 'Juan',
+        familyName: 'Pérez',
+        email: 'juan@example.com',
+      },
     });
     mockPrismaMembershipFindMany.mockResolvedValue([{ personId: 'admin-1' }]);
 
@@ -139,7 +154,12 @@ describe('POST /api/invitations/[token]/request-new', () => {
     mockPrismaInvitationFindFirst.mockResolvedValue({
       personId: 'person-1',
       institutionId: 'inst-1',
-      person: { givenName: 'Juan', familyName: 'Pérez', email: 'juan@example.com' },
+      person: {
+        code: 'PER-0001',
+        givenName: 'Juan',
+        familyName: 'Pérez',
+        email: 'juan@example.com',
+      },
     });
     mockPrismaMembershipFindMany.mockResolvedValue([]);
 
@@ -167,14 +187,20 @@ describe('POST /api/invitations/[token]/request-new', () => {
     mockPrismaInvitationFindFirst.mockResolvedValue({
       personId: 'person-1',
       institutionId: 'inst-1',
-      person: { givenName: 'Juan', familyName: 'Pérez', email: 'juan@example.com' },
+      person: {
+        code: 'PER-0001',
+        givenName: 'Juan',
+        familyName: 'Pérez',
+        email: 'juan@example.com',
+      },
     });
     mockPrismaMembershipFindMany.mockResolvedValue([{ personId: 'admin-1' }]);
 
     await callEndpoint('valid-token');
 
     const createManyCall = mockPrismaNotificationCreateMany.mock.calls[0][0];
-    expect(createManyCall.data[0].href).toBe('/personas/person-1');
+    // La ficha se abre por el código legible (25/9), no por el id.
+    expect(createManyCall.data[0].href).toBe('/personas/PER-0001');
   });
 
   it('does not notify operations while the invitation is still pending and valid', async () => {
@@ -183,7 +209,12 @@ describe('POST /api/invitations/[token]/request-new', () => {
       institutionId: 'inst-1',
       acceptedAt: null,
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      person: { givenName: 'Juan', familyName: 'Pérez', email: 'juan@example.com' },
+      person: {
+        code: 'PER-0001',
+        givenName: 'Juan',
+        familyName: 'Pérez',
+        email: 'juan@example.com',
+      },
     });
     mockPrismaMembershipFindMany.mockResolvedValue([{ personId: 'admin-1' }]);
 

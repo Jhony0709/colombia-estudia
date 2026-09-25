@@ -29,6 +29,13 @@ import { PageHeader } from '@/components/templates/page';
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
 import { PageSection } from '@/components/templates/page';
+import {
+  AssessmentDetailsForm,
+  type AssessmentLessonChoice,
+  type AssessmentModuleChoice,
+  type AssessmentSubjectChoice,
+} from './assessment-details-form';
+import type { AssessmentKind } from '@/features/content/server/assessments.service';
 import { issueText } from '@/lib/content/issue-text';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { QuestionsBuilder, type QuestionIssue } from './questions-builder';
@@ -81,12 +88,33 @@ export function AssessmentEditor({
   initialReviewPolicy,
   canPublish,
   header,
+  details,
   readiness,
 }: {
   assessmentId: string;
   versionId: string;
   /** Lo que la cabecera necesita: la pinta este componente porque sus acciones dependen del estado. */
-  header: { title: string; kindLabel: string; number: number; hasPublished: boolean };
+  header: {
+    code: string;
+    title: string;
+    kindLabel: string;
+    number: number;
+    hasPublished: boolean;
+  };
+  /** Lo que «Datos del examen» necesita (25/9). */
+  details: {
+    modules: AssessmentModuleChoice[];
+    lessons: AssessmentLessonChoice[];
+    subjects: AssessmentSubjectChoice[];
+    initial: {
+      title: string;
+      kind: AssessmentKind;
+      moduleId: string | null;
+      lessonId: string | null;
+      subjectId: string | null;
+      learningObjective: string | null;
+    };
+  };
   initialContent: string;
   initialMaxAttempts: number;
   initialTimeLimitMinutes: number | null;
@@ -361,7 +389,7 @@ export function AssessmentEditor({
   return (
     <>
       <PageHeader
-        overline={header.kindLabel}
+        overline={`${header.code} · ${header.kindLabel}`}
         title={header.title}
         back={
           <Breadcrumb
@@ -413,6 +441,16 @@ export function AssessmentEditor({
         {published !== null && (
           <Alert severity="success">{t('publishedOk', { number: published })}</Alert>
         )}
+
+        {/* Los datos del examen, plegados (25/9): como «Datos del tema» en el editor del tema. */}
+        <AssessmentDetailsForm
+          assessmentId={assessmentId}
+          modules={details.modules}
+          lessons={details.lessons}
+          subjects={details.subjects}
+          initial={details.initial}
+          hasPublished={header.hasPublished}
+        />
 
         <PageSection
           id="preguntas"

@@ -53,7 +53,13 @@ export function PersonGuardians({
   guardians,
 }: {
   personId: string;
-  guardians: Array<{ id: string; name: string; relationship: string; hasAccount: boolean }>;
+  guardians: Array<{
+    id: string;
+    code: string;
+    name: string;
+    relationship: string;
+    hasAccount: boolean;
+  }>;
 }) {
   const t = useTranslations('people');
   const { busy, error, done, send } = useMutation();
@@ -80,7 +86,7 @@ export function PersonGuardians({
                     invitación se manda desde su ficha, como a cualquier persona. */}
                 <span className="type-caption text-text-muted block">
                   {g.hasAccount ? t('guardianHasAccount') : t('guardianNoAccount')}{' '}
-                  <Link href={`/personas/${g.id}`} className="text-text-link underline">
+                  <Link href={`/personas/${g.code}`} className="text-text-link underline">
                     {g.hasAccount ? t('guardianOpen') : t('guardianInvite')}
                   </Link>
                 </span>
