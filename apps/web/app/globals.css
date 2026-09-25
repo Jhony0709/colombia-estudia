@@ -129,6 +129,39 @@ body {
   animation: dialog-fade-out var(--duration-normal) var(--easing-exit);
 }
 
+/* La hoja (`Sheet`) y el cajón de navegación del teléfono (`SideNav`): mismo fondo que el
+   diálogo, y entran deslizando desde su borde —es su «grow in»— y salen con fade (25/9). */
+@keyframes sheet-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes drawer-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.sheet-panel[data-state='open'] {
+  animation: sheet-slide-in var(--duration-normal) var(--easing-enter);
+}
+.drawer-panel[data-state='open'] {
+  animation: drawer-slide-in var(--duration-normal) var(--easing-enter);
+}
+.sheet-panel[data-state='closed'],
+.drawer-panel[data-state='closed'] {
+  animation: dialog-fade-out var(--duration-normal) var(--easing-exit);
+}
+
 /** Toasts (24/9): mismo grow/fade que el diálogo, sin el centrado; deslizar sigue al dedo. */
 @keyframes toast-grow-in {
   from {

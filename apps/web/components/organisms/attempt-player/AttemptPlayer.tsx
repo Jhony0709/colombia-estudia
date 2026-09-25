@@ -23,9 +23,9 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useFormatter } from 'next-intl';
-import * as Dialog from '@radix-ui/react-dialog';
 import { Clock, EyeOff, Eye, CircleCheck, Circle, CircleX } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
 import { useAnnounce } from '@/lib/a11y/announce';
@@ -427,51 +427,53 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
         <span className="type-caption text-text-muted">{t('submitHint')}</span>
       </div>
 
-      <Dialog.Root open={confirming} onOpenChange={(open) => !submitting && setConfirming(open)}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
-          <Dialog.Content className="bg-surface-base elevation-modal rounded-card fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-[28rem] -translate-x-1/2 -translate-y-1/2 p-6">
-            <Dialog.Title className="type-subheading text-text">{t('confirmTitle')}</Dialog.Title>
-            <Dialog.Description className="type-body text-text-muted mt-2">
-              {unanswered.length === 0
-                ? t('confirmAllAnswered')
-                : t('confirmUnanswered', { count: unanswered.length })}
-            </Dialog.Description>
-            {unanswered.length > 0 && (
-              <ul className="type-body mt-3 max-h-40 list-disc overflow-y-auto pl-5">
-                {unanswered.map((q) => {
-                  const index = attempt.questions.indexOf(q);
-                  return (
-                    <li key={q.code}>
-                      <button
-                        type="button"
-                        className="text-text-link underline"
-                        onClick={() => {
-                          setConfirming(false);
-                          setCurrent(index);
-                        }}
-                      >
-                        {t('questionN', { n: index + 1 })}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            <p className="type-caption text-text-muted mt-3">{t('confirmFinal')}</p>
-            <div className="mt-5 flex flex-wrap justify-end gap-2">
-              <Dialog.Close asChild>
-                <Button type="button" variant="secondary" disabled={submitting}>
-                  {t('confirmBack')}
-                </Button>
-              </Dialog.Close>
-              <Button type="button" disabled={submitting} onClick={() => void submit()}>
-                {submitting ? t('submitting') : t('confirmSubmit')}
+      <Dialog
+        open={confirming}
+        onOpenChange={setConfirming}
+        locked={submitting}
+        size="sm"
+        title={t('confirmTitle')}
+        description={
+          unanswered.length === 0
+            ? t('confirmAllAnswered')
+            : t('confirmUnanswered', { count: unanswered.length })
+        }
+        actions={
+          <>
+            <DialogClose>
+              <Button type="button" variant="secondary" disabled={submitting}>
+                {t('confirmBack')}
               </Button>
-            </div>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+            </DialogClose>
+            <Button type="button" disabled={submitting} onClick={() => void submit()}>
+              {submitting ? t('submitting') : t('confirmSubmit')}
+            </Button>
+          </>
+        }
+      >
+        {unanswered.length > 0 && (
+          <ul className="type-body max-h-40 list-disc overflow-y-auto pl-5">
+            {unanswered.map((q) => {
+              const index = attempt.questions.indexOf(q);
+              return (
+                <li key={q.code}>
+                  <button
+                    type="button"
+                    className="text-text-link underline"
+                    onClick={() => {
+                      setConfirming(false);
+                      setCurrent(index);
+                    }}
+                  >
+                    {t('questionN', { n: index + 1 })}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        <p className="type-caption text-text-muted">{t('confirmFinal')}</p>
+      </Dialog>
     </div>
   );
 }

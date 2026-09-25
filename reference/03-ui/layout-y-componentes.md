@@ -178,6 +178,22 @@ llega a él después del contenido, que es donde uno pide ayuda. Sin temas, no h
 chuleta del formato del editor vivía plegada entre el texto y los minutos; una ayuda es algo
 que se pide, no algo que se lee de paso.
 
+### Dialog: el diálogo modal, uno solo (25/9)
+
+`organisms/dialog`: `Dialog({ open, onOpenChange, title, description?, children?, actions?,
+size?, locked?, scroll? })` y `DialogClose` para el botón que cierra. Radix debajo (foco
+dentro y de vuelta, Escape, tabulador contenido), fondo oscurecido **y desenfocado**, grow al
+entrar y fade al salir (`.dialog-overlay` / `.dialog-panel`, tokens de motion; corte seco con
+reduced-motion). La fila de acciones va a la derecha con la principal al final, igual en
+todos: cancelar es siempre el de la izquierda. `locked` impide cerrarlo mientras hay una
+petición en vuelo; `scroll` limita el panel a la ventana para cuerpos largos. Un formulario
+dentro apunta su botón de enviar con `form=` desde `actions` (`EditorDialog`).
+
+Lo usan: cerrar sesión, publicar tema y examen, eliminar tema, accesibilidad de un medio, los
+diálogos del editor de bloques y la confirmación de entrega del examen. **No** es `Sheet`
+(hoja lateral) ni el cajón de navegación del teléfono; esos dos comparten el fondo y salen
+con fade, pero entran deslizando desde su borde (`.sheet-panel`, `.drawer-panel`).
+
 ### LogoutDialog: «Cerrar sesión» pregunta en el sitio (23/9)
 
 `components/organisms/logout-dialog`. La misma pieza de Radix que `Sheet`, centrada, con
@@ -397,6 +413,7 @@ parecerse por casualidad.
 | `templates/page`                   | estable                                           |
 | `atoms/card`                       | estable (`actions` y `label`, 24/9)               |
 | `molecules/segmented-control`      | nuevo 24/9                                        |
+| `organisms/dialog`                 | nuevo 25/9 (el único modal)                       |
 | `atoms/nav-item`                   | estable                                           |
 | `organisms/side-nav`               | estable                                           |
 | `organisms/app-header`             | **retirado** el 18/9 (ver `PRODUCT_DECISIONS.md`) |

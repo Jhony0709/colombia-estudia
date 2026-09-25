@@ -297,8 +297,8 @@ export function SideNav({
           </Dialog.Trigger>
 
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 bg-black/40 lg:hidden" />
-            <Dialog.Content className="bg-surface-base elevation-modal w-sidenav fixed inset-y-0 left-0 z-50 flex flex-col gap-6 p-3 lg:hidden">
+            <Dialog.Overlay className="dialog-overlay fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden" />
+            <Dialog.Content className="drawer-panel bg-surface-base elevation-modal w-sidenav fixed inset-y-0 left-0 z-50 flex flex-col gap-6 p-3 lg:hidden">
               <VisuallyHidden>
                 <Dialog.Title>Navegación</Dialog.Title>
               </VisuallyHidden>

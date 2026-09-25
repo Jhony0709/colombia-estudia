@@ -32,7 +32,6 @@
  * previa que renderizara por su cuenta sería la vista previa de algo que no existe.
  */
 
-import * as Dialog from '@radix-ui/react-dialog';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert } from '@/components/atoms/alert';
@@ -42,6 +41,7 @@ import { Card } from '@/components/atoms/card';
 import { SegmentedControl, type SegmentedOption } from '@/components/molecules/segmented-control';
 import { PageHeader } from '@/components/templates/page';
 import { PageHelp } from '@/components/organisms/page-help';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Sheet } from '@/components/organisms/sheet';
 import { useToast } from '@/components/organisms/toaster';
 import { issueText } from '@/lib/content/issue-text';
@@ -672,83 +672,81 @@ export function LessonEditor({
       </Sheet>
 
       {/* ── Publicar: un diálogo, con la casilla de reapertura y lo que lo impide ── */}
-      <Dialog.Root open={confirming} onOpenChange={setConfirming}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
-          <Dialog.Content className="bg-surface-base elevation-modal rounded-sheet fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 space-y-4 p-6">
-            <Dialog.Title className="type-subheading text-text">{t('publishTitle')}</Dialog.Title>
-
-            {blocked ? (
-              <>
-                <Dialog.Description className="type-body text-text max-w-reading">
-                  {validation === null
-                    ? t('validating')
-                    : t('blockedErrors', { count: errors.length })}
-                </Dialog.Description>
-                <div className="flex flex-wrap gap-3">
-                  <Dialog.Close asChild>
-                    <Button type="button" variant="secondary" onClick={() => setIssuesOpen(true)}>
-                      {t('seeIssues')}
-                    </Button>
-                  </Dialog.Close>
-                  <Dialog.Close asChild>
-                    <Button type="button" variant="quiet">
-                      {t('cancel')}
-                    </Button>
-                  </Dialog.Close>
-                </div>
-              </>
-            ) : (
-              <>
-                <Dialog.Description className="type-body text-text max-w-reading">
-                  {t('confirmBody', { warnings: warnings.length })}
-                </Dialog.Description>
-                {/*
-                  Publicar no cambia lo que las cohortes ya tienen asignado (eso es
-                  `PATCH /api/cohorts/assignments/[id]`); lo que sí abre es que las cohortes
-                  abiertas que aún no tienen el tema puedan añadirlo. Se dice aquí, que es
-                  donde se decide.
-                */}
-                {pendingCohorts.length > 0 && (
-                  <p className="type-body text-text-muted max-w-reading">
-                    {t('confirmPending', {
-                      count: pendingCohorts.length,
-                      list: pendingCohorts.map((cohort) => cohort.code).join(', '),
-                    })}
-                  </p>
-                )}
-
-                <div className="flex items-start gap-2">
-                  <input
-                    id="reabre"
-                    type="checkbox"
-                    checked={reopens}
-                    onChange={(event) => {
-                      setReopens(event.target.checked);
-                      setDirty(true);
-                    }}
-                    className="border-border text-accent-base focus:ring-accent-base mt-0.5 h-6 w-6 rounded"
-                  />
-                  <label htmlFor="reabre" className="type-body text-text max-w-reading">
-                    {t('reopensLabel')}
-                  </label>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Button type="button" loading={publishing} onClick={() => void onPublish()}>
-                    {t('confirmPublish')}
-                  </Button>
-                  <Dialog.Close asChild>
-                    <Button type="button" variant="quiet" disabled={publishing}>
-                      {t('cancel')}
-                    </Button>
-                  </Dialog.Close>
-                </div>
-              </>
+      <Dialog
+        open={confirming}
+        onOpenChange={setConfirming}
+        locked={publishing}
+        title={t('publishTitle')}
+        description={
+          blocked
+            ? validation === null
+              ? t('validating')
+              : t('blockedErrors', { count: errors.length })
+            : t('confirmBody', { warnings: warnings.length })
+        }
+        actions={
+          blocked ? (
+            <>
+              <DialogClose>
+                <Button type="button" variant="quiet">
+                  {t('cancel')}
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button type="button" variant="secondary" onClick={() => setIssuesOpen(true)}>
+                  {t('seeIssues')}
+                </Button>
+              </DialogClose>
+            </>
+          ) : (
+            <>
+              <DialogClose>
+                <Button type="button" variant="quiet" disabled={publishing}>
+                  {t('cancel')}
+                </Button>
+              </DialogClose>
+              <Button type="button" loading={publishing} onClick={() => void onPublish()}>
+                {t('confirmPublish')}
+              </Button>
+            </>
+          )
+        }
+      >
+        {!blocked && (
+          <>
+            {/*
+              Publicar no cambia lo que las cohortes ya tienen asignado (eso es
+              `PATCH /api/cohorts/assignments/[id]`); lo que sí abre es que las cohortes
+              abiertas que aún no tienen el tema puedan añadirlo. Se dice aquí, que es
+              donde se decide.
+            */}
+            {pendingCohorts.length > 0 && (
+              <p className="type-body text-text-muted max-w-reading">
+                {t('confirmPending', {
+                  count: pendingCohorts.length,
+                  list: pendingCohorts.map((cohort) => cohort.code).join(', '),
+                })}
+              </p>
             )}
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+
+            <div className="flex items-start gap-2">
+              <input
+                id="reabre"
+                type="checkbox"
+                checked={reopens}
+                onChange={(event) => {
+                  setReopens(event.target.checked);
+                  setDirty(true);
+                }}
+                className="border-border text-accent-base focus:ring-accent-base mt-0.5 h-6 w-6 rounded"
+              />
+              <label htmlFor="reabre" className="type-body text-text max-w-reading">
+                {t('reopensLabel')}
+              </label>
+            </div>
+          </>
+        )}
+      </Dialog>
     </>
   );
 }

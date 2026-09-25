@@ -22,13 +22,13 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
 import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/atoms/badge';
 import { PageHeader } from '@/components/templates/page';
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
 import { PageSection } from '@/components/templates/page';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import {
   AssessmentDetailsForm,
   type AssessmentLessonChoice,
@@ -561,70 +561,64 @@ export function AssessmentEditor({
         )}
       </EditorLayout>
 
-      <Dialog.Root open={confirming} onOpenChange={setConfirming}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
-          <Dialog.Content className="bg-surface-base elevation-modal rounded-sheet fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 space-y-4 p-6">
-            <Dialog.Title className="type-subheading text-text">{t('publishTitle')}</Dialog.Title>
-
-            {validation === null ? (
-              <Dialog.Description className="type-body text-text-muted">
-                {t('validating')}
-              </Dialog.Description>
-            ) : blocked ? (
-              <>
-                <Dialog.Description className="type-body text-text max-w-reading">
-                  {!canPublish
-                    ? t('blockedCapability')
-                    : t('blockedErrors', { count: errors.length })}
-                </Dialog.Description>
-                {blockedNumbers.length > 0 && (
-                  <p className="type-body text-text-muted max-w-reading">
-                    {t('blockedInQuestions', { list: blockedNumbers.join(', ') })}{' '}
-                    {needsAnswers && answers === null && t('blockedAnswersHidden')}
-                  </p>
-                )}
-                <Dialog.Close asChild>
-                  <Button type="button" variant="quiet">
-                    {t('cancel')}
-                  </Button>
-                </Dialog.Close>
-              </>
-            ) : (
-              <>
-                <Dialog.Description className="type-body text-text max-w-reading">
-                  {t('readyToPublish')}
-                </Dialog.Description>
-                {/* Igual que en el tema: publicar no cambia lo asignado; abre que las cohortes
-                    sin el examen puedan añadirlo. */}
-                {pendingCohorts.length > 0 && (
-                  <p className="type-body text-text-muted max-w-reading">
-                    {t('confirmPending', {
-                      count: pendingCohorts.length,
-                      list: pendingCohorts.map((cohort) => cohort.code).join(', '),
-                    })}
-                  </p>
-                )}
-                <div className="flex flex-wrap gap-3">
-                  <Button
-                    type="button"
-                    loading={publishing}
-                    disabled={saving}
-                    onClick={() => void onPublish()}
-                  >
-                    {t('confirmPublish')}
-                  </Button>
-                  <Dialog.Close asChild>
-                    <Button type="button" variant="quiet" disabled={publishing}>
-                      {t('cancel')}
-                    </Button>
-                  </Dialog.Close>
-                </div>
-              </>
-            )}
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+      {/* ── Publicar: un diálogo con lo que lo impide, o la confirmación ── */}
+      <Dialog
+        open={confirming}
+        onOpenChange={setConfirming}
+        locked={publishing}
+        title={t('publishTitle')}
+        description={
+          validation === null
+            ? t('validating')
+            : blocked
+              ? !canPublish
+                ? t('blockedCapability')
+                : t('blockedErrors', { count: errors.length })
+              : t('readyToPublish')
+        }
+        actions={
+          validation !== null && !blocked ? (
+            <>
+              <DialogClose>
+                <Button type="button" variant="quiet" disabled={publishing}>
+                  {t('cancel')}
+                </Button>
+              </DialogClose>
+              <Button
+                type="button"
+                loading={publishing}
+                disabled={saving}
+                onClick={() => void onPublish()}
+              >
+                {t('confirmPublish')}
+              </Button>
+            </>
+          ) : (
+            <DialogClose>
+              <Button type="button" variant="quiet">
+                {t('cancel')}
+              </Button>
+            </DialogClose>
+          )
+        }
+      >
+        {validation !== null && blocked && blockedNumbers.length > 0 && (
+          <p className="type-body text-text-muted max-w-reading">
+            {t('blockedInQuestions', { list: blockedNumbers.join(', ') })}{' '}
+            {needsAnswers && answers === null && t('blockedAnswersHidden')}
+          </p>
+        )}
+        {/* Igual que en el tema: publicar no cambia lo asignado; abre que las cohortes
+            sin el examen puedan añadirlo. */}
+        {validation !== null && !blocked && pendingCohorts.length > 0 && (
+          <p className="type-body text-text-muted max-w-reading">
+            {t('confirmPending', {
+              count: pendingCohorts.length,
+              list: pendingCohorts.map((cohort) => cohort.code).join(', '),
+            })}
+          </p>
+        )}
+      </Dialog>
     </>
   );
 }

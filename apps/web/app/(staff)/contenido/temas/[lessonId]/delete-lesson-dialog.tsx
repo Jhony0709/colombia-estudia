@@ -11,11 +11,11 @@
  * motion (`.dialog-overlay` / `.dialog-panel`).
  */
 
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import * as Dialog from '@radix-ui/react-dialog';
 import { Button } from '@/components/atoms/button';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Alert } from '@/components/atoms/alert';
 import { FormField, FormInput } from '@/components/atoms/form-field';
 import { apiErrorText } from '@/lib/http/api-error-text';
@@ -31,7 +31,6 @@ export function DeleteLessonDialog({
 }) {
   const t = useTranslations('editor.delete');
   const router = useRouter();
-  const ids = { desc: useId() };
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState('');
   const [busy, setBusy] = useState(false);
@@ -73,53 +72,44 @@ export function DeleteLessonDialog({
       <Button type="button" variant="quiet" onClick={() => setOpen(true)}>
         {t('open')}
       </Button>
-      <Dialog.Root open={open} onOpenChange={(next) => !busy && setOpen(next)}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="dialog-overlay fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" />
-          <Dialog.Content
-            aria-describedby={ids.desc}
-            className="dialog-panel bg-surface-base elevation-modal rounded-card fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-[28rem] -translate-x-1/2 -translate-y-1/2 p-6"
-          >
-            <Dialog.Title className="type-subheading text-text">
-              {t('title', { title })}
-            </Dialog.Title>
-            <Dialog.Description id={ids.desc} className="type-body text-text-muted mt-2">
-              {t('body', { versions: usage.versions })}
-            </Dialog.Description>
-
-            <form
-              className="mt-4 space-y-4"
-              noValidate
-              onSubmit={(event) => {
-                event.preventDefault();
-                if (matches) void remove();
-              }}
-            >
-              <FormField label={t('confirmLabel', { title })} name="confirmTitle" required>
-                <FormInput
-                  name="confirmTitle"
-                  value={typed}
-                  onChange={(event) => setTyped(event.target.value)}
-                  autoComplete="off"
-                  spellCheck={false}
-                  disabled={busy}
-                />
-              </FormField>
-              {error !== null && <Alert severity="error">{error}</Alert>}
-              <div className="flex flex-wrap justify-end gap-2">
-                <Dialog.Close asChild>
-                  <Button type="button" variant="secondary" disabled={busy}>
-                    {t('cancel')}
-                  </Button>
-                </Dialog.Close>
-                <Button type="submit" loading={busy} disabled={!matches}>
-                  {t('confirm')}
-                </Button>
-              </div>
-            </form>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        locked={busy}
+        title={t('title', { title })}
+        description={t('body', { versions: usage.versions })}
+      >
+        <form
+          className="space-y-4"
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (matches) void remove();
+          }}
+        >
+          <FormField label={t('confirmLabel', { title })} name="confirmTitle" required>
+            <FormInput
+              name="confirmTitle"
+              value={typed}
+              onChange={(event) => setTyped(event.target.value)}
+              autoComplete="off"
+              spellCheck={false}
+              disabled={busy}
+            />
+          </FormField>
+          {error !== null && <Alert severity="error">{error}</Alert>}
+          <div className="flex flex-wrap justify-end gap-2">
+            <DialogClose>
+              <Button type="button" variant="secondary" disabled={busy}>
+                {t('cancel')}
+              </Button>
+            </DialogClose>
+            <Button type="submit" loading={busy} disabled={!matches}>
+              {t('confirm')}
+            </Button>
+          </div>
+        </form>
+      </Dialog>
     </>
   );
 }

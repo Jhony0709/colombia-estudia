@@ -3,14 +3,16 @@
 /**
  * El diálogo pequeño del editor: un par de campos y dos botones, centrado.
  *
- * Enlace, imagen, fórmula, otro idioma y vídeo son la misma pieza con campos distintos: un
- * `Dialog` de Radix —foco dentro, Escape cierra, el tabulador no se escapa— con un `<form>`
- * dentro para que Intro envíe. Los campos los pone quien lo abre.
+ * Enlace, imagen, fórmula, otro idioma y vídeo son la misma pieza con campos distintos: el
+ * `Dialog` general (`organisms/dialog`, 25/9) con un `<form>` dentro para que Intro envíe.
+ * El botón de enviar vive en la fila de acciones del diálogo, fuera del `<form>`, y lo
+ * apunta con `form=`: así la fila es la misma que en todos los diálogos y Intro sigue
+ * enviando. Los campos los pone quien lo abre.
  */
 
-import * as Dialog from '@radix-ui/react-dialog';
-import type { FormEvent, ReactNode } from 'react';
+import { useId, type FormEvent, type ReactNode } from 'react';
 import { Button } from '@/components/atoms/button';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 
 export interface EditorDialogProps {
   open: boolean;
@@ -37,41 +39,35 @@ export function EditorDialog({
   onSubmit,
   children,
 }: EditorDialogProps) {
+  const formId = useId();
   const submit = (event: FormEvent) => {
     event.preventDefault();
     void onSubmit();
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
-        <Dialog.Content className="bg-surface-base elevation-modal rounded-sheet fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 p-6">
-          <form onSubmit={submit} noValidate className="space-y-4">
-            <div className="space-y-1">
-              <Dialog.Title className="type-subheading text-text">{title}</Dialog.Title>
-              {description && (
-                <Dialog.Description className="type-caption text-text-muted">
-                  {description}
-                </Dialog.Description>
-              )}
-            </div>
-
-            {children}
-
-            <div className="flex flex-wrap gap-3">
-              <Button type="submit" loading={busy} disabled={disabled}>
-                {submitLabel}
-              </Button>
-              <Dialog.Close asChild>
-                <Button type="button" variant="quiet" disabled={busy}>
-                  {cancelLabel}
-                </Button>
-              </Dialog.Close>
-            </div>
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      locked={busy}
+      title={title}
+      description={description}
+      actions={
+        <>
+          <DialogClose>
+            <Button type="button" variant="quiet" disabled={busy}>
+              {cancelLabel}
+            </Button>
+          </DialogClose>
+          <Button type="submit" form={formId} loading={busy} disabled={disabled}>
+            {submitLabel}
+          </Button>
+        </>
+      }
+    >
+      <form id={formId} onSubmit={submit} noValidate className="space-y-4">
+        {children}
+      </form>
+    </Dialog>
   );
 }

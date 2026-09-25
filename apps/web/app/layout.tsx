@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { THEME_COOKIE, themeClass, themeColorScheme, toTheme } from '@/lib/theme/theme';
@@ -9,6 +9,7 @@ import { TooltipProvider } from '@/components/atoms/tooltip';
 import { ToastProvider } from '@/components/organisms/toaster';
 import { FocusManager } from '@/lib/a11y/focus-manager';
 import { SkipLink } from '@/lib/a11y/skip-link';
+import { StyleNonce } from '@/lib/csp/style-nonce';
 import { atkinson } from './fonts/sans';
 import './globals.css';
 
@@ -51,7 +52,14 @@ export async function generateViewport(): Promise<Viewport> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [messages, cookieStore] = await Promise.all([getMessages(), cookies()]);
+  const [messages, cookieStore, headerStore] = await Promise.all([
+    getMessages(),
+    cookies(),
+    headers(),
+  ]);
+  // El nonce que el middleware puso en la petición; las librerías que inyectan `<style>`
+  // (el bloqueo de scroll de los diálogos) lo necesitan o la CSP las rechaza.
+  const nonce = headerStore.get('x-nonce');
 
   /*
     El tema se decide AQUÍ, en el servidor, y por eso no parpadea: el HTML sale con la clase
@@ -82,6 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     },
                   }}
                 >
+                  <StyleNonce nonce={nonce} />
                   <SkipLink />
                   <FocusManager />
                   {/*

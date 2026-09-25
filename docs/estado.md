@@ -4824,6 +4824,51 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 25/9 — CSP en staging: el bloqueo de scroll de los diálogos iba sin nonce
+
+Jhonny pegó de la consola de staging: «Applying inline style violates … style-src 'self'
+'nonce-…' … a hash ('sha256-nzTg…')». El hash es exactamente el de la hoja que
+`react-remove-scroll` (el bloqueo de scroll de Radix `Dialog`) inyecta en un `<style>`
+propio al abrir cualquier diálogo (lo comprobé en staging: `sha256` de ese `<style>` ==
+el del mensaje). Sin nonce la CSP la rechaza y, de paso, el fondo del diálogo seguía
+haciendo scroll (`body { overflow: visible }`).
+
+- Esas librerías leen el nonce de `get-nonce`. Con confirmación de Jhonny: `get-nonce`
+  1.0.1 en `apps/web/package.json` (ya estaba en el lockfile como transitiva), y
+  `lib/csp/style-nonce.tsx` (`StyleNonce`, cliente, no pinta nada) que llama `setNonce()`
+  con el `x-nonce` que el middleware deja en la petición; el layout raíz lo lee con
+  `headers()` y lo monta antes de `SkipLink`.
+- **Jhonny**: `pnpm install` para que el lockfile registre la dependencia (aquí solo pude
+  enlazar `apps/web/node_modules/get-nonce` a mano al store; `pnpm install --offline`
+  quería reinstalar todo el árbol y lo paré). Sin ese `pnpm install`, el build con
+  `--frozen-lockfile` falla.
+- Verificado en local (misma CSP con nonce): al abrir «Cerrar sesión» el `<style>` lleva el
+  mismo nonce que los scripts, la hoja se aplica y `body` queda `overflow: hidden`.
+- El otro error, `VM3:2 Cannot read properties of undefined (reading 'startTime')`: `VM3`
+  es un script inyectado (no un chunk de la app: extensión del navegador, DevTools o la
+  barra de Vercel), no sale de nuestro código ni de Sentry; no lo pude reproducir en
+  staging. Si aparece en una ventana de incógnito sin extensiones, lo miramos.
+
+## 25/9 — Un solo `Dialog`
+
+Jhonny: «el diálogo de publicar versión no usa el diálogo con blur; debe ser un único
+componente dialog general». Tenía razón: había siete diálogos montados a mano sobre Radix y
+solo dos (cerrar sesión, eliminar tema) llevaban el desenfoque y el motion del 23/9.
+
+- Nuevo `components/organisms/dialog` (`Dialog`, `DialogClose`): fondo oscurecido y
+  desenfocado, grow/fade con los tokens, título, descripción, cuerpo y acciones a la derecha
+  con la principal al final; `locked` mientras hay petición en vuelo; `scroll` para cuerpos
+  largos. `reference/03-ui/layout-y-componentes.md` §3.
+- Migrados: `LogoutDialog`, publicar tema (`lesson-editor`), publicar examen
+  (`assessment-editor`), `DeleteLessonDialog`, `MediaSettingsDialog`, `EditorDialog` del
+  editor de bloques (el botón de enviar apunta al `<form>` con `form=`) y la confirmación
+  de entrega de `AttemptPlayer`. Ya no queda ningún `@radix-ui/react-dialog` fuera de
+  `Dialog`, `Sheet` y el cajón de `SideNav`.
+- `Sheet` y el cajón de navegación: mismo fondo desenfocado; entran deslizando desde su
+  borde y salen con fade (`.sheet-panel`, `.drawer-panel` en `globals.css`).
+- Verificado en Chrome: «Publicar esta versión» en `TEM-0002` abre el diálogo con el fondo
+  desenfocado y «Cancelar · Sí, publicar» a la derecha; cancelado sin publicar. `tsc` en cero.
+
 ## 25/9 — El código va en la URL
 
 Jhonny: «el slug de todos los cambiados debe corresponder». Las fichas se abren por el

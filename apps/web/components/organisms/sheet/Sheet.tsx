@@ -41,10 +41,10 @@ export function Sheet({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
+        <Dialog.Overlay className="dialog-overlay fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" />
         <Dialog.Content
           className={cn(
-            'bg-surface-base elevation-modal fixed inset-y-0 right-0 z-50 flex w-full flex-col',
+            'sheet-panel bg-surface-base elevation-modal fixed inset-y-0 right-0 z-50 flex w-full flex-col',
             size === 'reading' ? 'sm:max-w-[48rem]' : 'sm:max-w-[28rem]'
           )}
         >

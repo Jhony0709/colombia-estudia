@@ -17,8 +17,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/atoms/button';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Alert } from '@/components/atoms/alert';
-import * as Dialog from '@radix-ui/react-dialog';
 import { apiErrorText } from '@/lib/http/api-error-text';
 
 export interface MediaItem {
@@ -122,114 +122,110 @@ export function MediaSettingsDialog({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(next) => !next && onClose()}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
-        <Dialog.Content className="bg-surface-base elevation-modal rounded-sheet fixed left-1/2 top-1/2 z-50 max-h-[calc(100%-2rem)] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 -translate-y-1/2 space-y-3 overflow-y-auto p-6">
-          <Dialog.Title className="type-subheading text-text">
-            {t('mediaSettingsTitle', { kind: t(`mediaKind.${item.kind}`) })}
-          </Dialog.Title>
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            {vimeo !== null && (
-              <a
-                href={vimeo}
-                target="_blank"
-                rel="noreferrer"
-                className="type-caption text-text-link underline"
-              >
-                {`vimeo.com/${item.providerRef}`}
-              </a>
-            )}
-            {item.durationSeconds !== null && (
-              <span className="type-caption text-text-muted">
-                {t('mediaMinutes', { minutes: Math.max(1, Math.round(item.durationSeconds / 60)) })}
-              </span>
-            )}
-          </div>
-
-          <Dialog.Description className="type-caption text-text-muted max-w-reading">
-            {item.captionsSource === 'REVIEWED'
-              ? t('mediaOkReviewed')
-              : item.hasTranscript
-                ? t('mediaOkTranscript')
-                : item.missingCaptions
-                  ? t('mediaBlocked')
-                  : t('mediaNothingNeeded')}
-          </Dialog.Description>
-
-          {needs && item.missingCaptions && (
-            <>
-              {error !== null && <Alert severity="error">{error}</Alert>}
-
-              <div>
-                <label
-                  htmlFor={`transcript-${item.mediaAssetId}`}
-                  className="type-label text-text block"
-                >
-                  {t('videoTranscript')}
-                </label>
-                <p className="type-caption text-text-muted max-w-reading">
-                  {t('videoTranscriptHint')}
-                </p>
-                <textarea
-                  id={`transcript-${item.mediaAssetId}`}
-                  rows={5}
-                  value={transcript}
-                  onChange={(event) => setTranscript(event.target.value)}
-                  className="border-border bg-surface-base text-text type-body rounded-control mt-1 w-full border p-3"
-                />
-              </div>
-
-              {/* La casilla es la ÚNICA vía a `REVIEWED`, y por eso está redactada como una
-              afirmación de quien la marca y no como un ajuste: la API de Vimeo no distingue
-              unos subtítulos automáticos de unos escritos a mano, y por oEmbed ni se ven. */}
-              {item.kind === 'VIDEO' && (
-                <div className="min-h-touch flex items-start gap-3 py-1">
-                  <input
-                    id={`reviewed-${item.mediaAssetId}`}
-                    type="checkbox"
-                    checked={reviewed}
-                    onChange={(event) => setReviewed(event.target.checked)}
-                    className="border-border text-accent-base focus:ring-accent-base mt-0.5 h-6 w-6 shrink-0 rounded"
-                  />
-                  <label
-                    htmlFor={`reviewed-${item.mediaAssetId}`}
-                    className="type-body text-text max-w-reading cursor-pointer"
-                  >
-                    {t('videoReviewed')}
-                    <span className="type-caption text-text-muted block">
-                      {t('videoReviewedHint')}
-                    </span>
-                  </label>
-                </div>
-              )}
-
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  type="button"
-                  loading={busy}
-                  disabled={transcript.trim() === '' && !reviewed}
-                  onClick={() => void save()}
-                >
-                  {t('mediaSave')}
-                </Button>
-                <Dialog.Close asChild>
-                  <Button type="button" variant="quiet" disabled={busy}>
-                    {t('cancel')}
-                  </Button>
-                </Dialog.Close>
-              </div>
-            </>
-          )}
-          {!(needs && item.missingCaptions) && (
-            <Dialog.Close asChild>
-              <Button type="button" variant="secondary">
+    <Dialog
+      open={open}
+      onOpenChange={(next) => !next && onClose()}
+      locked={busy}
+      size="lg"
+      scroll
+      title={t('mediaSettingsTitle', { kind: t(`mediaKind.${item.kind}`) })}
+      description={
+        item.captionsSource === 'REVIEWED'
+          ? t('mediaOkReviewed')
+          : item.hasTranscript
+            ? t('mediaOkTranscript')
+            : item.missingCaptions
+              ? t('mediaBlocked')
+              : t('mediaNothingNeeded')
+      }
+      actions={
+        needs && item.missingCaptions ? (
+          <>
+            <DialogClose>
+              <Button type="button" variant="quiet" disabled={busy}>
                 {t('cancel')}
               </Button>
-            </Dialog.Close>
+            </DialogClose>
+            <Button
+              type="button"
+              loading={busy}
+              disabled={transcript.trim() === '' && !reviewed}
+              onClick={() => void save()}
+            >
+              {t('mediaSave')}
+            </Button>
+          </>
+        ) : (
+          <DialogClose>
+            <Button type="button" variant="secondary">
+              {t('cancel')}
+            </Button>
+          </DialogClose>
+        )
+      }
+    >
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        {vimeo !== null && (
+          <a
+            href={vimeo}
+            target="_blank"
+            rel="noreferrer"
+            className="type-caption text-text-link underline"
+          >
+            {`vimeo.com/${item.providerRef}`}
+          </a>
+        )}
+        {item.durationSeconds !== null && (
+          <span className="type-caption text-text-muted">
+            {t('mediaMinutes', { minutes: Math.max(1, Math.round(item.durationSeconds / 60)) })}
+          </span>
+        )}
+      </div>
+
+      {needs && item.missingCaptions && (
+        <>
+          {error !== null && <Alert severity="error">{error}</Alert>}
+
+          <div>
+            <label
+              htmlFor={`transcript-${item.mediaAssetId}`}
+              className="type-label text-text block"
+            >
+              {t('videoTranscript')}
+            </label>
+            <p className="type-caption text-text-muted max-w-reading">{t('videoTranscriptHint')}</p>
+            <textarea
+              id={`transcript-${item.mediaAssetId}`}
+              rows={5}
+              value={transcript}
+              onChange={(event) => setTranscript(event.target.value)}
+              className="border-border bg-surface-base text-text type-body rounded-control mt-1 w-full border p-3"
+            />
+          </div>
+
+          {/* La casilla es la ÚNICA vía a `REVIEWED`, y por eso está redactada como una
+              afirmación de quien la marca y no como un ajuste: la API de Vimeo no distingue
+              unos subtítulos automáticos de unos escritos a mano, y por oEmbed ni se ven. */}
+          {item.kind === 'VIDEO' && (
+            <div className="min-h-touch flex items-start gap-3 py-1">
+              <input
+                id={`reviewed-${item.mediaAssetId}`}
+                type="checkbox"
+                checked={reviewed}
+                onChange={(event) => setReviewed(event.target.checked)}
+                className="border-border text-accent-base focus:ring-accent-base mt-0.5 h-6 w-6 shrink-0 rounded"
+              />
+              <label
+                htmlFor={`reviewed-${item.mediaAssetId}`}
+                className="type-body text-text max-w-reading cursor-pointer"
+              >
+                {t('videoReviewed')}
+                <span className="type-caption text-text-muted block">{t('videoReviewedHint')}</span>
+              </label>
+            </div>
           )}
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </>
+      )}
+    </Dialog>
   );
 }
