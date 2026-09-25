@@ -126,6 +126,9 @@ importers:
       date-fns-tz:
         specifier: ^3.2.0
         version: 3.2.0(date-fns@4.4.0)
+      get-nonce:
+        specifier: 1.0.1
+        version: 1.0.1
       lucide-react:
         specifier: ^1.46.0
         version: 1.46.0(react@18.3.1)
