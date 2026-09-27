@@ -1,7 +1,7 @@
 /**
  * El registro público, visto desde la institución (Fase B, 23/9): en qué cohorte entra
  * quien se registra.
- * SSOT: docs/plan-redefinicion-2009.md Fase B.1 («`Institution.settings.introCohortId`,
+ * SSOT: docs/plan-redefinicion-2009.md Fase B.1 (hoy `Institution.introCohortId`, columna desde el 25/9;
  * elegida en `/admin/institucion` entre las cohortes abiertas»).
  */
 
@@ -9,8 +9,6 @@ import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
-import { parseInstitutionSettings } from '@/lib/institution/settings';
-import type { JsonObject } from '@/lib/db/prisma';
 
 export interface RegistrationCohortOption {
   id: string;
@@ -56,7 +54,10 @@ export async function getRegistrationSettings(
   const db = createTenantClient(institutionId);
 
   const [institution, cohorts] = await Promise.all([
-    db.institution.findUniqueOrThrow({ where: { id: institutionId }, select: { settings: true } }),
+    db.institution.findUniqueOrThrow({
+      where: { id: institutionId },
+      select: { introCohortId: true },
+    }),
     db.cohort.findMany({
       where: { status: { in: ['PLANNED', 'OPEN'] } },
       orderBy: [{ status: 'asc' }, { startsOn: 'desc' }],
@@ -64,7 +65,7 @@ export async function getRegistrationSettings(
     }),
   ]);
 
-  const { introCohortId = null } = parseInstitutionSettings(institution.settings);
+  const introCohortId = institution.introCohortId;
   const candidates = cohorts.map(toOption);
   const introCohort = candidates.find((c) => c.id === introCohortId) ?? null;
 
@@ -99,16 +100,12 @@ export async function updateRegistrationSettings({
   await db.$transaction(async (tx) => {
     const current = await tx.institution.findUniqueOrThrow({
       where: { id: institutionId },
-      select: { settings: true },
+      select: { introCohortId: true },
     });
-    const settings = parseInstitutionSettings(current.settings);
-    const before = settings.introCohortId ?? null;
+    const before = current.introCohortId;
     if (before === introCohortId) return;
 
-    await tx.institution.update({
-      where: { id: institutionId },
-      data: { settings: { ...settings, introCohortId } as JsonObject },
-    });
+    await tx.institution.update({ where: { id: institutionId }, data: { introCohortId } });
     await tx.auditLog.create({
       data: {
         institutionId,

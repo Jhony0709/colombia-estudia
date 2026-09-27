@@ -26,7 +26,7 @@
 import Link from 'next/link';
 import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { FormField, FormInput } from '@/components/atoms/form-field';
+import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
 import { Button } from '@/components/atoms/button';
 import { Tooltip } from '@/components/atoms/tooltip';
 import { DataTable } from '@/components/molecules/data-table';
@@ -36,6 +36,14 @@ import type {
   CurriculumProgram,
 } from '@/features/admin/server/curriculum.service';
 import { CurriculumFeedback, useCurriculumSend, type Send } from '../curriculum-send';
+import {
+  PROGRAM_KINDS,
+  PROGRAM_PRICINGS,
+  type ProgramKind,
+  type ProgramPricing,
+} from '@/lib/programs/kinds';
+import { ProgramPrices } from './program-prices';
+import { EditModuleDialog } from './edit-module-dialog';
 
 export function ProgramsManager({ programs }: { programs: CurriculumProgram[] }) {
   const t = useTranslations('admin.curriculum');
@@ -105,9 +113,11 @@ export function ProgramsManager({ programs }: { programs: CurriculumProgram[] })
             cell: (program) => (
               <div className="min-w-0">
                 <p className="type-body text-text m-0">{program.name}</p>
-                {program.description && (
-                  <p className="type-caption text-text-muted m-0">{program.description}</p>
-                )}
+                <p className="type-caption text-text-muted m-0">
+                  {t(`kind.${program.kind}`)}
+                  {program.pricing === 'FREE' ? ` · ${t('pricing.FREE')}` : ''}
+                  {program.description ? ` · ${program.description}` : ''}
+                </p>
               </div>
             ),
           },
@@ -235,6 +245,8 @@ function ProgramDetail({
         </div>
       )}
       <ModuleList program={program} busy={busy} send={send} />
+      {/* La lista de precios (25/9): lo que cuesta el programa y a qué grados aplica. */}
+      <ProgramPrices programId={program.id} prices={program.prices} busy={busy} send={send} />
     </div>
   );
 }
@@ -243,6 +255,8 @@ interface ProgramValues {
   code: string;
   name: string;
   description: string;
+  kind: ProgramKind;
+  pricing: ProgramPricing;
   defaultAccessDays: number;
 }
 
@@ -262,6 +276,8 @@ export function ProgramForm({
     code: initial?.code ?? '',
     name: initial?.name ?? '',
     description: initial?.description ?? '',
+    kind: initial?.kind ?? 'OTRO',
+    pricing: initial?.pricing ?? 'PAID',
     defaultAccessDays: initial?.defaultAccessDays ?? 300,
   });
 
@@ -322,6 +338,34 @@ export function ProgramForm({
           </FormField>
         </div>
       </div>
+      {/* Qué vende (25/9): la lista de los clientes. `OTRO` para lo que no encaje. */}
+      <FormField label={t('programKind')} name="kind" required>
+        <FormSelect
+          name="kind"
+          value={values.kind}
+          onChange={(e) => setValues((v) => ({ ...v, kind: e.target.value as ProgramKind }))}
+        >
+          {PROGRAM_KINDS.map((kind) => (
+            <option key={kind} value={kind}>
+              {t(`kind.${kind}`)}
+            </option>
+          ))}
+        </FormSelect>
+      </FormField>
+      {/* Gratuito o de pago (25/9): en uno gratuito un menor entra sin acudiente. */}
+      <FormField label={t('programPricing')} name="pricing" required hint={t('programPricingHint')}>
+        <FormSelect
+          name="pricing"
+          value={values.pricing}
+          onChange={(e) => setValues((v) => ({ ...v, pricing: e.target.value as ProgramPricing }))}
+        >
+          {PROGRAM_PRICINGS.map((pricing) => (
+            <option key={pricing} value={pricing}>
+              {t(`pricing.${pricing}`)}
+            </option>
+          ))}
+        </FormSelect>
+      </FormField>
       <FormField label={t('programDescription')} name="description">
         <FormInput
           name="description"
@@ -352,6 +396,9 @@ function ModuleList({
   const [confirming, setConfirming] = useState<{ id: string; op: 'archive' | 'delete' } | null>(
     null
   );
+  // El componente que se edita (25/9), en `EditModuleDialog`. Antes era un formulario en la
+  // fila; con descripción y cierre no cabía.
+  const [editing, setEditing] = useState<CurriculumModule | null>(null);
   const listId = useId();
   const last = program.modules.length - 1;
 
@@ -386,7 +433,18 @@ function ModuleList({
             narrow: true,
             cell: (module) => <span className="font-mono">{module.code}</span>,
           },
-          { key: 'name', header: t('table.module'), cell: (module) => module.name },
+          {
+            key: 'name',
+            header: t('table.module'),
+            cell: (module) => module.name,
+          },
+          {
+            key: 'grade',
+            header: t('table.grade'),
+            narrow: true,
+            cell: (module) =>
+              module.grade === null ? '—' : t('gradeShort', { grade: module.grade }),
+          },
           {
             key: 'lessons',
             header: t('table.lessons'),
@@ -450,6 +508,10 @@ function ModuleList({
                     </>
                   ) : (
                     <>
+                      <Button variant="quiet" disabled={busy} onClick={() => setEditing(module)}>
+                        {t('edit')}
+                        <span className="sr-only"> {module.name}</span>
+                      </Button>
                       <Button
                         variant="quiet"
                         disabled={busy}
@@ -505,6 +567,16 @@ function ModuleList({
           {t('add')}
         </Button>
       </form>
+
+      {editing !== null && (
+        <EditModuleDialog
+          key={editing.id}
+          module={editing}
+          busy={busy}
+          send={send}
+          onClose={() => setEditing(null)}
+        />
+      )}
     </div>
   );
 }

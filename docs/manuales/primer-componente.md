@@ -40,15 +40,23 @@ ejemplo 365). Guardar.
 En la fila del programa, abrir el chevron y en «Nombre del nuevo componente» escribir
 «Gestión emocional y riesgos psicosociales» → «Añadir». Es el componente 1 del programa.
 
-## 3. Temas de lectura (cuatro)
+## 3. Temas de lectura (cinco)
 
 Contenido → Temas → «Nuevo tema», por cada uno: título, programa «Introducción», componente
 «Gestión emocional…», asignatura «BDP», y **sin** marcar «Este tema se completa con una
 actividad revisada». Crear.
 
-En el editor de cada tema, pegar el texto por bloques (párrafos, listas, encabezados). Los
-encabezados no pueden saltar niveles (`##` y luego `###`, nunca `####` directo). Guardar el
-borrador y **Publicar**; la publicación valida y dice qué falta.
+En el editor de cada tema, pasar la tarjeta «Contenido del tema» a la vista **Markdown** y
+pegar el bloque del tema tal como está en `primer-componente-contenido.md`; al volver a
+«Bloques» queda separado en secciones, párrafos y listas. Los encabezados empiezan en `##` y
+no saltan niveles (`##` y luego `###`, nunca `####` directo). Guardar el borrador y
+**Publicar**; la publicación valida y dice qué falta.
+
+Los cinco, en este orden: «APRENDER ES AVANZAR», «TALLER 1. GESTIÓN DE EMOCIONES»,
+«RIESGOS PSICOSOCIALES Y EL ESTRÉS», «RESOLUCIÓN DE CONFLICTOS, REDES DE APOYO Y CUIDADO
+PERSONAL» y, **después de los dos temas con actividad del paso 4**, «ASPECTOS A
+REFLEXIONAR» (el orden de la nota de voz: taller → actividades → reflexión →
+cuestionario). El orden se ajusta en «Construir la ruta» (paso 6).
 
 Para el video de introducción: subirlo a Vimeo, y en el editor pegar la dirección
 `https://vimeo.com/…` en un bloque vacío: se convierte en bloque de video. En el engranaje
@@ -89,7 +97,7 @@ documento casi siempre es la más larga. Publicar.
 
 Contenido → Programas → «Construir la ruta» del programa «Introducción»: el orden que
 recorrerá el estudiante. Debe quedar: introducción, tres talleres, actividad 1, actividad
-2, cuestionario. Reordenar con subir/bajar si hace falta.
+2, aspectos a reflexionar, cuestionario. Reordenar con subir/bajar si hace falta.
 
 ## 7. Cohorte
 
@@ -105,8 +113,9 @@ apertura revisa que la ruta esté completa.
 
 Administración → Institución → «Registro público» → «Cohorte de introducción»: elegir
 «INTRO-2026» y guardar. Desde ese momento, quien se registre en `/registro` entra a
-estudiar en el acto (mayores de edad; un menor se crea sin matrícula y operación lo
-matricula con su acudiente).
+estudiar en el acto, también los menores de edad (25/9, clientes: el componente de
+introducción es gratuito y un menor se inscribe solo; el acudiente hace falta al pasar a un
+programa de pago).
 
 ## 9. Probar como estudiante
 
@@ -119,5 +128,6 @@ del componente.
 ## Qué no hace la plataforma todavía
 
 - Un video de introducción distinto por componente sin tema: hoy el video va en un tema.
-- «Aspectos a reflexionar» como pieza propia: va como cierre del último taller.
-- El cierre del cuestionario es un texto general para toda la plataforma, no por componente.
+- Desde el 25/9 el componente sí tiene descripción y texto de cierre propios: Programas →
+  fila del programa → componente → «Editar». El cierre del documento («Aprender es avanzar.
+  Cada persona tiene una historia diferente…») va ahí, tal cual, en «Texto de cierre».

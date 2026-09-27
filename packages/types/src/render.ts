@@ -32,6 +32,7 @@ import type { Root } from 'mdast';
 import type { Node, Parent } from 'unist';
 
 import type { LessonAssetInfo } from './content';
+import { CALLOUT_TITLES, isCalloutKind } from './callouts';
 
 /** Lo que el render necesita saber de cada asset para poder pintarlo. */
 export interface RenderAsset {
@@ -102,6 +103,24 @@ function directivesToHtml(assets: Map<string, RenderAsset>) {
           hName: 'span',
           hProperties: value === '' ? {} : { lang: value },
         };
+        return;
+      }
+
+      // Un callout (27/9): `<aside class="callout callout-<kind>">` con su título como primer
+      // párrafo. El cuerpo sigue siendo Markdown y pasa por el mismo saneado que todo.
+      if (name === 'callout' && node.type === 'containerDirective') {
+        const kind = directive.attributes?.kind ?? 'note';
+        const safeKind = isCalloutKind(kind) ? kind : 'note';
+        const title = directive.attributes?.title?.trim() || CALLOUT_TITLES[safeKind];
+        directive.data = {
+          hName: 'aside',
+          hProperties: { className: ['callout', `callout-${safeKind}`] },
+        };
+        (directive as unknown as { children: unknown[] }).children.unshift({
+          type: 'paragraph',
+          data: { hProperties: { className: ['callout-title'] } },
+          children: [{ type: 'text', value: title }],
+        });
         return;
       }
 
@@ -184,8 +203,14 @@ function resolveImages(assets: Map<string, RenderAsset>) {
       // un tercero desde el navegador de quien escribe, enseñando algo que nunca se
       // publicará.
       if (!match?.[1]) {
+        // Una URL vacía es el marcador que el editor pone mientras sube la imagen pegada
+        // (`![Subiendo x…]()`, 27/9): su `alt` ya dice lo que pasa y se respeta. El consejo es
+        // para la URL externa, que es la que hay que cambiar.
+        const isPlaceholder = node.url.trim() === '' && !!node.alt && node.alt.trim() !== '';
         node.url = '';
-        node.alt = 'Las imágenes se suben a la biblioteca y se citan como asset:<id>';
+        if (!isPlaceholder) {
+          node.alt = 'Las imágenes se suben a la biblioteca y se citan como asset:<id>';
+        }
         return;
       }
 
@@ -253,6 +278,7 @@ export const lessonSchema: SanitizeSchema = {
     ...(defaultSchema.tagNames ?? []),
     'figure',
     'figcaption',
+    'aside',
     'iframe',
     'audio',
     'source',
@@ -268,6 +294,7 @@ export const lessonSchema: SanitizeSchema = {
     a: [...(defaultSchema.attributes?.a ?? []), 'download'],
     img: [...(defaultSchema.attributes?.img ?? []), 'loading'],
     figure: ['className'],
+    aside: ['className'],
     p: ['className', 'role'],
     // El genérico va PRIMERO: si fuera después pisaría las entradas de `math` y
     // `annotation` de abajo, y `display="block"` y `encoding` se perderían por el camino.
@@ -312,4 +339,65 @@ export function renderLessonHtml(
 
   const lang = options.language;
   return lang ? `<div lang="${lang}">${html}</div>` : html;
+}
+
+// ───────────────────────── inline (preguntas de examen) ─────────────────────────
+
+/** Lo que cabe dentro de una frase: énfasis, código, tachado, enlace, salto y fórmula. */
+const inlineSchema: SanitizeSchema = {
+  ...defaultSchema,
+  tagNames: ['strong', 'em', 'code', 'del', 'br', 'sub', 'sup', 'a', ...MATHML_TAGS],
+  attributes: {
+    a: ['href'],
+    ...Object.fromEntries(MATHML_TAGS.map((tag) => [tag, ['mathvariant', 'displaystyle']])),
+    math: ['xmlns', 'display', 'mathvariant', 'displaystyle'],
+    annotation: ['encoding'],
+    semantics: [],
+  },
+  protocols: { href: ['http', 'https', 'mailto'] },
+  // Sin `p`, `ul`, `h1`… en `tagNames`, el saneador los desenvuelve y deja el texto.
+  strip: ['script', 'style', 'img', 'iframe', 'audio', 'video'],
+};
+
+/** Varios párrafos en una frase: se separan con `<br>`, no se pegan. */
+function paragraphsToBreaks() {
+  return (tree: Node) => {
+    const root = tree as Parent;
+    const out: Node[] = [];
+    for (const child of root.children) {
+      const el = child as Parent & { tagName?: string; value?: string };
+      // `remark-rehype` deja un texto «\n» entre bloques hermanos; sin bloques, sobra.
+      if (el.type === 'text' && (el.value ?? '').trim() === '') continue;
+      if (el.type === 'element' && el.tagName === 'p') {
+        if (out.length > 0) {
+          out.push({ type: 'element', tagName: 'br', properties: {}, children: [] } as Node);
+        }
+        out.push(...el.children);
+      } else {
+        out.push(child);
+      }
+    }
+    root.children = out;
+  };
+}
+
+/**
+ * Markdown de una frase → HTML seguro **sin bloques** (27/9). Para el texto de una pregunta
+ * de examen, sus opciones y su retroalimentación: negrita, cursiva, código, fórmula
+ * (`$…$`) y enlace; nada de imágenes, tablas ni títulos, que en una pregunta no caben. Un
+ * `**` escrito por el autor deja de verse como `**`.
+ */
+export function renderInlineHtml(markdown: string): string {
+  return unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkMath)
+    .use(remarkRehype)
+    .use(rehypeKatex, { output: 'mathml' })
+    .use(paragraphsToBreaks)
+    .use(rehypeSanitize, inlineSchema)
+    .use(rehypeStringify)
+    .processSync(markdown)
+    .toString()
+    .trim();
 }

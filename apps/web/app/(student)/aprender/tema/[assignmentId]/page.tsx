@@ -20,11 +20,13 @@ import { EmptyState } from '@/components/molecules/empty-state';
 import { Alert } from '@/components/atoms/alert';
 import { Button } from '@/components/atoms/button';
 import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
-import { ArrowLeft, ArrowRight, CircleCheck } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, CircleCheck, Target } from 'lucide-react';
+import { Callout } from '@/components/atoms/callout';
 import { EvidenceRecorder } from './evidence-recorder';
 import { SubmissionForm } from './submission-form';
 import { TranscriptPanel } from './transcript-panel';
 import { LessonTools } from './lesson-tools';
+import { ReadingProgress } from './reading-progress';
 import { TaskBar, TaskMode } from '@/components/organisms/task-mode';
 import { PrimaryActionTracker } from '@/components/molecules/primary-action-tracker';
 import { RouteRail, WithRouteRail } from '../../route-rail';
@@ -141,26 +143,35 @@ export default async function LessonPage({
     <Page wide>
       {/* Modo tarea (E2, 23/9): en el teléfono, la barra global se va y esta la sustituye. */}
       <TaskMode />
+      {/* Avance de lectura (27/9): la línea fina del borde superior; solo si el texto no cabe. */}
+      <ReadingProgress />
       <TaskBar
         backHref={`/aprender?matricula=${lesson.enrollmentId}#ruta`}
         backLabel={t('task.back')}
         place={meta}
         action={<LessonTools assignmentId={lesson.assignmentId} compact />}
       />
-      <PageHeader
-        overline={meta}
-        title={lesson.title}
-        description={lesson.learningObjective ?? undefined}
-        action={<LessonTools assignmentId={lesson.assignmentId} />}
-      />
-
-      {/* La ruta al lado (21/9): dónde estoy y qué sigue, sin volver al panel. */}
+      {/* La ruta al lado (21/9): dónde estoy y qué sigue, sin volver al panel. La cabecera va
+          en la columna del contenido (27/9). */}
       <WithRouteRail
         rail={
           <RouteRail
             modules={view.route}
             currentId={lesson.assignmentId}
             enrollmentId={lesson.enrollmentId}
+          />
+        }
+        header={
+          <PageHeader
+            overline={meta}
+            title={lesson.title}
+            // Bajo `lg` la barra de tarea ya lleva las herramientas (compactas): dos «…»
+            // en la misma pantalla era lo que se veía en el teléfono (auditoría 27/9).
+            action={
+              <div className="hidden lg:block">
+                <LessonTools assignmentId={lesson.assignmentId} />
+              </div>
+            }
           />
         }
       >
@@ -170,6 +181,19 @@ export default async function LessonPage({
           <Alert severity="warning">
             {t('lesson.missingAssets', { count: lesson.missingAssets.length })}
           </Alert>
+        )}
+
+        {/* El objetivo (27/9) como recuadro y no como subtítulo gris: es lo primero que se lee
+            y dice para qué sirve el tema. Mismo `Callout` que un `:::callout` del contenido. */}
+        {lesson.learningObjective && (
+          <Callout
+            kind="important"
+            title={t('lesson.objective')}
+            icon={<Target aria-hidden className="size-4 shrink-0" />}
+            className="max-w-reading"
+          >
+            <p className="type-body text-text m-0">{lesson.learningObjective}</p>
+          </Callout>
         )}
 
         {/*
@@ -223,6 +247,7 @@ export default async function LessonPage({
             )}
             <p className="type-caption text-text-muted">
               {t(`activity.accepts.${lesson.activity.accepts}`)}
+              {lesson.activity.autoApprove ? ` ${t('activity.autoApprove')}` : ''}
             </p>
           </section>
         )}
@@ -293,7 +318,9 @@ function placeInRoute(
  * La barra fija del pie (23/9, `docs/ux/decision-ux-2309.md`): a la izquierda qué falta o
  * qué pasó; a la derecha **una** acción que cambia con el estado:
  *
- * - tema con actividad sin entregar → «Enviar actividad» (baja a «Practica»);
+ * - tema con actividad sin entregar → «Ir a la actividad» (baja a «Practica»; hasta el 27/9
+ *   decía «Enviar actividad», igual que el botón real del formulario, y al pulsarlo con el
+ *   formulario ya a la vista no pasaba nada visible: ni enviaba ni avisaba);
  * - actividad devuelta → «Enviar nueva versión»; en revisión → nada que pulsar, se dice;
  * - siguiente habilitado → «Siguiente: …» o «Ir al examen: …»;
  * - siguiente bloqueado → se dice qué falta, sin botón que no lleve a ninguna parte.
@@ -356,7 +383,7 @@ async function LessonNav({
       <Button asChild>
         <a href="#practica">
           {submission === 'RETURNED' ? t('bar.resend') : t('bar.send')}
-          <ArrowRight aria-hidden className="size-4 shrink-0" />
+          <ArrowDown aria-hidden className="size-4 shrink-0" />
         </a>
       </Button>
     );
@@ -380,19 +407,10 @@ async function LessonNav({
           {statusText}
         </span>
       }
-      secondary={
-        <>
-          {previous ? <NavLink item={previous} direction="previous" /> : null}
-          {/* A la ruta de ESTE programa (21/9): con varias matrículas, `/aprender` a secas
-              abriría la más reciente, que puede ser otra. */}
-          <Link
-            href={`/aprender?matricula=${enrollmentId}#ruta`}
-            className="type-caption text-text-link min-h-touch inline-flex items-center underline"
-          >
-            {t('lesson.backToOutline')}
-          </Link>
-        </>
-      }
+      // «Volver a la ruta» se fue de aquí (auditoría 27/9): bajo `lg` lo lleva la barra de
+      // tarea y desde `lg` el riel («Ver toda la ruta»); en el pie era el tercer enlace de una
+      // barra que en el teléfono ocupaba tres filas.
+      secondary={previous ? <NavLink item={previous} direction="previous" /> : null}
       action={action}
     />
   );
@@ -417,7 +435,7 @@ async function NavLink({
 
   if (!item.enabled) {
     return (
-      <span className="type-caption text-text-muted block max-w-[20rem] text-right">
+      <span className="type-caption text-text-muted block text-left sm:max-w-[20rem] sm:text-right">
         {item.blockedBy === currentTitle
           ? t('lesson.completeToContinue', { title: item.title })
           : item.blockedBy
@@ -431,10 +449,15 @@ async function NavLink({
     return (
       <Button asChild>
         <Link href={href}>
-          <span className="max-w-[16rem] truncate">
+          {/* En el teléfono cabe «Siguiente» y poco más; el título completo va en el nombre
+              accesible. Desde `sm`, el título truncado a lo que quepa. */}
+          <span className="sr-only sm:not-sr-only sm:max-w-[16rem] sm:truncate lg:max-w-[18rem] xl:max-w-[24rem]">
             {item.kind === 'ASSESSMENT'
               ? t('lesson.nextExam', { title: item.title })
               : t('lesson.next', { title: item.title })}
+          </span>
+          <span aria-hidden className="sm:hidden">
+            {t('lesson.nextShort')}
           </span>
           <ArrowRight aria-hidden className="size-4 shrink-0" />
         </Link>
@@ -445,10 +468,15 @@ async function NavLink({
   return (
     <Link
       href={href}
-      className="text-text-link type-caption min-h-touch inline-flex items-center gap-1 underline"
+      className="text-text-link type-caption min-h-touch inline-flex min-w-0 items-center gap-1 underline"
     >
       <ArrowLeft aria-hidden className="size-4 shrink-0" />
-      <span className="max-w-[12rem] truncate">{t('lesson.previous', { title: item.title })}</span>
+      <span className="sr-only sm:not-sr-only sm:max-w-[12rem] sm:truncate">
+        {t('lesson.previous', { title: item.title })}
+      </span>
+      <span aria-hidden className="sm:hidden">
+        {t('lesson.previousShort')}
+      </span>
     </Link>
   );
 }

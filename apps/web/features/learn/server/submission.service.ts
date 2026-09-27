@@ -61,6 +61,66 @@ function fileNameOf(path: string): string {
 }
 
 /** La entrega vigente del estudiante para un tema, con la URL firmada del archivo. */
+type Tx = Omit<
+  ReturnType<typeof createTenantClient>,
+  '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
+>;
+
+/**
+ * Lo que una entrega aprobada hace con el tema (27/9): `LessonProgress` a `COMPLETED` con la
+ * entrega como evidencia y el `LearningEvent` de tema completado. Lo llaman la revisión del
+ * instructor (`cohorts/submissions.service.ts`) y la aprobación automática al enviar: es la
+ * misma regla en un solo sitio.
+ */
+export async function completeLessonBySubmission(
+  tx: Tx,
+  {
+    institutionId,
+    enrollmentId,
+    studentId,
+    lessonAssignmentId,
+    lessonVersionId,
+    submissionId,
+    now,
+  }: {
+    institutionId: string;
+    enrollmentId: string;
+    studentId: string;
+    lessonAssignmentId: string;
+    lessonVersionId: string;
+    submissionId: string;
+    now: Date;
+  }
+): Promise<void> {
+  await tx.lessonProgress.upsert({
+    where: { enrollmentId_lessonAssignmentId: { enrollmentId, lessonAssignmentId } },
+    create: {
+      institutionId,
+      enrollmentId,
+      studentId,
+      lessonAssignmentId,
+      lessonVersionId,
+      status: 'COMPLETED',
+      source: 'EVIDENCE',
+      evidence: { submissionId },
+      startedAt: now,
+      lastActivityAt: now,
+      completedAt: now,
+    },
+    update: { status: 'COMPLETED', source: 'EVIDENCE', lastActivityAt: now, completedAt: now },
+  });
+  await tx.learningEvent.create({
+    data: {
+      institutionId,
+      studentId,
+      enrollmentId,
+      type: 'lesson.completed',
+      payload: { assignmentId: lessonAssignmentId, form: 'SUBMISSION', submissionId },
+      occurredAt: now,
+    },
+  });
+}
+
 export async function getSubmissionForStudent({
   institutionId,
   enrollmentId,
@@ -146,6 +206,7 @@ export async function submitLesson({
           requiresSubmission: true,
           activityAccepts: true,
           activityPrompts: true,
+          activityAutoApprove: true,
         },
       },
     },
@@ -207,16 +268,21 @@ export async function submitLesson({
     throw new APIError('Esta actividad ya fue aprobada', 'CONFLICT');
   }
 
+  // Aprobación automática (27/9): la entrega nace `APPROVED`, sin revisor, y el tema se
+  // completa en la misma transacción. Nadie recibe «actividad por revisar».
+  const autoApprove = assignment.lesson.activityAutoApprove;
+
   const id = await db.$transaction(async (tx) => {
     const data = {
-      status: 'SUBMITTED' as const,
+      status: autoApprove ? ('APPROVED' as const) : ('SUBMITTED' as const),
       text,
       // Prisma quiere un JSON «plano»; un `Array` de objetos con tipo propio no le sirve tal cual.
       answers: answerRows ? (answerRows.map((a) => ({ ...a })) as JsonValue) : JSON_NULL,
       fileAssetId,
       submittedAt: now,
       reviewedById: null,
-      reviewedAt: null,
+      reviewedAt: autoApprove ? now : null,
+      feedback: null,
     };
     const row = existing
       ? await tx.submission.update({ where: { id: existing.id }, data, select: { id: true } })
@@ -256,26 +322,54 @@ export async function submitLesson({
           submissionId: row.id,
           resubmission: Boolean(existing),
           withFile: Boolean(fileAssetId),
+          autoApproved: autoApprove,
         },
         occurredAt: now,
       },
     });
 
+    if (autoApprove) {
+      await completeLessonBySubmission(tx, {
+        institutionId,
+        enrollmentId,
+        studentId: personId,
+        lessonAssignmentId: assignmentId,
+        lessonVersionId: assignment.lessonVersionId,
+        submissionId: row.id,
+        now,
+      });
+      await tx.auditLog.create({
+        data: {
+          institutionId,
+          actorId: null,
+          entity: 'submission',
+          entityId: row.id,
+          action: 'auto_approved',
+          before: { status: existing?.status ?? null },
+          after: { status: 'APPROVED', rule: 'lesson.activityAutoApprove' },
+          occurredAt: now,
+        },
+      });
+    }
+
     return row.id;
   });
 
-  // Aviso al equipo que revisa. Mejor esfuerzo: la entrega ya está guardada.
-  try {
-    const reviewers = await staffPersonIds(institutionId, ['INSTRUCTOR', 'ADMIN']);
-    await notifyMany(institutionId, reviewers, {
-      type: 'submission_received',
-      title: existing ? 'Actividad reenviada' : 'Actividad nueva por revisar',
-      body: `${assignment.lesson.title} · ${outline.cohort.code}`,
-      href: `/cohortes/${outline.cohort.id}/actividades?estado=SUBMITTED`,
-      dedupeKey: `submission_received:${id}:${now.toISOString().slice(0, 10)}`,
-    });
-  } catch {
-    // Un aviso que falla no deshace una entrega.
+  // Aviso al equipo que revisa —solo si hay algo que revisar—. Mejor esfuerzo: la entrega ya
+  // está guardada.
+  if (!autoApprove) {
+    try {
+      const reviewers = await staffPersonIds(institutionId, ['INSTRUCTOR', 'ADMIN']);
+      await notifyMany(institutionId, reviewers, {
+        type: 'submission_received',
+        title: existing ? 'Actividad reenviada' : 'Actividad nueva por revisar',
+        body: `${assignment.lesson.title} · ${outline.cohort.code}`,
+        href: `/cohortes/${outline.cohort.id}/actividades?estado=SUBMITTED`,
+        dedupeKey: `submission_received:${id}:${now.toISOString().slice(0, 10)}`,
+      });
+    } catch {
+      // Un aviso que falla no deshace una entrega.
+    }
   }
 
   const view = await getSubmissionForStudent({ institutionId, enrollmentId, assignmentId });

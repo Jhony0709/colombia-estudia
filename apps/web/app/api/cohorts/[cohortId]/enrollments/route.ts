@@ -13,6 +13,7 @@ const schema = z.object({
   personHandle: z.string().trim().min(1, 'Indica el documento o el correo de la persona'),
   /** Grado de entrada (20/9): posición del primer módulo de su ruta. Nulo = todo el programa. */
   startsAtModule: z.number().int().min(1).nullable().optional(),
+  entryGrade: z.number().int().min(0).max(13).nullable().optional(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -25,5 +26,6 @@ export const POST = apiHandler<Input>({ schema, capability: 'cohort.manage' })(
       cohortId: await routeParam(ctx.params, 'cohortId'),
       personHandle: input.personHandle,
       startsAtModule: input.startsAtModule ?? null,
+      entryGrade: input.entryGrade ?? null,
     })
 );

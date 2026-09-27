@@ -46,7 +46,7 @@ export interface PageHeaderProps {
   overline?: string;
   title: string;
   /** One or two lines saying what this screen is for. */
-  description?: string;
+  description?: ReactNode;
   /** The one primary action. Everything else belongs in the content. */
   action?: ReactNode;
   /** Breadcrumb or back link, rendered above the overline. */
@@ -57,8 +57,11 @@ export function PageHeader({ overline, title, description, action, back }: PageH
   return (
     <header className="space-y-3">
       {back}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="space-y-1">
+      {/* Desde `sm` la acción va a la derecha del título en la misma fila, aunque el título
+          ocupe tres líneas (27/9): antes `flex-wrap` + `items-end` la mandaba debajo en
+          cuanto el título era largo, y quedaba un botón suelto entre el título y el contenido. */}
+      <div className="flex flex-wrap items-start justify-between gap-4 sm:flex-nowrap">
+        <div className="min-w-0 space-y-1 sm:flex-1">
           {overline && <p className="type-overline text-text-muted uppercase">{overline}</p>}
           {/* FocusManager moves focus here on every route change (lib/a11y/focus-manager.tsx). */}
           <h1 className="type-display text-text outline-none" tabIndex={-1}>
@@ -68,7 +71,7 @@ export function PageHeader({ overline, title, description, action, back }: PageH
           <span aria-hidden="true" className="bg-brand-yellow rounded-pill block h-1 w-10" />
           {description && <p className="type-body text-text-muted max-w-prose">{description}</p>}
         </div>
-        {action}
+        {action && <div className="shrink-0">{action}</div>}
       </div>
     </header>
   );

@@ -9,6 +9,7 @@
 import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
+import { createReadUrl } from '@/lib/media/storage';
 import { bogotaDate } from '@colombia-estudia/domain';
 import {
   sequence,
@@ -43,6 +44,14 @@ export interface OutlineModule {
   id: string;
   name: string;
   position: number;
+  /** De qué va el componente (25/9); nulo si el equipo no lo escribió. */
+  description: string | null;
+  /**
+   * La imagen de la tarjeta del componente (27/9), firmada (10 min). Solo se firma para el
+   * componente por el que se va —el de «Actividad actual» en `/aprender`—; en los demás es
+   * nula para no pedir una URL a Storage por componente y por matrícula.
+   */
+  coverUrl: string | null;
   items: SequencedItem[];
 }
 
@@ -60,6 +69,8 @@ export interface CohortOutline {
     code: string;
     name: string;
     programName: string;
+    /** Programa gratuito (25/9): se dice en la pantalla, porque es lo que promociona la institución. */
+    programFree: boolean;
     progression: 'LINEAR' | 'FREE';
     startsOn: string;
     endsOn: string;
@@ -161,7 +172,7 @@ export async function getCohortOutline({
           endsOn: true,
           partnerId: true,
           programId: true,
-          program: { select: { name: true } },
+          program: { select: { name: true, pricing: true } },
         },
       },
       paymentPlan: { select: { payerType: true } },
@@ -178,6 +189,7 @@ export async function getCohortOutline({
     code: cohort.code,
     name: cohort.name,
     programName: cohort.program.name,
+    programFree: cohort.program.pricing === 'FREE',
     progression: cohort.progression === 'FREE' ? ('FREE' as const) : ('LINEAR' as const),
     startsOn: isoDay(cohort.startsOn),
     endsOn: isoDay(cohort.endsOn),
@@ -214,7 +226,13 @@ export async function getCohortOutline({
     db.module.findMany({
       where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
       orderBy: { position: 'asc' },
-      select: { id: true, name: true, position: true },
+      select: {
+        id: true,
+        name: true,
+        position: true,
+        description: true,
+        coverMedia: { select: { providerRef: true, status: true } },
+      },
     }),
     db.lessonAssignment.findMany({
       where: { cohortId: cohort.id },
@@ -325,18 +343,27 @@ export async function getCohortOutline({
   });
 
   const all = [...sequenced.values()];
+  const resume = resumePoint(all);
+  const currentModuleId = (resume ?? nextPoint(all))?.moduleId ?? null;
 
   return {
     gate: null,
     enrollmentId: enrollment.id,
     cohort: cohortInfo,
-    modules: modules.map((module) => ({
-      id: module.id,
-      name: module.name,
-      position: module.position,
-      items: all.filter((item) => item.moduleId === module.id),
-    })),
-    resume: resumePoint(all),
+    modules: await Promise.all(
+      modules.map(async (module) => ({
+        id: module.id,
+        name: module.name,
+        position: module.position,
+        description: module.description,
+        coverUrl:
+          module.id === currentModuleId && module.coverMedia?.status === 'READY'
+            ? await createReadUrl(module.coverMedia.providerRef, { asAttachment: false })
+            : null,
+        items: all.filter((item) => item.moduleId === module.id),
+      }))
+    ),
+    resume,
     upcoming: nextPoint(all),
     progress: progressOf(all),
     partnerFunded,

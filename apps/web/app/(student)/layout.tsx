@@ -19,6 +19,7 @@
 import { cookies } from 'next/headers';
 import { requireStudentSession } from '@/lib/authz/student';
 import { StudentTopNav } from '@/components/organisms/student-top-nav';
+import { StudentTabBar } from '@/components/organisms/student-tab-bar';
 import { ConnectivityBanner } from '@/components/organisms/connectivity-banner';
 import { THEME_COOKIE, toTheme } from '@/lib/theme/theme';
 import { buildStudentNav } from '@/lib/nav/student-nav';
@@ -41,11 +42,15 @@ export default async function StudentLayout({ children }: { children: React.Reac
         spaces={buildSpaces(ctx.capabilities)}
         personName={ctx.person ? `${ctx.person.givenName} ${ctx.person.familyName}` : null}
         unreadNotifications={unread}
+        primaryNav="desktop"
       />
       <ConnectivityBanner />
-      <main id="contenido" className="min-w-0">
+      {/* `pb-20` bajo `lg` (27/9): la barra de pestañas es fija y el final de la pantalla no
+          puede quedar debajo. En modo tarea la barra no está y el `pb` sobra pero no estorba. */}
+      <main id="contenido" className="min-w-0 pb-20 lg:pb-0">
         {children}
       </main>
+      <StudentTabBar items={buildStudentNav(ctx.capabilities)} />
     </div>
   );
 }

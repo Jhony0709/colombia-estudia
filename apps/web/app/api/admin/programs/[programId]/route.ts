@@ -12,7 +12,12 @@ import {
   requireInstitutionId,
   routeParam,
 } from '@/lib/http/admin-input';
-import { updateProgram, archiveProgram } from '@/features/admin/server/curriculum.service';
+import {
+  updateProgram,
+  archiveProgram,
+  PROGRAM_KINDS,
+  type ProgramKind,
+} from '@/features/admin/server/curriculum.service';
 
 const schema = z.discriminatedUnion('op', [
   z.object({
@@ -20,6 +25,8 @@ const schema = z.discriminatedUnion('op', [
     code: z.string().trim().min(1, 'El código es obligatorio').max(40),
     name: z.string().trim().min(1, 'El nombre es obligatorio').max(160),
     description: optionalText(2000),
+    kind: z.enum(PROGRAM_KINDS as unknown as [ProgramKind, ...ProgramKind[]]),
+    pricing: z.enum(['FREE', 'PAID']),
     defaultAccessDays: z.number().int().min(1, 'Mínimo 1 día').max(3650),
   }),
   z.object({ op: z.literal('archive') }),
@@ -48,6 +55,8 @@ export const PATCH = apiHandler<Input>({ schema, capability: 'institution.manage
       code: input.code.trim(),
       name: input.name.trim(),
       description: blankToNull(input.description),
+      kind: input.kind,
+      pricing: input.pricing,
       defaultAccessDays: input.defaultAccessDays,
     },
   });

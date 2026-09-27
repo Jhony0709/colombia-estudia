@@ -608,8 +608,16 @@ export function AssessmentEditor({
             {needsAnswers && answers === null && t('blockedAnswersHidden')}
           </p>
         )}
-        {/* Igual que en el tema: publicar no cambia lo asignado; abre que las cohortes
-            sin el examen puedan añadirlo. */}
+        {/* Igual que en el tema (27/9): las cohortes que siguen la última versión la reciben;
+            los intentos ya abiertos conservan su examen. Las sin el examen podrán añadirlo. */}
+        {validation !== null && !blocked && readiness && readiness.cohorts.assigned > 0 && (
+          <p className="type-body text-text max-w-reading">
+            {t('confirmFollowing', {
+              following: readiness.cohorts.following,
+              pinned: readiness.cohorts.pinned,
+            })}
+          </p>
+        )}
         {validation !== null && !blocked && pendingCohorts.length > 0 && (
           <p className="type-body text-text-muted max-w-reading">
             {t('confirmPending', {

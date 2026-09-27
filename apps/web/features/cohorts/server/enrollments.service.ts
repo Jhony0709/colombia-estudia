@@ -21,7 +21,7 @@ export interface CohortDetail {
   programName: string;
   programId: string;
   /** Los módulos del programa, en orden: para elegir el grado de entrada al matricular (20/9). */
-  modules: Array<{ id: string; name: string; position: number }>;
+  modules: Array<{ id: string; name: string; position: number; grade: number | null }>;
   /**
    * La última apertura o cierre, para la cabecera («Abierta por X el …»; ola 2, 23/9). Sale
    * del `AuditLog` porque la cohorte no guarda quién la abrió; `by` nulo si no hay actor.
@@ -96,7 +96,7 @@ export async function getCohortDetail({
           modules: {
             where: { archivedAt: null },
             orderBy: { position: 'asc' },
-            select: { id: true, name: true, position: true },
+            select: { id: true, name: true, position: true, grade: true },
           },
         },
       },
@@ -162,6 +162,24 @@ export async function getCohortDetail({
 }
 
 /**
+ * Si la cohorte es de un programa **gratuito** (`Program.pricing = FREE`, fase de negocio 3):
+ * en él un menor de edad se matricula **sin acudiente**: «cuando es menor de edad se puede
+ * inscribir a un curso gratuito libremente; contrario de los cursos pagos» (clientes, 25/9).
+ * Los programas de pago siguen exigiendo acudiente, porque ahí hay cartera y consentimiento
+ * de datos que firma un adulto. Hasta el 25/9 la regla miraba `settings.introCohortId`.
+ */
+async function isFreeCohort(
+  db: ReturnType<typeof createTenantClient>,
+  cohortId: string
+): Promise<boolean> {
+  const cohort = await db.cohort.findFirst({
+    where: { id: cohortId },
+    select: { program: { select: { pricing: true } } },
+  });
+  return cohort?.program.pricing === 'FREE';
+}
+
+/**
  * Enrolls a person, found by document number or email.
  *
  * `birthDate` is required (endpoints.md:65): without it there is no way to know whether the
@@ -177,7 +195,8 @@ export async function enrollPerson({
   actorId,
   cohortId,
   personHandle,
-  startsAtModule = null,
+  startsAtModule: startsAtModuleInput = null,
+  entryGrade = null,
   now = new Date(),
 }: {
   institutionId: string;
@@ -185,6 +204,11 @@ export async function enrollPerson({
   cohortId: string;
   personHandle: string;
   startsAtModule?: number | null;
+  /**
+   * El grado por el que entra (25/9). Con grado, la posición de entrada se calcula: el
+   * primer componente de ese grado. Se guardan los dos.
+   */
+  entryGrade?: number | null;
   now?: Date;
 }): Promise<{ enrollmentId: string; warning: string | null }> {
   const db = createTenantClient(institutionId);
@@ -217,7 +241,8 @@ export async function enrollPerson({
       where: { studentId: person.id, institutionId },
       select: { id: true },
     });
-    if (!guardianship) {
+    // Sin acudiente solo entra a un programa gratuito (25/9).
+    if (!guardianship && !(await isFreeCohort(db, cohortId))) {
       throw new APIError(
         'Es menor de edad y no tiene acudiente registrado; regístralo antes de matricular',
         'VALIDATION_ERROR'
@@ -234,7 +259,7 @@ export async function enrollPerson({
       program: {
         select: {
           defaultAccessDays: true,
-          modules: { where: { archivedAt: null }, select: { position: true } },
+          modules: { where: { archivedAt: null }, select: { position: true, grade: true } },
         },
       },
     },
@@ -244,6 +269,26 @@ export async function enrollPerson({
   }
   if (cohort.status !== 'PLANNED' && cohort.status !== 'OPEN') {
     throw new APIError('La cohorte ya no admite matrículas', 'CONFLICT');
+  }
+
+  // El grado de entrada (25/9) se traduce a posición: el primer componente de ese grado.
+  // Sin componentes de ese grado no hay dónde empezar, y se dice. En un programa con grados
+  // la única entrada es el grado: `startsAtModule` es su traducción guardada, no una segunda
+  // verdad (revisión 25/9, docs/negocio/resumen.md §5).
+  const hasGrades = cohort.program.modules.some((m) => typeof m.grade === 'number');
+  if (hasGrades && entryGrade === null && startsAtModuleInput !== null) {
+    throw new APIError(
+      'En un programa con grados se indica el grado de entrada, no la posición',
+      'VALIDATION_ERROR'
+    );
+  }
+  let startsAtModule = startsAtModuleInput;
+  if (entryGrade !== null) {
+    const ofGrade = cohort.program.modules.filter((m) => m.grade === entryGrade);
+    if (ofGrade.length === 0) {
+      throw new APIError('El programa no tiene componentes de ese grado', 'VALIDATION_ERROR');
+    }
+    startsAtModule = Math.min(...ofGrade.map((m) => m.position));
   }
 
   // The entry module has to exist in the program: an enrollment starting past the last
@@ -275,6 +320,7 @@ export async function enrollPerson({
           isMinorAtEnrollment: isMinor,
           accessUntil,
           startsAtModule,
+          entryGrade,
         },
         select: { id: true },
       });
@@ -312,6 +358,7 @@ export async function enrollPerson({
             isMinorAtEnrollment: isMinor,
             accessUntil: isoDay(accessUntil),
             startsAtModule,
+            entryGrade,
           },
         },
       });
@@ -418,7 +465,10 @@ export async function previewEnrollment({
 
   const blockers: EnrollmentPreview['blockers'] = [];
   if (!person.birthDate) blockers.push('NO_BIRTH_DATE');
-  if (isMinor && !guardian) blockers.push('MINOR_WITHOUT_GUARDIAN');
+  // Un menor sin acudiente sí puede entrar a un programa gratuito (25/9).
+  if (isMinor && !guardian && !(await isFreeCohort(db, cohortId))) {
+    blockers.push('MINOR_WITHOUT_GUARDIAN');
+  }
   if (alreadyEnrolled) blockers.push('ALREADY_ENROLLED');
 
   return {

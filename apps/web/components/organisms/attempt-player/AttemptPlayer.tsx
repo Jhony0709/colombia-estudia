@@ -15,8 +15,12 @@
  * ocultable con hitos por `useAnnounce`, estado de guardado en `role="status"`, y el diálogo
  * de entrega lista las sin responder antes de cerrar nada.
  *
- * En móvil una pregunta por pantalla; en escritorio todas en una columna con el índice al
- * lado. Es la misma lista con distinto CSS: no hay dos árboles.
+ * Una pregunta por pantalla en todos los tamaños (27/9; hasta entonces en escritorio iban
+ * las diez en columna y «Entregar» quedaba debajo de todas). El índice al lado en escritorio
+ * y debajo en móvil; Anterior / Siguiente / Entregar en la barra fija del pie
+ * (`StickyActionBar`), siempre a la vista. El cambio de pregunta es un fade de entrada con
+ * tokens (`.attempt-question`, `globals.css`); la salida es corte. `prefers-reduced-motion`
+ * = corte en ambos sentidos por la regla global.
  */
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -28,6 +32,8 @@ import { Button } from '@/components/atoms/button';
 import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
+import { ProgressBar } from '@/components/atoms/progress-bar';
+import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { trackStudentEvent } from '@/lib/telemetry/student-events';
 import { SLOW_AFTER_MS } from '@/lib/net/slow-request';
@@ -38,12 +44,15 @@ export interface AttemptQuestion {
   code: string;
   type: 'single_choice' | 'multiple_choice' | 'true_false' | 'short_text';
   text: string;
-  options: Array<{ code: string; text: string }>;
+  /** HTML seguro de una frase (`renderInlineHtml`): lo que se pinta. `text` queda para lógica. */
+  textHtml: string;
+  options: Array<{ code: string; text: string; textHtml: string }>;
   points: number;
   answer: unknown;
   correct: boolean | null;
   pointsAwarded: number | null;
   feedback: string | null;
+  feedbackHtml: string | null;
 }
 
 export interface AttemptView {
@@ -54,6 +63,11 @@ export interface AttemptView {
   title: string;
   language: string;
   instructions: string | null;
+  instructionsHtml: string | null;
+  /** El cierre del componente (25/9); nulo = el texto general. */
+  closingText: string | null;
+  /** Solo con límite de tiempo configurado y sin exención: sin eso no hay reloj (27/9). */
+  timed: boolean;
   deadlineAt: string | null;
   serverNow: string;
   submittedAt: string | null;
@@ -69,6 +83,10 @@ const RETRY_MS = 15_000;
 const TEXT_DEBOUNCE_MS = 800;
 /** Hitos del reloj que se anuncian, en segundos restantes. */
 const MILESTONES = [600, 300, 60];
+
+/** Para los textos que no vienen del servidor ya saneados (Verdadero / Falso). */
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const isAnswered = (a: Answer) => a !== null && (Array.isArray(a) ? a.length > 0 : a.trim() !== '');
 
@@ -305,79 +323,110 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
   const total = attempt.questions.length;
   const answeredCount = total - unanswered.length;
 
+  const goTo = (index: number) => {
+    const next = Math.max(0, Math.min(total - 1, index));
+    setCurrent(next);
+    // El foco a la leyenda de la pregunta nueva, para lector de pantalla y teclado.
+    requestAnimationFrame(() => {
+      document
+        .getElementById(`pregunta-${next + 1}`)
+        ?.querySelector<HTMLElement>('legend')
+        ?.focus();
+    });
+  };
+  const isLast = current === total - 1;
+  const currentQuestion = attempt.questions[current];
+  const samePoints = attempt.questions.every((q) => q.points === attempt.questions[0]?.points);
+
   return (
     <div className="space-y-6">
-      <div className="bg-surface-base border-border-muted rounded-card sticky top-14 z-[5] flex flex-wrap items-center justify-between gap-3 border px-4 py-3">
-        <p className="type-body m-0" role="status">
-          {t('progress', { answered: answeredCount, total })}
-          <span className="text-text-muted"> · </span>
-          <SaveStatus state={saveState} savedAt={savedAt} />
-        </p>
-        {/*
-          El reloj solo cuando el plazo es de esta sesión (23/9). `deadlineAt` es el mínimo de
-          límite de tiempo, fecha de entrega y fin de acceso (`getAttemptDeadline`); sin límite
-          de tiempo, el fin de acceso a tres meses salía como «124440:38» y parecía una cuenta
-          atrás. Un plazo a más de un día no es un reloj: es una fecha, y ya está en «Antes de
-          empezar» y en el calendario. El servidor sigue cerrando el intento al vencer.
-        */}
-        {attempt.deadlineAt && isSessionDeadline(attempt.deadlineAt) && (
-          <Timer deadlineAt={attempt.deadlineAt} offset={offset} onExpired={onExpired} />
-        )}
+      {/* Cabecera de una línea (27/9): cuántas van, guardado y, si aplica, el reloj; debajo
+          la barra de avance real. Antes eran ~140 px de tarjeta antes de la primera pregunta. */}
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+          <p className="type-body-emphasis m-0" role="status">
+            {t('progress', { answered: answeredCount, total })}
+            <span className="type-caption text-text-muted font-normal"> · </span>
+            <span className="type-caption text-text-muted font-normal">
+              <SaveStatus state={saveState} savedAt={savedAt} />
+            </span>
+          </p>
+          {/*
+            El reloj solo si el examen tiene límite de tiempo configurado (27/9, Jhonny; por
+            defecto no lo tiene). `deadlineAt` es el mínimo de límite de tiempo, fecha de entrega
+            y fin de acceso (`getAttemptDeadline`): una fecha de entrega cercana no es un reloj,
+            es una fecha, y ya está en «Antes de empezar» y en el calendario. El servidor sigue
+            cerrando el intento al vencer aunque no haya cuenta atrás en pantalla.
+          */}
+          {attempt.timed && attempt.deadlineAt && (
+            <Timer deadlineAt={attempt.deadlineAt} offset={offset} onExpired={onExpired} />
+          )}
+        </div>
+        <ProgressBar
+          percent={total === 0 ? 0 : (answeredCount / total) * 100}
+          label={t('progress', { answered: answeredCount, total })}
+          className="progress-bar-animated"
+        />
       </div>
 
-      {attempt.instructions && <p className="type-body max-w-reading">{attempt.instructions}</p>}
+      {attempt.instructionsHtml && (
+        <p
+          className="type-body text-text-muted max-w-reading"
+          dangerouslySetInnerHTML={{ __html: attempt.instructionsHtml }}
+        />
+      )}
 
-      <div className="gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start">
-        <ol className="space-y-8" aria-labelledby={headingId}>
+      <div className="gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
+        {/* Solo la pregunta actual está en el DOM (27/9): diez `fieldset` con sus `input`
+            escondidos con `display:none` no aportan nada y duplican nombres. Las respuestas
+            viven en `answers`, así que cambiar de pregunta no pierde nada. La clave por
+            pregunta hace que la nueva monte y entre con fade. */}
+        <section aria-labelledby={headingId} className="min-w-0">
           <h2 id={headingId} className="sr-only">
             {t('questionsHeading')}
           </h2>
-          {attempt.questions.map((q, index) => (
-            <li
-              key={q.code}
-              id={`pregunta-${index + 1}`}
-              className={cn(index !== current && 'hidden lg:block')}
+          {currentQuestion && (
+            <div
+              key={currentQuestion.code}
+              id={`pregunta-${current + 1}`}
+              className="attempt-question"
             >
               <Question
-                question={q}
-                index={index}
+                question={currentQuestion}
+                index={current}
                 total={total}
                 language={attempt.language}
-                value={answers[q.code] ?? null}
-                onChange={(value, debounce) => setAnswer(q.code, value, debounce)}
+                value={answers[currentQuestion.code] ?? null}
+                showPoints={!samePoints}
+                onChange={(value, debounce) => setAnswer(currentQuestion.code, value, debounce)}
               />
-            </li>
-          ))}
-        </ol>
+            </div>
+          )}
+        </section>
 
         <aside className="mt-8 lg:mt-0">
           <nav
             aria-label={t('indexLabel')}
             className="bg-surface-base border-border-muted rounded-card border p-4"
           >
-            <p className="type-caption text-text-muted mb-2">{t('indexTitle')}</p>
-            <ol className="grid grid-cols-6 gap-2 sm:grid-cols-8 lg:grid-cols-5">
+            <p className="type-caption text-text-muted mb-3">{t('indexTitle')}</p>
+            <ol className="grid grid-cols-6 gap-2 sm:grid-cols-8 lg:grid-cols-4">
               {attempt.questions.map((q, index) => {
                 const done = isAnswered(answers[q.code] ?? null);
+                const active = index === current;
                 return (
                   <li key={q.code}>
-                    <a
-                      href={`#pregunta-${index + 1}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setCurrent(index);
-                        document
-                          .getElementById(`pregunta-${index + 1}`)
-                          ?.querySelector<HTMLElement>('legend')
-                          ?.focus();
-                      }}
-                      aria-current={index === current ? 'true' : undefined}
+                    <button
+                      type="button"
+                      onClick={() => goTo(index)}
+                      aria-current={active ? 'step' : undefined}
                       className={cn(
-                        'rounded-control min-h-touch min-w-touch type-label inline-flex w-full items-center justify-center gap-1 border',
-                        done
-                          ? 'border-status-success-base bg-status-success-muted text-text'
-                          : 'border-border bg-surface-sunken text-text-muted',
-                        index === current && 'ring-focus-ring ring-2 ring-offset-1'
+                        'rounded-control min-h-touch min-w-touch type-label duration-fast ease-standard inline-flex w-full items-center justify-center gap-1 border transition-colors',
+                        active
+                          ? 'border-accent-base bg-accent-base text-text-on-accent'
+                          : done
+                            ? 'border-status-success-base bg-status-success-muted text-text'
+                            : 'border-border bg-surface-sunken text-text-muted'
                       )}
                     >
                       <span className="sr-only">
@@ -386,46 +435,55 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
                           : t('indexUnanswered', { n: index + 1 })}
                       </span>
                       <span aria-hidden="true">{index + 1}</span>
-                    </a>
+                      {done && !active && <CircleCheck aria-hidden className="size-3.5" />}
+                    </button>
                   </li>
                 );
               })}
             </ol>
+            <p className="type-caption text-text-muted mt-3">{t('submitHint')}</p>
           </nav>
         </aside>
       </div>
 
-      {/* Anterior / siguiente: solo en móvil, donde se ve una pregunta por pantalla. */}
-      <div className="flex items-center justify-between gap-3 lg:hidden">
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={current === 0}
-          onClick={() => setCurrent((c) => Math.max(0, c - 1))}
-        >
-          {t('previous')}
-        </Button>
-        <span className="type-caption text-text-muted">
-          {t('position', { n: current + 1, total })}
-        </span>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={current === total - 1}
-          onClick={() => setCurrent((c) => Math.min(total - 1, c + 1))}
-        >
-          {t('next')}
-        </Button>
-      </div>
-
       {error && <Alert severity="error">{error}</Alert>}
 
-      <div className="border-border flex flex-wrap items-center gap-3 border-t pt-4">
-        <Button type="button" size="lg" onClick={() => setConfirming(true)}>
-          {t('submit')}
-        </Button>
-        <span className="type-caption text-text-muted">{t('submitHint')}</span>
-      </div>
+      {/* Anterior / Siguiente / Entregar siempre a la vista (27/9). En la última pregunta la
+          acción pasa a ser «Entregar»; antes, seguir. Entregar también está en el índice para
+          quien termina antes de la última. */}
+      <StickyActionBar
+        label={t('navLabel')}
+        status={<span className="lg:hidden">{t('position', { n: current + 1, total })}</span>}
+        secondary={
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={current === 0}
+              onClick={() => goTo(current - 1)}
+            >
+              {t('previous')}
+            </Button>
+            {isLast && <span className="sr-only">{t('lastQuestion')}</span>}
+          </>
+        }
+        action={
+          isLast ? (
+            <Button type="button" onClick={() => setConfirming(true)}>
+              {t('submit')}
+            </Button>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Button type="button" variant="quiet" onClick={() => setConfirming(true)}>
+                {t('submit')}
+              </Button>
+              <Button type="button" onClick={() => goTo(current + 1)}>
+                {t('next')}
+              </Button>
+            </div>
+          )
+        }
+      />
 
       <Dialog
         open={confirming}
@@ -506,8 +564,6 @@ function SaveStatus({ state, savedAt }: { state: SaveState; savedAt: Date | null
  * llega a cero avisa y recarga, y es el servidor quien cierra el intento.
  */
 /** Un plazo dentro de las próximas 24 h se enseña como reloj; más lejos, no. */
-const isSessionDeadline = (deadlineAt: string) =>
-  new Date(deadlineAt).getTime() - Date.now() <= 24 * 60 * 60 * 1000;
 
 function Timer({
   deadlineAt,
@@ -603,6 +659,7 @@ function Question({
   value,
   onChange,
   review,
+  showPoints = true,
 }: {
   question: AttemptQuestion;
   index: number;
@@ -611,6 +668,8 @@ function Question({
   value: Answer;
   onChange?: (value: Answer, debounce?: boolean) => void;
   review?: boolean;
+  /** Falso cuando todas valen lo mismo: repetir «1 punto» diez veces no dice nada (27/9). */
+  showPoints?: boolean;
 }) {
   const t = useTranslations('learn.attempt');
   const id = useId();
@@ -619,15 +678,18 @@ function Question({
   const options =
     q.type === 'true_false' && q.options.length === 0
       ? [
-          { code: 'true', text: t('true') },
-          { code: 'false', text: t('false') },
+          { code: 'true', text: t('true'), textHtml: escapeHtml(t('true')) },
+          { code: 'false', text: t('false'), textHtml: escapeHtml(t('false')) },
         ]
       : q.options;
 
   return (
     <fieldset
       className={cn(
-        'bg-surface-base border-border-muted rounded-card border p-5',
+        // En curso, sin tarjeta (27/9): una pregunta por vista no necesita caja dentro de
+        // caja; las opciones ya tienen su borde. En revisión, la tarjeta con el color del
+        // resultado sí dice algo.
+        review ? 'bg-surface-base border-border-muted rounded-card border p-5' : 'min-w-0 py-2',
         review && q.correct === true && 'border-status-success-base',
         review && q.correct === false && 'border-status-error-base'
       )}
@@ -635,7 +697,8 @@ function Question({
       disabled={readOnly}
     >
       <legend tabIndex={-1} className="type-caption text-text-muted">
-        {t('questionOf', { n: index + 1, total })} · {t('points', { count: q.points })}
+        {t('questionOf', { n: index + 1, total })}
+        {showPoints && <> · {t('points', { count: q.points })}</>}
         {review && q.pointsAwarded !== null && (
           <>
             {' · '}
@@ -645,7 +708,11 @@ function Question({
           </>
         )}
       </legend>
-      <p className="type-body-emphasis mt-1 whitespace-pre-wrap">{q.text}</p>
+      {/* HTML saneado en el servidor (`renderInlineHtml`): negrita, fórmula, código; sin bloques. */}
+      <p
+        className="type-body-emphasis mt-1 text-[1.125rem] leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: q.textHtml }}
+      />
 
       {q.type === 'short_text' ? (
         <div className="mt-3">
@@ -672,11 +739,16 @@ function Question({
                 : value === opt.code;
             return (
               <li key={opt.code}>
+                {/* El texto de la etiqueta es HTML ya saneado (`textHtml`, 27/9) dentro del
+                    `<span>`; el linter no ve texto y avisa, pero el `<label>` sí lo tiene. */}
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label
                   htmlFor={optionId}
                   className={cn(
-                    'rounded-control min-h-touch flex cursor-pointer items-center gap-3 border px-3 py-2',
-                    checked ? 'border-accent-base bg-surface-sunken' : 'border-border-muted'
+                    'rounded-control min-h-touch duration-fast ease-standard flex cursor-pointer items-center gap-3 border px-3 py-2 transition-colors',
+                    checked
+                      ? 'border-accent-base bg-surface-sunken'
+                      : 'border-border-muted hover:border-border hover:bg-surface-sunken'
                   )}
                 >
                   <input
@@ -699,7 +771,7 @@ function Question({
                     }}
                     className={CONTROL}
                   />
-                  <span className="type-body">{opt.text}</span>
+                  <span className="type-body" dangerouslySetInnerHTML={{ __html: opt.textHtml }} />
                 </label>
               </li>
             );
@@ -707,8 +779,11 @@ function Question({
         </ul>
       )}
 
-      {review && q.feedback && (
-        <p className="type-body text-text-muted border-border mt-3 border-l-2 pl-3">{q.feedback}</p>
+      {review && q.feedbackHtml && (
+        <p
+          className="type-body text-text-muted border-border mt-3 border-l-2 pl-3"
+          dangerouslySetInnerHTML={{ __html: q.feedbackHtml }}
+        />
       )}
     </fieldset>
   );
@@ -787,7 +862,11 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
           <h2 id="attempt-closing-title" className="type-subheading text-text">
             {t('closing.title')}
           </h2>
-          <p className="type-body text-text-muted max-w-reading mt-2">{t('closing.body')}</p>
+          {/* Por componente cuando el equipo lo escribió (25/9); si no, el general. Los
+              saltos de línea del texto se respetan: es un texto de cierre, no Markdown. */}
+          <p className="type-body text-text-muted max-w-reading mt-2 whitespace-pre-line">
+            {attempt.closingText ?? t('closing.body')}
+          </p>
           <div className="mt-4">
             <Button asChild>
               <Link href="/aprender">{t('closing.next')}</Link>

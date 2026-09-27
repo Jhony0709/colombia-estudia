@@ -20,6 +20,10 @@ import { createTenantClient } from '@/lib/db/tenant';
 export interface ReadinessCohorts {
   /** Cohortes abiertas que ya tienen la pieza asignada. */
   assigned: number;
+  /** De las asignadas, las que siguen a la última versión: al publicar la reciben (27/9). */
+  following: number;
+  /** De las asignadas, las fijadas en su versión: se mueven a mano desde la cohorte. */
+  pinned: number;
   /** Cohortes abiertas del programa que aún no la tienen: al publicar, podrán añadirla. */
   pending: Array<{ id: string; code: string; name: string }>;
 }
@@ -139,7 +143,10 @@ export async function getLessonReadiness({
         id: true,
         code: true,
         name: true,
-        lessonAssignments: { where: { lessonId: lesson.id }, select: { id: true } },
+        lessonAssignments: {
+          where: { lessonId: lesson.id },
+          select: { id: true, pinnedVersion: true },
+        },
       },
     }),
     publishedVersion(db, lesson.versions[0]),
@@ -167,7 +174,7 @@ export async function getLessonReadiness({
       hasPublished: exam.versions.length > 0,
     })),
     published,
-    cohorts: splitCohorts(cohorts.map((c) => ({ ...c, has: c.lessonAssignments.length > 0 }))),
+    cohorts: splitCohorts(cohorts.map((c) => ({ ...c, assignments: c.lessonAssignments }))),
   };
 }
 
@@ -206,7 +213,10 @@ export async function getAssessmentReadiness({
         id: true,
         code: true,
         name: true,
-        assessmentAssignments: { where: { assessmentId: assessment.id }, select: { id: true } },
+        assessmentAssignments: {
+          where: { assessmentId: assessment.id },
+          select: { id: true, pinnedVersion: true },
+        },
       },
     }),
     publishedVersion(db, assessment.versions[0]),
@@ -217,15 +227,26 @@ export async function getAssessmentReadiness({
     module: assessment.module,
     lesson: assessment.lesson,
     published,
-    cohorts: splitCohorts(cohorts.map((c) => ({ ...c, has: c.assessmentAssignments.length > 0 }))),
+    cohorts: splitCohorts(cohorts.map((c) => ({ ...c, assignments: c.assessmentAssignments }))),
   };
 }
 
 function splitCohorts(
-  cohorts: Array<{ id: string; code: string; name: string; has: boolean }>
+  cohorts: Array<{
+    id: string;
+    code: string;
+    name: string;
+    assignments: Array<{ pinnedVersion: boolean }>;
+  }>
 ): ReadinessCohorts {
+  const assigned = cohorts.filter((c) => c.assignments.length > 0);
+  const pinned = assigned.filter((c) => c.assignments.some((a) => a.pinnedVersion)).length;
   return {
-    assigned: cohorts.filter((c) => c.has).length,
-    pending: cohorts.filter((c) => !c.has).map(({ id, code, name }) => ({ id, code, name })),
+    assigned: assigned.length,
+    following: assigned.length - pinned,
+    pinned,
+    pending: cohorts
+      .filter((c) => c.assignments.length === 0)
+      .map(({ id, code, name }) => ({ id, code, name })),
   };
 }

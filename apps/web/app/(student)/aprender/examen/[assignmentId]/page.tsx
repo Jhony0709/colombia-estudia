@@ -120,14 +120,23 @@ export default async function AssessmentPage({
 
   return (
     <Page wide>
-      <PageHeader overline={overline} title={a.title} description={a.instructions ?? undefined} />
-
       <WithRouteRail
         rail={
           <RouteRail
             modules={view.route}
             currentId={a.assignmentId}
             enrollmentId={a.enrollmentId}
+          />
+        }
+        header={
+          <PageHeader
+            overline={overline}
+            title={a.title}
+            description={
+              a.instructionsHtml ? (
+                <span dangerouslySetInnerHTML={{ __html: a.instructionsHtml }} />
+              ) : undefined
+            }
           />
         }
       >

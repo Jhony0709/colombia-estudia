@@ -5,13 +5,16 @@
  *
  * Lo que crea, en este orden: el usuario de Auth (Supabase), la `Person`, la membresía
  * `STUDENT`, el consentimiento (solo mayores de edad) y la matrícula en la cohorte de
- * introducción (`Institution.settings.introCohortId`). La matrícula pasa por `enrollPerson`,
+ * introducción (`Institution.introCohortId`). La matrícula pasa por `enrollPerson`,
  * **la misma función que usa operación**: menor sin acudiente, cohorte que no admite, acceso
  * hasta cuándo… se deciden ahí y no en dos sitios.
  *
- * Un menor de edad no firma la política (Ley 1581: firma el acudiente) y no se matricula
- * solo (`enrollPerson` exige acudiente): se le crea la cuenta y se le dice que operación
- * completará el resto. Es la misma regla que la invitación (`acceptInvitation`).
+ * Un menor de edad no firma la política (Ley 1581: firma el acudiente), pero **sí entra**
+ * a la cohorte de introducción (clientes, 25/9): es el componente gratuito de promoción y
+ * un menor se inscribe solo; el acudiente hace falta para los programas de pago, y eso lo
+ * decide `enrollPerson` (sin acudiente solo admite la cohorte de introducción). El
+ * consentimiento de datos del menor queda pendiente de que un acudiente lo firme cuando
+ * pase a un programa de pago (se ve en su ficha, en Personas).
  *
  * El correo **no** se verifica antes de crear la cuenta (`email_confirm: true`), igual que
  * en la invitación —allí el enlace lo prueba; aquí no hay prueba—. Es una decisión abierta
@@ -25,7 +28,6 @@ import { calculateAgeAt } from '@colombia-estudia/domain';
 import { APIError } from '@/lib/core/errors';
 import { createTenantClient } from '@/lib/db/tenant';
 import { getSupabaseAdmin } from '@/lib/auth/supabase-server';
-import { parseInstitutionSettings } from '@/lib/institution/settings';
 import { enrollPerson } from '@/features/cohorts/server/enrollments.service';
 
 export interface RegistrationInput {
@@ -47,9 +49,8 @@ export interface RegistrationResult {
   isMinor: boolean;
   /** La cohorte en la que quedó matriculada, o por qué no. */
   enrollment:
-    | { status: 'ENROLLED'; cohortCode: string; cohortName: string }
+    | { status: 'ENROLLED'; cohortCode: string; cohortName: string; free: boolean }
     | { status: 'NO_INTRO_COHORT' }
-    | { status: 'MINOR_NEEDS_GUARDIAN' }
     | { status: 'FAILED'; reason: string };
 }
 
@@ -86,9 +87,9 @@ export async function registerPerson(input: RegistrationInput): Promise<Registra
 
   const institution = await db.institution.findUniqueOrThrow({
     where: { id: institutionId },
-    select: { settings: true, dataPolicyVersion: true },
+    select: { introCohortId: true, dataPolicyVersion: true },
   });
-  const { introCohortId = null } = parseInstitutionSettings(institution.settings);
+  const introCohortId = institution.introCohortId;
 
   const admin = getSupabaseAdmin();
   const { data: authData, error: authError } = await admin.auth.admin.createUser({
@@ -163,14 +164,7 @@ export async function registerPerson(input: RegistrationInput): Promise<Registra
     email,
     personId,
     isMinor,
-    enrollment: await enrollInIntroCohort({
-      institutionId,
-      personId,
-      email,
-      isMinor,
-      introCohortId,
-      now,
-    }),
+    enrollment: await enrollInIntroCohort({ institutionId, personId, email, introCohortId, now }),
   };
 }
 
@@ -183,19 +177,16 @@ async function enrollInIntroCohort({
   institutionId,
   personId,
   email,
-  isMinor,
   introCohortId,
   now,
 }: {
   institutionId: string;
   personId: string;
   email: string;
-  isMinor: boolean;
   introCohortId: string | null;
   now: Date;
 }): Promise<RegistrationResult['enrollment']> {
   if (introCohortId === null) return { status: 'NO_INTRO_COHORT' };
-  if (isMinor) return { status: 'MINOR_NEEDS_GUARDIAN' };
 
   const db = createTenantClient(institutionId);
   try {
@@ -208,9 +199,14 @@ async function enrollInIntroCohort({
     });
     const cohort = await db.cohort.findFirstOrThrow({
       where: { id: introCohortId },
-      select: { code: true, name: true },
+      select: { code: true, name: true, program: { select: { pricing: true } } },
     });
-    return { status: 'ENROLLED', cohortCode: cohort.code, cohortName: cohort.name };
+    return {
+      status: 'ENROLLED',
+      cohortCode: cohort.code,
+      cohortName: cohort.name,
+      free: cohort.program.pricing === 'FREE',
+    };
   } catch (err) {
     const reason = err instanceof APIError ? err.message : 'unknown';
     // Se audita para que operación vea que alguien se quedó sin matrícula y por qué.

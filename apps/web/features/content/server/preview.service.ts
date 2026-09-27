@@ -24,6 +24,8 @@ export interface PreviewResult {
   html: string;
   /** Assets citados que no se pudieron resolver: se enseñan aparte, no se esconden. */
   missingAssets: string[];
+  /** El idioma del tema, para el `lang` del contenedor de la vista previa (27/9). */
+  language: string;
 }
 
 export async function previewDraft({
@@ -50,7 +52,10 @@ export async function previewDraft({
   const assets = await resolveRenderAssets({ institutionId, assetIds });
 
   return {
-    html: renderLessonHtml(version.content, assets, { language: version.lesson.language }),
+    // Sin `{ language }` (27/9): el idioma sale aparte y la vista previa lo pone en su `div`,
+    // igual que el player en su `<article>`; así los selectores de `.contenido` alcanzan.
+    html: renderLessonHtml(version.content, assets),
+    language: version.lesson.language,
     missingAssets: assetIds.filter((id) => !assets.has(id)),
   };
 }

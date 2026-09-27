@@ -26,7 +26,7 @@ export default async function ProgramsPage() {
   const ctx = await getRequestContext();
 
   const [curriculum, t] = await Promise.all([
-    listCurriculum(ctx.institution.id),
+    listCurriculum(ctx.institution.id, { coverUrls: true }),
     getTranslations('admin.curriculum'),
   ]);
   const th = await getTranslations('help');

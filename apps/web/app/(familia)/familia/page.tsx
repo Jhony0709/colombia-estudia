@@ -11,6 +11,7 @@ import { listWards } from '@/features/family/server/family.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { ArrowRight, CircleAlert } from 'lucide-react';
 import { EmptyState } from '@/components/molecules/empty-state';
+import { ProgressBar } from '@/components/atoms/progress-bar';
 import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 
 export const metadata: Metadata = { title: 'Mi familia' };
@@ -141,20 +142,10 @@ export default async function FamilyPage() {
               </div>
 
               <div className="space-y-1">
-                {/* SVG y no un div con `style`: la CSP no admite estilos en línea. */}
-                <svg
-                  role="progressbar"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={ward.progress.percent}
-                  aria-label={t('progressLabel', { name: ward.student.name })}
-                  viewBox="0 0 100 8"
-                  preserveAspectRatio="none"
-                  className="h-2 w-full overflow-hidden rounded-full"
-                >
-                  <rect width="100" height="8" className="fill-surface-sunken" />
-                  <rect width={ward.progress.percent} height="8" className="fill-accent-base" />
-                </svg>
+                <ProgressBar
+                  percent={ward.progress.percent}
+                  label={t('progressLabel', { name: ward.student.name })}
+                />
                 <p className="type-caption text-text-muted">
                   {t('progress', {
                     completed: ward.progress.completed,

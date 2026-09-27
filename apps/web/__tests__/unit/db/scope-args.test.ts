@@ -187,8 +187,9 @@ describe('scopeArgs', () => {
   });
 
   describe('TENANT_SCOPED_MODELS list', () => {
-    it('should have exactly 35 models', () => {
-      expect(TENANT_SCOPED_MODELS.length).toBe(35);
+    // 37 desde el 25/9: `ProgramPrice` (fase de negocio 1) y `Counter` (códigos legibles).
+    it('should have exactly 37 models', () => {
+      expect(TENANT_SCOPED_MODELS.length).toBe(37);
     });
 
     it('should not include Institution', () => {

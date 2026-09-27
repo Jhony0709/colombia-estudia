@@ -12,7 +12,8 @@
  * 3. acuerdos cumplidos → `FULFILLED`; acuerdos con cuota vencida → aviso a operación;
  * 4. cuotas vencidas → aviso al pagador, solo si `notifyPayerOnOverdue` (y correo, si hay);
  * 5. sesiones en vivo en las próximas 24 h → aviso a los matriculados;
- * 6. concilia pagos de pasarela sin confirmar de más de una hora.
+ * 6. concilia pagos de pasarela sin confirmar de más de una hora;
+ * 7. borra los medios que nada usa pasado el periodo de gracia (`sweepUnusedMedia`).
  */
 
 import 'server-only';
@@ -30,6 +31,7 @@ import {
   staffPersonIds,
 } from '@/features/notifications/server/notifications.service';
 import { getPolicy } from '@/features/admin/server/policies.service';
+import { sweepUnusedMedia } from '@/features/content/server/media.service';
 
 export interface DailyJobReport {
   institutionId: string;
@@ -41,6 +43,7 @@ export interface DailyJobReport {
   overdueReminders: number;
   liveSessionReminders: number;
   gatewayReconciled: number;
+  mediaSwept: number;
 }
 
 const day = (d: Date) => d.toISOString().slice(0, 10);
@@ -78,6 +81,7 @@ async function runForInstitution({
     overdueReminders: 0,
     liveSessionReminders: 0,
     gatewayReconciled: 0,
+    mediaSwept: 0,
   };
 
   // 1. Intentos vencidos.
@@ -259,6 +263,13 @@ async function runForInstitution({
     } catch (err) {
       logger.warn({ event: 'job-reconcile-failed', paymentId: p.id, error: String(err) });
     }
+  }
+
+  // 7. Medios sin uso. Su propio `AuditLog media.swept` lleva el detalle; aquí solo el conteo.
+  try {
+    report.mediaSwept = (await sweepUnusedMedia({ institutionId, now })).swept;
+  } catch (err) {
+    logger.warn({ event: 'job-media-sweep-failed', institutionId, error: String(err) });
   }
 
   await db.auditLog.create({

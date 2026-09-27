@@ -19,6 +19,14 @@ const mockAuditLogCreate = jest.fn();
 
 jest.mock('server-only', () => ({}));
 
+// 27/9: publicar propaga la versión a las cohortes no fijadas (probado en su propio test).
+const mockPropagateAssessment = jest.fn<Promise<{ moved: number }>, unknown[]>(async () => ({
+  moved: 0,
+}));
+jest.mock('@/features/cohorts/server/version-propagation', () => ({
+  propagateAssessmentVersion: (...args: unknown[]) => mockPropagateAssessment(...args),
+}));
+
 jest.mock('@/lib/db/tenant', () => ({
   createTenantClient: jest.fn(() => {
     const tx = {
@@ -331,6 +339,21 @@ describe('publishAssessment', () => {
     expect(audit).toContain('published');
     expect(audit).not.toContain('correct');
     expect(audit).not.toContain('capital de Colombia');
+  });
+
+  it('propaga la versión a las cohortes no fijadas y lo dice en la respuesta (27/9)', async () => {
+    mockVersionFindFirst
+      .mockResolvedValueOnce(draft)
+      .mockResolvedValueOnce({ content: VALID_CONTENT, answerKey: VALID_KEY });
+    mockPropagateAssessment.mockResolvedValueOnce({ moved: 3 });
+
+    const result = await publishAssessment({ institutionId: 'i1', actorId: 'p1', versionId: 'v1' });
+
+    expect(mockPropagateAssessment).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ assessmentId: 'a1', version: { id: 'v1', number: 1 } })
+    );
+    expect(result.cohortsUpdated).toBe(3);
   });
 
   it('se niega si una pregunta no tiene clave', async () => {

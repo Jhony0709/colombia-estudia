@@ -39,6 +39,11 @@ principal (§8).
 | `description` | Una o dos líneas de para qué sirve la pantalla. Opcional.                                                                                |
 | `action`      | **Una** acción principal, o ninguna. Puede ir acompañada de una secundaria (`Vista previa` junto a `Publicar`); nunca de otra principal. |
 
+Disposición (27/9): bajo `sm` la acción va debajo del título; desde `sm` a su derecha en la
+misma fila, arriba (`items-start`), y el título se parte en las líneas que necesite sin
+mandarla al renglón siguiente. El tamaño del `h1` (`--type-display-size`) es fluido: 24 px en
+un teléfono, 30 desde ~1024.
+
 La ranura única de acción es deliberada y ya está comentada en `Page.tsx:6-7`: _«una
 cabecera que puede llevar cinco botones acaba llevando cinco botones»_. Es la misma regla
 que GOV.UK llama _one thing per page_ y que Polaris fija con una sola `primaryAction` por
@@ -400,24 +405,27 @@ parecerse por casualidad.
 
 ### Inventario hoy
 
-| Componente                         | Estado                                            |
-| ---------------------------------- | ------------------------------------------------- |
-| `atoms/button`                     | estable                                           |
-| `atoms/input`, `label`             | estable                                           |
-| `atoms/form-field`                 | estable                                           |
-| `atoms/alert`                      | estable                                           |
-| `atoms/password-input`             | estable                                           |
-| `molecules/data-table`             | estable                                           |
-| `molecules/empty-state`            | estable                                           |
-| `organisms/app-header`             | estable                                           |
-| `templates/page`                   | estable                                           |
-| `atoms/card`                       | estable (`actions` y `label`, 24/9)               |
-| `molecules/segmented-control`      | nuevo 24/9                                        |
-| `organisms/dialog`                 | nuevo 25/9 (el único modal)                       |
-| `atoms/nav-item`                   | estable                                           |
-| `organisms/side-nav`               | estable                                           |
-| `organisms/app-header`             | **retirado** el 18/9 (ver `PRODUCT_DECISIONS.md`) |
-| `ToggleButton`, `MenuItem`, `Tabs` | **no existen** (§5 los exige)                     |
+| Componente                         | Estado                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `atoms/button`                     | estable                                                                                                                         |
+| `atoms/input`, `label`             | estable                                                                                                                         |
+| `atoms/form-field`                 | estable (`FormTextarea` desde el 25/9)                                                                                          |
+| `atoms/alert`                      | estable                                                                                                                         |
+| `atoms/callout`                    | 27/9: recuadro con título (`note`/`example`/`important`), mismas clases `.callout` que el `:::callout` del Markdown; sin `role` |
+| `atoms/progress-bar`               | 27/9: barra de avance SVG (`role="progressbar"`); antes copiada en `/aprender` y `/familia`                                     |
+| `organisms/student-tab-bar`        | 27/9: pestañas inferiores del estudiante bajo `lg` (programas, calendario, biblioteca, cuenta); oculta en modo tarea            |
+| `atoms/password-input`             | estable                                                                                                                         |
+| `molecules/data-table`             | estable                                                                                                                         |
+| `molecules/empty-state`            | estable                                                                                                                         |
+| `organisms/app-header`             | estable                                                                                                                         |
+| `templates/page`                   | estable                                                                                                                         |
+| `atoms/card`                       | estable (`actions` y `label`, 24/9)                                                                                             |
+| `molecules/segmented-control`      | nuevo 24/9                                                                                                                      |
+| `organisms/dialog`                 | nuevo 25/9 (el único modal)                                                                                                     |
+| `atoms/nav-item`                   | estable                                                                                                                         |
+| `organisms/side-nav`               | estable                                                                                                                         |
+| `organisms/app-header`             | **retirado** el 18/9 (ver `PRODUCT_DECISIONS.md`)                                                                               |
+| `ToggleButton`, `MenuItem`, `Tabs` | **no existen** (§5 los exige)                                                                                                   |
 
 ---
 

@@ -12,7 +12,10 @@
  * Composición: marca → destinos de «Estudiar» como pestañas → a la derecha, campana con
  * contador y el menú de la persona (iniciales) con «Mi historial», el tema y «Cerrar sesión».
  * Por debajo de `md` las pestañas bajan a una segunda fila con desplazamiento horizontal:
- * siempre en el DOM, siempre alcanzables con teclado, sin cajón.
+ * siempre en el DOM, siempre alcanzables con teclado, sin cajón. Salvo con
+ * `primaryNav="desktop"` (27/9): el área del estudiante tiene barra de pestañas abajo por
+ * debajo de `lg` (`StudentTabBar`) y los mismos tres destinos arriba y abajo eran ruido
+ * (Jhonny lo vio en el móvil). `(familia)` no tiene barra abajo y conserva la fila.
  */
 
 import Link from 'next/link';
@@ -44,6 +47,7 @@ import {
 import type { NavDestination } from '@/lib/nav/staff-nav';
 import { toTheme, type Theme } from '@/lib/theme/theme';
 import { applyTheme, THEME_OPTIONS } from '@/lib/theme/apply-theme';
+import { isActive } from '@/lib/nav/is-active';
 import { cn } from '@/lib/utils';
 
 /**
@@ -52,12 +56,6 @@ import { cn } from '@/lib/utils';
  * Resultados, Constancias y Mi cuenta, que cuelgan de `/aprender/` sin ser la ruta. Los
  * destinos sin `activeUnder` conservan la regla de prefijo (`/aprender/calendario/…`).
  */
-function isActive(currentPath: string | null, item: NavDestination): boolean {
-  if (!currentPath) return false;
-  if (currentPath === item.href) return true;
-  if (item.activeUnder) return item.activeUnder.some((prefix) => currentPath.startsWith(prefix));
-  return currentPath.startsWith(`${item.href}/`);
-}
 
 /** Icono de cada destino de «Mi historial»; uno nuevo sin icono sale sin él, no rompe. */
 const PERSONAL_ICONS: Record<string, LucideIcon> = {
@@ -86,6 +84,7 @@ export function StudentTopNav({
   spaces = [],
   homeHref = '/aprender',
   notificationsHref = '/aprender/notificaciones',
+  primaryNav = 'always',
 }: {
   institutionName: string;
   items: NavDestination[];
@@ -96,6 +95,8 @@ export function StudentTopNav({
   spaces?: Space[];
   homeHref?: string;
   notificationsHref?: string;
+  /** `desktop`: los destinos solo desde `lg`; por debajo los pone la barra de pestañas. */
+  primaryNav?: 'always' | 'desktop';
 }) {
   const currentPath = usePathname() as string | null;
   const router = useRouter();
@@ -115,7 +116,13 @@ export function StudentTopNav({
       <div className="max-w-site mx-auto flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2 sm:px-6">
         <SpaceSwitcher institutionName={institutionName} spaces={spaces} homeHref={homeHref} />
 
-        <nav aria-label="Principal" className="order-last w-full md:order-none md:w-auto md:flex-1">
+        <nav
+          aria-label="Principal"
+          className={cn(
+            'order-last w-full md:order-none md:w-auto md:flex-1',
+            primaryNav === 'desktop' && 'hidden lg:block'
+          )}
+        >
           <ul className="-mx-4 flex gap-1 overflow-x-auto px-4 md:mx-0 md:px-0">
             {primary.map((item) => {
               const active = isActive(currentPath, item);

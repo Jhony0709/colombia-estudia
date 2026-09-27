@@ -19,6 +19,8 @@ const schema = z.object({
   accepts: z.enum(['TEXT', 'FILE', 'TEXT_OR_FILE']),
   /** Enunciados (24/9); vacío = un solo texto. */
   prompts: z.array(z.string().trim().max(1_000)).max(20).optional(),
+  /** Aprobar al enviar (27/9). */
+  autoApprove: z.boolean().optional(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -38,5 +40,6 @@ export const PUT = apiHandler<Input>({ schema, capability: 'lesson.author' })(as
     instructions: input.instructions === '' ? null : input.instructions,
     accepts: input.accepts,
     prompts: input.prompts ?? [],
+    autoApprove: input.autoApprove ?? false,
   });
 });

@@ -26,6 +26,18 @@ const mockAuditLogCreate = jest.fn();
 
 jest.mock('server-only', () => ({}));
 
+// 27/9: publicar propaga la versión a las cohortes no fijadas. Aquí se prueba que se llama
+// con lo publicado y que el resultado llega al autor; la propagación tiene su propio test.
+const mockPropagate = jest.fn<
+  Promise<{ moved: number; reopened: Array<{ assignmentId: string; studentIds: string[] }> }>,
+  unknown[]
+>(async () => ({ moved: 0, reopened: [] }));
+const mockNotifyReopened = jest.fn<Promise<number>, unknown[]>(async () => 0);
+jest.mock('@/features/cohorts/server/version-propagation', () => ({
+  propagateLessonVersion: (...args: unknown[]) => mockPropagate(...args),
+  notifyReopened: (...args: unknown[]) => mockNotifyReopened(...args),
+}));
+
 jest.mock('@/lib/db/tenant', () => ({
   createTenantClient: jest.fn(() => {
     const tx = {
@@ -322,6 +334,43 @@ describe('saveDraft', () => {
     expect(mockVersionUpdate).toHaveBeenCalled();
     expect(mockAuditLogCreate).not.toHaveBeenCalled();
   });
+
+  // 27/9: el borrador reclama sus imágenes para que el barrido diario no las tome por huérfanas.
+  // Los ids son cuids válidos porque el parser descarta los que no lo son antes de llegar aquí
+  // (`invalid-asset-id`): «inventado» significa con forma válida pero sin fila en la base.
+  it('vincula al borrador los assets que el Markdown referencia y existen; ignora los inventados', async () => {
+    const real = 'cm1abcdefghijklmnopqrstuv';
+    const ghost = 'cm1ghostghostghostghostgh';
+    mockVersionFindFirst.mockResolvedValue({ id: 'v3', status: 'DRAFT' });
+    mockMediaFindMany.mockResolvedValue([{ id: real, kind: 'IMAGE', status: 'READY' }]);
+
+    await saveDraft({
+      institutionId: 'i1',
+      versionId: 'v3',
+      content: `## Sección\n\n![Un mapa](asset:${real})\n\n![Otro](asset:${ghost})\n`,
+    });
+
+    expect(mockMediaFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: { in: [real, ghost] } } })
+    );
+    expect(mockAssetDeleteMany).toHaveBeenCalledWith({
+      where: { lessonVersionId: 'v3', mediaAssetId: { notIn: [real] } },
+    });
+    expect(mockAssetCreateMany).toHaveBeenCalledWith({
+      data: [{ institutionId: 'i1', lessonVersionId: 'v3', mediaAssetId: real }],
+      skipDuplicates: true,
+    });
+  });
+
+  it('sin imágenes en el texto suelta todos los vínculos y no crea ninguno', async () => {
+    mockVersionFindFirst.mockResolvedValue({ id: 'v3', status: 'DRAFT' });
+
+    await saveDraft({ institutionId: 'i1', versionId: 'v3', content: '## Solo texto\n' });
+
+    expect(mockMediaFindMany).not.toHaveBeenCalled();
+    expect(mockAssetDeleteMany).toHaveBeenCalledWith({ where: { lessonVersionId: 'v3' } });
+    expect(mockAssetCreateMany).not.toHaveBeenCalled();
+  });
 });
 
 describe('publishLesson', () => {
@@ -331,6 +380,7 @@ describe('publishLesson', () => {
     number: 3,
     status: 'DRAFT',
     invalidatesProgress: false,
+    lesson: { title: LESSON.title },
   };
 
   const contentFor = (markdown: string) => ({
@@ -399,5 +449,52 @@ describe('publishLesson', () => {
     await publishLesson({ institutionId: 'i1', actorId: 'p1', versionId: 'v3' });
 
     expect(mockAssetDeleteMany).toHaveBeenCalledWith({ where: { lessonVersionId: 'v3' } });
+  });
+
+  // 27/9: la congelación es de la cohorte. Publicar mueve a las que siguen la última versión.
+  it('propaga la versión a las cohortes no fijadas dentro de la transacción y avisa a los reabiertos después', async () => {
+    mockVersionFindFirst
+      .mockResolvedValueOnce({ ...draftVersion, invalidatesProgress: true })
+      .mockResolvedValueOnce(contentFor('## Sección\n\nUn párrafo.\n'));
+    mockPropagate.mockResolvedValueOnce({
+      moved: 2,
+      reopened: [{ assignmentId: 'la-1', studentIds: ['s1', 's2'] }],
+    });
+    mockNotifyReopened.mockResolvedValueOnce(2);
+
+    const result = await publishLesson({ institutionId: 'i1', actorId: 'p1', versionId: 'v3' });
+
+    expect(mockPropagate).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        institutionId: 'i1',
+        lessonId: 'l1',
+        version: { id: 'v3', number: 3, invalidatesProgress: true },
+      })
+    );
+    expect(mockNotifyReopened).toHaveBeenCalledWith(
+      expect.objectContaining({
+        lessonTitle: LESSON.title,
+        versionNumber: 3,
+        reopened: [{ assignmentId: 'la-1', studentIds: ['s1', 's2'] }],
+      })
+    );
+    expect(result).toMatchObject({ number: 3, cohortsUpdated: 2, reopened: 2 });
+    expect(mockAuditLogCreate.mock.calls[0]?.[0].data.after).toMatchObject({ cohortsUpdated: 2 });
+  });
+
+  it('con errores de validación no propaga nada', async () => {
+    mockVersionFindFirst
+      .mockResolvedValueOnce(draftVersion)
+      .mockResolvedValueOnce(
+        contentFor('## Sección\n\n![Diagrama](asset:cm1abcdefghijklmnopqrstuv)\n')
+      );
+
+    await expect(
+      publishLesson({ institutionId: 'i1', actorId: 'p1', versionId: 'v3' })
+    ).rejects.toThrow(/impiden publicarlo/);
+
+    expect(mockPropagate).not.toHaveBeenCalled();
+    expect(mockNotifyReopened).not.toHaveBeenCalled();
   });
 });

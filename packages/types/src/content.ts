@@ -11,6 +11,7 @@
  */
 
 import { z } from 'zod';
+import { CALLOUT_KINDS, isCalloutKind } from './callouts';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
@@ -396,6 +397,31 @@ export function parseLessonMarkdown(markdown: string): ParsedLesson {
           }
         }
       }
+      // Callout (27/9): a container with a body; the kind has to be one we can draw.
+      else if (name === 'callout') {
+        if (node.type !== 'containerDirective') {
+          issues.push({
+            rule: 'callout-needs-body',
+            severity: 'error',
+            message: 'Callout needs a body: write it as :::callout … :::',
+            line: pos?.start.line,
+            column: pos?.start.column,
+            fix: 'Use the container form: :::callout{kind="note"} on its own line, the text, then ::: on its own line.',
+          });
+        } else {
+          const kind = directive.attributes?.kind ?? 'note';
+          if (!isCalloutKind(kind)) {
+            issues.push({
+              rule: 'callout-invalid-kind',
+              severity: 'error',
+              message: `Unknown callout kind: "${kind}"`,
+              line: pos?.start.line,
+              column: pos?.start.column,
+              fix: `Use one of: ${CALLOUT_KINDS.join(', ')}.`,
+            });
+          }
+        }
+      }
       // Unknown directive
       else {
         issues.push({
@@ -404,7 +430,7 @@ export function parseLessonMarkdown(markdown: string): ParsedLesson {
           message: `Unknown directive: ::${name}`,
           line: pos?.start.line,
           column: pos?.start.column,
-          fix: `Use a supported directive: ::video, ::audio, ::pdf, or :lang`,
+          fix: `Use a supported directive: ::video, ::audio, ::pdf, :::callout, or :lang`,
         });
       }
     }

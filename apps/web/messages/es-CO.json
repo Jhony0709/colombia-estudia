@@ -150,6 +150,42 @@
       "noDomain": "Sin dominio propio todavía."
     },
     "curriculum": {
+      "prices": {
+        "title": "Precios",
+        "caption": "Lista de precios del programa: monto, periodo, grados y vigencia",
+        "empty": "Este programa no tiene precio: sus matrículas no generan cobro salvo que se cree un plan a mano.",
+        "add": "Añadir precio",
+        "added": "Precio añadido.",
+        "archived": "Precio archivado.",
+        "archive": "Archivar",
+        "confirmArchive": "Confirmar archivado",
+        "inUse": "{count, plural, one {usado en 1 plan de pagos} other {usado en # planes de pagos}}",
+        "cancel": "Cancelar",
+        "save": "Guardar el precio",
+        "colGrades": "Grados",
+        "colAmount": "Monto",
+        "colPeriod": "Se cobra",
+        "colValidity": "Vigencia",
+        "colActions": "Acciones",
+        "allGrades": "Todo el programa",
+        "gradeRange": "Grado {from} a {to}",
+        "validSince": "Desde {from}",
+        "validBetween": "Del {from} al {to}",
+        "period": {
+          "ONE_TIME": "Una vez por matrícula",
+          "MONTHLY": "Por mes",
+          "PER_MODULE": "Por componente"
+        },
+        "amount": "Monto (COP)",
+        "amountHint": "Pesos enteros, sin puntos ni centavos.",
+        "periodLabel": "Se cobra",
+        "gradeFrom": "Desde el grado",
+        "gradeTo": "Hasta el grado",
+        "gradesHint": "Vacío = todo el programa. Para bachillerato: 6 a 8, 9 a 11.",
+        "validFrom": "Vigente desde",
+        "validTo": "Vigente hasta",
+        "validToHint": "Vacío = sin fecha de fin."
+      },
       "programs": "Programas",
       "programsHint": "{count, plural, =0 {Todavía no hay ningún programa} one {Un programa} other {# programas}}. Un programa agrupa los componentes que recorre una cohorte.",
       "programsEmpty": "Aún no hay programas. Crea el primero.",
@@ -160,6 +196,42 @@
       "programCode": "Código",
       "programName": "Nombre",
       "programDescription": "Descripción",
+      "programKind": "Tipo de programa",
+      "programPricing": "Cobro",
+      "programPricingHint": "Un programa gratuito no genera cartera y un menor de edad puede matricularse sin acudiente. En uno de pago, el acudiente firma la matrícula.",
+      "pricing": {
+        "FREE": "Gratuito",
+        "PAID": "De pago"
+      },
+      "kind": {
+        "BACHILLERATO": "Bachillerato",
+        "INGLES": "Inglés",
+        "TECNICO": "Técnico",
+        "REFUERZO": "Refuerzo académico",
+        "PRE_ICFES": "Pre-ICFES",
+        "PREGRADO": "Pregrado",
+        "OTRO": "Otro"
+      },
+      "moduleName": "Nombre",
+      "moduleGrade": "Grado",
+      "moduleDescription": "Descripción",
+      "moduleDescriptionHint": "Una o dos frases: el estudiante las lee en su ruta, bajo el nombre del componente.",
+      "moduleClosing": "Texto de cierre",
+      "moduleClosingHint": "Lo que se lee al enviar el cuestionario del componente. Vacío = el texto general de la plataforma.",
+      "moduleUpdated": "Componente guardado.",
+      "moduleEditTitle": "Editar componente {code}",
+      "cover": {
+        "label": "Imagen de la tarjeta",
+        "hint": "PNG, JPG o WebP de hasta {mb} MB. Se ve en «Cursos abiertos», recortada a 16:9.",
+        "uploading": "Subiendo la imagen…",
+        "remove": "Quitar imagen",
+        "errors": {
+          "type": "Solo se admiten PNG, JPG o WebP.",
+          "size": "La imagen pesa más de {mb} MB.",
+          "upload": "No se pudo subir la imagen. Inténtalo de nuevo."
+        }
+      },
+      "gradeShort": "{grade}.º",
       "defaultAccessDays": "Días de acceso por defecto",
       "defaultAccessDaysHint": "Cuántos días de acceso tiene una matrícula del programa, contados desde que empieza.",
       "programCreated": "Programa creado.",
@@ -201,6 +273,7 @@
       "newSubjectTitle": "Nueva asignatura",
       "subjectsListTitle": "Asignaturas de la institución",
       "table": {
+        "grade": "Grado",
         "caption": "Programas de la institución, con sus componentes, temas y días de acceso",
         "modulesCaption": "Componentes de {name}",
         "code": "Código",
@@ -572,7 +645,13 @@
       "reopens": "Reabre el tema a quien ya lo completó",
       "keepsProgress": "Conserva lo completado",
       "updated": "«{title}» pasa a la v{number}{reopened, plural, =0 {} one { · 1 estudiante tendrá que revisarlo de nuevo} other { · # estudiantes tendrán que revisarlo de nuevo}}.",
-      "updateError": "No se pudo actualizar la versión. Inténtalo de nuevo."
+      "updateError": "No se pudo actualizar la versión. Inténtalo de nuevo.",
+      "pinned": "Fijada",
+      "pin": "Fijar en v{number}",
+      "pinHint": "Fijada, no cambia cuando el autor publique una versión nueva.",
+      "unpin": "Seguir la última versión",
+      "pinnedDone": "«{title}» queda fijada en la v{number}.",
+      "unpinnedDone": "«{title}» vuelve a seguir la última versión{to, plural, =0 {} other { y pasa a la v#}}."
     },
     "audit": {
       "openedBy": "Abierta por {name} el {date}",
@@ -590,6 +669,10 @@
     "enrolled": "Persona matriculada.",
     "startsAt": "Empieza en",
     "startsAtHint": "Grado de entrada: los componentes anteriores no se le muestran ni cuentan en su avance.",
+    "entryGrade": "Grado de entrada",
+    "entryGradeHint": "Empieza en el primer componente de ese grado; los anteriores no se le muestran ni cuentan en su avance.",
+    "entryGradeFirst": "Desde el grado {grade} (el primero)",
+    "gradeOption": "Grado {grade}",
     "startsAtFirst": "Desde el primer componente",
     "moduleOption": "Componente {position} — {name}",
     "startsAtModule": "Empieza en el componente {position}",
@@ -830,7 +913,13 @@
       "label": "Vista del contenido",
       "blocks": "Bloques",
       "markdown": "Markdown",
-      "markdownHint": "Es el texto tal como se guarda. Los videos, las imágenes y el código van en Markdown; al volver a Bloques se leen de nuevo."
+      "markdownHint": "Es el texto tal como se guarda. Los videos, las imágenes y el código van en Markdown; al volver a Bloques se leen de nuevo. Pega o suelta una imagen y se sube sola.",
+      "uploadingImage": "Subiendo {name}…",
+      "imageErrors": {
+        "type": "Solo se admiten PNG, JPG o WebP.",
+        "size": "La imagen pesa más de {mb} MB.",
+        "upload": "No se pudo subir la imagen. Inténtalo de nuevo."
+      }
     },
     "minutesLabel": "Minutos estimados",
     "pager": {
@@ -946,6 +1035,8 @@
     "seeIssues": "Ver los avisos",
     "mediaSettingsTitle": "{kind}: accesibilidad",
     "confirmPending": "{count, plural, one {La cohorte abierta {list} no tiene este tema todavía: podrá añadirlo} other {Las cohortes abiertas {list} no tienen este tema todavía: podrán añadirlo}} desde «Actualizaciones del programa».",
+    "confirmFollowing": "{following, plural, =0 {Ninguna cohorte abierta recibe esta versión al publicar} one {La cohorte abierta que sigue la última versión la recibe al publicar} other {Las # cohortes abiertas que siguen la última versión la reciben al publicar}}{pinned, plural, =0 {.} one {; una está fijada en su versión y se mueve desde la cohorte.} other {; # están fijadas en su versión y se mueven desde la cohorte.}}",
+    "publishedCohorts": "{cohorts, plural, =0 {Ninguna cohorte cambió de versión.} one {Una cohorte pasó a esta versión.} other {# cohortes pasaron a esta versión.}}{reopened, plural, =0 {} one { 1 estudiante tendrá que revisar el tema de nuevo.} other { # estudiantes tendrán que revisar el tema de nuevo.}}",
     "readiness": {
       "route": "En la ruta",
       "routeDetail": "{program} · Componente {position} «{module}»",
@@ -1004,6 +1095,8 @@
         "add": "Añadir una pregunta",
         "remove": "Quitar"
       },
+      "autoApprove": "Aprobar automáticamente al entregar",
+      "autoApproveHint": "La entrega queda aprobada al enviarse y el tema se completa en el acto, sin pasar por revisión. Para actividades de reflexión, donde lo que cuenta es hacerla. Nadie recibe aviso de revisión.",
       "save": "Guardar la actividad",
       "saved": "Actividad guardada.",
       "error": "No se pudo guardar la actividad. Tus cambios siguen en pantalla: vuelve a intentarlo."
@@ -1030,7 +1123,7 @@
     "questionsHint": "Cada pregunta necesita su enunciado, cuánto vale y —salvo en respuesta escrita— sus opciones.",
     "settingsTitle": "Reglas del intento",
     "maxAttempts": "Intentos",
-    "timeLimit": "Minutos",
+    "timeLimit": "Minutos (vacío: sin límite ni reloj)",
     "passPercent": "% para aprobar",
     "reviewPolicy": "Qué ve el estudiante después",
     "policy": {
@@ -1120,6 +1213,7 @@
     "confirmPublish": "Sí, publicar",
     "cancel": "Cancelar",
     "confirmPending": "{count, plural, one {La cohorte abierta {list} no tiene este examen todavía: podrá añadirlo} other {Las cohortes abiertas {list} no tienen este examen todavía: podrán añadirlo}} desde «Actualizaciones del programa».",
+    "confirmFollowing": "{following, plural, =0 {Ninguna cohorte abierta recibe esta versión al publicar} one {La cohorte abierta que sigue la última versión la recibe al publicar; los intentos ya abiertos conservan su examen} other {Las # cohortes abiertas que siguen la última versión la reciben al publicar; los intentos ya abiertos conservan su examen}}{pinned, plural, =0 {.} one {; una está fijada en su versión y se mueve desde la cohorte.} other {; # están fijadas en su versión y se mueven desde la cohorte.}}",
     "readiness": {
       "route": "En la ruta",
       "routeDetail": "{program} · Componente {position} «{module}»",
@@ -1148,6 +1242,7 @@
   },
   "learn": {
     "title": "Aprender",
+    "free": "Gratis",
     "dashboardTitle": "Mis programas",
     "dashboardHint": "{count, plural, one {Estás en un programa} other {Estás en # programas}}. Elige uno para ver su ruta.",
     "programsTitle": "Tus programas",
@@ -1171,6 +1266,39 @@
     },
     "minutes": "{count} min",
     "resumeHere": "Reanudar",
+    "startLabel": "Empezar",
+    "continueLabel": "Continuar",
+    "currentActivity": "Actividad actual",
+    "greeting": "Hola, {name}",
+    "showRest": "{count, plural, =1 {Ver 1 actividad restante} other {Ver # actividades restantes}}",
+    "hero": {
+      "eyebrow": "Tu aprendizaje importa",
+      "title": "Sigue avanzando en tu programa",
+      "body": "Cada actividad te acerca a nuevas habilidades para tu bienestar y tu futuro.",
+      "cta": "Continuar aprendiendo",
+      "start": {
+        "title": "Empieza tu camino",
+        "body": "Elige un curso abierto y da el primer paso. Es gratis y a tu ritmo.",
+        "cta": "Ver los cursos abiertos"
+      }
+    },
+    "strip": {
+      "label": "Tu progreso",
+      "completed": "completado de {program}",
+      "activities": "actividades",
+      "remaining": "restantes"
+    },
+    "aside": {
+      "label": "Para acompañarte",
+      "events": "Próximos eventos",
+      "calendar": "Ver calendario",
+      "resources": "Recursos",
+      "library": "Ver biblioteca",
+      "kind": { "DOCUMENT": "Documento", "AUDIO": "Audio", "RECORDING": "Grabación" },
+      "help": "¿Necesitas ayuda?",
+      "helpBody": "Estamos aquí para acompañarte en tu proceso de aprendizaje.",
+      "contact": "Escribir a soporte"
+    },
     "startHere": {
       "title": "Empieza por aquí",
       "body": "Este es tu primer tema. {how} Cuando lo termines, te llevamos al siguiente.",
@@ -1189,6 +1317,8 @@
     },
     "rail": {
       "label": "Ruta del programa",
+      "progressLabel": "Avance en {module}",
+      "progress": "{completed} de {total} completados · {percent} %",
       "allRoute": "Ver toda la ruta",
       "toggle": "Ruta del componente",
       "hide": "Ocultar la ruta",
@@ -1208,6 +1338,22 @@
     "closed": "Ya cerró.",
     "noSession": "No hay sesión",
     "noSessionHint": "Inicia sesión para ver tu programa.",
+    "catalog": {
+      "title": "Cursos abiertos",
+      "hint": "Cursos gratuitos en los que puedes inscribirte ahora.",
+      "noEnrollmentHint": "Todavía no estás en ningún programa. Elige un curso para empezar.",
+      "free": "Gratis",
+      "grade": "{grade}.º",
+      "content": "Contenido",
+      "lessonCount": "{count, plural, =0 {Sin temas todavía} =1 {1 tema} other {# temas}}",
+      "withAssessment": "con examen",
+      "program": "Programa",
+      "dates": "Fechas",
+      "dateRange": "Del {from} al {to}",
+      "cta": "Inscribirme",
+      "enrolled": "Quedaste inscrito en {name}. Ya puedes empezar.",
+      "error": "No se pudo completar la inscripción. Inténtalo de nuevo."
+    },
     "gate": {
       "NO_ENROLLMENT": {
         "title": "Todavía no estás matriculado en una cohorte",
@@ -1236,6 +1382,10 @@
     },
     "lesson": {
       "navLabel": "Navegación del tema",
+      "objective": "Objetivo de aprendizaje",
+      "readingProgress": "Avance de lectura del tema",
+      "nextShort": "Siguiente",
+      "previousShort": "Anterior",
       "backToOutline": "Volver a la ruta del programa",
       "previous": "Anterior: {title}",
       "next": "Siguiente: {title}",
@@ -1275,7 +1425,7 @@
     "submission": {
       "title": "Tu actividad",
       "textLabel": "Texto de la actividad",
-      "answersHint": "Responde cada pregunta en su campo. Lo que escribas se guarda en este aparato hasta que envíes.",
+      "answersHint": "Todas las preguntas son obligatorias: sin una respuesta en cada campo no se puede enviar. Lo que escribas se guarda en este aparato hasta que envíes.",
       "textHint": {
         "TEXT": "Escribe aquí tu respuesta.",
         "TEXT_OR_FILE": "Escribe aquí tu respuesta, o adjunta un archivo, o las dos cosas."
@@ -1392,12 +1542,14 @@
       "true": "Verdadero",
       "false": "Falso",
       "indexLabel": "Índice de preguntas",
-      "indexTitle": "Preguntas",
+      "indexTitle": "Progreso",
       "indexAnswered": "Pregunta {n}, respondida",
       "indexUnanswered": "Pregunta {n}, sin responder",
       "previous": "Anterior",
       "next": "Siguiente",
-      "position": "{n} de {total}",
+      "position": "Pregunta {n} de {total}",
+      "navLabel": "Navegación del intento",
+      "lastQuestion": "Última pregunta.",
       "submit": "Entregar",
       "submitHint": "Antes de cerrar te mostramos qué falta por responder.",
       "submitting": "Entregando…",
@@ -1641,6 +1793,7 @@
     "activity": {
       "title": "Actividad",
       "none": "El instructor todavía no escribió las instrucciones de esta actividad. Si tienes dudas, repórtalo abajo.",
+      "autoApprove": "No pasa por revisión: al enviarla completa, el tema queda completado en el acto.",
       "accepts": {
         "TEXT": "Se entrega escribiendo la respuesta aquí.",
         "FILE": "Se entrega con un archivo: PDF, PNG o JPG de hasta 20 MB.",
@@ -1656,8 +1809,8 @@
       "needsSubmission": "Te falta enviar la actividad para completar este tema.",
       "inReview": "Tu actividad está en revisión. Cuando la aprueben, el tema queda completado.",
       "returned": "Tu instructor pidió unos cambios en la actividad.",
-      "send": "Enviar actividad",
-      "resend": "Enviar nueva versión"
+      "send": "Ir a la actividad",
+      "resend": "Ir a la actividad devuelta"
     },
     "tools": {
       "label": "Opciones",
@@ -1823,8 +1976,8 @@
       "fix": "Usa Markdown: el HTML no se publica."
     },
     "image-not-asset": {
-      "message": "Una imagen apunta a una dirección externa.",
-      "fix": "Sube la imagen a la biblioteca y cítala como ![alt](asset:…)."
+      "message": "Una imagen no apunta a un recurso de la biblioteca.",
+      "fix": "Si la acabas de pegar, espera a que termine de subir. Si no, súbela a la biblioteca y cítala como ![alt](asset:…)."
     },
     "invalid-asset-id": {
       "message": "El identificador de un recurso no tiene la forma correcta.",
@@ -1918,6 +2071,7 @@
       "media": "Medio",
       "image": "Imagen",
       "rule": "Separador",
+      "callout": "Recuadro",
       "raw": "Markdown"
     },
     "addBlock": "Añadir un bloque",
@@ -1933,6 +2087,30 @@
     "level4": "Apartado",
     "listHint": "Una línea por elemento. Empieza con «- » para viñetas, «1. » para números y «- [ ] » para tareas.",
     "quotePlaceholder": "El texto de la cita",
+    "imageUpload": "Subir imagen",
+    "imageReplace": "Cambiar imagen",
+    "imageUploading": "Subiendo la imagen…",
+    "imageNoPreview": "Imagen guardada. La vista previa del tema la muestra.",
+    "imagePasteHint": "Pega una imagen, suéltala aquí o súbela.",
+    "imageAltRequired": "Describe la imagen antes de publicar.",
+    "imageAssetDetails": "ID del recurso",
+    "imageErrors": {
+      "type": "Solo se admiten PNG, JPG o WebP.",
+      "size": "La imagen pesa más de {mb} MB.",
+      "upload": "No se pudo subir la imagen. Inténtalo de nuevo."
+    },
+    "altTitle": "Describe la imagen",
+    "altHint": "Lo que muestra, para quien no la ve. No vale el nombre del archivo.",
+    "calloutTitle": "Título del recuadro",
+    "calloutKind": "Tipo de recuadro",
+    "calloutKinds": {
+      "note": "Nota",
+      "example": "Ejemplo",
+      "important": "Importante",
+      "goals": "Aprenderás"
+    },
+    "calloutPlaceholder": "El texto del recuadro",
+    "calloutHint": "Markdown: párrafos, listas, negrita. Sin título usa el del tipo. «Aprenderás» va a la derecha del texto en pantallas anchas.",
     "codeLanguage": "Lenguaje",
     "codePlaceholder": "El código",
     "tableHint": "La primera fila es el encabezado y no puede ir vacía. Las columnas se separan con «|».",
@@ -1941,7 +2119,7 @@
     "imageAlt": "Descripción",
     "imageAltHint": "Lo que muestra la imagen, para quien no la ve. No es opcional.",
     "imageAsset": "ID del recurso",
-    "imageAssetHint": "Sale de la biblioteca de recursos. Todavía no hay pantalla para subir imágenes.",
+    "imageAssetHint": "El id de una imagen ya subida, por si la tienes a mano. Normalmente no hace falta: sube o pega la imagen.",
     "rawHint": "Markdown que el editor no reconoce. Se guarda tal cual.",
     "format": "Formato",
     "bold": "Negrita",
@@ -2518,6 +2696,9 @@
       "partner": "Aliado",
       "choosePartner": "Elige un aliado",
       "total": "Total (pesos)",
+      "listPrice": "Precio de lista",
+      "listPriceHint": "Rellena el total: una vez por matrícula, el monto; por mes o por componente, el monto por cada cuota. Puedes ajustarlo.",
+      "noListPrice": "Sin precio de lista (total a mano)",
       "totalHint": "Sin puntos ni centavos.",
       "count": "Número de cuotas",
       "firstDueOn": "Primer vencimiento",
@@ -2701,13 +2882,13 @@
     "passwordHint": "Mínimo 12 caracteres.",
     "acceptPolicy": "Acepto la política de tratamiento de datos",
     "viewPolicy": "Ver política",
-    "minorNotice": "Como eres menor de edad, tu acudiente firma la política de datos. Te creamos la cuenta y el equipo completará tu matrícula con tu acudiente.",
+    "minorNotice": "Como eres menor de edad, puedes empezar el componente de introducción sin costo. Para matricularte en un programa de pago, tu acudiente firmará la política de datos y la matrícula.",
     "submit": "Crear cuenta",
     "haveAccount": "¿Ya tienes cuenta?",
     "login": "Inicia sesión",
     "success": "¡Cuenta creada!",
     "enrolled": "Ya estás en {code} — {name}. Puedes empezar a estudiar.",
-    "minorPending": "Tu cuenta está lista. El equipo te matriculará cuando tu acudiente firme la autorización.",
+    "enrolledFree": "Tu componente de introducción es gratis y ya está listo: estás en {code} — {name}. Entra y empieza a estudiar.",
     "operationsPending": "Tu cuenta está lista. El equipo te matriculará en tu cohorte y te avisará.",
     "enter": "Entrar",
     "goToLogin": "Ir a iniciar sesión",

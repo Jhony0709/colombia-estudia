@@ -40,7 +40,10 @@ describe('previewDraft', () => {
 
     const result = await previewDraft({ institutionId: 'i1', versionId: 'v1' });
 
-    expect(result.html).toContain('<div lang="es-CO">');
+    // Sin `<div lang>` envolvente (27/9): el idioma sale aparte y la vista previa lo pone en
+    // su contenedor, igual que el player.
+    expect(result.html).not.toContain('<div lang=');
+    expect(result.language).toBe('es-CO');
     expect(result.html).toContain('<h2>Sección</h2>');
     expect(result.missingAssets).toEqual([IMAGE_ID]);
   });

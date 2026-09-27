@@ -1034,3 +1034,124 @@ cohortes recorren. Las reglas del intento siguen siendo de la versión.
 
 **Razón**: Jhonny (25/9). Hasta hoy lo fijado al crear era inmutable, como los temas hasta
 el 18/9.
+
+## 2026-09-25 — Un menor entra solo al componente de introducción
+
+**Decisión**: la cohorte de introducción (`Institution.settings.introCohortId`) es el
+componente gratuito de promoción, y en ella un menor de edad se matricula **sin acudiente**,
+tanto por `/registro` como desde Cohortes → Matricular. En cualquier otra cohorte —los
+programas de pago— sigue exigiéndose acudiente, y el consentimiento de datos del menor lo
+firma ese acudiente cuando pasa a un programa de pago. La cartera sigue sin tocar nunca el
+acceso académico de un menor.
+
+**Razón**: los clientes (25/9, WhatsApp): «cuando es menor de edad se puede inscribir a un
+curso gratuito libremente, no es necesario agregar acudiente, contrario de los cursos
+pagos». Hasta hoy el registro de un menor creaba la cuenta sin matrícula y decía que
+operación completaría con el acudiente.
+
+## 2026-09-25 — Fase de negocio 1: el precio es un dato del programa
+
+**Decisión**: cada programa tiene una lista de precios (`ProgramPrice`): monto en pesos,
+periodo (`ONE_TIME`, `MONTHLY`, `PER_MODULE`), rango de grados opcional y vigencia. Un
+precio se archiva, nunca se edita ni se borra. El plan de pagos de una matrícula referencia
+el precio del que salió su total (`PaymentPlan.priceId`); el total sigue siendo editable
+por operación, pero deja de ser un número sin origen.
+
+**Razón**: los clientes venden «grado 6 a 8: $120.000 c/m; 9 a 11: $90.000 c/m» y hasta hoy
+el único monto del sistema era el total de cada plan, escrito a mano. El «c/m» (mes o
+componente) es una decisión abierta de los clientes: por eso el periodo es un dato del
+precio y no una suposición del código. Revisión de schema del 25/9, aceptada por Jhonny.
+
+## 2026-09-25 — Fase de negocio 2: el programa dice qué vende y el componente en qué grado va
+
+**Decisión**: `Program.kind` con la lista de los clientes (bachillerato, inglés, técnico,
+refuerzo, pre-ICFES, pregrado, otro). `Module.grade` es el grado escolar del componente y
+`Enrollment.entryGrade` el grado por el que entra una matrícula; la posición de entrada
+(`startsAtModule`, 20/9) se calcula desde el grado y se guarda también. Con componentes por
+grado, matricular pide el grado de entrada, no una posición.
+
+**Razón**: el negocio habla en grados —precio, ingreso, graduación— y el schema solo sabía de
+posiciones, que cambian al reordenar. Revisión de schema del 25/9.
+
+## 2026-09-25 — Fase de negocio 3: «gratis» es un dato del programa, no un JSON
+
+**Decisión**: `Program.pricing` (`FREE` | `PAID`). Un programa gratuito no genera cartera y
+en él un menor de edad se matricula sin acudiente (la regla del 25/9 pasa de «la cohorte de
+introducción» a «cualquier programa gratuito»). `Institution.introCohortId` es una columna con
+FK (antes `settings.introCohortId`): la cohorte en la que entra quien se registra. La
+plataforma dice «gratis» donde toca: al registrarse y en `/aprender`.
+
+**Razón**: «gratis» decidía matrícula automática y acudiente y vivía en un campo JSON cuyo
+comentario decía «nada de negocio crítico aquí». Los clientes: «lo que le brindamos gratis
+de promoción, digámoslo así». Revisión de schema del 25/9.
+
+## 2026-09-25 — Fase de negocio 4: el componente cuenta de qué va y cómo se cierra
+
+**Decisión**: `Module.description` (se lee en la ruta del estudiante) y `Module.closingText`
+(se lee al enviar el cuestionario del componente; vacío = texto general). Supera en parte la
+decisión del 24/9 («el cierre es general, no se guarda»): ahora es por componente cuando el
+equipo lo escribe, general si no. El video de introducción sigue en el primer tema del
+componente mientras no haya dónde gestionar subtítulos y transcripción de un medio del
+componente (regla de accesibilidad no negociable).
+
+**Razón**: el negocio da a cada componente descripción, video de entrada y cierre; el schema
+solo tenía posición y nombre. Revisión de schema del 25/9.
+
+## 2026-09-25 — Lo que la revisión del schema cambia hoy y lo que espera a un caso real
+
+**Decisión**: se aplican solo dos cosas: en programas con grados la matrícula recibe el grado
+y no una posición suelta (`startsAtModule` pasa a ser la traducción guardada del grado), y
+`ProgramPrice` es inmutable (se archiva y se crea otro; el plan de pagos no guarda snapshot
+porque el precio referenciado no cambia). `ProgramModule`, `GradeEntry` ponderado,
+`entryModuleOverride`, proyecciones materializadas y periodos académicos quedan anotados con
+su disparador en `docs/negocio/resumen.md` §5, no se construyen por adelantado.
+
+**Razón**: no complicar el modelo con capacidades que nadie ha pedido; cada una tiene un
+momento claro en que se vuelve necesaria y una migración clara cuando llegue.
+
+## 2026-09-25 — El estudiante se inscribe solo en lo gratuito, y el curso es el componente
+
+**Decisión**: `/aprender` enseña los cursos gratuitos abiertos en los que la persona no está,
+con un botón «Inscribirme». El curso que se elige es el **componente** (cliente, 25/9: «los
+componentes son los cursos a tomar»); el programa es la ruta que los ordena y la cohorte, el
+grupo con fechas. Inscribirse crea la matrícula en esa cohorte por `enrollPerson` con la
+persona como actor, entrando por ese componente. Lo de pago no aparece ahí: la matrícula de pago la
+hace operación, con plan de pagos y, si es menor, acudiente. Quien se retiró o terminó una
+cohorte no la vuelve a ver: volver a entrar es de operación.
+
+**Razón**: el negocio vende la introducción gratuita como puerta («regístrate y entra»); si el
+registro ocurre antes de que exista la cohorte, o el estudiante quiere otro curso gratuito
+después, no había ningún camino salvo escribir a la institución. Jhonny, 25/9.
+
+**Pendiente que destapa**: la matrícula sigue siendo por cohorte. Quien entra por un componente
+ve ese y los siguientes; tomar uno anterior después es de operación. Se decide cuando haya un
+programa con varios cursos sueltos, no antes.
+
+## 2026-09-27 — Actividades que se aprueban solas
+
+**Decisión**: cada tema con actividad tiene la opción «Aprobar automáticamente al entregar»
+(`Lesson.activityAutoApprove`, en la tarjeta de la actividad del editor). Con ella, la entrega
+queda aprobada al enviarse, el tema se completa en el acto y el equipo no recibe aviso; sin
+ella, todo sigue como el 23/9: revisión del instructor con aprobar o devolver.
+
+**Razón**: las actividades del componente de introducción son de reflexión («Un día difícil»,
+«Carta a mí mismo/a»); lo que cuenta es hacerlas, y una cola de revisión para eso sería un
+cuello de botella artificial y una espera para el estudiante. Jhonny, 27/9.
+
+## 2026-09-27 — La congelación es de la cohorte, no del contenido
+
+**Decisión**: las versiones de tema y examen siguen siendo inmutables, pero la asignación de
+cada cohorte viva sigue por defecto a la última versión publicada: al publicar, pasa sola,
+aplicando la regla de reabrir si `invalidatesProgress`. «Congelar» pasa a ser fijar una
+asignación en su versión (`pinnedVersion`, desde la pestaña «Ruta» de la cohorte), y es la
+excepción. Para el autor, publicar se siente como «guardar cambios».
+
+**Razón**: Jhonny quería cursos con contenido base editable cuando se quiera. Hacer el
+contenido mutable de verdad perdía tres cosas que un colegio necesita: saber con qué texto
+completó cada estudiante, la puerta de validación de accesibilidad al publicar, y un sitio
+donde vivir `invalidatesProgress`; además obligaba a dos regímenes distintos para tema y
+examen (un examen mutable cambia la nota de quien ya lo hizo). Mover la congelación a la
+cohorte da lo mismo en la práctica y conserva todo eso. Jhonny, 27/9.
+
+**Descartado**: `LessonVersion` editable en caliente; un «publicar sin propagar» como opción
+del autor (la excepción la decide quien lleva la cohorte, no quien escribe).

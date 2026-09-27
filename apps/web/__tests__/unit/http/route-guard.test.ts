@@ -45,6 +45,13 @@ const PUBLIC_ROUTES = new Map([
     'exige sesión; el personId del contexto va en el where del UPDATE',
   ],
   ['notifications/read-all/route.ts', 'exige sesión; solo marca las propias'],
+  // Catálogo del estudiante (25/9): quien no tiene matrícula no tiene ninguna capacidad
+  // (`resolveCapabilities`: STUDENT se resuelve por matrículas), y es justo quien se inscribe.
+  // Lo que filtra es el `personId` del contexto y que la cohorte sea OPEN + FREE (catalog.service).
+  [
+    'learn/catalog/[cohortId]/enroll/route.ts',
+    'exige sesión; se inscribe a sí mismo y solo en cohortes abiertas de programas gratuitos',
+  ],
   // Fases 5 y 6 (19/9): tres rutas que se autentican por otra cosa que una capacidad.
   [
     'certificates/[code]/route.ts',

@@ -10,9 +10,16 @@ Program ─ Module ─ Lesson ──1:N──▶ LessonVersion ◀── LessonA
 El autor edita `Lesson`. Al publicar se crea una `LessonVersion` **inmutable**. Una versión
 publicada no se edita ni se borra: se publica otra.
 
-**La asignación es (cohorte, tema), no (cohorte, versión).** `LessonAssignment.lessonVersionId`
-puede cambiar —auditado— cuando el autor republica. El progreso guarda `lessonVersionId`:
-con qué versión se recogió la evidencia. Regla al cambiar la versión de una asignación:
+**La asignación es (cohorte, tema), no (cohorte, versión), y sigue a la versión publicada
+(27/9).** Al publicar, `LessonAssignment.lessonVersionId` pasa a la versión nueva en todas las
+cohortes `PLANNED`/`OPEN` cuya asignación no esté **fijada** (`pinnedVersion`), en la misma
+transacción y auditado por asignación (`version_changed` con `onPublish`). Para el autor,
+publicar es «guardar cambios»; la congelación es de la cohorte, no del contenido: fijar una
+asignación (pestaña «Ruta» de la cohorte) es la excepción, para la que está a punto de cerrar
+y no quiere que le muevan el piso; soltarla la pone al día en el acto. Las `CLOSED`/`ARCHIVED`
+no se tocan: terminaron con la versión con la que terminaron. El progreso guarda
+`lessonVersionId`: con qué versión se recogió la evidencia. Regla al cambiar la versión de una
+asignación, sea al publicar o a mano:
 
 - por defecto el `COMPLETED` **sobrevive** (una corrección de tildes no reabre un tema);
 - si la nueva versión tiene `invalidatesProgress = true` (el autor lo marca cuando el cambio
@@ -20,7 +27,8 @@ con qué versión se recogió la evidencia. Regla al cambiar la versión de una 
   evidencia conservada, y se notifica al estudiante.
 
 Para evaluaciones: `Attempt.assessmentVersionId` es el snapshot con el que se abrió el
-intento; cambiar la versión de la asignación afecta solo a intentos nuevos.
+intento; cambiar la versión de la asignación —al publicar o a mano— afecta solo a intentos
+nuevos.
 
 **Una fuente, N cohortes.** Al abrir una cohorte se crean sus asignaciones con las versiones
 vigentes del programa. El clon "ValoraT" de LearnDash desaparece: mismo catálogo, dos cohortes.
@@ -49,28 +57,41 @@ passPercent` (o cualquier `GRADED` si `passPercent` es nulo).
 LaTeX acotado + directivas propias. El contrato exacto es un parser/validador en
 `packages/types/src/content.ts`, y es SSOT.
 
-| Elemento                 | Sintaxis                                     | Regla                                                                                                                                                        |
-| ------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Imagen                   | `![texto alternativo](asset:<id>)`           | `alt` obligatorio, descriptivo, distinto del nombre de archivo                                                                                               |
-| Video                    | `::video{asset="<id>"}`                      | `captionsSource = REVIEWED` o `transcriptPath` (WebVTT sincronizado). `AUTO` no cuenta. Si el video muestra algo esencial, el texto de la lección lo explica |
-| Audio                    | `::audio{asset="<id>"}`                      | Idem                                                                                                                                                         |
-| PDF                      | `::pdf{asset="<id>"}`                        | `textAlternativePath` (Markdown con su texto)                                                                                                                |
-| Fórmula                  | `$…$` en línea, `$$…$$` en bloque (LaTeX)    | Debe compilar; se renderiza a MathML con el LaTeX como respaldo                                                                                              |
-| Fragmento en otro idioma | `:lang[The cat is on the table]{en}`         | Renderiza `<span lang="en">`                                                                                                                                 |
-| Encabezados              | `##` en adelante (`#` es el título del tema) | Sin saltos de nivel                                                                                                                                          |
-| Enlaces                  | `[texto](url)`                               | Texto descriptivo; nada de "clic aquí"                                                                                                                       |
-| HTML crudo               | —                                            | Rechazado                                                                                                                                                    |
+| Elemento                 | Sintaxis                                       | Regla                                                                                                                                                                                                                                                                                                                          |
+| ------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Imagen                   | `![texto alternativo](asset:<id>)`             | `alt` obligatorio, descriptivo, distinto del nombre de archivo                                                                                                                                                                                                                                                                 |
+| Video                    | `::video{asset="<id>"}`                        | `captionsSource = REVIEWED` o `transcriptPath` (WebVTT sincronizado). `AUTO` no cuenta. Si el video muestra algo esencial, el texto de la lección lo explica                                                                                                                                                                   |
+| Audio                    | `::audio{asset="<id>"}`                        | Idem                                                                                                                                                                                                                                                                                                                           |
+| PDF                      | `::pdf{asset="<id>"}`                          | `textAlternativePath` (Markdown con su texto)                                                                                                                                                                                                                                                                                  |
+| Fórmula                  | `$…$` en línea, `$$…$$` en bloque (LaTeX)      | Debe compilar; se renderiza a MathML con el LaTeX como respaldo                                                                                                                                                                                                                                                                |
+| Fragmento en otro idioma | `:lang[The cat is on the table]{en}`           | Renderiza `<span lang="en">`                                                                                                                                                                                                                                                                                                   |
+| Recuadro (27/9)          | `:::callout{kind="example" title="…"}` … `:::` | `kind` ∈ `note`, `example`, `important`, `goals` (otro = error); `goals` = «En este tema aprenderás», flotado a la derecha del texto en pantallas anchas; `title` opcional (por defecto Nota / Ejemplo / Importante); cuerpo en Markdown. Renderiza `<aside class="callout callout-<kind>">` con el título como primer párrafo |
+| Encabezados              | `##` en adelante (`#` es el título del tema)   | Sin saltos de nivel                                                                                                                                                                                                                                                                                                            |
+| Enlaces                  | `[texto](url)`                                 | Texto descriptivo; nada de "clic aquí"                                                                                                                                                                                                                                                                                         |
+| HTML crudo               | —                                              | Rechazado                                                                                                                                                                                                                                                                                                                      |
 
-Todo `asset:<id>` debe ser de la **misma institución** y estar `READY`. Al publicar, los ids
-se extraen a `LessonVersionAsset` (impide borrar un recurso en uso y hace consultable qué versión usa qué recurso).
+Todo `asset:<id>` debe ser de la **misma institución** y estar `READY`. Al guardar el borrador
+y al publicar, los ids se extraen a `LessonVersionAsset` (impide borrar un recurso en uso y hace
+consultable qué versión usa qué recurso). En el borrador solo se vinculan ids que existen; la
+exigencia de `READY` es de la publicación.
+
+**Recursos que nadie usa (27/9).** El editor sube la imagen al pegarla, antes de saber si se
+quedará. Lo que ninguna versión (`usedBy`), entrega (`submissions`) ni portada (`coverOf`)
+referencia pasados 7 días (`UNUSED_MEDIA_GRACE_DAYS`) lo borra el job diario
+(`sweepUnusedMedia`, `media.service.ts`): primero el objeto de Storage, después la fila, con el
+mismo `where` para que un reclamo tardío la salve por `Restrict`. Cubre el `PENDING` que nunca
+confirmó, la imagen pegada y no guardada y la que se quitó del texto. `AuditLog media.swept` con
+los conteos. El cliente no borra nunca.
 
 Por qué Markdown y no JSON de un editor: texto plano, portable, diffable, destino natural
 del OCR, render semántico limpio. Por qué LaTeX: Matemáticas, Geometría y Física; una
 fórmula como imagen no la lee nadie con lector de pantalla.
 
-**Pegar imágenes funciona como en GitHub**, y además por teclado: botón "Subir imagen"
-(`<input type="file">`), diálogo "Describe la imagen" con el `alt` obligatorio, y se inserta
-`![alt](asset:<id>)`. El editor no deja guardar un `alt` vacío ni igual al nombre del archivo.
+**Pegar imágenes funciona como en GitHub** (hecho el 27/9), y además por teclado: botón
+"Subir imagen" (`<input type="file">`), pegar o soltar en cualquier bloque, diálogo "Describe
+la imagen" con el `alt` obligatorio, y se inserta `![alt](asset:<id>)`. La imagen se reescala
+en el navegador (lado mayor ≤ 2000 px, WebP) antes de subir. El diálogo no acepta un `alt`
+vacío ni igual al nombre del archivo; la validación de publicación lo vuelve a comprobar.
 
 ## Dos caminos para el contenido existente
 

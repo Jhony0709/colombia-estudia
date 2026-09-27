@@ -4824,6 +4824,682 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 27/9 — Catálogo: hero sin matrícula y «Gratis» como pill
+
+Jhonny, entrando como Estudiante Tres (sin matrícula): la rama sin matrícula de `/aprender` no
+tenía hero ni el resto de la casa. Ahora `HomeHero` acepta `variant="start"` («Empieza tu
+camino», CTA «Ver los cursos abiertos» → `#cursos-abiertos`) y esa rama lo pinta encima del
+catálogo. En la tarjeta, «Gratis» pasa de texto en la overline a `Badge success` en
+sentence case (`learn.catalog.free`). Verificado en Chrome.
+
+La portada que no se veía en la primera comprobación apareció en la siguiente carga sin
+cambio de código en la lectura (`listOpenFreeCourses` ya la resolvía): inferencia, el guardado
+del diálogo llegó después de mi primera mirada.
+
+Tarjeta rediseñada (27/9, referencia de Jhonny: tarjeta de curso de Udemy): `<article>` con
+imagen 16:9 a sangre arriba (o bloque hundido con icono si no hay), nombre en dos líneas,
+«programa · grupo», descripción en dos líneas si la hay, fila con pill «Gratis» · temas ·
+examen · grado, fechas cortas y el botón al pie; rejilla de 1/2/3/4 columnas. Deja de usar el
+átomo `Card` (su padding no admite imagen a sangre). Verificado en Chrome.
+
+## 27/9 — Móvil: los tres destinos estaban arriba y abajo
+
+Jhonny lo vio en el teléfono: «Mis programas · Calendario · Biblioteca» en la segunda fila de
+`StudentTopNav` y otra vez en `StudentTabBar`. La barra de pestañas (27/9) llegó sin quitar la
+fila de arriba que la barra superior tenía desde el 21/9 para móvil. `StudentTopNav` gana
+`primaryNav: 'always' | 'desktop'`; `(student)/layout.tsx` pasa `desktop` y los destinos de
+arriba solo se ven desde `lg`, el mismo corte en el que desaparece la barra de abajo.
+`(familia)` no tiene barra de pestañas y conserva la fila. Verificado a 395 px: cabecera de
+una fila, `/aprender` con el recorte alto del hero (la persona entera, cabeza incluida) y la
+barra de pestañas; el tema en modo tarea sin barra de pestañas y con la barra fija del pie.
+
+## 27/9 — El reloj del intento solo con límite de tiempo configurado
+
+Decisión de Jhonny: el cronómetro aparece únicamente si el examen tiene límite de tiempo
+(`AssessmentVersion.timeLimitMinutes`, por defecto `null`) y el estudiante no está exento.
+Hasta ahora salía siempre que `deadlineAt` cayera dentro de 24 h (`isSessionDeadline`, 23/9),
+y `deadlineAt` es el mínimo de límite, fecha de entrega y fin de acceso: una entrega para
+mañana ponía una cuenta atrás en un examen sin límite. Una fecha no es un reloj.
+
+- `attempt.service.ts`: `loadOwnAttempt` selecciona `timeLimitMinutes` y `appliedAccommodation`;
+  `AttemptForStudent.timed = timeLimitMinutes !== null && !exemptFromTimer`.
+- `AttemptPlayer.tsx`: `attempt.timed && attempt.deadlineAt` decide el reloj; `isSessionDeadline`
+  eliminada. El servidor sigue cerrando el intento al vencer cualquier plazo.
+- Editor: el campo pasa de «Minutos» a «Minutos (vacío: sin límite ni reloj)».
+- Tests +2 en `AttemptPlayer.test.tsx` (plazo cercano sin límite → sin `role="timer"`; con
+  límite → reloj).
+
+## 27/9 — El intento: Markdown en las preguntas y una pregunta por vista
+
+De la crítica de UI/UX que trajo Jhonny (27/9), las dos primeras prioridades.
+
+**1. Markdown en preguntas, opciones, retroalimentación e instrucciones.** El contrato trata
+el texto de la pregunta como Markdown (la validación de publicación mira imágenes en
+`questions.*.text`), pero el player lo pintaba como texto plano y el estudiante veía `**`.
+Nuevo `renderInlineHtml` en `packages/types/src/render.ts`: mismo pipeline saneado, esquema
+solo en línea (`strong`, `em`, `code`, `del`, `br`, `sub`, `sup`, `a` y MathML de KaTeX);
+`p`, títulos y listas se desenvuelven a texto, imágenes e iframes se quitan; varios párrafos se
+separan con `<br>`. Tests +4 en `render.test.ts`. Se renderiza en el servidor
+(`attempt.service.ts`: `textHtml`, `options[].textHtml`, `feedbackHtml`, `instructionsHtml`
+en `getAssessmentForStudent` y `getAttemptForStudent`), así el cliente no carga unified ni
+KaTeX. `PageHeader.description` pasa a `ReactNode` para las instrucciones del examen.
+
+**2. Una pregunta por vista, en todos los tamaños** (`AttemptPlayer.tsx`): antes en escritorio
+iban todas en columna y «Entregar» debajo de la décima. Ahora: cabecera de una línea
+(«N de 10 respondidas · Guardado» + reloj si aplica) con `ProgressBar` debajo; la pregunta sin
+tarjeta (las opciones ya tienen borde); índice «Progreso» con tres estados sin depender del
+color (actual = fondo acento, respondida = check + verde, pendiente = hundida); «1 punto» solo
+si los puntos difieren entre preguntas; barra fija del pie con `StickyActionBar`: Anterior ·
+Entregar (`quiet`) · Siguiente, y en la última Entregar como primaria. El foco va a la leyenda
+de la pregunta nueva. En revisión (post-entrega) la tarjeta con el color del resultado se
+conserva.
+
+**Motion** (`motion-colombia-estudia`): la pregunta nueva entra con fade + 4 px
+(`.attempt-question`, `duration.normal`, `easing.enter`), salida por corte; opciones e índice con
+`transition-colors duration-fast ease-standard`; la barra de avance crece con `normal`
+(`.progress-bar-animated`, `width` del `rect` del SVG, excepción medida como los acordeones).
+`prefers-reduced-motion` = corte por la regla global. El reloj no se anima.
+
+Verificado en Chrome (Estudiante Dos, intento 2 del cuestionario): negrita en las
+instrucciones, avance 0 → 10 % al responder, cambio de pregunta, índice 1 ✓ / 2 actual. No
+verificado en móvil (Chrome en pantalla completa ignora el `resize`). Sin cambios de schema.
+
+Auditoría propia después (27/9): el índice pasa de `<a href="#pregunta-N">` (apuntaba a
+elementos con `display:none`) a `<button>` con `aria-current="step"`; la clave del envoltorio
+que remonta la pregunta es explícita (`${code}-on|off`); Verdadero/Falso, que no vienen del
+servidor, se escapan antes de `dangerouslySetInnerHTML`. Test nuevo
+`components/organisms/attempt-player/AttemptPlayer.test.tsx` (5 casos, jsdom: una sola
+pregunta con el HTML ya pintado, Anterior/Siguiente y Entregar en la última, avance e índice
+al responder, puntos solo si difieren, diálogo con las sin responder). SSOT:
+`01-routing/routes.md`, `03-ui/accesibilidad.md`. No ejecutado aquí.
+
+Segunda vuelta tras correr los tests (27/9): tres de los cinco fallaban porque las preguntas
+no actuales seguían en el DOM con `class="hidden"` (jsdom no aplica Tailwind, así que estaban
+«visibles» para Testing Library, y `getByLabelText('A')` encontraba cuatro radios). El test
+tenía razón en lo que pedía: ahora solo la pregunta actual está en el DOM (`<section>` con la
+`Question` con `key={code}`), sin diez `fieldset` escondidos con nombres repetidos. Mismo
+comportamiento en pantalla; menos DOM.
+Pendientes de la crítica: aviso del reloj ya existía (ámbar ≤ 5 min, rojo ≤ 1 min); «marcar
+para revisar», retroalimentación inmediata y sentence case quedan para el cliente.
+
+## 27/9 — Dos botones «Enviar actividad» y solo uno enviaba
+
+Jhonny, como estudiante: «no veo el error». Verificado en Chrome (Estudiante Dos, tema
+«Carta a mí mismo/a»): el botón del formulario sí muestra «Responde todas las preguntas antes
+de enviar» al pulsarlo vacío. El que no hacía nada visible era el de la barra fija del pie:
+decía «Enviar actividad →» igual que el del formulario, pero es un `<a href="#practica">` que
+solo baja a la sección (`page.tsx`, `LessonNav`); con el formulario ya a la vista, pulsarlo no
+enviaba ni avisaba. Ahora la barra dice «Ir a la actividad» / «Ir a la actividad devuelta» con
+flecha hacia abajo (`learn.bar.send/resend`): una etiqueta de navegación para una acción de
+navegación. Comprobado tras recargar.
+
+## 27/9 — Actividad con preguntas y aprobación automática: se dice que son obligatorias
+
+Pregunta de Jhonny. La regla ya existía en servidor y cliente (`submission.service.ts:232-236`
+«Responde todas las preguntas de la actividad»; `submission-form.tsx` `errors.answerAll`),
+pero solo se descubría al pulsar enviar, y con la aprobación automática el pie decía «se
+aprueba al enviar», que suena a «vale cualquier cosa». Cambios: `learn.submission.answersHint`
+dice que todas son obligatorias antes de escribir; cada campo lleva `required` +
+`aria-required`; `learn.activity.autoApprove` pasa a «No pasa por revisión: al enviarla
+completa, el tema queda completado en el acto». Sin cambio de lógica.
+
+## 27/9 — La congelación es de la cohorte: publicar propaga, fijar es la excepción
+
+Decisión en `PRODUCT_DECISIONS.md` (27/9). Jhonny pidió «contenido base editable cuando se
+quiera»; en vez de hacer mutable `LessonVersion` (pierde evidencia, validación de a11y e
+`invalidatesProgress`, y parte en dos el régimen de temas y exámenes), la asignación sigue
+sola a la versión publicada.
+
+- **Schema (protegido, avisado)**: `LessonAssignment.pinnedVersion` y
+  `AssessmentAssignment.pinnedVersion` (`Boolean @default(false)`); migración
+  `20260927120000_assignment_pinned_version`. `prisma generate` hecho aquí.
+- `features/cohorts/server/version-propagation.ts` (nuevo): `propagateLessonVersion(tx, …)`
+  mueve las no fijadas de cohortes `PLANNED`/`OPEN` que no estén ya en la versión, reabre
+  `COMPLETED → IN_PROGRESS` si `invalidatesProgress` (evidencia intacta), audita
+  `version_changed` por asignación con `onPublish: true` (`auditLog.createMany`);
+  `propagateAssessmentVersion` igual sin reabrir; `notifyReopened` avisa fuera de la
+  transacción con el mismo `dedupeKey` que el cambio manual.
+- `lessons.service.ts#publishLesson` y `assessments.service.ts#publishAssessment` la llaman
+  dentro de su transacción y responden `cohortsUpdated` (y `reopened` en temas).
+- `assignments.service.ts`: `setAssignmentPinned` (fija/suelta, audita `pinned`/`unpinned`;
+  al soltar reutiliza `updateAssignmentToLatest` y traga su `CONFLICT` de «ya al día»);
+  `CohortAssignmentItem.pinned`. `PATCH /api/cohorts/assignments/[id]` acepta `pinned?`.
+- `readiness.service.ts`: `ReadinessCohorts.following/pinned`.
+- UI: pestaña «Ruta» de la cohorte con «Fijar en vN» / «Seguir la última versión» y badge
+  «Fijada» (`assignment-rows.tsx`); diálogos de publicar de tema y examen dicen cuántas
+  cohortes reciben la versión y cuántas están fijadas (`confirmFollowing`); toast de publicar
+  del tema con `publishedCohorts`.
+- Tests: `version-propagation.test.ts` (5), `assignments.service.test.ts` +4,
+  `lessons.service.test.ts` +2 (propagación mockeada), `assessments.service.test.ts` +1.
+  No ejecutados aquí. `tsc` limpio.
+- SSOT: `04-business-logic/contenido-y-evaluaciones.md`, `05-database/schema.md`,
+  `02-api/endpoints.md` (tres filas).
+
+De tu lado: `pnpm prisma migrate deploy --schema=prisma/schema.prisma`,
+`pnpm --filter @colombia-estudia/web db:generate`, `pnpm test:unit`. No verificado en Chrome
+(hace falta sesión de staff).
+
+## 27/9 — Imagen rota con «Las imágenes se suben a la biblioteca…» tras pegar
+
+Pantallazo de Jhonny: icono de imagen rota con ese texto como alt. Es lo que `render.ts`
+(`resolveImages`) pone a toda imagen cuya URL no es `asset:<id>`, incluido el marcador
+`![Subiendo x…]()` que el editor en modo Markdown inserta mientras sube la imagen pegada. Que
+el marcador llegara a la vista previa o al tema significa que se **guardó** con él, y había dos
+formas: (1) el autoguardado corrió durante la subida y `setDirty(false)`; el reemplazo posterior
+por `![alt](asset:id)` no volvía a marcar `dirty`, así que no se guardaba hasta la siguiente
+tecla; (2) recarga o cierre a mitad de subida: el borrador guardado se queda con un marcador que
+nada reemplazará.
+
+- `lesson-editor.tsx`: `pendingUploads` (ref con los marcadores en curso); `save` envía
+  `stripPendingUploads(content)`, el estado local conserva el marcador para el reemplazo;
+  `setDirty(true)` tras resolver la subida, con éxito o sin él.
+- `packages/types/src/render.ts`: una imagen con URL **vacía** y alt conserva su alt (el
+  marcador ya dice «Subiendo…»); el consejo de la biblioteca queda para la URL externa, que es
+  la que hay que cambiar. Tests +2 en `render.test.ts`.
+
+## 27/9 — Imágenes pegadas que no se usan: reclamar en el borrador, barrer en el job
+
+Pregunta de Jhonny: qué pasa con las imágenes que se pegan en el editor y al final no se usan.
+Respuesta hasta hoy: nada, se quedaban (`media.service.ts` lo decía en su cabecera). Patrón
+adoptado: subir al pegar, reclamar al guardar, barrer por edad.
+
+- `lessons.service.ts`: `saveDraft` ahora sincroniza `LessonVersionAsset` con las referencias
+  `asset:` del Markdown, solo con ids que existen (`resolveAssets`), dentro de la misma
+  transacción que guarda el texto. El helper `syncVersionAssets` (quita lo que ya no está con
+  `notIn`, añade con `skipDuplicates`) lo comparten `saveDraft` y `publishLesson`; el autoguardado
+  de 5 s no reescribe filas que no cambiaron.
+- `media.service.ts`: `sweepUnusedMedia({ institutionId, now })` borra, en lotes de 200 por
+  pasada, los `MediaAsset` con `createdAt` anterior a 7 días (`UNUSED_MEDIA_GRACE_DAYS`) y sin
+  `usedBy`, `submissions` ni `coverOf`. Para `STORAGE` quita el objeto del bucket antes que la
+  fila (si el bucket falla, la fila se queda y cuenta en `failed`); para `VIMEO` solo la
+  transcripción/alternativa textual, que son nuestras. El `deleteMany` repite el `where`, y un
+  `Restrict` por reclamo tardío se trata como «en uso». `AuditLog media.swept` con conteos solo
+  si hubo algo.
+- `daily.service.ts`: paso 7, `report.mediaSwept`; un fallo del barrido no tumba el job.
+- Tests: `lessons.service.test.ts` +2 (`saveDraft` vincula existentes e ignora inventados; sin
+  imágenes suelta todo), `media.service.test.ts` +4 (`sweepUnusedMedia`). No ejecutados aquí.
+- SSOT: `04-business-logic/contenido-y-evaluaciones.md` («Recursos que nadie usa»),
+  `05-database/schema.md`, `02-api/endpoints.md` (fila del job).
+
+Corrección a lo dicho en el chat: afirmé por inferencia que el editor no autoguardaba; sí lo hace
+cada 5 s (`lesson-editor.tsx:110`, `AUTOSAVE_MS`). Con eso, la única imagen en riesgo real es la
+pegada en los cinco segundos antes de cerrar la pestaña; 7 días de gracia sobran, y se pueden
+bajar. Sin cambio de schema ni de archivos protegidos. Descartado a propósito: `DELETE
+/api/media/[id]` desde el editor (capacidad y ruta nuevas para cubrir un subconjunto de casos) y
+deduplicación por hash.
+
+## 27/9 — Dos arreglos de la tarde: `confirm` de media y el logger
+
+- **`POST /api/media/[mediaId]/confirm` devolvía `VALIDATION_ERROR` con `{}`.** El esquema
+  tenía `altText: optionalText(300)`, y `optionalText` (`lib/http/admin-input.ts:12`) es
+  `z.union([z.literal(''), z.string().trim().max(n)])`: admite vacío, no ausente. Los dos
+  clientes (`submission-form.tsx`, `lib/media/use-image-upload.ts`) confirman con `{}` y ponen el
+  alt después, así que toda subida moría en el tercer paso con `durationMs: 1` (falla en el
+  parse, antes del handler). Ahora `altText: optionalText(300).optional()`, como ya hacen
+  `report`, `submission` y `accommodations`; `confirmUpload` ya trataba `undefined` como «no
+  tocar» (`media.service.ts:204`). Sin test propio de la ruta; `media.service.test.ts` cubre el
+  servicio.
+- **`Error: the worker has exited` en `next dev`.** `pino-pretty` iba como `transport`, es decir
+  en un hilo (`thread-stream`) que `next dev` mata al recompilar; el error se emite en un
+  `setImmediate` como evento `error` sin oyente → `uncaughtException`. El `try/catch` que se puso
+  antes no podía atraparlo. Ahora en desarrollo `pino-pretty` es un flujo en el mismo proceso
+  (`lib/observability/logger.ts:70`) y `containWriteErrors` escucha `error` en el flujo
+  (`logger.ts:97-99`). Hace falta reiniciar `next dev`.
+
+## 27/9 — Aprobación automática de actividades
+
+Jhonny: «vamos a agregar la opción de aprobar automáticamente las actividades en el admin».
+
+- `prisma/schema.prisma` (protegido; una columna, sin otra forma de guardar la regla) +
+  `migrations/20260927000000_lesson_activity_auto_approve`: `Lesson.activityAutoApprove`
+  `Boolean @default(false)`. `prisma format/generate` en verde.
+- Admin: casilla «Aprobar automáticamente al entregar» en la tarjeta de la actividad del
+  tema (`lesson-activity.tsx`), con su ayuda; viaja en `PUT …/activity` (`autoApprove`) y
+  `updateLessonActivity` la guarda y audita (`before/after.autoApprove`).
+- Estudiante: `submitLesson` crea la entrega `APPROVED` (sin revisor, `reviewedAt` = envío),
+  completa el tema en la misma transacción y audita `auto_approved` sin actor; no avisa al
+  equipo. Bajo la actividad se lee «Se aprueba al enviar: el tema queda completado en el
+  acto» (`learn.activity.autoApprove`). El pie pasa directo a «Tema completado» y «Siguiente».
+- **No duplicar**: lo que hace una aprobación con el tema (`LessonProgress` `COMPLETED` +
+  `lesson.completed`) sale de `completeLessonBySubmission` en `learn/server/submission.service.ts`,
+  que ahora usan también la revisión del instructor (`cohorts/submissions.service.ts`) y la
+  automática.
+- Test nuevo `__tests__/unit/features/learn/submission.service.test.ts` (normal vs automática).
+  No ejecutado aquí. `tsc` en cero. No visto en Chrome (sin sesión de admin).
+- **Jhonny**: `migrate deploy`, `db:generate`, reiniciar, `test:unit`.
+
+## 27/9 — Pegar, soltar o subir imágenes en el editor
+
+Jhonny: «cuando en GitHub copio una imagen y la pego en el editor esta se sube y se adjunta
+al markdown, ¿cómo hacemos lo mismo?». Hasta hoy el bloque de imagen pedía el ID del recurso
+a mano («Todavía no hay pantalla para subir imágenes»).
+
+- `lib/media/use-image-upload.ts` (`useImageUpload`, `imageFilesFrom`, `IMAGE_ACCEPT`,
+  `IMAGE_MAX_MB`): la tubería única —validar tipo y tamaño en cliente → reescalar en canvas
+  (lado mayor ≤ 2000 px, WebP 0.85; el canvas suelta el EXIF; si el resultado pesa más que el
+  original se sube el original) → `POST /api/media/upload` → PUT firmado → `confirm`—.
+  `cover-image-field.tsx` pasa a usarla (era el mismo código copiado).
+- `BlockEditor`: `onPaste`/`onDrop` en la raíz —solo si hay archivos de imagen; el texto
+  sigue su camino en cada campo— insertan un bloque de imagen justo después del bloque
+  donde se pegó, «Subiendo…» desde el primer instante (placeholder optimista, como GitHub),
+  vista previa local al terminar y el diálogo «Describe la imagen» (`AltDialog`: no acepta
+  vacío ni el nombre del archivo, que es lo que GitHub pone y el contrato prohíbe). Si falla,
+  el bloque se va y se dice por qué; el texto no se toca. Varias imágenes a la vez: un
+  bloque por archivo, sin diálogo, con el `alt` marcado como obligatorio en cada uno.
+- Bloque de imagen: botón «Subir imagen» / «Cambiar imagen» (`<input type="file">` en
+  `sr-only` dentro de un `label`), vista previa, `alt` con error si falta, y el ID del
+  recurso plegado en un `<details>` para quien lo tenga de la biblioteca.
+- Vista Markdown (`lesson-editor.tsx`): pegar o soltar pone `![Subiendo nombre.png…]()` en
+  el cursor y lo sustituye por `![nombre](asset:id)` al terminar; el `alt` provisional es el
+  nombre sin extensión y la validación de publicación exige cambiarlo.
+- Mensajes `blockEditor.image*`, `blockEditor.alt*`, `editor.view.uploadingImage`,
+  `editor.view.imageErrors.*`; `imageAssetHint` ya no dice que no hay pantalla.
+- Sin cambios de schema ni de API. `tsc` en cero. **No visto en Chrome**: la sesión abierta
+  es de estudiante; probar pegando una captura en Bloques y en Markdown.
+- **No hecho**: deduplicar por hash, cuota por institución, barrido de `MediaAsset` `PENDING`
+  huérfanos en el job diario (anotado como deuda: hoy nadie los limpia).
+
+## 27/9 — El contenido del tema deja de ser plano
+
+Jhonny: «el renderizado debe ser atractivo visualmente, no plano». Solo CSS en `globals.css`
+(`.contenido`), tokens de siempre, estructura intacta (el lector de pantalla oye lo mismo):
+
+- `h2` con marca amarilla corta debajo (`::after` vacío, como el subrayado del `PageHeader`)
+  y más aire arriba; `h3` con barra izquierda de acento; `h4`–`h6` como overline (mayúsculas
+  pequeñas, gris). Lo que sigue a un título se le pega (`h2 + *` a `space-3`).
+- Viñetas y numerales en el color de acento (`li::marker`); casillas de tareas con
+  `accent-color`; listas anidadas con aire.
+- **Idea clave**: un párrafo que es solo negrita —así marca el cliente las frases importantes
+  en sus documentos— sale como recuadro azul suave con borde (`p:has(> strong:only-child)`).
+- Cita como superficie hundida con borde de acento; tabla con cabecera azul suave, línea
+  inferior y filas alternas; imágenes con esquinas redondeadas; `hr` como marca corta
+  amarilla centrada; enlaces con subrayado fino que engrosa al pasar; `pre` con borde.
+- **Error encontrado**: `renderLessonHtml(…, { language })` envolvía el HTML en `<div lang>`,
+  y los bloques quedaban como nietos del artículo: los selectores `.contenido > …` (la
+  separación entre párrafos, entre otros) no les llegaban. Todo tema con idioma —todos— se
+  veía con los párrafos pegados desde que existe la clase. Ahora el `lang` va en el
+  `<article>` (ya lo llevaba) y en el `div` de la vista previa (`PreviewResult.language`), y
+  el servicio y la vista previa llaman al render sin `{ language }`. La función conserva la
+  opción; nadie la usa.
+- Visto en Chrome en escritorio con «Taller 1. Gestión de emociones».
+
+## 27/9 — `/aprender` como «Student Learning Home» (diseño aprobado)
+
+Jhonny aprobó el rediseño del panel del estudiante (crítica + mockups del 27/9) con estas
+reglas: hero estático, sin emojis, sin carrusel, sin CMS; secciones laterales solo si hay
+algo; en móvil la ruta abierta y lo demás apilado.
+
+- `app/(student)/aprender/page.tsx` reescrito: hero (`home-hero.tsx`, panel sólido de marca
+  con ondas SVG decorativas y `brand.yellow`, sin foto: el público lee en celulares con datos
+  limitados y el texto no depende de una imagen para contrastar) → `PageHeader` «Hola,
+  {nombre}» con la fecha como acción → `CurrentActivity` (overline «Actividad actual», título
+  fuera del botón, programa, «Actividad · 10 min», barra + %, botón «Continuar»/«Empezar»
+  con el título en `sr-only`, portada del componente si la hay) → `ProgressStrip` (una
+  superficie: «50 % · 4 / 8 · ~35 min restantes», los minutos de lo no completado; se omite
+  la cifra si nadie los trae) → ruta como línea vertical (`StatusDot`: completado / actual /
+  disponible / bloqueado, siempre con icono) sin borde por ítem, con «Ver N actividades
+  restantes» plegado tras el actual y el siguiente → catálogo. Sin código de cohorte ni
+  «Gratis» en el titular del estudiante.
+- Rejilla 8/4 en `lg` (`Page wide`): a la derecha «Próximos eventos» (solo `LIVE_SESSION` y
+  `ASSESSMENT_DUE` futuros; las fechas de cohorte serían ruido), «Recursos» (biblioteca) y
+  «¿Necesitas ayuda?» (`supportEmail`), cada una solo si hay algo. En el teléfono, apilado.
+- `cohort.service.ts`: `OutlineModule.coverUrl`, firmado solo para el componente por el que
+  se va (una URL por matrícula, no por componente).
+- Barra inferior de pestañas (`organisms/student-tab-bar`, 27/9): Mis programas, Calendario,
+  Biblioteca, Mi cuenta bajo `lg`; oculta en modo tarea (`globals.css`), donde el pie es la
+  barra de «Siguiente». `main` con `pb-20` bajo `lg`. `isActive` sale de `StudentTopNav` a
+  `lib/nav/is-active.ts` para que lo compartan las dos barras.
+- Mensajes `learn.{greeting,currentActivity,continueLabel,showRest,hero.*,strip.*,aside.*}`.
+- Verificado en Chrome en escritorio (≥ 1024). Móvil y tablet pendientes de ver: la ventana
+  volvió a pantalla completa y no admite redimensionar.
+- **Fuera a propósito**: hero gestionable, segmentación, analytics propios (la acción
+  principal ya se mide con `PrimaryActionTracker`), pestañas «Información / Recursos /
+  Logros», anillo de progreso, buscador en la cabecera, emojis.
+- **Foto del hero** (misma tarde): Jhonny generó una imagen (persona no identificable, sin
+  bandera, sin texto) a partir del prompt de aquí; el original (1672×941, 147 KB) quedó en
+  `_to_delete/aprender-hero-original.webp` y de él salen dos recortes en
+  `public/photos/`: `aprender-hero-wide.webp` (1600×500, 43 KB, `sm`+) y
+  `aprender-hero-tall.webp` (560×700, 37 KB, teléfono, solo el 42 % derecho). `next/image`
+  con `sizes` para no bajar el ancho a un celular; texto sobre el azul de marca con
+  `.hero-photo-scrim` (degradado `accent-base` → `color-mix` → transparente) fundiendo la
+  foto por la izquierda: el contraste no depende de la imagen. Las ondas SVG se fueron.
+  Visto en escritorio; el recorte alto pendiente de ver en el teléfono.
+
+## 27/9 — Avance de lectura en el tema
+
+Jhonny: «agreguemos un scroll progress». `app/(student)/aprender/tema/[assignmentId]/reading-progress.tsx`
+(cliente): línea de 4 px pegada al borde superior (`fixed inset-x-0 top-0 z-20`, sin eventos
+de puntero) que se llena a medida que el `<article>` del tema pasa por la pantalla. Mide el
+artículo y no la página (la ruta plegada, la actividad y el pie no son lectura): 0 cuando el
+artículo asoma por arriba, 100 cuando su final entra; si cabe entero, no se pinta. Es el mismo
+`ProgressBar` (SVG, atributo `width`) porque la CSP no admite `style` en línea; `scroll`
+pasivo + `requestAnimationFrame`; sin transición a propósito (sigue al dedo). Nombre accesible
+`learn.lesson.readingProgress`. Visto en Chrome en escritorio (96 % al final del texto).
+
+## 27/9 — Auditoría responsive del estudiante (390 / 768 / 1024, en Chrome)
+
+Jhonny: «La UI/UX en responsive no es muy buena, audita y mejora». Visto con la sesión de
+Estudiante Dos en `/aprender`, el tema, calendario y biblioteca. Calendario y biblioteca bien.
+
+- **Tema, teléfono**: dos «…» en la misma pantalla (barra de tarea + `PageHeader`); la barra
+  fija del pie a tres filas (estado, «Anterior: …» + «Volver a la ruta», «Siguiente» truncado
+  o el aviso de bloqueo a dos líneas alineado a la derecha). Ahora: las herramientas del
+  `PageHeader` solo desde `lg` (`hidden lg:block`); «Volver a la ruta» fuera del pie (la barra
+  de tarea y el riel ya lo llevan); «Anterior» y «Siguiente» a secas bajo `sm` con el título
+  en `sr-only` (`lesson.nextShort/previousShort`); el aviso de bloqueo alineado a la izquierda
+  bajo `sm`. Queda en dos filas: estado y salida + acción.
+- **Tema, tablet y 1024**: «Opciones» caía en una fila propia entre el título y el contenido;
+  `PageHeader` pasa a `flex-nowrap items-start` desde `sm` con el bloque del título en
+  `min-w-0 flex-1`, así la acción se queda arriba a la derecha aunque el título ocupe tres
+  líneas (afecta a todas las pantallas, staff incluido: un botón «Nuevo…» ya no baja al
+  segundo renglón por un título largo). `StickyActionBar` en una sola fila desde `sm`
+  (`sm:flex-nowrap`); el «Siguiente» se trunca a 16/18/24 rem según `sm/lg/xl`; el enlace
+  «Anterior» lleva `min-w-0` para poder truncarse en vez de meterse bajo el botón.
+- **Riel**: el nombre del componente se parte en dos líneas (`line-clamp-2`) en vez de
+  «Gestión emocional y riesgo…».
+- **`/aprender`, teléfono**: «Seguir con “RESOLUCIÓN DE CONFLI…» → dos líneas y sin puntos
+  suspensivos (`line-clamp-2 text-left`). El «se habilita al completar X» solo en el primer
+  ítem bloqueado del componente (`ItemRow.showReason`): la misma frase cuatro veces seguidas
+  era media pantalla. **Error encontrado de paso**: el botón «Reanudar / Empezar» de la fila
+  imprimía `learn.startHere` —desde E2 (23/9) esa clave es un objeto—; nueva `learn.startLabel`
+  = «Empezar». Era mío, del 23/9.
+- **Tokens**: `--type-display-size` fluido, `clamp(1.5rem, 1.1rem + 1.6vw, 1.875rem)`: 24 px
+  en 390, 30 px desde ~1024. Un título de tema en mayúsculas ocupaba cuatro líneas de 30 px en
+  el teléfono. El plugin se carga al arrancar: **reiniciar `next dev`** para verlo.
+- El cuadrado gris abajo a la izquierda en el teléfono es el indicador de desarrollo de Next
+  (`<nextjs-portal>`), no nuestro.
+- Verificado en Chrome a 390, 768 y 1024 tras los cambios (salvo el token, que pide
+  reinicio). No visto: examen (bloqueado para esta cuenta) ni catálogo (la cuenta ya está
+  matriculada); revisados por código. `tsc` en cero.
+
+## 27/9 — Recuadros en el contenido y objetivo como recuadro (del diseño de referencia)
+
+Jhonny pasó un diseño de la vista del tema. Al contrastarlo con lo que hay, casi todo era el
+layout E2 (riel, barra de tarea, barra fija con estado + anterior + siguiente, `PageHeader`
+con objetivo). Lo que faltaba de verdad eran los recuadros dentro del contenido y que el
+objetivo se viera como tal. Eso es lo que entró; la columna derecha «En este tema aprenderás»
+primero no se hizo como columna; ver el bloque «Misma tarde» más abajo.
+
+- **Contrato** (`packages/types/src/content.ts`, protegido —editado porque es el SSOT de lo
+  que el Markdown admite—): directiva contenedora `:::callout{kind="note|example|important"
+title="…"}` … `:::`. Tipo desconocido = `callout-invalid-kind`; forma de una línea
+  (`::callout`) = `callout-needs-body`. Tipos y títulos por defecto en el nuevo
+  `packages/types/src/callouts.ts`, sin dependencias, para que el editor lo importe en el
+  navegador sin arrastrar katex.
+- **Render** (`render.ts`): `<aside class="callout callout-<kind>">` con el título como primer
+  `<p class="callout-title">`; `aside` y su `className` en el esquema de saneado.
+- **Estilos** (`globals.css`): `.callout*` fuera de `.contenido`, con tokens (`surface-sunken`
+  / `surface-note` / `status-info-muted`, borde izquierdo de 4 px + fondo, no solo color).
+- **Editor de bloques**: bloque `callout` (`blocks.ts`: recorte del cuerpo entre la línea de
+  apertura y el `:::`; ida y vuelta exacta) y su edición con la pinta que tendrá (título a
+  pelo con el título por defecto como marcador, selector de tipo, cuerpo Markdown). Entrada
+  «Recuadro» en el menú de añadir. Mensajes `blockEditor.callout*`.
+- **Átomo `Callout`** (`components/atoms/callout`): el mismo `<aside>` para lo que pone la
+  plataforma. El player lo usa para «Objetivo de aprendizaje» (`Lesson.learningObjective`)
+  al inicio del contenido, tipo `important`, icono decorativo; antes era el subtítulo gris
+  de `PageHeader`.
+- Tests: `blocks.test.ts` +2, `render.test.ts` +2, `content.test.ts` +3. No ejecutados aquí.
+- `tsc` en cero en `apps/web`, `packages/types`, `packages/domain`. Sin ver en Chrome.
+- **No hecho, y por qué**: «Opciones» como menú (hoy es «Reportar un problema» directo, un
+  menú de una entrada sobra); iconos de forma/duración en la línea de meta (la línea de texto
+  ya lo dice).
+
+**Misma tarde — la división izquierda/derecha** (Jhonny: «me gusta también la división, lo que
+se muestra a la izquierda y a la derecha»):
+
+- Izquierda: en el riel, el componente por el que se va lleva barra de avance y «3 de 8
+  completados · 38 %» (`rail.progress*`) en vez del «3/8». La barra es el nuevo átomo
+  `ProgressBar` (`components/atoms/progress-bar`), que sustituye a los dos SVG copiados de
+  `/aprender` y `/familia`: eran el mismo código.
+- Derecha: cuarto tipo de recuadro `goals` («En este tema aprenderás», título por defecto). Se
+  ve como nota y, a partir de 80 rem, `globals.css` lo flota a la derecha del texto (18 rem) y
+  ensancha la columna de lectura lo que mide la caja (`:has(> .callout-goals)`, `flow-root`
+  para contener el flotado). Flotado y no columna: el orden de lectura sigue siendo el del
+  Markdown y en pantallas estrechas cae en el flujo sin otro punto de quiebre. Sin `:has()`
+  (navegadores viejos) la caja flota igual dentro del ancho de lectura. El autor lo escribe
+  como primer bloque del tema: `:::callout{kind="goals"}` + lista numerada + `:::`.
+- `tsc` en cero. Sin ver en Chrome.
+
+**Y la cabecera en la columna del contenido** (Jhonny: «qué opinas de que el PageHeader esté
+al lado izquierdo»): `WithRouteRail` recibe `header`; `RouteRailFrame` lo pinta arriba de la
+columna del contenido y, bajo `lg`, la ruta plegada (`mobileRail`) debajo de la cabecera. Una
+sola cabecera en el DOM (el gestor de foco busca el `h1` al cambiar de ruta). El riel ocupa la
+izquierda de arriba abajo, como en el diseño; antes la cabecera cruzaba las dos columnas y la
+ruta empezaba bajo el título del tema. Aplica a `/aprender/tema/…` y `/aprender/examen/…`.
+
+## 26/9 — Imagen para la tarjeta del curso
+
+Jhonny: «Permitamos subir una imagen para la card».
+
+- `prisma/schema.prisma` + `migrations/20260926000000_module_cover`: `Module.coverMediaId` →
+  `MediaAsset` (relación `ModuleCover`, `ON DELETE SET NULL`). **Schema protegido: editado
+  porque la funcionalidad lo pide; no hay otra forma de asociar una imagen al componente.**
+  `prisma format/validate/generate` en verde.
+- Subida: la tubería que ya existía (`POST /api/media/upload` con `kind: 'IMAGE'` → PUT a la
+  URL firmada → `POST /api/media/[id]/confirm`, que comprueba los bytes). Nuevo
+  `app/(staff)/contenido/programas/cover-image-field.tsx` dentro de `EditModuleDialog`:
+  vista previa 16:9, «Quitar imagen», errores de tipo/tamaño (PNG/JPG/WebP, 10 MB, los mismos
+  límites de `lib/media/limits.ts`). Se guarda con el diálogo, no al elegir el archivo.
+- `curriculum.service.ts`: `CurriculumModule.coverMediaId` y `coverUrl` (firmada, 10 min);
+  `listCurriculum(id, { coverUrls })` firma solo cuando la pantalla lo pide (Programas), las
+  demás listas no gastan una llamada a Storage por componente. `updateModule` acepta
+  `coverMediaId` (`undefined` no toca, `null` quita, id debe ser IMAGE `READY` sin archivar de
+  la institución; si no, `VALIDATION_ERROR`). Ruta `PATCH …/modules/[id]` `op: 'update'`.
+- Estudiante: `CatalogCourse.coverUrl`; la tarjeta de «Cursos abiertos» la enseña arriba,
+  16:9, `alt=""` —decorativa: el nombre del curso va al lado (WCAG 1.1.1)—.
+- Tests: `curriculum.service.test.ts` +3 (`updateModule` con imagen válida, inválida, quitar /
+  no tocar), `catalog.service.test.ts` con `coverUrl`. No ejecutados aquí.
+- `tsc` en cero. Sin ver en Chrome.
+- **Jhonny**: `pnpm prisma migrate deploy`, `db:generate`, reiniciar.
+- **No hecho**: miniatura en la tabla de componentes del admin; imagen en la tarjeta «Continúa»
+  de `/aprender`; texto alternativo editable (si la imagen deja de ser decorativa, hay que
+  añadirlo: `MediaAsset.altText` ya existe).
+
+## 25/9 — «Cursos abiertos» en `/aprender`: inscribirse solo a lo gratuito
+
+Jhonny: «debería poder ver el curso en una sección en /aprender, una card con la información
+del curso y un cta para inscribirme». Hasta hoy la única puerta era el registro (cohorte de
+introducción) o que operación matriculara.
+
+- `features/learn/server/catalog.service.ts`: `listOpenFreeCourses` (cohortes `OPEN` de
+  programas `FREE` sin archivar en las que la persona no tiene matrícula en ningún estado) y
+  `selfEnroll` (misma comprobación; luego `enrollPerson` con la persona como actor, por correo o
+  documento). Lo de pago no aparece: plan de pagos y acudiente son de operación.
+- `POST /api/learn/catalog/[cohortId]/enroll`: sin capacidad, solo sesión —quien no tiene
+  matrícula no tiene ninguna capacidad (`resolveCapabilities`), y es justo quien lo necesita—.
+  `personId` del contexto. Cerrada o de pago = 404; duplicado = 409 (de `enrollPerson`).
+- `app/(student)/aprender/catalog-section.tsx` (server) + `enroll-button.tsx` (client):
+  tarjeta por curso —código · Gratis, programa, descripción, grupo, componentes, fechas— y
+  «Inscribirme», que tras el 200 anuncia y hace `router.refresh()`: la matrícula nueva sale
+  arriba como «Empieza por aquí». `Card` con `labelledBy` + `label` porque dos cohortes del
+  mismo programa colisionarían en el id que `Card` deriva del título.
+- `/aprender`: sin matrículas y con cursos, la sección sustituye al vacío «todavía no estás
+  matriculado»; con matrículas, va debajo de la ruta; sin cursos, nada.
+- Mensajes `learn.catalog.*`; `reference/01-routing/routes.md`, `02-api/endpoints.md`.
+- Tests: `__tests__/unit/features/learn/catalog.service.test.ts` (5 casos, no ejecutados aquí).
+- `tsc` en cero. Sin ver en Chrome (sin sesión).
+- **No hecho**: cursos de pago en el catálogo («solicitar información»); volver a inscribirse
+  tras retiro; límite de cupo (no existe en `Cohort`).
+
+**Corrección del mismo día — el curso es el componente.** El cliente confirmó: «los componentes
+son los cursos a tomar, por lo que se deben listar los cursos no los programas». Yo había
+hecho una tarjeta por cohorte (programa). Ahora:
+
+- `CatalogCourse` es un componente: `moduleId`, `code` (`COM-…`), `name`, `description`,
+  `grade`, `lessonCount`, `hasAssessment`, más el programa y el grupo (`cohortCode`,
+  `cohortName`, fechas) como contexto. `listOpenFreeCourses` aplana cohortes abiertas ×
+  componentes sin archivar.
+- `selfEnroll({ cohortId, moduleId })`: valida que el componente sea del programa de esa
+  cohorte y matricula entrando por él —`entryGrade` si el programa va por grados,
+  `startsAtModule` si no, nada si es el primero—. La ruta del estudiante muestra ese
+  componente y los siguientes. Body del `POST`: `{ moduleId }` (cuid).
+- Tarjeta: `COM-0001 · Gratis · 7.º`, nombre y descripción del componente, «Contenido: 7 temas
+  · con examen», «Programa: Introducción · Introducción septiembre», fechas, «Inscribirme».
+- Tests: 8 casos (entrada por posición, por grado, componente ajeno).
+- **Decisión abierta que esto destapa**: una matrícula es por cohorte, no por componente. Quien
+  entra por el componente 3 ve el 3 y los siguientes, no el 1 y el 2; y no puede «tomar» después
+  un componente anterior sin que operación toque la matrícula. Para la introducción (un solo
+  componente) no importa; para un programa con varios cursos sueltos habrá que decidir si la
+  matrícula pasa a ser por componente (cambio de schema) o si basta con abrir la ruta entera y
+  que «inscribirme» solo marque por dónde empieza.
+
+## 25/9 — Editar componente en un diálogo
+
+- Nuevo `app/(staff)/contenido/programas/edit-module-dialog.tsx` (`EditModuleDialog`): el
+  `Dialog` general (`size="lg"`, `scroll`, `locked` mientras envía) con nombre, grado,
+  descripción y texto de cierre; el `<form>` va en el cuerpo y «Guardar» en la fila de
+  acciones vía `form={formId}`, como `EditorDialog`. Título «Editar componente COM-0001»
+  (`admin.curriculum.moduleEditTitle`).
+- `programs-manager.tsx`: la celda del nombre vuelve a ser solo el nombre; «Editar» abre el
+  diálogo (`editing: CurriculumModule | null`, `key={editing.id}` para que el estado del
+  formulario empiece limpio por componente). Motivo: el formulario en línea con dos textareas
+  (fase 4) rompía la fila de la tabla.
+- `tsc` en cero. Sin ver en Chrome (sin sesión).
+
+## 25/9 — Revisión externa del schema: qué se aplicó y qué no
+
+Un revisor senior leyó `docs/negocio/resumen.md` y señaló siete riesgos. Se contrastó cada
+uno con el código (evidencia en el chat, resumida en `docs/negocio/resumen.md` §5).
+
+- **Aplicado — una sola entrada de grado al matricular**: `enrollments.service.ts` rechaza
+  una `startsAtModule` suelta cuando el programa tiene grados (`VALIDATION_ERROR`); la
+  posición guardada es la traducción del grado, no una segunda verdad. Test añadido en
+  `enrollments.service.test.ts` (y la fixture base lleva `grade: null`). La duplicación era
+  mía: en la fase 2 añadí `entryGrade` al lado de `startsAtModule` en vez de cerrar la
+  entrada. Programas sin grados siguen aceptando la posición.
+- **Aplicado — precio inmutable, por escrito**: `ProgramPrice` ya no tenía ruta de edición
+  (solo archivo); ahora lo dicen el comentario del modelo y `reference/05-database/schema.md`:
+  el plan de pagos no necesita snapshot porque el precio referenciado no cambia y el total y
+  las cuotas ya están copiados.
+- **No aplicado, con disparador**: separar `ProgramModule` de `Module` (cuando un componente
+  se quiera en dos programas); `GradeEntry` ponderado en vez de `Score` único por asignatura
+  (cuando aparezcan notas compuestas); proyecciones/vistas materializadas (cuando un
+  dashboard tarde; primer candidato: el estado de cuenta por request en
+  `lib/authz/request-context.ts`).
+- **Ya estaba**: la regla del menor y la mora viven solo en `resolveCapabilities`
+  (`packages/domain/src/capabilities.ts`), sin atajos en UI; periodos académicos fuera a
+  propósito.
+- `tsc` en cero; `prisma format` sin cambios de forma (solo comentarios).
+
+## 25/9 — Fase de negocio 4: componente con descripción y cierre
+
+- `prisma/schema.prisma` + `migrations/20260925130000_module_description_closing`:
+  `Module.description` y `Module.closingText` (texto).
+- `curriculum.service.ts`: los dos en `CurriculumModule` y en `updateModule`; `PATCH
+…/modules/[id]` `op: 'update'` los acepta (`optionalText`, vacío = nulo).
+- Nuevo átomo `FormTextarea` (`atoms/form-field`; era deuda del 18/9): mismo cableado que
+  `FormInput`. Programas → componente → «Editar» ahora edita nombre, grado, descripción y
+  texto de cierre.
+- Estudiante: `/aprender` muestra la descripción bajo el nombre del componente
+  (`OutlineModule.description`); el cierre del cuestionario (`AttemptPlayer`) enseña
+  `Module.closingText` si existe, con saltos de línea respetados, y si no el general
+  (`AttemptForStudent.closingText`, vía `assessment.module`).
+- **No hecho, y por qué**: `Module.introMediaAssetId`. Un medio del componente necesitaría su
+  propio lugar para subtítulos/transcripción (no negociable de accesibilidad) y hoy ese
+  lugar es el editor del tema; hasta entonces el video de introducción va en el primer tema,
+  como dice el manual. Manuales y `PRODUCT_DECISIONS.md` actualizados (el texto de cierre del
+  documento se pega en el componente, ya no en `messages`).
+- **Auditoría de fase**: `tsc` en cero; `closingText` viaja solo a quien ya ve el intento
+  (`loadOwnAttempt`); `description` solo en la ruta del estudiante matriculado; el cierre
+  general sigue como fallback, así que nada cambia para los componentes sin texto. Sin ver en
+  Chrome.
+
+**Fase 5 (periodos académicos y ceremonias de graduación): no hecha a propósito**, como se
+dijo en la revisión: necesita un programa de bachillerato real cargado para diseñar
+`Period` y `GraduationCeremony` contra datos y no contra supuestos.
+
+## 25/9 — Fase de negocio 3: «gratis» explícito
+
+- `prisma/schema.prisma` + `migrations/20260925120000_free_programs_intro_cohort`: enum
+  `ProgramPricing`, `Program.pricing` (default `PAID`), `Institution.introCohortId` (columna,
+  FK a `Cohort`, `@unique`, relación `IntroCohort`). La migración mueve el dato de
+  `settings.introCohortId` a la columna (solo si la cohorte existe), quita la clave del JSON
+  y marca `FREE` el programa de esa cohorte.
+- `lib/institution/settings.ts` ya no conoce `introCohortId`. `features/admin/server/
+registration.service.ts` y `features/auth/server/registration.service.ts` leen/escriben la
+  columna. `enrollments.service.ts`: `isIntroCohort` → `isFreeCohort` (mira
+  `program.pricing`): un menor sin acudiente entra a cualquier programa gratuito.
+- Programas: «Cobro» (gratuito / de pago, obligatorio) en el formulario y «Gratuito» bajo el
+  nombre en la lista. API de programas exige `pricing`.
+- Estudiante: `/aprender` muestra «· Gratis» junto al programa cuando es gratuito
+  (`cohort.programFree`); el registro dice «Tu componente de introducción es gratis y ya está
+  listo…» (`registration.enrolledFree`) cuando la cohorte de introducción es de un programa
+  gratuito.
+- Reset SQL: **corregido un riesgo real**: con la FK nueva, `TRUNCATE … CASCADE` sobre
+  `Cohort` habría vaciado `Institution`. Ahora suelta `introCohortId` antes y va sin `CASCADE`
+  (la lista de tablas es completa; Postgres avisa si falta una).
+- Tests: `registration.service.test.ts` (columna), `enrollments.service.test.ts` (programa
+  gratuito por `pricing`), `curriculum.service.test.ts` (`pricing` en fixtures).
+- **Auditoría de fase**: `tsc` en cero; no queda ningún lector de `settings.introCohortId`
+  (grep); `Counter` y `ProgramPrice` con tenant; la regla «mora nunca toca a un menor» no
+  cambia. Pendiente de negocio: el programa «Introducción» de Jhonny quedará `FREE` por la
+  migración solo si `introCohortId` estaba configurado al migrar; si no, marcarlo en
+  Programas → Editar → Cobro: Gratuito.
+
+## 25/9 — Fase de negocio 2: tipo de programa y grado
+
+- `prisma/schema.prisma` + `migrations/20260925110000_program_kind_and_grade`: enum
+  `ProgramKind`, `Program.kind` (default `OTRO`), `Module.grade Int?` y
+  `Enrollment.entryGrade Int?` (ambos con `CHECK` 0–13).
+- `lib/programs/kinds.ts` (lista y tipo, sin `server-only`, para el formulario y el servicio).
+  `curriculum.service.ts`: `kind` en crear/editar/listar, `grade` en `CurriculumModule`,
+  `updateModule({ name, grade })` (`PATCH …/modules/[id]` `op: 'update'`).
+- `enrollPerson({ entryGrade })`: traduce el grado al primer componente de ese grado y
+  guarda los dos; `VALIDATION_ERROR` si el programa no tiene ese grado. API
+  `POST …/enrollments` acepta `entryGrade`. La cuenta (`getAccount`) expone `entryGrade` y
+  Cartera → crear plan preselecciona el precio vigente de ese grado (`currentPriceFor`).
+- UI: formulario del programa con «Tipo de programa» (obligatorio; los existentes quedan en
+  «Otro»); lista de programas muestra el tipo bajo el nombre; subtabla de componentes con
+  columna «Grado» y «Editar» en línea (nombre + grado). Hoja de matricular: con componentes
+  por grado, «Grado de entrada» en vez de posición.
+- Tests: `curriculum.service.test.ts` (fixtures con `kind`), `enrollments.service.test.ts`
+  (dos casos nuevos: grado → posición, grado inexistente).
+- **Auditoría de fase**: `tsc` en cero; `startsAtModule` sigue siendo lo que lee el
+  estudiante (`outline`), así que nada cambia para él; `renameModule` queda como estaba
+  (sin llamador en UI, como antes). Sin ver en Chrome.
+
+## 25/9 — Fase de negocio 1: lista de precios
+
+Jhonny aceptó la revisión de schema («¿está correctamente organizado para el negocio?»)
+y pidió los cambios por fases con auditoría al final de cada una. Fase 1, el precio:
+
+- `prisma/schema.prisma` + `migrations/20260925100000_program_prices`: enum `PricePeriod`,
+  modelo `ProgramPrice` (programa, rango de grados opcional con `CHECK`, monto
+  `Decimal(12,0)`, periodo, vigencia, `createdById`, `archivedAt`) y `PaymentPlan.priceId`.
+- `features/billing/server/prices.service.ts`: `listProgramPrices`, `currentPriceFor`
+  (el vigente más específico para un grado; lo usará la fase 2), `createProgramPrice`,
+  `archiveProgramPrice`; auditan `program_price.created/archived`.
+- API: `GET/POST /api/admin/programs/[id]/prices`, `PATCH …/prices/[priceId]` (`archive`);
+  `POST /api/billing/plans` acepta `priceId` y comprueba que sea del programa de la matrícula.
+- UI: Programas → fila del programa → sección «Precios» (`program-prices.tsx`: tabla plana
+  y formulario de alta; archivar con confirmación en línea). Cartera → crear plan: select
+  «Precio de lista» que rellena el total (una vez = monto; por mes/componente = monto × cuotas).
+- `lib/db/tenant.ts`: `ProgramPrice` y `Counter` en `TENANT_SCOPED_MODELS` (test de conteo
+  35 → 37). Reset SQL vacía `ProgramPrice` y pone a cero los contadores de lo vaciado.
+- **Auditoría de fase**: `tsc` en cero; scoping por institución cubierto (`programPrice`
+  pasa por el cliente de tenant); el precio referenciado por un plan no puede ser de otro
+  programa (`billing.service.ts`); un precio con planes solo se archiva; `currentPriceFor`
+  aún sin llamador (fase 2). Sin ver en Chrome (no hay sesión). Pendiente: **Jhonny** corre
+  `migrate deploy` + `db:generate` + reinicio antes de abrir Programas o Cartera.
+
+## 25/9 — Un menor entra solo al componente de introducción
+
+Jhonny, de los clientes: «cuando es menor de edad se puede inscribir a un curso gratuito
+libremente, no es necesario agregar acudiente, contrario de los cursos pagos».
+
+- `enrollments.service.ts`: `isIntroCohort()` (lee `settings.introCohortId`); `enrollPerson`
+  y `previewEnrollment` dejan pasar a un menor sin acudiente **solo** en esa cohorte. En el
+  resto, igual que antes (`MINOR_WITHOUT_GUARDIAN`).
+- `registration.service.ts`: el menor ya no se queda en `MINOR_NEEDS_GUARDIAN`; va a
+  `enrollPerson` como un adulto y queda `ENROLLED` en la cohorte de introducción. Sigue sin
+  firmar consentimiento (lo firma el acudiente al pasar a un programa de pago).
+- `/registro`: aviso al menor reescrito («puedes empezar el componente de introducción sin
+  costo…»); el estado `MINOR_NEEDS_GUARDIAN` y `minorPending` desaparecen.
+- Tests ajustados: `registration.service.test.ts` (el menor queda matriculado),
+  `enrollments.service.test.ts` (mock de `institution`, caso nuevo «menor sin acudiente en la
+  cohorte de introducción»). `PRODUCT_DECISIONS.md`, `endpoints.md`, manual paso 8.
+- Sin ver en Chrome (no hay sesión). `tsc` en cero.
+
 ## 25/9 — CSP en staging: el bloqueo de scroll de los diálogos iba sin nonce
 
 Jhonny pegó de la consola de staging: «Applying inline style violates … style-src 'self'

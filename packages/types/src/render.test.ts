@@ -6,7 +6,7 @@
  * pasa por aquí. La mitad de estas pruebas son de lo que NO debe salir.
  */
 
-import { renderLessonHtml, type RenderAsset } from './render';
+import { renderInlineHtml, renderLessonHtml, type RenderAsset } from './render';
 
 const IMAGE_ID = 'cm1abcdefghijklmnopqrstuv';
 const VIDEO_ID = 'cm2abcdefghijklmnopqrstuv';
@@ -129,6 +129,18 @@ describe('lo que NO sale', () => {
     expect(html).not.toContain('externo.test');
     expect(html).toContain('biblioteca');
   });
+
+  // El marcador del editor mientras sube una imagen pegada (27/9): el alt ya lo explica.
+  it('una imagen con URL vacía conserva su alt en vez del consejo de la biblioteca', () => {
+    const html = render('![Subiendo captura.png…]()\n');
+
+    expect(html).toContain('alt="Subiendo captura.png…"');
+    expect(html).not.toContain('biblioteca');
+  });
+
+  it('una imagen con URL vacía y sin alt sí recibe el consejo', () => {
+    expect(render('![]()\n')).toContain('biblioteca');
+  });
 });
 
 describe('lo que sí sale', () => {
@@ -152,6 +164,21 @@ describe('lo que sí sale', () => {
 
     expect(html).toContain('storage.test/guia.pdf');
     expect(html).toContain('download');
+  });
+
+  it('un callout sale como aside con su clase y el título por defecto del tipo (27/9)', () => {
+    const html = render(':::callout{kind="example"}\nUn caso con **negrita**.\n:::\n');
+
+    expect(html).toContain('<aside class="callout callout-example">');
+    expect(html).toContain('<p class="callout-title">Ejemplo</p>');
+    expect(html).toContain('<strong>negrita</strong>');
+  });
+
+  it('un callout con título propio lo usa, y un tipo desconocido cae en nota', () => {
+    const html = render(':::callout{kind="rosa" title="Para pensar"}\nTexto\n:::\n');
+
+    expect(html).toContain('callout-note');
+    expect(html).toContain('<p class="callout-title">Para pensar</p>');
   });
 
   it('las matemáticas salen en MathML, con su espacio de nombres', () => {
@@ -267,5 +294,39 @@ describe('contenedor', () => {
 
   it('sin idioma no envuelve nada', () => {
     expect(renderLessonHtml('Texto.\n', assets)).not.toContain('<div');
+  });
+});
+
+// 27/9: el texto de una pregunta es Markdown de una frase; el player lo pintaba crudo.
+describe('renderInlineHtml', () => {
+  it('énfasis, código y fórmula, sin envolver en <p>', () => {
+    const html = renderInlineHtml('¿Cuál es **una** razón para $x^2$ y `código`?');
+
+    expect(html).toContain('<strong>una</strong>');
+    expect(html).toContain('<code>código</code>');
+    expect(html).toContain('<math');
+    expect(html).not.toContain('<p>');
+    expect(html).not.toContain('**');
+  });
+
+  it('no hay bloques: un título o una lista quedan como texto plano y una imagen desaparece', () => {
+    const html = renderInlineHtml('# Título\n\n- uno\n\n![x](asset:cm1abcdefghijklmnopqrstuv)');
+
+    expect(html).not.toContain('<h1');
+    expect(html).not.toContain('<ul');
+    expect(html).not.toContain('<img');
+    expect(html).toContain('Título');
+    expect(html).toContain('uno');
+  });
+
+  it('dos párrafos se separan con <br>, no se pegan', () => {
+    expect(renderInlineHtml('Primera.\n\nSegunda.')).toBe('Primera.<br>Segunda.');
+  });
+
+  it('el HTML escrito a mano no pasa', () => {
+    const html = renderInlineHtml('Hola <script>alert(1)</script> <b onclick="x">b</b>');
+
+    expect(html).not.toContain('<script');
+    expect(html).not.toContain('onclick');
   });
 });

@@ -166,7 +166,10 @@ describe('lo que se abre', () => {
     expect(view.gate).toBeNull();
     expect(view.lesson?.title).toBe('Los números reales');
     expect(view.lesson?.html).toContain('<h2>Sección</h2>');
-    expect(view.lesson?.html).toContain('<div lang="es-CO">');
+    // Sin `<div lang>` envolvente (27/9): el idioma va en `lesson.language` y lo pone el
+    // `<article lang>` del player; los bloques cuelgan directos para que `.contenido > …` llegue.
+    expect(view.lesson?.html).not.toContain('<div lang=');
+    expect(view.lesson?.language).toBe('es-CO');
     expect(view.lesson?.estimatedMinutes).toBe(20);
     expect(view.lesson?.form).toBe('MARKDOWN');
   });

@@ -88,6 +88,27 @@ describe('blocks', () => {
     );
   });
 
+  it('un recuadro es un bloque callout con su tipo, título y cuerpo, y vuelve igual (27/9)', () => {
+    const md =
+      ':::callout{kind="example" title="Un caso"}\nUna persona que **estudia y trabaja**.\n\n- y una lista\n:::';
+    const [block] = markdownToBlocks(md);
+
+    expect(block).toMatchObject({
+      kind: 'callout',
+      variant: 'example',
+      title: 'Un caso',
+      markdown: 'Una persona que **estudia y trabaja**.\n\n- y una lista',
+    });
+    expect(blocksToMarkdown(markdownToBlocks(md))).toBe(`${md}\n`);
+  });
+
+  it('un recuadro sin tipo conocido es una nota, y sin título no escribe title=', () => {
+    const [block] = markdownToBlocks(':::callout{kind="rosa"}\nTexto\n:::');
+
+    expect(block).toMatchObject({ kind: 'callout', variant: 'note', title: '' });
+    expect(blocksToMarkdown([block!])).toBe(':::callout{kind="note"}\nTexto\n:::\n');
+  });
+
   it('el aviso de una línea lleva a su bloque', () => {
     const blocks = markdownToBlocks(FIXTURE);
     const md = blocksToMarkdown(blocks).split('\n');

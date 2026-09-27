@@ -7,6 +7,7 @@
  */
 
 import pino from 'pino';
+import pretty from 'pino-pretty';
 import { createHash } from 'crypto';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -52,7 +53,6 @@ const options: pino.LoggerOptions = {
     paths: redactPaths,
     remove: true,
   },
-  transport: isDev ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
 };
 
 /**
@@ -62,22 +62,26 @@ const options: pino.LoggerOptions = {
  * soon as Jest moved the suite to worker processes.
  */
 export function createLogger(destination?: pino.DestinationStream) {
-  return destination ? pino(options, destination) : pino(options);
+  if (destination) return pino(options, destination);
+  // En desarrollo, `pino-pretty` como flujo **en el mismo proceso** (27/9), no como
+  // `transport`: el transport abre un hilo trabajador (`thread-stream`) que `next dev` mata
+  // en cada recarga en caliente, y a partir de ahí cada `logger.info` emitía «the worker has
+  // exited». Sin hilo no hay nada que morir. En producción no hay pretty y no hay hilo.
+  return isDev ? pino(options, pretty({ colorize: true })) : pino(options);
 }
 
 /**
  * Escribir un log no puede tumbar el proceso.
  *
- * `pino` con `transport` escribe a través de un **hilo trabajador** (`thread-stream`). Si ese
- * hilo muere —y en `next dev` muere en cada recarga en caliente que reevalúa este módulo— la
- * siguiente llamada a `logger.info` lanza `Error: the worker has exited`, de forma **síncrona**
- * y desde dentro del manejador. Ahí no la recoge nadie: sale como `uncaughtException` y se
- * lleva por delante el servidor de desarrollo. El rastro apunta a `api-handler.ts:174`, que es
- * solo el primer sitio que tocó el flujo ya muerto.
- *
- * Que una línea de registro pueda cancelar una petición es un fallo en sí mismo, en desarrollo
- * y en producción: ninguna respuesta de esta aplicación depende de que el log se escriba. Así
- * que el error se contiene aquí, en un único sitio, y no en los ocho puntos donde se registra.
+ * Historia: con `pino-pretty` como `transport`, el hilo trabajador (`thread-stream`) moría en
+ * cada recarga en caliente de `next dev` y la siguiente escritura fallaba con «the worker has
+ * exited». El primer arreglo envolvió cada nivel en `try/catch`, y **no bastó** (27/9): el
+ * error no se lanza, `thread-stream` lo **emite** como evento `error` en un `setImmediate`
+ * (`thread-stream/index.js`, `function error`), y un flujo sin oyente de `error` lo convierte
+ * en `uncaughtException`. El rastro apuntaba a este `try` porque el `Error` se crea en la
+ * escritura, aunque explote después. Por eso ahora (1) en desarrollo no hay hilo —ver
+ * `createLogger`— y (2) el flujo de destino lleva un oyente de `error`, para que, si alguna
+ * vez vuelve a haber un transport, un log que no se puede escribir no cancele una petición.
  *
  * No se traga en silencio para siempre: el primero se escribe en `stderr` a pelo. Un logger
  * mudo que además oculta que está mudo es peor que el fallo original.
@@ -89,6 +93,16 @@ type LevelMethod = (...args: unknown[]) => void;
 function containWriteErrors(base: pino.Logger): pino.Logger {
   let reported = false;
   const target = base as unknown as Record<string, LevelMethod>;
+
+  const stream = (base as unknown as Record<symbol, unknown>)[pino.symbols.streamSym] as
+    { on?: (event: 'error', listener: (err: unknown) => void) => unknown } | undefined;
+  stream?.on?.('error', (err) => {
+    if (reported) return;
+    reported = true;
+    process.stderr.write(
+      `[logger] el registro dejó de escribir y se seguirá ignorando: ${String(err)}\n`
+    );
+  });
 
   for (const level of LEVELS) {
     const original = target[level]?.bind(base);

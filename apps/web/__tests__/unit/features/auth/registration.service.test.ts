@@ -20,9 +20,7 @@ const admin = {
   auth: { admin: { createUser: jest.fn(), deleteUser: jest.fn() } },
 };
 const mockEnrollPerson = jest.fn();
-// `institutionSettingsSchema` exige un cuid en `introCohortId` (`lib/institution/settings.ts`):
-// con «cohort-intro» a secas el ajuste se descartaba entero y el registro devolvía
-// NO_INTRO_COHORT.
+// Desde el 25/9 `introCohortId` es una columna de `Institution` (fase de negocio 3).
 const INTRO_COHORT_ID = 'cmuflxkr1000213nqvodk4agt';
 
 jest.mock('server-only', () => ({}));
@@ -55,12 +53,17 @@ beforeEach(() => {
   jest.clearAllMocks();
   db.person.findFirst.mockResolvedValue(null);
   db.institution.findUniqueOrThrow.mockResolvedValue({
-    settings: { introCohortId: INTRO_COHORT_ID },
+    introCohortId: INTRO_COHORT_ID,
     dataPolicyVersion: '2',
   });
   admin.auth.admin.createUser.mockResolvedValue({ data: { user: { id: 'auth-1' } }, error: null });
   db.person.create.mockResolvedValue({ id: 'p-1' });
-  db.cohort.findFirstOrThrow.mockResolvedValue({ code: 'INTRO-1', name: 'Introducción' });
+  // Desde el 25/9 el servicio lee `program.pricing` para decir si la matrícula fue gratis.
+  db.cohort.findFirstOrThrow.mockResolvedValue({
+    code: 'INTRO-1',
+    name: 'Introducción',
+    program: { pricing: 'FREE' },
+  });
   mockEnrollPerson.mockResolvedValue({ enrollmentId: 'e-1', warning: null });
 });
 
@@ -89,6 +92,7 @@ describe('registerPerson', () => {
       status: 'ENROLLED',
       cohortCode: 'INTRO-1',
       cohortName: 'Introducción',
+      free: true,
     });
   });
 
@@ -106,7 +110,7 @@ describe('registerPerson', () => {
     ).rejects.toMatchObject({ code: 'CONSENT_REQUIRED' });
   });
 
-  it('creates a minor without consent and without enrolment', async () => {
+  it('creates a minor without consent and enrols them in the intro cohort (free, 25/9)', async () => {
     const result = await registerPerson({
       ...BASE,
       birthDate: '2012-05-01',
@@ -114,8 +118,11 @@ describe('registerPerson', () => {
     });
     expect(result.isMinor).toBe(true);
     expect(db.consent.create).not.toHaveBeenCalled();
-    expect(mockEnrollPerson).not.toHaveBeenCalled();
-    expect(result.enrollment).toEqual({ status: 'MINOR_NEEDS_GUARDIAN' });
+    // Sin acudiente y sin consentimiento propio; `enrollPerson` decide si la cohorte lo admite.
+    expect(mockEnrollPerson).toHaveBeenCalledWith(
+      expect.objectContaining({ cohortId: INTRO_COHORT_ID, personHandle: 'ana@example.com' })
+    );
+    expect(result.enrollment.status).toBe('ENROLLED');
   });
 
   it('keeps the account when the enrolment fails, and audits why', async () => {
@@ -133,7 +140,10 @@ describe('registerPerson', () => {
   });
 
   it('says there is no intro cohort when none is configured', async () => {
-    db.institution.findUniqueOrThrow.mockResolvedValue({ settings: null, dataPolicyVersion: '1' });
+    db.institution.findUniqueOrThrow.mockResolvedValue({
+      introCohortId: null,
+      dataPolicyVersion: '1',
+    });
     const result = await registerPerson({ ...BASE, birthDate: '1990-05-01' });
     expect(mockEnrollPerson).not.toHaveBeenCalled();
     expect(result.enrollment).toEqual({ status: 'NO_INTRO_COHORT' });

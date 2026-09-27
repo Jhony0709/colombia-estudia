@@ -5,8 +5,10 @@
  */
 
 const mockFindFirst = jest.fn();
+const mockFindMany = jest.fn();
 const mockCreate = jest.fn();
 const mockUpdate = jest.fn();
+const mockDeleteMany = jest.fn();
 const mockAuditLogCreate = jest.fn();
 const mockReadObjectHead = jest.fn();
 const mockRemoveObject = jest.fn();
@@ -19,7 +21,13 @@ jest.mock('server-only', () => ({}));
 jest.mock('@/lib/db/tenant', () => ({
   createTenantClient: jest.fn(() => {
     const tx = {
-      mediaAsset: { findFirst: mockFindFirst, create: mockCreate, update: mockUpdate },
+      mediaAsset: {
+        findFirst: mockFindFirst,
+        findMany: mockFindMany,
+        create: mockCreate,
+        update: mockUpdate,
+        deleteMany: mockDeleteMany,
+      },
       auditLog: { create: mockAuditLogCreate },
     };
     return { ...tx, $transaction: (fn: (t: typeof tx) => unknown) => fn(tx) };
@@ -43,12 +51,15 @@ jest.mock('@/lib/media/vimeo', () => ({
   getVimeoTextTracks: (...args: unknown[]) => mockGetVimeoTextTracks(...args),
 }));
 
-jest.mock('@/lib/observability/logger', () => ({ logger: { error: jest.fn() } }));
+jest.mock('@/lib/observability/logger', () => ({
+  logger: { error: jest.fn(), warn: jest.fn() },
+}));
 
 import {
   requestUpload,
   confirmUpload,
   registerVimeoVideo,
+  sweepUnusedMedia,
 } from '@/features/content/server/media.service';
 
 const svgBytes = new Uint8Array([...'<svg xmlns="x"/>'].map((c) => c.charCodeAt(0)));
@@ -296,5 +307,95 @@ describe('registerVimeoVideo', () => {
     ).rejects.toThrow(/No se reconoce ese video/);
 
     expect(mockGetVimeoVideo).not.toHaveBeenCalled();
+  });
+});
+
+// 27/9: lo que nadie reclamó pasado el periodo de gracia se borra; el bucket manda.
+describe('sweepUnusedMedia', () => {
+  const NOW = new Date('2026-09-27T03:00:00Z');
+  const unusedWhere = {
+    createdAt: { lt: new Date('2026-09-20T03:00:00Z') },
+    usedBy: { none: {} },
+    submissions: { none: {} },
+    coverOf: { none: {} },
+  };
+
+  beforeEach(() => {
+    mockDeleteMany.mockResolvedValue({ count: 1 });
+    mockAuditLogCreate.mockResolvedValue({});
+  });
+
+  it('pregunta por lo que ninguna versión, entrega ni portada usa y ya cumplió los 7 días', async () => {
+    mockFindMany.mockResolvedValue([]);
+
+    const result = await sweepUnusedMedia({ institutionId: 'inst1', now: NOW });
+
+    expect(mockFindMany).toHaveBeenCalledWith(expect.objectContaining({ where: unusedWhere }));
+    expect(result).toEqual({ swept: 0, failed: 0 });
+    expect(mockAuditLogCreate).not.toHaveBeenCalled();
+  });
+
+  it('quita el objeto de STORAGE y luego la fila, con el mismo `where` para que un reclamo tardío la salve', async () => {
+    mockFindMany.mockResolvedValue([
+      {
+        id: 'a1',
+        provider: 'STORAGE',
+        providerRef: 'institutions/inst1/image/a1.webp',
+        transcriptPath: null,
+        textAlternativePath: null,
+      },
+    ]);
+
+    const result = await sweepUnusedMedia({ institutionId: 'inst1', now: NOW });
+
+    expect(mockRemoveObject).toHaveBeenCalledWith('institutions/inst1/image/a1.webp');
+    expect(mockDeleteMany).toHaveBeenCalledWith({ where: { id: 'a1', ...unusedWhere } });
+    expect(result).toEqual({ swept: 1, failed: 0 });
+    expect(mockAuditLogCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          entity: 'media',
+          action: 'swept',
+          actorId: null,
+          after: { swept: 1, failed: 0, graceDays: 7 },
+        }),
+      })
+    );
+  });
+
+  it('para VIMEO no toca el providerRef, solo la transcripción que es nuestra', async () => {
+    mockFindMany.mockResolvedValue([
+      {
+        id: 'v1',
+        provider: 'VIMEO',
+        providerRef: '12345',
+        transcriptPath: 'institutions/inst1/transcript/v1.vtt',
+        textAlternativePath: null,
+      },
+    ]);
+
+    await sweepUnusedMedia({ institutionId: 'inst1', now: NOW });
+
+    expect(mockRemoveObject).toHaveBeenCalledTimes(1);
+    expect(mockRemoveObject).toHaveBeenCalledWith('institutions/inst1/transcript/v1.vtt');
+    expect(mockDeleteMany).toHaveBeenCalledWith({ where: { id: 'v1', ...unusedWhere } });
+  });
+
+  it('si el bucket falla la fila se queda para reintentar mañana', async () => {
+    mockFindMany.mockResolvedValue([
+      {
+        id: 'a2',
+        provider: 'STORAGE',
+        providerRef: 'institutions/inst1/image/a2.png',
+        transcriptPath: null,
+        textAlternativePath: null,
+      },
+    ]);
+    mockRemoveObject.mockRejectedValueOnce(new Error('storage down'));
+
+    const result = await sweepUnusedMedia({ institutionId: 'inst1', now: NOW });
+
+    expect(mockDeleteMany).not.toHaveBeenCalled();
+    expect(result).toEqual({ swept: 0, failed: 1 });
   });
 });

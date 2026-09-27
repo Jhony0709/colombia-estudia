@@ -54,8 +54,13 @@ model Institution {
   primaryDomain     String?   @unique
   /// { readOnly?: boolean, gatewayFeeBy?: 'INSTITUTION' | 'PAYER' } — validado con Zod; nada de negocio crítico aquí.
   settings          Json?
+  /// La cohorte en la que entra quien se registra por `/registro` (25/9, fase de negocio 3;
+  /// antes en `settings.introCohortId`). Nula = el registro crea la cuenta sin matrícula.
+  introCohortId     String?   @unique
   createdAt         DateTime  @default(now())
   archivedAt        DateTime?
+
+  introCohort Cohort? @relation("IntroCohort", fields: [introCohortId], references: [id])
 
   people                Person[]
   memberships           Membership[]
@@ -81,6 +86,7 @@ model Institution {
   learningEvents        LearningEvent[]
   accommodations        Accommodation[]
   paymentPlans          PaymentPlan[]
+  programPrices         ProgramPrice[]
   installments          Installment[]
   payments              Payment[]
   paymentAgreements     PaymentAgreement[]
@@ -139,29 +145,30 @@ model Person {
 
   institution Institution @relation(fields: [institutionId], references: [id])
 
-  memberships         Membership[]
-  guardianOf          Guardianship[]     @relation("GuardianPerson")
-  guardians           Guardianship[]     @relation("StudentPerson")
-  consentsSigned      Consent[]          @relation("ConsentSigner")
-  consentsAbout       Consent[]          @relation("ConsentSubject")
-  partnerContacts     Partner[]          @relation("PartnerContact")
-  enrollments         Enrollment[]
-  authoredLessons     Lesson[]
-  authoredAssessments Assessment[]
-  lessonProgress      LessonProgress[]
-  attempts            Attempt[]          @relation("AttemptStudent")
-  gradedAttempts      Attempt[]          @relation("AttemptGrader")
-  scores              Score[]            @relation("ScoreStudent")
-  scoresRecorded      Score[]            @relation("ScoreRecorder")
-  accommodations      Accommodation[]
-  paymentPlansPaid    PaymentPlan[]      @relation("PlanPayerPerson")
-  agreementsSigned    PaymentAgreement[] @relation("AgreementPayerPerson")
-  learningEvents      LearningEvent[]
-  notifications       Notification[]
-  uploadedMedia       MediaAsset[]
-  submissionsReviewed Submission[]       @relation("SubmissionReviewer")
-  invitations         Invitation[]
-  invitationsCreated  Invitation[]       @relation("InvitationCreator")
+  memberships          Membership[]
+  guardianOf           Guardianship[]     @relation("GuardianPerson")
+  guardians            Guardianship[]     @relation("StudentPerson")
+  consentsSigned       Consent[]          @relation("ConsentSigner")
+  consentsAbout        Consent[]          @relation("ConsentSubject")
+  partnerContacts      Partner[]          @relation("PartnerContact")
+  enrollments          Enrollment[]
+  authoredLessons      Lesson[]
+  authoredAssessments  Assessment[]
+  lessonProgress       LessonProgress[]
+  attempts             Attempt[]          @relation("AttemptStudent")
+  gradedAttempts       Attempt[]          @relation("AttemptGrader")
+  scores               Score[]            @relation("ScoreStudent")
+  scoresRecorded       Score[]            @relation("ScoreRecorder")
+  accommodations       Accommodation[]
+  paymentPlansPaid     PaymentPlan[]      @relation("PlanPayerPerson")
+  programPricesCreated ProgramPrice[]     @relation("PriceCreatedBy")
+  agreementsSigned     PaymentAgreement[] @relation("AgreementPayerPerson")
+  learningEvents       LearningEvent[]
+  notifications        Notification[]
+  uploadedMedia        MediaAsset[]
+  submissionsReviewed  Submission[]       @relation("SubmissionReviewer")
+  invitations          Invitation[]
+  invitationsCreated   Invitation[]       @relation("InvitationCreator")
 
   @@unique([institutionId, documentType, documentNumber])
   @@unique([institutionId, email])
@@ -263,16 +270,37 @@ model Partner {
 // ───────────────────────────── Programa y cohortes ─────────────────────────────
 
 /// Lo que se vende: "Bachillerato Valida YA". El catálogo de contenido cuelga de aquí.
+/// Qué vende el programa (25/9, fase de negocio 2): la lista de los clientes («programas a
+/// proyectar»). `OTRO` para lo que no encaje, y para el componente de introducción.
+enum ProgramPricing {
+  FREE
+  PAID
+}
+
+enum ProgramKind {
+  BACHILLERATO
+  INGLES
+  TECNICO
+  REFUERZO
+  PRE_ICFES
+  PREGRADO
+  OTRO
+}
+
 model Program {
-  id                String    @id @default(cuid())
+  id                String         @id @default(cuid())
   institutionId     String
   code              String
   name              String
   description       String?
+  kind              ProgramKind    @default(OTRO)
+  /// Gratuito o de pago (25/9, fase de negocio 3). Un programa gratuito no cobra y un menor
+  /// entra a él sin acudiente; en uno de pago el acudiente firma matrícula y datos.
+  pricing           ProgramPricing @default(PAID)
   /// Días de acceso desde la matrícula, por defecto para las cohortes del programa.
-  defaultAccessDays Int       @default(300)
+  defaultAccessDays Int            @default(300)
   sourceRef         String?
-  createdAt         DateTime  @default(now())
+  createdAt         DateTime       @default(now())
   archivedAt        DateTime?
 
   institution Institution @relation(fields: [institutionId], references: [id])
@@ -281,6 +309,7 @@ model Program {
   cohorts     Cohort[]
   lessons     Lesson[]
   assessments Assessment[]
+  prices      ProgramPrice[]
 
   @@unique([institutionId, code])
   @@unique([institutionId, sourceRef])
@@ -297,11 +326,24 @@ model Module {
   programId     String
   position      Int
   name          String
+  /// El grado escolar al que pertenece el componente (bachillerato: 6 a 11), 25/9. Nulo en
+  /// programas sin grados. Es lo que el negocio nombra —precio, ingreso, graduación—; la
+  /// posición sigue siendo el orden de la ruta.
+  grade         Int?
+  /// De qué va el componente (25/9, fase de negocio 4): lo ve el estudiante en su ruta.
+  description   String?
+  /// El cierre del componente (25/9): lo que se lee al enviar su cuestionario. Nulo = el
+  /// texto general de la plataforma («Aprender es avanzar»).
+  closingText   String?
+  /// La imagen de la tarjeta del curso (26/9): un `MediaAsset` IMAGE `READY` de Storage.
+  /// Decorativa: el nombre del componente va al lado, así que no lleva texto alternativo propio.
+  coverMediaId  String?
   sourceRef     String?
   archivedAt    DateTime?
 
   institution Institution @relation(fields: [institutionId], references: [id])
   program     Program     @relation(fields: [programId], references: [id])
+  coverMedia  MediaAsset? @relation("ModuleCover", fields: [coverMediaId], references: [id])
 
   lessons      Lesson[]
   assessments  Assessment[]
@@ -366,6 +408,8 @@ model Cohort {
   assessmentAssignments AssessmentAssignment[]
   scores                Score[]
   liveSessions          LiveSession[]
+  /// La institución que la tiene como cohorte de introducción, si es esta.
+  introOf               Institution?           @relation("IntroCohort")
 
   @@unique([institutionId, code])
   @@unique([institutionId, sourceRef])
@@ -392,6 +436,11 @@ model Enrollment {
   /// Quien entra desde 10° empieza en el módulo 5 sin repetir los anteriores. La asignación es
   /// de la cohorte; lo que se oculta es la vista, el avance y las constancias de esta matrícula.
   startsAtModule      Int?
+  /// El grado por el que entró (25/9): se guarda junto a `startsAtModule`, que es su
+  /// traducción a posición en el momento de matricular. Si los componentes se reordenan, el
+  /// grado sigue diciendo la verdad. En programas con grados es la única entrada; la posición
+  /// suelta solo se acepta en programas sin grados (enrollments.service.ts).
+  entryGrade          Int?
   enrolledAt          DateTime         @default(now())
   accessUntil         DateTime         @db.Date
   completedAt         DateTime?
@@ -457,6 +506,9 @@ model Lesson {
   /// Enunciados de la actividad (`string[]`, 24/9): con uno o más, el estudiante responde en la
   /// plataforma pregunta por pregunta en vez de en un solo texto. Sin versionar, como las instrucciones.
   activityPrompts      Json?
+  /// Aprobación automática (27/9): la entrega queda `APPROVED` al enviarse, sin revisión, y el
+  /// tema se completa en el acto. Para actividades de reflexión, donde lo que importa es hacerla.
+  activityAutoApprove  Boolean         @default(false)
   authorId             String
   sourceRef            String?
   createdAt            DateTime        @default(now())
@@ -617,6 +669,8 @@ model LessonAssignment {
   availableFrom   DateTime
   availableUntil  DateTime?
   assignedById    String
+  /// Fijada en su versión (27/9): al publicar, las no fijadas pasan solas a la nueva.
+  pinnedVersion   Boolean   @default(false)
 
   institution   Institution   @relation(fields: [institutionId], references: [id])
   cohort        Cohort        @relation(fields: [cohortId], references: [id])
@@ -639,6 +693,8 @@ model AssessmentAssignment {
   availableFrom       DateTime
   dueAt               DateTime?
   assignedById        String
+  /// Fijada en su versión (27/9): al publicar, las no fijadas pasan solas a la nueva.
+  pinnedVersion       Boolean   @default(false)
 
   institution       Institution       @relation(fields: [institutionId], references: [id])
   cohort            Cohort            @relation(fields: [cohortId], references: [id])
@@ -707,6 +763,7 @@ model MediaAsset {
 
   usedBy      LessonVersionAsset[]
   submissions Submission[]
+  coverOf     Module[]             @relation("ModuleCover")
 
   @@unique([institutionId, provider, providerRef])
   @@index([institutionId, kind])
@@ -882,6 +939,45 @@ enum PayerType {
 }
 
 /// Lo que cuesta una matrícula y quién lo paga (el estudiante, su acudiente o un aliado).
+/// Cómo se cobra un precio: una vez por matrícula, por mes o por componente (25/9, fase de
+/// negocio 1). Los clientes venden el bachillerato «$120.000 c/m»; el «c/m» (mes o
+/// componente) sigue abierto y por eso el periodo es un dato y no una suposición.
+enum PricePeriod {
+  ONE_TIME
+  MONTHLY
+  PER_MODULE
+}
+
+/// Lista de precios de un programa (25/9). Un precio aplica a un rango de grados
+/// (bachillerato: 6–8 a un precio, 9–11 a otro) o a todo el programa (grados nulos), desde
+/// una fecha. Los planes de pago referencian el precio que se les aplicó: el monto de un plan
+/// deja de ser un número escrito a mano sin origen. Se archiva, nunca se borra: un plan
+/// viejo tiene que poder decir de qué precio salió.
+/// Lista de precios de un programa (25/9). Inmutable: nunca se actualiza, se archiva y se crea
+/// otro. Por eso `PaymentPlan.priceId` basta como origen histórico del total.
+model ProgramPrice {
+  id            String      @id @default(cuid())
+  institutionId String
+  programId     String
+  gradeFrom     Int?
+  gradeTo       Int?
+  amount        Decimal     @db.Decimal(12, 0)
+  period        PricePeriod
+  validFrom     DateTime    @db.Date
+  validTo       DateTime?   @db.Date
+  createdById   String?
+  createdAt     DateTime    @default(now())
+  archivedAt    DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  program     Program     @relation(fields: [programId], references: [id])
+  createdBy   Person?     @relation("PriceCreatedBy", fields: [createdById], references: [id])
+
+  paymentPlans PaymentPlan[]
+
+  @@index([institutionId, programId])
+}
+
 model PaymentPlan {
   id            String    @id @default(cuid())
   institutionId String
@@ -890,12 +986,15 @@ model PaymentPlan {
   payerPersonId String?
   partnerId     String?
   totalAmount   Decimal   @db.Decimal(12, 0)
+  /// El precio de lista del que salió el total (25/9). Nulo en planes anteriores o escritos a mano.
+  priceId       String?
   createdAt     DateTime  @default(now())
 
-  institution Institution @relation(fields: [institutionId], references: [id])
-  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
-  payerPerson Person?     @relation("PlanPayerPerson", fields: [payerPersonId], references: [id])
-  partner     Partner?    @relation(fields: [partnerId], references: [id])
+  institution Institution   @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment    @relation(fields: [enrollmentId], references: [id])
+  payerPerson Person?       @relation("PlanPayerPerson", fields: [payerPersonId], references: [id])
+  partner     Partner?      @relation(fields: [partnerId], references: [id])
+  price       ProgramPrice? @relation(fields: [priceId], references: [id])
 
   installments Installment[]
 

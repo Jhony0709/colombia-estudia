@@ -55,6 +55,21 @@ describe('parseLessonMarkdown', () => {
       expect(result.issues).toHaveLength(0);
     });
 
+    it(':::callout with a known kind → no issue (27/9)', () => {
+      const result = parseLessonMarkdown(':::callout{kind="example"}\nTexto\n:::\n');
+      expect(result.issues).toHaveLength(0);
+    });
+
+    it(':::callout with an unknown kind → error', () => {
+      const result = parseLessonMarkdown(':::callout{kind="rosa"}\nTexto\n:::\n');
+      expect(result.issues).toEqual([expect.objectContaining({ rule: 'callout-invalid-kind' })]);
+    });
+
+    it('::callout as a leaf directive → callout-needs-body', () => {
+      const result = parseLessonMarkdown('::callout{kind="note"}\n');
+      expect(result.issues).toEqual([expect.objectContaining({ rule: 'callout-needs-body' })]);
+    });
+
     it('video without asset attribute → error', () => {
       const md = '::video{}';
       const result = parseLessonMarkdown(md);

@@ -30,8 +30,10 @@ import {
   Code,
   FileText,
   ImageIcon,
+  Upload,
   Italic,
   Languages,
+  Lightbulb,
   Link2,
   Music,
   Plus,
@@ -73,6 +75,13 @@ import {
   type BlockKind,
 } from './blocks';
 import { EditorDialog } from './editor-dialog';
+import {
+  IMAGE_ACCEPT,
+  IMAGE_MAX_MB,
+  imageFilesFrom,
+  useImageUpload,
+} from '@/lib/media/use-image-upload';
+import { CALLOUT_KINDS, CALLOUT_TITLES, type CalloutKind } from '@colombia-estudia/types/callouts';
 
 /* ─────────────────────────── La interfaz pública ─────────────────────────── */
 
@@ -109,6 +118,8 @@ type Dialog =
   | { kind: 'video'; afterId: string | null }
   | { kind: 'link'; blockId: string }
   | { kind: 'lang'; blockId: string }
+  /** «Describe la imagen» (27/9): tras subirla, antes de darla por puesta. */
+  | { kind: 'alt'; blockId: string; fileName: string }
   | null;
 
 export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(function BlockEditor(
@@ -126,6 +137,22 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
   const emitted = useRef<string>(blocksToMarkdown(blocks));
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const root = useRef<HTMLDivElement>(null);
+  // Imágenes (27/9): vista previa local por bloque (`blob:`, fuera del modelo porque no va al
+  // Markdown), qué bloques están subiendo y el último error de subida.
+  const { upload } = useImageUpload();
+  const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState<Record<string, true>>({});
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  // Los `blob:` se sueltan al desmontar, todos a la vez: soltarlos cuando cambia el mapa
+  // dejaría sin imagen a los bloques que siguen vivos. El ref lleva el mapa vigente.
+  const previewsRef = useRef(previews);
+  previewsRef.current = previews;
+  useEffect(
+    () => () => {
+      Object.values(previewsRef.current).forEach((url) => URL.revokeObjectURL(url));
+    },
+    []
+  );
 
   // Hacia fuera, Markdown, con retraso, y solo si de verdad cambió.
   useEffect(() => {
@@ -260,8 +287,92 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
     insertAfter(afterId, emptyBlock(kind));
   };
 
+  /**
+   * Imágenes que llegan por el botón, pegadas o soltadas (27/9): un bloque de imagen por
+   * archivo, en su sitio desde el primer instante («subiendo…», como el placeholder de
+   * GitHub), y al terminar el diálogo de descripción. Si falla, el bloque se va y se dice
+   * por qué; el texto del autor no se toca. `replaceId` reutiliza un bloque de imagen vacío.
+   */
+  const addImageFiles = async (
+    files: File[],
+    where: { afterId: string | null } | { replaceId: string }
+  ) => {
+    setUploadError(null);
+    let anchor = 'afterId' in where ? where.afterId : null;
+    for (const [i, file] of files.entries()) {
+      const id = 'replaceId' in where && i === 0 ? where.replaceId : newId();
+      if (!('replaceId' in where && i === 0)) {
+        insertAfter(anchor, { id, kind: 'image', alt: '', assetId: '' });
+      }
+      anchor = id;
+      setUploading((prev) => ({ ...prev, [id]: true }));
+      const outcome = await upload(file);
+      setUploading((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
+      if (!outcome.ok) {
+        if (!('replaceId' in where && i === 0)) remove(id);
+        setUploadError(
+          outcome.error === 'type'
+            ? t('imageErrors.type')
+            : outcome.error === 'size'
+              ? t('imageErrors.size', { mb: IMAGE_MAX_MB })
+              : (outcome.message ?? t('imageErrors.upload'))
+        );
+        continue;
+      }
+      setPreviews((prev) => ({ ...prev, [id]: outcome.result.previewUrl }));
+      update(id, { assetId: outcome.result.mediaAssetId });
+      // Una sola imagen: el diálogo de descripción enseguida. Varias: el campo de cada bloque
+      // queda marcado como obligatorio y la publicación no pasa sin él.
+      if (files.length === 1) setDialog({ kind: 'alt', blockId: id, fileName: file.name });
+    }
+  };
+
+  /** El bloque desde el que se pegó o soltó: la imagen va justo después. */
+  const anchorFrom = (target: EventTarget | null): string | null =>
+    (target as HTMLElement | null)?.closest?.('[data-block-id]')?.getAttribute('data-block-id') ??
+    null;
+
   return (
-    <div ref={root} role="group" aria-labelledby={labelledBy} className="space-y-3">
+    // Pegar o soltar una imagen en cualquier bloque (27/9): sube y se pone justo después.
+    // Los eventos suben desde los campos de dentro, que son los interactivos; el grupo solo
+    // los delega, y con teclado se pega en el campo. Por eso la excepción a la regla.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    <div
+      ref={root}
+      role="group"
+      aria-labelledby={labelledBy}
+      className="space-y-3"
+      // El pegado de texto (y de direcciones de Vimeo) sigue su camino en cada campo.
+      onPaste={(event) => {
+        const files = imageFilesFrom(event.clipboardData);
+        if (files.length === 0) return;
+        event.preventDefault();
+        void addImageFiles(files, { afterId: anchorFrom(event.target) });
+      }}
+      onDragOver={(event) => {
+        if (
+          imageFilesFrom(event.dataTransfer).length > 0 ||
+          event.dataTransfer.types.includes('Files')
+        ) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        const files = imageFilesFrom(event.dataTransfer);
+        if (files.length === 0) return;
+        event.preventDefault();
+        void addImageFiles(files, { afterId: anchorFrom(event.target) });
+      }}
+    >
+      {uploadError && (
+        <p role="alert" className="type-caption text-status-error-base m-0">
+          {uploadError}
+        </p>
+      )}
       <ol className="space-y-3">
         {blocks.map((block, index) => (
           <li key={block.id} data-block-id={block.id}>
@@ -282,6 +393,9 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
               onPasteVideo={(video) => void addVideo(video, { replaceId: block.id })}
               onLink={() => setDialog({ kind: 'link', blockId: block.id })}
               onLang={() => setDialog({ kind: 'lang', blockId: block.id })}
+              preview={previews[block.id] ?? null}
+              uploading={uploading[block.id] === true}
+              onPickImage={(file) => void addImageFiles([file], { replaceId: block.id })}
             />
           </li>
         ))}
@@ -336,6 +450,17 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
           });
         }}
       />
+      <AltDialog
+        open={dialog?.kind === 'alt'}
+        fileName={dialog?.kind === 'alt' ? dialog.fileName : ''}
+        onClose={() => setDialog(null)}
+        onSubmit={(alt) => {
+          if (dialog?.kind !== 'alt') return;
+          update(dialog.blockId, { alt });
+          setFocusId(dialog.blockId);
+          setDialog(null);
+        }}
+      />
     </div>
   );
 });
@@ -359,6 +484,10 @@ interface RowProps {
   onPasteVideo: (video: string) => void;
   onLink: () => void;
   onLang: () => void;
+  /** Bloque de imagen (27/9): vista previa local, si está subiendo, y elegir archivo. */
+  preview: string | null;
+  uploading: boolean;
+  onPickImage: (file: File) => void;
 }
 
 function BlockRow(props: RowProps) {
@@ -461,6 +590,9 @@ function BlockBody(props: RowProps) {
     media,
     onMediaSettings,
     registering,
+    preview,
+    uploading,
+    onPickImage,
   } = props;
   const t = useTranslations('blockEditor');
   const listCaret = useRef<{ start: number; end: number } | null>(null);
@@ -567,6 +699,45 @@ function BlockBody(props: RowProps) {
           onChange={(text) => onUpdate(block.id, { text })}
         />
       );
+    case 'callout':
+      // El recuadro (27/9) se edita con la pinta que tendrá: la misma clase `callout` del
+      // player, el tipo como selector igual al del nivel de sección, y el título como campo
+      // a pelo con el título por defecto de ese tipo como marcador de posición.
+      return (
+        <div className={cn('callout', `callout-${block.variant}`)}>
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              type="text"
+              aria-label={t('calloutTitle')}
+              placeholder={CALLOUT_TITLES[block.variant]}
+              value={block.title}
+              className="type-body-emphasis text-text placeholder:text-text-subtle min-w-0 flex-1 bg-transparent py-1 outline-none"
+              onChange={(event) => onUpdate(block.id, { title: event.target.value })}
+            />
+            <select
+              aria-label={t('calloutKind')}
+              value={block.variant}
+              onChange={(event) =>
+                onUpdate(block.id, { variant: event.target.value as CalloutKind })
+              }
+              className="border-border bg-surface-base text-text type-caption min-h-control rounded-control border px-2"
+            >
+              {CALLOUT_KINDS.map((kind) => (
+                <option key={kind} value={kind}>
+                  {t(`calloutKinds.${kind}`)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <GrowingTextarea
+            value={block.markdown}
+            ariaLabel={t('kind.callout')}
+            placeholder={t('calloutPlaceholder')}
+            hint={t('calloutHint')}
+            onChange={(markdown) => onUpdate(block.id, { markdown })}
+          />
+        </div>
+      );
     case 'code':
       return (
         <div className="space-y-2">
@@ -611,37 +782,81 @@ function BlockBody(props: RowProps) {
         />
       );
     case 'image':
+      // Subir, pegar o soltar (27/9): la imagen se ve en cuanto sube; el `alt` es obligatorio y
+      // el ID queda plegado para quien ya lo tenga de la biblioteca.
       return (
-        <div className="flex flex-wrap gap-3">
-          <div className="min-w-[16rem] flex-1">
-            <FormField
-              label={t('imageAlt')}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-start gap-4">
+            {preview ? (
+              // eslint-disable-next-line @next/next/no-img-element -- vista previa local (blob:).
+              <img
+                src={preview}
+                alt=""
+                className="bg-surface-sunken rounded-card max-h-48 w-auto max-w-full object-contain"
+              />
+            ) : (
+              <div className="bg-surface-sunken text-text-muted rounded-card type-caption flex min-h-24 w-48 items-center justify-center px-3 text-center">
+                {uploading
+                  ? t('imageUploading')
+                  : block.assetId
+                    ? t('imageNoPreview')
+                    : t('imagePasteHint')}
+              </div>
+            )}
+            <label
+              className={cn(
+                'type-label text-text border-border hover:bg-surface-sunken rounded-control min-h-control inline-flex cursor-pointer items-center gap-2 border px-3',
+                uploading && 'pointer-events-none opacity-60'
+              )}
+            >
+              <Upload aria-hidden="true" className="h-4 w-4" />
+              {block.assetId ? t('imageReplace') : t('imageUpload')}
+              <input
+                type="file"
+                accept={IMAGE_ACCEPT}
+                className="sr-only"
+                disabled={uploading}
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  event.target.value = '';
+                  if (file) onPickImage(file);
+                }}
+              />
+            </label>
+          </div>
+          <FormField
+            label={t('imageAlt')}
+            name={`alt-${block.id}`}
+            required
+            hint={t('imageAltHint')}
+            error={block.assetId && block.alt.trim() === '' ? t('imageAltRequired') : undefined}
+          >
+            <FormInput
               name={`alt-${block.id}`}
-              required
-              hint={t('imageAltHint')}
-            >
-              <FormInput
-                name={`alt-${block.id}`}
-                value={block.alt}
-                onChange={(event) => onUpdate(block.id, { alt: event.target.value })}
-              />
-            </FormField>
-          </div>
-          <div className="w-64">
-            <FormField
-              label={t('imageAsset')}
-              name={`asset-${block.id}`}
-              required
-              hint={t('imageAssetHint')}
-            >
-              <FormInput
+              value={block.alt}
+              onChange={(event) => onUpdate(block.id, { alt: event.target.value })}
+            />
+          </FormField>
+          <details className="type-caption text-text-muted">
+            <summary className="min-h-touch flex cursor-pointer items-center">
+              {t('imageAssetDetails')}
+              {block.assetId ? <span className="ml-2 font-mono">{block.assetId}</span> : null}
+            </summary>
+            <div className="mt-2 w-64">
+              <FormField
+                label={t('imageAsset')}
                 name={`asset-${block.id}`}
-                value={block.assetId}
-                spellCheck={false}
-                onChange={(event) => onUpdate(block.id, { assetId: event.target.value })}
-              />
-            </FormField>
-          </div>
+                hint={t('imageAssetHint')}
+              >
+                <FormInput
+                  name={`asset-${block.id}`}
+                  value={block.assetId}
+                  spellCheck={false}
+                  onChange={(event) => onUpdate(block.id, { assetId: event.target.value })}
+                />
+              </FormField>
+            </div>
+          </details>
         </div>
       );
     case 'media':
@@ -941,6 +1156,7 @@ const ADDABLE: Array<{ kind: BlockKind; Icon?: LucideIcon }> = [
   { kind: 'heading' },
   { kind: 'list' },
   { kind: 'quote' },
+  { kind: 'callout', Icon: Lightbulb },
   { kind: 'media', Icon: Video },
   { kind: 'image', Icon: ImageIcon },
   { kind: 'math', Icon: Sigma },
@@ -1085,6 +1301,55 @@ function WrapDialog({
           className={mode === 'lang' ? 'w-32' : undefined}
           onChange={(e) => setValue(e.target.value)}
         />
+      </FormField>
+    </EditorDialog>
+  );
+}
+
+/**
+ * «Describe la imagen» (27/9): se abre al terminar una subida. No se acepta vacío ni el nombre
+ * del archivo, que es lo que GitHub pone y lo que el contrato prohíbe
+ * (`contenido-y-evaluaciones.md`: `alt` descriptivo, distinto del nombre de archivo).
+ */
+function AltDialog({
+  open,
+  fileName,
+  onClose,
+  onSubmit,
+}: {
+  open: boolean;
+  fileName: string;
+  onClose: () => void;
+  onSubmit: (alt: string) => void;
+}) {
+  const t = useTranslations('blockEditor');
+  const [value, setValue] = useState('');
+  const base = fileName
+    .replace(/\.[a-z0-9]+$/i, '')
+    .trim()
+    .toLowerCase();
+  const trimmed = value.trim();
+  const valid =
+    trimmed !== '' &&
+    trimmed.toLowerCase() !== base &&
+    trimmed.toLowerCase() !== fileName.toLowerCase();
+
+  return (
+    <EditorDialog
+      open={open}
+      onOpenChange={(next) => !next && onClose()}
+      title={t('altTitle')}
+      description={t('altHint')}
+      submitLabel={t('apply')}
+      cancelLabel={t('cancel')}
+      disabled={!valid}
+      onSubmit={() => {
+        onSubmit(trimmed);
+        setValue('');
+      }}
+    >
+      <FormField label={t('imageAlt')} name="alt-value" required hint={t('imageAltHint')}>
+        <FormInput name="alt-value" value={value} onChange={(e) => setValue(e.target.value)} />
       </FormField>
     </EditorDialog>
   );

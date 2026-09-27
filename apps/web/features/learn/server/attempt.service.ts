@@ -35,6 +35,7 @@ import {
   getAttemptDeadline,
   getAttemptsAllowed,
 } from '@colombia-estudia/domain';
+import { renderInlineHtml } from '@colombia-estudia/types';
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import type { JsonObject } from '@/lib/db/prisma';
@@ -80,6 +81,8 @@ export interface AssessmentForStudent {
     subjectName: string | null;
     language: string;
     instructions: string | null;
+    /** Las instrucciones en HTML seguro de una frase (27/9): el autor escribe `**` y se veía. */
+    instructionsHtml: string | null;
     questionCount: number;
     totalPoints: number;
     /** Minutos ya multiplicados por el ajuste; `null` sin límite o con exención. */
@@ -104,7 +107,9 @@ export interface AttemptQuestionView {
   code: string;
   type: 'single_choice' | 'multiple_choice' | 'true_false' | 'short_text';
   text: string;
-  options: Array<{ code: string; text: string }>;
+  /** El texto en HTML seguro, sin bloques (`renderInlineHtml`, 27/9): el player pintaba `**`. */
+  textHtml: string;
+  options: Array<{ code: string; text: string; textHtml: string }>;
   points: number;
   /** Lo guardado hasta ahora (en curso) o lo entregado (revisión). */
   answer: unknown;
@@ -112,6 +117,7 @@ export interface AttemptQuestionView {
   correct: boolean | null;
   pointsAwarded: number | null;
   feedback: string | null;
+  feedbackHtml: string | null;
 }
 
 export interface AttemptForStudent {
@@ -122,6 +128,15 @@ export interface AttemptForStudent {
   title: string;
   language: string;
   instructions: string | null;
+  instructionsHtml: string | null;
+  /** El cierre del componente (25/9), si el equipo lo escribió; si no, el general. */
+  closingText: string | null;
+  /**
+   * Hay cronómetro solo si el examen tiene límite de tiempo y el estudiante no está exento
+   * (decisión de Jhonny, 27/9). `deadlineAt` puede venir de la fecha de entrega o del fin de
+   * acceso, y eso es una fecha, no un reloj.
+   */
+  timed: boolean;
   deadlineAt: string | null;
   serverNow: string;
   submittedAt: string | null;
@@ -578,6 +593,7 @@ async function resolveAssessment({
       subjectName: assignment.assessment.subject?.name ?? null,
       language: assignment.assessment.language,
       instructions: content.instructions ?? null,
+      instructionsHtml: content.instructions ? renderInlineHtml(content.instructions) : null,
       questionCount: content.questions.length,
       totalPoints: content.questions.reduce((sum, q) => sum + q.points, 0),
       timeLimitMinutes,
@@ -761,12 +777,16 @@ const ATTEMPT_SELECT = {
   score: true,
   maxScore: true,
   assessmentAssignmentId: true,
+  appliedAccommodation: true,
   assessmentVersion: {
     select: {
       content: true,
       passPercent: true,
       reviewPolicy: true,
-      assessment: { select: { title: true, language: true } },
+      timeLimitMinutes: true,
+      assessment: {
+        select: { title: true, language: true, module: { select: { closingText: true } } },
+      },
     },
   },
   assignment: { select: { dueAt: true } },
@@ -907,6 +927,11 @@ export async function getAttemptForStudent({
     title: row.assessmentVersion.assessment.title,
     language: row.assessmentVersion.assessment.language,
     instructions: content.instructions ?? null,
+    instructionsHtml: content.instructions ? renderInlineHtml(content.instructions) : null,
+    closingText: row.assessmentVersion.assessment.module?.closingText ?? null,
+    timed:
+      row.assessmentVersion.timeLimitMinutes !== null &&
+      !(row.appliedAccommodation as { exemptFromTimer?: boolean } | null)?.exemptFromTimer,
     deadlineAt: row.deadlineAt ? row.deadlineAt.toISOString() : null,
     serverNow: now.toISOString(),
     submittedAt: row.submittedAt ? row.submittedAt.toISOString() : null,
@@ -919,12 +944,14 @@ export async function getAttemptForStudent({
         code: q.code,
         type: q.type,
         text: q.text,
-        options: q.options ?? [],
+        textHtml: renderInlineHtml(q.text),
+        options: (q.options ?? []).map((o) => ({ ...o, textHtml: renderInlineHtml(o.text) })),
         points: q.points,
         answer: a?.answer ?? null,
         correct: review === 'FULL' ? (a?.correct ?? false) : null,
         pointsAwarded: review === 'FULL' ? (a?.pointsAwarded ?? 0) : null,
         feedback: review === 'FULL' ? (a?.feedback ?? null) : null,
+        feedbackHtml: review === 'FULL' && a?.feedback ? renderInlineHtml(a.feedback) : null,
       };
     }),
   };

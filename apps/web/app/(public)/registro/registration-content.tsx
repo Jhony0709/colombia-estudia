@@ -21,9 +21,8 @@ import { apiErrorText } from '@/lib/http/api-error-text';
 import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
 
 type Enrollment =
-  | { status: 'ENROLLED'; cohortCode: string; cohortName: string }
+  | { status: 'ENROLLED'; cohortCode: string; cohortName: string; free: boolean }
   | { status: 'NO_INTRO_COHORT' }
-  | { status: 'MINOR_NEEDS_GUARDIAN' }
   | { status: 'FAILED'; reason: string };
 
 interface Done {
@@ -123,10 +122,8 @@ export default function RegistrationContent({
         </h1>
         {e.status === 'ENROLLED' ? (
           <Alert severity="success">
-            {t('enrolled', { code: e.cohortCode, name: e.cohortName })}
+            {t(e.free ? 'enrolledFree' : 'enrolled', { code: e.cohortCode, name: e.cohortName })}
           </Alert>
-        ) : e.status === 'MINOR_NEEDS_GUARDIAN' ? (
-          <Alert severity="info">{t('minorPending')}</Alert>
         ) : (
           <Alert severity="info">{t('operationsPending')}</Alert>
         )}

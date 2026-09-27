@@ -82,7 +82,9 @@ export interface AgreementView {
 export interface AccountView {
   enrollmentId: string;
   student: { id: string; name: string; isMinor: boolean };
-  cohort: { id: string; code: string; name: string };
+  cohort: { id: string; code: string; name: string; programId: string };
+  /** El grado por el que entró (25/9), para sugerir el precio de lista. */
+  entryGrade: number | null;
   plan: {
     id: string;
     payerType: PayerType;
@@ -228,8 +230,9 @@ export async function getAccount({
     select: {
       id: true,
       isMinorAtEnrollment: true,
+      entryGrade: true,
       student: { select: { id: true, givenName: true, familyName: true } },
-      cohort: { select: { id: true, code: true, name: true } },
+      cohort: { select: { id: true, code: true, name: true, programId: true } },
       paymentPlan: { select: PLAN_SELECT },
       paymentAgreements: {
         orderBy: { signedAt: 'desc' },
@@ -332,6 +335,7 @@ export async function getAccount({
       isMinor: e.isMinorAtEnrollment,
     },
     cohort: e.cohort,
+    entryGrade: e.entryGrade,
     plan: plan
       ? {
           id: plan.id,
@@ -554,6 +558,8 @@ export interface CreatePlanInput {
   installments: number;
   firstDueOn: Date;
   periodicity: Periodicity;
+  /** El precio de lista del que sale el total (25/9); nulo si el total se escribió a mano. */
+  priceId?: string | null;
 }
 
 /**
@@ -593,9 +599,24 @@ export async function createPaymentPlans({
       studentId: true,
       isMinorAtEnrollment: true,
       paymentPlan: { select: { id: true } },
+      cohort: { select: { programId: true } },
     },
   });
   if (enrollments.length === 0) throw new APIError('Not found', 'NOT_FOUND');
+
+  // El precio de lista tiene que ser del programa de la matrícula (25/9): un plan que
+  // referencie el precio de otro programa diría de dónde salió su total y mentiría.
+  const priceId = input.priceId ?? null;
+  if (priceId) {
+    const price = await db.programPrice.findFirst({
+      where: { id: priceId },
+      select: { programId: true },
+    });
+    if (!price) throw new APIError('El precio de lista no existe', 'VALIDATION_ERROR');
+    if (enrollments.some((e) => e.cohort.programId !== price.programId)) {
+      throw new APIError('El precio de lista es de otro programa', 'VALIDATION_ERROR');
+    }
+  }
 
   if (input.partnerId) {
     const partner = await db.partner.findFirst({
@@ -637,6 +658,7 @@ export async function createPaymentPlans({
           payerPersonId,
           partnerId: input.partnerId,
           totalAmount: input.totalAmount,
+          priceId,
           installments: {
             create: amounts.map((amount, i) => ({
               institutionId,

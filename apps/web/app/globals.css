@@ -61,8 +61,13 @@ body {
  * la pantalla pone la suya (`TaskBar`). `lg` = 1024 px, el mismo corte que la rejilla.
  */
 @media (max-width: 1023.98px) {
-  .task-mode [data-student-nav] {
+  .task-mode [data-student-nav],
+  .task-mode [data-student-tabbar] {
     display: none;
+  }
+  /* Sin barra de pestañas no hace falta el hueco del pie (27/9). */
+  .task-mode main#contenido {
+    padding-bottom: 0;
   }
 }
 
@@ -80,6 +85,32 @@ body {
     rgba(10, 18, 40, 0.85) 68%,
     rgba(10, 18, 40, 0.9) 100%
   );
+}
+
+/**
+ * Hero de `/aprender` (27/9): la foto va detrás del texto y este velo la funde con el azul de
+ * marca por la izquierda —opaco donde está el texto, transparente donde está la persona—. En
+ * el teléfono la foto solo ocupa el tercio derecho, y el velo es más corto. Aquí y no en línea
+ * por la CSP.
+ */
+.hero-photo-scrim {
+  background: linear-gradient(
+    90deg,
+    var(--accent-base) 0%,
+    var(--accent-base) 20%,
+    transparent 100%
+  );
+}
+@media (min-width: 640px) {
+  .hero-photo-scrim {
+    background: linear-gradient(
+      90deg,
+      var(--accent-base) 0%,
+      var(--accent-base) 38%,
+      color-mix(in srgb, var(--accent-base) 55%, transparent) 55%,
+      transparent 75%
+    );
+  }
 }
 
 /**
@@ -163,6 +194,34 @@ body {
 }
 
 /** Toasts (24/9): mismo grow/fade que el diálogo, sin el centrado; deslizar sigue al dedo. */
+/**
+ * Cambio de pregunta en el intento (27/9, motion-colombia-estudia): la pregunta nueva entra
+ * con fade (`duration.normal`, `easing.enter`); la anterior sale con corte, que es más
+ * simple que la entrada. Solo `opacity` y un `transform` mínimo. Reduced motion = corte por
+ * la regla global.
+ */
+@keyframes question-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.attempt-question {
+  animation: question-fade-in var(--duration-normal) var(--easing-enter);
+}
+
+/**
+ * La barra de avance crece con `normal` (doctrina 9). El `width` del `rect` es geometría del
+ * SVG, no layout del documento: excepción medida, como `grid-template-rows` en acordeones.
+ */
+.progress-bar-animated rect:last-child {
+  transition: width var(--duration-normal) var(--easing-standard);
+}
+
 @keyframes toast-grow-in {
   from {
     opacity: 0;
@@ -232,31 +291,85 @@ html[data-reading-width='narrow'] .contenido {
   max-width: 55ch;
 }
 
+/*
+ * Los selectores de hijo directo (`.contenido > …`) exigen que el HTML del tema cuelgue
+ * directamente del contenedor: el `lang` va en el `<article>` o en el `div` de la vista
+ * previa, nunca en un `<div lang>` envolvente (27/9: con el envoltorio, los párrafos de un
+ * tema con idioma salían sin separación, porque `p { margin: 0 }` de preflight ganaba).
+ */
 .contenido > * + * {
   margin-top: var(--space-4);
 }
 
+/*
+ * Ritmo y acentos (27/9, «el renderizado debe ser atractivo, no plano»): la tipografía sigue
+ * saliendo de los tokens; lo que se añade es jerarquía visible —marca amarilla bajo el h2,
+ * barra bajo el h3, viñetas y numerales en el color de acento— y superficies para lo que el
+ * autor destaca: cita, tabla, imagen, y el párrafo que es solo negrita (la «idea clave» de
+ * los documentos del cliente). Nada de esto cambia la estructura: un lector de pantalla oye
+ * lo mismo que antes. Sin `content:` con texto en pseudoelementos: algunos lectores lo leen.
+ */
 .contenido h2 {
   font-size: var(--type-heading-size);
   line-height: var(--type-heading-line-height);
   font-weight: var(--type-heading-weight);
-  margin-top: var(--space-8);
+  letter-spacing: -0.01em;
+  margin-top: var(--space-12);
+  padding-bottom: var(--space-3);
+  position: relative;
+}
+.contenido h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 2.5rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--brand-yellow);
+}
+.contenido > h2:first-child {
+  margin-top: 0;
 }
 
 .contenido h3 {
   font-size: var(--type-subheading-size);
   line-height: var(--type-subheading-line-height);
   font-weight: var(--type-subheading-weight);
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--accent-base);
 }
 
 .contenido h4,
 .contenido h5,
 .contenido h6 {
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-line-height);
-  font-weight: var(--type-body-emphasis-weight);
+  font-size: var(--type-overline-size);
+  line-height: var(--type-overline-line-height);
+  font-weight: var(--type-overline-weight);
+  letter-spacing: var(--type-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--text-muted);
   margin-top: var(--space-6);
+}
+
+/* Lo que sigue a un título se le pega: el título es de lo que viene debajo. */
+.contenido h2 + *,
+.contenido h3 + *,
+.contenido h4 + * {
+  margin-top: var(--space-3);
+}
+
+/* La idea clave: un párrafo que es solo negrita, como los marca el cliente en sus documentos. */
+.contenido > p:has(> strong:only-child) {
+  background-color: var(--status-info-muted);
+  border-left: 4px solid var(--status-info-base);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-6);
+}
+.contenido > p:has(> strong:only-child) strong {
+  color: var(--text-default);
 }
 
 .contenido ul,
@@ -272,20 +385,53 @@ html[data-reading-width='narrow'] .contenido {
   list-style: decimal;
 }
 
+.contenido li::marker {
+  color: var(--accent-base);
+}
+
+.contenido ol > li::marker {
+  font-weight: var(--type-body-emphasis-weight);
+  font-variant-numeric: tabular-nums;
+}
+
 .contenido li + li {
   margin-top: var(--space-2);
+}
+
+.contenido li > ul,
+.contenido li > ol {
+  margin-top: var(--space-2);
+}
+
+/* Listas de tareas (GFM): la casilla en el color de acento, alineada con el texto. */
+.contenido input[type='checkbox'] {
+  accent-color: var(--accent-base);
+  margin-right: var(--space-2);
+  vertical-align: -0.1em;
 }
 
 .contenido a {
   color: var(--text-link);
   /* El subrayado siempre: el color no basta (1.4.1). */
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+.contenido a:hover {
+  color: var(--accent-hover);
+  text-decoration-thickness: 2px;
 }
 
 .contenido blockquote {
-  border-left: 3px solid var(--border-default);
-  padding-left: var(--space-4);
-  color: var(--text-muted);
+  background-color: var(--surface-sunken);
+  border-left: 4px solid var(--accent-base);
+  border-radius: var(--radius-card);
+  padding: var(--space-4) var(--space-6);
+  margin-top: var(--space-6);
+  color: var(--text-default);
+}
+.contenido blockquote > * + * {
+  margin-top: var(--space-3);
 }
 
 .contenido code {
@@ -300,6 +446,7 @@ html[data-reading-width='narrow'] .contenido {
 
 .contenido pre {
   background-color: var(--surface-sunken);
+  border: 1px solid var(--border-muted);
   border-radius: var(--radius-card);
   padding: var(--space-4);
   /* Un bloque de código largo se desplaza; no empuja la página a lo ancho. */
@@ -316,23 +463,33 @@ html[data-reading-width='narrow'] .contenido {
   display: block;
   overflow-x: auto;
   border-collapse: collapse;
+  margin-top: var(--space-6);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-body-line-height);
 }
 
 .contenido th,
 .contenido td {
-  border: 1px solid var(--border-default);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
   text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-muted);
 }
 
 .contenido th {
   font-weight: var(--type-body-emphasis-weight);
+  background-color: var(--status-info-muted);
+  border-bottom: 2px solid var(--status-info-base);
+}
+
+.contenido tbody tr:nth-child(even) td {
   background-color: var(--surface-sunken);
 }
 
 .contenido img {
   max-width: 100%;
   height: auto;
+  border-radius: var(--radius-card);
 }
 
 .contenido figure {
@@ -344,6 +501,16 @@ html[data-reading-width='narrow'] .contenido {
   line-height: var(--type-caption-line-height);
   color: var(--text-muted);
   margin-top: var(--space-2);
+}
+
+/* El separador es una marca corta de la casa, no una raya de lado a lado. */
+.contenido hr {
+  border: 0;
+  height: 3px;
+  width: 3rem;
+  margin: var(--space-12) auto;
+  border-radius: var(--radius-pill);
+  background-color: var(--brand-yellow);
 }
 
 /* El iframe de Vimeo mantiene su proporción sin que nadie calcule padding. */
@@ -370,4 +537,63 @@ html[data-reading-width='narrow'] .contenido {
   border-radius: var(--radius-card);
   padding: var(--space-3);
   color: var(--text-muted);
+}
+
+/*
+ * Callouts (27/9): `:::callout{kind}` en el Markdown y el átomo `Callout` del player pintan lo
+ * mismo, por eso viven fuera de `.contenido`. Borde a la izquierda y fondo: no solo color.
+ */
+.callout {
+  border: 1px solid var(--border-muted);
+  border-left-width: 4px;
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.callout > * + * {
+  margin-top: var(--space-2);
+}
+/* Dentro del contenido respira como una figura: un escalón más que un párrafo. */
+.contenido > * + .callout {
+  margin-top: var(--space-6);
+}
+.callout-title {
+  font-weight: var(--type-body-emphasis-weight);
+  color: var(--text-default);
+}
+.callout-note {
+  background-color: var(--surface-sunken);
+  border-left-color: var(--border-default);
+}
+.callout-example {
+  background-color: var(--surface-note);
+  border-left-color: var(--status-warning-base);
+}
+.callout-important {
+  background-color: var(--status-info-muted);
+  border-left-color: var(--status-info-base);
+}
+.callout-goals {
+  background-color: var(--surface-sunken);
+  border-left-color: var(--border-default);
+}
+/*
+ * «En este tema aprenderás» a la derecha del texto en pantallas anchas (27/9, del diseño de
+ * referencia): flotado, no en columna aparte, para que el orden de lectura siga siendo el del
+ * Markdown y en pantallas estrechas caiga en el flujo sin otro punto de quiebre. Solo cuando
+ * el riel no compite por el ancho (≥ 80 rem); la columna de lectura crece lo que mide la caja.
+ */
+@media (min-width: 80rem) {
+  .contenido:has(> .callout-goals) {
+    max-width: calc(var(--size-reading-width) + 18rem + var(--space-6));
+    /* Contiene el flotado: si el texto es más corto que la caja, no se sale del artículo. */
+    display: flow-root;
+  }
+  .contenido > .callout-goals {
+    float: right;
+    width: 18rem;
+    margin: 0 0 var(--space-4) var(--space-6);
+  }
+  .contenido > .callout-goals + * {
+    margin-top: 0;
+  }
 }

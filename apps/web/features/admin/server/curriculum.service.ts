@@ -10,11 +10,25 @@
 import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
+import {
+  PROGRAM_PRICE_SELECT,
+  toProgramPriceView,
+  type ProgramPriceView,
+} from '@/features/billing/server/prices.service';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { APIError } from '@/lib/core/errors';
+import { createReadUrl } from '@/lib/media/storage';
 
 /** Position used for the split second a swap needs a free slot. */
 const TEMP_POSITION = -1;
+
+export {
+  PROGRAM_KINDS,
+  PROGRAM_PRICINGS,
+  type ProgramKind,
+  type ProgramPricing,
+} from '@/lib/programs/kinds';
+import type { ProgramKind, ProgramPricing } from '@/lib/programs/kinds';
 
 export interface CurriculumModule {
   id: string;
@@ -22,6 +36,14 @@ export interface CurriculumModule {
   code: string;
   name: string;
   position: number;
+  /** Grado escolar del componente (25/9); nulo en programas sin grados. */
+  grade: number | null;
+  /** De qué va y cómo se cierra (25/9, fase 4). */
+  description: string | null;
+  closingText: string | null;
+  /** La imagen de la tarjeta del curso (25/9): el asset y una URL de lectura firmada (10 min). */
+  coverMediaId: string | null;
+  coverUrl: string | null;
   lessonCount: number;
 }
 
@@ -30,8 +52,14 @@ export interface CurriculumProgram {
   code: string;
   name: string;
   description: string | null;
+  /** Qué vende el programa (25/9). */
+  kind: ProgramKind;
+  /** Gratuito o de pago (25/9): en uno gratuito un menor entra sin acudiente. */
+  pricing: ProgramPricing;
   defaultAccessDays: number;
   modules: CurriculumModule[];
+  /** La lista de precios vigente (no archivada), 25/9. */
+  prices: ProgramPriceView[];
 }
 
 export interface CurriculumSubject {
@@ -59,7 +87,15 @@ function asConflict(err: unknown, message: string): never {
 
 // ─────────────────────────── Read ───────────────────────────
 
-export async function listCurriculum(institutionId: string): Promise<Curriculum> {
+/**
+ * `coverUrls` (25/9): firmar una URL por imagen es una llamada a Storage por componente; solo
+ * la pantalla de Programas las enseña, las demás listas (temas, exámenes) solo necesitan
+ * nombres y las dejan en nulo.
+ */
+export async function listCurriculum(
+  institutionId: string,
+  { coverUrls = false }: { coverUrls?: boolean } = {}
+): Promise<Curriculum> {
   const db = createTenantClient(institutionId);
 
   const [programs, subjects] = await Promise.all([
@@ -71,6 +107,8 @@ export async function listCurriculum(institutionId: string): Promise<Curriculum>
         code: true,
         name: true,
         description: true,
+        kind: true,
+        pricing: true,
         defaultAccessDays: true,
         modules: {
           where: { archivedAt: null },
@@ -80,8 +118,17 @@ export async function listCurriculum(institutionId: string): Promise<Curriculum>
             code: true,
             name: true,
             position: true,
+            grade: true,
+            description: true,
+            closingText: true,
+            coverMedia: { select: { id: true, providerRef: true, status: true } },
             _count: { select: { lessons: true } },
           },
+        },
+        prices: {
+          where: { archivedAt: null },
+          orderBy: [{ gradeFrom: 'asc' }, { validFrom: 'desc' }],
+          select: PROGRAM_PRICE_SELECT,
         },
       },
     }),
@@ -93,16 +140,26 @@ export async function listCurriculum(institutionId: string): Promise<Curriculum>
   ]);
 
   return {
-    programs: programs.map((p) => ({
-      ...p,
-      modules: p.modules.map((m) => ({
-        id: m.id,
-        code: m.code,
-        name: m.name,
-        position: m.position,
-        lessonCount: m._count.lessons,
-      })),
-    })),
+    programs: await Promise.all(
+      programs.map(async (p) => ({
+        ...p,
+        prices: p.prices.map(toProgramPriceView),
+        modules: await Promise.all(
+          p.modules.map(async (m) => ({
+            id: m.id,
+            code: m.code,
+            name: m.name,
+            position: m.position,
+            grade: m.grade,
+            description: m.description,
+            closingText: m.closingText,
+            coverMediaId: m.coverMedia?.id ?? null,
+            coverUrl: coverUrls ? await coverUrlOf(m.coverMedia) : null,
+            lessonCount: m._count.lessons,
+          }))
+        ),
+      }))
+    ),
     subjects: subjects.map((s) => ({
       id: s.id,
       name: s.name,
@@ -121,7 +178,14 @@ export async function createProgram({
 }: {
   institutionId: string;
   actorId: string | null;
-  data: { code: string; name: string; description: string | null; defaultAccessDays: number };
+  data: {
+    code: string;
+    name: string;
+    description: string | null;
+    kind: ProgramKind;
+    pricing: ProgramPricing;
+    defaultAccessDays: number;
+  };
 }): Promise<{ id: string }> {
   const db = createTenantClient(institutionId);
 
@@ -157,7 +221,14 @@ export async function updateProgram({
   institutionId: string;
   actorId: string | null;
   programId: string;
-  data: { code: string; name: string; description: string | null; defaultAccessDays: number };
+  data: {
+    code: string;
+    name: string;
+    description: string | null;
+    kind: ProgramKind;
+    pricing: ProgramPricing;
+    defaultAccessDays: number;
+  };
 }): Promise<{ id: string }> {
   const db = createTenantClient(institutionId);
 
@@ -165,7 +236,14 @@ export async function updateProgram({
     return await db.$transaction(async (tx) => {
       const before = await tx.program.findFirst({
         where: { id: programId, institutionId },
-        select: { code: true, name: true, description: true, defaultAccessDays: true },
+        select: {
+          code: true,
+          name: true,
+          description: true,
+          kind: true,
+          pricing: true,
+          defaultAccessDays: true,
+        },
       });
       if (!before) {
         throw new APIError('Program not found', 'NOT_FOUND');
@@ -281,6 +359,87 @@ export async function createModule({
     });
 
     return { id: created.id };
+  });
+}
+
+/**
+ * Nombre y grado del componente (25/9): el grado es lo que el negocio nombra (precio por
+ * grados, grado de entrada); la posición sigue siendo el orden de la ruta.
+ */
+/**
+ * URL de lectura de la imagen de la tarjeta (25/9). Solo si el asset quedó `READY`: uno
+ * `PENDING` es una subida que no terminó y no hay nada que enseñar.
+ */
+export async function coverUrlOf(
+  cover: { providerRef: string; status: string } | null
+): Promise<string | null> {
+  if (!cover || cover.status !== 'READY') return null;
+  return createReadUrl(cover.providerRef, { asAttachment: false });
+}
+
+export async function updateModule({
+  institutionId,
+  actorId,
+  moduleId,
+  name,
+  grade,
+  description,
+  closingText,
+  coverMediaId,
+}: {
+  institutionId: string;
+  actorId: string | null;
+  moduleId: string;
+  name: string;
+  grade: number | null;
+  description: string | null;
+  closingText: string | null;
+  /** `undefined` = no tocar; `null` = quitar la imagen; id = un `MediaAsset` IMAGE `READY`. */
+  coverMediaId?: string | null;
+}): Promise<{ id: string }> {
+  const db = createTenantClient(institutionId);
+
+  return db.$transaction(async (tx) => {
+    const before = await tx.module.findFirst({
+      where: { id: moduleId, institutionId },
+      select: { name: true, grade: true, description: true, closingText: true, coverMediaId: true },
+    });
+    if (!before) {
+      throw new APIError('Module not found', 'NOT_FOUND');
+    }
+
+    // La imagen tiene que ser una imagen ya subida y comprobada (`confirm`), de esta
+    // institución: el id viene del cliente y se trata como tal.
+    if (typeof coverMediaId === 'string') {
+      const asset = await tx.mediaAsset.findFirst({
+        where: { id: coverMediaId, kind: 'IMAGE', status: 'READY', archivedAt: null },
+        select: { id: true },
+      });
+      if (!asset) {
+        throw new APIError('La imagen no existe o no terminó de subirse', 'VALIDATION_ERROR');
+      }
+    }
+
+    const data = {
+      name,
+      grade,
+      description,
+      closingText,
+      ...(coverMediaId !== undefined ? { coverMediaId } : {}),
+    };
+    await tx.module.update({ where: { id: moduleId }, data });
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'module',
+        entityId: moduleId,
+        action: 'updated',
+        before,
+        after: data,
+      },
+    });
+    return { id: moduleId };
   });
 }
 

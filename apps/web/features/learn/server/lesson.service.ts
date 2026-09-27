@@ -87,6 +87,8 @@ export interface LessonForStudent {
       accepts: 'TEXT' | 'FILE' | 'TEXT_OR_FILE';
       /** Enunciados (24/9): con uno o más, un campo por pregunta en vez de un solo texto. */
       prompts: string[];
+      /** Aprobación automática (27/9): se completa al enviar, sin revisión. */
+      autoApprove: boolean;
     } | null;
     /** Qué evidencia la completa. `lesson-form.ts` explica por qué se decide así. */
     form: LessonForm;
@@ -228,6 +230,7 @@ export async function getLessonForStudent({
           activityInstructions: true,
           activityAccepts: true,
           activityPrompts: true,
+          activityAutoApprove: true,
           module: { select: { name: true } },
         },
       },
@@ -278,19 +281,21 @@ export async function getLessonForStudent({
       activity: assignment.lesson.requiresSubmission
         ? {
             html: assignment.lesson.activityInstructions
-              ? renderLessonHtml(assignment.lesson.activityInstructions, new Map(), {
-                  language: assignment.lesson.language,
-                })
+              ? renderLessonHtml(assignment.lesson.activityInstructions, new Map())
               : null,
             accepts: assignment.lesson.activityAccepts,
             prompts:
               assignment.lesson.activityAccepts === 'FILE'
                 ? []
                 : promptsOf(assignment.lesson.activityPrompts),
+            autoApprove: assignment.lesson.activityAutoApprove,
           }
         : null,
       form: lessonFormOf({ parsed, requiresSubmission: assignment.lesson.requiresSubmission }),
-      html: renderLessonHtml(content, assets, { language: assignment.lesson.language }),
+      // Sin `{ language }` (27/9): el `lang` va en el `<article>` del player, y el `<div lang>`
+      // que envolvía el HTML dejaba los bloques como nietos del artículo, fuera del alcance de
+      // los selectores de hijo directo de `.contenido` (párrafos sin separación).
+      html: renderLessonHtml(content, assets),
       missingAssets: assetIds.filter((id) => !assets.has(id)),
       transcripts,
     },

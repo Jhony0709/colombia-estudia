@@ -15,8 +15,12 @@ import { APIError } from '@/lib/core/errors';
 import { confirmUpload } from '@/features/content/server/media.service';
 
 const schema = z.object({
-  /** Obligatorio para imágenes, pero eso lo exige la validación de publicación, no esto. */
-  altText: optionalText(300),
+  /**
+   * Obligatorio para imágenes, pero eso lo exige la validación de publicación, no esto.
+   * `.optional()` (27/9): los clientes confirman con `{}` y ponen el alt después
+   * (`submission-form.tsx`, `use-image-upload.ts`); `optionalText` solo admite vacío, no ausente.
+   */
+  altText: optionalText(300).optional(),
 });
 
 type Input = z.infer<typeof schema>;

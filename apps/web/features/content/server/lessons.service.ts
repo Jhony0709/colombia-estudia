@@ -28,6 +28,11 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { byCodeOrId } from '@/lib/core/entity-code';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { APIError } from '@/lib/core/errors';
+import {
+  propagateLessonVersion,
+  notifyReopened,
+  type PropagationResult,
+} from '@/features/cohorts/server/version-propagation';
 
 export interface LessonListItem {
   id: string;
@@ -68,6 +73,8 @@ export interface DraftView {
   activityAccepts: ActivityAccepts;
   /** Enunciados (24/9): con uno o más, el estudiante responde pregunta por pregunta. */
   activityPrompts: string[];
+  /** Aprobación automática (27/9): la entrega queda aprobada al enviarse. */
+  activityAutoApprove: boolean;
   /**
    * Dónde se usa (24/9), para decidir si se puede **eliminar**: cohortes que lo tienen
    * asignado y exámenes del tema. Con cualquiera de los dos, solo se archiva.
@@ -517,6 +524,7 @@ export async function updateLessonActivity({
   instructions,
   accepts,
   prompts,
+  autoApprove,
 }: {
   institutionId: string;
   actorId: string;
@@ -525,6 +533,8 @@ export async function updateLessonActivity({
   accepts: ActivityAccepts;
   /** Enunciados; vacío = un solo texto. Sin sentido con `accepts: 'FILE'`, y se guarda vacío. */
   prompts: string[];
+  /** Aprobar al enviar (27/9), sin pasar por revisión. */
+  autoApprove: boolean;
 }): Promise<{ lessonId: string }> {
   const db = createTenantClient(institutionId);
 
@@ -536,6 +546,7 @@ export async function updateLessonActivity({
       activityInstructions: true,
       activityAccepts: true,
       activityPrompts: true,
+      activityAutoApprove: true,
     },
   });
   if (!lesson) throw new APIError('Lesson not found', 'NOT_FOUND');
@@ -552,6 +563,7 @@ export async function updateLessonActivity({
         activityInstructions: instructions,
         activityAccepts: accepts,
         activityPrompts: cleanPrompts,
+        activityAutoApprove: autoApprove,
       },
     });
     await tx.auditLog.create({
@@ -565,11 +577,13 @@ export async function updateLessonActivity({
           activityAccepts: lesson.activityAccepts,
           hadInstructions: lesson.activityInstructions !== null,
           prompts: promptsOf(lesson.activityPrompts).length,
+          autoApprove: lesson.activityAutoApprove,
         },
         after: {
           activityAccepts: accepts,
           hasInstructions: instructions !== null,
           prompts: cleanPrompts.length,
+          autoApprove,
         },
       },
     });
@@ -625,6 +639,7 @@ export async function openDraft({
       activityInstructions: true,
       activityAccepts: true,
       activityPrompts: true,
+      activityAutoApprove: true,
       subject: { select: { name: true } },
       _count: { select: { assignments: true, assessments: true, versions: true } },
       versions: {
@@ -662,6 +677,7 @@ export async function openDraft({
     activityInstructions: lesson.activityInstructions,
     activityAccepts: lesson.activityAccepts,
     activityPrompts: promptsOf(lesson.activityPrompts),
+    activityAutoApprove: lesson.activityAutoApprove,
     usage: lesson._count,
     hasPublished: publishedCount > 0,
   };
@@ -736,16 +752,63 @@ export async function saveDraft({
     );
   }
 
-  await db.lessonVersion.update({
-    where: { id: versionId },
-    data: {
-      content,
-      ...(estimatedMinutes !== undefined ? { estimatedMinutes } : {}),
-      ...(invalidatesProgress !== undefined ? { invalidatesProgress } : {}),
-    },
+  // Reclamar los assets desde el borrador (27/9): el vínculo `LessonVersionAsset` antes solo
+  // se escribía al publicar, así que una imagen pegada en un borrador no constaba en ningún
+  // sitio como usada y el barrido diario (`sweepUnusedMedia`) la habría borrado. Solo se
+  // vinculan ids que existen: en un borrador puede haber `asset:` escritos a mano.
+  const referenced = [...new Set(parseLessonMarkdown(content).assets.map((a) => a.id))];
+  const known = await resolveAssets(institutionId, referenced);
+  const assetIds = referenced.filter((id) => known.has(id));
+
+  await db.$transaction(async (tx) => {
+    await tx.lessonVersion.update({
+      where: { id: versionId },
+      data: {
+        content,
+        ...(estimatedMinutes !== undefined ? { estimatedMinutes } : {}),
+        ...(invalidatesProgress !== undefined ? { invalidatesProgress } : {}),
+      },
+    });
+    await syncVersionAssets(tx, { institutionId, versionId, assetIds });
   });
 
   return { savedAt: new Date().toISOString() };
+}
+
+type Tx = Omit<
+  ReturnType<typeof createTenantClient>,
+  '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
+>;
+
+/**
+ * Deja `LessonVersionAsset` igual a lo que el Markdown referencia: quita lo que ya no está y
+ * añade lo nuevo, sin tocar lo que sigue. Idempotente, para que el autoguardado de cada cinco
+ * segundos no reescriba filas que no cambiaron. Lo usan `saveDraft` y `publishLesson`.
+ */
+async function syncVersionAssets(
+  tx: Tx,
+  {
+    institutionId,
+    versionId,
+    assetIds,
+  }: { institutionId: string; versionId: string; assetIds: string[] }
+): Promise<void> {
+  await tx.lessonVersionAsset.deleteMany({
+    where: {
+      lessonVersionId: versionId,
+      ...(assetIds.length > 0 ? { mediaAssetId: { notIn: assetIds } } : {}),
+    },
+  });
+  if (assetIds.length > 0) {
+    await tx.lessonVersionAsset.createMany({
+      data: assetIds.map((mediaAssetId) => ({
+        institutionId,
+        lessonVersionId: versionId,
+        mediaAssetId,
+      })),
+      skipDuplicates: true,
+    });
+  }
 }
 
 /** Los `MediaAsset` que el Markdown referencia, en la forma que espera la validación. */
@@ -824,6 +887,10 @@ export interface PublishResult {
   versionId: string;
   number: number;
   publishedAt: string;
+  /** Asignaciones de cohortes vivas, no fijadas, que pasaron a esta versión (27/9). */
+  cohortsUpdated: number;
+  /** Estudiantes a los que la versión les reabrió el tema. */
+  reopened: number;
 }
 
 /**
@@ -834,6 +901,9 @@ export interface PublishResult {
  * - Los `LessonVersionAsset` se reescriben desde lo que el Markdown referencia de verdad.
  *   Sin eso, un asset que se quitó del texto seguiría contando como usado y no se podría
  *   archivar nunca.
+ * - Las asignaciones no fijadas de cohortes vivas pasan a esta versión en la misma
+ *   transacción (27/9, `version-propagation.ts`): para el autor, publicar es «guardar cambios».
+ *   Las fijadas se quedan y se mueven a mano (`PATCH /api/cohorts/assignments/[id]`).
  */
 export async function publishLesson({
   institutionId,
@@ -856,6 +926,7 @@ export async function publishLesson({
       number: true,
       status: true,
       invalidatesProgress: true,
+      lesson: { select: { title: true } },
     },
   });
 
@@ -873,23 +944,23 @@ export async function publishLesson({
     );
   }
 
-  await db.$transaction(async (tx) => {
+  const propagation: PropagationResult = await db.$transaction(async (tx) => {
     await tx.lessonVersion.update({
       where: { id: versionId },
       data: { status: 'PUBLISHED', publishedAt: now, publishedById: actorId },
     });
 
-    await tx.lessonVersionAsset.deleteMany({ where: { lessonVersionId: versionId } });
-    if (validation.assetIds.length > 0) {
-      await tx.lessonVersionAsset.createMany({
-        data: validation.assetIds.map((mediaAssetId) => ({
-          institutionId,
-          lessonVersionId: versionId,
-          mediaAssetId,
-        })),
-        skipDuplicates: true,
-      });
-    }
+    await syncVersionAssets(tx, { institutionId, versionId, assetIds: validation.assetIds });
+
+    const moved = await propagateLessonVersion(tx, {
+      institutionId,
+      lessonId: version.lessonId,
+      version: {
+        id: versionId,
+        number: version.number,
+        invalidatesProgress: version.invalidatesProgress,
+      },
+    });
 
     await tx.auditLog.create({
       data: {
@@ -904,10 +975,27 @@ export async function publishLesson({
           invalidatesProgress: version.invalidatesProgress,
           assets: validation.assetIds.length,
           warnings: validation.warnings.length,
+          cohortsUpdated: moved.moved,
         },
       },
     });
+
+    return moved;
   });
 
-  return { versionId, number: version.number, publishedAt: now.toISOString() };
+  const reopened = await notifyReopened({
+    institutionId,
+    lessonTitle: version.lesson.title,
+    versionNumber: version.number,
+    reopened: propagation.reopened,
+    now,
+  });
+
+  return {
+    versionId,
+    number: version.number,
+    publishedAt: now.toISOString(),
+    cohortsUpdated: propagation.moved,
+    reopened,
+  };
 }

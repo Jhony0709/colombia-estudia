@@ -9,6 +9,11 @@
  *
  * El `MediaAsset` nace `PENDING`. Si `confirm` no llega nunca, ahí se queda y no lo
  * referencia ninguna versión publicada: la validación de publicación exige `READY`.
+ *
+ * Lo que nadie usa se recoge (27/9): el editor sube la imagen en el momento de pegarla, el
+ * borrador o la publicación la reclaman (`LessonVersionAsset`), y `sweepUnusedMedia`, desde el
+ * job diario, borra pasado un periodo de gracia lo que no reclamó ningún tema, entrega ni
+ * portada. El cliente nunca borra: no sabe si la referencia sigue viva en otro sitio.
  */
 
 import 'server-only';
@@ -442,4 +447,102 @@ export async function registerVimeoVideo({
     name: video.name,
     unlisted: hash !== null,
   };
+}
+
+/** Días que un asset sin uso espera antes de que el barrido diario lo borre. */
+export const UNUSED_MEDIA_GRACE_DAYS = 7;
+
+export interface SweepResult {
+  /** Filas borradas (y, para `STORAGE`, objetos quitados del bucket). */
+  swept: number;
+  /** Objetos que no se pudieron quitar del bucket; la fila se conserva para reintentar. */
+  failed: number;
+}
+
+/**
+ * Borra los `MediaAsset` que nada referencia y ya cumplieron el periodo de gracia.
+ *
+ * «Nada» son las tres relaciones del modelo: `usedBy` (versiones de tema, borrador o
+ * publicadas), `submissions` y `coverOf`. Con eso caen los tres casos en una sola regla: el
+ * `PENDING` que nunca confirmó, la imagen pegada que no llegó a guardarse y la que se quitó del
+ * texto. Los objetos de `STORAGE` se quitan del bucket antes que la fila; si el bucket falla la
+ * fila se queda y se reintenta al día siguiente. Para `VIMEO` y el resto no hay objeto que
+ * quitar salvo la transcripción, que sí es nuestra.
+ *
+ * El borrado de la fila es por `deleteMany` con el mismo `where`: si entre la consulta y el
+ * borrado alguien reclamó el asset, el `Restrict` de las relaciones lo protege y no se borra.
+ */
+export async function sweepUnusedMedia({
+  institutionId,
+  now = new Date(),
+  graceDays = UNUSED_MEDIA_GRACE_DAYS,
+}: {
+  institutionId: string;
+  now?: Date;
+  graceDays?: number;
+}): Promise<SweepResult> {
+  const db = createTenantClient(institutionId);
+  const before = new Date(now.getTime() - graceDays * 24 * 60 * 60 * 1000);
+  const unused = {
+    createdAt: { lt: before },
+    usedBy: { none: {} },
+    submissions: { none: {} },
+    coverOf: { none: {} },
+  } as const;
+
+  const candidates = await db.mediaAsset.findMany({
+    where: unused,
+    select: {
+      id: true,
+      provider: true,
+      providerRef: true,
+      transcriptPath: true,
+      textAlternativePath: true,
+    },
+    orderBy: { createdAt: 'asc' },
+    take: 200,
+  });
+
+  const result: SweepResult = { swept: 0, failed: 0 };
+  for (const asset of candidates) {
+    const objects = [
+      asset.provider === 'STORAGE' ? asset.providerRef : null,
+      asset.transcriptPath,
+      asset.textAlternativePath,
+    ].filter((path): path is string => path !== null);
+
+    try {
+      for (const path of objects) await removeObject(path);
+    } catch (error: unknown) {
+      result.failed++;
+      logger.warn(
+        { mediaAssetId: asset.id, err: error instanceof Error ? error.message : String(error) },
+        'no se pudo quitar del bucket un archivo sin uso; se reintenta mañana'
+      );
+      continue;
+    }
+
+    try {
+      const deleted = await db.mediaAsset.deleteMany({ where: { id: asset.id, ...unused } });
+      result.swept += deleted.count;
+    } catch {
+      // Alguien lo reclamó entre la consulta y el borrado: el `Restrict` hizo su trabajo.
+    }
+  }
+
+  if (result.swept > 0 || result.failed > 0) {
+    await db.auditLog.create({
+      data: {
+        institutionId,
+        actorId: null,
+        entity: 'media',
+        entityId: now.toISOString().slice(0, 10),
+        action: 'swept',
+        after: { ...result, graceDays },
+        occurredAt: now,
+      },
+    });
+  }
+
+  return result;
 }

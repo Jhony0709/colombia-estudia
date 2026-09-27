@@ -13,6 +13,7 @@
  * Es código puro: sin React. Recibe y devuelve texto y objetos, y se prueba con `node`.
  */
 
+import { isCalloutKind, type CalloutKind } from '@colombia-estudia/types/callouts';
 import remarkDirective from 'remark-directive';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -34,6 +35,8 @@ export type Block =
   | { id: string; kind: 'media'; media: MediaKind; assetId: string }
   | { id: string; kind: 'image'; alt: string; assetId: string }
   | { id: string; kind: 'rule' }
+  /** Un recuadro (27/9): nota, ejemplo o importante, con título opcional y cuerpo en Markdown. */
+  | { id: string; kind: 'callout'; variant: CalloutKind; title: string; markdown: string }
   /** Lo que no es ninguno de los anteriores: se enseña tal cual para que no se pierda. */
   | { id: string; kind: 'raw'; markdown: string };
 
@@ -138,6 +141,18 @@ function toBlock(node: MdNode, markdown: string): Block {
       if (isMediaKind(name)) {
         return { id, kind: 'media', media: name, assetId: node.attributes?.asset ?? '' };
       }
+      if (name === 'callout' && node.type === 'containerDirective') {
+        // El cuerpo es lo que hay entre la línea de apertura y el `:::` de cierre, tal cual.
+        const lines = raw.split('\n');
+        const kind = node.attributes?.kind ?? 'note';
+        return {
+          id,
+          kind: 'callout',
+          variant: isCalloutKind(kind) ? kind : 'note',
+          title: node.attributes?.title ?? '',
+          markdown: lines.slice(1, lines.length - 1).join('\n'),
+        };
+      }
       return { id, kind: 'raw', markdown: raw };
     }
     default:
@@ -168,6 +183,11 @@ export function blockToMarkdown(block: Block): string {
       return `$$\n${block.latex.trim()}\n$$`;
     case 'media':
       return `::${block.media}{asset="${block.assetId.trim()}"}`;
+    case 'callout': {
+      const title = block.title.trim();
+      const attrs = `kind="${block.variant}"${title === '' ? '' : ` title="${title.replace(/"/g, '\u201d')}"`}`;
+      return `:::callout{${attrs}}\n${block.markdown.replace(/\s+$/, '')}\n:::`;
+    }
     case 'image':
       return `![${block.alt.trim()}](asset:${block.assetId.trim()})`;
     case 'rule':
@@ -194,6 +214,8 @@ export function isEmptyBlock(block: Block): boolean {
     case 'media':
     case 'image':
       return block.assetId.trim() === '';
+    case 'callout':
+      return block.markdown.trim() === '' && block.title.trim() === '';
     case 'rule':
       return false;
   }
@@ -262,6 +284,8 @@ export function emptyBlock(kind: Exclude<BlockKind, 'media' | 'image'>): Block {
       return { id, kind: 'math', latex: '' };
     case 'rule':
       return { id, kind: 'rule' };
+    case 'callout':
+      return { id, kind: 'callout', variant: 'note', title: '', markdown: '' };
     case 'raw':
       return { id, kind: 'raw', markdown: '' };
   }

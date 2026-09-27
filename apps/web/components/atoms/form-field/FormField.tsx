@@ -15,6 +15,7 @@ import {
   forwardRef,
   type ReactNode,
   type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
 } from 'react';
 import { Info } from 'lucide-react';
 import { Label } from '../label';
@@ -225,3 +226,40 @@ export const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(
 );
 
 FormSelect.displayName = 'FormSelect';
+
+// ─────────────────────────── FormTextarea ───────────────────────────
+
+export interface FormTextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'id'> {
+  /** Field name (for form submission) */
+  name: string;
+}
+
+/**
+ * Textarea nativo conectado al contexto de FormField (25/9; era deuda desde el 18/9). El
+ * mismo cableado que FormInput: id, describedby, invalid, required. Crece con `rows`, no con
+ * el texto: para un párrafo o dos, no para un editor.
+ */
+export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
+  ({ name, className, ...props }, ref) => {
+    const fieldProps = useFormField();
+    const { hasError, ...aria } = fieldProps;
+
+    return (
+      <textarea
+        ref={ref}
+        name={name}
+        {...aria}
+        {...props}
+        className={cn(
+          'rounded-control bg-surface-sunken w-full border px-3 py-2',
+          'type-body text-text',
+          'duration-fast ease-standard transition-colors',
+          hasError ? 'border-status-error-base' : 'border-border',
+          className
+        )}
+      />
+    );
+  }
+);
+
+FormTextarea.displayName = 'FormTextarea';

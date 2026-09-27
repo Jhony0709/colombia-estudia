@@ -1,0 +1,1 @@
+export { StudentTabBar } from './StudentTabBar';

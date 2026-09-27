@@ -80,7 +80,11 @@ describe('enrollPerson', () => {
     accessUntil: null,
     program: {
       defaultAccessDays: 300,
-      modules: [{ position: 1 }, { position: 2 }, { position: 3 }],
+      modules: [
+        { position: 1, grade: null },
+        { position: 2, grade: null },
+        { position: 3, grade: null },
+      ],
     },
   };
 
@@ -96,11 +100,37 @@ describe('enrollPerson', () => {
   it('refuses a minor with no guardian registered', async () => {
     db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: MINOR_BIRTH });
     db.guardianship.findFirst.mockResolvedValue(null);
+    // El programa de la cohorte es de pago (`pricing` por defecto): sin acudiente no entra.
+    db.cohort.findFirst.mockResolvedValue(cohort);
 
     await expect(
       enrollPerson({ ...BASE, cohortId: 'cohort-1', personHandle: '123', now: NOW })
     ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
     expect(db.enrollment.create).not.toHaveBeenCalled();
+  });
+
+  it('lets a minor with no guardian into a free program (25/9)', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: MINOR_BIRTH });
+    db.guardianship.findFirst.mockResolvedValue(null);
+    db.cohort.findFirst.mockResolvedValue({
+      ...cohort,
+      program: { ...cohort.program, pricing: 'FREE' },
+    });
+    db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+    db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+
+    const result = await enrollPerson({
+      ...BASE,
+      cohortId: 'cohort-1',
+      personHandle: '123',
+      now: NOW,
+    });
+
+    expect(result).toEqual({ enrollmentId: 'enr-1', warning: null });
+    expect(db.enrollment.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ isMinorAtEnrollment: true, studentId: 'p1' }),
+      select: { id: true },
+    });
   });
 
   it('enrols a minor who has a guardian, flagging isMinorAtEnrollment', async () => {
@@ -196,6 +226,75 @@ describe('enrollPerson', () => {
     expect(db.enrollment.create).not.toHaveBeenCalled();
   });
 
+  it('translates the entry grade into the first module of that grade (25/9)', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+    db.cohort.findFirst.mockResolvedValue({
+      ...cohort,
+      program: {
+        ...cohort.program,
+        modules: [
+          { position: 1, grade: 6 },
+          { position: 2, grade: 6 },
+          { position: 3, grade: 7 },
+          { position: 4, grade: 7 },
+        ],
+      },
+    });
+    db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+    db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+
+    await enrollPerson({
+      ...BASE,
+      cohortId: 'cohort-1',
+      personHandle: '123',
+      entryGrade: 7,
+      now: NOW,
+    });
+
+    expect(db.enrollment.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ startsAtModule: 3, entryGrade: 7 }),
+      select: { id: true },
+    });
+  });
+
+  it('refuses a raw entry position when the program has grades (25/9)', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+    db.cohort.findFirst.mockResolvedValue({
+      ...cohort,
+      program: {
+        ...cohort.program,
+        modules: [
+          { position: 1, grade: 6 },
+          { position: 2, grade: 7 },
+        ],
+      },
+    });
+
+    await expect(
+      enrollPerson({
+        ...BASE,
+        cohortId: 'cohort-1',
+        personHandle: '123',
+        startsAtModule: 2,
+        now: NOW,
+      })
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(db.enrollment.create).not.toHaveBeenCalled();
+  });
+
+  it('refuses an entry grade the program does not have', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+    db.cohort.findFirst.mockResolvedValue({
+      ...cohort,
+      program: { ...cohort.program, modules: [{ position: 1, grade: 6 }] },
+    });
+
+    await expect(
+      enrollPerson({ ...BASE, cohortId: 'cohort-1', personHandle: '123', entryGrade: 9, now: NOW })
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(db.enrollment.create).not.toHaveBeenCalled();
+  });
+
   it('turns the duplicate enrolment into a readable 409', async () => {
     db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
     db.cohort.findFirst.mockResolvedValue(cohort);
@@ -213,6 +312,7 @@ describe('previewEnrollment', () => {
   it('says who it found and what blocks the enrolment, without writing', async () => {
     db.person.findFirst.mockResolvedValue({
       id: 'p-1',
+      code: 'PER-0001',
       givenName: 'Ana',
       familyName: 'Pérez',
       birthDate: MINOR_BIRTH,
@@ -241,6 +341,7 @@ describe('previewEnrollment', () => {
 
     expect(preview.person).toEqual({
       id: 'p-1',
+      code: 'PER-0001',
       name: 'Ana Pérez',
       hasBirthDate: true,
       isMinor: true,

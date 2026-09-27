@@ -10,6 +10,7 @@ import { getTranslations, getFormatter } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { requireCapability } from '@/lib/authz/with-capability';
 import { getAccount } from '@/features/billing/server/billing.service';
+import { currentPriceFor, listProgramPrices } from '@/features/billing/server/prices.service';
 import { listCohortFormOptions } from '@/features/cohorts/server/cohorts.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
@@ -48,6 +49,22 @@ export default async function EnrollmentBillingPage({
     getFormatter(),
   ]);
   if (!account) notFound();
+
+  // La lista de precios del programa (25/9), para que el plan salga de un precio y no de
+  // un número escrito a mano. Solo hace falta si todavía no hay plan.
+  const [prices, suggested] = account.plan
+    ? [[], null]
+    : await Promise.all([
+        listProgramPrices({
+          institutionId: ctx.institution.id,
+          programId: account.cohort.programId,
+        }),
+        currentPriceFor({
+          institutionId: ctx.institution.id,
+          programId: account.cohort.programId,
+          grade: account.entryGrade,
+        }),
+      ]);
 
   const cop = (v: number) =>
     format.number(v, { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
@@ -95,6 +112,8 @@ export default async function EnrollmentBillingPage({
             enrollmentId={account.enrollmentId}
             isMinor={account.student.isMinor}
             partners={options.partners}
+            prices={prices}
+            suggestedPriceId={suggested?.id ?? null}
           />
         </PageSection>
       ) : (

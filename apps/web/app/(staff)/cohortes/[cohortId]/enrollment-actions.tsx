@@ -83,7 +83,7 @@ export function EnrollSheet({
   cohortId: string;
   disabled: boolean;
   /** Los módulos del programa, en orden, para elegir el grado de entrada (20/9). */
-  modules: Array<{ id: string; name: string; position: number }>;
+  modules: Array<{ id: string; name: string; position: number; grade: number | null }>;
   /** En la cabecera de una cohorte abierta es LA acción (ola 2, 23/9): relleno. */
   prominent?: boolean;
 }) {
@@ -141,13 +141,22 @@ export function EnrollSheet({
     const ok = await send(
       `/api/cohorts/${cohortId}/enrollments`,
       'POST',
-      { personHandle: handle, startsAtModule: startsAt === '' ? null : Number(startsAt) },
+      graded
+        ? { personHandle: handle, entryGrade: startsAt === '' ? null : Number(startsAt) }
+        : { personHandle: handle, startsAtModule: startsAt === '' ? null : Number(startsAt) },
       t('enrolled')
     );
     if (ok) reset();
   };
 
   const canEnrol = preview !== null && preview.person !== null && preview.blockers.length === 0;
+
+  // Con componentes por grado (25/9), el grado de entrada se elige por grado y no por
+  // posición: es lo que el negocio nombra. Sin grados, por componente como hasta ahora.
+  const grades = Array.from(
+    new Set(modules.map((m) => m.grade).filter((g): g is number => g !== null))
+  ).sort((a, b) => a - b);
+  const graded = grades.length > 0;
 
   return (
     <>
@@ -209,7 +218,23 @@ export function EnrollSheet({
 
           {/* El grado de entrada solo cuando ya se sabe a quién: un select antes de la
               persona es una pregunta sin sujeto. */}
-          {canEnrol && modules.length > 1 && (
+          {canEnrol && graded && grades.length > 1 && (
+            <FormField label={t('entryGrade')} name="entryGrade" hint={t('entryGradeHint')}>
+              <FormSelect
+                name="entryGrade"
+                value={startsAt}
+                onChange={(e) => setStartsAt(e.target.value)}
+              >
+                <option value="">{t('entryGradeFirst', { grade: grades[0] ?? 0 })}</option>
+                {grades.slice(1).map((grade) => (
+                  <option key={grade} value={String(grade)}>
+                    {t('gradeOption', { grade })}
+                  </option>
+                ))}
+              </FormSelect>
+            </FormField>
+          )}
+          {canEnrol && !graded && modules.length > 1 && (
             <FormField label={t('startsAt')} name="startsAtModule" hint={t('startsAtHint')}>
               <FormSelect
                 name="startsAtModule"

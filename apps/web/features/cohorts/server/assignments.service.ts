@@ -10,6 +10,10 @@
  * `COMPLETED` sobrevive salvo que la versión nueva tenga `invalidatesProgress`, y entonces
  * vuelve a `IN_PROGRESS` con la evidencia conservada y se avisa al estudiante. Para un
  * examen, la versión nueva solo afecta a intentos nuevos.
+ *
+ * Desde el 27/9 la asignación **sigue sola** a la versión publicada al publicar
+ * (`version-propagation.ts`), salvo que esté fijada (`pinnedVersion`). Este `PATCH` queda para
+ * las fijadas —o las que quedaron atrás por otra razón— y para fijar o soltar.
  */
 
 import 'server-only';
@@ -32,6 +36,8 @@ export interface CohortAssignmentItem {
   assigned: { id: string; number: number };
   /** La publicada más alta; igual a la asignada si está al día. */
   latest: { id: string; number: number; invalidatesProgress: boolean } | null;
+  /** Fijada en su versión: no sigue a la publicada al publicar (27/9). */
+  pinned: boolean;
   availableFrom: string;
   availableUntil: string | null;
 }
@@ -86,6 +92,7 @@ export async function listCohortAssignments({
         id: true,
         availableFrom: true,
         availableUntil: true,
+        pinnedVersion: true,
         lessonVersion: { select: { id: true, number: true } },
         lesson: {
           select: {
@@ -109,6 +116,7 @@ export async function listCohortAssignments({
         id: true,
         availableFrom: true,
         dueAt: true,
+        pinnedVersion: true,
         assessmentVersion: { select: { id: true, number: true } },
         assessment: {
           select: {
@@ -140,6 +148,7 @@ export async function listCohortAssignments({
       position: a.lesson.position,
       assigned: { id: a.lessonVersion.id, number: a.lessonVersion.number },
       latest: a.lesson.versions[0] ?? null,
+      pinned: a.pinnedVersion,
       availableFrom: iso(a.availableFrom),
       availableUntil: a.availableUntil ? iso(a.availableUntil) : null,
     })),
@@ -155,6 +164,7 @@ export async function listCohortAssignments({
       latest: a.assessment.versions[0]
         ? { ...a.assessment.versions[0], invalidatesProgress: false }
         : null,
+      pinned: a.pinnedVersion,
       availableFrom: iso(a.availableFrom),
       availableUntil: a.dueAt ? iso(a.dueAt) : null,
     })),
@@ -313,4 +323,72 @@ export async function updateAssignmentToLatest({
   }
 
   return { from: a.lessonVersion.number, to: latest.number, reopened: reopened.length };
+}
+
+/**
+ * Fija la asignación en su versión o la suelta (27/9). Al soltar, si quedó atrás, se pone al
+ * día en el mismo acto: soltar significa «quiero lo último», no «quiero lo último a partir de
+ * la próxima publicación». Audita `assignment.pinned` / `assignment.unpinned`.
+ */
+export async function setAssignmentPinned({
+  institutionId,
+  actorId,
+  kind,
+  assignmentId,
+  pinned,
+  now = new Date(),
+}: {
+  institutionId: string;
+  actorId: string;
+  kind: 'lesson' | 'assessment';
+  assignmentId: string;
+  pinned: boolean;
+  now?: Date;
+}): Promise<{ pinned: boolean; from: number; to: number; reopened: number }> {
+  const db = createTenantClient(institutionId);
+  const select = { id: true, pinnedVersion: true, cohortId: true } as const;
+  const where = { id: assignmentId };
+
+  const current =
+    kind === 'lesson'
+      ? await db.lessonAssignment.findFirst({ where, select })
+      : await db.assessmentAssignment.findFirst({ where, select });
+  if (!current) throw new APIError('Assignment not found', 'NOT_FOUND');
+
+  if (current.pinnedVersion !== pinned) {
+    await db.$transaction(async (tx) => {
+      const data = { pinnedVersion: pinned };
+      if (kind === 'lesson') await tx.lessonAssignment.update({ where, data });
+      else await tx.assessmentAssignment.update({ where, data });
+      await tx.auditLog.create({
+        data: {
+          institutionId,
+          actorId,
+          entity: kind === 'lesson' ? 'lesson_assignment' : 'assessment_assignment',
+          entityId: assignmentId,
+          action: pinned ? 'pinned' : 'unpinned',
+          after: { cohortId: current.cohortId },
+        },
+      });
+    });
+  }
+
+  if (pinned) return { pinned, from: 0, to: 0, reopened: 0 };
+
+  try {
+    const moved = await updateAssignmentToLatest({
+      institutionId,
+      actorId,
+      kind,
+      assignmentId,
+      now,
+    });
+    return { pinned, ...moved };
+  } catch (error) {
+    // Ya estaba al día: soltar no tiene nada que mover.
+    if (error instanceof APIError && error.code === 'CONFLICT') {
+      return { pinned, from: 0, to: 0, reopened: 0 };
+    }
+    throw error;
+  }
 }

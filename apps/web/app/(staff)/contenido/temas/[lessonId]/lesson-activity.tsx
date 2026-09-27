@@ -28,7 +28,12 @@ export function LessonActivity({
   initial,
 }: {
   lessonId: string;
-  initial: { instructions: string | null; accepts: ActivityAccepts; prompts: string[] };
+  initial: {
+    instructions: string | null;
+    accepts: ActivityAccepts;
+    prompts: string[];
+    autoApprove: boolean;
+  };
 }) {
   const t = useTranslations('editor.activity');
   const router = useRouter();
@@ -38,13 +43,16 @@ export function LessonActivity({
   const [accepts, setAccepts] = useState<ActivityAccepts>(initial.accepts);
   // Enunciados (24/9): con uno o más, el estudiante responde pregunta por pregunta.
   const [prompts, setPrompts] = useState<string[]>(initial.prompts);
+  // Aprobación automática (27/9): la entrega queda aprobada al enviarse, sin revisión.
+  const [autoApprove, setAutoApprove] = useState(initial.autoApprove);
   const [busy, setBusy] = useState(false);
   const { toast } = useToast();
 
   const dirty =
     instructions !== (initial.instructions ?? '') ||
     accepts !== initial.accepts ||
-    prompts.join('\n') !== initial.prompts.join('\n');
+    prompts.join('\n') !== initial.prompts.join('\n') ||
+    autoApprove !== initial.autoApprove;
 
   const save = async () => {
     setBusy(true);
@@ -56,6 +64,7 @@ export function LessonActivity({
           instructions: instructions.trim(),
           accepts,
           prompts: accepts === 'FILE' ? [] : prompts.map((q) => q.trim()).filter(Boolean),
+          autoApprove,
         }),
       });
       if (!res.ok) {
@@ -188,6 +197,21 @@ export function LessonActivity({
           </Button>
         </fieldset>
       )}
+
+      {/* Aprobación automática (27/9): para actividades de reflexión, donde lo que cuenta es
+          hacerla; el estudiante completa el tema al enviar y nadie tiene que revisar. */}
+      <label className="border-border rounded-control max-w-reading flex cursor-pointer items-start gap-3 border p-3">
+        <input
+          type="checkbox"
+          checked={autoApprove}
+          onChange={(event) => setAutoApprove(event.target.checked)}
+          className="mt-1"
+        />
+        <span className="type-body text-text block">
+          {t('autoApprove')}
+          <span className="type-caption text-text-muted block">{t('autoApproveHint')}</span>
+        </span>
+      </label>
 
       <div>
         <Button type="button" variant="secondary" loading={busy} disabled={!dirty} onClick={save}>

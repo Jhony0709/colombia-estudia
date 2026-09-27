@@ -7,12 +7,18 @@
 import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
 import { optionalText, blankToNull, requireInstitutionId } from '@/lib/http/admin-input';
-import { createProgram } from '@/features/admin/server/curriculum.service';
+import {
+  createProgram,
+  PROGRAM_KINDS,
+  type ProgramKind,
+} from '@/features/admin/server/curriculum.service';
 
 const schema = z.object({
   code: z.string().trim().min(1, 'El código es obligatorio').max(40),
   name: z.string().trim().min(1, 'El nombre es obligatorio').max(160),
   description: optionalText(2000),
+  kind: z.enum(PROGRAM_KINDS as unknown as [ProgramKind, ...ProgramKind[]]),
+  pricing: z.enum(['FREE', 'PAID']),
   defaultAccessDays: z.number().int().min(1, 'Mínimo 1 día').max(3650),
 });
 
@@ -27,6 +33,8 @@ export const POST = apiHandler<Input>({ schema, capability: 'institution.manage'
         code: input.code.trim(),
         name: input.name.trim(),
         description: blankToNull(input.description),
+        kind: input.kind,
+        pricing: input.pricing,
         defaultAccessDays: input.defaultAccessDays,
       },
     })

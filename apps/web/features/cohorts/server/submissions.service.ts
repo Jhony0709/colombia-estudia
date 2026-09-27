@@ -16,7 +16,11 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { createReadUrl } from '@/lib/media/storage';
 import { notify } from '@/features/notifications/server/notifications.service';
-import { answersOf, type SubmissionAnswer } from '@/features/learn/server/submission.service';
+import {
+  answersOf,
+  completeLessonBySubmission,
+  type SubmissionAnswer,
+} from '@/features/learn/server/submission.service';
 
 export type SubmissionStatusFilter = 'SUBMITTED' | 'RETURNED' | 'APPROVED';
 export const SUBMISSION_STATUSES: readonly SubmissionStatusFilter[] = [
@@ -285,41 +289,15 @@ export async function reviewSubmission({
     });
 
     if (decision === 'APPROVED') {
-      await tx.lessonProgress.upsert({
-        where: {
-          enrollmentId_lessonAssignmentId: {
-            enrollmentId: row.enrollmentId,
-            lessonAssignmentId: row.lessonAssignmentId,
-          },
-        },
-        create: {
-          institutionId,
-          enrollmentId: row.enrollmentId,
-          studentId: row.enrollment.studentId,
-          lessonAssignmentId: row.lessonAssignmentId,
-          lessonVersionId: row.assignment.lessonVersionId,
-          status: 'COMPLETED',
-          source: 'EVIDENCE',
-          evidence: { submissionId: row.id },
-          startedAt: now,
-          lastActivityAt: now,
-          completedAt: now,
-        },
-        update: { status: 'COMPLETED', source: 'EVIDENCE', lastActivityAt: now, completedAt: now },
-      });
-      await tx.learningEvent.create({
-        data: {
-          institutionId,
-          studentId: row.enrollment.studentId,
-          enrollmentId: row.enrollmentId,
-          type: 'lesson.completed',
-          payload: {
-            assignmentId: row.lessonAssignmentId,
-            form: 'SUBMISSION',
-            submissionId: row.id,
-          },
-          occurredAt: now,
-        },
+      // La misma regla que la aprobación automática al enviar (27/9), en un solo sitio.
+      await completeLessonBySubmission(tx, {
+        institutionId,
+        enrollmentId: row.enrollmentId,
+        studentId: row.enrollment.studentId,
+        lessonAssignmentId: row.lessonAssignmentId,
+        lessonVersionId: row.assignment.lessonVersionId,
+        submissionId: row.id,
+        now,
       });
     }
 

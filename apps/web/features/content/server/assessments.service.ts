@@ -28,6 +28,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { byCodeOrId } from '@/lib/core/entity-code';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { APIError } from '@/lib/core/errors';
+import { propagateAssessmentVersion } from '@/features/cohorts/server/version-propagation';
 
 export type AssessmentKind = 'DIAGNOSTIC' | 'SUBJECT' | 'FINAL';
 
@@ -673,7 +674,7 @@ export async function publishAssessment({
   actorId: string;
   versionId: string;
   now?: Date;
-}): Promise<{ versionId: string; number: number; publishedAt: string }> {
+}): Promise<{ versionId: string; number: number; publishedAt: string; cohortsUpdated: number }> {
   const db = createTenantClient(institutionId);
 
   const version = await db.assessmentVersion.findFirst({
@@ -695,10 +696,18 @@ export async function publishAssessment({
     );
   }
 
-  await db.$transaction(async (tx) => {
+  const { moved } = await db.$transaction(async (tx) => {
     await tx.assessmentVersion.update({
       where: { id: versionId },
       data: { status: 'PUBLISHED', publishedAt: now, publishedById: actorId },
+    });
+
+    // Las asignaciones no fijadas de cohortes vivas pasan a esta versión (27/9). Los
+    // intentos ya abiertos conservan su snapshot; solo los nuevos ven el examen nuevo.
+    const propagated = await propagateAssessmentVersion(tx, {
+      institutionId,
+      assessmentId: version.assessmentId,
+      version: { id: versionId, number: version.number },
     });
 
     await tx.auditLog.create({
@@ -713,10 +722,18 @@ export async function publishAssessment({
           assessmentId: version.assessmentId,
           number: version.number,
           warnings: validation.warnings.length,
+          cohortsUpdated: propagated.moved,
         },
       },
     });
+
+    return propagated;
   });
 
-  return { versionId, number: version.number, publishedAt: now.toISOString() };
+  return {
+    versionId,
+    number: version.number,
+    publishedAt: now.toISOString(),
+    cohortsUpdated: moved,
+  };
 }

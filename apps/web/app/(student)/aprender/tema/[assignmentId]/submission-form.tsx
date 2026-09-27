@@ -323,6 +323,8 @@ export function SubmissionForm({
                   onChange={(e) => setAnswer(index, e.target.value)}
                   rows={4}
                   maxLength={5_000}
+                  required
+                  aria-required="true"
                   disabled={busy}
                   aria-describedby={error ? ids.error : undefined}
                   className={cn(

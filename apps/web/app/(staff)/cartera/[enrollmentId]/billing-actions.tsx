@@ -17,6 +17,7 @@ import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
+import type { ProgramPriceView } from '@/features/billing/server/prices.service';
 
 async function call(
   url: string,
@@ -38,18 +39,51 @@ export function CreatePlan({
   enrollmentId,
   isMinor,
   partners,
+  prices,
+  suggestedPriceId,
 }: {
   enrollmentId: string;
   isMinor: boolean;
   partners: Array<{ id: string; name: string }>;
+  /** La lista de precios vigente del programa (25/9); vacía si el programa no tiene precio. */
+  prices: ProgramPriceView[];
+  /** El precio vigente para el grado de entrada de la matrícula, preseleccionado. */
+  suggestedPriceId: string | null;
 }) {
   const t = useTranslations('billing.plan');
+  const tp = useTranslations('admin.curriculum.prices');
+  const format = useFormatter();
   const router = useRouter();
   const { announce } = useAnnounce();
   const [payerType, setPayerType] = useState<'PERSON' | 'PARTNER'>('PERSON');
   const [partnerId, setPartnerId] = useState('');
-  const [total, setTotal] = useState('');
+  const suggested = prices.find((p) => p.id === suggestedPriceId) ?? null;
+  const [priceId, setPriceId] = useState(suggested?.id ?? '');
   const [count, setCount] = useState('3');
+  const [total, setTotal] = useState(
+    suggested
+      ? String(suggested.period === 'ONE_TIME' ? suggested.amount : suggested.amount * 3)
+      : ''
+  );
+
+  const cop = (v: number) =>
+    format.number(v, { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+  const priceLabel = (p: ProgramPriceView) =>
+    `${
+      p.gradeFrom === null && p.gradeTo === null
+        ? tp('allGrades')
+        : tp('gradeRange', { from: p.gradeFrom ?? '…', to: p.gradeTo ?? '…' })
+    } · ${cop(p.amount)} · ${tp(`period.${p.period}`)}`;
+
+  // Elegir un precio rellena el total: una vez por matrícula es el monto tal cual; por mes o
+  // por componente, el monto por cada cuota del plan. El total sigue siendo editable.
+  const applyPrice = (id: string, installments: string) => {
+    setPriceId(id);
+    const price = prices.find((p) => p.id === id);
+    if (!price) return;
+    const n = Math.max(1, Number(installments) || 1);
+    setTotal(String(price.period === 'ONE_TIME' ? price.amount : price.amount * n));
+  };
   const [firstDueOn, setFirstDueOn] = useState('');
   const [periodicity, setPeriodicity] = useState('MONTHLY');
   const [busy, setBusy] = useState(false);
@@ -68,6 +102,7 @@ export function CreatePlan({
         installments: Number(count),
         firstDueOn,
         periodicity,
+        priceId: priceId === '' ? null : priceId,
       });
       if (!r.ok) return setError(apiErrorText(r.payload, t('error')));
       announce(t('created'));
@@ -109,6 +144,22 @@ export function CreatePlan({
             </FormSelect>
           </FormField>
         )}
+        {prices.length > 0 && (
+          <FormField label={t('listPrice')} name="priceId" hint={t('listPriceHint')}>
+            <FormSelect
+              name="priceId"
+              value={priceId}
+              onChange={(e) => applyPrice(e.target.value, count)}
+            >
+              <option value="">{t('noListPrice')}</option>
+              {prices.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {priceLabel(p)}
+                </option>
+              ))}
+            </FormSelect>
+          </FormField>
+        )}
         <FormField label={t('total')} name="total" required hint={t('totalHint')}>
           <FormInput
             name="total"
@@ -127,7 +178,10 @@ export function CreatePlan({
             min={1}
             max={36}
             value={count}
-            onChange={(e) => setCount(e.target.value)}
+            onChange={(e) => {
+              setCount(e.target.value);
+              if (priceId !== '') applyPrice(priceId, e.target.value);
+            }}
           />
         </FormField>
         <FormField label={t('firstDueOn')} name="firstDueOn" required>

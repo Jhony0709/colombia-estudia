@@ -78,6 +78,7 @@ export default async function LessonEditorPage({ params }: { params: Params }) {
             ? {
                 instructions: draft.activityInstructions,
                 accepts: draft.activityAccepts,
+                autoApprove: draft.activityAutoApprove,
                 prompts: draft.activityPrompts,
               }
             : null

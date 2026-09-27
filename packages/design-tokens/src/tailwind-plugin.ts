@@ -81,9 +81,12 @@ export const designTokensPlugin = plugin(
         texto de ayuda y el estado, y el público lee en un celular de gama media
         (`plan/11-ux.md:20`). Encoger la letra de ayuda es ahorrar donde más cuesta.
       - `body` no se toca. Nunca se toca a la baja.
+      - `display` es fluido desde el 27/9 (auditoría responsive): 24 px en un teléfono de
+        390 y los 30 px de siempre desde ~1024. Un título de tema en mayúsculas ocupaba
+        cuatro líneas a 30 px en el teléfono, y el h1 no es lo que se lee, es lo que orienta.
     */
     const typographyVars = {
-      '--type-display-size': '1.875rem',
+      '--type-display-size': 'clamp(1.5rem, 1.1rem + 1.6vw, 1.875rem)',
       '--type-display-line-height': '1.25',
       '--type-display-weight': '700',
       '--type-heading-size': '1.5rem',

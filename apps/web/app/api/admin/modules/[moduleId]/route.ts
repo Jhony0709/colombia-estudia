@@ -7,9 +7,15 @@
 
 import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
-import { requireInstitutionId, routeParam } from '@/lib/http/admin-input';
+import {
+  blankToNull,
+  optionalText,
+  requireInstitutionId,
+  routeParam,
+} from '@/lib/http/admin-input';
 import {
   renameModule,
+  updateModule,
   archiveModule,
   moveModule,
   deleteModule,
@@ -19,6 +25,15 @@ const schema = z.discriminatedUnion('op', [
   z.object({
     op: z.literal('rename'),
     name: z.string().trim().min(1, 'El nombre es obligatorio').max(160),
+  }),
+  z.object({
+    op: z.literal('update'),
+    name: z.string().trim().min(1, 'El nombre es obligatorio').max(160),
+    grade: z.number().int().min(0).max(13).nullable(),
+    description: optionalText(2000).optional(),
+    closingText: optionalText(4000).optional(),
+    /** La imagen de la tarjeta (25/9): id de un `MediaAsset` IMAGE, `null` la quita, ausente no toca. */
+    coverMediaId: z.string().cuid().nullable().optional(),
   }),
   z.object({ op: z.literal('archive') }),
   z.object({ op: z.literal('delete') }),
@@ -39,6 +54,17 @@ export const PATCH = apiHandler<Input>({ schema, capability: 'institution.manage
   switch (input.op) {
     case 'rename':
       return renameModule({ institutionId, actorId, moduleId, name: input.name.trim() });
+    case 'update':
+      return updateModule({
+        institutionId,
+        actorId,
+        moduleId,
+        name: input.name.trim(),
+        grade: input.grade,
+        description: blankToNull(input.description ?? ''),
+        closingText: blankToNull(input.closingText ?? ''),
+        coverMediaId: input.coverMediaId,
+      });
     case 'archive':
       return archiveModule({ institutionId, actorId, moduleId });
     case 'delete':

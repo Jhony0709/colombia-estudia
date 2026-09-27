@@ -49,6 +49,7 @@ import { LessonDetailsForm, type ModuleChoice, type SubjectChoice } from './less
 import { lessonHelpTopics } from './lesson-help';
 import { MediaSettingsDialog, useLessonMedia } from './lesson-media';
 import { LessonActivity, type ActivityAccepts } from './lesson-activity';
+import { IMAGE_MAX_MB, imageFilesFrom, useImageUpload } from '@/lib/media/use-image-upload';
 import { BlockEditor, type BlockEditorHandle } from '@/features/content/editor/BlockEditor';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { LessonPager } from './lesson-pager';
@@ -131,7 +132,12 @@ export interface LessonWorkspaceProps {
   /** Dónde está el tema en la ruta, sus exámenes, su versión publicada y las cohortes abiertas. */
   readiness: LessonReadiness | null;
   /** La actividad, solo en un tema que se completa con una; `null` en los demás. */
-  activity: { instructions: string | null; accepts: ActivityAccepts; prompts: string[] } | null;
+  activity: {
+    instructions: string | null;
+    accepts: ActivityAccepts;
+    prompts: string[];
+    autoApprove: boolean;
+  } | null;
   details: {
     modules: ModuleChoice[];
     subjects: SubjectChoice[];
@@ -174,6 +180,51 @@ export function LessonEditor({
   const [mediaSettings, setMediaSettings] = useState<string | null>(null);
 
   const [content, setContent] = useState(initialContent);
+  const { upload: uploadImage } = useImageUpload();
+  const [imageError, setImageError] = useState<string | null>(null);
+
+  /** Vista Markdown: placeholder en el cursor → subida → referencia definitiva (27/9). */
+  // Marcadores `![Subiendo x…]()` de subidas en curso. El autoguardado los quita de lo que
+  // envía: si el autor recarga a mitad de subida, el borrador guardado no se queda con un
+  // marcador que nada va a reemplazar (pasó el 27/9). El estado local sí lo conserva, que es
+  // donde se hace el reemplazo.
+  const pendingUploads = useRef<Set<string>>(new Set());
+  const stripPendingUploads = useCallback((text: string) => {
+    let out = text;
+    for (const token of pendingUploads.current) out = out.replace(token, '');
+    return out;
+  }, []);
+  const pasteImagesIntoMarkdown = async (files: File[]) => {
+    setImageError(null);
+    for (const file of files) {
+      const area = markdownArea.current;
+      const token = `![${t('view.uploadingImage', { name: file.name })}]()`;
+      const at = area ? area.selectionStart : content.length;
+      pendingUploads.current.add(token);
+      setContent((prev) => `${prev.slice(0, at)}${token}${prev.slice(at)}`);
+      setDirty(true);
+      const outcome = await uploadImage(file);
+      pendingUploads.current.delete(token);
+      // `dirty` otra vez: si un autoguardado corrió durante la subida lo dejó en falso, y el
+      // texto con el `asset:` definitivo (o sin el marcador) no se guardaría hasta la siguiente
+      // tecla.
+      setDirty(true);
+      if (!outcome.ok) {
+        setContent((prev) => prev.replace(token, ''));
+        setImageError(
+          outcome.error === 'type'
+            ? t('view.imageErrors.type')
+            : outcome.error === 'size'
+              ? t('view.imageErrors.size', { mb: IMAGE_MAX_MB })
+              : (outcome.message ?? t('view.imageErrors.upload'))
+        );
+        continue;
+      }
+      const alt = file.name.replace(/\.[a-z0-9]+$/i, '');
+      setContent((prev) => prev.replace(token, `![${alt}](asset:${outcome.result.mediaAssetId})`));
+      URL.revokeObjectURL(outcome.result.previewUrl);
+    }
+  };
   const [minutes, setMinutes] = useState<string>(
     initialEstimatedMinutes === null ? '' : String(initialEstimatedMinutes)
   );
@@ -196,7 +247,11 @@ export function LessonEditor({
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState<number | null>(null);
   const [confirming, setConfirming] = useState(false);
-  const [preview, setPreview] = useState<{ html: string; missingAssets: string[] } | null>(null);
+  const [preview, setPreview] = useState<{
+    html: string;
+    missingAssets: string[];
+    language?: string;
+  } | null>(null);
   const [previewing, setPreviewing] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -208,7 +263,7 @@ export function LessonEditor({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         versionId,
-        content,
+        content: stripPendingUploads(content),
         estimatedMinutes: Number.isFinite(parsedMinutes) ? parsedMinutes : null,
         invalidatesProgress: reopens,
       }),
@@ -223,7 +278,7 @@ export function LessonEditor({
     setSavedAt(new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' }));
     setDirty(false);
     return true;
-  }, [content, minutes, reopens, t, versionId, notifyError]);
+  }, [content, minutes, reopens, t, versionId, notifyError, stripPendingUploads]);
 
   const validate = useCallback(async () => {
     const res = await fetch(`/api/content/lessons/${versionId}/validate`, {
@@ -295,7 +350,9 @@ export function LessonEditor({
         return;
       }
 
-      setPreview((payload.data ?? payload) as { html: string; missingAssets: string[] });
+      setPreview(
+        (payload.data ?? payload) as { html: string; missingAssets: string[]; language?: string }
+      );
     } catch {
       notifyError(t('previewError'));
     } finally {
@@ -374,8 +431,14 @@ export function LessonEditor({
       }
 
       const number = (payload.data?.number ?? payload.number) as number;
+      const cohorts = (payload.data?.cohortsUpdated ?? 0) as number;
+      const reopened = (payload.data?.reopened ?? 0) as number;
       setPublished(number);
-      toast({ severity: 'success', title: t('publishedOk', { number }) });
+      toast({
+        severity: 'success',
+        title: t('publishedOk', { number }),
+        description: t('publishedCohorts', { cohorts, reopened }),
+      });
       setConfirming(false);
     } catch {
       notifyError(t('publishError'));
@@ -571,11 +634,32 @@ export function LessonEditor({
                   setContent(event.target.value);
                   setDirty(true);
                 }}
+                // Pegar o soltar una imagen en la vista Markdown (27/9): placeholder en el
+                // cursor mientras sube, como en GitHub, y `![alt](asset:id)` al terminar; el
+                // `alt` es el nombre del archivo sin extensión como punto de partida y la
+                // validación de publicación exige cambiarlo.
+                onPaste={(event) => {
+                  const files = imageFilesFrom(event.clipboardData);
+                  if (files.length === 0) return;
+                  event.preventDefault();
+                  void pasteImagesIntoMarkdown(files);
+                }}
+                onDrop={(event) => {
+                  const files = imageFilesFrom(event.dataTransfer);
+                  if (files.length === 0) return;
+                  event.preventDefault();
+                  void pasteImagesIntoMarkdown(files);
+                }}
                 className="border-border bg-surface-base text-text rounded-control min-h-[24rem] w-full resize-y border px-3 py-2 font-mono text-[0.875rem] leading-relaxed"
               />
               <p id="editor-markdown-hint" className="type-caption text-text-muted">
                 {t('view.markdownHint')}
               </p>
+              {imageError && (
+                <p role="alert" className="type-caption text-status-error-base m-0">
+                  {imageError}
+                </p>
+              )}
             </div>
           )}
 
@@ -665,6 +749,7 @@ export function LessonEditor({
                 previa se pintara distinto, estaría previendo algo que nadie va a ver. */}
             <div
               className="contenido max-w-reading"
+              lang={preview.language}
               dangerouslySetInnerHTML={{ __html: preview.html }}
             />
           </>
@@ -715,11 +800,18 @@ export function LessonEditor({
         {!blocked && (
           <>
             {/*
-              Publicar no cambia lo que las cohortes ya tienen asignado (eso es
-              `PATCH /api/cohorts/assignments/[id]`); lo que sí abre es que las cohortes
-              abiertas que aún no tienen el tema puedan añadirlo. Se dice aquí, que es
-              donde se decide.
+              Publicar mueve a esta versión las cohortes que siguen la última (27/9); las
+              fijadas se quedan y se mueven a mano desde la cohorte. Las abiertas que aún no
+              tienen el tema podrán añadirlo. Se dice aquí, que es donde se decide.
             */}
+            {readiness && readiness.cohorts.assigned > 0 && (
+              <p className="type-body text-text max-w-reading">
+                {t('confirmFollowing', {
+                  following: readiness.cohorts.following,
+                  pinned: readiness.cohorts.pinned,
+                })}
+              </p>
+            )}
             {pendingCohorts.length > 0 && (
               <p className="type-body text-text-muted max-w-reading">
                 {t('confirmPending', {
@@ -819,7 +911,12 @@ function readinessChecks({
   minutes: string;
   validation: Validation | null;
   media: Array<{ missingCaptions: boolean }> | null;
-  activity: { instructions: string | null; accepts: ActivityAccepts; prompts: string[] } | null;
+  activity: {
+    instructions: string | null;
+    accepts: ActivityAccepts;
+    prompts: string[];
+    autoApprove: boolean;
+  } | null;
   publishedNumber: number | null;
 }): ReadinessCheck[] {
   if (readiness === null) return [];

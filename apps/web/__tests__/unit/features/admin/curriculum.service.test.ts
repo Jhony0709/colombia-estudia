@@ -12,6 +12,7 @@ const tx = {
   module: { create: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
   subject: { create: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
   cohort: { count: jest.fn() },
+  mediaAsset: { findFirst: jest.fn() },
   auditLog: { create: jest.fn() },
 };
 
@@ -30,11 +31,17 @@ jest.mock('@/lib/db/errors', () => ({
   isUniqueViolation: (err: unknown) => mockIsUniqueViolation(err),
 }));
 
+// La URL firmada de la imagen de la tarjeta (25/9) sale de Storage; aquí no hay Storage.
+jest.mock('@/lib/media/storage', () => ({
+  createReadUrl: jest.fn(async (path: string) => `https://storage.test/${path}`),
+}));
+
 import {
   moveModule,
   createModule,
   createProgram,
   archiveProgram,
+  updateModule,
 } from '@/features/admin/server/curriculum.service';
 
 const BASE = { institutionId: 'inst-1', actorId: 'person-1' };
@@ -139,7 +146,14 @@ describe('createProgram', () => {
     await expect(
       createProgram({
         ...BASE,
-        data: { code: 'DEMO', name: 'Demo', description: null, defaultAccessDays: 300 },
+        data: {
+          code: 'DEMO',
+          name: 'Demo',
+          description: null,
+          kind: 'OTRO',
+          pricing: 'PAID',
+          defaultAccessDays: 300,
+        },
       })
     ).rejects.toMatchObject({ code: 'CONFLICT' });
   });
@@ -150,7 +164,14 @@ describe('createProgram', () => {
     await expect(
       createProgram({
         ...BASE,
-        data: { code: 'DEMO', name: 'Demo', description: null, defaultAccessDays: 300 },
+        data: {
+          code: 'DEMO',
+          name: 'Demo',
+          description: null,
+          kind: 'OTRO',
+          pricing: 'PAID',
+          defaultAccessDays: 300,
+        },
       })
     ).rejects.toThrow('connection lost');
   });
@@ -180,5 +201,65 @@ describe('archiveProgram', () => {
     expect(tx.auditLog.create).toHaveBeenCalledWith({
       data: expect.objectContaining({ entity: 'program', action: 'archived' }),
     });
+  });
+});
+
+describe('updateModule', () => {
+  const MODULE = {
+    name: 'Aprender es avanzar',
+    grade: null,
+    description: null,
+    closingText: null,
+    coverMediaId: null,
+  };
+  const INPUT = {
+    ...BASE,
+    moduleId: 'mod-1',
+    name: 'Aprender es avanzar',
+    grade: null,
+    description: 'De qué va',
+    closingText: null,
+  };
+
+  it('accepts a READY image as the card cover and audits the change (25/9)', async () => {
+    tx.module.findFirst.mockResolvedValue(MODULE);
+    tx.mediaAsset.findFirst.mockResolvedValue({ id: 'img-1' });
+
+    await updateModule({ ...INPUT, coverMediaId: 'img-1' });
+
+    expect(tx.mediaAsset.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'img-1', kind: 'IMAGE', status: 'READY', archivedAt: null },
+      })
+    );
+    expect(tx.module.update).toHaveBeenCalledWith({
+      where: { id: 'mod-1' },
+      data: expect.objectContaining({ coverMediaId: 'img-1' }),
+    });
+    expect(tx.auditLog.create.mock.calls[0][0].data.after.coverMediaId).toBe('img-1');
+  });
+
+  it('refuses an image that is not a READY IMAGE asset', async () => {
+    tx.module.findFirst.mockResolvedValue(MODULE);
+    tx.mediaAsset.findFirst.mockResolvedValue(null);
+
+    await expect(updateModule({ ...INPUT, coverMediaId: 'pending-1' })).rejects.toMatchObject({
+      code: 'VALIDATION_ERROR',
+    });
+    expect(tx.module.update).not.toHaveBeenCalled();
+  });
+
+  it('removes the cover with null and leaves it alone when absent', async () => {
+    tx.module.findFirst.mockResolvedValue({ ...MODULE, coverMediaId: 'img-1' });
+
+    await updateModule({ ...INPUT, coverMediaId: null });
+    expect(tx.module.update).toHaveBeenLastCalledWith({
+      where: { id: 'mod-1' },
+      data: expect.objectContaining({ coverMediaId: null }),
+    });
+
+    await updateModule(INPUT);
+    expect(tx.module.update.mock.calls[1][0].data).not.toHaveProperty('coverMediaId');
+    expect(tx.mediaAsset.findFirst).not.toHaveBeenCalled();
   });
 });

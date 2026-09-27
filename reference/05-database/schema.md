@@ -54,9 +54,10 @@ persona en dos instituciones exige refactor a `Person` global + pertenencia por
 **`Enrollment.isMinorAtEnrollment` se congela**, y `birthDate` es obligatoria para
 matricular aunque sea opcional en `Person` (un contacto de aliado no la necesita).
 
-**Lo publicado es inmutable; la asignación es (cohorte, tema).** `LessonVersion` y
-`AssessmentVersion` no se editan. `LessonAssignment` apunta a una versión que puede cambiar
-(auditado); `LessonProgress.lessonVersionId` recuerda con cuál se recogió la evidencia;
+**Lo publicado es inmutable; la asignación es (cohorte, tema) y sigue a lo publicado.**
+`LessonVersion` y `AssessmentVersion` no se editan. `LessonAssignment` apunta a una versión
+que cambia sola al publicar salvo que `pinnedVersion` sea `true` (27/9; auditado);
+`LessonProgress.lessonVersionId` recuerda con cuál se recogió la evidencia;
 `Attempt.assessmentVersionId` es el snapshot del intento. Ver `contenido-y-evaluaciones.md`.
 
 **Las reglas del intento viven en la versión.** `maxAttempts`, `timeLimitMinutes`,
@@ -67,8 +68,11 @@ quién aprobó en marzo.
 La única lectura es `grading.ts`. Un `include` olvidado no filtra las respuestas.
 
 **Contenido en Markdown, recursos en `MediaAsset`, unión en `LessonVersionAsset`.** La
-tabla de unión se llena al publicar: impide borrar un recurso en uso (`Restrict`), garantiza
-misma institución y hace consultable qué recurso usa cada versión sin parsear Markdown.
+tabla de unión se llena al guardar el borrador y al publicar (27/9; antes solo al publicar):
+impide borrar un recurso en uso (`Restrict`), garantiza misma institución y hace consultable qué
+recurso usa cada versión sin parsear Markdown. Un `MediaAsset` sin fila aquí, sin `Submission` y
+sin `Module.coverMediaId` durante 7 días es huérfano y el job diario lo borra
+(`04-business-logic/contenido-y-evaluaciones.md`, «Recursos que nadie usa»).
 
 **`captionsSource` distingue `AUTO` de `REVIEWED`.** Los subtítulos automáticos de Vimeo con
 vocabulario de Física no cumplen WCAG 1.2.2; no cuentan para publicar ni para `requiresCaptions`.
@@ -119,6 +123,61 @@ import, los scripts y el seed: un camino que se olvide de pedir el código dejar
 él. En Prisma la columna es `String @default(dbgenerated("''::text"))`, así `create()` no lo
 pide y lo devuelve ya asignado. Patrón Basikon (`Counter` + `formatRegistration`). `Program`
 y `Cohort` conservan su `code` manual.
+
+## Precio (25/9, fase de negocio 1)
+
+`ProgramPrice`: la lista de precios de un programa —monto en pesos enteros, periodo
+(`ONE_TIME`, `MONTHLY`, `PER_MODULE`), rango de grados opcional (`gradeFrom`/`gradeTo`, con
+`CHECK from <= to`) y vigencia (`validFrom`/`validTo`)—. Se archiva, no se borra.
+`PaymentPlan.priceId` referencia el precio del que salió el total (nulo en planes viejos o
+escritos a mano). El «c/m» de los clientes (mes o componente) es un dato del precio, no una
+suposición del código. `currentPriceFor()` elige el vigente más específico para un grado.
+Un precio nunca se actualiza: se archiva y se crea otro. Esa inmutabilidad es lo que hace que
+`PaymentPlan.priceId` + `totalAmount` + las cuotas (`Installment.amount`/`dueOn`) expliquen
+una deuda años después sin más snapshot (revisión 25/9).
+
+## Tipo de programa y grado (25/9, fase de negocio 2)
+
+`Program.kind` (`ProgramKind`: bachillerato, inglés, técnico, refuerzo, pre-ICFES, pregrado,
+otro) dice qué vende el programa. `Module.grade` (0–13, `CHECK`) es el grado escolar del
+componente; nulo en programas sin grados. `Enrollment.entryGrade` es el grado por el que
+entró la matrícula, guardado junto a `startsAtModule` (su traducción a posición al
+matricular): si los componentes se reordenan, el grado sigue diciendo la verdad. En un
+programa con grados la única entrada al matricular es el grado; una posición suelta es
+`VALIDATION_ERROR` (`enrollments.service.ts`). `startsAtModule` a secas queda para programas
+sin grados. El precio de lista se elige por grado (`currentPriceFor`).
+
+## Gratuito y cohorte de introducción (25/9, fase de negocio 3)
+
+`Program.pricing` (`FREE` | `PAID`, default `PAID`): un programa gratuito no genera cartera y
+un menor de edad se matricula en él sin acudiente (`enrollments.service.ts`, `isFreeCohort`);
+en uno de pago el acudiente firma matrícula y datos. `Institution.introCohortId` (columna con
+FK a `Cohort`, `@unique`; antes `settings.introCohortId`) es la cohorte en la que entra quien
+se registra por `/registro`. La migración movió el dato del JSON a la columna y marcó como
+`FREE` el programa de esa cohorte. `settings` vuelve a ser lo que su comentario dice: nada de
+negocio crítico. Ojo con `TRUNCATE … CASCADE` sobre `Cohort`: arrastraría `Institution`
+(el reset SQL suelta la referencia antes y va sin `CASCADE`).
+
+## Componente con descripción y cierre (25/9, fase de negocio 4)
+
+`Module.description` (lo que el estudiante lee en su ruta bajo el nombre del componente) y
+`Module.closingText` (lo que lee al enviar el cuestionario del componente; nulo = el texto
+general de la plataforma). El video de introducción del componente **sigue viviendo en su
+primer tema**: un medio del componente necesitaría su propio lugar para subtítulos y
+transcripción (regla no negociable de accesibilidad) y hoy ese lugar es el editor del tema.
+
+`Module.coverMediaId` (26/9): la imagen de la tarjeta del curso en «Cursos abiertos». Apunta a
+un `MediaAsset` `IMAGE` `READY` de Storage, subido por la tubería normal (`upload` → PUT →
+`confirm`); `ON DELETE SET NULL`. Es decorativa —el nombre del curso va al lado— y por eso no
+lleva texto alternativo (`alt=""`). Se enseña con URL de lectura firmada de diez minutos.
+
+## Actividad con aprobación automática (27/9)
+
+`Lesson.activityAutoApprove` (`false` por defecto): con `true`, `submitLesson` crea la entrega
+`APPROVED` con `reviewedById` nulo y `reviewedAt = submittedAt`, completa el tema en la misma
+transacción (`LessonProgress` `COMPLETED`, `LearningEvent` `lesson.completed`) y audita
+`auto_approved` sin actor. Nadie recibe «actividad por revisar». Para actividades de reflexión,
+donde lo que cuenta es hacerla. Un reenvío sobre una aprobada sigue siendo `CONFLICT`.
 
 ## onDelete
 

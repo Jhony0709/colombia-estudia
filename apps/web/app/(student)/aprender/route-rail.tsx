@@ -23,6 +23,7 @@ import {
 import type { OutlineItem, SequencedItem } from '@/features/learn/server/outline';
 import type { OutlineModule } from '@/features/learn/server/cohort.service';
 import { cn } from '@/lib/utils';
+import { ProgressBar } from '@/components/atoms/progress-bar';
 import { RouteRailFrame } from './route-rail-frame';
 
 /** Icono por forma del ítem: lo que Coursera pone delante de cada uno. */
@@ -85,13 +86,32 @@ export async function RouteRail({
           >
             <summary className="min-h-touch flex cursor-pointer items-center gap-2 px-3 py-2">
               {locked && <Lock aria-hidden className="text-text-muted size-4 shrink-0" />}
-              <span className="type-body-emphasis text-text min-w-0 flex-1 truncate">
+              <span className="type-body-emphasis text-text line-clamp-2 min-w-0 flex-1">
                 {module.name}
               </span>
-              <span className="type-caption text-text-muted shrink-0">
-                {completed}/{module.items.length}
-              </span>
+              {!holdsCurrent && (
+                <span className="type-caption text-text-muted shrink-0">
+                  {completed}/{module.items.length}
+                </span>
+              )}
             </summary>
+            {/* El componente por el que se va (27/9, del diseño de referencia): barra de avance
+                y «3 de 8 completados · 38 %» en vez del «3/8» a secas de los demás. */}
+            {holdsCurrent && module.items.length > 0 && (
+              <div className="space-y-1 px-3 pb-3">
+                <ProgressBar
+                  percent={(completed / module.items.length) * 100}
+                  label={t('rail.progressLabel', { module: module.name })}
+                />
+                <p className="type-caption text-text-muted m-0">
+                  {t('rail.progress', {
+                    completed,
+                    total: module.items.length,
+                    percent: Math.round((completed / module.items.length) * 100),
+                  })}
+                </p>
+              </div>
+            )}
             <ul className="border-border-muted divide-border-muted divide-y border-t">
               {module.items.map((item) => (
                 <li key={item.assignmentId}>
@@ -162,25 +182,39 @@ async function RailItem({ item, current }: { item: SequencedItem; current: boole
  */
 export async function WithRouteRail({
   rail,
+  header,
   children,
 }: {
   rail: React.ReactNode;
+  /**
+   * La cabecera de la pantalla (27/9, del diseño de referencia): va en la columna del
+   * contenido, con lo que titula, y la ruta ocupa la izquierda de arriba abajo. Antes la
+   * cabecera cruzaba las dos columnas y la ruta empezaba debajo del título del tema, como si
+   * la ruta fuera del tema y no del componente.
+   */
+  header?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const t = await getTranslations('learn');
   return (
-    <>
-      {/* Móvil: la ruta plegada bajo la cabecera; el marco de escritorio no la pinta. */}
-      <details className="border-border rounded-card mb-6 border p-3 lg:hidden">
-        <summary className="type-body-emphasis min-h-touch flex cursor-pointer items-center">
-          {t('rail.toggle')}
-        </summary>
-        <div className="mt-3">{rail}</div>
-      </details>
-      {/* Escritorio (E2, 23/9): 15 rem y plegable, con la preferencia en el navegador. */}
-      <RouteRailFrame rail={rail} hideLabel={t('rail.hide')} showLabel={t('rail.show')}>
-        {children}
-      </RouteRailFrame>
-    </>
+    // Escritorio (E2, 23/9): 15 rem y plegable, con la preferencia en el navegador. Móvil: la
+    // cabecera y, debajo, la ruta plegada en un `<details>`; una sola cabecera en el DOM, que
+    // el gestor de foco la busca por su `h1` al cambiar de ruta.
+    <RouteRailFrame
+      rail={rail}
+      header={header}
+      mobileRail={
+        <details className="border-border rounded-card border p-3">
+          <summary className="type-body-emphasis min-h-touch flex cursor-pointer items-center">
+            {t('rail.toggle')}
+          </summary>
+          <div className="mt-3">{rail}</div>
+        </details>
+      }
+      hideLabel={t('rail.hide')}
+      showLabel={t('rail.show')}
+    >
+      {children}
+    </RouteRailFrame>
   );
 }

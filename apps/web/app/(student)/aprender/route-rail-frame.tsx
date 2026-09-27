@@ -7,7 +7,7 @@
  * navegador (`ce.rail.collapsed`), como las de lectura.
  *
  * Cliente por el estado del pliegue; `rail` y `children` llegan ya pintados del servidor.
- * En móvil no interviene: la ruta va en un `<details>` (`WithRouteRail`).
+ * En móvil pinta la ruta plegada (`mobileRail`, un `<details>`) bajo la cabecera.
  */
 
 import { useEffect, useState, type ReactNode } from 'react';
@@ -18,11 +18,17 @@ const KEY = 'ce.rail.collapsed';
 
 export function RouteRailFrame({
   rail,
+  header,
+  mobileRail,
   children,
   hideLabel,
   showLabel,
 }: {
   rail: ReactNode;
+  /** La cabecera del tema (27/9): en la columna del contenido, no sobre la ruta. */
+  header?: ReactNode;
+  /** La ruta plegada para el teléfono; va bajo la cabecera y solo se pinta bajo `lg`. */
+  mobileRail: ReactNode;
   children: ReactNode;
   hideLabel: string;
   showLabel: string;
@@ -79,7 +85,11 @@ export function RouteRailFrame({
         </button>
         {!collapsed && rail}
       </aside>
-      <div className="min-w-0 space-y-10">{children}</div>
+      <div className="min-w-0">
+        {header && <div className="mb-6 lg:mb-8">{header}</div>}
+        <div className="mb-6 lg:hidden">{mobileRail}</div>
+        <div className="space-y-10">{children}</div>
+      </div>
     </div>
   );
 }

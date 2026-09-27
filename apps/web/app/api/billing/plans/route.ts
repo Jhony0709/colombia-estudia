@@ -24,6 +24,7 @@ const schema = z
     installments: z.number().int().min(1).max(36),
     firstDueOn: z.string().date(),
     periodicity: z.enum(PERIODICITIES as unknown as [string, ...string[]]),
+    priceId: z.string().cuid().nullable().optional(),
   })
   .refine((v) => Boolean(v.enrollmentId) !== Boolean(v.cohortId), {
     message: 'Indica una matrícula o una cohorte, no las dos',
@@ -67,6 +68,7 @@ export const POST = apiHandler<Input>({ schema, capability: 'billing.manage' })(
       installments: input.installments,
       firstDueOn: new Date(`${input.firstDueOn}T00:00:00.000Z`),
       periodicity: input.periodicity as 'MONTHLY' | 'BIWEEKLY' | 'WEEKLY',
+      priceId: input.priceId ?? null,
     },
   });
 });

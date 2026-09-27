@@ -37,7 +37,9 @@ export function StickyActionBar({
         className
       )}
     >
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+      {/* Teléfono: el estado en su fila y debajo salida + acción. Desde `sm`, una sola fila:
+          el estado ocupa lo que sobra (y se parte si hace falta), la acción no se encoge. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:flex-nowrap">
         {status !== undefined && (
           <p
             role="status"
@@ -46,7 +48,7 @@ export function StickyActionBar({
             {status}
           </p>
         )}
-        {secondary && <div className="flex min-w-0 items-center gap-3">{secondary}</div>}
+        {secondary && <div className="flex min-w-0 shrink items-center gap-3">{secondary}</div>}
         {action && <div className="ml-auto shrink-0">{action}</div>}
       </div>
     </nav>

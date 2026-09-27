@@ -25,7 +25,10 @@ jest.mock('@/features/notifications/server/notifications.service', () => ({
   notifyMany: (...args: unknown[]) => notifyMany(...args),
 }));
 
-import { updateAssignmentToLatest } from '@/features/cohorts/server/assignments.service';
+import {
+  updateAssignmentToLatest,
+  setAssignmentPinned,
+} from '@/features/cohorts/server/assignments.service';
 
 const BASE = { institutionId: 'inst-1', actorId: 'actor-1', assignmentId: 'la-1' };
 const NOW = new Date('2026-09-23T12:00:00.000Z');
@@ -173,5 +176,65 @@ describe('updateAssignmentToLatest — examen', () => {
       before: { number: 1 },
       after: { number: 3, cohortId: 'cohort-1' },
     });
+  });
+});
+
+// 27/9: fijar es la excepción; soltar pone al día en el acto.
+describe('setAssignmentPinned', () => {
+  it('fija: escribe el flag, audita y no mueve nada', async () => {
+    db.lessonAssignment.findFirst.mockResolvedValueOnce({
+      id: 'la-1',
+      pinnedVersion: false,
+      cohortId: 'cohort-1',
+    });
+
+    const result = await setAssignmentPinned({ ...BASE, kind: 'lesson', pinned: true, now: NOW });
+
+    expect(db.lessonAssignment.update).toHaveBeenCalledWith({
+      where: { id: 'la-1' },
+      data: { pinnedVersion: true },
+    });
+    expect(db.auditLog.create.mock.calls[0][0].data).toMatchObject({
+      entity: 'lesson_assignment',
+      action: 'pinned',
+    });
+    expect(result).toEqual({ pinned: true, from: 0, to: 0, reopened: 0 });
+  });
+
+  it('suelta y, si quedó atrás, pasa a la última versión en el mismo acto', async () => {
+    db.lessonAssignment.findFirst
+      .mockResolvedValueOnce({ id: 'la-1', pinnedVersion: true, cohortId: 'cohort-1' })
+      .mockResolvedValueOnce(lessonAssignment({ number: 2, invalidatesProgress: false }));
+
+    const result = await setAssignmentPinned({ ...BASE, kind: 'lesson', pinned: false, now: NOW });
+
+    expect(db.lessonAssignment.update).toHaveBeenCalledWith({
+      where: { id: 'la-1' },
+      data: { pinnedVersion: false },
+    });
+    expect(result).toEqual({ pinned: false, from: 1, to: 2, reopened: 0 });
+  });
+
+  it('soltar una que ya está al día no falla: el CONFLICT del cambio se traga', async () => {
+    db.lessonAssignment.findFirst
+      .mockResolvedValueOnce({ id: 'la-1', pinnedVersion: true, cohortId: 'cohort-1' })
+      .mockResolvedValueOnce(lessonAssignment({ number: 1, invalidatesProgress: false }));
+
+    const result = await setAssignmentPinned({ ...BASE, kind: 'lesson', pinned: false, now: NOW });
+
+    expect(result).toEqual({ pinned: false, from: 0, to: 0, reopened: 0 });
+  });
+
+  it('repetir el mismo estado no escribe ni audita', async () => {
+    db.assessmentAssignment.findFirst.mockResolvedValueOnce({
+      id: 'aa-1',
+      pinnedVersion: true,
+      cohortId: 'cohort-1',
+    });
+
+    await setAssignmentPinned({ ...BASE, kind: 'assessment', assignmentId: 'aa-1', pinned: true });
+
+    expect(db.assessmentAssignment.update).not.toHaveBeenCalled();
+    expect(db.auditLog.create).not.toHaveBeenCalled();
   });
 });
