@@ -70,6 +70,7 @@ const institution = {
   dataPolicyUrl: null,
   dataPolicyVersion: '1',
   settings: null,
+  requireStaffMfa: true,
 };
 
 describe('getRequestContext', () => {

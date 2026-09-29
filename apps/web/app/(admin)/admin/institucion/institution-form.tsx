@@ -30,8 +30,11 @@ const CANVAS_DARK = dark.surface.canvas;
 /** WCAG 2.1 SC 1.4.11: non-text UI components need 3:1. */
 const UI_CONTRAST_MIN = 3;
 
-/** Every field is a string in the form; the endpoint turns blanks back into nulls. */
-type FormValues = Record<keyof Omit<InstitutionSettings, 'id'>, string>;
+/**
+ * Every text field is a string in the form; the endpoint turns blanks back into nulls. The
+ * booleans (`requireStaffMfa`, 29/9) travel apart, as booleans.
+ */
+type FormValues = Record<keyof Omit<InstitutionSettings, 'id' | 'requireStaffMfa'>, string>;
 type FieldErrors = Partial<Record<keyof FormValues, string[]>>;
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
@@ -51,6 +54,7 @@ export function InstitutionForm({ settings }: { settings: InstitutionSettings })
   };
 
   const [values, setValues] = useState<FormValues>(initial);
+  const [requireStaffMfa, setRequireStaffMfa] = useState(settings.requireStaffMfa);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<'idle' | 'saving'>('idle');
   const [result, setResult] = useState<{ kind: 'ok' | 'error'; message: string } | null>(null);
@@ -83,7 +87,7 @@ export function InstitutionForm({ settings }: { settings: InstitutionSettings })
       const res = await fetch('/api/admin/institution', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, requireStaffMfa }),
       });
       const body = await res.json();
 
@@ -243,6 +247,25 @@ export function InstitutionForm({ settings }: { settings: InstitutionSettings })
         </FormField>
 
         {policyVersionChanged && <Alert severity="warning">{t('dataPolicyVersionWarning')}</Alert>}
+      </PageSection>
+
+      <PageSection id="acceso" title={t('accessSection')} card>
+        {/* MFA como ajuste (Jhonny, 29/9): antes era fijo para ADMIN/OPERATIONS. Apagarlo no
+            borra los factores ya configurados; solo deja de exigirlos al entrar. */}
+        <label className="border-border rounded-control max-w-reading flex cursor-pointer items-start gap-3 border p-3">
+          <input
+            type="checkbox"
+            name="requireStaffMfa"
+            checked={requireStaffMfa}
+            onChange={(event) => setRequireStaffMfa(event.target.checked)}
+            className="mt-1"
+          />
+          <span className="type-body text-text block">
+            {t('requireStaffMfa')}
+            <span className="type-caption text-text-muted block">{t('requireStaffMfaHint')}</span>
+          </span>
+        </label>
+        {!requireStaffMfa && <Alert severity="warning">{t('requireStaffMfaOff')}</Alert>}
       </PageSection>
 
       <div>

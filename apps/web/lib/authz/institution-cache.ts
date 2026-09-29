@@ -22,6 +22,8 @@ interface CachedInstitution {
   dataPolicyUrl: string | null;
   dataPolicyVersion: string;
   settings: unknown;
+  /** Verificación en dos pasos obligatoria para ADMIN/OPERATIONS (ajuste de admin, 29/9). */
+  requireStaffMfa: boolean;
 }
 
 interface CacheEntry {
@@ -90,6 +92,7 @@ export async function resolveInstitutionBySlug(slug: string): Promise<CachedInst
       dataPolicyUrl: true,
       dataPolicyVersion: true,
       settings: true,
+      requireStaffMfa: true,
     },
   });
 

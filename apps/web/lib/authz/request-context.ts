@@ -298,7 +298,10 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
   const hasStaffMembership = typedMemberships.some(
     (m) => !m.revokedAt && MFA_REQUIRED_ROLES.includes(m.role)
   );
-  const mfaPending = hasStaffMembership && aal !== 'aal2';
+  // Solo si la institución lo exige (`requireStaffMfa`, ajuste de admin desde el 29/9; hasta
+  // entonces era fijo). Con el ajuste apagado, el personal entra con aal1 y sus capacidades.
+  // `!== false` y no `=== true`: si el dato faltara, se exige (el lado seguro).
+  const mfaPending = institution.requireStaffMfa !== false && hasStaffMembership && aal !== 'aal2';
 
   // When MFA is pending, exclude ADMIN/OPERATIONS memberships from capability resolution.
   // This ensures staff capabilities (institution.manage, etc.) require aal2.

@@ -54,6 +54,8 @@ model Institution {
   primaryDomain     String?   @unique
   /// { readOnly?: boolean, gatewayFeeBy?: 'INSTITUTION' | 'PAYER' } — validado con Zod; nada de negocio crítico aquí.
   settings          Json?
+  /// Verificación en dos pasos obligatoria para ADMIN/OPERATIONS (29/9). Antes era fija.
+  requireStaffMfa   Boolean   @default(true)
   /// La cohorte en la que entra quien se registra por `/registro` (25/9, fase de negocio 3;
   /// antes en `settings.introCohortId`). Nula = el registro crea la cuenta sin matrícula.
   introCohortId     String?   @unique

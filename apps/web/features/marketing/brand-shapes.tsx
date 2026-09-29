@@ -60,17 +60,20 @@ export function CornerRibbon({ className }: { className?: string }) {
   );
 }
 
-/** Subrayado ondulado de marca bajo un título. */
+/**
+ * Subrayado ondulado de marca bajo un título. `h-5` y un `viewBox` de 20 de alto (28/9): con
+ * `h-3` y 12 de alto, la onda con su trazo de 4 se salía del cuadro y se veía cortada.
+ */
 export function Underline({ className }: { className?: string }) {
   return (
     <svg
       aria-hidden="true"
       focusable="false"
-      viewBox="0 0 120 12"
-      className={cn('site-underline h-3 w-28', className)}
+      viewBox="0 0 120 20"
+      className={cn('site-underline h-5 w-28', className)}
     >
       <path
-        d="M2 8c20-8 40-8 60 0s40 8 56 0"
+        d="M2 10c20-6 40-6 60 0s40 6 56 0"
         fill="none"
         stroke="var(--site-yellow)"
         strokeWidth="4"
@@ -78,4 +81,14 @@ export function Underline({ className }: { className?: string }) {
       />
     </svg>
   );
+}
+
+/**
+ * El logotipo de WhatsApp (28/9). Es una marca ajena: el trazo no se dibuja a mano, se carga
+ * el archivo del kit de marca en `public/brand/whatsapp.svg`. Va como máscara CSS
+ * (`.site-wa-icon`, `site.css`) y no como `<img>`: así toma el color del texto donde esté,
+ * blanco sobre el azul del flotante y oscuro sobre el amarillo del CTA final.
+ */
+export function WhatsAppIcon({ className }: { className?: string }) {
+  return <span aria-hidden="true" className={cn('site-wa-icon size-6', className)} />;
 }

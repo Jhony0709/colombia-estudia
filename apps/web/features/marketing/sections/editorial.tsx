@@ -16,7 +16,10 @@ export async function Editorial() {
             className="site-panel lg:aspect-[21/9]"
             sizes="(min-width: 1024px) 1240px, 100vw"
           />
-          <div className="site-float mx-4 -mt-16 max-w-lg space-y-4 p-7 sm:p-9 lg:absolute lg:right-12 lg:top-1/2 lg:mx-0 lg:mt-0 lg:w-[42%] lg:-translate-y-1/2">
+          {/* `relative` por debajo de `lg` (28/9): el panel sube 4 rem sobre la foto, y la foto
+              (`MediaPlaceholder`, `relative`) pintaba encima y tapaba la primera línea del
+              título en tableta y teléfono. Un hermano posicionado posterior gana. */}
+          <div className="site-float relative mx-4 -mt-16 max-w-lg space-y-4 p-7 sm:p-9 lg:absolute lg:right-12 lg:top-1/2 lg:mx-0 lg:mt-0 lg:w-[42%] lg:-translate-y-1/2">
             <h2 id="editorial-title" className="site-h2">
               {t('title')}
             </h2>

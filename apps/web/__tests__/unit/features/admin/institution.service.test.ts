@@ -10,6 +10,12 @@ const mockAuditLogCreate = jest.fn();
 
 jest.mock('server-only', () => ({}));
 
+// La caché de la institución alimenta `getRequestContext`; se vacía al guardar (29/9).
+const mockClearCache = jest.fn();
+jest.mock('@/lib/authz/institution-cache', () => ({
+  clearInstitutionCache: () => mockClearCache(),
+}));
+
 jest.mock('@/lib/db/tenant', () => ({
   createTenantClient: jest.fn(() => {
     const tx = {
@@ -33,6 +39,7 @@ const STORED = {
   emailFromName: 'Colombia Estudia',
   dataPolicyUrl: null,
   dataPolicyVersion: '1',
+  requireStaffMfa: true,
 };
 
 const { id: _id, ...CURRENT } = STORED;
@@ -68,6 +75,7 @@ describe('updateInstitution', () => {
     });
 
     expect([...result.changed].sort()).toEqual(['dataPolicyVersion', 'supportPhone']);
+    expect(mockClearCache).toHaveBeenCalledTimes(1);
     expect(mockAuditLogCreate).toHaveBeenCalledWith({
       data: {
         institutionId: 'inst-1',
@@ -105,5 +113,26 @@ describe('updateInstitution', () => {
     expect(mockAuditLogCreate).toHaveBeenCalledWith({
       data: expect.objectContaining({ actorId: null }),
     });
+  });
+});
+
+describe('requireStaffMfa (29/9)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockFindUniqueOrThrow.mockResolvedValue(STORED);
+  });
+
+  it('apagar la verificación en dos pasos se audita como cualquier ajuste y vacía la caché', async () => {
+    const next = { ...CURRENT, requireStaffMfa: false };
+    mockUpdate.mockResolvedValue({ ...STORED, ...next });
+
+    const result = await updateInstitution({ institutionId: 'inst-1', actorId: 'p1', data: next });
+
+    expect(result.changed).toEqual(['requireStaffMfa']);
+    expect(mockAuditLogCreate.mock.calls[0]?.[0].data).toMatchObject({
+      before: { requireStaffMfa: true },
+      after: { requireStaffMfa: false },
+    });
+    expect(mockClearCache).toHaveBeenCalled();
   });
 });

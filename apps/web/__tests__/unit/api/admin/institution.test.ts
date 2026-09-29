@@ -45,6 +45,7 @@ const VALID = {
   emailFromName: 'Colombia Estudia',
   dataPolicyUrl: 'https://colombiaestudia.co/politica',
   dataPolicyVersion: '1',
+  requireStaffMfa: true,
 };
 
 function request(body: unknown): NextRequest {

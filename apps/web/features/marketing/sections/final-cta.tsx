@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { MessageCircle } from 'lucide-react';
 import { SiteContainer } from '../site-container';
 import { MediaPlaceholder } from '../media-placeholder';
-import { CornerRibbon } from '../brand-shapes';
+import { CornerRibbon, WhatsAppIcon } from '../brand-shapes';
 import { CtaLink } from '../cta-link';
 import type { ContactLink } from '../contact-links';
 
@@ -21,7 +21,11 @@ export async function FinalCta({ contact }: { contact: ContactLink }) {
             </h2>
             <p className="site-lead max-w-[34rem]">{t('body')}</p>
             <CtaLink contact={contact} variant="yellow" className="mt-2">
-              <MessageCircle aria-hidden="true" className="size-5" />
+              {contact.external ? (
+                <WhatsAppIcon className="size-5" />
+              ) : (
+                <MessageCircle aria-hidden="true" className="size-5" />
+              )}
               {contact.external ? t('cta') : t('ctaEmail')}
             </CtaLink>
           </div>

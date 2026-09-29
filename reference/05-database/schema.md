@@ -51,6 +51,11 @@ y académica; el módulo ("Mes 1") ordena el contenido y sus evaluaciones.
 persona en dos instituciones exige refactor a `Person` global + pertenencia por
 `Membership`. Se hace antes de la segunda institución, no ahora.
 
+**`Institution.requireStaffMfa` (29/9)** decide si ADMIN/OPERATIONS pasan por el segundo
+factor: `getRequestContext` solo marca `mfaPending` (y retiene capacidades) con el ajuste
+activo, y `POST /api/auth/login` solo desvía a `/auth/mfa` con él. Por defecto `true`; se
+cambia en `/admin/institucion`. Apagarlo no borra factores ya configurados.
+
 **`Enrollment.isMinorAtEnrollment` se congela**, y `birthDate` es obligatoria para
 matricular aunque sea opcional en `Person` (un contacto de aliado no la necesita).
 

@@ -35,6 +35,8 @@ const schema = z.object({
   emailFromName: z.string().trim().min(1, 'El nombre del remitente es obligatorio').max(80),
   dataPolicyUrl: z.union([z.literal(''), z.string().trim().url('URL de política inválida')]),
   dataPolicyVersion: z.string().trim().min(1, 'La versión es obligatoria').max(20),
+  /** Verificación en dos pasos para el personal (29/9). */
+  requireStaffMfa: z.boolean(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -66,6 +68,7 @@ export const PUT = apiHandler<Input>({ schema, capability: 'institution.manage' 
       emailFromName: input.emailFromName.trim(),
       dataPolicyUrl: blankToNull(input.dataPolicyUrl),
       dataPolicyVersion: input.dataPolicyVersion.trim(),
+      requireStaffMfa: input.requireStaffMfa,
     },
   });
 });

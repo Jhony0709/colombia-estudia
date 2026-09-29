@@ -1155,3 +1155,16 @@ cohorte da lo mismo en la práctica y conserva todo eso. Jhonny, 27/9.
 
 **Descartado**: `LessonVersion` editable en caliente; un «publicar sin propagar» como opción
 del autor (la excepción la decide quien lleva la cohorte, no quien escribe).
+
+## 2026-09-29 — La verificación en dos pasos del personal es un ajuste
+
+**Decisión**: `Institution.requireStaffMfa` (por defecto activo) decide si administradores y
+operaciones pasan por el segundo factor al entrar; se cambia en Admin → Institución →
+«Acceso del personal», con aviso de lo que se pierde al apagarlo. Estudiantes, acudientes y
+aliados nunca lo tuvieron.
+
+**Razón**: Jhonny, 29/9: para una institución pequeña el MFA obligatorio es una fricción que
+debe poder decidir el propio colegio. Se conserva como valor por defecto porque el plan de
+seguridad (plan/03 «MFA para staff») lo daba por fijo y un despliegue existente no debe
+relajarse solo. Apagarlo no borra los factores ya configurados, así que volver a exigirlo no
+pide volver a escanear.

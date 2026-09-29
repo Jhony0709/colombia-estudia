@@ -127,6 +127,10 @@
       "domain": "Dominio",
       "brandSection": "Marca y contacto",
       "legalSection": "Datos legales y política",
+      "accessSection": "Acceso del personal",
+      "requireStaffMfa": "Exigir verificación en dos pasos al personal",
+      "requireStaffMfaHint": "Administradores y operaciones tendrán que confirmar un código de su app de autenticación al entrar. Estudiantes, acudientes y aliados no.",
+      "requireStaffMfaOff": "Sin verificación en dos pasos, una contraseña filtrada da acceso a los datos de todas las personas de la institución. Recomendamos dejarla activa.",
       "name": "Nombre de la institución",
       "emailFromName": "Nombre del remitente",
       "emailFromNameHint": "Aparece como remitente en los correos que envía la plataforma.",
@@ -2298,6 +2302,9 @@
           "a": "Escríbenos y te contamos el valor, las becas disponibles y las formas de pago para la próxima cohorte."
         }
       }
+    },
+    "contact": {
+      "message": "Hola, quiero información sobre los programas de {name}."
     },
     "fab": {
       "label": "¿Tienes dudas? Escríbenos",

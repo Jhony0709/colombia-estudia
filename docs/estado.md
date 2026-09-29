@@ -4824,6 +4824,80 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 29/9 — MFA del personal como ajuste de la institución
+
+Decisión en `PRODUCT_DECISIONS.md`. **Schema (protegido, avisado)**:
+`Institution.requireStaffMfa Boolean @default(true)`, migración
+`20260929000000_institution_require_staff_mfa`; `prisma generate` hecho aquí.
+
+- `lib/authz/institution-cache.ts`: el campo entra en `CachedInstitution`.
+- `lib/authz/request-context.ts`: `mfaPending = institution.requireStaffMfa && staff && aal !== 'aal2'`.
+  Con el ajuste apagado el personal entra con aal1 y todas sus capacidades; `lib/authz/staff.ts`
+  (que desvía a `/auth/mfa` por `mfaPending`) no cambia.
+- `features/auth/server/session.service.ts#findLoginPerson`: lee el ajuste junto a la persona;
+  `needsMfa` solo con él activo → el login deja de desviar a `/auth/mfa`.
+- `features/admin/server/institution.service.ts`: campo en `InstitutionSettings` y en el
+  `select`; `updateInstitution` llama a `clearInstitutionCache()` tras guardar (la caché de 5 min
+  alimenta `getRequestContext`; en Vercel cada instancia tiene la suya, así que el resto se
+  entera al vencer el TTL).
+- `PUT /api/admin/institution`: `requireStaffMfa: z.boolean()`.
+- `/admin/institucion`: sección «Acceso del personal» con la casilla y un aviso ámbar al
+  desmarcarla. Los booleanos viajan aparte de `FormValues` (que es todo `string`).
+- Tests: `institution.service.test.ts` +1 y la aserción de la caché; fixture con el campo.
+- SSOT: `02-api/endpoints.md` (login y admin/institution), `05-database/schema.md`.
+
+De tu lado: `pnpm prisma migrate deploy --schema=prisma/schema.prisma`,
+`pnpm --filter @colombia-estudia/web db:generate`, `pnpm test:unit`. No verificado en Chrome
+(sin sesión de admin; y con el ajuste activo por defecto nada cambia hasta desmarcarlo).
+
+## 28/9 — Portada: subrayado sin cortar y WhatsApp con mensaje escrito
+
+- `brand-shapes.tsx#Underline`: `h-3` → `h-5` y `viewBox` de 12 a 20 de alto, con la onda
+  recentrada (amplitud 6): con el trazo de 4 y las puntas redondas se salía del cuadro y se
+  veía cortada por abajo. Verificado.
+- `contact-links.ts#whatsappUrl(phone, message?)`: el mensaje va en `?text=` codificado;
+  `primaryContact` lo recibe y `landing.tsx` lo pasa desde `landing.contact.message` («Hola,
+  quiero información sobre los programas de {name}.»). Test +1.
+- Icono: `WhatsAppIcon` en `brand-shapes.tsx` (marca ajena: se usa el archivo del kit, no se
+  dibuja). Jhonny dejó `whatsapp.svg` (29/9, blanco, 32×32) y quedó en
+  `public/brand/whatsapp.svg`. Va como máscara CSS con `background-color: currentColor`
+  (`.site-wa-icon`, `site.css`), no como `<img>`: así es blanco en el flotante azul y oscuro
+  en el CTA amarillo sin dos archivos. El flotante y el CTA final lo muestran solo cuando el
+  contacto es WhatsApp; con correo siguen con `MessageCircle`. Sin verificar en pantalla hasta
+  que haya teléfono.
+- El número no va en el código: el contacto sale de `Institution.supportPhone` (decisión del
+  19/9, `app/page.tsx`; Jhonny lo confirma el 29/9: se administra desde Admin → Institución).
+  Hoy está vacío y por eso la portada cae a correo. Se pone en `/admin/institucion`
+  («Teléfono»): `+57 310 250 2207` → `wa.me/573102502207`.
+
+## 28/9 — Auditoría de la portada (`/`) en escritorio, tableta y teléfono
+
+Recorrida en Chrome a 1467, 749 y 390 px, sin sesión (la del estudiante de prueba había
+vencido; la cabecera con sesión, `nav.enter`, queda sin verificar).
+
+**Arreglado**
+
+- `sections/editorial.tsx`: por debajo de `lg` el panel blanco sube 4 rem sobre la foto
+  (`-mt-16`) y la foto, `relative` en `MediaPlaceholder`, pintaba encima y tapaba la primera
+  línea de «Una Colombia más preparada» en tableta y teléfono. `relative` en el panel.
+- `sections/floating-contact.tsx` + `site.css`: en el teléfono el botón flotante llevaba texto
+  («Escríbenos», ~150 px) y tapaba «Explorar programas» y el botón de la tarjeta del programa;
+  su propio comentario decía «solo el icono». Ahora es un círculo de 3,5 rem con `aria-label`;
+  el texto vuelve desde `sm`.
+
+**Correcto, revisado**: `Reveal` solo oculta con `scripting: enabled` y sin
+`prefers-reduced-motion`; hero con `priority`; footer a tres columnas desde `md`; anclas de la
+cabecera ocultas bajo `lg` por decisión (19/9); `pb-24` del footer para el botón flotante.
+
+**Copy desactualizado frente al producto (para el cliente, no tocado)**: «En tres pasos, sin
+formularios ni registros» y el paso 1 «Escríbenos» conviven con «Regístrate» en la cabecera y
+con el curso gratuito de autoinscripción (25/9); la portada solo vende «Bachillerato
+acelerado» y no menciona la puerta gratuita de «Introducción»; «Seis componentes» enumera
+ocho; «Cohortes cada seis meses» frente a la cohorte de introducción abierta; la FAQ «¿Qué
+necesito para inscribirme?» responde como si no hubiera registro; tres «Escríbenos» en
+escritorio (cabecera, flotante, bandas). El `site.css` usa `ms` y colores literales por ser el
+ámbito propio de la portada (decisión del 19/9), fuera de los tokens de la app.
+
 ## 27/9 — Catálogo: hero sin matrícula y «Gratis» como pill
 
 Jhonny, entrando como Estudiante Tres (sin matrícula): la rama sin matrícula de `/aprender` no

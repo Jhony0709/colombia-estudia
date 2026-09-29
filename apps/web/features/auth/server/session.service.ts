@@ -17,14 +17,21 @@ export async function findLoginPerson(
   authUserId: string
 ): Promise<{ needsMfa: boolean } | null> {
   const db = createTenantClient(institutionId);
-  const person = await db.person.findUnique({
-    where: { authUserId },
-    select: { memberships: { select: { role: true, revokedAt: true } } },
-  });
+  const [person, institution] = await Promise.all([
+    db.person.findUnique({
+      where: { authUserId },
+      select: { memberships: { select: { role: true, revokedAt: true } } },
+    }),
+    db.institution.findUnique({
+      where: { id: institutionId },
+      select: { requireStaffMfa: true },
+    }),
+  ]);
   if (!person) return null;
 
-  const needsMfa = person.memberships.some(
-    (m) => !m.revokedAt && MFA_REQUIRED_ROLES.includes(m.role)
-  );
+  // La institución decide si el personal pasa por el segundo factor (29/9).
+  const needsMfa =
+    (institution?.requireStaffMfa ?? true) &&
+    person.memberships.some((m) => !m.revokedAt && MFA_REQUIRED_ROLES.includes(m.role));
   return { needsMfa };
 }

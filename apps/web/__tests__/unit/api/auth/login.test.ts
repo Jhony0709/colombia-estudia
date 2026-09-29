@@ -81,6 +81,8 @@ describe('POST /api/auth/login', () => {
     mockPersonFindUnique = jest.fn();
     (createTenantClient as jest.Mock).mockReturnValue({
       person: { findUnique: mockPersonFindUnique },
+      // `findLoginPerson` lee el ajuste `requireStaffMfa` (29/9); aquí, exigido.
+      institution: { findUnique: jest.fn(async () => ({ requireStaffMfa: true })) },
     });
   });
 
@@ -304,5 +306,28 @@ describe('POST /api/auth/login', () => {
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.data.next).not.toContain('/auth/mfa');
+  });
+
+  // 29/9: la institución decide si el personal pasa por el segundo factor.
+  it('un ADMIN entra sin pasar por /auth/mfa cuando la institución no lo exige', async () => {
+    mockSupabaseAuth.signInWithPassword.mockResolvedValue({
+      data: { user: { id: 'user-1' } },
+      error: null,
+    });
+    mockPersonFindUnique.mockResolvedValue({
+      memberships: [{ role: 'ADMIN', revokedAt: null }],
+    });
+    (createTenantClient as jest.Mock).mockReturnValue({
+      person: { findUnique: mockPersonFindUnique },
+      institution: { findUnique: jest.fn(async () => ({ requireStaffMfa: false })) },
+    });
+
+    const response = await POST(
+      createRequest({ email: 'admin@validaya.co', password: 'correct-password' })
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.next).toBe('/ingresar');
   });
 });

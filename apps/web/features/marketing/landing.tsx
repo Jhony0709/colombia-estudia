@@ -13,6 +13,7 @@
  */
 
 import { lexend } from '@/app/fonts/site';
+import { getTranslations } from 'next-intl/server';
 import { cn } from '@/lib/utils';
 import { primaryContact } from './contact-links';
 import { Reveal, StickyHeaderShadow } from './reveal';
@@ -43,7 +44,13 @@ export async function Landing({
   institution: LandingInstitution;
   signedIn: boolean;
 }) {
-  const contact = primaryContact(institution.supportPhone, institution.supportEmail);
+  const t = await getTranslations('landing');
+  // El mensaje pre-escrito del chat (28/9): el teléfono sigue saliendo de la institución.
+  const contact = primaryContact(
+    institution.supportPhone,
+    institution.supportEmail,
+    t('contact.message', { name: institution.name })
+  );
   return (
     <div className={cn('site theme-light-scope min-h-screen', lexend.variable)}>
       <SiteHeader signedIn={signedIn} contact={contact} />

@@ -7,6 +7,7 @@
 import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
+import { clearInstitutionCache } from '@/lib/authz/institution-cache';
 
 /**
  * Editable institution settings. Mirrors the form on /admin/institucion.
@@ -24,6 +25,8 @@ export interface InstitutionSettings {
   emailFromName: string;
   dataPolicyUrl: string | null;
   dataPolicyVersion: string;
+  /** Verificación en dos pasos obligatoria para ADMIN/OPERATIONS (29/9). */
+  requireStaffMfa: boolean;
 }
 
 /** The editable subset, as it travels from the form. */
@@ -40,6 +43,7 @@ const SETTINGS_SELECT = {
   emailFromName: true,
   dataPolicyUrl: true,
   dataPolicyVersion: true,
+  requireStaffMfa: true,
 } as const;
 
 /**
@@ -129,6 +133,10 @@ export async function updateInstitution({
         after: Object.fromEntries(changed.map((key) => [key, data[key]])),
       },
     });
+
+    // La caché de la institución (5 min) alimenta `getRequestContext`; un ajuste como
+    // `requireStaffMfa` tiene que verse en la siguiente petición de este proceso (29/9).
+    clearInstitutionCache();
 
     return { settings: updated, changed };
   });
