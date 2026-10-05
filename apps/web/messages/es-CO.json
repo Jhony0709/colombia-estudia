@@ -101,18 +101,46 @@
       "home": "Ir a la portada",
       "privacy": "Privacidad",
       "login": {
-        "title": "Volver a estudiar sí es posible",
-        "body": "A tu ritmo, con acompañamiento y un camino claro para avanzar."
+        "titleA": "Tu historia también puede",
+        "titleB": "continuar.",
+        "body": "Educación flexible para personas que, como tú, quieren terminar su bachillerato y construir un mejor mañana."
       },
       "register": {
-        "title": "Empezar hoy es un paso pequeño",
-        "body": "Crea tu cuenta y entra a la cohorte de introducción."
+        "titleA": "Empezar hoy es un",
+        "titleB": "paso pequeño.",
+        "body": "Crea tu cuenta y entra a la cohorte de introducción, a tu ritmo y con acompañamiento."
       },
       "recover": {
-        "title": "Volver a entrar no tiene que ser difícil",
-        "body": "Recupera tu acceso en un par de pasos."
+        "titleA": "Volver a entrar no tiene que ser",
+        "titleB": "difícil.",
+        "body": "Recupera tu acceso en un par de pasos y sigue donde ibas."
+      },
+      "benefits": {
+        "pace": {
+          "title": "A tu ritmo",
+          "body": "Estudia cuando puedas"
+        },
+        "virtual": {
+          "title": "100 % virtual",
+          "body": "Desde donde estés"
+        },
+        "support": {
+          "title": "Acompañamiento real",
+          "body": "Siempre tendrás orientación"
+        }
+      },
+      "trust": {
+        "privacy": "Tus datos están protegidos",
+        "support": "Acompañamiento real y cercano",
+        "future": "Más educación. Más oportunidades."
       }
-    }
+    },
+    "loginTitle": "Inicia sesión",
+    "loginSubtitle": "Continúa tu proceso educativo.",
+    "enter": "Entrar",
+    "or": "o",
+    "magicLinkCta": "Recibir un enlace de acceso",
+    "createAccount": "Crear cuenta"
   },
   "button": {
     "loading": "Cargando…"
@@ -361,6 +389,11 @@
     "enrollments": "Matrículas",
     "noEnrollments": "Sin matrículas.",
     "accessUntil": "acceso hasta {date}",
+    "openEnrollment": "Ver la matrícula",
+    "openEnrollmentNamed": "Ver la matrícula en {cohort}",
+    "openBilling": "Cartera",
+    "openBillingNamed": "Cartera de la matrícula en {cohort}",
+    "more": "Más datos y acciones",
     "guardianship": "Acudencia",
     "noGuardianship": "Sin acudencias registradas.",
     "guardianIs": "{name} es su acudiente ({relationship}).",
@@ -446,6 +479,7 @@
       "activityEmpty": "Todavía no hay actividad registrada.",
       "by": "por {name}",
       "event": {
+        "person_registered": "Se registró por la web",
         "person_pii_read": "Ficha consultada",
         "person_pii_export": "Exportación de datos",
         "invitation_sent": "Invitación enviada",
@@ -651,9 +685,11 @@
       "updated": "«{title}» pasa a la v{number}{reopened, plural, =0 {} one { · 1 estudiante tendrá que revisarlo de nuevo} other { · # estudiantes tendrán que revisarlo de nuevo}}.",
       "updateError": "No se pudo actualizar la versión. Inténtalo de nuevo.",
       "pinned": "Fijada",
-      "pin": "Fijar en v{number}",
-      "pinHint": "Fijada, no cambia cuando el autor publique una versión nueva.",
+      "pin": "Fijar",
+      "pinHint": "Deja la cohorte en esta versión aunque el autor publique otra.",
       "unpin": "Seguir la última versión",
+      "pinNamed": "Fijar «{title}» en la v{number}",
+      "unpinNamed": "«{title}»: seguir la última versión",
       "pinnedDone": "«{title}» queda fijada en la v{number}.",
       "unpinnedDone": "«{title}» vuelve a seguir la última versión{to, plural, =0 {} other { y pasa a la v#}}."
     },
@@ -782,6 +818,7 @@
     "actions": {
       "viewGrade": "Ver la nota",
       "goToLesson": "Ir al tema",
+      "goToRoute": "Ir a mi ruta",
       "viewSession": "Ver la sesión",
       "viewCertificate": "Ver la constancia",
       "viewAccount": "Ver mi cuenta",
@@ -795,7 +832,18 @@
     "emptyTitle": "Todavía no tienes avisos",
     "emptyHint": "Aquí aparecerán las solicitudes y los cambios que necesiten tu atención.",
     "noSession": "No hay sesión",
-    "noSessionHint": "Inicia sesión para ver tus avisos."
+    "noSessionHint": "Inicia sesión para ver tus avisos.",
+    "menu": {
+      "label": "Notificaciones",
+      "unreadLabel": "{count, plural, one {Notificaciones, 1 sin leer} other {Notificaciones, # sin leer}}",
+      "title": "Avisos recientes",
+      "loading": "Cargando avisos",
+      "error": "No se pudieron cargar los avisos.",
+      "empty": "Todavía no tienes avisos.",
+      "new": "Nuevo",
+      "justNow": "Ahora",
+      "viewAll": "Ver todas"
+    }
   },
   "bulkInvitations": {
     "sectionTitle": "Invitaciones",
@@ -926,6 +974,9 @@
       }
     },
     "minutesLabel": "Minutos estimados",
+    "minutesSuggested": "Por su extensión ({words, plural, one {# palabra} other {# palabras}}), unos {minutes} min.",
+    "minutesUse": "Usar",
+    "shouting": "{count, plural, one {Un título está} other {# títulos están}} en mayúsculas, como «{first}». Con mayúscula inicial se leen mejor.",
     "pager": {
       "label": "Temas de la ruta",
       "position": "{index} de {total}",
@@ -972,6 +1023,8 @@
     "detailsFieldTitle": "Título del tema",
     "detailsFieldObjective": "Objetivo de aprendizaje",
     "detailsObjectiveHint": "Qué debe poder hacer el estudiante al terminar. Aparece bajo el título en la pantalla del estudiante.",
+    "detailsFieldClosing": "Mensaje de cierre («Aprender es avanzar»)",
+    "detailsClosingHint": "Se muestra al terminar este cuestionario, antes de pasar al siguiente taller. Si se deja vacío, se usa el del componente o el mensaje general.",
     "detailsFieldSubject": "Asignatura",
     "detailsFieldModule": "Componente",
     "detailsRequiresSubmission": "Este tema se completa con una actividad revisada, no leyéndolo",
@@ -1134,7 +1187,8 @@
       "NONE": "Nada",
       "SCORE_ONLY": "Solo la nota",
       "FULL_AFTER_GRADED": "Todo, una vez calificado",
-      "FULL_AFTER_DUE": "Todo, pasada la fecha"
+      "FULL_AFTER_DUE": "Todo, pasada la fecha",
+      "FULL_AFTER_LAST_ATTEMPT": "Todo, agotados los intentos o aprobado"
     },
     "saveNow": "Guardar ahora",
     "unsaved": "Cambios sin guardar",
@@ -1249,6 +1303,9 @@
     "free": "Gratis",
     "dashboardTitle": "Mis programas",
     "dashboardHint": "{count, plural, one {Estás en un programa} other {Estás en # programas}}. Elige uno para ver su ruta.",
+    "dashboardHintOne": "Lo que toca hoy y cómo vas.",
+    "dashboardHintMany": "Estás en {count} programas. Cambia de uno a otro desde el recuadro azul.",
+    "dashboardHintDone": "Terminaste tu programa. Elige tu siguiente curso o revisa lo que ya completaste.",
     "programsTitle": "Tus programas",
     "progressLabel": "Avance en {program}",
     "routeShownBelow": "Su ruta está abajo",
@@ -1262,6 +1319,16 @@
     "moduleEmpty": "Este componente todavía no tiene temas asignados.",
     "moduleSummary": "{completed} de {total} completados{minutes, plural, =0 {} other { · # min}}",
     "moduleLocked": "Se abre al completar “{title}”",
+    "moduleAccess": {
+      "LOCKED": "Se habilita cuando el equipo lo active. Escríbenos cuando quieras continuar.",
+      "NOT_YET": "Se habilita el {date}.",
+      "CLOSED": "Cerró el {date}. Escríbenos si necesitas volver a abrirlo."
+    },
+    "nextComponent": {
+      "overline": "Siguiente componente",
+      "title": "Terminaste lo que tienes habilitado",
+      "body": "Lo que sigue es “{module}”. El equipo lo habilita cuando lo pidas: escríbenos y seguimos."
+    },
     "form": {
       "VIDEO": "Vídeo",
       "MARKDOWN": "Lectura",
@@ -1276,6 +1343,8 @@
     "greeting": "Hola, {name}",
     "showRest": "{count, plural, =1 {Ver 1 actividad restante} other {Ver # actividades restantes}}",
     "hero": {
+      "resume": "Continúa donde ibas",
+      "progress": "{percent} % de {program} · {completed} de {total} completados",
       "eyebrow": "Tu aprendizaje importa",
       "title": "Sigue avanzando en tu programa",
       "body": "Cada actividad te acerca a nuevas habilidades para tu bienestar y tu futuro.",
@@ -1284,6 +1353,56 @@
         "title": "Empieza tu camino",
         "body": "Elige un curso abierto y da el primer paso. Es gratis y a tu ritmo.",
         "cta": "Ver los cursos abiertos"
+      }
+    },
+    "kpis": {
+      "label": "Cómo vas",
+      "progress": "Avance del programa",
+      "progressLabel": "Avance en {program}",
+      "progressHint": "{completed} de {total} pasos completados",
+      "time": "Tiempo que queda",
+      "timeValue": "~{minutes} min",
+      "timeDone": "Nada pendiente",
+      "timeLabel": "Tiempo de estudio ya hecho",
+      "timeHint": "Ya hiciste {done} de {total} min estimados",
+      "days": "Días con estudio",
+      "daysValue": "{active} de {total}",
+      "daysHint": "{thisWeek, plural, =0 {Esta semana todavía sin pasos} one {# paso esta semana} other {# pasos esta semana}} · {lastWeek, plural, one {# la anterior} other {# la anterior}}"
+    },
+    "rhythm": {
+      "title": "Tu ritmo",
+      "hint": "Pasos que completaste cada día en las últimas dos semanas: temas, actividades enviadas y exámenes.",
+      "total": "{count, plural, one {paso en 14 días} other {pasos en 14 días}}",
+      "totalWeek": "{count, plural, one {paso en los últimos 7 días} other {pasos en los últimos 7 días}}",
+      "chartLabel": "Pasos completados por día",
+      "today": "Hoy",
+      "todayLong": "hoy, {date}",
+      "dayDescription": "{steps, plural, =0 {Sin pasos} one {# paso} other {# pasos}} · {day}",
+      "empty": "Cada tema que termines o actividad que envíes aparecerá aquí."
+    },
+    "exams": {
+      "title": "Tus exámenes",
+      "hint": "Tu mejor nota frente a la que se necesita para aprobar.",
+      "more": "Ver resultados",
+      "passed": "Aprobado · {percent} %",
+      "failed": "No aprobado · {percent} %",
+      "pending": "Sin presentar",
+      "inProgress": "En curso",
+      "locked": "Bloqueado",
+      "summary": "Mejor nota {percent} %{hasPass, select, yes {, para aprobar {pass} %} other {}}",
+      "summaryNone": "Sin nota todavía{hasPass, select, yes {, para aprobar {pass} %} other {}}",
+      "legend": "La raya marca la nota para aprobar."
+    },
+    "agenda": {
+      "title": "Próximas fechas",
+      "more": "Ver calendario",
+      "empty": "No hay fechas por delante.",
+      "kind": {
+        "COHORT_START": "Inicio",
+        "COHORT_END": "Fin de la cohorte",
+        "ACCESS_UNTIL": "Fin de tu acceso",
+        "ASSESSMENT_DUE": "Fecha límite",
+        "LIVE_SESSION": "Sesión en vivo"
       }
     },
     "strip": {
@@ -1298,10 +1417,17 @@
       "calendar": "Ver calendario",
       "resources": "Recursos",
       "library": "Ver biblioteca",
-      "kind": { "DOCUMENT": "Documento", "AUDIO": "Audio", "RECORDING": "Grabación" },
+      "kind": {
+        "DOCUMENT": "Documento",
+        "AUDIO": "Audio",
+        "RECORDING": "Grabación"
+      },
       "help": "¿Necesitas ayuda?",
       "helpBody": "Estamos aquí para acompañarte en tu proceso de aprendizaje.",
-      "contact": "Escribir a soporte"
+      "contact": "Escribir a soporte",
+      "contactWhatsApp": "Escribir por WhatsApp",
+      "newTab": "(se abre en una pestaña nueva)",
+      "helpMessage": "Hola, soy {name} y tengo una pregunta sobre mi programa."
     },
     "startHere": {
       "title": "Empieza por aquí",
@@ -1340,6 +1466,7 @@
     "blockedBy": "Se habilita al completar “{title}”.",
     "notYet": "Todavía no está disponible.",
     "closed": "Ya cerró.",
+    "lockedModule": "El componente todavía no está habilitado.",
     "noSession": "No hay sesión",
     "noSessionHint": "Inicia sesión para ver tu programa.",
     "catalog": {
@@ -1408,10 +1535,20 @@
         "CLOSED": {
           "title": "Este tema ya cerró",
           "body": "El plazo para estudiarlo terminó. Escríbenos si necesitas volver a abrirlo."
+        },
+        "LOCKED": {
+          "title": "Este componente todavía no está habilitado",
+          "body": "El equipo lo habilita cuando lo pidas. Escríbenos y seguimos."
         }
       },
-      "place": "{module} · Tema {index} de {total}",
-      "nextExam": "Ir al examen: {title}"
+      "place": "{module} · Paso {index} de {total}",
+      "outline": "En este tema",
+      "nextExam": "Ir al examen: {title}",
+      "nextLocked": "El siguiente componente se habilita cuando el equipo lo active.",
+      "nextShortLocked": "Siguiente bloqueado",
+      "nextIn": "Siguiente en {time}",
+      "readToEnd": "Lee hasta el final",
+      "nextSaving": "Guardando tu avance"
     },
     "evidence": {
       "status": {
@@ -1495,7 +1632,7 @@
       "timeUnlimited": "Sin límite de tiempo",
       "timeExempt": "Sin límite de tiempo (ajuste razonable)",
       "attempts": "Intentos",
-      "attemptsValue": "Te quedan {left} de {allowed}",
+      "attemptsValue": "{left, plural, one {Te queda # de {allowed}: es el último} other {Te quedan # de {allowed}}}",
       "dueAt": "Fecha límite",
       "pass": "Para aprobar",
       "passValue": "{percent} % o más",
@@ -1504,7 +1641,8 @@
         "NONE": "Solo que la entregaste",
         "SCORE_ONLY": "Tu nota",
         "FULL_AFTER_GRADED": "Tu nota y cada pregunta",
-        "FULL_AFTER_DUE": "Tu nota; cada pregunta después de la fecha límite"
+        "FULL_AFTER_DUE": "Tu nota; cada pregunta después de la fecha límite",
+        "FULL_AFTER_LAST_ATTEMPT": "Tu nota; cada pregunta cuando apruebes o uses tu último intento"
       },
       "noPause": "El tiempo corre desde que empieces y no se puede pausar. Si cierras la ventana, sigue corriendo.",
       "autosave": "Cada respuesta se guarda sola. Si se va la conexión, se guarda al volver.",
@@ -1559,6 +1697,8 @@
       "submitting": "Entregando…",
       "submitError": "No se pudo entregar. Inténtalo de nuevo.",
       "submitPendingError": "Hay respuestas sin guardar. Revisa tu conexión e inténtalo de nuevo.",
+      "submitSessionError": "Tu sesión se cerró y tus últimas respuestas no se guardaron. Siguen en este equipo: vuelve a entrar, abre el examen y entrégalo.",
+      "submitServerError": "No se pudieron guardar tus últimas respuestas. Recarga la página e inténtalo de nuevo.",
       "submittedAnnounce": "Intento entregado.",
       "expiredAnnounce": "Se acabó el tiempo. Tu intento se entregó con lo que habías respondido.",
       "confirmTitle": "¿Entregar el intento?",
@@ -1601,6 +1741,8 @@
     "results": {
       "title": "Mis resultados",
       "description": "Tus notas por asignatura y tus intentos. Puedes consultarlos aunque tu acceso haya vencido.",
+      "bar": "{hasBest, select, yes {Mejor nota {percent} %} other {Sin nota todavía}}{hasPass, select, yes {, para aprobar {pass} %} other {}}",
+      "passLine": "La raya marca el {pass} % que se necesita para aprobar.",
       "examsTitle": "Mis exámenes",
       "examsHint": "Todos los exámenes de tus programas activos, hechos o no, con su fecha límite y tu mejor nota.",
       "examsCaption": "Exámenes de tus programas",
@@ -1630,6 +1772,7 @@
         "blockedBy": "Se habilita al completar “{title}”.",
         "notYet": "Todavía no está disponible.",
         "closed": "La cohorte ya cerró.",
+        "locked": "Su componente todavía no está habilitado.",
         "pending": "Pendiente. Puedes presentarlo cuando quieras.",
         "pendingDue": "Pendiente. Vence el {date}.",
         "inProgress": "Tienes un intento en curso. Tus respuestas están guardadas.",
@@ -1808,6 +1951,19 @@
     "othersTitle": "Tus otros programas",
     "continue": {
       "title": "Continúa donde quedaste"
+    },
+    "routeDone": {
+      "title": "Completaste la ruta",
+      "body": "Hiciste todos los pasos de {program}. En tus resultados ves cómo te fue en cada examen y, cuando el programa quede aprobado, tu constancia."
+    },
+    "completed": {
+      "title": "Cursos completados",
+      "hint": "Lo que ya terminaste. Cada constancia se puede verificar con su código.",
+      "finished": "Terminado",
+      "finishedOn": "Terminado el {date}",
+      "certificate": "Ver constancia",
+      "results": "Ver resultados",
+      "nextCourse": "Elegir mi siguiente curso"
     },
     "bar": {
       "needsSubmission": "Te falta enviar la actividad para completar este tema.",
@@ -2157,151 +2313,206 @@
   "landing": {
     "nav": {
       "label": "Navegación de la portada",
+      "home": "Inicio",
+      "homeLabel": "ALBA Futuro Educativo, inicio",
       "programs": "Programas",
       "how": "Cómo funciona",
-      "contact": "Contacto",
-      "login": "Iniciar sesión",
-      "enter": "Ingresar",
-      "write": "Escríbenos",
-      "menu": "Menú",
+      "stories": "Historias",
       "faq": "Preguntas",
-      "register": "Regístrate"
+      "login": "Ingresar",
+      "enter": "Ir a mi cuenta",
+      "start": "Comenzar",
+      "menuOpen": "Abrir el menú",
+      "menuClose": "Cerrar el menú"
     },
     "hero": {
-      "eyebrow": "Aprende hoy, construye tu mañana",
-      "titleLight": "Tu futuro",
-      "titleStrong": "más cerca",
-      "lead": "Termina tu bachillerato desde el celular, a tu ritmo y con un grupo que avanza contigo. Clases en vídeo, exámenes con retroalimentación y personas que te acompañan.",
-      "ctaPrimary": "Explorar programas",
+      "eyebrow": "Tu esfuerzo sigue contando",
+      "titleA": "Tu historia también",
+      "titleB": "puede continuar.",
+      "lead": "Termina tu bachillerato con un programa flexible, cercano y pensado para tu vida de hoy.",
+      "ctaPrimary": "Conoce los programas",
       "ctaSecondary": "Cómo funciona",
+      "benefitsLabel": "Lo que encuentras",
       "benefits": {
-        "flexible": {
-          "title": "Acceso flexible",
-          "body": "Desde tu celular, cuando puedas."
-        },
-        "group": {
-          "title": "Con tu grupo",
-          "body": "Cohortes con personas que te acompañan."
-        },
-        "quality": {
-          "title": "Contenido de calidad",
-          "body": "Vídeo con transcripción y exámenes."
-        }
-      },
-      "chipVideo": "Clases en vídeo con transcripción",
-      "chipCohort": "Cohortes cada seis meses"
-    },
-    "facts": {
-      "label": "Lo que encuentras",
-      "cohorts": "Programas en cohortes",
-      "virtual": "100 % virtual, a tu ritmo",
-      "feedback": "Exámenes con retroalimentación",
-      "accessible": "Accesible para todas las personas"
-    },
-    "programs": {
-      "title": "Aprende lo que te impulsa",
-      "lead": "Programas para volver a estudiar, terminar lo pendiente y seguir adelante.",
-      "link": "Pregunta por la próxima cohorte",
-      "category": "Programa",
-      "items": {
-        "bachillerato": {
-          "name": "Bachillerato acelerado",
-          "description": "Termina tu bachillerato en menos tiempo, con clases en vídeo, lecturas y exámenes que te dicen en qué mejorar. Pensado para quien trabaja o tiene familia.",
-          "meta": "Seis componentes · 100 % virtual · Cohortes cada seis meses"
-        }
-      },
-      "includesTitle": "Lo que incluye",
-      "includes": {
-        "modules": "Seis componentes: Español, Matemáticas, Inglés, Sociales, Física, Economía, Educación financiera y Proyecto de vida",
-        "tutor": "Tutor profesional y clases en vídeo con transcripción",
-        "pace": "100 % virtual, disponible las 24 horas, a tu ritmo",
-        "diploma": "Diploma y acta de grado registrados ante el Ministerio de Educación"
-      },
-      "askCta": "Pregunta por la próxima cohorte"
-    },
-    "editorial": {
-      "title": "Una Colombia más preparada",
-      "body": "Creemos en el poder de la educación para construir un país con más oportunidades.",
-      "cta": "Cómo funciona"
-    },
-    "how": {
-      "title": "¿Cómo funciona?",
-      "lead": "En tres pasos, sin formularios ni registros.",
-      "steps": {
-        "contact": {
-          "title": "Escríbenos",
-          "body": "Te contamos qué programa te sirve, cuánto cuesta y cuándo empieza la próxima cohorte."
-        },
-        "enter": {
-          "title": "Entra a tu cohorte",
-          "body": "Recibes tu acceso y empiezas con tu grupo: vídeos con transcripción, lecturas y exámenes."
-        },
         "pace": {
-          "title": "Avanza a tu ritmo",
-          "body": "Tu progreso y tus resultados siempre a la vista, desde el celular. Si te atrasas, alguien te escribe."
+          "title": "A tu ritmo",
+          "body": "Tú decides cuándo y cómo."
+        },
+        "support": {
+          "title": "Acompañamiento real",
+          "body": "Siempre tendrás orientación."
+        },
+        "anywhere": {
+          "title": "Desde donde estés",
+          "body": "100 % en línea, desde el celular o el computador."
         }
       }
     },
-    "banner": {
-      "title": "Invierte en ti, invierte en tu futuro",
-      "body": "La educación abre oportunidades. Escríbenos y te contamos cómo empezar en la próxima cohorte.",
-      "cta": "Comienza ahora"
-    },
-    "final": {
-      "title": "Tu futuro empieza hoy",
-      "body": "Escríbenos y te contamos qué programa te sirve, cuánto cuesta y cuándo empieza la próxima cohorte.",
-      "cta": "Escríbenos por WhatsApp",
-      "ctaEmail": "Escríbenos"
-    },
-    "footer": {
-      "tagline": "Educación hoy, más oportunidades mañana.",
-      "platform": "Plataforma",
-      "institution": "Institución",
-      "legal": "Legal",
-      "contact": "Contacto",
-      "dataPolicy": "Política de tratamiento de datos",
-      "email": "Correo",
-      "phone": "Teléfono",
-      "whatsapp": "WhatsApp",
-      "rights": "© {year} {name}. Todos los derechos reservados."
-    },
-    "meta": {
-      "title": "Colombia Estudia · Tu futuro más cerca",
-      "description": "Programas en cohortes con clases en vídeo, exámenes con retroalimentación y acompañamiento. Accesible, en español de Colombia y desde el celular."
-    },
-    "faq": {
-      "title": "Preguntas frecuentes",
-      "lead": "Lo que la gente pregunta antes de escribirnos. Si tu duda no está aquí, escríbenos y te respondemos.",
-      "items": {
-        "legal": {
-          "q": "¿El bachillerato acelerado es válido en Colombia?",
-          "a": "Sí. Es bachillerato por ciclos para adultos, regulado por el Decreto 3011 del Ministerio de Educación Nacional. El programa se dicta en convenio con instituciones educativas autorizadas y el título queda registrado ante el Ministerio."
-        },
-        "requirements": {
-          "q": "¿Qué necesito para inscribirme?",
-          "a": "Tener mínimo 16 años cumplidos al momento de graduarte (no hay límite de edad), el certificado del último grado aprobado (mínimo 5.º de primaria), tu documento de identidad y, si eres menor de edad, el documento del adulto responsable."
-        },
-        "when": {
-          "q": "¿Cuándo puedo empezar?",
-          "a": "Hay cohortes de ingreso cada seis meses. Escríbenos y te decimos cuándo abre la próxima y cómo apartar tu cupo."
-        },
+    "adult": {
+      "eyebrow": "Otra forma de avanzar",
+      "titleA": "Volver a estudiar puede sentirse",
+      "titleB": "diferente.",
+      "body": "Sabemos que la vida adulta trae responsabilidades. Por eso, te ofrecemos una experiencia flexible, humana y enfocada en lo que realmente necesitas.",
+      "features": {
         "schedule": {
-          "q": "¿Tengo que conectarme a una hora fija?",
-          "a": "No. El programa es 100 % virtual: los componentes están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
+          "title": "Horarios flexibles",
+          "body": "Estudia en los momentos que se ajusten a tu vida."
         },
-        "icfes": {
-          "q": "¿Necesito presentar el ICFES para graduarme?",
-          "a": "No, la prueba Saber 11 no es requisito para graduarte. Sí la necesitarás si después quieres entrar a la universidad."
+        "support": {
+          "title": "Acompañamiento en cada etapa",
+          "body": "Tendrás orientación académica y personal."
+        },
+        "path": {
+          "title": "Un camino claro para terminar",
+          "body": "Sabemos dónde estás y te ayudamos a llegar."
+        }
+      }
+    },
+    "programs": {
+      "eyebrow": "Programas",
+      "title": "Encuentra el camino que se adapta a ti.",
+      "link": "Pregunta por la próxima cohorte",
+      "featured": {
+        "bachillerato": {
+          "name": "Bachillerato acelerado",
+          "tags": ["100 % en línea", "A tu ritmo"],
+          "description": "Completa tu bachillerato con una metodología pensada para adultos, con contenidos prácticos y aplicados a la vida real.",
+          "cta": "Pregunta por el bachillerato acelerado"
+        }
+      },
+      "services": {
+        "start": {
+          "title": "Tu punto de partida",
+          "tags": ["Último grado aprobado", "Plan a tu medida"],
+          "body": "Con tu certificado vemos desde dónde sigues: no repites lo que ya aprobaste.",
+          "cta": "Cómo sé qué ruta me corresponde"
+        },
+        "tutor": {
+          "title": "Tutor y acompañamiento",
+          "tags": ["Tutor profesional", "Seguimiento"],
+          "body": "Un tutor resuelve tus dudas y, si te atrasas, alguien te escribe.",
+          "cta": "Cómo funciona el acompañamiento"
         },
         "diploma": {
-          "q": "¿Recibo diploma y acta de grado?",
-          "a": "Sí, en físico, legales y registrados ante el Ministerio de Educación. Con ellos puedes seguir estudios técnicos, tecnológicos o profesionales, y usarlos para buscar empleo."
+          "title": "Diploma y acta de grado",
+          "tags": ["Legal", "Registrado"],
+          "body": "En físico, legales y registrados ante el Ministerio de Educación.",
+          "cta": "Si el título es válido"
+        }
+      }
+    },
+    "stories": {
+      "eyebrow": "Historias reales",
+      "titleA": "No empiezas de cero.",
+      "titleB": "Empiezas desde donde estás.",
+      "body1": "Trabajo, familia, responsabilidades… la vida no se detiene.",
+      "body2": "En ALBA creemos en tu historia y te damos las herramientas para que sigas construyendo tu futuro.",
+      "cta": "Cuéntanos tu historia"
+    },
+    "process": {
+      "eyebrow": "Así funciona",
+      "titleA": "Un proceso simple, humano y",
+      "titleB": "a tu ritmo.",
+      "steps": {
+        "tell": {
+          "title": "Cuéntanos tu situación",
+          "body": "Conocemos tu perfil y tus objetivos."
+        },
+        "route": {
+          "title": "Conoce tu ruta",
+          "body": "Te proponemos un plan personalizado."
+        },
+        "advance": {
+          "title": "Empieza a avanzar",
+          "body": "Estudia, recibe apoyo y alcanza tu meta."
+        }
+      }
+    },
+    "people": {
+      "eyebrow": "Hecho para la vida real",
+      "titleA": "Personas reales,",
+      "titleB": "historias reales.",
+      "body": "Como tú, muchas personas están retomando sus estudios para abrir nuevas oportunidades en sus vidas.",
+      "cta": "Conoce los programas",
+      "labels": {
+        "place": "Estudia desde donde estés",
+        "work": "Compatible con tu trabajo",
+        "future": "Un mejor futuro para ti y tu familia"
+      }
+    },
+    "values": {
+      "label": "Lo que nos mueve",
+      "items": {
+        "closeness": {
+          "title": "Cercanía",
+          "body": "Personas que te escuchan y te entienden."
+        },
+        "clarity": {
+          "title": "Claridad",
+          "body": "Información simple y sin enredos."
+        },
+        "flexibility": {
+          "title": "Flexibilidad",
+          "body": "Se adapta a tu vida, no al revés."
+        },
+        "progress": {
+          "title": "Progreso",
+          "body": "Pequeños avances que generan grandes cambios."
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "titleA": "Preguntas que vale",
+      "titleB": "la pena resolver.",
+      "lead": "¿Tienes otra duda? Escríbenos y te respondemos.",
+      "write": "Escríbenos",
+      "items": {
+        "work": {
+          "q": "¿Puedo estudiar si trabajo?",
+          "a": "Sí. El programa es 100 % en línea y está disponible las 24 horas: estudias en los ratos que te deja el trabajo, desde el celular o el computador."
+        },
+        "schedule": {
+          "q": "¿Necesito conectarme a una hora fija?",
+          "a": "No. El programa es 100 % virtual: los componentes están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
+        },
+        "route": {
+          "q": "¿Cómo sé qué ruta me corresponde?",
+          "a": "Depende del último grado que aprobaste. Con tu certificado te decimos en qué ciclo empiezas y qué te queda por cursar: no repites lo que ya aprobaste."
+        },
+        "years": {
+          "q": "¿Puedo retomar después de muchos años?",
+          "a": "Sí. No hay límite de edad ni importa cuánto tiempo haya pasado: necesitas el certificado del último grado aprobado (mínimo 5.º de primaria) y tu documento de identidad."
+        },
+        "legal": {
+          "q": "¿El título es válido en Colombia?",
+          "a": "Sí. Es bachillerato por ciclos para adultos, regulado por el Decreto 3011 del Ministerio de Educación Nacional. El programa se dicta en convenio con instituciones educativas autorizadas y el título queda registrado ante el Ministerio."
         },
         "price": {
           "q": "¿Cuánto cuesta?",
           "a": "Escríbenos y te contamos el valor, las becas disponibles y las formas de pago para la próxima cohorte."
         }
       }
+    },
+    "final": {
+      "eyebrow": "Tu próximo capítulo",
+      "titleA": "Tu próximo comienzo",
+      "titleB": "puede ser hoy.",
+      "cta": "Quiero conocer mi ruta",
+      "ctaSecondary": "Hablar con orientación"
+    },
+    "footer": {
+      "tagline": "Tu historia también puede continuar.",
+      "explore": "Explora",
+      "support": "Soporte",
+      "legal": "Legal",
+      "write": "Escríbenos",
+      "dataPolicy": "Política de tratamiento de datos",
+      "rights": "© {year} {name}. Todos los derechos reservados."
+    },
+    "meta": {
+      "title": "ALBA Futuro Educativo · Tu historia también puede continuar",
+      "description": "Termina tu bachillerato con un programa flexible, 100 % en línea y con acompañamiento real, pensado para la vida adulta."
     },
     "contact": {
       "message": "Hola, quiero información sobre los programas de {name}."
@@ -2413,6 +2624,37 @@
     "lastActivity": "Última conexión",
     "completedOn": "Completado el {date}",
     "actions": "Acciones",
+    "modules": {
+      "title": "Componentes",
+      "hint": "El primero está abierto. Los siguientes se habilitan aquí, cuando el estudiante lo pida; las fechas son opcionales y acotan el componente entero.",
+      "position": "Componente {position}",
+      "first": "Abierto desde la matrícula",
+      "waiting": "Espera habilitación",
+      "unlockedBy": "Habilitado por {name} el {date}",
+      "someone": "alguien del equipo",
+      "window": "Del {from} al {until}",
+      "state": {
+        "OPEN": "Abierto",
+        "LOCKED": "Bloqueado",
+        "NOT_YET": "Programado",
+        "CLOSED": "Cerrado"
+      },
+      "unlock": "Habilitar",
+      "unlockNamed": "Habilitar «{name}»",
+      "unlockWithDates": "Habilitar con fechas",
+      "dates": "Fechas",
+      "saveDates": "Guardar fechas",
+      "lock": "Bloquear",
+      "lockNamed": "Bloquear «{name}»",
+      "from": "Desde",
+      "fromHint": "Vacío: desde ya.",
+      "until": "Hasta",
+      "untilHint": "Vacío: sin cierre.",
+      "cancel": "Cancelar",
+      "error": "No se pudo guardar. Inténtalo de nuevo.",
+      "unlocked": "«{name}» habilitado. El estudiante recibió un aviso.",
+      "locked": "«{name}» bloqueado."
+    },
     "override": {
       "open": "Marcar completado",
       "openNamed": "Marcar «{title}» como completado",
@@ -2500,7 +2742,7 @@
       "revoked": "Constancia {code} revocada.",
       "error": "No se pudo revocar. Inténtalo de nuevo."
     },
-    "billingLink": "Ver la cartera de esta matrícula"
+    "billingLink": "Ver la cartera"
   },
   "cohortProgress": {
     "title": "Avance",
@@ -2824,6 +3066,7 @@
     "addModuleExam": "Examen del componente",
     "addModuleExamHint": "Va al final del componente, después de todos los temas",
     "addLessonExam": "Añadir el examen de este tema",
+    "addLessonExamNamed": "Añadir el examen de «{title}»",
     "status": {
       "none": "Sin versión",
       "draft": "Borrador (v{number})",
@@ -3010,8 +3253,7 @@
       "lessons": "Temas completados",
       "lessonsHint": "De los temas empezados en el periodo.",
       "submissions": "Actividades aprobadas",
-      "submissionsHint": "De las actividades enviadas en el periodo.",
-      "note": "No hay telemetría de errores: el tercer embudo («sesiones con error no recuperado») no se puede medir todavía."
+      "submissionsHint": "De las actividades enviadas en el periodo."
     },
     "rail": {
       "label": "Cohortes: próximas y actividad reciente"

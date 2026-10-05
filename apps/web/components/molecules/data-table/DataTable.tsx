@@ -42,7 +42,18 @@ export interface DataTableColumn<T> {
   narrow?: boolean;
   /** Numbers line up on tabular figures (DESIGN.md: rol `data`). */
   numeric?: boolean;
+  /**
+   * Se oculta por debajo de ese ancho (4/10): en el teléfono la tabla enseña lo que identifica
+   * la fila y lo que se hace con ella; el resto vive en la ficha. Nunca la primera columna.
+   */
+  hideBelow?: 'sm' | 'md' | 'lg';
 }
+
+const HIDE_BELOW = {
+  sm: 'hidden sm:table-cell',
+  md: 'hidden md:table-cell',
+  lg: 'hidden lg:table-cell',
+} as const;
 
 export interface DataTableProps<T> {
   /** Describes the table for someone who cannot see it. Not decorative. */
@@ -125,7 +136,8 @@ export function DataTable<T>({
                 aria-label={column.headerLabel}
                 className={cn(
                   'type-overline text-text-muted px-2 py-3 uppercase first:pl-0 last:pr-0',
-                  column.narrow && 'w-px whitespace-nowrap'
+                  column.narrow && 'w-px whitespace-nowrap',
+                  column.hideBelow && HIDE_BELOW[column.hideBelow]
                 )}
               >
                 {column.header}
@@ -165,7 +177,8 @@ export function DataTable<T>({
                       'text-text px-2 first:pl-0 last:pr-0',
                       compactRows ? 'py-2' : 'py-3',
                       column.numeric ? 'type-data' : 'type-body',
-                      column.narrow && 'w-px whitespace-nowrap'
+                      column.narrow && 'w-px whitespace-nowrap',
+                      column.hideBelow && HIDE_BELOW[column.hideBelow]
                     )}
                   >
                     {column.cell(row)}

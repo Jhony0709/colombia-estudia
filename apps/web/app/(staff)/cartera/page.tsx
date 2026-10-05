@@ -277,6 +277,7 @@ export default async function BillingPage({
           },
           {
             key: 'paid',
+            hideBelow: 'md',
             header: t('paidOfTotal'),
             numeric: true,
             cell: (r) => (r.status ? `${cop(r.paid)} / ${cop(r.total)}` : '—'),
@@ -294,6 +295,7 @@ export default async function BillingPage({
           },
           {
             key: 'next',
+            hideBelow: 'lg',
             header: t('next'),
             cell: (r) =>
               r.nextDueOn

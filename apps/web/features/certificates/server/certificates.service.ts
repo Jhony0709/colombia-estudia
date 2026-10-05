@@ -23,6 +23,7 @@ import { isEnrollmentCompleted, type ModuleInput } from '@colombia-estudia/domai
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { notify } from '@/features/notifications/server/notifications.service';
+import { logger } from '@/lib/observability/logger';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const CODE_LENGTH = 10;
@@ -289,6 +290,30 @@ export async function issueDueCertificatesForEnrollment({
   }
 
   return { issued, completed };
+}
+
+/**
+ * Lo del job diario para una matrícula, justo cuando avanza (5/10): al cerrar el último paso
+ * la matrícula pasa a `COMPLETED` en el acto. Antes esperaba al job, y entretanto `/aprender`
+ * enseñaba una ruta terminada sin nada que abrir. Mejor esfuerzo: nunca tumba la nota, la
+ * evidencia ni la revisión que lo disparó.
+ */
+export async function issueAfterProgress(input: {
+  institutionId: string;
+  enrollmentId: string;
+  now?: Date;
+}): Promise<void> {
+  try {
+    await issueDueCertificatesForEnrollment(input);
+  } catch (error) {
+    logger.error(
+      {
+        enrollmentId: input.enrollmentId,
+        err: error instanceof Error ? error.message : String(error),
+      },
+      'certificate issue after progress failed'
+    );
+  }
 }
 
 /** Todas las matrículas activas de la institución: es lo que corre el job diario. */

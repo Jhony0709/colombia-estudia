@@ -28,7 +28,9 @@ const schema = z.object({
   maxAttempts: z.number().int().min(1).max(20).optional(),
   timeLimitMinutes: z.number().int().min(1).max(600).nullable().optional(),
   passPercent: z.number().int().min(0).max(100).nullable().optional(),
-  reviewPolicy: z.enum(['NONE', 'SCORE_ONLY', 'FULL_AFTER_GRADED', 'FULL_AFTER_DUE']).optional(),
+  reviewPolicy: z
+    .enum(['NONE', 'SCORE_ONLY', 'FULL_AFTER_GRADED', 'FULL_AFTER_DUE', 'FULL_AFTER_LAST_ATTEMPT'])
+    .optional(),
 });
 
 type Input = z.infer<typeof schema>;

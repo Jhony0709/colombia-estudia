@@ -65,7 +65,7 @@ export default async function CertificatesPage() {
       <PageHeader title={tc('title')} description={tc('description')} />
 
       {certificates.length === 0 ? (
-        <EmptyState title={tc('empty')} description={tc('emptyHint')} />
+        <EmptyState icon={Award} title={tc('empty')} description={tc('emptyHint')} />
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2">
           {certificates.map((c) => (

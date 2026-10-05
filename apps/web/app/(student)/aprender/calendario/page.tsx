@@ -149,12 +149,30 @@ export default async function CalendarPage() {
     const Icon = ICON[item.kind];
     const far = distance(item, showPast);
     return (
-      <li className="flex items-start gap-3 py-3">
-        <span className="bg-surface-sunken rounded-control text-text-muted inline-flex size-10 shrink-0 items-center justify-center">
-          <Icon className="size-5" aria-hidden="true" />
+      <li className="flex items-start gap-4 py-3">
+        {/* La fecha en baldosa (4/10), como en el panel: el día se lee de un vistazo. */}
+        <span
+          aria-hidden="true"
+          className="bg-surface-sunken rounded-control flex w-12 shrink-0 flex-col items-center py-1.5"
+        >
+          <span className="type-overline text-text-muted uppercase">
+            {format
+              .dateTime(new Date(item.at), {
+                month: 'short',
+                ...(isDateOnly(item) ? { timeZone: 'UTC' } : {}),
+              })
+              .replace('.', '')}
+          </span>
+          <span className="type-heading text-text">
+            {format.dateTime(new Date(item.at), {
+              day: 'numeric',
+              ...(isDateOnly(item) ? { timeZone: 'UTC' } : {}),
+            })}
+          </span>
         </span>
         <div className="min-w-0 flex-1">
-          <p className="type-caption text-text-muted m-0">
+          <p className="type-caption text-text-muted m-0 inline-flex items-center gap-1.5">
+            <Icon className="size-3.5" aria-hidden="true" />
             {tc(`kind.${item.kind}`)}
             {far && <> · {far}</>}
           </p>
@@ -219,7 +237,7 @@ export default async function CalendarPage() {
             </ul>
           )}
 
-          <PageSection title={tc('upcoming')} id="proximo">
+          <PageSection title={tc('upcoming')} id="proximo" card>
             {upcoming.length === 0 ? (
               <p className="type-body text-text-muted">{tc('nothingUpcoming')}</p>
             ) : (

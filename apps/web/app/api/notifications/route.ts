@@ -16,12 +16,16 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { APIError } from '@/lib/core/errors';
 import { listNotifications } from '@/features/notifications/server/notifications.service';
 
-export const GET = apiHandler()(async () => {
+export const GET = apiHandler()(async (req) => {
   const ctx = await getRequestContext();
   if (!ctx.person) throw new APIError('Authentication required', 'UNAUTHENTICATED');
+
+  // `?limit=` pide menos de los 50 (la campana, 5/10); nunca más.
+  const limit = Number.parseInt(req.nextUrl.searchParams.get('limit') ?? '', 10);
 
   return listNotifications({
     institutionId: ctx.institution.id,
     personId: ctx.person.id,
+    ...(limit > 0 ? { limit: Math.min(limit, 50) } : {}),
   });
 });

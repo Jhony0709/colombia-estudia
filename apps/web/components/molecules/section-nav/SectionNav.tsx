@@ -13,6 +13,7 @@
 import Link from 'next/link';
 import type { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface SectionNavItem {
@@ -20,6 +21,8 @@ export interface SectionNavItem {
   label: string;
   /** Un número al lado del rótulo: pendientes, novedades. */
   count?: number;
+  /** Lleva a otra área (4/10): se marca con una flecha para que no sorprenda perder las pestañas. */
+  external?: boolean;
 }
 
 function isCurrent(item: SectionNavItem, pathname: string, search: string): boolean {
@@ -42,7 +45,7 @@ export function SectionNav({ label, items }: { label: string; items: SectionNavI
 
   return (
     <nav aria-label={label} className="border-border-muted -mt-2 border-b">
-      <ul className="hidden gap-1 sm:flex">
+      <ul className="hidden flex-wrap gap-x-1 sm:flex">
         {items.map((item) => {
           const active = item === current;
           return (
@@ -59,6 +62,7 @@ export function SectionNav({ label, items }: { label: string; items: SectionNavI
                 )}
               >
                 {item.label}
+                {item.external && <ArrowUpRight aria-hidden className="size-4" />}
                 {item.count !== undefined && item.count > 0 && (
                   <span className="bg-surface-sunken text-text rounded-pill type-caption px-2 tabular-nums">
                     {item.count}

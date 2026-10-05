@@ -26,8 +26,10 @@ const TONE = {
 export function StatCard({ label, value, icon: Icon, href, tone = 'info' }: StatCardProps) {
   const body = (
     <>
+      {/* En el teléfono sin icono (4/10): cuatro tarjetas apiladas empujaban la lista, que es
+          lo que la pantalla es, fuera de la primera vista. */}
       <span
-        className={`rounded-control inline-flex size-11 shrink-0 items-center justify-center ${TONE[tone]}`}
+        className={`rounded-control hidden size-11 shrink-0 items-center justify-center sm:inline-flex ${TONE[tone]}`}
       >
         <Icon aria-hidden="true" className="size-5" />
       </span>
@@ -40,7 +42,7 @@ export function StatCard({ label, value, icon: Icon, href, tone = 'info' }: Stat
     </>
   );
   const shell =
-    'bg-surface-base border-border-muted rounded-card elevation-resting flex items-center gap-4 border p-5';
+    'bg-surface-base border-border-muted rounded-card elevation-resting flex items-center gap-4 border p-3 sm:p-5';
   return href ? (
     <Link href={href} className={`${shell} hover:bg-surface-sunken transition-colors`}>
       {body}
@@ -62,8 +64,8 @@ export function StatGrid({
     <div
       className={
         columns === 3
-          ? 'grid gap-4 sm:grid-cols-2 xl:grid-cols-3'
-          : 'grid gap-4 sm:grid-cols-2 xl:grid-cols-4'
+          ? 'grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-3'
+          : 'grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-4'
       }
     >
       {children}

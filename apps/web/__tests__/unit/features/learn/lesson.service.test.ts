@@ -165,7 +165,9 @@ describe('lo que se abre', () => {
 
     expect(view.gate).toBeNull();
     expect(view.lesson?.title).toBe('Los números reales');
-    expect(view.lesson?.html).toContain('<h2>Sección</h2>');
+    // El `##` lleva su ancla desde el 4/10: es el destino del índice «En este tema».
+    expect(view.lesson?.html).toContain('<h2 id="user-content-seccion">Sección</h2>');
+    expect(view.lesson?.outline).toEqual([{ id: 'user-content-seccion', text: 'Sección' }]);
     // Sin `<div lang>` envolvente (27/9): el idioma va en `lesson.language` y lo pone el
     // `<article lang>` del player; los bloques cuelgan directos para que `.contenido > …` llegue.
     expect(view.lesson?.html).not.toContain('<div lang=');

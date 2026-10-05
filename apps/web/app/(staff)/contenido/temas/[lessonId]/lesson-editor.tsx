@@ -57,6 +57,11 @@ import { Code, LayoutList } from 'lucide-react';
 import { pendingChecks, ReadinessPanel, type ReadinessCheck } from '../../readiness-panel';
 import { PublishedLine } from '../../published-line';
 import { EditorLayout } from '../../editor-layout';
+import {
+  countWords,
+  shoutingHeadings,
+  suggestedMinutes,
+} from '@/features/content/editor/text-hints';
 import type { LessonReadiness } from '@/features/content/server/readiness.service';
 
 type EditorView = 'blocks' | 'markdown';
@@ -450,6 +455,10 @@ export function LessonEditor({
   // Con `useMemo` para que el efecto de los toasts no se dispare en cada render.
   const errors = useMemo(() => validation?.errors ?? [], [validation]);
   const warnings = useMemo(() => validation?.warnings ?? [], [validation]);
+  // Pistas que no bloquean (4/10): minutos por extensión y títulos en mayúsculas.
+  const words = useMemo(() => countWords(content), [content]);
+  const minutesHint = suggestedMinutes(words);
+  const shouting = useMemo(() => shoutingHeadings(content), [content]);
   const blocked = !validation || errors.length > 0 || !canPublish;
   const hasIssues = errors.length + warnings.length > 0;
 
@@ -664,7 +673,7 @@ export function LessonEditor({
           )}
 
           {/* Los minutos son de la versión, como el texto, y se guardan con él. */}
-          <div className="w-40">
+          <div>
             <label htmlFor={minutesId} className="type-label text-text block">
               {t('minutesLabel')}
             </label>
@@ -679,9 +688,29 @@ export function LessonEditor({
                 setMinutes(event.target.value);
                 setDirty(true);
               }}
-              className="border-border bg-surface-base text-text type-body min-h-control rounded-control mt-1 w-full border px-3"
+              className="border-border bg-surface-base text-text type-body min-h-control rounded-control mt-1 w-40 border px-3"
             />
+            {minutesHint !== null && String(minutesHint) !== minutes.trim() && (
+              <p className="type-caption text-text-muted mt-1">
+                {t('minutesSuggested', { minutes: minutesHint, words })}{' '}
+                <button
+                  type="button"
+                  className="text-text-link underline"
+                  onClick={() => {
+                    setMinutes(String(minutesHint));
+                    setDirty(true);
+                  }}
+                >
+                  {t('minutesUse')}
+                </button>
+              </p>
+            )}
           </div>
+          {shouting.length > 0 && (
+            <p className="type-caption text-text-muted">
+              {t('shouting', { count: shouting.length, first: shouting[0]! })}
+            </p>
+          )}
         </Card>
 
         {/* La actividad, como sección propia (23/9): qué entrega el estudiante y con qué. */}
@@ -720,7 +749,11 @@ export function LessonEditor({
         )}
       </Sheet>
 
-      <PageHelp screen={t('contentLabel')} topics={lessonHelpTopics(t, { canPublish })} />
+      <PageHelp
+        screen={t('contentLabel')}
+        topics={lessonHelpTopics(t, { canPublish })}
+        phoneSide="start"
+      />
 
       {/* ── Vista previa: una hoja, con el render real ── */}
       <Sheet
@@ -748,7 +781,7 @@ export function LessonEditor({
             {/* `contenido` es la misma clase que usa el player del estudiante: si la vista
                 previa se pintara distinto, estaría previendo algo que nadie va a ver. */}
             <div
-              className="contenido max-w-reading"
+              className="contenido max-w-measure"
               lang={preview.language}
               dangerouslySetInnerHTML={{ __html: preview.html }}
             />

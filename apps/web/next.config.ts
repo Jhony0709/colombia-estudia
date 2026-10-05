@@ -6,6 +6,9 @@ const withNextIntl = createNextIntlPlugin('./lib/i18n/request.ts');
 const nextConfig: NextConfig = {
   // Next 15.5 moved this out of `experimental` (build warning on 15/9).
   typedRoutes: true,
+  // Solo `next dev`: deja que un celular en la red local cargue /_next/* y el HMR.
+  // Definirlo activa el bloqueo para cualquier otro origen que no sea localhost.
+  allowedDevOrigins: ['192.168.1.*'],
   // Sentry's OpenTelemetry instrumentation uses dynamic requires; bundling it produces
   // "Critical dependency: the request of a dependency is an expression" warnings.
   // Keeping these packages external is what Sentry documents for Next 15.

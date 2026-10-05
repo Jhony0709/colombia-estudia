@@ -45,7 +45,9 @@ function buildCsp(nonce: string): string {
     "frame-ancestors 'none'",
     "form-action 'self'",
     "base-uri 'self'",
-    'upgrade-insecure-requests',
+    // Solo en producción: en desarrollo por la IP de la red (http://192.168.x.x:3030, el
+    // teléfono) subía los CSS y JS a https y no cargaban. localhost está exento.
+    ...(dev ? [] : ['upgrade-insecure-requests']),
   ].join('; ');
 }
 

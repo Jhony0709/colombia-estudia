@@ -182,6 +182,8 @@ los temas de ayuda que declara la pantalla. Es el último elemento del DOM: con 
 llega a él después del contenido, que es donde uno pide ayuda. Sin temas, no hay botón. La
 chuleta del formato del editor vivía plegada entre el texto y los minutos; una ayuda es algo
 que se pide, no algo que se lee de paso.
+En el teléfono mide 48 px y, donde la pantalla tiene acciones pegadas a la derecha (los
+bloques del editor de temas), va a la izquierda con `phoneSide="start"` (4/10).
 
 ### Dialog: el diálogo modal, uno solo (25/9)
 
@@ -278,6 +280,27 @@ Para una lista cuyas filas tienen hijos que se consultan de vez en cuando (progr
 módulos); si los hijos se leen siempre, es una tabla agrupada, no una expandible. Primer uso:
 `/contenido/programas`.
 
+## 3b. Gráficos (4/10)
+
+Los gráficos del estudiante (`components/molecules/charts`) siguen la skill de dataviz con
+nuestras restricciones: **SVG con geometría en atributos** (la CSP no admite `style`), colores
+solo por clase de token (`fill-accent-base`, `fill-status-*`, `stroke-text`), y la forma por la
+tarea antes que el color.
+
+- **Una serie, sin leyenda**: el título la nombra. Cifra directa solo en el máximo.
+- **Columnas** de 24 px, extremo de datos redondeado (4 px) y base recta; los días sin dato
+  llevan un trazo de 2 px en `border-muted`, no un hueco.
+- **Bala** (`ExamBullet`): nota sobre pista de 0 a 100 y raya del umbral de 2 px
+  (`vector-effect="non-scaling-stroke"`). El color de la barra es de estado y el estado va
+  además en texto e icono.
+- **Tooltip** con puntero y con teclado: la lista de días es **una sola parada de tabulador**
+  y se recorre con flechas, Inicio y Fin; cada día lleva su frase completa en `sr-only`.
+- **Movimiento**: marcas que crecen desde su base al aparecer (`.chart-grow-x`/`.chart-grow-y`,
+  `duration.normal`, `easing.enter`, solo `transform`); con movimiento reducido, corte por la
+  regla global. Sin escalonar (no hay token, `frontend-colombia-estudia` M4).
+- En el teléfono, las columnas enseñan la semana actual y la cifra que las acompaña dice lo
+  mismo que se ve.
+
 ## 4. Filas o tarjetas
 
 | Lo que enseñas                                                  | Forma     |
@@ -291,6 +314,23 @@ y Polaris resuelven los índices con tablas y no con rejillas de tarjetas.
 
 Para filas usamos `components/molecules/data-table`. Una fila presionable es **un solo
 botón** para el lector de pantalla, no siete elementos enfocables (`DESIGN.md` §Patrones).
+
+**Prioridad de columnas (4/10).** `DataTableColumn.hideBelow: 'sm' | 'md' | 'lg'` oculta la
+columna por debajo de ese ancho. En el teléfono la tabla enseña lo que identifica la fila y lo
+que se hace con ella; lo demás vive en la ficha. Nunca la primera columna ni la de acciones
+(esa va `narrow`, sin partir). Aplicado en Personas, Cohortes, Cartera, Actividades, Avance,
+Exámenes y las matrículas de una cohorte.
+
+**Cifras (`StatCard`).** En el teléfono, dos por fila y sin icono: cuatro tarjetas apiladas
+empujaban la lista fuera de la primera vista (4/10).
+
+**Crear (4/10).** Una entidad de un solo campo (asignatura, componente) se crea en línea, en
+la propia lista. Una con varios campos se crea en una página o en una `Sheet` desde el botón
+«Nuevo…» de la cabecera; al crear se abre su editor o su ficha. No hay un tercer patrón.
+
+**Pestañas de una ficha (`SectionNav`).** Todas las páginas a las que lleva una pestaña pintan
+la misma barra (la cohorte: `cohort-sections.tsx`); una pestaña que sale a otra área lleva
+`external` y una flecha. Desde `sm` la barra pasa a varias líneas si no cabe.
 
 ---
 
@@ -412,8 +452,10 @@ parecerse por casualidad.
 | `atoms/form-field`                 | estable (`FormTextarea` desde el 25/9)                                                                                          |
 | `atoms/alert`                      | estable                                                                                                                         |
 | `atoms/callout`                    | 27/9: recuadro con título (`note`/`example`/`important`), mismas clases `.callout` que el `:::callout` del Markdown; sin `role` |
-| `atoms/progress-bar`               | 27/9: barra de avance SVG (`role="progressbar"`); antes copiada en `/aprender` y `/familia`                                     |
-| `organisms/student-tab-bar`        | 27/9: pestañas inferiores del estudiante bajo `lg` (programas, calendario, biblioteca, cuenta); oculta en modo tarea            |
+| `atoms/progress-bar`               | 27/9: barra de avance SVG (`role="progressbar"`); 4/10: `tone="on-accent"` (sobre el azul) y `grow` (crece al aparecer)         |
+| `organisms/student-tab-bar`        | 27/9: pestañas inferiores del estudiante bajo `lg`; 4/10: Inicio · Calendario · Resultados · Biblioteca (+ Mi cuenta si aplica) |
+| `molecules/charts`                 | 4/10: `ActivityColumns` (cliente, foco itinerante), `ExamBullet`/`ExamBulletBar`, `DayStrip`. Ver §3b                           |
+| `molecules/empty-state` (icono)    | 4/10: `icon` opcional, decorativo                                                                                               |
 | `atoms/password-input`             | estable                                                                                                                         |
 | `molecules/data-table`             | estable                                                                                                                         |
 | `molecules/empty-state`            | estable                                                                                                                         |

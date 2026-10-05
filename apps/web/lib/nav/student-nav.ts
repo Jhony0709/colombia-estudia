@@ -20,20 +20,24 @@ interface StudentDefinition extends NavDestination {
 const NAV: readonly StudentDefinition[] = [
   {
     href: '/aprender',
-    label: 'Mis programas',
+    // «Inicio» (4/10): desde que `/aprender` es el panel —lo que toca, cómo vas, qué viene—
+    // dejó de ser una lista de programas.
+    label: 'Inicio',
     needs: 'lesson.read',
     section: 'estudiar',
     // El player y los exámenes son «Mis programas»; los otros destinos tienen su prefijo.
     activeUnder: ['/aprender/tema/', '/aprender/examen/'],
   },
   { href: '/aprender/calendario', label: 'Calendario', needs: 'lesson.read', section: 'estudiar' },
-  { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'estudiar' },
+  // Resultados sube a pestaña (4/10): «¿cómo me fue?» es de las tres preguntas del estudiante y
+  // vivía detrás del menú de la persona.
   {
     href: '/aprender/resultados',
     label: 'Resultados',
     needs: 'score.read.own',
-    section: 'historial',
+    section: 'estudiar',
   },
+  { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'estudiar' },
   {
     href: '/aprender/certificados',
     label: 'Constancias',

@@ -1,16 +1,16 @@
 /**
- * El panel del estudiante («Student Learning Home», 27/9): en pocos segundos, dónde estoy, qué
- * hago ahora y cuánto llevo. SSOT: reference/01-routing/routes.md:27, plan/08-aprender-y-evaluar.md:12-19.
+ * El panel del estudiante («Student Learning Home», 27/9; rehecho el 4/10). SSOT:
+ * reference/01-routing/routes.md:27, plan/08-aprender-y-evaluar.md:12-19.
  *
- * Orden (del diseño aprobado el 27/9): hero estático → saludo → «Actividad actual» con el
- * botón «Continuar» (el título fuera del botón) → una franja de progreso (50 % · 4 de 8 ·
- * ~40 min) → la ruta como línea con cuatro estados. En escritorio (`lg`) una columna a la
- * derecha con eventos próximos, recursos y ayuda, cada uno solo si hay algo que enseñar; en
- * el teléfono todo apilado y la ruta abierta, con «Ver N restantes» para lo que sigue.
+ * Orden (4/10): saludo → **héroe de continuar** (la actividad actual sobre el azul de marca,
+ * con la portada del componente y el botón) → tres cifras con micro-gráfico (avance, tiempo,
+ * días con estudio) → «Tu ritmo» y «Tus exámenes» a la izquierda, «Próximas fechas» y ayuda a
+ * la derecha → la ruta como línea con cuatro estados → cursos abiertos. En el teléfono todo
+ * apilado en ese orden, con las fechas antes de la ruta, que es larga.
  *
- * Varias matrículas a la vez (21/9): el selector dentro de «Actividad actual» y la ruta del
- * elegido (`?matricula=`). Server Component entero; el acordeón es `<details>`, que abre y
- * cierra con teclado y aunque el JavaScript falle.
+ * Varias matrículas a la vez (21/9): el selector va en el héroe y la ruta es la del elegido
+ * (`?matricula=`). Server Component salvo el tooltip del gráfico; el acordeón es `<details>`,
+ * que abre y cierra con teclado y aunque el JavaScript falle.
  */
 
 import type { Metadata } from 'next';
@@ -21,7 +21,16 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { listOpenFreeCourses } from '@/features/learn/server/catalog.service';
 import { getCalendarForStudent } from '@/features/learn/server/calendar.service';
 import { getLibraryForStudent } from '@/features/learn/server/library.service';
+import { getStudyActivity } from '@/features/learn/server/activity.service';
+import { getResultsForStudent } from '@/features/learn/server/attempt.service';
+import {
+  issueAfterProgress,
+  listCertificatesForStudent,
+} from '@/features/certificates/server/certificates.service';
+import { CompletedCourses } from './completed-courses';
 import { CatalogSection } from './catalog-section';
+import Image from 'next/image';
+import { AgendaCard, ExamsCard, HelpCard, ProgressKpis, RhythmCard } from './dashboard-cards';
 import { HomeHero } from './home-hero';
 import {
   getCohortOutline,
@@ -30,17 +39,8 @@ import {
   type MyEnrollment,
   type OutlineModule,
 } from '@/features/learn/server/cohort.service';
-import type { SequencedItem } from '@/features/learn/server/outline';
-import {
-  ArrowRight,
-  CalendarDays,
-  CircleCheck,
-  FileText,
-  LifeBuoy,
-  Lock,
-  Play,
-  Video,
-} from 'lucide-react';
+import { workshopStart, type SequencedItem } from '@/features/learn/server/outline';
+import { ArrowRight, CalendarDays, CircleCheck, FileText, Lock, Play } from 'lucide-react';
 import { FORM_ICONS, formOf, hrefFor, itemMeta } from './route-rail';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
@@ -75,10 +75,19 @@ export default async function LearnPage({
   // bachillerato tiene dos programas, y ver solo «el más reciente» escondía el otro.
   // Y los cursos gratuitos abiertos en los que no está (25/9): la puerta para quien se
   // registró antes de que existiera la cohorte de introducción, y para el siguiente curso.
-  const [mine, courses] = await Promise.all([
+  const [listed, courses] = await Promise.all([
     listMyEnrollments({ institutionId, personId }),
     listOpenFreeCourses({ institutionId, personId }),
   ]);
+  // Ruta terminada con la matrícula aún activa (5/10): se emite lo que toque, como en
+  // «Constancias», y el héroe dice «Terminaste el programa» sin esperar al job diario.
+  const done = listed.filter(
+    (row) => !row.gate && !row.resume && !row.upcoming && row.progress.total > 0
+  );
+  for (const row of done) {
+    await issueAfterProgress({ institutionId, enrollmentId: row.enrollmentId });
+  }
+  const mine = done.length > 0 ? await listMyEnrollments({ institutionId, personId }) : listed;
 
   if (mine.length === 0) {
     // Sin matrícula el hero también está (27/9, Jhonny): es la misma casa, con la
@@ -110,30 +119,50 @@ export default async function LearnPage({
   const picked = Array.isArray(matricula) ? matricula[0] : matricula;
   const selected = mine.find((row) => row.enrollmentId === picked) ?? mine[0]!;
 
-  const [outline, events, library] = await Promise.all([
+  const [outline, events, library, activity] = await Promise.all([
     getCohortOutline({ institutionId, personId, enrollmentId: selected.enrollmentId }),
     getCalendarForStudent({ institutionId, personId }),
     getLibraryForStudent({ institutionId, personId }),
+    getStudyActivity({ institutionId, personId }),
   ]);
+  // Los exámenes del programa elegido, con su mejor nota visible y su umbral (4/10). Solo si
+  // la ruta tiene exámenes: la consulta de resultados recorre todas las matrículas.
+  const hasExams = outline.modules.some((m) => m.items.some((i) => i.kind === 'ASSESSMENT'));
+  const exams = hasExams
+    ? (await getResultsForStudent({ institutionId, personId })).assessments.filter(
+        (exam) => exam.cohortCode === selected.cohort.code
+      )
+    : [];
 
   const nowIso = new Date().toISOString();
-  // Solo lo que viene y es un evento (27/9): sesiones en vivo y entregas de examen. Las
-  // fechas de la cohorte (inicio, fin, acceso) ya están en el calendario y aquí serían ruido;
-  // y una tarjeta con «nada para hoy» es peor que ninguna.
-  const upcomingEvents = events
-    .filter((e) => e.at >= nowIso && (e.kind === 'LIVE_SESSION' || e.kind === 'ASSESSMENT_DUE'))
-    .slice(0, 3);
+  // Lo que viene (4/10): sesiones, entregas y, si no hay nada más, el fin de la cohorte o del
+  // acceso, que también es una fecha que el estudiante quiere ver venir.
+  const agenda = events
+    .filter((e) => e.at >= nowIso)
+    .slice(0, 3)
+    .map((e) => ({ id: e.id, kind: e.kind, title: e.title, at: e.at, href: e.href }));
   const resources = [...library.modules.flatMap((m) => m.items), ...library.recordings].slice(0, 3);
+  const current = currentModule(outline);
 
-  const resumeHref = selected.gate ? null : selected.resume ? hrefFor(selected.resume) : '#ruta';
+  // Lo terminado (5/10): con el programa elegido completado, el panel deja de ser «lo que
+  // toca hoy» y pasa a ser qué sigue —los cursos abiertos— y lo que ya se hizo.
+  const completedRows = mine.filter((row) => row.gate?.kind === 'COMPLETED');
+  const certificates =
+    completedRows.length > 0 ? await listCertificatesForStudent({ institutionId, personId }) : [];
+  const finished = selected.gate?.kind === 'COMPLETED';
+  const completedSection = <CompletedCourses rows={completedRows} certificates={certificates} />;
 
   return (
     <Page wide>
-      <HomeHero href={resumeHref} />
-
       <PageHeader
         title={t('greeting', { name: ctx.person.givenName })}
-        description={t('dashboardHint', { count: mine.length })}
+        description={
+          finished
+            ? t('dashboardHintDone')
+            : mine.length > 1
+              ? t('dashboardHintMany', { count: mine.length })
+              : t('dashboardHintOne')
+        }
         action={
           <p className="type-caption text-text-muted inline-flex items-center gap-2">
             <CalendarDays aria-hidden className="size-4 shrink-0" />
@@ -142,136 +171,118 @@ export default async function LearnPage({
         }
       />
 
-      {/* 8/4 en escritorio (27/9): lo que hay que hacer a la izquierda; a la derecha lo que
-          acompaña. En el teléfono, apilado en ese mismo orden. */}
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-        <div className="min-w-0 space-y-8">
-          <CurrentActivity
-            row={selected}
-            cover={outline.modules.find((m) => m.coverUrl !== null)?.coverUrl ?? null}
-            switcher={
-              // E2 (23/9): con dos o más matrículas, un selector en la tarjeta; con una, nada.
-              mine.length > 1 ? (
-                <EnrollmentSwitcher
-                  selectedId={selected.enrollmentId}
-                  options={mine.map((row) => ({
-                    enrollmentId: row.enrollmentId,
-                    programName: row.cohort.programName,
-                    code: row.cohort.code,
-                    cohortName: row.cohort.name,
-                    completed: row.progress.completed,
-                    total: row.progress.total,
-                  }))}
-                />
-              ) : null
-            }
-          />
+      <CurrentActivity
+        row={selected}
+        cover={current?.coverUrl ?? null}
+        moduleName={selected.resume ? (current?.name ?? null) : null}
+        catalogHref={finished && courses.length > 0 ? '#cursos-abiertos' : null}
+        lockedNext={
+          selected.upcoming?.unavailableReason === 'LOCKED' && !selected.resume
+            ? (outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.name ?? null)
+            : null
+        }
+        switcher={
+          // E2 (23/9): con dos o más matrículas, un selector en el héroe; con una, nada.
+          mine.length > 1 ? (
+            <EnrollmentSwitcher
+              tone="on-accent"
+              selectedId={selected.enrollmentId}
+              options={mine.map((row) => ({
+                enrollmentId: row.enrollmentId,
+                programName: row.cohort.programName,
+                code: row.cohort.code,
+                cohortName: row.cohort.name,
+                completed: row.progress.completed,
+                total: row.progress.total,
+              }))}
+            />
+          ) : null
+        }
+      />
 
-          {!selected.gate && (
-            <ProgressStrip outline={outline} programName={selected.cohort.programName} />
-          )}
+      {!selected.gate && <ProgressKpis outline={outline} activity={activity} />}
 
-          <RouteSection outline={outline} supportEmail={ctx.institution.supportEmail} />
-
-          <CatalogSection courses={courses} />
+      {finished && (
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
+          <div className="min-w-0 space-y-8">
+            <CatalogSection courses={courses} />
+            {completedSection}
+          </div>
+          <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
+            <AgendaCard items={agenda} />
+            <HelpCard
+              phone={ctx.institution.supportPhone ?? null}
+              email={ctx.institution.supportEmail ?? null}
+              name={ctx.person.givenName}
+            />
+          </aside>
         </div>
+      )}
 
-        <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
-          {upcomingEvents.length > 0 && (
-            <SideCard
-              title={t('aside.events')}
-              moreHref="/aprender/calendario"
-              moreLabel={t('aside.calendar')}
-            >
-              <ul className="m-0 list-none space-y-3 p-0">
-                {upcomingEvents.map((event) => (
-                  <li key={event.id} className="flex items-start gap-3">
-                    <span className="bg-status-info-muted text-status-info-base rounded-control inline-flex size-9 shrink-0 items-center justify-center">
-                      {event.kind === 'LIVE_SESSION' ? (
-                        <Video aria-hidden className="size-4" />
-                      ) : (
-                        <CalendarDays aria-hidden className="size-4" />
-                      )}
-                    </span>
-                    <span className="min-w-0">
-                      {event.href ? (
-                        <Link
-                          href={event.href}
-                          className="type-body-emphasis text-text-link block underline"
-                        >
-                          {event.title}
-                        </Link>
-                      ) : (
-                        <span className="type-body-emphasis text-text block">{event.title}</span>
-                      )}
-                      <span className="type-caption text-text-muted block">
-                        {format.dateTime(new Date(event.at), {
-                          weekday: 'short',
-                          day: 'numeric',
-                          month: 'short',
-                          ...(event.kind === 'LIVE_SESSION'
-                            ? { hour: 'numeric', minute: '2-digit' }
-                            : {}),
-                        })}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </SideCard>
-          )}
+      {!finished && (
+        <>
+          {/* 2/3 + 1/3 en escritorio (4/10): a la izquierda cómo voy (ritmo, exámenes) y la ruta;
+              a la derecha lo que viene y a quién preguntar. En el teléfono, apilado en ese orden,
+              con las fechas antes de la ruta, que es larga. */}
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
+            <div className="min-w-0 space-y-6">
+              {!selected.gate && <RhythmCard activity={activity} />}
+              <ExamsCard exams={exams} />
+            </div>
+            <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
+              <AgendaCard items={agenda} />
+              <HelpCard
+                phone={ctx.institution.supportPhone ?? null}
+                email={ctx.institution.supportEmail ?? null}
+                name={ctx.person.givenName}
+              />
+            </aside>
+          </div>
 
-          {resources.length > 0 && (
-            <SideCard
-              title={t('aside.resources')}
-              moreHref="/aprender/biblioteca"
-              moreLabel={t('aside.library')}
-            >
-              <ul className="m-0 list-none space-y-3 p-0">
-                {resources.map((item) => (
-                  <li key={item.id} className="flex items-start gap-3">
-                    <span className="bg-surface-sunken text-text-muted rounded-control inline-flex size-9 shrink-0 items-center justify-center">
-                      {item.kind === 'RECORDING' ? (
-                        <Play aria-hidden className="size-4" />
-                      ) : (
-                        <FileText aria-hidden className="size-4" />
-                      )}
-                    </span>
-                    <span className="min-w-0">
-                      <a
-                        href={item.href}
-                        className="type-body-emphasis text-text-link block underline"
-                      >
-                        {item.title}
-                      </a>
-                      <span className="type-caption text-text-muted block">
-                        {t(`aside.kind.${item.kind}`)}
-                        {item.lessonTitle ? ` · ${item.lessonTitle}` : ''}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </SideCard>
-          )}
-
-          {ctx.institution.supportEmail && (
-            <SideCard title={t('aside.help')}>
-              <div className="flex items-start gap-3">
-                <span className="bg-status-info-muted text-status-info-base rounded-control inline-flex size-9 shrink-0 items-center justify-center">
-                  <LifeBuoy aria-hidden className="size-4" />
-                </span>
-                <div className="min-w-0 space-y-3">
-                  <p className="type-body text-text-muted m-0">{t('aside.helpBody')}</p>
-                  <Button asChild variant="secondary">
-                    <a href={`mailto:${ctx.institution.supportEmail}`}>{t('aside.contact')}</a>
-                  </Button>
-                </div>
-              </div>
-            </SideCard>
-          )}
-        </aside>
-      </div>
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
+            <div className="min-w-0 space-y-8">
+              <RouteSection outline={outline} supportEmail={ctx.institution.supportEmail} />
+              <CatalogSection courses={courses} />
+              {completedSection}
+            </div>
+            {resources.length > 0 && (
+              <aside className="min-w-0" aria-label={t('aside.resources')}>
+                <SideCard
+                  title={t('aside.resources')}
+                  moreHref="/aprender/biblioteca"
+                  moreLabel={t('aside.library')}
+                >
+                  <ul className="m-0 list-none space-y-3 p-0">
+                    {resources.map((item) => (
+                      <li key={item.id} className="flex items-start gap-3">
+                        <span className="bg-surface-sunken text-text-muted rounded-control inline-flex size-9 shrink-0 items-center justify-center">
+                          {item.kind === 'RECORDING' ? (
+                            <Play aria-hidden className="size-4" />
+                          ) : (
+                            <FileText aria-hidden className="size-4" />
+                          )}
+                        </span>
+                        <span className="min-w-0">
+                          <a
+                            href={item.href}
+                            className="type-body-emphasis text-text-link block underline"
+                          >
+                            {item.title}
+                          </a>
+                          <span className="type-caption text-text-muted block">
+                            {t(`aside.kind.${item.kind}`)}
+                            {item.lessonTitle ? ` · ${item.lessonTitle}` : ''}
+                          </span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </SideCard>
+              </aside>
+            )}
+          </div>
+        </>
+      )}
     </Page>
   );
 }
@@ -323,199 +334,207 @@ function SideCard({
 const isDayOnly = (d: Date) =>
   d.getUTCHours() === 0 && d.getUTCMinutes() === 0 && d.getUTCSeconds() === 0;
 
+/**
+ * El componente por el que se va (3/10, antes lo decidía el servicio al firmar una sola
+ * portada): el del ítem a retomar, o el del primero sin completar, o el último.
+ */
+function currentModule(outline: CohortOutline): OutlineModule | null {
+  const id = (outline.resume ?? outline.upcoming)?.moduleId ?? null;
+  return (
+    outline.modules.find((m) => m.id === id) ?? outline.modules[outline.modules.length - 1] ?? null
+  );
+}
+
 async function CurrentActivity({
   row,
   cover,
+  moduleName,
+  lockedNext,
   switcher,
+  catalogHref,
 }: {
   row: MyEnrollment;
   cover: string | null;
+  /** El componente de lo que toca, para la línea de contexto del héroe. */
+  moduleName: string | null;
+  /** El nombre del siguiente componente cuando lo que toca está en uno bloqueado (3/10). */
+  lockedNext: string | null;
   switcher: React.ReactNode;
+  /** Programa terminado y cursos abiertos (5/10): el héroe lleva a elegir el siguiente. */
+  catalogHref: string | null;
 }) {
   const [t, format] = await Promise.all([getTranslations('learn'), getFormatter()]);
   const { cohort, gate, progress, resume, upcoming } = row;
   // Sin nada que abrir pero con algo por delante (23/9): decir cuál es y por qué espera.
   const waiting = !gate && !resume && upcoming ? upcoming : null;
+  // Todo hecho y la matrícula aún activa (5/10): un examen final sin aprobar, o la constancia
+  // por emitir. Antes el héroe decía «Continúa donde quedaste» sin botón: sin salida.
+  const routeDone = !gate && !lockedNext && !resume && !upcoming && progress.total > 0;
   const percent =
     progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100);
   const starting = !gate && progress.completed === 0;
 
+  const body = gate
+    ? t(`gate.${gate.kind}.body`, {
+        date: 'startsOn' in gate ? gate.startsOn : 'accessUntil' in gate ? gate.accessUntil : '',
+      })
+    : lockedNext
+      ? t('nextComponent.body', { module: lockedNext })
+      : starting && resume
+        ? t('startHere.body', { how: t(`startHere.how.${formOf(resume)}`) })
+        : waiting
+          ? t('startHere.waiting', {
+              title: waiting.title,
+              reason:
+                waiting.unavailableReason === 'CLOSED'
+                  ? t('startHere.closed')
+                  : waiting.unavailableReason === 'NOT_YET'
+                    ? t('startHere.notYet', {
+                        // `availableFrom` es la fecha de inicio de la cohorte (`@db.Date`,
+                        // medianoche UTC) cuando la asignación viene de abrirla, y un
+                        // instante cuando viene de «Actualizaciones del programa».
+                        date: format.dateTime(waiting.availableFrom, {
+                          dateStyle: 'long',
+                          ...(isDayOnly(waiting.availableFrom) ? { timeZone: 'UTC' } : {}),
+                        }),
+                      })
+                    : waiting.blockedBy
+                      ? t('startHere.blocked', { title: waiting.blockedBy })
+                      : t('startHere.unavailable'),
+            })
+          : routeDone
+            ? t('routeDone.body', { program: cohort.programName })
+            : null;
+
   return (
+    // El héroe ES lo que toca hoy (4/10): antes había un héroe de ánimo con su propio
+    // «Continuar aprendiendo» y, debajo, esta tarjeta con otro «Continuar». En el teléfono el
+    // botón quedaba tras pantalla y media. El azul de marca y la foto se quedan; el mensaje
+    // ahora es la actividad.
     <section
       aria-labelledby="actual-titulo"
-      className="bg-surface-base rounded-card elevation-resting p-5 sm:p-6"
+      className="bg-accent-base text-text-on-accent rounded-card relative overflow-hidden sm:min-h-[17rem]"
     >
-      <div className="flex flex-col gap-5 sm:flex-row">
-        {/* La portada del componente, decorativa: el nombre va al lado (WCAG 1.1.1). */}
-        {cover && !gate && (
+      {/* La portada del componente o, sin ella, la foto de marca: decorativa (WCAG 1.1.1),
+          solo desde `sm`; en el teléfono el texto y el botón van primero. */}
+      <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[46%] sm:block">
+        {cover ? (
           // eslint-disable-next-line @next/next/no-img-element -- URL firmada de Storage.
-          <img
-            src={cover}
+          <img src={cover} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <Image
+            src="/photos/aprender-hero-wide.webp"
             alt=""
-            className="bg-surface-sunken rounded-card aspect-[16/9] w-full shrink-0 object-cover sm:aspect-[4/5] sm:w-40"
+            width={1600}
+            height={500}
+            sizes="(min-width: 640px) 46vw, 0px"
+            priority
+            className="h-full w-full object-cover object-right-top"
           />
         )}
-        <div className="min-w-0 flex-1 space-y-4">
-          <div className="space-y-1">
-            {switcher ?? (
-              <p className="type-overline text-status-info-base m-0 uppercase">
-                {gate ? cohort.programName : starting ? t('startHere.title') : t('currentActivity')}
-              </p>
-            )}
-            <h2 id="actual-titulo" className="type-heading text-text m-0">
+        <div className="hero-cover-scrim absolute inset-0" />
+      </div>
+
+      <div className="relative max-w-[36rem] space-y-5 p-6 sm:p-10">
+        <div className="space-y-2">
+          {switcher ?? (
+            <p className="type-overline m-0 uppercase opacity-90">
               {gate
-                ? t(`gate.${gate.kind}.title`)
+                ? cohort.programName
+                : lockedNext
+                  ? t('nextComponent.overline')
+                  : starting
+                    ? t('startHere.title')
+                    : t('hero.resume')}
+            </p>
+          )}
+          <h2 id="actual-titulo" className="type-display m-0 text-balance">
+            {gate
+              ? t(`gate.${gate.kind}.title`)
+              : lockedNext
+                ? t('nextComponent.title', { module: lockedNext })
                 : resume
                   ? resume.title
                   : waiting
                     ? waiting.title
-                    : t('continue.title')}
-            </h2>
-            {!gate && <p className="type-body text-text-muted m-0">{cohort.programName}</p>}
-            {gate ? (
-              <p className="type-body text-text-muted max-w-reading m-0">
-                {t(`gate.${gate.kind}.body`, {
-                  date:
-                    'startsOn' in gate
-                      ? gate.startsOn
-                      : 'accessUntil' in gate
-                        ? gate.accessUntil
-                        : '',
-                })}
-              </p>
-            ) : starting && resume ? (
-              <p className="type-body text-text-muted max-w-reading m-0">
-                {t('startHere.body', { how: t(`startHere.how.${formOf(resume)}`) })}
-              </p>
-            ) : waiting ? (
-              <p className="type-body text-text-muted max-w-reading m-0">
-                {t('startHere.waiting', {
-                  title: waiting.title,
-                  reason:
-                    waiting.unavailableReason === 'CLOSED'
-                      ? t('startHere.closed')
-                      : waiting.unavailableReason === 'NOT_YET'
-                        ? t('startHere.notYet', {
-                            // `availableFrom` es la fecha de inicio de la cohorte (`@db.Date`,
-                            // medianoche UTC) cuando la asignación viene de abrirla, y un
-                            // instante cuando viene de «Actualizaciones del programa».
-                            date: format.dateTime(waiting.availableFrom, {
-                              dateStyle: 'long',
-                              ...(isDayOnly(waiting.availableFrom) ? { timeZone: 'UTC' } : {}),
-                            }),
-                          })
-                        : waiting.blockedBy
-                          ? t('startHere.blocked', { title: waiting.blockedBy })
-                          : t('startHere.unavailable'),
-                })}
-              </p>
-            ) : null}
-          </div>
-
+                    : routeDone
+                      ? t('routeDone.title')
+                      : t('continue.title')}
+          </h2>
           {!gate && resume && (
-            <p className="type-caption text-text-muted m-0 inline-flex items-center gap-2">
+            <p className="type-body m-0 flex items-start gap-2 opacity-90">
               {(() => {
                 const Icon = FORM_ICONS[formOf(resume)];
-                return <Icon aria-hidden className="size-4 shrink-0" />;
+                return <Icon aria-hidden className="mt-1 size-4 shrink-0" />;
               })()}
-              {itemMeta(resume, t)}
+              <span className="min-w-0">
+                {itemMeta(resume, t)}
+                {moduleName ? ` · ${moduleName}` : ''}
+              </span>
             </p>
           )}
-
-          {!gate && (
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-              <div className="min-w-[10rem] flex-1 space-y-1">
-                <div className="flex items-center gap-3">
-                  <ProgressBar
-                    percent={percent}
-                    label={t('progressLabel', { program: cohort.programName })}
-                    className="flex-1"
-                  />
-                  <span className="type-caption text-text tabular-nums">{percent} %</span>
-                </div>
-                <p className="type-caption text-text-muted m-0">
-                  {t('progress', { completed: progress.completed, total: progress.total })}
-                </p>
-              </div>
-              {resume && (
-                // E0 (23/9): la acción principal de /aprender se mide (mostrada / pulsada).
-                <PrimaryActionTracker
-                  screen="aprender"
-                  action={starting ? 'start' : 'resume'}
-                  assignmentId={resume.assignmentId}
-                  form={formOf(resume)}
-                  enrollmentId={row.enrollmentId}
-                >
-                  <Button asChild size="lg">
-                    <Link href={hrefFor(resume)}>
-                      {starting ? t('startLabel') : t('continueLabel')}
-                      <span className="sr-only"> {resume.title}</span>
-                      <ArrowRight aria-hidden className="size-4 shrink-0" />
-                    </Link>
-                  </Button>
-                </PrimaryActionTracker>
-              )}
-            </div>
-          )}
-
-          {(gate?.kind === 'ACCESS_EXPIRED' || gate?.kind === 'COMPLETED') && (
-            <Link
-              href="/aprender/resultados"
-              className="type-body text-text-link min-h-touch inline-flex items-center underline"
-            >
-              {t('goToResults')}
-            </Link>
-          )}
-          {row.partnerFunded && (
-            <p className="type-caption text-text-muted m-0">{t('partnerFunded')}</p>
-          )}
         </div>
+
+        {body && <p className="type-body max-w-reading m-0 opacity-90">{body}</p>}
+
+        {!gate && (
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+            {resume && (
+              // E0 (23/9): la acción principal de /aprender se mide (mostrada / pulsada).
+              <PrimaryActionTracker
+                screen="aprender"
+                action={starting ? 'start' : 'resume'}
+                assignmentId={resume.assignmentId}
+                form={formOf(resume)}
+                enrollmentId={row.enrollmentId}
+              >
+                <Button asChild size="lg" variant="secondary">
+                  <Link href={hrefFor(resume)}>
+                    {starting ? t('startLabel') : t('continueLabel')}
+                    <span className="sr-only"> {resume.title}</span>
+                    <ArrowRight aria-hidden className="size-4 shrink-0" />
+                  </Link>
+                </Button>
+              </PrimaryActionTracker>
+            )}
+            <div className="min-w-[12rem] flex-1 space-y-1.5">
+              <ProgressBar
+                percent={percent}
+                label={t('progressLabel', { program: cohort.programName })}
+                tone="on-accent"
+                grow
+              />
+              <p className="type-caption m-0 opacity-90">
+                {t('hero.progress', {
+                  percent,
+                  completed: progress.completed,
+                  total: progress.total,
+                  program: cohort.programName,
+                })}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {gate?.kind === 'COMPLETED' && catalogHref && (
+          <Button asChild size="lg" variant="secondary">
+            <a href={catalogHref}>
+              {t('completed.nextCourse')}
+              <ArrowRight aria-hidden className="size-4 shrink-0" />
+            </a>
+          </Button>
+        )}
+        {(gate?.kind === 'ACCESS_EXPIRED' || gate?.kind === 'COMPLETED' || routeDone) && (
+          <Link
+            href="/aprender/resultados"
+            className="type-body min-h-touch inline-flex items-center underline underline-offset-4"
+          >
+            {t('goToResults')}
+          </Link>
+        )}
+        {row.partnerFunded && <p className="type-caption m-0 opacity-90">{t('partnerFunded')}</p>}
       </div>
     </section>
-  );
-}
-
-/**
- * Una franja con tres cifras (27/9): lo que llevas, cuántas actividades, cuánto queda. Una
- * sola superficie y no tres tarjetas —el propio diseño pide evitar el «dashboarditis»—. Los
- * minutos que quedan son la suma de `estimatedMinutes` de lo no completado; si nada los
- * trae, la cifra no se inventa: se omite.
- */
-async function ProgressStrip({
-  outline,
-  programName,
-}: {
-  outline: CohortOutline;
-  programName: string;
-}) {
-  const t = await getTranslations('learn.strip');
-  const items = outline.modules.flatMap((m) => m.items);
-  const total = items.length;
-  const completed = items.filter((i) => i.status === 'COMPLETED').length;
-  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
-  const remaining = items
-    .filter((i) => i.status !== 'COMPLETED')
-    .reduce((sum, i) => sum + (i.estimatedMinutes ?? 0), 0);
-  if (total === 0) return null;
-
-  const cells: Array<{ value: string; label: string }> = [
-    { value: `${percent} %`, label: t('completed', { program: programName }) },
-    { value: `${completed} / ${total}`, label: t('activities') },
-    ...(remaining > 0 ? [{ value: `~${remaining} min`, label: t('remaining') }] : []),
-  ];
-
-  return (
-    <dl
-      aria-label={t('label')}
-      className="bg-surface-base rounded-card elevation-resting divide-border-muted m-0 grid grid-cols-3 divide-x p-2"
-    >
-      {cells.map((cell) => (
-        <div key={cell.label} className="px-4 py-3 text-center">
-          <dd className="type-heading text-text m-0 tabular-nums">{cell.value}</dd>
-          <dt className="type-caption text-text-muted m-0">{cell.label}</dt>
-        </div>
-      ))}
-    </dl>
   );
 }
 
@@ -599,11 +618,26 @@ async function ModuleBlock({
   /** El módulo por el que se va (E2, 23/9): el único que se abre; los demás, resumidos. */
   current: boolean;
 }) {
-  const t = await getTranslations('learn');
+  const [t, format] = await Promise.all([getTranslations('learn'), getFormatter()]);
   const { completed, total, minutes } = summarize(module.items);
   const first = module.items[0];
+  // Cerrado por el componente (3/10: operación no lo ha habilitado, o está fuera de sus
+  // fechas) o por secuencia (ningún ítem habilitado y el primero espera a otro tema).
+  const { access } = module;
+  const closed = access.state !== 'OPEN';
   const locked =
-    module.items.length > 0 && module.items.every((item) => !item.enabled) && first?.blockedBy;
+    closed ||
+    (module.items.length > 0 && module.items.every((item) => !item.enabled) && !!first?.blockedBy);
+  const lockedText =
+    access.state === 'LOCKED'
+      ? t('moduleAccess.LOCKED')
+      : access.state === 'NOT_YET'
+        ? t('moduleAccess.NOT_YET', { date: format.dateTime(access.from, { dateStyle: 'long' }) })
+        : access.state === 'CLOSED'
+          ? t('moduleAccess.CLOSED', { date: format.dateTime(access.until, { dateStyle: 'long' }) })
+          : first?.blockedBy
+            ? t('moduleLocked', { title: first.blockedBy })
+            : null;
   const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
 
   // Lo visible sin plegar: hasta el ítem actual (o el primero sin completar) y uno más.
@@ -616,16 +650,26 @@ async function ModuleBlock({
   const rest = module.items.slice(visibleUntil);
   const firstBlockedId = module.items.find((i) => !i.enabled)?.assignmentId ?? null;
 
+  // El taller (asignatura) como cabecera de grupo cuando cambia (3/10): «Lengua castellana»,
+  // y debajo sus temas y su cuestionario.
+  const workshop = (item: SequencedItem) => workshopStart(module.items, module.items.indexOf(item));
+
   const row = (item: SequencedItem, index: number, last: boolean) => (
     <li key={item.assignmentId} className="relative pl-9">
+      {workshop(item) && (
+        <p className="type-overline text-text-muted mb-2 mt-3 first:mt-0">{workshop(item)}</p>
+      )}
       {/* La línea entre puntos; el último no la lleva. */}
       {!last && (
         <span
           aria-hidden
-          className="bg-border-muted absolute left-[0.6875rem] top-8 h-[calc(100%-0.5rem)] w-0.5"
+          className={cn(
+            'bg-border-muted absolute left-[0.6875rem] w-0.5',
+            workshop(item) ? 'top-[3.875rem] h-[calc(100%-2.75rem)]' : 'top-8 h-[calc(100%-0.5rem)]'
+          )}
         />
       )}
-      <StatusDot item={item} isResume={item.assignmentId === resumeId} />
+      <StatusDot item={item} isResume={item.assignmentId === resumeId} offset={!!workshop(item)} />
       <ItemRow
         item={item}
         isResume={item.assignmentId === resumeId}
@@ -644,6 +688,18 @@ async function ModuleBlock({
       )}
     >
       <summary className="min-h-touch flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2">
+        {/* La portada del componente (3/10), decorativa; en gris cuando está bloqueado. */}
+        {module.coverUrl && (
+          // eslint-disable-next-line @next/next/no-img-element -- URL firmada de Storage.
+          <img
+            src={module.coverUrl}
+            alt=""
+            className={cn(
+              'bg-surface-sunken rounded-control size-12 shrink-0 object-cover',
+              locked && 'opacity-60 grayscale'
+            )}
+          />
+        )}
         <span className="min-w-0 flex-1">
           <span className="type-subheading text-text inline-flex items-center gap-2">
             {locked ? (
@@ -653,10 +709,10 @@ async function ModuleBlock({
             ) : null}
             {module.name}
           </span>
-          {total > 0 && (
+          {(total > 0 || closed) && (
             <span className="type-caption text-text-muted block">
-              {locked && first?.blockedBy
-                ? t('moduleLocked', { title: first.blockedBy })
+              {locked && lockedText
+                ? lockedText
                 : t('moduleSummary', { completed, total, minutes })}
             </span>
           )}
@@ -704,8 +760,20 @@ async function ModuleBlock({
 }
 
 /** El punto de la línea: uno por estado, y siempre con icono, no solo color. */
-function StatusDot({ item, isResume }: { item: SequencedItem; isResume: boolean }) {
-  const base = 'absolute left-0 top-3 inline-flex size-6 items-center justify-center rounded-full';
+function StatusDot({
+  item,
+  isResume,
+  offset = false,
+}: {
+  item: SequencedItem;
+  isResume: boolean;
+  /** Con cabecera de taller encima, el punto baja a la altura de la fila. */
+  offset?: boolean;
+}) {
+  const base = cn(
+    'absolute left-0 inline-flex size-6 items-center justify-center rounded-full',
+    offset ? 'top-[2.625rem]' : 'top-3'
+  );
   if (item.status === 'COMPLETED') {
     return (
       <span aria-hidden className={cn(base, 'bg-status-success-muted text-status-success-base')}>
@@ -758,7 +826,9 @@ async function ItemRow({
       ? t('blockedBy', { title: item.blockedBy })
       : item.unavailableReason === 'NOT_YET'
         ? t('notYet')
-        : t('closed');
+        : item.unavailableReason === 'LOCKED'
+          ? t('lockedModule')
+          : t('closed');
     return (
       <div className={cn('rounded-control flex items-start gap-3 px-3 py-2', nested && 'ml-4')}>
         <Icon aria-hidden className="text-text-subtle mt-0.5 size-5 shrink-0" />

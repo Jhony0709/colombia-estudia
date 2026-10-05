@@ -30,7 +30,7 @@ export const POST = apiHandler()(async () => {
 
   const { data, error } = await supabase.auth.mfa.enroll({
     factorType: 'totp',
-    friendlyName: 'Colombia Estudia',
+    friendlyName: 'ALBA Futuro Educativo',
   });
 
   if (error) {

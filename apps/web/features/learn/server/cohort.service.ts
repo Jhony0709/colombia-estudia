@@ -9,13 +9,15 @@
 import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
-import { createReadUrl } from '@/lib/media/storage';
+import { createReadUrls } from '@/lib/media/storage';
 import { bogotaDate } from '@colombia-estudia/domain';
 import {
   sequence,
+  moduleAccess,
   resumePoint,
   nextPoint,
   progressOf,
+  type ModuleAccess,
   type OutlineItem,
   type SequencedItem,
 } from './outline';
@@ -47,11 +49,13 @@ export interface OutlineModule {
   /** De qué va el componente (25/9); nulo si el equipo no lo escribió. */
   description: string | null;
   /**
-   * La imagen de la tarjeta del componente (27/9), firmada (10 min). Solo se firma para el
-   * componente por el que se va —el de «Actividad actual» en `/aprender`—; en los demás es
-   * nula para no pedir una URL a Storage por componente y por matrícula.
+   * La imagen de la tarjeta del componente (27/9), firmada (10 min). Desde el 3/10 se firman
+   * todas en una sola llamada a Storage (`createReadUrls`): la ruta enseña la portada de cada
+   * componente, en gris los bloqueados.
    */
   coverUrl: string | null;
+  /** Si el componente está abierto para esta matrícula (3/10): ver `moduleAccess`. */
+  access: ModuleAccess;
   items: SequencedItem[];
 }
 
@@ -222,7 +226,7 @@ export async function getCohortOutline({
   // cuentan en su avance. `openCohort` los asigna igual; la matrícula es la que decide.
   const fromModule = enrollment.startsAtModule ?? 1;
 
-  const [modules, lessonAssignments, assessmentAssignments] = await Promise.all([
+  const [modules, unlocks, lessonAssignments, assessmentAssignments] = await Promise.all([
     db.module.findMany({
       where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
       orderBy: { position: 'asc' },
@@ -233,6 +237,10 @@ export async function getCohortOutline({
         description: true,
         coverMedia: { select: { providerRef: true, status: true } },
       },
+    }),
+    db.enrollmentModule.findMany({
+      where: { enrollmentId: enrollment.id },
+      select: { moduleId: true, availableFrom: true, availableUntil: true },
     }),
     db.lessonAssignment.findMany({
       where: { cohortId: cohort.id },
@@ -247,6 +255,7 @@ export async function getCohortOutline({
             moduleId: true,
             position: true,
             requiresSubmission: true,
+            subject: { select: { id: true, name: true } },
           },
         },
         // Los minutos y si embebe vídeo: la forma del ítem en la ruta (misma regla que
@@ -270,7 +279,14 @@ export async function getCohortOutline({
         availableFrom: true,
         dueAt: true,
         assessment: {
-          select: { id: true, title: true, moduleId: true, lessonId: true, position: true },
+          select: {
+            id: true,
+            title: true,
+            moduleId: true,
+            lessonId: true,
+            position: true,
+            subject: { select: { id: true, name: true } },
+          },
         },
         assessmentVersion: { select: { timeLimitMinutes: true } },
         attempts: { where: { studentId: personId }, select: { status: true } },
@@ -287,6 +303,8 @@ export async function getCohortOutline({
         title: assignment.lesson.title,
         moduleId: assignment.lesson.moduleId,
         lessonId: assignment.lesson.id,
+        subjectId: assignment.lesson.subject.id,
+        subjectName: assignment.lesson.subject.name,
         position: assignment.lesson.position,
         status:
           progress?.status === 'COMPLETED'
@@ -317,6 +335,8 @@ export async function getCohortOutline({
           title: assignment.assessment.title,
           moduleId: assignment.assessment.moduleId,
           lessonId: assignment.assessment.lessonId,
+          subjectId: assignment.assessment.subject?.id ?? null,
+          subjectName: assignment.assessment.subject?.name ?? null,
           position: assignment.assessment.position,
           status: assessmentStatus(assignment.attempts),
           form: 'ASSESSMENT',
@@ -331,9 +351,25 @@ export async function getCohortOutline({
     }),
   ];
 
+  // Qué componente está habilitado para esta matrícula (3/10): el primero de su ruta, y los
+  // que operación haya abierto a mano.
+  const unlockOf = new Map(unlocks.map((row) => [row.moduleId, row]));
+  const accessOf = new Map(
+    modules.map((module, index) => [
+      module.id,
+      moduleAccess({
+        first: index === 0,
+        unlock: unlockOf.get(module.id) ?? null,
+        progression: cohortInfo.progression,
+        now,
+      }),
+    ])
+  );
+
   const byModule = modules.map((module) => ({
     id: module.id,
     items: items.filter((item) => item.moduleId === module.id),
+    access: accessOf.get(module.id) ?? { state: 'OPEN' as const },
   }));
 
   const sequenced = sequence({
@@ -344,25 +380,30 @@ export async function getCohortOutline({
 
   const all = [...sequenced.values()];
   const resume = resumePoint(all);
-  const currentModuleId = (resume ?? nextPoint(all))?.moduleId ?? null;
+
+  // Las portadas listas, firmadas de una vez.
+  const coverPaths = modules.flatMap((module) =>
+    module.coverMedia?.status === 'READY' ? [module.coverMedia.providerRef] : []
+  );
+  const signed = await createReadUrls(coverPaths);
+  const coverUrls = new Map(coverPaths.map((path, index) => [path, signed[index] ?? null]));
 
   return {
     gate: null,
     enrollmentId: enrollment.id,
     cohort: cohortInfo,
-    modules: await Promise.all(
-      modules.map(async (module) => ({
-        id: module.id,
-        name: module.name,
-        position: module.position,
-        description: module.description,
-        coverUrl:
-          module.id === currentModuleId && module.coverMedia?.status === 'READY'
-            ? await createReadUrl(module.coverMedia.providerRef, { asAttachment: false })
-            : null,
-        items: all.filter((item) => item.moduleId === module.id),
-      }))
-    ),
+    modules: modules.map((module) => ({
+      id: module.id,
+      name: module.name,
+      position: module.position,
+      description: module.description,
+      coverUrl:
+        module.coverMedia?.status === 'READY'
+          ? (coverUrls.get(module.coverMedia.providerRef) ?? null)
+          : null,
+      access: accessOf.get(module.id) ?? { state: 'OPEN' as const },
+      items: all.filter((item) => item.moduleId === module.id),
+    })),
     resume,
     upcoming: nextPoint(all),
     progress: progressOf(all),

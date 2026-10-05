@@ -30,8 +30,8 @@ import './globals.css';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Colombia Estudia',
-  description: 'Plataforma de educación',
+  title: 'ALBA Futuro Educativo',
+  description: 'Termina tu bachillerato a tu ritmo, 100 % en línea y con acompañamiento.',
 };
 
 /**

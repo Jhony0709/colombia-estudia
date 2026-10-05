@@ -22,6 +22,7 @@ import { APIError } from '@/lib/core/errors';
 import { createReadUrl } from '@/lib/media/storage';
 import { notifyMany, staffPersonIds } from '@/features/notifications/server/notifications.service';
 import { getCohortOutline } from './cohort.service';
+import { issueAfterProgress } from '@/features/certificates/server/certificates.service';
 import { promptsOf } from '@/features/content/server/lessons.service';
 
 export type SubmissionState = 'SUBMITTED' | 'RETURNED' | 'APPROVED';
@@ -354,6 +355,9 @@ export async function submitLesson({
 
     return row.id;
   });
+
+  // Aprobada al enviar: si era el último paso, la matrícula se cierra ya.
+  if (autoApprove) await issueAfterProgress({ institutionId, enrollmentId, now });
 
   // Aviso al equipo que revisa —solo si hay algo que revisar—. Mejor esfuerzo: la entrega ya
   // está guardada.

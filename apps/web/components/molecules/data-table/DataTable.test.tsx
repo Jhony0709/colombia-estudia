@@ -49,6 +49,29 @@ describe('DataTable', () => {
     );
   });
 
+  // 4/10: en el teléfono la tabla enseña lo que identifica la fila; el resto, desde `md`.
+  it('oculta en pantallas estrechas la columna marcada con hideBelow, cabecera y celdas', () => {
+    render(
+      <DataTable<Row>
+        caption="Personas"
+        rows={[{ id: '1', name: 'Ana' }]}
+        columns={[
+          ...columns,
+          { key: 'id', header: 'Código', hideBelow: 'md', cell: (row: Row) => row.id },
+        ]}
+        rowKey={(row) => row.id}
+        empty={<p>vacío</p>}
+      />
+    );
+
+    expect(screen.getByRole('columnheader', { name: 'Código' })).toHaveClass(
+      'hidden',
+      'md:table-cell'
+    );
+    expect(screen.getByRole('cell', { name: '1' })).toHaveClass('hidden', 'md:table-cell');
+    expect(screen.getByRole('columnheader', { name: 'Nombre' })).not.toHaveClass('hidden');
+  });
+
   it('renders the empty state instead of an empty grid', () => {
     render(
       <DataTable<Row>

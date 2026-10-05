@@ -16,6 +16,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { createReadUrl } from '@/lib/media/storage';
 import { notify } from '@/features/notifications/server/notifications.service';
+import { issueAfterProgress } from '@/features/certificates/server/certificates.service';
 import {
   answersOf,
   completeLessonBySubmission,
@@ -314,6 +315,11 @@ export async function reviewSubmission({
       },
     });
   });
+
+  // Aprobada: si era el último paso, la matrícula se cierra ya.
+  if (decision === 'APPROVED') {
+    await issueAfterProgress({ institutionId, enrollmentId: row.enrollmentId, now });
+  }
 
   try {
     await notify(institutionId, {

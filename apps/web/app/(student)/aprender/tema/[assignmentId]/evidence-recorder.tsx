@@ -38,6 +38,13 @@ interface Snapshot {
 /** Lo dispara `transcript-panel.tsx` al llegar al final de la transcripción. */
 const TRANSCRIPT_READ_EVENT = 'ce:transcript-read';
 
+/** Segundos visibles y scroll, para la cuenta atrás del pie (`reading-countdown.tsx`, 5/10). */
+export const READING_EVENT = 'ce:reading';
+export interface ReadingDetail {
+  seconds: number;
+  scrolledToEnd: boolean;
+}
+
 const FLUSH_MS = 20_000;
 const VIMEO_ORIGIN = 'https://player.vimeo.com';
 
@@ -45,10 +52,16 @@ export function EvidenceRecorder({
   assignmentId,
   form,
   initialStatus,
+  requiredSeconds = 0,
+  scrolledBefore = false,
 }: {
   assignmentId: string;
   form: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
   initialStatus: Status;
+  /** `requiredReadingSeconds` del tema: al cumplirse con el scroll hecho, se manda ya. */
+  requiredSeconds?: number;
+  /** El final ya se vio en otra visita: el servidor lo guardó y no hace falta volver a bajar. */
+  scrolledBefore?: boolean;
 }) {
   const t = useTranslations('learn.evidence');
   const router = useRouter();
@@ -70,7 +83,7 @@ export function EvidenceRecorder({
   useEffect(() => {
     if (done.current) return;
 
-    const flush = async (keepalive = false) => {
+    const flush = async (keepalive = false, force = false) => {
       const s = snap.current;
       const last = sent.current;
       const changed =
@@ -78,7 +91,7 @@ export function EvidenceRecorder({
         s.scrolledToEnd !== last.scrolledToEnd ||
         s.transcriptReadToEnd !== last.transcriptReadToEnd ||
         s.videoPositionSeconds - last.videoPositionSeconds >= 5;
-      if (!changed || inflight.current || done.current) return;
+      if ((!changed && !force) || inflight.current || done.current) return;
 
       inflight.current = true;
       const body: Record<string, unknown> = { secondsOnLesson: s.secondsOnLesson };
@@ -114,9 +127,24 @@ export function EvidenceRecorder({
       }
     };
 
+    const emit = () =>
+      window.dispatchEvent(
+        new CustomEvent<ReadingDetail>(READING_EVENT, {
+          detail: {
+            seconds: snap.current.secondsOnLesson,
+            scrolledToEnd: snap.current.scrolledToEnd,
+          },
+        })
+      );
+
     // Reloj de segundos visibles.
     const tick = window.setInterval(() => {
-      if (document.visibilityState === 'visible') snap.current.secondsOnLesson += 1;
+      if (document.visibilityState !== 'visible') return;
+      snap.current.secondsOnLesson += 1;
+      emit();
+      // Cumplido el tiempo con el final ya visto, no se esperan los 20 s del envío periódico.
+      const scrolled = snap.current.scrolledToEnd || scrolledBefore;
+      if (scrolled && snap.current.secondsOnLesson === requiredSeconds) void flush(false, true);
     }, 1000);
 
     // Envío periódico.
@@ -135,6 +163,7 @@ export function EvidenceRecorder({
         (entries) => {
           if (entries.some((e) => e.isIntersecting) && !snap.current.scrolledToEnd) {
             snap.current.scrolledToEnd = true;
+            emit();
             void flush();
           }
         },
@@ -230,7 +259,7 @@ export function EvidenceRecorder({
       document.removeEventListener('visibilitychange', onHide);
       void flush(true);
     };
-    // `assignmentId` y `form` no cambian sin desmontar la página.
+    // `assignmentId`, `form`, `requiredSeconds` y `scrolledBefore` no cambian sin desmontar la página.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignmentId, form]);
 

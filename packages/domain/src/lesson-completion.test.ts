@@ -3,7 +3,11 @@
  * SSOT: reference/04-business-logic/contenido-y-evaluaciones.md:145-150
  */
 
-import { isLessonCompleted, type IsLessonCompletedInput } from './lesson-completion';
+import {
+  isLessonCompleted,
+  requiredReadingSeconds,
+  type IsLessonCompletedInput,
+} from './lesson-completion';
 
 // ─────────────────────────── Test Helpers ───────────────────────────
 
@@ -171,24 +175,37 @@ describe('isLessonCompleted - MARKDOWN', () => {
     expect(result).toBe(true);
   });
 
-  it('AMBIGUO: estimatedMinutes null → required = 120s', () => {
-    const result = isLessonCompleted(
-      createInput({
-        form: 'MARKDOWN',
-        evidence: { scrolledToEnd: true, secondsOnLesson: 120 },
-        estimatedMinutes: null,
-      })
-    );
-    expect(result).toBe(true);
+  it('estimatedMinutes null or 0 → no wait, only the scroll (5/10)', () => {
+    for (const estimatedMinutes of [null, 0]) {
+      expect(
+        isLessonCompleted(
+          createInput({
+            form: 'MARKDOWN',
+            evidence: { scrolledToEnd: true, secondsOnLesson: 0 },
+            estimatedMinutes,
+          })
+        )
+      ).toBe(true);
+      expect(
+        isLessonCompleted(
+          createInput({
+            form: 'MARKDOWN',
+            evidence: { scrolledToEnd: false, secondsOnLesson: 300 },
+            estimatedMinutes,
+          })
+        )
+      ).toBe(false);
+    }
+  });
+});
 
-    const result2 = isLessonCompleted(
-      createInput({
-        form: 'MARKDOWN',
-        evidence: { scrolledToEnd: true, secondsOnLesson: 119 },
-        estimatedMinutes: null,
-      })
-    );
-    expect(result2).toBe(false);
+describe('requiredReadingSeconds', () => {
+  it('half the estimate, capped at 2 min; nothing without minutes', () => {
+    expect(requiredReadingSeconds(1)).toBe(30);
+    expect(requiredReadingSeconds(3)).toBe(90);
+    expect(requiredReadingSeconds(10)).toBe(120);
+    expect(requiredReadingSeconds(0)).toBe(0);
+    expect(requiredReadingSeconds(null)).toBe(0);
   });
 });
 

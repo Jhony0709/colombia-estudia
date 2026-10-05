@@ -15,6 +15,7 @@ import { getTranslations, getFormatter } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
 import { getEnrollmentDetail } from '@/features/cohorts/server/enrollment-detail.service';
+import { listModuleAccess } from '@/features/cohorts/server/module-access.service';
 import {
   getAccommodation,
   listAccommodationHistory,
@@ -26,6 +27,7 @@ import { EmptyState } from '@/components/molecules/empty-state';
 import { Badge } from '@/components/atoms/badge';
 import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 import { ProgressOverride } from './progress-override';
+import { ModuleAccess } from './module-access';
 import { AccommodationForm } from './accommodation-form';
 import { RevokeCertificate } from './revoke-certificate';
 import { listCertificatesForEnrollment } from '@/features/certificates/server/certificates.service';
@@ -39,7 +41,12 @@ export default async function EnrollmentDetailPage({
 }) {
   const ctx = await getRequestContext();
   const can = (
-    c: 'cohort.manage' | 'accommodation.manage' | 'progress.override' | 'institution.manage'
+    c:
+      | 'cohort.manage'
+      | 'accommodation.manage'
+      | 'progress.override'
+      | 'institution.manage'
+      | 'billing.manage'
   ) => (ctx.capabilities.get(c)?.length ?? 0) > 0;
   if (!can('cohort.manage') && !can('accommodation.manage')) redirect(HOME_AFTER_LOGIN);
 
@@ -56,6 +63,7 @@ export default async function EnrollmentDetailPage({
   ]);
   if (!detail) notFound();
 
+  const moduleAccess = await listModuleAccess({ institutionId, enrollmentId });
   const inclusion = can('accommodation.manage');
   const [accommodation, history] = inclusion
     ? await Promise.all([
@@ -102,12 +110,24 @@ export default async function EnrollmentDetailPage({
         }
         action={
           can('cohort.manage') ? (
-            <Link
-              href={`/personas/${detail.student.code}`}
-              className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
-            >
-              {t('personLink')}
-            </Link>
+            // Los dos saltos de una matrícula (4/10): a la persona y a su cartera. La cartera era
+            // una sección entera con un solo enlace al final de la página.
+            <div className="flex flex-wrap items-center gap-x-4">
+              <Link
+                href={`/personas/${detail.student.code}`}
+                className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
+              >
+                {t('personLink')}
+              </Link>
+              {can('billing.manage') && (
+                <Link
+                  href={`/cartera/${detail.id}`}
+                  className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
+                >
+                  {t('billingLink')}
+                </Link>
+              )}
+            </div>
           ) : undefined
         }
       />
@@ -116,6 +136,22 @@ export default async function EnrollmentDetailPage({
         <p className="type-body text-text-muted">
           {t('withdrawn', { reason: detail.withdrawReason })}
         </p>
+      )}
+
+      {/* Los componentes y su habilitación (3/10): un clic para abrir el siguiente. */}
+      {moduleAccess.applies && moduleAccess.modules.length > 0 && (
+        <PageSection
+          title={t('modules.title')}
+          description={t('modules.hint')}
+          id="componentes"
+          card
+        >
+          <ModuleAccess
+            enrollmentId={detail.id}
+            modules={moduleAccess.modules}
+            canManage={can('cohort.manage') && detail.status === 'ACTIVE'}
+          />
+        </PageSection>
       )}
 
       <PageSection
@@ -338,19 +374,6 @@ export default async function EnrollmentDetailPage({
           </ul>
         )}
       </PageSection>
-
-      {can('cohort.manage') && (
-        <PageSection title={t('billingTitle')} id="cartera">
-          <p className="type-body">
-            <Link
-              href={`/cartera/${detail.id}`}
-              className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
-            >
-              {t('billingLink')}
-            </Link>
-          </p>
-        </PageSection>
-      )}
     </Page>
   );
 }

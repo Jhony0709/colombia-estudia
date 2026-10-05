@@ -105,6 +105,24 @@ export async function createReadUrl(
   return data.signedUrl;
 }
 
+/**
+ * Varias URLs de lectura en una sola llamada (3/10): las portadas de todos los componentes
+ * de una ruta. Devuelve `null` donde Storage no pudo firmar, en el mismo orden.
+ */
+export async function createReadUrls(paths: string[]): Promise<Array<string | null>> {
+  if (paths.length === 0) return [];
+  const { data, error } = await admin()
+    .storage.from(MEDIA_BUCKET)
+    .createSignedUrls(paths, READ_URL_SECONDS);
+
+  if (error || !data) {
+    throw new Error(`No se pudo crear las URL de lectura: ${error?.message ?? 'sin datos'}`);
+  }
+
+  const byPath = new Map(data.map((row) => [row.path, row.signedUrl]));
+  return paths.map((path) => byPath.get(path) ?? null);
+}
+
 export interface ObjectHead {
   bytes: Uint8Array;
   sizeBytes: number | null;

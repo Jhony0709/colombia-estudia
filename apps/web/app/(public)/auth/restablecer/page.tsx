@@ -68,7 +68,7 @@ export default function RestablecerPage() {
   if (success) {
     return (
       <section className="space-y-6">
-        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+        <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
           {t('reset')}
         </h1>
         <Alert severity="success">{t('resetSuccess')}</Alert>
@@ -79,7 +79,7 @@ export default function RestablecerPage() {
 
   return (
     <section className="space-y-6">
-      <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+      <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
         {t('reset')}
       </h1>
 

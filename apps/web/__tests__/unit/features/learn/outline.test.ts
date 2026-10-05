@@ -8,11 +8,14 @@
 
 import {
   sequence,
+  moduleAccess,
   sortItems,
   resumePoint,
   nextPoint,
   progressOf,
   neighbours,
+  workshopStart,
+  type ModuleAccess,
   type OutlineItem,
 } from '@/features/learn/server/outline';
 
@@ -32,7 +35,7 @@ const item = (
   ...over,
 });
 
-const lineal = (modules: Array<{ id: string; items: OutlineItem[] }>) =>
+const lineal = (modules: Array<{ id: string; items: OutlineItem[]; access?: ModuleAccess }>) =>
   sequence({ modules, progression: 'LINEAR', now: NOW });
 
 describe('sortItems', () => {
@@ -61,6 +64,59 @@ describe('sortItems', () => {
     ];
 
     expect(sortItems(mezcla).map((i) => i.assignmentId)).toEqual(['t1', 'e1', 't2', 'e-fin']);
+  });
+
+  // 3/10 (cliente): el componente se recorre taller a taller, con el cuestionario del taller
+  // después de sus temas y antes del siguiente taller.
+  it('agrupa por taller: temas de Lengua, su cuestionario, temas de Matemáticas, el suyo', () => {
+    const lengua = { subjectId: 's-lengua', subjectName: 'Lengua castellana' };
+    const mates = { subjectId: 's-mates', subjectName: 'Matemáticas' };
+    const items = [
+      item({
+        assignmentId: 'q-mates',
+        title: 'Cuestionario mates',
+        kind: 'ASSESSMENT',
+        position: 2,
+        ...mates,
+      }),
+      item({
+        assignmentId: 'q-lengua',
+        title: 'Cuestionario lengua',
+        kind: 'ASSESSMENT',
+        position: 1,
+        ...lengua,
+      }),
+      item({ assignmentId: 'm1', title: 'Naturales', position: 3, lessonId: 'lm1', ...mates }),
+      item({ assignmentId: 'l2', title: 'Organizadores', position: 2, lessonId: 'll2', ...lengua }),
+      item({ assignmentId: 'l1', title: 'Comunicación', position: 1, lessonId: 'll1', ...lengua }),
+      item({
+        assignmentId: 'q-comp',
+        title: 'Final del componente',
+        kind: 'ASSESSMENT',
+        position: 3,
+      }),
+    ];
+
+    expect(sortItems(items).map((i) => i.assignmentId)).toEqual([
+      'l1',
+      'l2',
+      'q-lengua',
+      'm1',
+      'q-mates',
+      'q-comp',
+    ]);
+  });
+
+  it('el orden de los talleres es el de su primer tema, aunque los temas estén entreverados', () => {
+    const a = { subjectId: 'a', subjectName: 'A' };
+    const b = { subjectId: 'b', subjectName: 'B' };
+    const items = [
+      item({ assignmentId: 'b1', title: 'B1', position: 1, lessonId: 'b1', ...b }),
+      item({ assignmentId: 'a1', title: 'A1', position: 2, lessonId: 'a1', ...a }),
+      item({ assignmentId: 'b2', title: 'B2', position: 3, lessonId: 'b2', ...b }),
+    ];
+
+    expect(sortItems(items).map((i) => i.assignmentId)).toEqual(['b1', 'b2', 'a1']);
   });
 
   it('un examen cuyo tema no está en la ruta cae al final del módulo', () => {
@@ -210,6 +266,93 @@ describe('ventanas de fecha', () => {
   });
 });
 
+describe('moduleAccess (3/10: el componente se habilita a mano)', () => {
+  it('el primero de la ruta está abierto sin habilitación; el siguiente, bloqueado', () => {
+    expect(moduleAccess({ first: true, unlock: null, progression: 'LINEAR', now: NOW })).toEqual({
+      state: 'OPEN',
+    });
+    expect(moduleAccess({ first: false, unlock: null, progression: 'LINEAR', now: NOW })).toEqual({
+      state: 'LOCKED',
+    });
+  });
+
+  it('habilitado sin fechas: abierto', () => {
+    const unlock = { availableFrom: null, availableUntil: null };
+    expect(moduleAccess({ first: false, unlock, progression: 'LINEAR', now: NOW }).state).toBe(
+      'OPEN'
+    );
+  });
+
+  it('habilitado con ventana: programado antes, cerrado después', () => {
+    expect(
+      moduleAccess({
+        first: false,
+        unlock: { availableFrom: MANANA, availableUntil: null },
+        progression: 'LINEAR',
+        now: NOW,
+      })
+    ).toEqual({ state: 'NOT_YET', from: MANANA });
+    expect(
+      moduleAccess({
+        first: false,
+        unlock: { availableFrom: null, availableUntil: AYER },
+        progression: 'LINEAR',
+        now: NOW,
+      })
+    ).toEqual({ state: 'CLOSED', until: AYER });
+  });
+
+  it('en FREE todo está abierto, haya o no habilitación', () => {
+    expect(moduleAccess({ first: false, unlock: null, progression: 'FREE', now: NOW }).state).toBe(
+      'OPEN'
+    );
+  });
+});
+
+describe('sequence con componente bloqueado', () => {
+  const modules = [
+    {
+      id: 'm1',
+      items: [item({ assignmentId: 'a1', title: 'Tema 1', status: 'COMPLETED' })],
+      access: { state: 'OPEN' as const },
+    },
+    {
+      id: 'm2',
+      items: [item({ assignmentId: 'b1', title: 'Tema 2', moduleId: 'm2' })],
+      access: { state: 'LOCKED' as const },
+    },
+  ];
+
+  it('con el primero completo, el tema del componente bloqueado sigue cerrado y dice por qué', () => {
+    const result = lineal(modules);
+    expect(result.get('b1')?.enabled).toBe(false);
+    expect(result.get('b1')?.blockedBy).toBeNull();
+    expect(result.get('b1')?.unavailableReason).toBe('LOCKED');
+  });
+
+  it('el motivo del componente manda sobre la secuencia', () => {
+    const result = lineal([
+      { ...modules[0]!, items: [item({ assignmentId: 'a1', title: 'Tema 1' })] },
+      modules[1]!,
+    ]);
+    expect(result.get('b1')?.blockedBy).toBeNull();
+    expect(result.get('b1')?.unavailableReason).toBe('LOCKED');
+  });
+
+  it('la ventana del componente se dice como la de un tema', () => {
+    const result = lineal([
+      modules[0]!,
+      { ...modules[1]!, access: { state: 'NOT_YET' as const, from: MANANA } },
+    ]);
+    expect(result.get('b1')?.unavailableReason).toBe('NOT_YET');
+  });
+
+  it('sin `access` el componente cuenta como abierto (builder y tests anteriores)', () => {
+    const result = lineal([modules[0]!, { id: 'm2', items: modules[1]!.items }]);
+    expect(result.get('b1')?.enabled).toBe(true);
+  });
+});
+
 describe('resumePoint', () => {
   const build = (items: OutlineItem[]) => [...lineal([{ id: 'm1', items }]).values()];
 
@@ -327,5 +470,24 @@ describe('nextPoint', () => {
   it('con todo completado no hay nada por delante', () => {
     const items = build([item({ assignmentId: 'z', title: 'Z', status: 'COMPLETED' })]);
     expect(nextPoint(items)).toBeNull();
+  });
+});
+
+describe('workshopStart', () => {
+  const lengua = { subjectId: 's1', subjectName: 'Lengua castellana' };
+  const items = [
+    item({ assignmentId: '1', title: 'T1', ...lengua }),
+    item({ assignmentId: '2', title: 'T2', ...lengua }),
+    item({ assignmentId: '3', title: 'M1', subjectId: 's2', subjectName: 'Matemáticas' }),
+    item({ assignmentId: '4', title: 'Final', kind: 'ASSESSMENT' }),
+  ];
+
+  it('dice el taller solo donde empieza, y nada donde no hay taller', () => {
+    expect(items.map((_, i) => workshopStart(items, i))).toEqual([
+      'Lengua castellana',
+      null,
+      'Matemáticas',
+      null,
+    ]);
   });
 });

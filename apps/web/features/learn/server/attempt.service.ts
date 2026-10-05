@@ -37,13 +37,15 @@ import {
 } from '@colombia-estudia/domain';
 import { renderInlineHtml } from '@colombia-estudia/types';
 import { createTenantClient } from '@/lib/db/tenant';
+import { issueAfterProgress } from '@/features/certificates/server/certificates.service';
 import { APIError } from '@/lib/core/errors';
 import type { JsonObject } from '@/lib/db/prisma';
 import { notify } from '@/features/notifications/server/notifications.service';
 import { getCohortOutline, listMyEnrollments, type OutlineModule } from './cohort.service';
 import type { LessonGate } from './lesson.service';
 
-export type ReviewPolicy = 'NONE' | 'SCORE_ONLY' | 'FULL_AFTER_GRADED' | 'FULL_AFTER_DUE';
+export type ReviewPolicy =
+  'NONE' | 'SCORE_ONLY' | 'FULL_AFTER_GRADED' | 'FULL_AFTER_DUE' | 'FULL_AFTER_LAST_ATTEMPT';
 export type AttemptStatus = 'IN_PROGRESS' | 'SUBMITTED' | 'EXPIRED' | 'GRADED';
 
 /** Una respuesta guardada: lo que el estudiante marcó y cuándo. */
@@ -183,17 +185,24 @@ function parseContent(raw: unknown): AssessmentContent {
  *
  * `FULL_AFTER_DUE` sin `dueAt` no tiene un «después» que esperar: se trata como
  * `FULL_AFTER_GRADED`. Está anotado en PRODUCT_DECISIONS (19/9).
+ *
+ * `FULL_AFTER_LAST_ATTEMPT` (3/10, cliente): la nota siempre; cada pregunta con su respuesta
+ * correcta solo cuando el examen ya no se puede volver a presentar —se agotaron los intentos
+ * o aprobó—. Mientras queden intentos, enseñar las respuestas sería regalar el siguiente.
  */
 function reviewLevel({
   policy,
   status,
   dueAt,
   now,
+  exhausted,
 }: {
   policy: ReviewPolicy;
   status: AttemptStatus;
   dueAt: Date | null;
   now: Date;
+  /** Sin intentos por delante: se usaron todos o alguno aprobó. */
+  exhausted: boolean;
 }): 'NONE' | 'SCORE' | 'FULL' {
   if (status !== 'GRADED') return 'NONE';
   switch (policy) {
@@ -205,7 +214,30 @@ function reviewLevel({
       return 'FULL';
     case 'FULL_AFTER_DUE':
       return dueAt === null || dueAt <= now ? 'FULL' : 'SCORE';
+    case 'FULL_AFTER_LAST_ATTEMPT':
+      return exhausted ? 'FULL' : 'SCORE';
   }
+}
+
+/**
+ * Si ya no hay más intentos que jugar: se usaron todos los permitidos, o alguno aprobó. Los
+ * `IN_PROGRESS` cuentan como usados (el cupo ya está gastado aunque no se haya entregado).
+ */
+export function attemptsExhausted({
+  attempts,
+  attemptsAllowed,
+  passPercent,
+}: {
+  attempts: Array<{
+    status: string;
+    score: { toNumber(): number } | null;
+    maxScore: { toNumber(): number } | null;
+  }>;
+  attemptsAllowed: number;
+  passPercent: number | null;
+}): boolean {
+  if (attempts.length >= attemptsAllowed) return true;
+  return attempts.some((a) => a.status === 'GRADED' && scoreView(a, passPercent)?.passed === true);
 }
 
 function scoreView(
@@ -380,6 +412,9 @@ async function gradeAndClose({
     href: `/aprender/examen/${attempt.assessmentAssignmentId}/intento/${attempt.id}`,
     dedupeKey: `attempt_graded:${attempt.id}`,
   });
+
+  // Si era el último paso, la matrícula se cierra ya y no al pasar el job.
+  await issueAfterProgress({ institutionId, enrollmentId: attempt.enrollmentId, now });
 }
 
 /**
@@ -471,7 +506,9 @@ async function resolveAssessment({
         ? { kind: 'BLOCKED', blockedBy: item.blockedBy }
         : item.unavailableReason === 'NOT_YET'
           ? { kind: 'NOT_YET' }
-          : { kind: 'CLOSED' }
+          : item.unavailableReason === 'LOCKED'
+            ? { kind: 'LOCKED' }
+            : { kind: 'CLOSED' }
     );
   }
 
@@ -614,8 +651,17 @@ async function resolveAssessment({
       startedAt: a.startedAt.toISOString(),
       submittedAt: a.submittedAt ? a.submittedAt.toISOString() : null,
       score:
-        reviewLevel({ policy, status: a.status as AttemptStatus, dueAt: assignment.dueAt, now }) ===
-        'NONE'
+        reviewLevel({
+          policy,
+          status: a.status as AttemptStatus,
+          dueAt: assignment.dueAt,
+          now,
+          exhausted: attemptsExhausted({
+            attempts,
+            attemptsAllowed,
+            passPercent: version.passPercent,
+          }),
+        }) === 'NONE'
           ? null
           : scoreView(a, version.passPercent),
     })),
@@ -784,13 +830,37 @@ const ATTEMPT_SELECT = {
       passPercent: true,
       reviewPolicy: true,
       timeLimitMinutes: true,
+      maxAttempts: true,
       assessment: {
-        select: { title: true, language: true, module: { select: { closingText: true } } },
+        select: {
+          title: true,
+          language: true,
+          closingText: true,
+          module: { select: { closingText: true } },
+        },
       },
     },
   },
-  assignment: { select: { dueAt: true } },
 } as const;
+
+/**
+ * El intento con los hermanos del mismo estudiante en la misma asignación:
+ * `FULL_AFTER_LAST_ATTEMPT` necesita saber si quedan (3/10).
+ */
+function attemptSelect(personId: string) {
+  return {
+    ...ATTEMPT_SELECT,
+    assignment: {
+      select: {
+        dueAt: true,
+        attempts: {
+          where: { studentId: personId },
+          select: { status: true, score: true, maxScore: true },
+        },
+      },
+    },
+  } as const;
+}
 
 /** El intento, del estudiante que pregunta, ya cerrado por plazo si tocaba. */
 async function loadOwnAttempt({
@@ -808,13 +878,13 @@ async function loadOwnAttempt({
   // `studentId` en el `where`: un intento ajeno no existe para quien pregunta.
   let row = await db.attempt.findFirst({
     where: { id: attemptId, studentId: personId },
-    select: ATTEMPT_SELECT,
+    select: attemptSelect(personId),
   });
   if (!row) throw new APIError('Not found', 'NOT_FOUND');
   if (await expireIfDue({ institutionId, attempt: row, now })) {
     row = await db.attempt.findFirst({
       where: { id: attemptId, studentId: personId },
-      select: ATTEMPT_SELECT,
+      select: attemptSelect(personId),
     });
     if (!row) throw new APIError('Not found', 'NOT_FOUND');
   }
@@ -916,7 +986,19 @@ export async function getAttemptForStudent({
   const content = parseContent(row.assessmentVersion.content);
   const policy = row.assessmentVersion.reviewPolicy as ReviewPolicy;
   const status = row.status as AttemptStatus;
-  const review = reviewLevel({ policy, status, dueAt: row.assignment.dueAt, now });
+  const accommodation = row.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
+  const review = reviewLevel({
+    policy,
+    status,
+    dueAt: row.assignment.dueAt,
+    now,
+    exhausted: attemptsExhausted({
+      attempts: row.assignment.attempts,
+      attemptsAllowed:
+        row.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
+      passPercent: row.assessmentVersion.passPercent,
+    }),
+  });
   const stored = parseAnswers(row.answers);
 
   return {
@@ -928,7 +1010,11 @@ export async function getAttemptForStudent({
     language: row.assessmentVersion.assessment.language,
     instructions: content.instructions ?? null,
     instructionsHtml: content.instructions ? renderInlineHtml(content.instructions) : null,
-    closingText: row.assessmentVersion.assessment.module?.closingText ?? null,
+    // El cierre del taller (3/10) manda; si no hay, el del componente; si no, el general.
+    closingText:
+      row.assessmentVersion.assessment.closingText ??
+      row.assessmentVersion.assessment.module?.closingText ??
+      null,
     timed:
       row.assessmentVersion.timeLimitMinutes !== null &&
       !(row.appliedAccommodation as { exemptFromTimer?: boolean } | null)?.exemptFromTimer,
@@ -982,11 +1068,13 @@ export interface ResultsForStudent {
     enabled: boolean;
     blockedBy: string | null;
     /** Por qué no está disponible cuando no es por secuencia (E3, 23/9). */
-    unavailableReason: 'NOT_YET' | 'CLOSED' | null;
+    unavailableReason: 'NOT_YET' | 'CLOSED' | 'LOCKED' | null;
     dueAt: string | null;
     best: { percent: number; passed: boolean } | null;
     /** Intentos con nota visible (E3): para decir «se conserva tu mejor intento de N». */
     visibleAttempts: number;
+    /** El umbral de la versión asignada (4/10), para pintar la nota contra él. Nulo = sin umbral. */
+    passPercent: number | null;
   }>;
   /** Intentos, del más reciente al más antiguo, con lo que la política deja ver. */
   attempts: Array<{
@@ -1040,6 +1128,7 @@ export async function getResultsForStudent({
         score: true,
         maxScore: true,
         assessmentAssignmentId: true,
+        appliedAccommodation: true,
         assignment: {
           select: {
             dueAt: true,
@@ -1047,7 +1136,9 @@ export async function getResultsForStudent({
             assessment: { select: { title: true, module: { select: { name: true } } } },
           },
         },
-        assessmentVersion: { select: { passPercent: true, reviewPolicy: true } },
+        assessmentVersion: {
+          select: { passPercent: true, reviewPolicy: true, maxAttempts: true },
+        },
       },
     }),
   ]);
@@ -1056,9 +1147,23 @@ export async function getResultsForStudent({
   // «en curso» un intento cuyo plazo pasó hace días.
   for (const a of attempts) await expireIfDue({ institutionId, attempt: a, now });
 
+  // Hermanos por asignación: `FULL_AFTER_LAST_ATTEMPT` mira si al estudiante le quedan intentos.
+  const siblings = new Map<string, typeof attempts>();
+  for (const a of attempts) {
+    const list = siblings.get(a.assessmentAssignmentId) ?? [];
+    list.push(a);
+    siblings.set(a.assessmentAssignmentId, list);
+  }
+
   const attemptRows = attempts.map((a) => {
     const status = a.status as AttemptStatus;
     const policy = a.assessmentVersion.reviewPolicy as ReviewPolicy;
+    const accommodation = a.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
+    const exhausted = attemptsExhausted({
+      attempts: siblings.get(a.assessmentAssignmentId) ?? [],
+      attemptsAllowed: a.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
+      passPercent: a.assessmentVersion.passPercent,
+    });
     return {
       id: a.id,
       assignmentId: a.assessmentAssignmentId,
@@ -1069,7 +1174,7 @@ export async function getResultsForStudent({
       status,
       submittedAt: a.submittedAt ? a.submittedAt.toISOString() : null,
       score:
-        reviewLevel({ policy, status, dueAt: a.assignment.dueAt, now }) === 'NONE'
+        reviewLevel({ policy, status, dueAt: a.assignment.dueAt, now, exhausted }) === 'NONE'
           ? null
           : scoreView(a, a.assessmentVersion.passPercent),
     };
@@ -1084,6 +1189,24 @@ export async function getResultsForStudent({
         getCohortOutline({ institutionId, personId, enrollmentId: row.enrollmentId, now })
       )
   );
+  // El umbral de cada examen asignado (4/10): la ruta no lo trae y el gráfico de bala lo pinta.
+  const thresholds = new Map(
+    (
+      await createTenantClient(institutionId).assessmentAssignment.findMany({
+        where: {
+          id: {
+            in: outlines.flatMap((o) =>
+              o.modules.flatMap((m) =>
+                m.items.filter((i) => i.kind === 'ASSESSMENT').map((i) => i.assignmentId)
+              )
+            ),
+          },
+        },
+        select: { id: true, assessmentVersion: { select: { passPercent: true } } },
+      })
+    ).map((row) => [row.id, row.assessmentVersion.passPercent])
+  );
+
   const assessmentRows: ResultsForStudent['assessments'] = outlines.flatMap((outline) =>
     outline.modules.flatMap((module) =>
       module.items
@@ -1112,6 +1235,7 @@ export async function getResultsForStudent({
             dueAt: item.dueAt ? item.dueAt.toISOString() : null,
             best,
             visibleAttempts: visible.length,
+            passPercent: thresholds.get(item.assignmentId) ?? null,
           };
         })
     )

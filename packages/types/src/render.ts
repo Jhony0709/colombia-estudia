@@ -49,7 +49,21 @@ export interface RenderAsset {
 export interface RenderOptions {
   /** Idioma del contenedor, del `Lesson.language`. */
   language?: string;
+  /**
+   * El título del tema (4/10): si el primer bloque lo repite —un título o una línea en
+   * negrita, como traen los documentos importados—, se quita; el `h1` de la página ya lo dice.
+   */
+  title?: string;
 }
+
+/** Una sección del tema (`##`) para el índice «En este tema»: `id` es el del HTML final. */
+export interface LessonOutlineItem {
+  id: string;
+  text: string;
+}
+
+/** El prefijo que `rehype-sanitize` pone a todo `id` (su `clobberPrefix` por defecto). */
+const ID_PREFIX = 'user-content-';
 
 interface DirectiveNode extends Node {
   type: 'leafDirective' | 'textDirective' | 'containerDirective';
@@ -192,6 +206,124 @@ function directivesToHtml(assets: Map<string, RenderAsset>) {
   };
 }
 
+/** El texto de un nodo mdast o hast, sin marcas. */
+function plainText(node: Node): string {
+  const value = (node as { value?: unknown }).value;
+  if (typeof value === 'string') return value;
+  const children = (node as Partial<Parent>).children;
+  return children ? children.map(plainText).join('') : '';
+}
+
+// «Taller 1.», «Actividad práctica 2.»: el prefijo de numeración que el título lleva y el
+// primer bloque del documento importado no.
+const TITLE_PREFIX =
+  /^(?:taller|actividad(?:\s+pr[aá]ctica)?|tema|lecci[oó]n|unidad|m[oó]dulo)\s*\d+\s*[.:)\-–]\s*/iu;
+
+const comparable = (value: string) =>
+  value
+    .toLocaleLowerCase('es')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+
+/** ¿Repite este texto el título del tema, con o sin su numeración y sin mirar mayúsculas? */
+export function repeatsTitle(text: string, title: string): boolean {
+  const block = comparable(text);
+  if (block === '') return false;
+  return block === comparable(title) || block === comparable(title.replace(TITLE_PREFIX, ''));
+}
+
+/** Quita el primer bloque si es un título o una línea en negrita que repite el del tema. */
+function dropLeadingTitle(title: string | undefined) {
+  return () => (tree: Root) => {
+    const first = tree.children[0];
+    if (!title || !first) return;
+    const titleLike =
+      first.type === 'heading' ||
+      (first.type === 'paragraph' &&
+        first.children.length === 1 &&
+        first.children[0]?.type === 'strong');
+    if (titleLike && repeatsTitle(plainText(first), title)) tree.children.shift();
+  };
+}
+
+interface HastElement extends Parent {
+  type: 'element';
+  tagName: string;
+  properties: Record<string, unknown>;
+}
+
+const isElement = (node: Node | undefined, tagName: string): node is HastElement =>
+  node?.type === 'element' && (node as HastElement).tagName === tagName;
+
+const slug = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/\p{M}+/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+
+/**
+ * Un `id` para cada `h2` del tema (4/10), para enlazar las secciones desde el índice. Solo los
+ * del primer nivel del documento: un título dentro de un recuadro no es una sección.
+ */
+function sectionIds(outline: LessonOutlineItem[]) {
+  return () => (tree: Node) => {
+    const used = new Map<string, number>();
+    for (const node of (tree as Parent).children) {
+      if (!isElement(node, 'h2')) continue;
+      const label = plainText(node).trim();
+      const base = slug(label) || 'seccion';
+      const seen = (used.get(base) ?? 0) + 1;
+      used.set(base, seen);
+      const id = seen === 1 ? base : `${base}-${seen}`;
+      node.properties.id = id;
+      outline.push({ id: `${ID_PREFIX}${id}`, text: label });
+    }
+  };
+}
+
+/** Cada tabla en su marco (4/10): la tabla ocupa el ancho y, si no cabe, se desplaza el marco. */
+function wrapTables() {
+  return () => (tree: Node) => {
+    visit(tree, 'element', (node: Node, index?: number, parent?: Parent) => {
+      if (!isElement(node, 'table') || !parent || index === undefined) return;
+      if (isElement(parent, 'div')) return;
+      parent.children[index] = el('div', { className: ['tabla'] }, [node]) as unknown as Node;
+    });
+  };
+}
+
+/**
+ * Una imagen sola en su línea y con título (`![alt](asset:id "Pie")`) sale como figura con
+ * pie (4/10). Todas cargan en diferido.
+ */
+function imageFigures() {
+  return () => (tree: Node) => {
+    visit(tree, 'element', (node: Node, index?: number, parent?: Parent) => {
+      if (isElement(node, 'img')) {
+        node.properties.loading = 'lazy';
+        return;
+      }
+      if (!isElement(node, 'p') || !parent || index === undefined) return;
+      const content = node.children.filter(
+        (child) => plainText(child).trim() !== '' || child.type !== 'text'
+      );
+      const image = content[0];
+      if (content.length !== 1 || !isElement(image, 'img')) return;
+      const caption =
+        typeof image.properties.title === 'string' ? image.properties.title.trim() : '';
+      if (caption === '') return;
+      delete image.properties.title;
+      parent.children[index] = el('figure', { className: ['figura'] }, [
+        image,
+        el('figcaption', {}, [text(caption)]),
+      ]) as unknown as Node;
+    });
+  };
+}
+
 /** Resuelve `asset:<id>` de las imágenes a su URL, y pone el `alt` guardado si falta. */
 function resolveImages(assets: Map<string, RenderAsset>) {
   return () => (tree: Root) => {
@@ -292,6 +424,8 @@ export const lessonSchema: SanitizeSchema = {
     audio: ['src', 'controls'],
     track: ['src', 'kind', 'srcLang', 'label', 'default'],
     a: [...(defaultSchema.attributes?.a ?? []), 'download'],
+    // Solo el marco de las tablas (`wrapTables`): el autor no escribe HTML.
+    div: [...(defaultSchema.attributes?.div ?? []), ['className', 'tabla']],
     img: [...(defaultSchema.attributes?.img ?? []), 'loading'],
     figure: ['className'],
     aside: ['className'],
@@ -311,26 +445,31 @@ export const lessonSchema: SanitizeSchema = {
 };
 
 /**
- * Markdown de un tema → HTML seguro.
+ * Markdown de un tema → HTML seguro, y sus secciones para el índice.
  *
  * `assets` trae las URLs ya resueltas: esta función **no** habla con Storage ni con la base
  * de datos, para que se pueda probar con un mapa escrito a mano y para que quien la llame
  * decida cuánto duran las URLs firmadas.
  */
-export function renderLessonHtml(
+export function renderLesson(
   markdown: string,
   assets: Map<string, RenderAsset>,
   options: RenderOptions = {}
-): string {
+): { html: string; outline: LessonOutlineItem[] } {
+  const outline: LessonOutlineItem[] = [];
   const html = unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkMath)
     .use(remarkDirective)
+    .use(dropLeadingTitle(options.title))
     .use(resolveImages(assets))
     .use(directivesToHtml(assets))
     // Sin `allowDangerousHtml`: el HTML escrito a mano en el Markdown no llega a ser HTML.
     .use(remarkRehype)
+    .use(sectionIds(outline))
+    .use(wrapTables())
+    .use(imageFigures())
     .use(rehypeKatex, { output: 'mathml' })
     .use(rehypeSanitize, lessonSchema)
     .use(rehypeStringify)
@@ -338,7 +477,16 @@ export function renderLessonHtml(
     .toString();
 
   const lang = options.language;
-  return lang ? `<div lang="${lang}">${html}</div>` : html;
+  return { html: lang ? `<div lang="${lang}">${html}</div>` : html, outline };
+}
+
+/** Lo mismo, solo el HTML. */
+export function renderLessonHtml(
+  markdown: string,
+  assets: Map<string, RenderAsset>,
+  options: RenderOptions = {}
+): string {
+  return renderLesson(markdown, assets, options).html;
 }
 
 // ───────────────────────── inline (preguntas de examen) ─────────────────────────

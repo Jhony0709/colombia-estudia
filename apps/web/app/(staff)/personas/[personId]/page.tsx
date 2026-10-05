@@ -7,6 +7,8 @@
  */
 
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 import { notFound, redirect } from 'next/navigation';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
@@ -54,6 +56,15 @@ export default async function PersonDetailPage({ params }: { params: Params }) {
   if (!person) notFound();
 
   const tc = await getTranslations('crumbs');
+  const can = (capability: Parameters<typeof ctx.capabilities.get>[0]) =>
+    (ctx.capabilities.get(capability)?.length ?? 0) > 0;
+  const latest = person.enrollments[0] ?? null;
+  const enrollmentHref = (e: { id: string; cohortId: string }) =>
+    `/cohortes/${e.cohortId}/matriculas/${e.id}` as const;
+  // Acudencia a la vista si es menor o ya tiene vínculos; si no, va con lo secundario.
+  const guardianshipFirst =
+    person.isMinor || person.guardians.length > 0 || person.wards.length > 0;
+  const canAnonymize = !person.anonymizedAt && can('institution.manage');
 
   return (
     <Page>
@@ -70,6 +81,18 @@ export default async function PersonDetailPage({ params }: { params: Params }) {
               { label: `${person.givenName} ${person.familyName}` },
             ]}
           />
+        }
+        action={
+          // El atajo de la ficha (4/10): de la persona a su matrícula más reciente, que es
+          // donde se habilitan componentes y se ven progreso, ajustes y cartera.
+          latest ? (
+            <Link
+              href={enrollmentHref(latest)}
+              className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
+            >
+              {t('openEnrollmentNamed', { cohort: latest.cohortCode })}
+            </Link>
+          ) : undefined
         }
       />
 
@@ -101,6 +124,41 @@ export default async function PersonDetailPage({ params }: { params: Params }) {
             <dd className="type-body text-text">{t(`invitations.${person.invitation}`)}</dd>
           </div>
         </dl>
+      </PageSection>
+
+      <PageSection title={t('enrollments')} id="matriculas" card>
+        {person.enrollments.length === 0 ? (
+          <p className="type-body text-text-muted">{t('noEnrollments')}</p>
+        ) : (
+          <ul className="divide-border-muted -my-2 divide-y">
+            {person.enrollments.map((e) => (
+              <li key={e.id} className="flex flex-wrap items-center justify-between gap-x-4 py-2">
+                <span className="type-body text-text min-w-0">
+                  <Link
+                    href={enrollmentHref(e)}
+                    aria-label={t('openEnrollmentNamed', { cohort: e.cohortCode })}
+                    className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
+                  >
+                    {e.cohortCode} — {e.cohortName}
+                  </Link>
+                  <span className="type-caption text-text-muted block first-letter:uppercase">
+                    {t(`enrollmentStatus.${e.status}`)} ·{' '}
+                    {t('accessUntil', { date: e.accessUntil })}
+                  </span>
+                </span>
+                {can('billing.manage') && (
+                  <Link
+                    href={`/cartera/${e.id}`}
+                    aria-label={t('openBillingNamed', { cohort: e.cohortCode })}
+                    className="text-text-link type-caption min-h-touch inline-flex items-center underline underline-offset-4"
+                  >
+                    {t('openBilling')}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
       </PageSection>
 
       {/* Sin envolver: el componente **es** su propia `PageSection`, y envolverlo dejaría
@@ -135,68 +193,84 @@ export default async function PersonDetailPage({ params }: { params: Params }) {
         <PersonRoles personId={person.id} roles={person.roles} />
       </PageSection>
 
-      <PageSection title={t('enrollments')} id="matriculas" card>
-        {person.enrollments.length === 0 ? (
-          <p className="type-body text-text-muted">{t('noEnrollments')}</p>
-        ) : (
-          <ul className="space-y-2">
-            {person.enrollments.map((e) => (
-              <li key={e.id} className="type-body text-text">
-                {e.cohortCode} — {e.cohortName} · {t(`enrollmentStatus.${e.status}`)} ·{' '}
-                {t('accessUntil', { date: e.accessUntil })}
-              </li>
-            ))}
-          </ul>
-        )}
-      </PageSection>
+      {guardianshipFirst && (
+        <PageSection title={t('guardianship')} id="acudencia" card>
+          <PersonGuardians personId={person.id} guardians={person.guardians} />
 
-      <PageSection title={t('guardianship')} id="acudencia" card>
-        <PersonGuardians personId={person.id} guardians={person.guardians} />
-
-        {person.wards.length > 0 && (
-          <ul className="space-y-1">
-            {person.wards.map((w) => (
-              <li key={w.id} className="type-body text-text">
-                {t('wardIs', { name: w.name, relationship: w.relationship })}
-              </li>
-            ))}
-          </ul>
-        )}
-      </PageSection>
-
-      <PageSection title={t('consents')} id="consentimientos" card>
-        {person.consents.length === 0 ? (
-          <p className="type-body text-text-muted">{t('noConsents')}</p>
-        ) : (
-          <ul className="space-y-1">
-            {person.consents.map((c) => (
-              <li key={c.id} className="type-body text-text">
-                {t('consentLine', {
-                  version: c.policyVersion,
-                  channel: c.channel,
-                  signedBy: c.signedBy,
-                  date: c.grantedAt.slice(0, 10),
-                })}
-                {c.revokedAt && ` · ${t('consentRevoked')}`}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <PersonConsent personId={person.id} isMinor={person.isMinor} />
-      </PageSection>
-
-      {/* Ley 1581 (Fase 6): al final y solo para quien administra la institución. */}
-      {!person.anonymizedAt && (ctx.capabilities.get('institution.manage')?.length ?? 0) > 0 && (
-        <PageSection
-          title={t('anonymize.title')}
-          description={t('anonymize.hint')}
-          id="anonimizar"
-          card
-        >
-          <AnonymizePerson personId={person.id} name={`${person.givenName} ${person.familyName}`} />
+          {person.wards.length > 0 && (
+            <ul className="space-y-1">
+              {person.wards.map((w) => (
+                <li key={w.id} className="type-body text-text">
+                  {t('wardIs', { name: w.name, relationship: w.relationship })}
+                </li>
+              ))}
+            </ul>
+          )}
         </PageSection>
       )}
+
+      {/* Lo que se consulta poco (4/10): plegado, con lo irreversible al final. */}
+      <details className="group">
+        <summary className="type-subheading text-text min-h-touch inline-flex cursor-pointer items-center gap-2">
+          <ChevronRight
+            aria-hidden
+            className="duration-fast ease-standard size-4 transition-transform group-open:rotate-90 motion-reduce:transition-none"
+          />
+          {t('more')}
+        </summary>
+        <div className="mt-6 space-y-8">
+          {!guardianshipFirst && (
+            <PageSection title={t('guardianship')} id="acudencia" card>
+              <PersonGuardians personId={person.id} guardians={person.guardians} />
+
+              {person.wards.length > 0 && (
+                <ul className="space-y-1">
+                  {person.wards.map((w) => (
+                    <li key={w.id} className="type-body text-text">
+                      {t('wardIs', { name: w.name, relationship: w.relationship })}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </PageSection>
+          )}
+          <PageSection title={t('consents')} id="consentimientos" card>
+            {person.consents.length === 0 ? (
+              <p className="type-body text-text-muted">{t('noConsents')}</p>
+            ) : (
+              <ul className="space-y-1">
+                {person.consents.map((c) => (
+                  <li key={c.id} className="type-body text-text">
+                    {t('consentLine', {
+                      version: c.policyVersion,
+                      channel: c.channel,
+                      signedBy: c.signedBy,
+                      date: c.grantedAt.slice(0, 10),
+                    })}
+                    {c.revokedAt && ` · ${t('consentRevoked')}`}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <PersonConsent personId={person.id} isMinor={person.isMinor} />
+          </PageSection>
+          {canAnonymize && (
+            <div className="border-border-muted border-t pt-6">
+              <PageSection
+                title={t('anonymize.title')}
+                description={t('anonymize.hint')}
+                id="anonimizar"
+              >
+                <AnonymizePerson
+                  personId={person.id}
+                  name={`${person.givenName} ${person.familyName}`}
+                />
+              </PageSection>
+            </div>
+          )}
+        </div>
+      </details>
     </Page>
   );
 }

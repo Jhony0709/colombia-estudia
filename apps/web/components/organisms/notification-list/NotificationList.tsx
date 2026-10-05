@@ -68,6 +68,7 @@ const formatDay = (iso: string) =>
 const ACTION_BY_TYPE: Record<string, string> = {
   attempt_graded: 'viewGrade',
   lesson_reopened: 'goToLesson',
+  module_unlocked: 'goToRoute',
   live_session_soon: 'viewSession',
   certificate_issued: 'viewCertificate',
   payment_confirmed: 'viewAccount',

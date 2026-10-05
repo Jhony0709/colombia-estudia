@@ -21,6 +21,8 @@ const schema = z.object({
   lessonId: z.string().cuid().nullable(),
   subjectId: z.string().cuid().nullable(),
   learningObjective: optionalText(500),
+  /** «Aprender es avanzar» del taller (3/10). */
+  closingText: optionalText(4000),
 });
 
 type Input = z.infer<typeof schema>;
@@ -45,5 +47,6 @@ export const PUT = apiHandler<Input>({ schema, capability: 'lesson.author' })(as
     lessonId: moduleId ? input.lessonId : null,
     subjectId: input.subjectId,
     learningObjective: blankToNull(input.learningObjective),
+    closingText: blankToNull(input.closingText),
   });
 });

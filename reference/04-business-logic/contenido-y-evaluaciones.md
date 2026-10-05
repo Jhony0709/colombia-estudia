@@ -35,15 +35,35 @@ vigentes del programa. El clon "ValoraT" de LearnDash desaparece: mismo catálog
 
 ## Secuencia y aprobación
 
-Dentro de un módulo, primero los temas (`Lesson.position`) y después las evaluaciones
-(`Assessment.position`). Reglas de `progression`:
+Dentro de un componente (`Module`) la ruta se recorre **taller a taller** (3/10, cliente:
+«taller = asignatura», `Subject`): los temas de una asignatura en su `Lesson.position`, cada
+uno seguido de sus exámenes de tema (`Assessment.lessonId`), y después el cuestionario del
+taller (`Assessment.subjectId` sin `lessonId`); luego el siguiente taller, en el orden en que
+aparece su primer tema. Al final, los exámenes del componente sin taller. Al enviar el
+cuestionario se lee `Assessment.closingText` («Aprender es avanzar» del taller), o en su
+defecto `Module.closingText`, o el texto general. `sortItems` (`outline.ts`) es la única
+función que ordena, tanto para el estudiante como para el builder del admin.
 
-- `LINEAR` (Valida YA): el tema N se habilita al completar el N-1; la evaluación `SUBJECT`
-  de un módulo se habilita al completar sus temas; **el módulo siguiente se habilita al
-  aprobar (o agotar intentos de) las evaluaciones del anterior**. La `DIAGNOSTIC` es
-  obligatoria antes del primer tema y nunca cuenta para aprobar; sus resultados los ve
-  operaciones.
+Reglas de `progression`:
+
+- `LINEAR`: el ítem N se habilita al completar el N-1, cruzando talleres. Un examen cuenta
+  como completado con un intento `GRADED`, apruebe o no: perder el cuestionario **no bloquea**
+  la ruta (cliente, 3/10). La `DIAGNOSTIC` es obligatoria antes del primer tema y nunca
+  cuenta para aprobar; sus resultados los ve operaciones.
 - `FREE`: todo abierto, con el orden como sugerencia.
+
+**El componente es la unidad de bloqueo (3/10, cliente).** En `LINEAR`, el primer componente
+de la ruta de la matrícula (su `startsAtModule`) está abierto; cada uno de los siguientes está
+**bloqueado hasta que operación lo habilita a mano** desde la ficha de la matrícula
+(`EnrollmentModule`: quién, cuándo, y una ventana `availableFrom`/`availableUntil` opcional
+por componente, no por tema). Al terminar un componente el estudiante ve «Terminaste lo que
+tienes habilitado» y el siguiente con su portada en gris; cuando se habilita recibe el aviso
+`module_unlocked`. La regla vive en `moduleAccess` (`outline.ts`); el motivo del componente
+manda sobre la secuencia (`unavailableReason: 'LOCKED'`). Es acceso académico y **no mira
+cartera**: que operación habilite «cuando hay pago» es su práctica, no una regla del código;
+la mora sigue gobernada por `RestrictionPolicy` y nunca toca el acceso de un menor. En `FREE`
+no se consulta. Regla general aprobada por el cliente el 3/10 con la condición de que hoy no
+hay menores matriculados.
 
 `Enrollment` pasa a `COMPLETED` cuando todas las asignaciones de tema están `COMPLETED` y
 toda evaluación `SUBJECT`/`FINAL` tiene un intento `GRADED` con `score/maxScore × 100 ≥
@@ -57,18 +77,18 @@ passPercent` (o cualquier `GRADED` si `passPercent` es nulo).
 LaTeX acotado + directivas propias. El contrato exacto es un parser/validador en
 `packages/types/src/content.ts`, y es SSOT.
 
-| Elemento                 | Sintaxis                                       | Regla                                                                                                                                                                                                                                                                                                                          |
-| ------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Imagen                   | `![texto alternativo](asset:<id>)`             | `alt` obligatorio, descriptivo, distinto del nombre de archivo                                                                                                                                                                                                                                                                 |
-| Video                    | `::video{asset="<id>"}`                        | `captionsSource = REVIEWED` o `transcriptPath` (WebVTT sincronizado). `AUTO` no cuenta. Si el video muestra algo esencial, el texto de la lección lo explica                                                                                                                                                                   |
-| Audio                    | `::audio{asset="<id>"}`                        | Idem                                                                                                                                                                                                                                                                                                                           |
-| PDF                      | `::pdf{asset="<id>"}`                          | `textAlternativePath` (Markdown con su texto)                                                                                                                                                                                                                                                                                  |
-| Fórmula                  | `$…$` en línea, `$$…$$` en bloque (LaTeX)      | Debe compilar; se renderiza a MathML con el LaTeX como respaldo                                                                                                                                                                                                                                                                |
-| Fragmento en otro idioma | `:lang[The cat is on the table]{en}`           | Renderiza `<span lang="en">`                                                                                                                                                                                                                                                                                                   |
-| Recuadro (27/9)          | `:::callout{kind="example" title="…"}` … `:::` | `kind` ∈ `note`, `example`, `important`, `goals` (otro = error); `goals` = «En este tema aprenderás», flotado a la derecha del texto en pantallas anchas; `title` opcional (por defecto Nota / Ejemplo / Importante); cuerpo en Markdown. Renderiza `<aside class="callout callout-<kind>">` con el título como primer párrafo |
-| Encabezados              | `##` en adelante (`#` es el título del tema)   | Sin saltos de nivel                                                                                                                                                                                                                                                                                                            |
-| Enlaces                  | `[texto](url)`                                 | Texto descriptivo; nada de "clic aquí"                                                                                                                                                                                                                                                                                         |
-| HTML crudo               | —                                              | Rechazado                                                                                                                                                                                                                                                                                                                      |
+| Elemento                 | Sintaxis                                       | Regla                                                                                                                                                                                                                                                                                                                               |
+| ------------------------ | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Imagen                   | `![texto alternativo](asset:<id>)`             | `alt` obligatorio, descriptivo, distinto del nombre de archivo; con título (`![alt](asset:<id> "Pie")`) y sola en su línea sale como figura con pie (4/10)                                                                                                                                                                          |
+| Video                    | `::video{asset="<id>"}`                        | `captionsSource = REVIEWED` o `transcriptPath` (WebVTT sincronizado). `AUTO` no cuenta. Si el video muestra algo esencial, el texto de la lección lo explica                                                                                                                                                                        |
+| Audio                    | `::audio{asset="<id>"}`                        | Idem                                                                                                                                                                                                                                                                                                                                |
+| PDF                      | `::pdf{asset="<id>"}`                          | `textAlternativePath` (Markdown con su texto)                                                                                                                                                                                                                                                                                       |
+| Fórmula                  | `$…$` en línea, `$$…$$` en bloque (LaTeX)      | Debe compilar; se renderiza a MathML con el LaTeX como respaldo                                                                                                                                                                                                                                                                     |
+| Fragmento en otro idioma | `:lang[The cat is on the table]{en}`           | Renderiza `<span lang="en">`                                                                                                                                                                                                                                                                                                        |
+| Recuadro (27/9)          | `:::callout{kind="example" title="…"}` … `:::` | `kind` ∈ `note`, `example`, `important`, `goals` (otro = error); `goals` = «En este tema aprenderás», en el flujo (el flotado a la derecha se retiró el 4/10); `title` opcional (por defecto Nota / Ejemplo / Importante); cuerpo en Markdown. Renderiza `<aside class="callout callout-<kind>">` con el título como primer párrafo |
+| Encabezados              | `##` en adelante (`#` es el título del tema)   | Sin saltos de nivel; si el primer bloque repite el título del tema (con o sin «Taller 1.»), el render lo quita (4/10); los `##` forman el índice «En este tema»                                                                                                                                                                     |
+| Enlaces                  | `[texto](url)`                                 | Texto descriptivo; nada de "clic aquí"                                                                                                                                                                                                                                                                                              |
+| HTML crudo               | —                                              | Rechazado                                                                                                                                                                                                                                                                                                                           |
 
 Todo `asset:<id>` debe ser de la **misma institución** y estar `READY`. Al guardar el borrador
 y al publicar, los ids se extraen a `LessonVersionAsset` (impide borrar un recurso en uso y hace
@@ -173,12 +193,12 @@ con enlace a la línea, no en un toast.
 `LessonProgress.evidence` guarda lo que pasó; `COMPLETED` lo decide
 `packages/domain/src/lesson-completion.ts` según la forma del contenido:
 
-| Forma                                   | Evidencia de completado                                                          |
-| --------------------------------------- | -------------------------------------------------------------------------------- |
-| Video                                   | posición ≥ 90 % **o** transcripción leída hasta el final (`transcriptReadToEnd`) |
-| Markdown                                | scroll al final **y** tiempo ≥ min(`estimatedMinutes` × 0,5, 2 min)              |
-| ~~Legado (imagen/PDF)~~ (RETIRADO 18/9) | — `LessonForm` ya solo tiene `VIDEO`, `MARKDOWN` y `SUBMISSION`                  |
-| Actividad (`requiresSubmission`)        | `Submission` con estado `APPROVED` por un instructor. Nada más lo completa       |
+| Forma                                   | Evidencia de completado                                                                                                                        |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Video                                   | posición ≥ 90 % **o** transcripción leída hasta el final (`transcriptReadToEnd`)                                                               |
+| Markdown                                | scroll al final **y** tiempo ≥ min(`estimatedMinutes` × 0,5, 2 min); con 0 o sin minutos, solo el scroll (5/10; antes, sin minutos eran 2 min) |
+| ~~Legado (imagen/PDF)~~ (RETIRADO 18/9) | — `LessonForm` ya solo tiene `VIDEO`, `MARKDOWN` y `SUBMISSION`                                                                                |
+| Actividad (`requiresSubmission`)        | `Submission` con estado `APPROVED` por un instructor. Nada más lo completa                                                                     |
 
 `source`: `EVIDENCE` (normal), `MANUAL` (operaciones con `progress.override`, motivo y
 `AuditLog`), `IMPORTED` (reservado; con la decisión 1 no se importa progreso).
@@ -249,7 +269,11 @@ entrega pide confirmación y lista las preguntas sin responder (WCAG 3.3.4).
 
 `reviewPolicy` gobierna qué devuelve el serializador tras `GRADED`: `NONE` (solo estado),
 `SCORE_ONLY`, `FULL_AFTER_GRADED` (respuestas y correctas), `FULL_AFTER_DUE` (lo mismo,
-pero solo pasado `dueAt`, para que nadie comparta las respuestas antes).
+pero solo pasado `dueAt`, para que nadie comparta las respuestas antes) y
+`FULL_AFTER_LAST_ATTEMPT` (3/10, cliente: la nota siempre; las correctas solo cuando ya no
+puede volver a presentar —agotó `maxAttempts` + bono de ajuste, o aprobó—;
+`attemptsExhausted` en `attempt.service.ts`). La pantalla previa dice «es el último» cuando
+queda un intento.
 
 `Score` (0–100) se deriva del mejor intento `GRADED` de la evaluación `SUBJECT` de la
 asignatura en la cohorte; `sourceAttemptId` lo enlaza. Se persiste para consulta y reporte.

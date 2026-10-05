@@ -10,6 +10,7 @@ import { ActivityFeed, RailCard } from '@/components/molecules/rail';
 
 const DAY = 24 * 60 * 60 * 1000;
 const KNOWN = new Set([
+  'person_registered',
   'person_pii_export',
   'invitation_sent',
   'invitation_accepted',

@@ -23,8 +23,10 @@ export function TaskBar({
   place: string;
   action?: React.ReactNode;
 }) {
+  // `!-mt-8` (4/10): con algo antes (el avance de lectura), el `space-y-8` de `Page` ganaba al
+  // `-mt-8` y quedaba una banda vacía de 64 px sobre la barra.
   return (
-    <div className="bg-surface-base border-border-muted sticky top-0 z-10 -mx-4 -mt-8 mb-6 flex items-center gap-2 border-b px-2 py-1 sm:-mx-6 lg:hidden">
+    <div className="bg-surface-base border-border-muted sticky top-0 z-10 -mx-4 !-mt-8 mb-6 flex items-center gap-2 border-b px-2 py-1 sm:-mx-6 lg:hidden">
       <Link
         href={backHref as Route}
         className="text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch min-w-touch inline-flex items-center justify-center"

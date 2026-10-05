@@ -47,7 +47,7 @@ export function AnonymizePerson({ personId, name }: { personId: string; name: st
 
   if (!open) {
     return (
-      <Button variant="secondary" onClick={() => setOpen(true)}>
+      <Button variant="quiet" className="text-status-error-base" onClick={() => setOpen(true)}>
         {t('open')}
       </Button>
     );

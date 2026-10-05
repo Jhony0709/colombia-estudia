@@ -23,6 +23,7 @@ import { CircleHelp } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Tooltip } from '@/components/atoms/tooltip';
 import { Sheet } from '@/components/organisms/sheet';
+import { cn } from '@/lib/utils';
 
 export interface HelpTopic {
   title: string;
@@ -33,9 +34,11 @@ export interface PageHelpProps {
   /** El nombre de la pantalla, para el título de la hoja: «Ayuda: Temas». */
   screen: string;
   topics: HelpTopic[];
+  /** Lado del botón en el teléfono (4/10): `start` donde la pantalla tiene acciones a la derecha. */
+  phoneSide?: 'start' | 'end';
 }
 
-export function PageHelp({ screen, topics }: PageHelpProps) {
+export function PageHelp({ screen, topics, phoneSide = 'end' }: PageHelpProps) {
   const [open, setOpen] = useState(false);
 
   if (topics.length === 0) return null;
@@ -46,7 +49,10 @@ export function PageHelp({ screen, topics }: PageHelpProps) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="bg-accent-base text-text-on-accent hover:bg-accent-hover active:bg-accent-active rounded-pill elevation-modal duration-fast ease-standard fixed bottom-4 right-4 z-30 flex h-14 w-14 items-center justify-center transition-colors sm:bottom-6 sm:right-6"
+          className={cn(
+            'bg-accent-base text-text-on-accent hover:bg-accent-hover active:bg-accent-active rounded-pill elevation-modal duration-fast ease-standard fixed bottom-4 z-30 flex h-12 w-12 items-center justify-center transition-colors sm:bottom-6 sm:right-6 sm:h-14 sm:w-14',
+            phoneSide === 'start' ? 'left-4 sm:left-auto' : 'right-4'
+          )}
         >
           <CircleHelp aria-hidden="true" className="h-6 w-6" />
           <span className="sr-only">Ayuda de esta pantalla</span>

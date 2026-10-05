@@ -29,6 +29,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { getCohortOutline } from './cohort.service';
 import { lessonFormOf } from './lesson-form';
+import { issueAfterProgress } from '@/features/certificates/server/certificates.service';
 
 export interface EvidenceInput {
   secondsOnLesson?: number;
@@ -217,6 +218,9 @@ export async function recordEvidence({
       });
     }
   });
+
+  // Si era el último paso, la matrícula se cierra ya y no al pasar el job.
+  if (completes) await issueAfterProgress({ institutionId, enrollmentId, now });
 
   return {
     status,

@@ -12,6 +12,7 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { listNotifications } from '@/features/notifications/server/notifications.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
+import { BellOff } from 'lucide-react';
 import { NotificationList } from '@/components/organisms/notification-list';
 
 export const metadata: Metadata = { title: 'Notificaciones' };
@@ -42,7 +43,7 @@ export default async function StudentNotificationsPage() {
       />
       <PageSection title={t('listTitle')} id="lista">
         {items.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyHint')} />
+          <EmptyState icon={BellOff} title={t('emptyTitle')} description={t('emptyHint')} />
         ) : (
           <NotificationList items={items} unread={unread} />
         )}

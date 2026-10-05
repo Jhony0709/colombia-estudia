@@ -1,5 +1,49 @@
 # Marca: ficheros de origen y derivados
 
+## ALBA Futuro Educativo (rebranding, 5/10)
+
+El cliente aprobó la marca **ALBA Futuro Educativo**: `alba-brand-board.png` (logo, paleta,
+Lexend, valores, sistema gráfico) y `alba-landing-reference.png` (mockup de la portada,
+escritorio y teléfono). La portada (`apps/web/features/marketing/`) ya sigue esa referencia:
+paleta navy `#0D2B5B` · azul `#2563EB` · azul claro `#60A5FA` · amarillo `#FBBF24` · blanco,
+superficies `#F8FAFC` / `#EFF6FF` / `#FFF9EC`, texto `#0F172A` / `#334155` / `#64748B`. Del
+manual se toma `#2563EB` y no el «Azul Horizonte» `#3B82F6` del tablero: este da 3.68:1 sobre
+blanco y no sirve para texto ni botones.
+
+**Logo (5/10).** `alba-isotipo-original.png` es el isotipo tal como llegó (1254 × 1254, RGBA,
+solo el símbolo, sin nombre). Sus colores reales: amarillo `#FDC102`, azul claro `#2193FD`,
+azul `#057FFD`; no son los de la paleta de la web (`#FBBF24`, `#60A5FA`, `#2563EB`): el logo es
+un fichero y se usa tal cual. Derivados (Python + Pillow, sin retoque a mano):
+
+1. alpha < 16 → 0 (un halo casi invisible ensanchaba la caja de 923 a 1125 px) y RGB a negro
+   bajo alpha 0; recorte cuadrado a la caja de alpha > 200 con un 2 % de margen
+   (`alba-isotipo-1024.png`, el maestro limpio).
+2. Variante blanca: el alpha como máscara con relleno blanco; las ranuras entre ondas ya son
+   transparentes en el original, así que el símbolo se sigue leyendo.
+3. Logo horizontal: isotipo + «ALBA» en Lexend 700 y «FUTURO EDUCATIVO» en Lexend 500 con
+   tracking 0.24 em, navy `#0D2B5B` (o blanco), como el tablero de marca.
+
+| Fichero                                       | Qué es                                                  |
+| --------------------------------------------- | ------------------------------------------------------- |
+| `public/brand/alba-logo-horizontal.png`       | Horizontal a color, 1229 × 400                          |
+| `public/brand/alba-logo-horizontal-white.png` | Horizontal blanco, para oscuro                          |
+| `public/brand/alba-isotipo.png`               | Isotipo, 256 × 256                                      |
+| `public/brand/alba-isotipo-white.png`         | Isotipo blanco                                          |
+| `app/icon.png`                                | Favicon, isotipo sobre transparente, 512 × 512          |
+| `app/apple-icon.png`                          | Isotipo a color sobre navy, 180 × 180 (tablero: app)    |
+| `app/opengraph-image.png`                     | Logo + «Tu historia también puede continuar.», 1200×630 |
+
+Los nombres llevan `alba-` a propósito: con el mismo nombre que los de Colombia Estudia, la caché
+de imágenes de Next y la del navegador seguían sirviendo el logo viejo. Los usan `BrandLogo`
+(producto) y `AlbaLogo` (portada). Pendiente: el vector (SVG) y, si se quiere, pasar los tokens
+del producto (`design-tokens`: acento `#0047BA`, `brand.yellow`, `brand.red`) a la paleta ALBA.
+El rojo deja de ser color de marca.
+
+## Colombia Estudia (19/9) — histórico
+
+Lo que sigue describe los ficheros de la marca anterior; los `public/brand/*.png` de esa
+marca ya no existen (sustituidos el 5/10 por los `alba-*`).
+
 `colombia-estudia-logo-original.png` es el logo tal como llegó (19/9): PNG RGBA de 1536 × 1024,
 sin vector. `colombia-estudia-isotipo-original.png` es el isotipo suelto ("logo solo", 1254 ×
 1254, RGBA) que llegó después y del que salen ahora `isotipo*.png`, `icon.png` y

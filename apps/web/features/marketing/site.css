@@ -1,114 +1,184 @@
 /*
-  Piel de la web pública (19/9). Vive solo bajo `.site` y no toca los tokens del producto:
-  la portada es la presentación ante un posible alumno y se diseña para eso. Lo que sí
-  comparte con el producto es lo no negociable: contraste AA, foco visible (el `:focus-visible`
-  global lee `--focus-ring`, que `theme-light-scope` fija en #0D2E6E), objetivos de 44 px.
+  Piel de la web pública: ALBA Futuro Educativo (rebranding, 5/10; antes «Colombia Estudia»,
+  19/9). Vive solo bajo `.site` y no toca los tokens del producto: la portada es la
+  presentación ante un posible alumno y se diseña para eso. Lo que sí comparte con el
+  producto es lo no negociable: contraste AA, foco visible (el `:focus-visible` global lee
+  `--focus-ring`, que `theme-light-scope` fija), objetivos de 44 px, movimiento reducido.
 
-  Contrastes medidos: ink-2 #3B4A60 / blanco 8.7; ink-3 #5C6B80 / blanco 5.2; ink-3 /
-  canvas #F3F5F8 4.8; blanco / blue 8.0; ink / yellow 11.2; blanco / blue-deep 12.9.
+  Paleta del manual ALBA: navy + azul + amarillo + blanco. El rojo deja de ser de marca.
+  Contrastes medidos (WCAG 2.x): ink #0F172A / blanco 17.9 · ink-2 #334155 / blanco 10.3 ·
+  ink-3 #64748B / blanco 4.76 y / surface 4.55 (NUNCA sobre `tint`: 4.37) · eyebrow #475569 /
+  tint 6.96 · blue #2563EB / blanco 5.17 y / tint 4.75 · blanco / blue 5.17 · navy / yellow
+  8.31 · yellow / navy 8.31 · blue-light #60A5FA / navy 5.46 (solo sobre navy; sobre blanco
+  2.54, decorativo) · blue / navy 2.68 (nunca texto).
 */
 .site {
-  --site-blue: #0047ba;
-  --site-blue-hover: #0052d6;
-  --site-blue-deep: #0d2e6e;
-  --site-yellow: #f5c400;
-  --site-red: #d72638;
-  --site-ink: #0c1522;
-  --site-ink-2: #3b4a60;
-  --site-ink-3: #5c6b80;
+  --site-navy: #0d2b5b;
+  --site-navy-2: #12366f;
+  --site-blue: #2563eb;
+  --site-blue-hover: #1d4ed8;
+  --site-blue-light: #60a5fa;
+  --site-yellow: #fbbf24;
+  --site-yellow-hover: #f59e0b;
+  --site-ink: #0f172a;
+  --site-ink-2: #334155;
+  --site-ink-3: #64748b;
+  --site-eyebrow: #475569;
   --site-bg: #ffffff;
-  --site-canvas: #f3f5f8;
-  --site-tint: #eaf2ff;
-  --site-line: #e3e8f0;
-  --site-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
-  --site-shadow-lg: 0 24px 60px rgba(13, 46, 110, 0.16);
-  --site-r-btn: 10px;
+  --site-canvas: #f8fafc;
+  --site-tint: #eff6ff;
+  --site-warm: #fff9ec;
+  --site-line: #e2e8f0;
+  --site-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --site-shadow-lg: 0 24px 60px rgba(13, 43, 91, 0.18);
+  --site-r-btn: 999px;
+  --site-r-control: 10px;
   --site-r-card: 14px;
-  --site-r-panel: 24px;
-  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --site-r-panel: 20px;
+  --site-header-h: 4rem;
+  /* Movimiento: espejo de `motion/tokens.ts` (5/10). Si cambia uno, cambian los dos. */
+  --mo-fast: 160ms;
+  --mo-base: 320ms;
+  --mo-reveal: 650ms;
+  --mo-slow: 1000ms;
+  --mo-wave: 1400ms;
+  --mo-accordion: 220ms;
+  /* El latido del botón de WhatsApp: el primero a los 6 s, después uno cada 10 s. */
+  --mo-pulse-cycle: 10s;
+  --mo-pulse-delay: 6s;
+  --mo-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --mo-ease-expressive: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Desplazamientos de entrada; en el teléfono, cortos. */
+  --mo-d-enter: 24px;
+  --mo-d-body: 16px;
+  --mo-d-wave: 40px;
   font-family: var(--font-site), var(--font-sans, ui-sans-serif), system-ui, sans-serif;
   color: var(--site-ink);
   background: var(--site-bg);
   -webkit-font-smoothing: antialiased;
 }
-
-/* Tipografía de marketing */
-.site-h1 {
-  font-size: clamp(2.75rem, 1.6rem + 4.2vw, 4.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.025em;
-  font-weight: 500;
+@media (min-width: 1024px) {
+  .site {
+    --site-header-h: 4.75rem;
+  }
 }
-.site-h1 strong {
+@media (max-width: 767px) {
+  .site {
+    --mo-d-enter: 12px;
+    --mo-d-body: 12px;
+    --mo-d-wave: 12px;
+  }
+}
+
+/* ───────────────────────── Tipografía (Lexend 400/500/600/700) ───────────────────────── */
+.site-h1 {
+  /* Dos líneas en escritorio («Tu historia también / puede continuar.»), como el mockup. */
+  font-size: clamp(2.25rem, 1.1rem + 2.4vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
   font-weight: 700;
-  color: var(--site-blue);
+  color: var(--site-navy);
 }
 .site-h2 {
-  font-size: clamp(1.875rem, 1.3rem + 1.8vw, 2.75rem);
+  font-size: clamp(1.875rem, 1.25rem + 2vw, 2.75rem);
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   font-weight: 700;
+  color: var(--site-navy);
 }
 .site-h3 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   line-height: 1.3;
-  font-weight: 700;
+  font-weight: 600;
+  color: var(--site-navy);
+}
+/* La palabra que cambia de color en un título: «puede continuar.», «diferente.». */
+.site-accent {
+  color: var(--site-blue);
 }
 .site-lead {
-  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
-  line-height: 1.55;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.6;
   color: var(--site-ink-2);
 }
 .site-body {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--site-ink-2);
 }
 .site-small {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   color: var(--site-ink-3);
 }
 .site-eyebrow {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--site-blue);
+  color: var(--site-eyebrow);
 }
-.site-muted {
-  color: var(--site-ink-3);
+.site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  color: var(--site-blue);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.site-link:hover {
+  color: var(--site-blue-hover);
+  text-decoration-thickness: 2px;
 }
 
-/* Botones */
+/* Sobre navy: texto blanco, secundario al 80 %, acento en azul claro y eyebrow amarillo. */
+.site-on-dark {
+  color: #fff;
+}
+.site-on-dark .site-h1,
+.site-on-dark .site-h2,
+.site-on-dark .site-h3 {
+  color: #fff;
+}
+.site-on-dark .site-lead,
+.site-on-dark .site-body,
+.site-on-dark .site-small {
+  color: rgba(255, 255, 255, 0.84);
+}
+.site-on-dark .site-accent {
+  color: var(--site-blue-light);
+}
+.site-on-dark .site-eyebrow,
+.site-eyebrow--sun {
+  color: var(--site-yellow);
+}
+
+/* ───────────────────────── Botones: píldora para acciones, 10 px para controles ───────── */
 .site-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 3.25rem;
-  padding: 0 1.5rem;
+  min-height: 3rem;
+  padding: 0 1.375rem;
   border-radius: var(--site-r-btn);
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   border: 1px solid transparent;
-  transition:
-    background-color 180ms var(--site-ease),
-    color 180ms var(--site-ease),
-    transform 180ms var(--site-ease),
-    box-shadow 180ms var(--site-ease);
   white-space: nowrap;
-}
-.site-btn:hover {
-  transform: translateY(-1px);
-}
-.site-btn:active {
-  transform: translateY(0);
+  transition:
+    background-color var(--mo-fast) var(--mo-ease),
+    color var(--mo-fast) var(--mo-ease),
+    border-color var(--mo-fast) var(--mo-ease),
+    box-shadow var(--mo-fast) var(--mo-ease);
 }
 .site-btn--primary {
   background: var(--site-blue);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(0, 71, 186, 0.22);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.22);
 }
 .site-btn--primary:hover {
   background: var(--site-blue-hover);
@@ -116,66 +186,173 @@
 .site-btn--secondary {
   background: #fff;
   color: var(--site-blue);
-  border-color: rgba(0, 71, 186, 0.28);
+  border-color: rgba(37, 99, 235, 0.35);
 }
 .site-btn--secondary:hover {
   background: var(--site-tint);
+  border-color: var(--site-blue);
 }
 .site-btn--yellow {
   background: var(--site-yellow);
-  color: var(--site-ink);
-  box-shadow: 0 8px 20px rgba(245, 196, 0, 0.3);
+  color: var(--site-navy);
+  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.28);
 }
 .site-btn--yellow:hover {
-  filter: brightness(0.96);
+  background: var(--site-yellow-hover);
 }
-.site-btn--white {
-  background: #fff;
-  color: var(--site-blue-deep);
+.site-btn--ghost {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
 }
-.site-btn--white:hover {
-  background: var(--site-tint);
+.site-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
 }
 .site-btn--sm {
   min-height: 2.75rem;
   padding: 0 1.125rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+}
+/* Botón redondo con flecha (tarjetas): 44 px, nunca menos. */
+.site-round {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
 }
 
-/* Superficies */
+/* ───────────────────────── Cabecera ───────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--site-header-h);
+  background: #fff;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--mo-base) var(--mo-ease),
+    border-color var(--mo-base) var(--mo-ease);
+}
+/* Despegada del borde: translúcida con desenfoque fijo (no se anima el desenfoque) y el borde
+   que aparece. La altura no cambia: encogerla movería la página entera bajo el dedo. */
+.site-header.is-stuck {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--site-line);
+}
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border-radius: var(--site-r-control);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--site-ink-2);
+  white-space: nowrap;
+}
+.site-nav-link:hover,
+.site-nav-link[aria-current='true'] {
+  color: var(--site-blue);
+}
+.site-nav-link[aria-current='true'] {
+  text-decoration: underline;
+  text-decoration-color: var(--site-yellow);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+/* Menú del teléfono: hoja bajo la cabecera, enlaces a 48 px. */
+.site-menu {
+  position: absolute;
+  inset: var(--site-header-h) 0 auto 0;
+  background: #fff;
+  border-bottom: 1px solid var(--site-line);
+  box-shadow: 0 24px 40px rgba(15, 23, 42, 0.1);
+}
+.site-menu li > a {
+  display: flex;
+  align-items: center;
+  min-height: 3rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--site-navy);
+}
+
+/* ───────────────────────── Máscaras de foto (forma de la marca) ─────────────────────────
+   Las formas son SVG en `public/brand/masks/`, estiradas al hueco (`100% 100%`): el arco del
+   hero, la curva de «Volver a estudiar», el óvalo de «Historias». Sin PNG ni estilos en línea. */
+.alba-mask {
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.alba-mask--arch {
+  -webkit-mask-image: url('/brand/masks/arch.svg');
+  mask-image: url('/brand/masks/arch.svg');
+}
+.alba-mask--arc {
+  -webkit-mask-image: url('/brand/masks/arc.svg');
+  mask-image: url('/brand/masks/arc.svg');
+}
+.alba-mask--oval {
+  -webkit-mask-image: url('/brand/masks/oval.svg');
+  mask-image: url('/brand/masks/oval.svg');
+}
+.alba-mask--leaf {
+  -webkit-mask-image: url('/brand/masks/leaf.svg');
+  mask-image: url('/brand/masks/leaf.svg');
+}
+
+/* Ondas: capas de `AlbaWave` y `WaveSeparator`. Cada capa lleva su clase para poder
+   animarla después sin tocar el marcado. */
+.alba-wave {
+  display: block;
+  pointer-events: none;
+}
+.site-separator {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: clamp(3rem, 7vw, 6.5rem);
+  /* Se monta 1 px sobre cada vecina: sin la costura de un píxel que dejaba el redondeo. */
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
+.site-separator--tall {
+  height: clamp(4rem, 10vw, 9rem);
+}
+
+/* ───────────────────────── Superficies ───────────────────────── */
 .site-card {
   background: #fff;
   border: 1px solid var(--site-line);
   border-radius: var(--site-r-card);
-  transition:
-    transform 200ms var(--site-ease),
-    box-shadow 200ms var(--site-ease);
 }
-.site-card--hover:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--site-shadow);
-}
-.site-panel {
+.site-card--lg {
   border-radius: var(--site-r-panel);
 }
-.site-float {
-  background: #fff;
-  border-radius: var(--site-r-card);
-  box-shadow: var(--site-shadow-lg);
-}
-.site-chip {
-  display: inline-flex;
+.site-row {
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.875rem;
-  border-radius: 999px;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 0.875rem 1rem;
   background: #fff;
-  box-shadow: var(--site-shadow);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--site-ink);
+  border: 1px solid var(--site-line);
+  border-radius: var(--site-r-card);
+  transition:
+    border-color var(--mo-fast) var(--mo-ease),
+    box-shadow var(--mo-fast) var(--mo-ease);
 }
-.site-icon-pill {
+
+.site-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -186,72 +363,125 @@
   background: var(--site-tint);
   color: var(--site-blue);
 }
-.site-link {
-  color: var(--site-blue);
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.site-icon--sun {
+  background: var(--site-warm);
+  color: #b45309;
 }
-.site-link:hover {
-  color: var(--site-blue-deep);
+.site-icon--plain {
+  background: transparent;
+  width: auto;
+  height: auto;
 }
-
-/* Fondo fotográfico del hero (tablet y escritorio). La ruta es la de MEDIA['hero-city'] en
-   media.ts: si cambia la foto, cambia aquí. `min-width: 768px` = `md` de Tailwind. */
-@media (min-width: 768px) {
-  .site-hero-bg {
-    background-image: url('/photos/hero-city.jpg');
-    background-size: cover;
-    background-position: 70% 40%;
-  }
-  .site-hero-mask {
-    background:
-      linear-gradient(
-        90deg,
-        var(--site-canvas) 0%,
-        var(--site-canvas) 42%,
-        rgba(243, 245, 248, 0.82) 58%,
-        rgba(243, 245, 248, 0.35) 78%,
-        rgba(243, 245, 248, 0.1) 100%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(243, 245, 248, 0.6) 0%,
-        rgba(243, 245, 248, 0) 30%,
-        rgba(243, 245, 248, 0) 70%,
-        var(--site-canvas) 100%
-      );
-  }
-}
-
-/* Cabecera fija */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--site-line);
-}
-.site-nav-link {
+.site-tag {
   display: inline-flex;
   align-items: center;
-  min-height: 2.75rem;
-  padding: 0 0.875rem;
-  border-radius: var(--site-r-btn);
-  font-size: 0.9375rem;
+  min-height: 1.75rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
   font-weight: 500;
+  background: var(--site-canvas);
   color: var(--site-ink-2);
-  white-space: nowrap;
+  border: 1px solid var(--site-line);
 }
-.site-nav-link:hover {
-  color: var(--site-blue);
-  background: var(--site-tint);
+.site-on-dark .site-tag {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
-/* FAQ con <details> nativo */
+/* Etiqueta sobre una foto: velo navy de abajo arriba (funcional: el texto siempre ≥ 4.5:1)
+   y la raya corta amarilla de la marca. */
+.site-photo-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(13, 43, 91, 0) 35%,
+    rgba(13, 43, 91, 0.55) 62%,
+    rgba(13, 43, 91, 0.92) 100%
+  );
+}
+.site-photo-label {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+.site-photo-label::before,
+.site-bar::before {
+  content: '';
+  display: block;
+  width: 1.75rem;
+  height: 3px;
+  margin-bottom: 0.5rem;
+  border-radius: 999px;
+  background: var(--site-yellow);
+}
+
+/* Velo del CTA final: el paisaje queda de fondo y el texto sobre navy casi opaco a la izquierda. */
+.site-final-veil {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(13, 43, 91, 0.96) 0%,
+      rgba(13, 43, 91, 0.86) 45%,
+      rgba(13, 43, 91, 0.55) 100%
+    ),
+    linear-gradient(180deg, rgba(13, 43, 91, 0.2) 0%, rgba(13, 43, 91, 0.75) 100%);
+}
+
+/* ───────────────────────── Hero: rejilla que se reordena en el teléfono ─────────────────
+   Teléfono: copy y CTA, foto, beneficios. Escritorio: copy y beneficios a la izquierda, foto a
+   la derecha (45/55). Áreas con nombre: el orden del DOM es el de lectura en las dos. */
+.site-hero-grid {
+  display: grid;
+  grid-template-areas:
+    'copy'
+    'visual'
+    'benefits';
+  row-gap: 2rem;
+}
+.site-hero-copy {
+  grid-area: copy;
+}
+.site-hero-visual {
+  grid-area: visual;
+}
+.site-hero-benefits {
+  grid-area: benefits;
+}
+@media (min-width: 1024px) {
+  .site-hero-grid {
+    grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+    grid-template-areas:
+      'copy visual'
+      'benefits visual';
+    grid-template-rows: auto 1fr;
+    column-gap: 3rem;
+    row-gap: 2.5rem;
+  }
+}
+
+/* ───────────────────────── Línea del proceso ───────────────────────── */
+.site-timeline-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: var(--site-yellow);
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 5px rgba(251, 191, 36, 0.45);
+}
+.site-step-number {
+  font-size: 2.5rem;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--site-blue);
+}
+
+/* ───────────────────────── FAQ con <details> nativo ───────────────────────── */
 .site-faq {
-  border-top: 1px solid var(--site-line);
+  border-bottom: 1px solid var(--site-line);
 }
 .site-faq summary {
   list-style: none;
@@ -260,28 +490,29 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.125rem 0;
-  font-size: 1.0625rem;
+  min-height: 3.5rem;
+  padding: 0.875rem 0;
+  font-size: 1rem;
   font-weight: 500;
-  min-height: 2.75rem;
+  color: var(--site-navy);
 }
 .site-faq summary::-webkit-details-marker {
   display: none;
 }
 .site-faq summary svg {
   flex-shrink: 0;
-  transition: transform 200ms var(--site-ease);
   color: var(--site-blue);
+  transition: transform var(--mo-accordion) var(--mo-ease);
 }
 .site-faq[open] summary svg {
-  transform: rotate(45deg);
+  transform: rotate(180deg);
 }
 .site-faq > div {
   padding: 0 0 1.25rem;
-  max-width: 60ch;
+  max-width: 62ch;
 }
 
-/* Botón flotante de WhatsApp */
+/* ───────────────────────── Botón flotante de WhatsApp ───────────────────────── */
 .site-fab {
   position: fixed;
   right: 1rem;
@@ -289,23 +520,40 @@
   z-index: 40;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.625rem;
   min-height: 3.5rem;
   min-width: 3.5rem; /* solo icono en el teléfono (28/9): un círculo, no una píldora vacía */
-  justify-content: center;
   padding: 0 1rem;
   border-radius: 999px;
-  background: var(--site-blue);
+  background: var(--site-navy);
   color: #fff;
   font-weight: 500;
-  box-shadow: 0 12px 30px rgba(0, 71, 186, 0.35);
-  transition:
-    transform 180ms var(--site-ease),
-    background-color 180ms var(--site-ease);
+  box-shadow: 0 12px 30px rgba(13, 43, 91, 0.35);
+  transition: background-color var(--mo-fast) var(--mo-ease);
 }
 .site-fab:hover {
-  background: var(--site-blue-hover);
-  transform: translateY(-2px);
+  background: var(--site-navy-2);
+}
+/* WhatsApp: el círculo verde de la marca ajena con el glifo en navy (7:1). */
+.site-fab--whatsapp {
+  padding: 0.5rem;
+}
+@media (min-width: 640px) {
+  .site-fab.site-fab--whatsapp {
+    padding: 0 1.25rem 0 0.5rem;
+  }
+}
+.site-fab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: #25d366;
+  color: var(--site-navy);
 }
 @media (min-width: 640px) {
   .site-fab {
@@ -324,178 +572,314 @@
   mask: url('/brand/whatsapp.svg') center / contain no-repeat;
 }
 
-/* Aparición al hacer scroll: solo si hay JavaScript, y nunca con movimiento reducido. */
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  .reveal {
-    opacity: 0;
-    transform: translateY(14px);
-    transition:
-      opacity 260ms var(--site-ease),
-      transform 260ms var(--site-ease);
-  }
-  .reveal.is-in {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* ═════════════════════════ Movimiento (ALBA, 5/10) ═════════════════════════
+   «La interfaz avanza contigo»: calmo, intencional, direccional. Solo opacidad, transform y
+   clip-path; una vez, sin bucles ni rebotes. Tokens: `--mo-*` (espejo de motion/tokens.ts).
+   Tres capas:
+   1. la entrada del hero al cargar: CSS, aquí (no espera a hidratar ni retrasa el LCP);
+   2. revelados al hacer scroll: primitivos de `motion/` (Motion), que solo ocultan lo que
+      espera su turno cuando `.site` ya tiene `data-mo-ready` (sin JavaScript, todo se ve);
+   3. microinteracciones (hover, press): CSS, solo con ratón.
+   Con `prefers-reduced-motion: reduce` no hay ninguna de las tres: estado final directo. */
 
-/* Texto sobre las bandas azules. (`text-white` no existe: el tema de colores es solo tokens.) */
-.site-on-dark {
-  color: #fff;
-}
-.site-on-dark .site-lead,
-.site-on-dark .site-body {
-  color: rgba(255, 255, 255, 0.86);
-}
-
-/* ───────────────────────── Movimiento (19/9) ─────────────────────────
-   Todo corto (200–600 ms), con la misma curva, solo opacidad/transform, y apagado
-   entero con `prefers-reduced-motion` (el corte global de globals.css también lo cubre). */
-
-/* Desplazamiento suave a las anclas, solo cuando la portada está en la página. */
 :root:has(.site) {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--site-header-h, 4.75rem);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:has(.site),
+  .site *,
+  .site *::before,
+  .site *::after {
+    scroll-behavior: auto !important;
+  }
 }
 
+/* ── 2. Lo que espera su turno (los primitivos lo animan desde aquí) ── */
+.site[data-mo-ready] [data-mo='fade']:not([data-mo-in]),
+.site[data-mo-ready] [data-mo='fade-up']:not([data-mo-in]),
+.site[data-mo-ready] [data-mo='slide-left']:not([data-mo-in]),
+.site[data-mo-ready] [data-mo='slide-right']:not([data-mo-in]),
+.site[data-mo-ready] [data-mo='stagger']:not([data-mo-in]) > * {
+  opacity: 0;
+}
+.site[data-mo-ready] [data-mo='mask']:not([data-mo-in]),
+.site[data-mo-ready] [data-mo='mask-bottom']:not([data-mo-in]) {
+  clip-path: inset(100% 0 0 0);
+}
+.site[data-mo-ready] [data-mo='mask-left']:not([data-mo-in]) {
+  clip-path: inset(0 100% 0 0);
+}
+.site[data-mo-ready] [data-mo='mask-top']:not([data-mo-in]) {
+  clip-path: inset(0 0 100% 0);
+}
+.site[data-mo-ready] [data-mo='mask-right']:not([data-mo-in]) {
+  clip-path: inset(0 0 0 100%);
+}
+.site[data-mo-ready] [data-mo='settle']:not([data-mo-in]) {
+  transform: scale(1.04);
+}
+.site[data-mo-ready] [data-mo='grow']:not([data-mo-in]) {
+  transform: scale(0.96);
+}
+.site[data-mo-ready] [data-mo='wave-separator']:not([data-mo-in]) {
+  opacity: 0.6;
+  transform: scaleX(0.92);
+}
+.site[data-mo-ready] [data-mo='wave-draw']:not([data-mo-in]) .alba-wave__stroke {
+  stroke-dashoffset: 1;
+}
+
+/* La línea del proceso viva (escritorio): marcador de cada paso a .35 hasta que la línea
+   llega; el punto crece de .6 a 1. El texto del paso no se atenúa (contraste AA). */
+[data-timeline='live'] [data-step] .site-step-marker {
+  opacity: 0.35;
+  translate: 0 6px;
+  transition:
+    opacity var(--mo-base) var(--mo-ease),
+    translate var(--mo-base) var(--mo-ease);
+}
+[data-timeline='live'] [data-step][data-active] .site-step-marker {
+  opacity: 1;
+  translate: 0 0;
+}
+[data-timeline='live'] [data-dot] {
+  scale: 0.6;
+  transition: scale var(--mo-base) var(--mo-ease);
+}
+[data-timeline='live'] [data-dot][data-active] {
+  scale: 1;
+}
+[data-timeline='live'] .site-timeline-path {
+  stroke-dashoffset: 1;
+}
+
+/* ── 1. Entrada del hero, al cargar ── */
 @media (prefers-reduced-motion: no-preference) {
-  /* Entrada del hero al cargar: copy en cascada, formas que crecen, chips que llegan. */
-  @keyframes site-rise {
+  @keyframes mo-fade {
     from {
       opacity: 0;
-      transform: translateY(18px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
     }
   }
-  @keyframes site-grow {
+  @keyframes mo-rise-enter {
     from {
       opacity: 0;
-      transform: scale(0.92);
-    }
-    to {
-      opacity: 1;
-      transform: none;
+      transform: translateY(var(--mo-d-enter));
     }
   }
-  @keyframes site-pop {
+  @keyframes mo-rise-body {
     from {
       opacity: 0;
-      transform: translateY(10px) scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: none;
+      transform: translateY(var(--mo-d-body));
     }
   }
-  .site-hero-copy > * {
-    animation: site-rise 600ms var(--site-ease) both;
+  @keyframes mo-press-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+  @keyframes mo-unveil {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+  }
+  @keyframes mo-settle {
+    from {
+      transform: scale(1.04);
+    }
+  }
+  @keyframes mo-wave-from-left {
+    from {
+      transform: translateX(calc(var(--mo-d-wave) * -1));
+    }
+  }
+  @keyframes mo-wave-from-right {
+    from {
+      transform: translateX(calc(var(--mo-d-wave) * 0.875));
+    }
+  }
+  @keyframes mo-wave-from-below {
+    from {
+      transform: translateY(20px);
+    }
+  }
+
+  /* Orden: cabecera, eyebrow, título, entradilla, CTA, beneficios, foto, ondas. 80 ms. */
+  .site-header {
+    animation: mo-fade var(--mo-reveal) var(--mo-ease) both;
   }
   .site-hero-copy > :nth-child(1) {
-    animation-delay: 40ms;
+    animation: mo-rise-body var(--mo-reveal) var(--mo-ease) 80ms both;
   }
   .site-hero-copy > :nth-child(2) {
-    animation-delay: 120ms;
+    animation: mo-rise-enter var(--mo-reveal) var(--mo-ease) 160ms both;
   }
   .site-hero-copy > :nth-child(3) {
-    animation-delay: 200ms;
+    animation: mo-rise-body var(--mo-reveal) var(--mo-ease) 240ms both;
   }
-  .site-hero-copy > :nth-child(4) {
-    animation-delay: 280ms;
+  .site-hero-ctas {
+    animation: mo-press-in var(--mo-reveal) var(--mo-ease) 320ms both;
   }
-  .site-hero-copy > :nth-child(5) {
-    animation-delay: 360ms;
-  }
-  .site-hero-shapes {
-    transform-origin: 60% 60%;
-    animation: site-grow 800ms var(--site-ease) both;
+  .site-hero-benefits {
+    animation: mo-rise-body var(--mo-reveal) var(--mo-ease) 400ms both;
   }
   .site-hero-photo {
-    animation: site-rise 700ms var(--site-ease) 200ms both;
+    animation: mo-unveil var(--mo-slow) var(--mo-ease-expressive) 260ms both;
   }
-  .site-hero-photo--city {
-    animation-delay: 320ms;
+  .site-hero-photo img {
+    animation: mo-settle var(--mo-slow) var(--mo-ease-expressive) 260ms both;
   }
-  .site-hero-chip {
-    animation: site-pop 500ms var(--site-ease) both;
+  .site-hero-sun {
+    animation: mo-press-in var(--mo-slow) var(--mo-ease-expressive) 480ms both;
   }
-  .site-hero-chip--1 {
-    animation-delay: 700ms;
+  /* Cada onda desde un eje: azul claro desde la izquierda, azul desde la derecha, la blanca
+     desde abajo; la amarilla, la última, desde la derecha. */
+  .site-hero-waves .alba-wave__layer {
+    transform-box: fill-box;
   }
-  .site-hero-chip--2 {
-    animation-delay: 850ms;
+  .site-hero-waves .alba-wave__layer--2 {
+    animation: mo-wave-from-left var(--mo-wave) var(--mo-ease-expressive) 540ms both;
   }
+  .site-hero-waves .alba-wave__layer--3 {
+    animation: mo-wave-from-right var(--mo-wave) var(--mo-ease-expressive) 620ms both;
+  }
+  .site-hero-waves .alba-wave__layer--4 {
+    animation: mo-wave-from-below var(--mo-wave) var(--mo-ease-expressive) 700ms both;
+  }
+  .site-hero-waves .alba-wave__layer--1 {
+    animation:
+      mo-wave-from-right var(--mo-wave) var(--mo-ease-expressive) 780ms both,
+      mo-fade var(--mo-wave) var(--mo-ease) 780ms both;
+  }
+}
 
-  /* Cascada dentro de una sección revelada: hijos directos con retardo creciente. */
-  .reveal .site-stagger > * {
-    opacity: 0;
-    transform: translateY(14px);
-    transition:
-      opacity 420ms var(--site-ease),
-      transform 420ms var(--site-ease);
+/* En el teléfono, la foto del hero solo aparece (sin recorte ni acercamiento). */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .site-hero-photo {
+    animation-name: mo-fade;
   }
-  .reveal.is-in .site-stagger > * {
-    opacity: 1;
-    transform: none;
+  .site-hero-photo img {
+    animation: none;
   }
-  .reveal.is-in .site-stagger > :nth-child(1) {
-    transition-delay: 60ms;
-  }
-  .reveal.is-in .site-stagger > :nth-child(2) {
-    transition-delay: 140ms;
-  }
-  .reveal.is-in .site-stagger > :nth-child(3) {
-    transition-delay: 220ms;
-  }
-  .reveal.is-in .site-stagger > :nth-child(4) {
-    transition-delay: 300ms;
-  }
-  .reveal.is-in .site-stagger > :nth-child(n + 5) {
-    transition-delay: 380ms;
-  }
+}
 
-  /* El subrayado se dibuja cuando aparece la sección. */
-  .site-underline path {
-    stroke-dasharray: 130;
-    stroke-dashoffset: 130;
-    transition: stroke-dashoffset 700ms var(--site-ease) 200ms;
-  }
-  .reveal.is-in .site-underline path,
-  .site-underline--now path {
-    stroke-dashoffset: 0;
-  }
+/* ── 3. Microinteracciones: solo con ratón (en el teléfono no hay hover) ── */
+.site-btn {
+  transition:
+    background-color var(--mo-fast) var(--mo-ease),
+    color var(--mo-fast) var(--mo-ease),
+    border-color var(--mo-fast) var(--mo-ease),
+    box-shadow var(--mo-fast) var(--mo-ease),
+    transform var(--mo-fast) var(--mo-ease);
+}
+.site-btn svg,
+.site-link svg,
+.site-round svg,
+.site-row-arrow {
+  transition: transform var(--mo-fast) var(--mo-ease);
+}
+.site-row {
+  transition:
+    background-color var(--mo-fast) var(--mo-ease),
+    border-color var(--mo-fast) var(--mo-ease);
+}
+.site-lift {
+  transition:
+    transform var(--mo-base) var(--mo-ease),
+    box-shadow var(--mo-base) var(--mo-ease);
+}
+.site-zoom img,
+.site-program-feature img {
+  transition: transform var(--mo-slow) var(--mo-ease);
+}
+.site-program-feature .site-round {
+  transition:
+    transform var(--mo-fast) var(--mo-ease),
+    background-color var(--mo-fast) var(--mo-ease);
+}
 
-  /* Microinteracciones. */
-  .site-btn svg {
-    transition: transform 200ms var(--site-ease);
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .site-btn:hover {
+    transform: scale(1.015);
   }
-  .site-btn:hover svg {
+  .site-btn:hover svg,
+  .site-row:hover .site-row-arrow {
+    transform: translateX(4px);
+  }
+  .site-link:hover svg,
+  a:hover > .site-round svg,
+  .site-round:hover svg {
     transform: translateX(3px);
   }
-  .site-card--hover img {
-    transition: transform 500ms var(--site-ease);
+  /* Filas de «Volver a estudiar»: blanco → azul muy claro y el borde un poco más firme. El
+     icono no gira. */
+  .site-row:hover {
+    background-color: var(--site-tint);
+    border-color: rgba(37, 99, 235, 0.4);
   }
-  .site-card--hover:hover img {
-    transform: scale(1.04);
+  /* Tarjetas de servicio: suben 4 px con una sombra mínima. */
+  .site-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--site-shadow);
   }
-  .site-nav-link {
-    transition:
-      color 180ms var(--site-ease),
-      background-color 180ms var(--site-ease);
+  /* La tarjeta navy no sube: su foto se acerca y el círculo amarillo crece un poco. */
+  .site-program-feature:hover img {
+    transform: scale(1.03);
   }
-  .site-faq > div {
-    animation: site-rise 260ms var(--site-ease) both;
+  .site-program-feature:hover .site-round {
+    transform: scale(1.08);
+  }
+  /* Mosaico: la foto se acerca. */
+  .site-zoom:hover img {
+    transform: scale(1.025);
+  }
+}
+/* ── El botón de WhatsApp: llega y late ──
+   Un halo amarillo (el sol de la marca) que sale del botón y se desvanece; el botón no cambia
+   de tamaño. Late en bucle pero espaciado: el primero a los 6 s, cuando el hero ya entró y se
+   está leyendo, y después uno cada 10 s (1.4 s de latido, 8.6 s de calma). Deja de latir para
+   siempre en la sesión cuando la persona lo toca, lo enfoca o pasa el ratón (`data-quiet`, lo
+   pone `fab-quiet.tsx`): WCAG 2.2.2 pide poder detener lo que se mueve solo. */
+.site-fab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes mo-fab-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+  @keyframes mo-fab-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.75);
+    }
+    14% {
+      box-shadow: 0 0 0 18px rgba(251, 191, 36, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 18px rgba(251, 191, 36, 0);
+    }
   }
   .site-fab {
-    animation: site-pop 500ms var(--site-ease) 1200ms both;
+    animation: mo-fab-in var(--mo-reveal) var(--mo-ease) 1200ms both;
   }
+  .site-fab--whatsapp::before {
+    animation: mo-fab-pulse var(--mo-pulse-cycle) var(--mo-ease) var(--mo-pulse-delay) infinite;
+  }
+  .site-fab--whatsapp[data-quiet]::before {
+    animation: none;
+  }
+}
 
-  /* La cabecera gana sombra al despegarse del borde (clase que pone reveal.tsx). */
-  .site-header {
-    transition: box-shadow 220ms var(--site-ease);
-  }
-  .site-header.is-stuck {
-    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+/* Presionado, con cualquier puntero. */
+@media (prefers-reduced-motion: no-preference) {
+  .site-btn:active {
+    transform: scale(0.985);
   }
 }

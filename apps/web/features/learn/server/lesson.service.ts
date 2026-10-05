@@ -17,7 +17,12 @@ import 'server-only';
 
 import { promptsOf } from '@/features/content/server/lessons.service';
 
-import { renderLessonHtml, parseLessonMarkdown } from '@colombia-estudia/types';
+import {
+  renderLesson,
+  renderLessonHtml,
+  parseLessonMarkdown,
+  type LessonOutlineItem,
+} from '@colombia-estudia/types';
 import type { LessonForm } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
 import { resolveRenderAssets } from '@/features/content/server/render-assets';
@@ -39,7 +44,9 @@ export type LessonGate =
   | { kind: 'NOT_ASSIGNED' }
   | { kind: 'BLOCKED'; blockedBy: string }
   | { kind: 'NOT_YET' }
-  | { kind: 'CLOSED' };
+  | { kind: 'CLOSED' }
+  /** Su componente no está habilitado para esta matrícula (3/10). */
+  | { kind: 'LOCKED' };
 
 export interface LessonNeighbour {
   assignmentId: string;
@@ -48,6 +55,8 @@ export interface LessonNeighbour {
   enabled: boolean;
   /** Título del tema que hay que completar antes, cuando la secuencia lo bloquea. */
   blockedBy: string | null;
+  /** Está en un componente todavía no habilitado (3/10): la barra lo dice en vez de «aún no». */
+  locked: boolean;
 }
 
 export interface LessonProgressView {
@@ -94,6 +103,8 @@ export interface LessonForStudent {
     form: LessonForm;
     /** HTML ya saneado por `renderLessonHtml`: es lo que sostiene el `dangerouslySetInnerHTML`. */
     html: string;
+    /** Los `##` del tema, con el `id` que llevan en `html`: el índice «En este tema» (4/10). */
+    outline: LessonOutlineItem[];
     /** Recursos citados que no se pudieron resolver. Se dicen, no se esconden. */
     missingAssets: string[];
     /**
@@ -129,6 +140,7 @@ const neighbourView = (
     kind: 'LESSON' | 'ASSESSMENT';
     enabled: boolean;
     blockedBy: string | null;
+    unavailableReason: 'NOT_YET' | 'CLOSED' | 'LOCKED' | null;
   } | null
 ): LessonNeighbour | null =>
   item === null
@@ -139,6 +151,7 @@ const neighbourView = (
         kind: item.kind,
         enabled: item.enabled,
         blockedBy: item.blockedBy,
+        locked: item.unavailableReason === 'LOCKED',
       };
 
 /**
@@ -209,7 +222,9 @@ export async function getLessonForStudent({
         ? { kind: 'BLOCKED', blockedBy: item.blockedBy }
         : item.unavailableReason === 'NOT_YET'
           ? { kind: 'NOT_YET' }
-          : { kind: 'CLOSED' }
+          : item.unavailableReason === 'LOCKED'
+            ? { kind: 'LOCKED' }
+            : { kind: 'CLOSED' }
     );
   }
 
@@ -265,6 +280,9 @@ export async function getLessonForStudent({
       })
     : null;
 
+  // Con el título (4/10): el primer bloque que lo repite se quita, y el índice sale de los `##`.
+  const rendered = renderLesson(content, assets, { title: assignment.lesson.title });
+
   return {
     gate: null,
     lesson: {
@@ -295,7 +313,7 @@ export async function getLessonForStudent({
       // Sin `{ language }` (27/9): el `lang` va en el `<article>` del player, y el `<div lang>`
       // que envolvía el HTML dejaba los bloques como nietos del artículo, fuera del alcance de
       // los selectores de hijo directo de `.contenido` (párrafos sin separación).
-      html: renderLessonHtml(content, assets),
+      ...rendered,
       missingAssets: assetIds.filter((id) => !assets.has(id)),
       transcripts,
     },

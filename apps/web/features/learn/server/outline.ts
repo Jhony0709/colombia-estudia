@@ -22,6 +22,12 @@ export interface OutlineItem {
    * del que es examen (20/9). Un examen sin tema va al final del módulo.
    */
   lessonId?: string | null;
+  /**
+   * El taller (asignatura) al que pertenece (3/10, cliente: «taller = asignatura»). En un
+   * tema, el suyo; en un examen, el de su `subjectId`, o nulo si es del componente entero.
+   */
+  subjectId?: string | null;
+  subjectName?: string | null;
   /** Posición dentro del módulo, entre los ítems de su misma clase. */
   position: number;
   status: ItemStatus;
@@ -44,18 +50,62 @@ export interface SequencedItem extends OutlineItem {
   enabled: boolean;
   /** Título del tema que hay que completar antes. Nulo si no lo bloquea otro ítem. */
   blockedBy: string | null;
-  /** Por qué no está disponible, cuando no es por secuencia. */
-  unavailableReason: 'NOT_YET' | 'CLOSED' | null;
+  /**
+   * Por qué no está disponible, cuando no es por secuencia. `LOCKED` (3/10): su componente
+   * todavía no está habilitado para esta matrícula.
+   */
+  unavailableReason: 'NOT_YET' | 'CLOSED' | 'LOCKED' | null;
 }
 
 /**
- * Los ítems de un módulo, en el orden en que se recorren (20/9): cada tema seguido de sus
- * exámenes, y al final los exámenes del módulo que no son de ningún tema.
- *
- * Un examen que apunta a un tema que no está en la lista (no asignado a la cohorte, o de
- * otro módulo por error) cae también al final: mejor visible fuera de sitio que perdido.
+ * Si el componente está abierto para la matrícula (3/10, cliente): el primero de la ruta
+ * siempre; los demás solo con habilitación de operación (`EnrollmentModule`), y dentro de su
+ * ventana de fechas si la tiene. En progresión `FREE` todos están abiertos.
  */
-export type Sortable = Pick<OutlineItem, 'kind' | 'lessonId' | 'position'>;
+export type ModuleAccess =
+  | { state: 'OPEN' }
+  | { state: 'LOCKED' }
+  | { state: 'NOT_YET'; from: Date }
+  | { state: 'CLOSED'; until: Date };
+
+export function moduleAccess({
+  first,
+  unlock,
+  progression,
+  now,
+}: {
+  /** Es el primer componente de la ruta de esta matrícula (su grado de entrada). */
+  first: boolean;
+  /** La habilitación, si existe. */
+  unlock: { availableFrom: Date | null; availableUntil: Date | null } | null;
+  progression: 'LINEAR' | 'FREE';
+  now: Date;
+}): ModuleAccess {
+  if (progression === 'FREE') return { state: 'OPEN' };
+  if (!unlock) return first ? { state: 'OPEN' } : { state: 'LOCKED' };
+  if (unlock.availableFrom && unlock.availableFrom > now) {
+    return { state: 'NOT_YET', from: unlock.availableFrom };
+  }
+  if (unlock.availableUntil && unlock.availableUntil < now) {
+    return { state: 'CLOSED', until: unlock.availableUntil };
+  }
+  return { state: 'OPEN' };
+}
+
+/**
+ * Los ítems de un módulo, en el orden en que se recorren. Desde el 3/10 (reunión con el
+ * cliente) el componente se recorre **taller a taller**: los temas de una asignatura, cada uno
+ * seguido de sus exámenes, y después el examen de ese taller (examen con `subjectId` y sin
+ * tema); luego el siguiente taller. Los talleres van en el orden en que aparece su primer
+ * tema. Al final, los exámenes del componente sin taller y los que apuntan a un tema que no
+ * está en la lista: mejor visibles fuera de sitio que perdidos.
+ *
+ * Hasta el 3/10 (regla del 20/9) todos los exámenes sin tema caían al final del componente,
+ * y con un cuestionario por taller quedaban los cuatro juntos después del último tema.
+ */
+export type Sortable = Pick<OutlineItem, 'kind' | 'lessonId' | 'position'> & {
+  subjectId?: string | null;
+};
 
 /**
  * Genérico sobre lo mínimo que hace falta para ordenar (23/9): el builder del programa
@@ -73,12 +123,32 @@ export function sortItems<T extends Sortable>(items: T[]): T[] {
   );
   const ofLesson = (lessonId: string) =>
     assessments.filter((assessment) => assessment.lessonId === lessonId);
-  const ofModule = assessments.filter(
+  const loose = assessments.filter(
     (assessment) => !assessment.lessonId || !lessonIds.has(assessment.lessonId)
   );
 
+  // Los talleres, en el orden de su primer tema; los temas sin taller (no debería haber)
+  // forman uno propio al final.
+  const subjects: Array<string | null> = [];
+  for (const lesson of lessons) {
+    const subject = lesson.subjectId ?? null;
+    if (!subjects.includes(subject)) subjects.push(subject);
+  }
+  const subjectIds = new Set(subjects.filter((id): id is string => id !== null));
+
+  const ofSubject = (subjectId: string | null) =>
+    loose.filter((assessment) => subjectId !== null && assessment.subjectId === subjectId);
+  const ofModule = loose.filter(
+    (assessment) => !assessment.subjectId || !subjectIds.has(assessment.subjectId)
+  );
+
   return [
-    ...lessons.flatMap((lesson) => [lesson, ...(lesson.lessonId ? ofLesson(lesson.lessonId) : [])]),
+    ...subjects.flatMap((subjectId) => [
+      ...lessons
+        .filter((lesson) => (lesson.subjectId ?? null) === subjectId)
+        .flatMap((lesson) => [lesson, ...(lesson.lessonId ? ofLesson(lesson.lessonId) : [])]),
+      ...ofSubject(subjectId),
+    ]),
     ...ofModule,
   ];
 }
@@ -99,26 +169,35 @@ export function sequence({
   progression,
   now,
 }: {
-  modules: Array<{ id: string; items: OutlineItem[] }>;
+  /** `access` ausente = componente abierto (los tests de secuencia pura y el builder). */
+  modules: Array<{ id: string; items: OutlineItem[]; access?: ModuleAccess }>;
   progression: 'LINEAR' | 'FREE';
   now: Date;
 }): Map<string, SequencedItem> {
   const result = new Map<string, SequencedItem>();
 
   // El recorrido es el del programa entero, módulo a módulo y en orden.
-  const ordered = modules.flatMap((module) => sortItems(module.items));
+  const ordered = modules.flatMap((module) =>
+    sortItems(module.items).map((item) => ({ item, access: module.access ?? { state: 'OPEN' } }))
+  );
 
   let blocker: string | null = null;
 
-  for (const item of ordered) {
+  for (const { item, access } of ordered) {
+    // El componente cerrado manda sobre la secuencia (3/10): «completa el tema 3» no sirve
+    // de nada si el componente entero espera a que operación lo habilite.
+    const moduleReason: SequencedItem['unavailableReason'] =
+      access.state === 'OPEN' ? null : access.state;
+
     const windowReason: SequencedItem['unavailableReason'] =
-      item.availableFrom > now
+      moduleReason ??
+      (item.availableFrom > now
         ? 'NOT_YET'
         : item.availableUntil !== null && item.availableUntil < now
           ? 'CLOSED'
-          : null;
+          : null);
 
-    const blockedBy = progression === 'LINEAR' ? blocker : null;
+    const blockedBy = progression === 'LINEAR' && moduleReason === null ? blocker : null;
     const enabled = blockedBy === null && windowReason === null;
 
     result.set(item.assignmentId, {
@@ -194,4 +273,18 @@ export function progressOf(items: SequencedItem[]): { completed: number; total: 
     completed: items.filter((item) => item.status === 'COMPLETED').length,
     total: items.length,
   };
+}
+
+/**
+ * El título del taller que empieza en este ítem, o nulo si sigue en el mismo (3/10). Para
+ * pintar «Taller: Lengua castellana» una vez por taller en la ruta, sin anidar listas.
+ */
+export function workshopStart(
+  items: ReadonlyArray<Pick<OutlineItem, 'subjectId' | 'subjectName'>>,
+  index: number
+): string | null {
+  const item = items[index];
+  if (!item?.subjectName) return null;
+  const previous = index > 0 ? items[index - 1] : null;
+  return previous && previous.subjectId === item.subjectId ? null : item.subjectName;
 }

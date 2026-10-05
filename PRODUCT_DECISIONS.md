@@ -1168,3 +1168,36 @@ debe poder decidir el propio colegio. Se conserva como valor por defecto porque 
 seguridad (plan/03 «MFA para staff») lo daba por fijo y un despliegue existente no debe
 relajarse solo. Apagarlo no borra los factores ya configurados, así que volver a exigirlo no
 pide volver a escanear.
+
+## 2026-10-03 — Lo que el cliente decidió en la reunión del 3/10
+
+**Decisiones** (transcripción en `docs/` vía Jhonny; mapa en la bitácora):
+
+1. **La ruta se recorre taller a taller.** Dentro del componente: temas del taller, cada uno
+   con su actividad, el cuestionario del taller y su «Aprender es avanzar» (ahora
+   `Assessment.closingText`, con `Module.closingText` como respaldo). Antes todos los
+   cuestionarios sin tema caían juntos al final del componente.
+2. **El componente es la unidad de bloqueo, y se habilita a mano.** El siguiente componente
+   está bloqueado hasta que operación lo habilita desde la ficha de la matrícula, con una
+   ventana de fechas opcional por componente. Dentro del componente el avance es libre y se
+   puede hacer en una sentada. Sin certificado por componente; al terminar, «siguiente
+   componente» y los demás en gris.
+3. **Cuestionarios:** máximo 2 intentos, 60 % para aprobar (siguen siendo valores por examen);
+   tras el primero fallido se avisa «es tu último intento»; perdidos los dos se muestran las
+   respuestas correctas (`FULL_AFTER_LAST_ATTEMPT`) y se sigue: perder no bloquea.
+
+**Razón**: es el modelo pedagógico y comercial del cliente (bachillerato por componentes, cada
+componente se paga y se habilita cuando el estudiante escribe). La plataforma ya tenía las
+piezas (`Subject`, `Module`, `maxAttempts`, `passPercent`, `ReviewPolicy`); faltaban el orden
+por taller, el bloqueo por componente y la política de revisión.
+
+**Condición**: el bloqueo manual «hasta que paguen» es acceso por pago, y «la mora nunca toca
+el acceso académico de un menor» no se negocia. Se implementó como regla general porque el
+cliente confirmó que **hoy no hay menores matriculados** (Jhonny, 3/10). Si entra un menor,
+hay que decidir cómo se habilita su siguiente componente sin depender del pago (por fechas,
+o por acudiente) antes de matricularlo. El código no mira cartera al habilitar: la decisión
+de cuándo habilitar es de operación.
+
+**Descartado**: bloquear al perder el cuestionario; fechas por tema; un certificado por
+componente; una bandera por programa para apagar el bloqueo (hoy lo apaga `progression:
+FREE` de la cohorte).

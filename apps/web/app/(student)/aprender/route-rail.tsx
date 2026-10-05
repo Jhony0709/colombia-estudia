@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import {
   BookOpen,
+  ChevronRight,
   CircleCheck,
   ClipboardCheck,
   FileUp,
@@ -20,7 +21,11 @@ import {
   Video,
   type LucideIcon,
 } from 'lucide-react';
-import type { OutlineItem, SequencedItem } from '@/features/learn/server/outline';
+import {
+  workshopStart,
+  type OutlineItem,
+  type SequencedItem,
+} from '@/features/learn/server/outline';
 import type { OutlineModule } from '@/features/learn/server/cohort.service';
 import { cn } from '@/lib/utils';
 import { ProgressBar } from '@/components/atoms/progress-bar';
@@ -113,8 +118,14 @@ export async function RouteRail({
               </div>
             )}
             <ul className="border-border-muted divide-border-muted divide-y border-t">
-              {module.items.map((item) => (
+              {module.items.map((item, index) => (
                 <li key={item.assignmentId}>
+                  {/* El taller como cabecera de grupo cuando cambia (3/10). */}
+                  {workshopStart(module.items, index) && (
+                    <p className="type-overline text-text-muted bg-surface-sunken m-0 px-4 pb-1 pt-3">
+                      {workshopStart(module.items, index)}
+                    </p>
+                  )}
                   <RailItem item={item} current={item.assignmentId === currentId} />
                 </li>
               ))}
@@ -204,8 +215,13 @@ export async function WithRouteRail({
       rail={rail}
       header={header}
       mobileRail={
-        <details className="border-border rounded-card border p-3">
-          <summary className="type-body-emphasis min-h-touch flex cursor-pointer items-center">
+        <details className="border-border rounded-card group border p-3">
+          {/* Con chevron (4/10): un `summary` en `flex` pierde el triángulo y la caja parecía vacía. */}
+          <summary className="type-body-emphasis min-h-touch flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden">
+            <ChevronRight
+              aria-hidden
+              className="duration-fast ease-standard size-4 shrink-0 transition-transform group-open:rotate-90"
+            />
             {t('rail.toggle')}
           </summary>
           <div className="mt-3">{rail}</div>

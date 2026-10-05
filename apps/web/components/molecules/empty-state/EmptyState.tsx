@@ -8,6 +8,7 @@
  */
 
 import type { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
 
 export interface EmptyStateProps {
   /** What is not here, in one line. */
@@ -18,11 +19,24 @@ export interface EmptyStateProps {
   action?: ReactNode;
   /** Institution's support address, so the screen never dead-ends. */
   supportEmail?: string;
+  /** Un icono de lo que falta (4/10): decorativo, el título dice lo mismo. */
+  icon?: LucideIcon;
 }
 
-export function EmptyState({ title, description, action, supportEmail }: EmptyStateProps) {
+export function EmptyState({
+  title,
+  description,
+  action,
+  supportEmail,
+  icon: Icon,
+}: EmptyStateProps) {
   return (
     <div className="bg-surface-sunken rounded-card space-y-3 p-6">
+      {Icon && (
+        <span className="bg-surface-base text-text-muted rounded-pill inline-flex size-11 items-center justify-center">
+          <Icon aria-hidden="true" className="size-5" />
+        </span>
+      )}
       <p className="type-body-emphasis text-text">{title}</p>
       {description && <p className="type-body text-text-muted">{description}</p>}
       {action}

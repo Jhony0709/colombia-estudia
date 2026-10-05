@@ -83,8 +83,9 @@ interlineado tiene que escalar con `reading.fontScale` y con el zoom del navegad
 ## Espaciado, radios, tamaños
 
 `space.{1,2,3,4,6,8,12}` en `rem` · `radius.{control,card,sheet,pill}` ·
-`size.touchMin = 44px` (mínimo de toque, siempre) · `size.readingWidth = 68ch` (el Markdown
-no se estira más) · `elevation.{none,resting,floating,modal}`.
+`size.touchMin = 44px` (mínimo de toque, siempre) · `size.readingWidth = 68ch` (textos de
+la interfaz) · `size.measure = 38rem` (4/10: el texto de un tema, ~75 caracteres de Atkinson a
+17 px; `68ch` daba 95 porque `ch` mide el cero) · `elevation.{none,resting,floating,modal}`.
 
 **Radios (18/9)**: `control` 8 · `card` 16 · `sheet` 20 · `pill`. Cuatro con rol distinto y no
 uno para todo; entre 6 y 8 px la diferencia entre un control y una tarjeta no se veía. `card`

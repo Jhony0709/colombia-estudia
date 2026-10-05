@@ -20,7 +20,7 @@ import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
-import { sortItems } from '@/features/learn/server/outline';
+import { sortItems, workshopStart } from '@/features/learn/server/outline';
 import { notifyMany } from '@/features/notifications/server/notifications.service';
 
 export interface CohortAssignmentItem {
@@ -31,6 +31,11 @@ export interface CohortAssignmentItem {
   title: string;
   moduleId: string | null;
   lessonId: string | null;
+  /** El taller (asignatura), para ordenar igual que la ruta del estudiante (3/10). */
+  subjectId: string | null;
+  subjectName: string | null;
+  /** El taller que empieza en este ítem (4/10), para la etiqueta de grupo; nulo si sigue el mismo. */
+  workshop: string | null;
   position: number;
   /** La versión que estudia la cohorte. */
   assigned: { id: string; number: number };
@@ -99,6 +104,8 @@ export async function listCohortAssignments({
             id: true,
             title: true,
             moduleId: true,
+            subjectId: true,
+            subject: { select: { name: true } },
             position: true,
             versions: {
               where: { status: 'PUBLISHED' },
@@ -124,6 +131,8 @@ export async function listCohortAssignments({
             title: true,
             moduleId: true,
             lessonId: true,
+            subjectId: true,
+            subject: { select: { name: true } },
             position: true,
             versions: {
               where: { status: 'PUBLISHED' },
@@ -145,6 +154,9 @@ export async function listCohortAssignments({
       title: a.lesson.title,
       moduleId: a.lesson.moduleId,
       lessonId: a.lesson.id,
+      subjectId: a.lesson.subjectId,
+      subjectName: a.lesson.subject.name,
+      workshop: null,
       position: a.lesson.position,
       assigned: { id: a.lessonVersion.id, number: a.lessonVersion.number },
       latest: a.lesson.versions[0] ?? null,
@@ -159,6 +171,9 @@ export async function listCohortAssignments({
       title: a.assessment.title,
       moduleId: a.assessment.moduleId,
       lessonId: a.assessment.lessonId,
+      subjectId: a.assessment.subjectId,
+      subjectName: a.assessment.subject?.name ?? null,
+      workshop: null,
       position: a.assessment.position,
       assigned: { id: a.assessmentVersion.id, number: a.assessmentVersion.number },
       latest: a.assessment.versions[0]
@@ -170,10 +185,13 @@ export async function listCohortAssignments({
     })),
   ];
 
-  const modules = cohort.program.modules.map((module) => ({
-    ...module,
-    items: sortItems(items.filter((item) => item.moduleId === module.id)),
-  }));
+  const modules = cohort.program.modules.map((module) => {
+    const sorted = sortItems(items.filter((item) => item.moduleId === module.id));
+    return {
+      ...module,
+      items: sorted.map((item, index) => ({ ...item, workshop: workshopStart(sorted, index) })),
+    };
+  });
   const programItems = items.filter((item) => item.moduleId === null);
   const outdated = items.filter(
     (item) => item.latest !== null && item.latest.number > item.assigned.number

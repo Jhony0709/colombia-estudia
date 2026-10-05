@@ -10,7 +10,8 @@
  * el sitio que necesita. Lo del staff sigue en `SideNav`; esto es solo para `(student)`.
  *
  * Composición: marca → destinos de «Estudiar» como pestañas → a la derecha, campana con
- * contador y el menú de la persona (iniciales) con «Mi historial», el tema y «Cerrar sesión».
+ * contador (desde el 5/10 abre los últimos avisos: `NotificationMenu`) y el menú de la
+ * persona (iniciales) con «Mi historial», el tema y «Cerrar sesión».
  * Por debajo de `md` las pestañas bajan a una segunda fila con desplazamiento horizontal:
  * siempre en el DOM, siempre alcanzables con teclado, sin cajón. Salvo con
  * `primaryNav="desktop"` (27/9): el área del estudiante tiene barra de pestañas abajo por
@@ -25,7 +26,6 @@ import { LogoutDialog } from '@/components/organisms/logout-dialog';
 import {
   Award,
   BarChart3,
-  Bell,
   ChevronDown,
   LogOut,
   Monitor,
@@ -36,6 +36,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { SpaceSwitcher } from '@/components/molecules/space-switcher';
+import { NotificationMenu } from '@/components/organisms/notification-menu';
 import type { Space } from '@/lib/nav/spaces';
 import {
   Dropdown,
@@ -148,28 +149,7 @@ export function StudentTopNav({
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <Link
-            href={notificationsHref}
-            aria-current={
-              isActive(currentPath, { href: notificationsHref, label: '' }) ? 'page' : undefined
-            }
-            className="text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch min-w-touch relative inline-flex items-center justify-center"
-          >
-            <Bell className="size-5" aria-hidden="true" />
-            <span className="sr-only">
-              {unreadNotifications > 0
-                ? `Notificaciones, ${unreadNotifications} sin leer`
-                : 'Notificaciones'}
-            </span>
-            {unreadNotifications > 0 && (
-              <span
-                aria-hidden="true"
-                className="bg-accent-base text-text-on-accent type-caption absolute -right-0.5 -top-0.5 min-w-5 rounded-full px-1 text-center"
-              >
-                {unreadNotifications}
-              </span>
-            )}
-          </Link>
+          <NotificationMenu href={notificationsHref} unread={unreadNotifications} />
 
           <Dropdown>
             <DropdownTrigger>

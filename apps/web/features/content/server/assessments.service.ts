@@ -62,6 +62,8 @@ export interface AssessmentDraftView {
   subjectId: string | null;
   lessonId: string | null;
   learningObjective: string | null;
+  /** «Aprender es avanzar» del taller (3/10); nulo = el del componente o el general. */
+  closingText: string | null;
   versionId: string;
   number: number;
   content: unknown;
@@ -91,6 +93,22 @@ function countQuestions(content: unknown): number {
  * módulo. `@@unique([moduleId, position])` no estorba con varios nulos: Postgres trata los
  * NULL como distintos entre sí.
  */
+/**
+ * Reglas con las que nace un examen calificable (3/10, cliente): dos intentos, 60 % y las
+ * respuestas correctas al agotarlos. El diagnóstico no aprueba ni reprueba: queda con las de
+ * la base (un intento, sin umbral, solo la nota).
+ */
+export const NEW_ASSESSMENT_RULES = {
+  maxAttempts: 2,
+  passPercent: 60,
+  reviewPolicy: 'FULL_AFTER_LAST_ATTEMPT',
+} as const;
+
+const rulesFor = (kind: AssessmentKind) =>
+  kind === 'DIAGNOSTIC'
+    ? { maxAttempts: 1, passPercent: null, reviewPolicy: 'SCORE_ONLY' as const }
+    : NEW_ASSESSMENT_RULES;
+
 export async function createAssessment({
   institutionId,
   actorId,
@@ -179,6 +197,7 @@ export async function createAssessment({
           status: 'DRAFT',
           content: { questions: [] },
           answerKey: {},
+          ...rulesFor(kind),
         },
         select: { id: true },
       });
@@ -271,6 +290,7 @@ export async function updateAssessmentDetails({
   lessonId,
   subjectId,
   learningObjective,
+  closingText,
 }: {
   institutionId: string;
   actorId: string;
@@ -281,6 +301,7 @@ export async function updateAssessmentDetails({
   lessonId: string | null;
   subjectId: string | null;
   learningObjective: string | null;
+  closingText: string | null;
 }): Promise<{ assessmentId: string; movedTo: string | null }> {
   const db = createTenantClient(institutionId);
 
@@ -297,6 +318,7 @@ export async function updateAssessmentDetails({
         subjectId: true,
         position: true,
         learningObjective: true,
+        closingText: true,
         versions: { where: { status: 'PUBLISHED' }, select: { id: true }, take: 1 },
       },
     });
@@ -360,6 +382,7 @@ export async function updateAssessmentDetails({
           subjectId,
           position,
           learningObjective: learningObjective === '' ? null : learningObjective,
+          closingText: closingText === '' ? null : closingText,
         },
       });
     } catch (error) {
@@ -383,8 +406,9 @@ export async function updateAssessmentDetails({
           lessonId: assessment.lessonId,
           subjectId: assessment.subjectId,
           learningObjective: assessment.learningObjective,
+          closingText: assessment.closingText,
         },
-        after: { title, kind, moduleId, lessonId, subjectId, learningObjective },
+        after: { title, kind, moduleId, lessonId, subjectId, learningObjective, closingText },
       },
     });
 
@@ -435,6 +459,7 @@ export async function openAssessmentDraft({
       subjectId: true,
       lessonId: true,
       learningObjective: true,
+      closingText: true,
       versions: {
         orderBy: { number: 'desc' },
         take: 1,
@@ -466,6 +491,7 @@ export async function openAssessmentDraft({
     subjectId: assessment.subjectId,
     lessonId: assessment.lessonId,
     learningObjective: assessment.learningObjective,
+    closingText: assessment.closingText,
     hasPublished: assessment.versions.some((v) => isVersionLive(toPublishStatus(v.status))),
   };
 

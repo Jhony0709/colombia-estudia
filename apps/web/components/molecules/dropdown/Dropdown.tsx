@@ -218,7 +218,7 @@ export interface DropdownItemProps {
   itemKey?: string;
   children: ReactNode;
   /** Segunda línea, en `text.muted`: qué hace, cuándo, para quién. */
-  description?: string;
+  description?: ReactNode;
   /** Un icono o similar, delante. */
   startContent?: ReactNode;
   /** Algo detrás: un badge, una flecha. */
@@ -239,6 +239,8 @@ export interface DropdownItemProps {
    * cuatro opciones que se reconocen por el icono (tema, densidad).
    */
   iconOnly?: boolean;
+  /** Título en hasta dos líneas y todo alineado arriba: avisos, no acciones (5/10). */
+  multiline?: boolean;
 }
 
 export function DropdownItem({
@@ -253,6 +255,7 @@ export function DropdownItem({
   onSelect,
   className,
   iconOnly = false,
+  multiline = false,
 }: DropdownItemProps) {
   const { onAction } = useContext(MenuContext);
   const selection = useContext(SelectionContext);
@@ -265,6 +268,7 @@ export function DropdownItem({
   const itemClass = cn(
     'rounded-control min-h-touch flex cursor-pointer items-center outline-none',
     iconOnly ? 'min-w-touch justify-center px-0' : 'gap-3 px-3 py-1.5',
+    multiline && 'items-start py-2',
     'duration-fast ease-standard transition-colors',
     'data-[highlighted]:bg-surface-sunken data-[state=checked]:bg-surface-sunken',
     // Deshabilitado con su color, no con opacidad: `text.subtle` sigue cumpliendo 4.5:1.
@@ -285,7 +289,9 @@ export function DropdownItem({
         <span className="flex shrink-0 items-center [&>svg]:size-4">{startContent}</span>
       )}
       <span className="min-w-0 flex-1">
-        <span className="type-body block truncate">{children}</span>
+        <span className={cn('type-body block', multiline ? 'line-clamp-2' : 'truncate')}>
+          {children}
+        </span>
         {description && (
           <span
             className={cn('type-caption block', disabled ? 'text-text-subtle' : 'text-text-muted')}

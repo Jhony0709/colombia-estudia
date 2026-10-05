@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AttemptPlayer, type AttemptView } from './AttemptPlayer';
 
 const mockRefresh = jest.fn();
@@ -30,14 +30,17 @@ jest.mock('@/components/organisms/dialog', () => ({
     open,
     children,
     title,
+    actions,
   }: {
     open: boolean;
     children: React.ReactNode;
     title: string;
+    actions?: React.ReactNode;
   }) =>
     open ? (
       <div role="dialog" aria-label={title}>
         {children}
+        {actions}
       </div>
     ) : null,
   DialogClose: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -151,6 +154,68 @@ describe('AttemptPlayer en curso', () => {
     const dialog = screen.getByRole('dialog');
     expect(dialog).toHaveTextContent('questionN:1');
     expect(dialog).toHaveTextContent('questionN:2');
+  });
+});
+
+describe('entregar', () => {
+  const saved = {
+    ok: true,
+    status: 200,
+    headers: { get: () => null },
+    json: async () => ({ data: { savedAt: new Date().toISOString() } }),
+  };
+
+  const answerAndSubmit = () => {
+    fireEvent.click(screen.getByLabelText('A'));
+    fireEvent.click(screen.getByRole('button', { name: 'submit' }));
+    fireEvent.click(screen.getByRole('button', { name: 'confirmSubmit' }));
+  };
+
+  // 5/10: responder la última y entregar enseguida decía «Hay respuestas sin guardar».
+  it('espera el guardado que va en camino antes de entregar', async () => {
+    const calls: string[] = [];
+    let release: () => void = () => undefined;
+    global.fetch = jest.fn((url: string, init?: RequestInit) => {
+      calls.push(`${init?.method} ${url}`);
+      if (init?.method === 'PATCH') {
+        return new Promise((resolve) => {
+          release = () => resolve(saved);
+        });
+      }
+      return Promise.resolve(saved);
+    }) as unknown as typeof fetch;
+
+    render(<AttemptPlayer attempt={attempt([question(1)])} />);
+    answerAndSubmit();
+
+    expect(calls).toEqual(['PATCH /api/learn/attempts/att-1']);
+    await act(async () => release());
+    await waitFor(() => expect(calls).toContain('POST /api/learn/attempts/att-1/submit'));
+    expect(screen.queryByText('submitPendingError')).not.toBeInTheDocument();
+  });
+
+  it('con la sesión cerrada lo dice, en vez de culpar a la conexión', async () => {
+    global.fetch = jest.fn(async (_url: string, init?: RequestInit) =>
+      init?.method === 'PATCH'
+        ? {
+            ok: false,
+            status: 401,
+            headers: { get: () => null },
+            json: async () => ({
+              error: { code: 'UNAUTHENTICATED', message: 'Authentication required' },
+            }),
+          }
+        : saved
+    ) as unknown as typeof fetch;
+
+    render(<AttemptPlayer attempt={attempt([question(1)])} />);
+    answerAndSubmit();
+
+    expect(await screen.findByText('submitSessionError')).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalledWith(
+      '/api/learn/attempts/att-1/submit',
+      expect.anything()
+    );
   });
 });
 

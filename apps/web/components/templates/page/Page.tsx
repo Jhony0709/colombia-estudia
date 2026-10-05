@@ -44,6 +44,8 @@ export function Page({ children, wide = false }: PageProps) {
 export interface PageHeaderProps {
   /** Small label above the title, for where in the product this is. */
   overline?: string;
+  /** El overline solo desde `lg` (4/10): en el player, debajo lo dice la barra de tarea. */
+  overlineFromLg?: boolean;
   title: string;
   /** One or two lines saying what this screen is for. */
   description?: ReactNode;
@@ -53,7 +55,14 @@ export interface PageHeaderProps {
   back?: ReactNode;
 }
 
-export function PageHeader({ overline, title, description, action, back }: PageHeaderProps) {
+export function PageHeader({
+  overline,
+  overlineFromLg = false,
+  title,
+  description,
+  action,
+  back,
+}: PageHeaderProps) {
   return (
     <header className="space-y-3">
       {back}
@@ -62,7 +71,16 @@ export function PageHeader({ overline, title, description, action, back }: PageH
           cuanto el título era largo, y quedaba un botón suelto entre el título y el contenido. */}
       <div className="flex flex-wrap items-start justify-between gap-4 sm:flex-nowrap">
         <div className="min-w-0 space-y-1 sm:flex-1">
-          {overline && <p className="type-overline text-text-muted uppercase">{overline}</p>}
+          {overline && (
+            <p
+              className={cn(
+                'type-overline text-text-muted uppercase',
+                overlineFromLg && 'hidden lg:block'
+              )}
+            >
+              {overline}
+            </p>
+          )}
           {/* FocusManager moves focus here on every route change (lib/a11y/focus-manager.tsx). */}
           <h1 className="type-display text-text outline-none" tabIndex={-1}>
             {title}

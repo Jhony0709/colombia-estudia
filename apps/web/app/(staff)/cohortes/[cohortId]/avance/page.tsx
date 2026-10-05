@@ -12,6 +12,7 @@ import { getCohortProgress } from '@/features/cohorts/server/progress.service';
 import { CohortProgressView } from '@/features/cohorts/components/cohort-progress-view';
 import { Page, PageHeader } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
+import { CohortSections } from '../cohort-sections';
 
 export const metadata: Metadata = { title: 'Avance' };
 
@@ -48,6 +49,11 @@ export default async function CohortProgressPage({
             ]}
           />
         }
+      />
+      <CohortSections
+        institutionId={ctx.institution.id}
+        cohortId={progress.cohort.id}
+        capabilities={ctx.capabilities}
       />
       <CohortProgressView
         progress={progress}

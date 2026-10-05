@@ -38,6 +38,7 @@ import { FormField, FormSelect } from '@/components/atoms/form-field';
 import { Button } from '@/components/atoms/button';
 import { StatusBadge } from '@/components/molecules/status-badge/StatusBadge';
 import { ReviewActions } from './review-actions';
+import { CohortSections } from '../cohort-sections';
 
 export const metadata: Metadata = { title: 'Actividades' };
 
@@ -141,6 +142,11 @@ export default async function SubmissionsPage({
             ]}
           />
         }
+      />
+      <CohortSections
+        institutionId={institutionId}
+        cohortId={cohortId}
+        capabilities={ctx.capabilities}
       />
 
       <section aria-label={t('statsLabel')}>
@@ -357,6 +363,7 @@ export default async function SubmissionsPage({
             },
             {
               key: 'submittedAt',
+              hideBelow: 'md',
               header: t('submittedAt'),
               cell: (r) => (
                 <>

@@ -33,7 +33,7 @@ export default async function PublicCertificatePage({
     <div className="mx-auto max-w-[44rem] px-4 py-10 sm:px-6">
       <div className="mb-6 flex items-center justify-between gap-3 print:hidden">
         <Link href="/" className="min-h-touch inline-flex items-center">
-          <BrandLogo variant="horizontal" alt="Colombia Estudia" className="h-8" />
+          <BrandLogo variant="horizontal" className="h-8" />
         </Link>
         {c && c.status === 'VALID' && <PrintButton label={t('print')} />}
       </div>

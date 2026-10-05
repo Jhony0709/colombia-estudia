@@ -113,6 +113,7 @@ export function AssessmentEditor({
       lessonId: string | null;
       subjectId: string | null;
       learningObjective: string | null;
+      closingText: string | null;
     };
   };
   initialContent: string;
@@ -516,12 +517,16 @@ export function AssessmentEditor({
             <SelectField
               label={t('reviewPolicy')}
               value={reviewPolicy}
-              options={['NONE', 'SCORE_ONLY', 'FULL_AFTER_GRADED', 'FULL_AFTER_DUE'].map(
-                (value) => ({
-                  value,
-                  label: t(`policy.${value}`),
-                })
-              )}
+              options={[
+                'NONE',
+                'SCORE_ONLY',
+                'FULL_AFTER_GRADED',
+                'FULL_AFTER_DUE',
+                'FULL_AFTER_LAST_ATTEMPT',
+              ].map((value) => ({
+                value,
+                label: t(`policy.${value}`),
+              }))}
               onChange={(v) => {
                 setReviewPolicy(v);
                 touchContent();

@@ -1,64 +1,72 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { BrandLogo } from '@/components/atoms/brand-logo';
+import { ArrowRight } from 'lucide-react';
 import { SiteContainer } from '../site-container';
-import { CtaLink } from '../cta-link';
-import type { ContactLink } from '../contact-links';
+import { AlbaLogo } from '../brand/alba-logo';
+import { MobileMenu, type MenuLink } from './mobile-menu';
 
 /**
- * Cabecera fija: logo, tres anclas (desde `lg`), entrar y escribir. Sin buscador ni "Crear
- * cuenta": no hay registro. Por debajo de `lg` las anclas se ocultan —las secciones van en
- * el mismo orden al bajar— y un cajón para tres anclas no se paga.
+ * Cabecera fija (ALBA, 5/10): logo a la izquierda, cinco anclas centradas y, a la derecha,
+ * «Ingresar» y «Comenzar →» (registro público). 76 px en escritorio y 64 en el teléfono, donde
+ * las anclas no se comprimen: van en el menú. Con sesión, «Comenzar» no aplica y «Ingresar»
+ * lleva a la cuenta.
  */
-export async function SiteHeader({
-  signedIn,
-  contact,
-}: {
-  signedIn: boolean;
-  contact: ContactLink;
-}) {
-  const t = await getTranslations('landing');
+export async function SiteHeader({ signedIn }: { signedIn: boolean }) {
+  const t = await getTranslations('landing.nav');
+  const links: MenuLink[] = [
+    { href: '#inicio', label: t('home') },
+    { href: '#programas', label: t('programs') },
+    { href: '#como-funciona', label: t('how') },
+    { href: '#historias', label: t('stories') },
+    { href: '#preguntas', label: t('faq') },
+  ];
+  const login = signedIn
+    ? { href: '/ingresar', label: t('enter') }
+    : { href: '/auth/login', label: t('login') };
+  const start = signedIn ? null : { href: '/registro', label: t('start') };
+
   return (
     <header className="site-header">
-      <SiteContainer className="flex min-h-[4.5rem] items-center justify-between gap-6">
+      <SiteContainer className="flex h-full items-center justify-between gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
         <Link
           href="/"
-          className="rounded-control inline-flex items-center"
-          aria-label="Colombia Estudia, inicio"
+          aria-label={t('homeLabel')}
+          className="min-h-touch inline-flex items-center justify-self-start rounded-[10px]"
         >
-          <BrandLogo alt="" className="h-10 sm:h-11" priority />
+          <AlbaLogo priority className="h-10 lg:h-11" />
         </Link>
-        <nav aria-label={t('nav.label')} className="hidden items-center gap-1 lg:flex">
-          <a href="#programas" className="site-nav-link">
-            {t('nav.programs')}
-          </a>
-          <a href="#como-funciona" className="site-nav-link">
-            {t('nav.how')}
-          </a>
-          <a href="#preguntas" className="site-nav-link">
-            {t('nav.faq')}
-          </a>
+
+        <nav aria-label={t('label')} className="hidden lg:block">
+          <ul className="m-0 flex list-none items-center gap-1 p-0">
+            {links.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} className="site-nav-link">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </nav>
-        <div className="flex items-center gap-2">
-          <Link
-            href={signedIn ? '/ingresar' : '/auth/login'}
-            className="site-btn site-btn--secondary site-btn--sm"
-          >
-            {signedIn ? t('nav.enter') : t('nav.login')}
+
+        <div className="hidden items-center gap-2 justify-self-end lg:flex">
+          <Link href={login.href} className="site-btn site-btn--secondary site-btn--sm">
+            {login.label}
           </Link>
-          {/* Registro público (Fase B): solo para quien no ha entrado. */}
-          {!signedIn && (
-            <Link href="/registro" className="site-btn site-btn--primary site-btn--sm">
-              {t('nav.register')}
+          {start && (
+            <Link href={start.href} className="site-btn site-btn--primary site-btn--sm">
+              {start.label}
+              <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           )}
-          {/* `hidden` no puede ir en el propio .site-btn: site.css fija su display después. */}
-          <span className="hidden sm:block">
-            <CtaLink contact={contact} size="sm">
-              {t('nav.write')}
-            </CtaLink>
-          </span>
         </div>
+
+        <MobileMenu
+          links={links}
+          login={login}
+          start={start}
+          openLabel={t('menuOpen')}
+          closeLabel={t('menuClose')}
+        />
       </SiteContainer>
     </header>
   );

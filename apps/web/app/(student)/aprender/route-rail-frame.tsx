@@ -62,9 +62,10 @@ export function RouteRailFrame({
         collapsed ? 'lg:grid-cols-[auto_minmax(0,1fr)]' : 'lg:grid-cols-[15rem_minmax(0,1fr)]'
       )}
     >
+      {/* Pegada bajo la cabecera fija (4/10): con `top-4` el botón de plegar quedaba debajo. */}
       <aside
         className={cn(
-          'sticky top-4 hidden max-h-[calc(100vh-2rem)] overflow-y-auto lg:block',
+          'sticky top-20 hidden max-h-[calc(100vh-6rem)] overflow-y-auto lg:block',
           collapsed && 'w-auto'
         )}
       >

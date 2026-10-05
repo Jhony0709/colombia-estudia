@@ -14,7 +14,7 @@ import 'server-only';
 
 import { isVersionLive, toPublishStatus, type PublishStatus } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
-import { sortItems } from '@/features/learn/server/outline';
+import { sortItems, workshopStart } from '@/features/learn/server/outline';
 
 export type BuilderForm = 'VIDEO' | 'MARKDOWN' | 'SUBMISSION' | 'ASSESSMENT';
 
@@ -35,6 +35,8 @@ export interface BuilderItem {
   /** Solo temas. */
   subjectId: string | null;
   subjectName: string | null;
+  /** El taller que empieza en este ítem (4/10), para la etiqueta de grupo; nulo si sigue el mismo. */
+  workshop?: string | null;
   /** Solo exámenes. */
   questionCount: number | null;
   assessmentKind: 'DIAGNOSTIC' | 'SUBJECT' | 'FINAL' | null;
@@ -121,6 +123,7 @@ export async function getProgramBuilder({
         lessonId: true,
         position: true,
         kind: true,
+        subject: { select: { id: true, name: true } },
         versions: {
           orderBy: { number: 'desc' },
           select: { number: true, status: true, content: true, timeLimitMinutes: true },
@@ -173,8 +176,9 @@ export async function getProgramBuilder({
       position: assessment.position,
       form: 'ASSESSMENT',
       estimatedMinutes: latest?.timeLimitMinutes ?? null,
-      subjectId: null,
-      subjectName: null,
+      // El taller del examen (3/10): con él, el cuestionario cae tras los temas de su taller.
+      subjectId: assessment.subject?.id ?? null,
+      subjectName: assessment.subject?.name ?? null,
       questionCount: countQuestions(latest?.content),
       assessmentKind: assessment.kind as BuilderItem['assessmentKind'],
       latestStatus: latest ? toPublishStatus(latest.status) : null,
@@ -190,7 +194,11 @@ export async function getProgramBuilder({
   });
 
   const modules: BuilderModule[] = program.modules.map((module) => {
-    const items = sortItems(all.filter((item) => item.moduleId === module.id));
+    const sorted = sortItems(all.filter((item) => item.moduleId === module.id));
+    const items = sorted.map((item, index) => ({
+      ...item,
+      workshop: workshopStart(sorted, index),
+    }));
     return {
       id: module.id,
       name: module.name,

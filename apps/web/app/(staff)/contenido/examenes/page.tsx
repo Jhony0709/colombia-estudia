@@ -118,11 +118,27 @@ export default async function AssessmentsPage() {
                 </Link>
               ),
             },
-            { key: 'kind', header: t('colKind'), cell: (a) => t(`kind.${a.kind}`) },
-            { key: 'module', header: t('colModule'), cell: (a) => a.moduleName ?? '—' },
-            { key: 'lesson', header: t('colLesson'), cell: (a) => a.lessonTitle ?? '—' },
+            {
+              key: 'kind',
+              hideBelow: 'md',
+              header: t('colKind'),
+              cell: (a) => t(`kind.${a.kind}`),
+            },
+            {
+              key: 'module',
+              hideBelow: 'md',
+              header: t('colModule'),
+              cell: (a) => a.moduleName ?? '—',
+            },
+            {
+              key: 'lesson',
+              hideBelow: 'lg',
+              header: t('colLesson'),
+              cell: (a) => a.lessonTitle ?? '—',
+            },
             {
               key: 'questions',
+              hideBelow: 'lg',
               header: t('colQuestions'),
               numeric: true,
               cell: (a) => a.questionCount,

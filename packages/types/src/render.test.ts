@@ -6,7 +6,13 @@
  * pasa por aquí. La mitad de estas pruebas son de lo que NO debe salir.
  */
 
-import { renderInlineHtml, renderLessonHtml, type RenderAsset } from './render';
+import {
+  renderInlineHtml,
+  renderLesson,
+  renderLessonHtml,
+  repeatsTitle,
+  type RenderAsset,
+} from './render';
 
 const IMAGE_ID = 'cm1abcdefghijklmnopqrstuv';
 const VIDEO_ID = 'cm2abcdefghijklmnopqrstuv';
@@ -328,5 +334,69 @@ describe('renderInlineHtml', () => {
 
     expect(html).not.toContain('<script');
     expect(html).not.toContain('onclick');
+  });
+});
+
+describe('el título repetido (4/10)', () => {
+  it.each([
+    ['**APRENDER ES AVANZAR**\n\nTexto.\n', 'Aprender es avanzar'],
+    ['## CARTA A MÍ MISMO/A\n\nTexto.\n', 'ACTIVIDAD PRÁCTICA 2. “CARTA A MÍ MISMO/A”'],
+    ['## RIESGOS PSICOSOCIALES\n\nTexto.\n', 'Taller 1. Riesgos psicosociales'],
+  ])('el primer bloque que repite el título se quita (%s)', (markdown, title) => {
+    const html = renderLessonHtml(markdown, new Map(), { title });
+
+    expect(html.trim()).toBe('<p>Texto.</p>');
+  });
+
+  it('un título que solo empieza igual se queda: es una sección, no el título', () => {
+    const html = renderLessonHtml('## Resolución de conflictos\n\nTexto.\n', new Map(), {
+      title: 'Resolución de conflictos, redes de apoyo y cuidado personal',
+    });
+
+    expect(html).toContain('<h2');
+  });
+
+  it('solo el primer bloque: el mismo texto más abajo se queda', () => {
+    const html = renderLessonHtml('Intro.\n\n## Aprender es avanzar\n', new Map(), {
+      title: 'Aprender es avanzar',
+    });
+
+    expect(html).toContain('Aprender es avanzar</h2>');
+  });
+
+  it('repeatsTitle no confunde un bloque vacío con el título', () => {
+    expect(repeatsTitle('  ', 'Tema')).toBe(false);
+  });
+});
+
+describe('las secciones y los bloques (4/10)', () => {
+  it('cada h2 del primer nivel lleva id y entra en el índice, sin repetir ids', () => {
+    const { html, outline } = renderLesson(
+      '## ¿Qué son?\n\nA\n\n## ¿Qué son?\n\n:::callout{kind=note}\n## Dentro\n:::\n',
+      new Map()
+    );
+
+    expect(outline).toEqual([
+      { id: 'user-content-que-son', text: '¿Qué son?' },
+      { id: 'user-content-que-son-2', text: '¿Qué son?' },
+    ]);
+    expect(html).toContain('<h2 id="user-content-que-son">');
+    expect(html).toContain('<h2 id="user-content-que-son-2">');
+    expect(html).toContain('<h2>Dentro</h2>');
+  });
+
+  it('la tabla va en su marco', () => {
+    expect(render('| a | b |\n| - | - |\n| 1 | 2 |\n')).toContain('<div class="tabla"><table>');
+  });
+
+  it('una imagen sola con título sale como figura con pie; todas cargan en diferido', () => {
+    const html = render(
+      `![Alt](asset:${IMAGE_ID} "Un pie")\n\nTexto ![x](asset:${IMAGE_ID}) suelto.\n`
+    );
+
+    expect(html).toContain('<figure class="figura">');
+    expect(html).toContain('<figcaption>Un pie</figcaption>');
+    expect(html).not.toContain('title=');
+    expect(html.match(/loading="lazy"/g)).toHaveLength(2);
   });
 });

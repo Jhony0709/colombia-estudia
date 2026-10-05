@@ -162,6 +162,9 @@ export const designTokensPlugin = plugin(
     const sizeVars = {
       '--size-touch-min': '44px',
       '--size-reading-width': '68ch',
+      // La medida del texto de un tema (4/10): ~75 caracteres de Atkinson a 17 px. `68ch` daba
+      // 95, porque `ch` mide el cero y el de Atkinson es ancho.
+      '--size-measure': '38rem',
       '--size-sidenav': '16rem',
       // 64rem (1024 px), decidido por Jhonny el 19/9 al pasar a lienzo gris con tarjetas
       // blancas: con el marco a 72rem la tarjeta se estiraba y la tabla se leía a saltos.
@@ -315,6 +318,9 @@ export const designTokensPlugin = plugin(
       },
       '.max-w-reading': {
         maxWidth: 'var(--size-reading-width)',
+      },
+      '.max-w-measure': {
+        maxWidth: 'var(--size-measure)',
       },
       '.w-sidenav': {
         width: 'var(--size-sidenav)',

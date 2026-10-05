@@ -280,6 +280,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
               },
               {
                 key: 'code',
+                hideBelow: 'md',
                 header: t('code'),
                 narrow: true,
                 cell: (person) => <span className="font-mono">{person.code}</span>,
@@ -305,7 +306,12 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
                   </span>
                 ),
               },
-              { key: 'email', header: t('email'), cell: (person) => person.emailMasked },
+              {
+                key: 'email',
+                hideBelow: 'md',
+                header: t('email'),
+                cell: (person) => person.emailMasked,
+              },
               {
                 key: 'roles',
                 header: t('role'),
@@ -324,6 +330,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
               },
               {
                 key: 'invitation',
+                hideBelow: 'md',
                 header: t('invitation'),
                 // La palabra dice el estado; la píldora solo lo hace visible de lejos.
                 cell: (person) => (
@@ -342,6 +349,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
               },
               {
                 key: 'created',
+                hideBelow: 'lg',
                 header: t('created'),
                 cell: (person) => (
                   <time

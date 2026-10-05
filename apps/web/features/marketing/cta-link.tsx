@@ -13,7 +13,7 @@ export function CtaLink({
 }: {
   href?: string;
   contact?: ContactLink;
-  variant?: 'primary' | 'secondary' | 'yellow' | 'white';
+  variant?: 'primary' | 'secondary' | 'yellow' | 'ghost';
   size?: 'sm';
   className?: string;
   children: ReactNode;

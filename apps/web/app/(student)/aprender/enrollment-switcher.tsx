@@ -11,6 +11,7 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
   Dropdown,
   DropdownItem,
@@ -30,9 +31,12 @@ export interface EnrollmentOption {
 export function EnrollmentSwitcher({
   options,
   selectedId,
+  tone = 'default',
 }: {
   options: EnrollmentOption[];
   selectedId: string;
+  /** `on-accent` (4/10): dentro del héroe azul de `/aprender`. */
+  tone?: 'default' | 'on-accent';
 }) {
   const t = useTranslations('learn');
   const router = useRouter();
@@ -43,7 +47,12 @@ export function EnrollmentSwitcher({
       <DropdownTrigger>
         <button
           type="button"
-          className="type-overline text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch -ml-2 inline-flex max-w-full items-center gap-1 px-2 uppercase"
+          className={cn(
+            'type-overline rounded-control min-h-touch -ml-2 inline-flex max-w-full items-center gap-1 px-2 uppercase',
+            tone === 'on-accent'
+              ? 'text-text-on-accent opacity-90 hover:opacity-100'
+              : 'text-text-muted hover:bg-surface-sunken hover:text-text'
+          )}
           aria-label={t('switcher.label', { program: selected.programName, code: selected.code })}
         >
           <span className="truncate">

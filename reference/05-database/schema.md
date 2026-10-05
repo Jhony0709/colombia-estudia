@@ -67,7 +67,15 @@ que cambia sola al publicar salvo que `pinnedVersion` sea `true` (27/9; auditado
 
 **Las reglas del intento viven en la versión.** `maxAttempts`, `timeLimitMinutes`,
 `passPercent`, `reviewPolicy` en `AssessmentVersion`: cambiar el umbral en mayo no reescribe
-quién aprobó en marzo.
+quién aprobó en marzo. `ReviewPolicy` suma `FULL_AFTER_LAST_ATTEMPT` (3/10).
+
+**El componente se habilita por matrícula (3/10).** `EnrollmentModule` (`enrollmentId ×
+moduleId` único; `unlockedAt`, `unlockedById` → `Person` `SET NULL`, `availableFrom`,
+`availableUntil` con `CHECK from <= until`): una fila = componente habilitado para esa
+matrícula; borrarla vuelve a bloquear. El primero de la ruta no necesita fila. Audita
+`enrollment_module.unlock|update|lock`. Ver `contenido-y-evaluaciones.md` § Secuencia.
+`Assessment.closingText` (3/10) es el «Aprender es avanzar» del taller; manda sobre
+`Module.closingText`.
 
 **`answerKey` separado de `content`** y excluido del cliente Prisma por defecto (`omit`).
 La única lectura es `grading.ts`. Un `include` olvidado no filtra las respuestas.

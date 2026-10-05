@@ -13,6 +13,8 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { getResultsForStudent } from '@/features/learn/server/attempt.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
+import { ExamBulletBar } from '@/components/molecules/charts/ExamBullet';
+import { ClipboardCheck, ChartColumn, History } from 'lucide-react';
 import { DataTable } from '@/components/molecules/data-table';
 import { Badge } from '@/components/atoms/badge';
 
@@ -69,7 +71,7 @@ export default async function ResultsPage() {
       */}
       <PageSection title={tr('examsTitle')} description={tr('examsHint')}>
         {results.assessments.length === 0 ? (
-          <EmptyState title={tr('noExams')} description={tr('noExamsHint')} />
+          <EmptyState icon={ClipboardCheck} title={tr('noExams')} description={tr('noExamsHint')} />
         ) : (
           <ul className="grid gap-3 md:grid-cols-2">
             {results.assessments.map((e) => (
@@ -86,7 +88,13 @@ export default async function ResultsPage() {
           caption={tr('scoresCaption')}
           rows={results.scores}
           rowKey={(s) => `${s.cohortCode}:${s.subjectName}`}
-          empty={<EmptyState title={tr('noScores')} description={tr('noScoresHint')} />}
+          empty={
+            <EmptyState
+              icon={ChartColumn}
+              title={tr('noScores')}
+              description={tr('noScoresHint')}
+            />
+          }
           columns={[
             { key: 'subject', header: tr('subject'), cell: (s) => s.subjectName },
             { key: 'cohort', header: tr('cohort'), cell: (s) => s.cohortCode, narrow: true },
@@ -106,7 +114,13 @@ export default async function ResultsPage() {
           caption={tr('attemptsCaption')}
           rows={results.attempts}
           rowKey={(a) => a.id}
-          empty={<EmptyState title={tr('noAttempts')} description={tr('noAttemptsHint')} />}
+          empty={
+            <EmptyState
+              icon={History}
+              title={tr('noAttempts')}
+              description={tr('noAttemptsHint')}
+            />
+          }
           columns={[
             {
               key: 'title',
@@ -196,7 +210,9 @@ async function ExamCard({
       ? tr('card.blockedBy', { title: exam.blockedBy })
       : exam.unavailableReason === 'CLOSED'
         ? tr('card.closed')
-        : tr('card.notYet');
+        : exam.unavailableReason === 'LOCKED'
+          ? tr('card.locked')
+          : tr('card.notYet');
   } else if (exam.status === 'IN_PROGRESS') {
     tone = 'info';
     line = tr('card.inProgress');
@@ -236,6 +252,35 @@ async function ExamCard({
         {exam.programName} · {exam.moduleName}
       </p>
       <p className="type-body text-text m-0">{line}</p>
+      {/* La nota contra el umbral (4/10), la misma bala que el panel. */}
+      {(exam.best || exam.passPercent !== null) && (
+        <div className="space-y-1">
+          <ExamBulletBar
+            state={
+              exam.best
+                ? exam.best.passed
+                  ? 'passed'
+                  : 'failed'
+                : exam.enabled
+                  ? 'pending'
+                  : 'locked'
+            }
+            percent={exam.best?.percent ?? null}
+            passPercent={exam.passPercent}
+            summary={tr('bar', {
+              percent: exam.best?.percent ?? 0,
+              hasBest: exam.best ? 'yes' : 'no',
+              pass: exam.passPercent ?? 0,
+              hasPass: exam.passPercent === null ? 'no' : 'yes',
+            })}
+          />
+          {exam.passPercent !== null && (
+            <p className="type-caption text-text-muted m-0">
+              {tr('passLine', { pass: exam.passPercent })}
+            </p>
+          )}
+        </div>
+      )}
       {action && (
         <Link
           href={action.href}

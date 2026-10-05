@@ -87,6 +87,7 @@ model Institution {
   scores                Score[]
   learningEvents        LearningEvent[]
   accommodations        Accommodation[]
+  enrollmentModules     EnrollmentModule[]
   paymentPlans          PaymentPlan[]
   programPrices         ProgramPrice[]
   installments          Installment[]
@@ -164,6 +165,7 @@ model Person {
   accommodations       Accommodation[]
   paymentPlansPaid     PaymentPlan[]      @relation("PlanPayerPerson")
   programPricesCreated ProgramPrice[]     @relation("PriceCreatedBy")
+  modulesUnlocked      EnrollmentModule[] @relation("ModuleUnlockedBy")
   agreementsSigned     PaymentAgreement[] @relation("AgreementPayerPerson")
   learningEvents       LearningEvent[]
   notifications        Notification[]
@@ -347,9 +349,10 @@ model Module {
   program     Program     @relation(fields: [programId], references: [id])
   coverMedia  MediaAsset? @relation("ModuleCover", fields: [coverMediaId], references: [id])
 
-  lessons      Lesson[]
-  assessments  Assessment[]
-  certificates Certificate[]
+  lessons           Lesson[]
+  assessments       Assessment[]
+  certificates      Certificate[]
+  enrollmentModules EnrollmentModule[]
 
   @@unique([programId, position])
   @@unique([institutionId, sourceRef])
@@ -462,10 +465,37 @@ model Enrollment {
   scores            Score[]
   certificates      Certificate[]
   submissions       Submission[]
+  modules           EnrollmentModule[]
 
   @@unique([studentId, cohortId])
   @@unique([institutionId, sourceRef])
   @@index([institutionId, cohortId, status])
+}
+
+/// Habilitación de un componente para una matrícula (3/10, decisión del cliente). En una cohorte
+/// `LINEAR` el primer componente de la ruta está abierto; cada uno de los siguientes está
+/// bloqueado hasta que operación lo habilita a mano, con un clic desde la ficha de la matrícula,
+/// cuando el estudiante lo pide. Una fila = habilitado; borrarla vuelve a bloquear. Las fechas,
+/// opcionales, acotan la ventana del componente —no del tema—: «para que nadie termine el
+/// bachillerato en dos meses». En cohortes `FREE` no se consulta. Es acceso académico, así que
+/// no mira cartera: la regla «la mora no toca el acceso» sigue viviendo en RestrictionPolicy.
+model EnrollmentModule {
+  id             String    @id @default(cuid())
+  institutionId  String
+  enrollmentId   String
+  moduleId       String
+  unlockedAt     DateTime  @default(now())
+  unlockedById   String?
+  availableFrom  DateTime?
+  availableUntil DateTime?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+  module      Module      @relation(fields: [moduleId], references: [id])
+  unlockedBy  Person?     @relation("ModuleUnlockedBy", fields: [unlockedById], references: [id])
+
+  @@unique([enrollmentId, moduleId])
+  @@index([institutionId, enrollmentId])
 }
 
 // ───────────────────────────── Contenido (catálogo versionado, Markdown) ─────────────────────────────
@@ -601,6 +631,9 @@ model Assessment {
   title             String
   language          String         @default("es-CO")
   learningObjective String?
+  /// «Aprender es avanzar» del taller (3/10): se muestra al cerrar este cuestionario.
+  /// Si falta, se usa el del componente (`Module.closingText`) y, si tampoco, el general.
+  closingText       String?
   authorId          String
   sourceRef         String?
   createdAt         DateTime       @default(now())
@@ -628,6 +661,8 @@ enum ReviewPolicy {
   SCORE_ONLY
   FULL_AFTER_GRADED
   FULL_AFTER_DUE
+  /// Cada pregunta solo cuando ya no quedan intentos o aprobó (3/10, cliente).
+  FULL_AFTER_LAST_ATTEMPT
 }
 
 /// Publicación inmutable. `content` = preguntas SIN respuestas correctas. `answerKey` = respuestas y

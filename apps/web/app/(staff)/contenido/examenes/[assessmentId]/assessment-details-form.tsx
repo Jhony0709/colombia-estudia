@@ -17,7 +17,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button } from '@/components/atoms/button';
 import { Card } from '@/components/atoms/card';
-import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
+import { FormField, FormInput, FormSelect, FormTextarea } from '@/components/atoms/form-field';
 import { useToast } from '@/components/organisms/toaster';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import type { AssessmentKind } from '@/features/content/server/assessments.service';
@@ -61,6 +61,7 @@ export function AssessmentDetailsForm({
     lessonId: string | null;
     subjectId: string | null;
     learningObjective: string | null;
+    closingText: string | null;
   };
   hasPublished: boolean;
 }) {
@@ -75,6 +76,7 @@ export function AssessmentDetailsForm({
   const [lessonId, setLessonId] = useState(initial.lessonId ?? '');
   const [subjectId, setSubjectId] = useState(initial.subjectId ?? '');
   const [objective, setObjective] = useState(initial.learningObjective ?? '');
+  const [closingText, setClosingText] = useState(initial.closingText ?? '');
   const [busy, setBusy] = useState(false);
 
   const needsModule = kind !== 'DIAGNOSTIC';
@@ -95,6 +97,7 @@ export function AssessmentDetailsForm({
           lessonId: needsModule && moduleId !== '' && lessonId !== '' ? lessonId : null,
           subjectId: subjectId === '' ? null : subjectId,
           learningObjective: objective,
+          closingText,
         }),
       });
 
@@ -218,6 +221,20 @@ export function AssessmentDetailsForm({
               name="assessmentObjective"
               value={objective}
               onChange={(event) => setObjective(event.target.value)}
+            />
+          </FormField>
+
+          <FormField
+            label={t('detailsFieldClosing')}
+            name="assessmentClosing"
+            hint={t('detailsClosingHint')}
+          >
+            <FormTextarea
+              name="assessmentClosing"
+              value={closingText}
+              onChange={(event) => setClosingText(event.target.value)}
+              rows={4}
+              maxLength={4000}
             />
           </FormField>
 

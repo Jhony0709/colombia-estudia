@@ -32,6 +32,10 @@ jest.mock('@/features/notifications/server/notifications.service', () => ({
   notifyMany: (...args: unknown[]) => mockNotifyMany(...args),
   staffPersonIds: (...args: unknown[]) => mockStaffPersonIds(...args),
 }));
+const mockIssueAfterProgress = jest.fn();
+jest.mock('@/features/certificates/server/certificates.service', () => ({
+  issueAfterProgress: (...args: unknown[]) => mockIssueAfterProgress(...args),
+}));
 
 import { submitLesson } from '@/features/learn/server/submission.service';
 
@@ -97,6 +101,7 @@ describe('submitLesson', () => {
     );
     expect(mockNotifyMany).toHaveBeenCalledTimes(1);
     expect(tx.auditLog.create).not.toHaveBeenCalled();
+    expect(mockIssueAfterProgress).not.toHaveBeenCalled();
   });
 
   it('nace aprobada, completa el tema y no avisa a nadie con aprobación automática (27/9)', async () => {
@@ -121,5 +126,11 @@ describe('submitLesson', () => {
       expect.objectContaining({ data: expect.objectContaining({ action: 'auto_approved' }) })
     );
     expect(mockNotifyMany).not.toHaveBeenCalled();
+    // Si era el último paso, la matrícula se cierra en el acto (5/10).
+    expect(mockIssueAfterProgress).toHaveBeenCalledWith({
+      institutionId: 'inst-1',
+      enrollmentId: 'e-1',
+      now: NOW,
+    });
   });
 });

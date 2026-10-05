@@ -92,6 +92,7 @@ export default async function AssessmentEditorPage({ params }: { params: Params 
             lessonId: draft.lessonId,
             subjectId: draft.subjectId,
             learningObjective: draft.learningObjective,
+            closingText: draft.closingText,
           },
         }}
       />

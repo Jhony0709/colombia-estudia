@@ -122,7 +122,14 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
   // La cola: lo que aún no confirmó el servidor. Un `Map` y no un array: la última
   // respuesta de una pregunta pisa a la anterior, que ya no interesa mandar.
   const pending = useRef(new Map<string, Answer>());
-  const inFlight = useRef(false);
+  // El guardado en curso (5/10): quien llama mientras viaja espera ese mismo envío. Antes era
+  // un booleano y `flush()` volvía al instante, así que «Entregar» justo después de responder
+  // la última pregunta encontraba la respuesta aún en la cola y decía «sin guardar».
+  const running = useRef<Promise<boolean> | null>(null);
+  // Por qué falló el último guardado: sin red, sesión cerrada u otra respuesta del servidor.
+  const failure = useRef<{ kind: 'offline' | 'session' | 'server'; payload?: unknown } | null>(
+    null
+  );
   const textTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closed = useRef(false);
 
@@ -130,12 +137,23 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
   // `Date` que devuelve el autosave.
   const offset = useRef(new Date(attempt.serverNow).getTime() - Date.now());
 
-  const flush = useCallback(async () => {
-    if (inFlight.current || pending.current.size === 0 || closed.current) return;
+  const flush = useCallback((): Promise<boolean> => {
+    if (running.current) return running.current;
+    if (pending.current.size === 0 || closed.current) return Promise.resolve(true);
+    const run = send().finally(() => {
+      running.current = null;
+    });
+    running.current = run;
+    return run;
+    // `send` se define abajo y lee solo refs y valores estables.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attempt.id]);
+
+  /** Un envío de la cola. `true` si el servidor confirmó. */
+  const send = async (): Promise<boolean> => {
     // Sin mirar `navigator.onLine` (20/9): en Chrome puede decir «sin conexión» con la red
     // perfectamente viva (VPN, adaptadores virtuales), y entonces las respuestas no salían
     // nunca. Se intenta siempre; un `fetch` que lanza es la señal real de que no hay red.
-    inFlight.current = true;
     setSaveState('saving');
     const batch = Object.fromEntries(pending.current);
     let sent = false;
@@ -161,12 +179,18 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
         closed.current = true;
         announce(t('expiredAnnounce'), { assertive: true });
         router.refresh();
-        return;
+        return false;
       }
       if (!res.ok || !payload?.data) {
+        failure.current = {
+          kind:
+            res.status === 401 || payload?.error?.code === 'UNAUTHENTICATED' ? 'session' : 'server',
+          payload,
+        };
         setSaveState('error');
-        return;
+        return false;
       }
+      failure.current = null;
       // Solo se descarta de la cola lo que se mandó tal cual; si la respuesta cambió
       // mientras viajaba, la nueva sigue pendiente.
       for (const [code, value] of Object.entries(batch)) {
@@ -189,9 +213,9 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
     } catch {
       // El `fetch` lanzó: no hubo respuesta. Eso es «sin conexión», diga lo que diga el
       // navegador; se reintenta al evento `online` y cada 15 s (efecto de abajo).
+      failure.current = { kind: 'offline' };
       setSaveState('offline');
     } finally {
-      inFlight.current = false;
       // E1 (23/9): cuánto tardó cada guardado y si llegó. De aquí saldrán los umbrales.
       const ms = Date.now() - began;
       trackStudentEvent('student.request.finished', {
@@ -207,7 +231,8 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
         setTimeout(() => void flush(), 250);
       }
     }
-  }, [attempt.id, announce, router, t]);
+    return sent;
+  };
 
   // Reintentos: al volver la red y, por si acaso, cada 15 s mientras quede algo.
   useEffect(() => {
@@ -286,10 +311,21 @@ function AttemptInProgress({ attempt }: { attempt: AttemptView }) {
     setError(null);
     try {
       if (textTimer.current) clearTimeout(textTimer.current);
-      // Lo pendiente sale antes de entregar; si no llega, no se entrega.
-      await flush();
+      // Lo pendiente sale antes de entregar; si no llega, no se entrega. Se espera el envío
+      // que esté en camino y se manda lo que entró mientras tanto.
+      for (let round = 0; round < 3 && pending.current.size > 0; round += 1) {
+        if (!(await flush())) break;
+      }
+      if (closed.current) return;
       if (pending.current.size > 0) {
-        setError(t('submitPendingError'));
+        const why = failure.current;
+        setError(
+          why?.kind === 'session'
+            ? t('submitSessionError')
+            : why?.kind === 'server'
+              ? apiErrorText(why.payload, t('submitServerError'))
+              : t('submitPendingError')
+        );
         return;
       }
       const res = await fetch(`/api/learn/attempts/${attempt.id}/submit`, {

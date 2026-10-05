@@ -18,6 +18,7 @@ import {
   BookOpen,
   CircleCheck,
   ClipboardCheck,
+  ClipboardPlus,
   FileUp,
   Plus,
   Video,
@@ -166,10 +167,21 @@ function ModuleBlock({ module, onAdd }: { module: BuilderModule; onAdd: (draft: 
         <ol className="mt-4 space-y-2">
           {module.items.map((item) => (
             <li key={item.id}>
-              <ItemRow item={item} nested={item.kind === 'ASSESSMENT' && item.lessonId !== null} />
-              {item.kind === 'LESSON' && (
-                <AddExamHint module={module} lesson={item} onAdd={onAdd} />
+              {/* El taller donde empieza (4/10), como lo ve el estudiante. */}
+              {item.workshop && (
+                <p className="type-overline text-text-muted mb-2 mt-4 uppercase first:mt-0">
+                  {item.workshop}
+                </p>
               )}
+              <ItemRow
+                item={item}
+                nested={item.kind === 'ASSESSMENT' && item.lessonId !== null}
+                trailing={
+                  item.kind === 'LESSON' ? (
+                    <AddExamHint module={module} lesson={item} onAdd={onAdd} />
+                  ) : null
+                }
+              />
             </li>
           ))}
         </ol>
@@ -227,17 +239,18 @@ function AddExamHint({
     (item) => item.kind === 'ASSESSMENT' && item.lessonId === lesson.id
   );
   if (hasExam) return null;
+  // Un botón con icono al lado del tema (4/10): siete enlaces de texto iguales bajo siete temas
+  // eran la mitad del constructor.
   return (
-    <div className="border-border-muted ml-5 border-l-2 pl-4">
-      <button
-        type="button"
-        onClick={() => onAdd({ kind: 'ASSESSMENT', module, lesson })}
-        className="type-caption text-text-link min-h-touch inline-flex items-center gap-1 underline"
-      >
-        <Plus aria-hidden className="size-3" />
-        {t('addLessonExam')}
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={() => onAdd({ kind: 'ASSESSMENT', module, lesson })}
+      aria-label={t('addLessonExamNamed', { title: lesson.title })}
+      title={t('addLessonExam')}
+      className="text-text-muted hover:bg-surface-sunken hover:text-text rounded-control min-h-touch min-w-touch inline-flex shrink-0 items-center justify-center"
+    >
+      <ClipboardPlus aria-hidden className="size-5" />
+    </button>
   );
 }
 
@@ -265,7 +278,16 @@ function statusBadge(item: BuilderItem, t: ReturnType<typeof useTranslations>) {
   };
 }
 
-function ItemRow({ item, nested }: { item: BuilderItem; nested: boolean }) {
+function ItemRow({
+  item,
+  nested,
+  trailing = null,
+}: {
+  item: BuilderItem;
+  nested: boolean;
+  /** Una acción al lado de la fila, fuera del enlace (un botón dentro de un enlace no vale). */
+  trailing?: React.ReactNode;
+}) {
   const t = useTranslations('builder');
   const Icon = FORM_ICONS[item.form];
   const href =
@@ -275,7 +297,6 @@ function ItemRow({ item, nested }: { item: BuilderItem; nested: boolean }) {
   const meta = [
     t(`form.${item.form}`),
     item.estimatedMinutes ? t('minutes', { count: item.estimatedMinutes }) : null,
-    item.subjectName,
     item.questionCount !== null ? t('questions', { count: item.questionCount }) : null,
     item.assessmentKind ? t(`assessmentKind.${item.assessmentKind}`) : null,
   ]
@@ -283,10 +304,15 @@ function ItemRow({ item, nested }: { item: BuilderItem; nested: boolean }) {
     .join(' · ');
 
   return (
-    <div className={cn(nested && 'border-border-muted ml-5 border-l-2 pl-4')}>
+    <div
+      className={cn(
+        'flex items-center gap-2',
+        nested && 'border-border-muted ml-5 border-l-2 pl-4'
+      )}
+    >
       <Link
         href={href}
-        className="border-border hover:bg-surface-sunken rounded-control min-h-touch flex items-center gap-3 border p-3"
+        className="border-border hover:bg-surface-sunken rounded-control min-h-touch flex min-w-0 flex-1 items-center gap-3 border p-3"
       >
         {item.hasPublished && item.latestStatus === 'PUBLISHED' ? (
           <CircleCheck aria-hidden className="text-status-success-base size-5 shrink-0" />
@@ -299,6 +325,7 @@ function ItemRow({ item, nested }: { item: BuilderItem; nested: boolean }) {
         </span>
         <Badge variant={badge.variant}>{badge.label}</Badge>
       </Link>
+      {trailing}
     </div>
   );
 }

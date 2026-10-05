@@ -57,7 +57,7 @@ export default function RecuperarPage() {
   if (sent) {
     return (
       <section className="space-y-6">
-        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+        <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
           {t('recover')}
         </h1>
         <Alert severity="success">{t('recoverSuccess')}</Alert>
@@ -72,7 +72,7 @@ export default function RecuperarPage() {
 
   return (
     <section className="space-y-6">
-      <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+      <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
         {t('recover')}
       </h1>
 

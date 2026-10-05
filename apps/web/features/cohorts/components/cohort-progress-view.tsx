@@ -137,12 +137,14 @@ export async function CohortProgressView({
           },
           {
             key: 'assessments',
+            hideBelow: 'md',
             header: t('assessments'),
             numeric: true,
             cell: (r) => `${r.assessmentsPassed}/${r.assessmentsTaken}`,
           },
           {
             key: 'activity',
+            hideBelow: 'md',
             header: t('lastActivity'),
             cell: (r) => (
               <>

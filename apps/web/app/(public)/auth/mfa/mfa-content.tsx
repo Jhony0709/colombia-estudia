@@ -180,7 +180,7 @@ export default function MfaContent() {
   // Funciones de render, no componentes internos: un componente definido dentro del render
   // se desmonta en cada tecla y el campo pierde el foco.
   const heading = (children: string) => (
-    <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+    <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
       {children}
     </h1>
   );

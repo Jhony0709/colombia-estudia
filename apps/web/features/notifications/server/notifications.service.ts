@@ -41,6 +41,8 @@ export const NOTIFICATION_TYPES = [
   'live_session_soon',
   // Ola 2 UX (23/9): la cohorte cambió de versión un tema que ya habías completado y se reabre.
   'lesson_reopened',
+  // 3/10: operación habilitó el siguiente componente para la matrícula.
+  'module_unlocked',
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

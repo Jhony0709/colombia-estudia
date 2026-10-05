@@ -77,14 +77,86 @@ body {
  * clara de estas fotos eso deja el blanco por encima de 7:1. Arriba apenas oscurece, para que
  * la persona se vea. Va aquí y no en línea por la CSP (sin `style` en línea).
  */
-.auth-photo-scrim {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 18, 40, 0.1) 0%,
-    rgba(10, 18, 40, 0.15) 40%,
-    rgba(10, 18, 40, 0.85) 68%,
-    rgba(10, 18, 40, 0.9) 100%
-  );
+.auth-brand {
+  /* Pantallas de acceso con la marca ALBA (5/10): la columna izquierda usa los colores de la
+     marca (los de la portada, features/marketing/site.css); el formulario, los tokens. */
+  --auth-navy: #0d2b5b;
+  --auth-navy-2: #12366f;
+  --auth-blue: #2563eb;
+  --auth-yellow: #fbbf24;
+  font-family: var(--font-site), var(--font-sans), system-ui, sans-serif;
+}
+.auth-panel {
+  background-color: var(--auth-navy);
+  color: #fff;
+}
+/* Contraste: blanco sobre navy 13.2:1; amarillo sobre navy 8.31; blanco al 80 % ≥ 9:1. */
+.auth-headline {
+  font-size: clamp(2rem, 0.9rem + 2.2vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: #fff;
+}
+.auth-highlight {
+  color: var(--auth-yellow);
+}
+.auth-bar {
+  width: 3.5rem;
+  height: 4px;
+  border-radius: 999px;
+  background-color: var(--auth-yellow);
+}
+.auth-lead {
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.86);
+}
+.auth-benefit-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  background-color: var(--auth-navy-2);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+.auth-benefit-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #fff;
+}
+.auth-benefit-body {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.8);
+}
+/* Franja de confianza bajo el formulario. */
+.auth-trust {
+  background-color: var(--surface-sunken);
+  border-radius: var(--radius-card);
+}
+.auth-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line-height);
+  color: var(--text-muted);
+}
+.auth-trust-item svg {
+  color: var(--accent-base);
+}
+@media (min-width: 640px) {
+  .auth-trust-item {
+    padding: 0 1rem;
+  }
+  .auth-trust-item + .auth-trust-item {
+    border-left: 1px solid var(--border-muted);
+  }
 }
 
 /**
@@ -264,8 +336,10 @@ body {
  * autor, que tienen que verse igual (por eso la vista previa existe).
  */
 .contenido {
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-line-height);
+  /* Un escalón sobre la interfaz (4/10): 17 px y 1.65 para leer de corrido, no para escanear.
+     La medida va en el contenedor (`max-w-measure`), no aquí: el tema y su actividad la comparten. */
+  font-size: calc(var(--type-body-size) * 1.0625);
+  line-height: 1.65;
 }
 
 /*
@@ -274,10 +348,10 @@ body {
   cumplen WCAG 1.4.12: el espaciado ancho es 1.5 de línea y 0.12 em entre letras.
 */
 html[data-reading-size='lg'] .contenido {
-  font-size: calc(var(--type-body-size) * 1.2);
+  font-size: calc(var(--type-body-size) * 1.25);
 }
 html[data-reading-size='xl'] .contenido {
-  font-size: calc(var(--type-body-size) * 1.45);
+  font-size: calc(var(--type-body-size) * 1.5);
 }
 html[data-reading-spacing='wide'] .contenido {
   line-height: 1.8;
@@ -288,7 +362,7 @@ html[data-reading-spacing='wide'] .contenido > * + * {
   margin-top: calc(var(--space-4) * 1.5);
 }
 html[data-reading-width='narrow'] .contenido {
-  max-width: 55ch;
+  max-width: calc(var(--size-measure) - 6rem);
 }
 
 /*
@@ -302,12 +376,12 @@ html[data-reading-width='narrow'] .contenido {
 }
 
 /*
- * Ritmo y acentos (27/9, «el renderizado debe ser atractivo, no plano»): la tipografía sigue
- * saliendo de los tokens; lo que se añade es jerarquía visible —marca amarilla bajo el h2,
- * barra bajo el h3, viñetas y numerales en el color de acento— y superficies para lo que el
- * autor destaca: cita, tabla, imagen, y el párrafo que es solo negrita (la «idea clave» de
- * los documentos del cliente). Nada de esto cambia la estructura: un lector de pantalla oye
- * lo mismo que antes. Sin `content:` con texto en pseudoelementos: algunos lectores lo leen.
+ * Ritmo y acentos (27/9, «el renderizado debe ser atractivo, no plano»; 4/10, cada marca con
+ * un solo sentido). La raya amarilla es del `h1` de la página; los títulos del tema se
+ * distinguen por tamaño y aire. El borde izquierdo es de lo que el autor destaca, en dos
+ * familias: con fondo e icono, los recuadros (`:::callout`); sin fondo, la cita (gris) y la
+ * idea clave (amarilla). Nada de esto cambia la estructura: un lector de pantalla oye lo
+ * mismo. Sin `content:` con texto en pseudoelementos: algunos lectores lo leen.
  */
 .contenido h2 {
   font-size: var(--type-heading-size);
@@ -315,18 +389,8 @@ html[data-reading-width='narrow'] .contenido {
   font-weight: var(--type-heading-weight);
   letter-spacing: -0.01em;
   margin-top: var(--space-12);
-  padding-bottom: var(--space-3);
-  position: relative;
-}
-.contenido h2::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 2.5rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--brand-yellow);
+  /* El índice salta aquí: que la cabecera fija no tape el título. */
+  scroll-margin-top: calc(var(--space-12) + var(--space-8));
 }
 .contenido > h2:first-child {
   margin-top: 0;
@@ -337,8 +401,6 @@ html[data-reading-width='narrow'] .contenido {
   line-height: var(--type-subheading-line-height);
   font-weight: var(--type-subheading-weight);
   margin-top: var(--space-8);
-  padding-left: var(--space-3);
-  border-left: 3px solid var(--accent-base);
 }
 
 .contenido h4,
@@ -360,16 +422,20 @@ html[data-reading-width='narrow'] .contenido {
   margin-top: var(--space-3);
 }
 
-/* La idea clave: un párrafo que es solo negrita, como los marca el cliente en sus documentos. */
+/* La idea clave: un párrafo que es solo negrita, como los marca el cliente en sus documentos.
+   Se lee como frase destacada, no como aviso: sin fondo, un escalón más grande. */
 .contenido > p:has(> strong:only-child) {
-  background-color: var(--status-info-muted);
-  border-left: 4px solid var(--status-info-base);
-  border-radius: var(--radius-card);
-  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--brand-yellow);
+  padding-left: var(--space-4);
   margin-top: var(--space-6);
+  font-size: var(--type-subheading-size);
+  line-height: var(--type-subheading-line-height);
 }
 .contenido > p:has(> strong:only-child) strong {
   color: var(--text-default);
+}
+.contenido > p:has(> strong:only-child) + * {
+  margin-top: var(--space-6);
 }
 
 .contenido ul,
@@ -423,12 +489,10 @@ html[data-reading-width='narrow'] .contenido {
 }
 
 .contenido blockquote {
-  background-color: var(--surface-sunken);
-  border-left: 4px solid var(--accent-base);
-  border-radius: var(--radius-card);
-  padding: var(--space-4) var(--space-6);
+  border-left: 4px solid var(--border-default);
+  padding-left: var(--space-4);
   margin-top: var(--space-6);
-  color: var(--text-default);
+  color: var(--text-muted);
 }
 .contenido blockquote > * + * {
   margin-top: var(--space-3);
@@ -458,13 +522,18 @@ html[data-reading-width='narrow'] .contenido {
   padding: 0;
 }
 
-/* Una tabla ancha se desplaza dentro de su propio marco, no rompe la lectura. */
-.contenido table {
-  display: block;
+/* Una tabla ancha se desplaza dentro de su marco (`div.tabla`, del render), no rompe la
+   lectura; una que cabe ocupa la medida entera (4/10: con `display: block` se encogía). */
+.contenido .tabla {
   overflow-x: auto;
-  border-collapse: collapse;
+}
+.contenido > * + .tabla {
   margin-top: var(--space-6);
-  font-size: var(--type-caption-size);
+}
+.contenido table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--type-body-size);
   line-height: var(--type-body-line-height);
 }
 
@@ -513,11 +582,39 @@ html[data-reading-width='narrow'] .contenido {
   background-color: var(--brand-yellow);
 }
 
-/* El iframe de Vimeo mantiene su proporción sin que nadie calcule padding. */
+/* El iframe de Vimeo mantiene su proporción sin que nadie calcule padding; mientras carga se
+   ve el hueco que va a ocupar, no un blanco. */
 .contenido iframe {
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 0;
+  border-radius: var(--radius-card);
+  background-color: var(--surface-sunken);
+}
+
+.contenido > * + .media {
+  margin-top: var(--space-6);
+}
+
+/* El PDF como tarjeta de descarga (4/10), no como un enlace suelto en medio del texto. */
+.contenido .media-pdf a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--size-touch-min);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-card);
+  background-color: var(--surface-base);
+}
+.contenido .media-pdf a::before {
+  content: '';
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  background-color: var(--accent-base);
+  -webkit-mask: var(--icono-descarga) center / contain no-repeat;
+  mask: var(--icono-descarga) center / contain no-repeat;
 }
 
 .contenido audio {
@@ -541,8 +638,17 @@ html[data-reading-width='narrow'] .contenido {
 
 /*
  * Callouts (27/9): `:::callout{kind}` en el Markdown y el átomo `Callout` del player pintan lo
- * mismo, por eso viven fuera de `.contenido`. Borde a la izquierda y fondo: no solo color.
+ * mismo, por eso viven fuera de `.contenido`. Borde a la izquierda, fondo e icono (4/10): el
+ * tipo no depende solo del color. El icono del Markdown sale de una máscara (la CSP admite
+ * `data:` en imágenes); si el título ya trae uno, el del átomo, no se pinta el segundo.
  */
+:root {
+  --icono-nota: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4M12 8h.01'/%3E%3C/svg%3E");
+  --icono-ejemplo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4'/%3E%3C/svg%3E");
+  --icono-importante: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8v4M12 16h.01'/%3E%3C/svg%3E");
+  --icono-objetivos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E");
+  --icono-descarga: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4M12 18v-6M9 15l3 3 3-3'/%3E%3C/svg%3E");
+}
 .callout {
   border: 1px solid var(--border-muted);
   border-left-width: 4px;
@@ -557,43 +663,102 @@ html[data-reading-width='narrow'] .contenido {
   margin-top: var(--space-6);
 }
 .callout-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-weight: var(--type-body-emphasis-weight);
   color: var(--text-default);
 }
+.callout-title:not(:has(svg))::before {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  background-color: var(--callout-tone);
+  -webkit-mask: var(--callout-icon) center / contain no-repeat;
+  mask: var(--callout-icon) center / contain no-repeat;
+}
 .callout-note {
+  --callout-icon: var(--icono-nota);
+  --callout-tone: var(--text-muted);
   background-color: var(--surface-sunken);
   border-left-color: var(--border-default);
 }
 .callout-example {
+  --callout-icon: var(--icono-ejemplo);
+  --callout-tone: var(--status-warning-base);
   background-color: var(--surface-note);
   border-left-color: var(--status-warning-base);
 }
 .callout-important {
+  --callout-icon: var(--icono-importante);
+  --callout-tone: var(--status-info-base);
   background-color: var(--status-info-muted);
   border-left-color: var(--status-info-base);
 }
 .callout-goals {
+  --callout-icon: var(--icono-objetivos);
+  --callout-tone: var(--accent-base);
   background-color: var(--surface-sunken);
-  border-left-color: var(--border-default);
+  border-left-color: var(--accent-base);
 }
 /*
- * «En este tema aprenderás» a la derecha del texto en pantallas anchas (27/9, del diseño de
- * referencia): flotado, no en columna aparte, para que el orden de lectura siga siendo el del
- * Markdown y en pantallas estrechas caiga en el flujo sin otro punto de quiebre. Solo cuando
- * el riel no compite por el ancho (≥ 80 rem); la columna de lectura crece lo que mide la caja.
+ * «En este tema aprenderás» dejó de flotar a la derecha (27/9 → 4/10): la medida del texto ya
+ * no crece y a la derecha, en pantallas anchas, va el índice «En este tema». Queda en el
+ * flujo, donde el autor lo puso.
  */
-@media (min-width: 80rem) {
-  .contenido:has(> .callout-goals) {
-    max-width: calc(var(--size-reading-width) + 18rem + var(--space-6));
-    /* Contiene el flotado: si el texto es más corto que la caja, no se sale del artículo. */
-    display: flow-root;
+
+/**
+ * Héroe de `/aprender` con portada (4/10): el velo funde la portada del componente con el azul
+ * por la izquierda, para que el texto nunca dependa de la imagen (WCAG 1.4.3). Aquí y no en
+ * línea por la CSP.
+ */
+.hero-cover-scrim {
+  background: linear-gradient(
+    90deg,
+    var(--accent-base) 0%,
+    color-mix(in srgb, var(--accent-base) 60%, transparent) 30%,
+    transparent 70%
+  );
+}
+
+/**
+ * Gráficos del panel (4/10): medidores y columnas crecen desde su base al aparecer (doctrina 9,
+ * `duration.normal`, `easing.enter`). Solo `transform`. `transform-box: fill-box` hace que el
+ * origen sea la propia marca y no el SVG entero. Reduced motion = corte por la regla global.
+ */
+@keyframes chart-grow-x {
+  from {
+    transform: scaleX(0);
   }
-  .contenido > .callout-goals {
-    float: right;
-    width: 18rem;
-    margin: 0 0 var(--space-4) var(--space-6);
+  to {
+    transform: scaleX(1);
   }
-  .contenido > .callout-goals + * {
-    margin-top: 0;
+}
+@keyframes chart-grow-y {
+  from {
+    transform: scaleY(0);
   }
+  to {
+    transform: scaleY(1);
+  }
+}
+.chart-grow-x {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: chart-grow-x var(--duration-normal) var(--easing-enter) both;
+}
+.chart-grow-y {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: chart-grow-y var(--duration-normal) var(--easing-enter) both;
+}
+
+/* Título de las pantallas de acceso: Lexend (heredada de `.auth-brand`), un escalón sobre el
+   título de sección. */
+.auth-title {
+  font-size: clamp(2rem, 1.6rem + 1.2vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }

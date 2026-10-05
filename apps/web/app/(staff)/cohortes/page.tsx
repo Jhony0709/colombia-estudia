@@ -229,6 +229,7 @@ export default async function CohortsPage({ searchParams }: { searchParams: Sear
             },
             {
               key: 'program',
+              hideBelow: 'md',
               header: t('program'),
               cell: (cohort) => (
                 <>
@@ -241,12 +242,14 @@ export default async function CohortsPage({ searchParams }: { searchParams: Sear
             },
             {
               key: 'dates',
+              hideBelow: 'md',
               header: t('dates'),
               numeric: true,
               cell: (cohort) => `${cohort.startsOn} → ${cohort.endsOn}`,
             },
             {
               key: 'enrollments',
+              hideBelow: 'lg',
               header: t('enrollments'),
               numeric: true,
               cell: (cohort) => cohort.enrollmentCount,

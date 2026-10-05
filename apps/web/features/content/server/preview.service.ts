@@ -41,7 +41,7 @@ export async function previewDraft({
     where: { id: versionId },
     select: {
       content: true,
-      lesson: { select: { language: true } },
+      lesson: { select: { language: true, title: true } },
     },
   });
 
@@ -54,7 +54,8 @@ export async function previewDraft({
   return {
     // Sin `{ language }` (27/9): el idioma sale aparte y la vista previa lo pone en su `div`,
     // igual que el player en su `<article>`; así los selectores de `.contenido` alcanzan.
-    html: renderLessonHtml(version.content, assets),
+    // Con el título (4/10), como el player: el bloque que lo repite tampoco se ve aquí.
+    html: renderLessonHtml(version.content, assets, { title: version.lesson.title }),
     language: version.lesson.language,
     missingAssets: assetIds.filter((id) => !assets.has(id)),
   };

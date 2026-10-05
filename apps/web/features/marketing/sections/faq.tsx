@@ -1,38 +1,62 @@
 import { getTranslations } from 'next-intl/server';
-import { Plus } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { SiteContainer } from '../site-container';
-import { Underline } from '../brand-shapes';
+import type { ContactLink } from '../contact-links';
+import { Reveal } from '../motion/Reveal';
+import { FaqItem } from './faq-item';
 
-const ITEMS = ['legal', 'requirements', 'when', 'schedule', 'icfes', 'diploma', 'price'] as const;
+const ITEMS = ['work', 'schedule', 'route', 'years', 'legal', 'price'] as const;
 
 /**
- * Preguntas frecuentes con `<details>` nativo: teclado, lector de pantalla y sin JavaScript.
- * Respuestas redactadas a partir de validaya.com/preguntas-frecuentes (19/9), con nuestras
- * palabras; el precio se remite al contacto porque el de la web no dice a qué corresponde.
+ * Preguntas (ALBA, 5/10): título a la izquierda, acordeón a la derecha; en el teléfono, título
+ * arriba. `<details>` nativo: teclado, lector de pantalla y sin JavaScript; ninguna abierta al
+ * cargar. Las cuatro primeras son las del manual; las dos últimas (validez y precio) siguen
+ * porque son las que más se preguntan antes de escribir.
+ *
+ * Movimiento («reduces incertidumbre»): el acordeón abre y cierra con su alto en 220 ms
+ * (`FaqItem`); el chevron gira. Nada más.
  */
-export async function Faq() {
+export async function Faq({ contact }: { contact: ContactLink }) {
   const t = await getTranslations('landing.faq');
   return (
-    <section id="preguntas" aria-labelledby="faq-title" className="scroll-mt-20 pb-20 lg:pb-24">
-      <SiteContainer className="grid gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
-        <div className="space-y-3 lg:sticky lg:top-28 lg:self-start">
-          <h2 id="faq-title" className="site-h2">
-            {t('title')}
+    <section
+      id="preguntas"
+      aria-labelledby="faq-title"
+      className="scroll-mt-20 bg-[var(--site-bg)] py-16 lg:py-24"
+    >
+      <SiteContainer className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        <Reveal className="space-y-4 lg:sticky lg:top-28 lg:self-start">
+          <p className="site-eyebrow m-0">{t('eyebrow')}</p>
+          <h2 id="faq-title" className="site-h2 m-0">
+            <span className="block">{t('titleA')}</span>
+            <span className="block">{t('titleB')}</span>
           </h2>
-          <Underline />
-          <p className="site-lead">{t('lead')}</p>
-        </div>
-        <div className="site-stagger border-b border-[var(--site-line)]">
+          <p className="site-body m-0">{t('lead')}</p>
+          <a
+            href={contact.href}
+            target={contact.external ? '_blank' : undefined}
+            rel={contact.external ? 'noreferrer' : undefined}
+            className="site-link"
+          >
+            {t('write')}
+            <ArrowRight aria-hidden="true" className="size-4" />
+          </a>
+        </Reveal>
+        <Reveal delay={0.1} className="border-t border-[var(--site-line)]">
           {ITEMS.map((key) => (
-            <details key={key} className="site-faq">
-              <summary>
-                {t(`items.${key}.q`)}
-                <Plus aria-hidden="true" className="size-5" />
-              </summary>
-              <div className="site-body">{t(`items.${key}.a`)}</div>
-            </details>
+            <FaqItem
+              key={key}
+              question={
+                <>
+                  {t(`items.${key}.q`)}
+                  <ChevronDown aria-hidden="true" className="size-5" />
+                </>
+              }
+            >
+              {t(`items.${key}.a`)}
+            </FaqItem>
           ))}
-        </div>
+        </Reveal>
       </SiteContainer>
     </section>
   );

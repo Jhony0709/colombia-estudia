@@ -44,7 +44,8 @@ describe('previewDraft', () => {
     // su contenedor, igual que el player.
     expect(result.html).not.toContain('<div lang=');
     expect(result.language).toBe('es-CO');
-    expect(result.html).toContain('<h2>Sección</h2>');
+    // Con su ancla (4/10), igual que en el player.
+    expect(result.html).toContain('<h2 id="user-content-seccion">Sección</h2>');
     expect(result.missingAssets).toEqual([IMAGE_ID]);
   });
 

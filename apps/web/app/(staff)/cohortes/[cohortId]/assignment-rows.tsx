@@ -108,6 +108,12 @@ export function AssignmentRows({ items }: { items: CohortAssignmentItem[] }) {
                   : 'flex flex-wrap items-center gap-3 py-2'
               }
             >
+              {/* El taller donde empieza (4/10), como en la ruta del estudiante. */}
+              {item.workshop && (
+                <p className="type-overline text-text-muted m-0 w-full pt-2 uppercase">
+                  {item.workshop}
+                </p>
+              )}
               <Icon aria-hidden className="text-text-muted size-4 shrink-0" />
               <span className="type-body text-text min-w-0 flex-1">{item.title}</span>
               <Badge variant={outdated ? 'warning' : 'neutral'}>
@@ -119,6 +125,11 @@ export function AssignmentRows({ items }: { items: CohortAssignmentItem[] }) {
                 variant="quiet"
                 loading={busy === item.assignmentId}
                 title={item.pinned ? undefined : t('pinHint')}
+                aria-label={
+                  item.pinned
+                    ? t('unpinNamed', { title: item.title })
+                    : t('pinNamed', { title: item.title, number: item.assigned.number })
+                }
                 onClick={() => void setPinned(item, !item.pinned)}
               >
                 {item.pinned ? (
@@ -126,7 +137,7 @@ export function AssignmentRows({ items }: { items: CohortAssignmentItem[] }) {
                 ) : (
                   <Pin aria-hidden className="size-4" />
                 )}
-                {item.pinned ? t('unpin') : t('pin', { number: item.assigned.number })}
+                {item.pinned ? t('unpin') : t('pin')}
               </Button>
               {outdated && item.latest && (
                 <div className="flex flex-col items-end gap-1">

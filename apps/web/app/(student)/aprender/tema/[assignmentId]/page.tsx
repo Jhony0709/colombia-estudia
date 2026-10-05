@@ -20,16 +20,20 @@ import { EmptyState } from '@/components/molecules/empty-state';
 import { Alert } from '@/components/atoms/alert';
 import { Button } from '@/components/atoms/button';
 import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
-import { ArrowDown, ArrowLeft, ArrowRight, CircleCheck, Target } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, CircleCheck, Target, Lock } from 'lucide-react';
 import { Callout } from '@/components/atoms/callout';
+import { requiredReadingSeconds } from '@colombia-estudia/domain';
 import { EvidenceRecorder } from './evidence-recorder';
+import { ReadingCountdown } from './reading-countdown';
 import { SubmissionForm } from './submission-form';
 import { TranscriptPanel } from './transcript-panel';
 import { LessonTools } from './lesson-tools';
 import { ReadingProgress } from './reading-progress';
+import { LessonOutline } from './lesson-outline';
 import { TaskBar, TaskMode } from '@/components/organisms/task-mode';
 import { PrimaryActionTracker } from '@/components/molecules/primary-action-tracker';
 import { RouteRail, WithRouteRail } from '../../route-rail';
+import { cn } from '@/lib/utils';
 
 /**
  * `cache` de React memoiza por petición: `generateMetadata` y la página piden lo mismo, y
@@ -124,7 +128,7 @@ export default async function LessonPage({
   const { lesson, progress, submission, navigation } = view;
   if (!lesson) notFound();
 
-  // «Módulo 2 · Tema 3 de 8 · 12 min» (23/9): dónde estoy en la ruta, sin abrir el rail.
+  // «Módulo 2 · Paso 3 de 8 · 12 min» (23/9): dónde estoy en la ruta, sin abrir el rail.
   const place = placeInRoute(view.route, lesson.assignmentId);
   const meta = [
     place
@@ -138,6 +142,21 @@ export default async function LessonPage({
     .join(' · ');
 
   const status = progress?.status ?? 'NOT_STARTED';
+  // Sin minutos (0 o vacío) no hay espera, solo el scroll (5/10).
+  const requiredSeconds =
+    lesson.form === 'MARKDOWN' ? requiredReadingSeconds(lesson.estimatedMinutes) : 0;
+  // Un tema que solo es actividad (4/10): quitado el título repetido, no queda texto.
+  const hasText = lesson.html.trim() !== '';
+  const evidence = (
+    // Evidencia de estudio (§2b): el servidor decide `COMPLETED`; esto solo mide.
+    <EvidenceRecorder
+      assignmentId={lesson.assignmentId}
+      form={lesson.form}
+      initialStatus={progress?.status ?? 'NOT_STARTED'}
+      requiredSeconds={requiredSeconds}
+      scrolledBefore={progress?.scrolledToEnd ?? false}
+    />
+  );
 
   return (
     <Page wide>
@@ -162,8 +181,12 @@ export default async function LessonPage({
           />
         }
         header={
+          // La cabecera ocupa la columna entera: «Opciones» queda sobre el borde del índice y
+          // de la barra del pie; a la medida del texto, el overline se partía en dos líneas.
           <PageHeader
             overline={meta}
+            // Bajo `lg` el lugar en la ruta ya va en la barra de tarea.
+            overlineFromLg
             title={lesson.title}
             // Bajo `lg` la barra de tarea ya lleva las herramientas (compactas): dos «…»
             // en la misma pantalla era lo que se veía en el teléfono (auditoría 27/9).
@@ -175,105 +198,124 @@ export default async function LessonPage({
           />
         }
       >
-        {/* Un recurso que falta se dice. Un hueco silencioso deja al estudiante creyendo que
-          la página cargó entera. */}
-        {lesson.missingAssets.length > 0 && (
-          <Alert severity="warning">
-            {t('lesson.missingAssets', { count: lesson.missingAssets.length })}
-          </Alert>
-        )}
-
-        {/* El objetivo (27/9) como recuadro y no como subtítulo gris: es lo primero que se lee
-            y dice para qué sirve el tema. Mismo `Callout` que un `:::callout` del contenido. */}
-        {lesson.learningObjective && (
-          <Callout
-            kind="important"
-            title={t('lesson.objective')}
-            icon={<Target aria-hidden className="size-4 shrink-0" />}
-            className="max-w-reading"
-          >
-            <p className="type-body text-text m-0">{lesson.learningObjective}</p>
-          </Callout>
-        )}
-
-        {/*
-        `dangerouslySetInnerHTML` con el nombre que tiene, y aquí está bien: este HTML sale de
-        `renderLessonHtml`, que pasa por `rehype-sanitize` con un esquema cerrado. Es EL sitio
-        donde ese saneado se paga. Si alguna vez entra aquí HTML de otra procedencia, esta
-        línea deja de ser segura.
-      */}
-        <article
-          className="contenido max-w-reading"
-          lang={lesson.language}
-          dangerouslySetInnerHTML={{ __html: lesson.html }}
-        />
-
-        {/* Transcripción sincronizada de cada video (§2): clic lleva al segundo; «solo transcripción». */}
-        <TranscriptPanel transcripts={lesson.transcripts} />
-
-        {/* Evidencia de estudio (§2b): el servidor decide `COMPLETED`; esto solo mide. */}
-        <EvidenceRecorder
-          assignmentId={lesson.assignmentId}
-          form={lesson.form}
-          initialStatus={progress?.status ?? 'NOT_STARTED'}
-        />
-
-        {/*
-          «Practica» (23/9): la actividad es el paso siguiente al contenido y va como bloque
-          propio, separado por un cambio de área (48 px), con lo que el autor pidió y el
-          formulario o el estado de la entrega. Sin instrucciones se dice, para que no
-          parezca que faltan por un error.
-        */}
-        {lesson.activity !== null && (
-          <section
-            aria-labelledby="actividad-titulo"
-            id="practica"
-            className="border-border-muted mt-12 space-y-3 border-t pt-8"
-          >
-            <p className="type-overline text-text-muted">{t('activity.step')}</p>
-            <h2 id="actividad-titulo" className="type-heading">
-              {t('activity.title')}
-            </h2>
-            {lesson.activity.html ? (
-              // Mismo `renderLessonHtml` y mismo saneado que el texto del tema: es el único
-              // HTML de otra procedencia que entra aquí, y pasa por el mismo esquema cerrado.
-              <div
-                className="contenido max-w-reading"
-                lang={lesson.language}
-                dangerouslySetInnerHTML={{ __html: lesson.activity.html }}
-              />
-            ) : (
-              <p className="type-body text-text-muted max-w-reading">{t('activity.none')}</p>
+        {/* Una sola medida (4/10): texto, actividad y entrega comparten el borde derecho. Desde
+            `xl`, el índice del tema ocupa lo que sobra a la derecha. */}
+        <div className="xl:grid xl:grid-cols-[minmax(0,var(--size-measure))_minmax(0,1fr)] xl:gap-12">
+          <div className="max-w-measure min-w-0 space-y-10">
+            {/* Un recurso que falta se dice. Un hueco silencioso deja al estudiante creyendo que
+              la página cargó entera. */}
+            {lesson.missingAssets.length > 0 && (
+              <Alert severity="warning">
+                {t('lesson.missingAssets', { count: lesson.missingAssets.length })}
+              </Alert>
             )}
-            <p className="type-caption text-text-muted">
-              {t(`activity.accepts.${lesson.activity.accepts}`)}
-              {lesson.activity.autoApprove ? ` ${t('activity.autoApprove')}` : ''}
-            </p>
-          </section>
-        )}
 
-        {/* La entrega (§2b): el formulario, o el estado de la que ya se mandó. */}
-        {lesson.requiresSubmission && lesson.activity !== null && (
-          <SubmissionForm
-            assignmentId={lesson.assignmentId}
-            submission={submission}
-            accepts={lesson.activity.accepts}
-            prompts={lesson.activity.prompts}
-            dateLabel={
-              submission
-                ? format.dateTime(new Date(submission.reviewedAt ?? submission.submittedAt), {
-                    day: 'numeric',
-                    month: 'long',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    // Sin «p. m.»: la abreviatura termina en punto y la frase también, y
-                    // salía «12:20 p. m..» (visto con Estudiante Uno, 23/9).
-                    hour12: false,
-                  })
-                : null
-            }
-          />
-        )}
+            {/* El objetivo (27/9) como recuadro y no como subtítulo gris: es lo primero que se lee
+                y dice para qué sirve el tema. Mismo `Callout` que un `:::callout` del contenido. */}
+            {lesson.learningObjective && (
+              <Callout
+                kind="important"
+                title={t('lesson.objective')}
+                icon={<Target aria-hidden className="size-4 shrink-0" />}
+              >
+                <p className="type-body text-text m-0">{lesson.learningObjective}</p>
+              </Callout>
+            )}
+
+            {/*
+              El texto, sus transcripciones y el medidor de evidencia van en un solo bloque: el
+              medidor pinta un centinela de 1 px y un aviso solo para lectores de pantalla, y
+              sueltos en el `space-y` dejaban 80 px vacíos antes de «Practica» (4/10).
+
+              `dangerouslySetInnerHTML` con el nombre que tiene, y aquí está bien: este HTML sale
+              de `renderLessonHtml`, que pasa por `rehype-sanitize` con un esquema cerrado. Es EL
+              sitio donde ese saneado se paga. Si alguna vez entra aquí HTML de otra procedencia,
+              esta línea deja de ser segura.
+            */}
+            {hasText && (
+              <div>
+                <article
+                  className="contenido"
+                  lang={lesson.language}
+                  dangerouslySetInnerHTML={{ __html: lesson.html }}
+                />
+                {/* Transcripción sincronizada de cada video (§2): clic lleva al segundo. */}
+                <TranscriptPanel transcripts={lesson.transcripts} />
+                {evidence}
+              </div>
+            )}
+
+            {/*
+              «Practica» (23/9): la actividad es el paso siguiente al contenido y va como bloque
+              propio, separado por una raya cuando hay texto encima (sin texto, la raya quedaba
+              entre el título y la actividad). Sin instrucciones se dice, para que no parezca que
+              faltan por un error.
+            */}
+            {lesson.activity !== null && (
+              <section
+                aria-labelledby="actividad-titulo"
+                id="practica"
+                className={cn('space-y-3', hasText && 'border-border-muted border-t pt-8')}
+              >
+                <p className="type-overline text-text-muted">{t('activity.step')}</p>
+                <h2 id="actividad-titulo" className="type-heading">
+                  {t('activity.title')}
+                </h2>
+                {lesson.activity.html ? (
+                  // Mismo `renderLessonHtml` y mismo saneado que el texto del tema: es el único
+                  // HTML de otra procedencia que entra aquí, y pasa por el mismo esquema cerrado.
+                  <div
+                    className="contenido"
+                    lang={lesson.language}
+                    dangerouslySetInnerHTML={{ __html: lesson.activity.html }}
+                  />
+                ) : (
+                  <p className="type-body text-text-muted">{t('activity.none')}</p>
+                )}
+                <p className="type-caption text-text-muted">
+                  {t(`activity.accepts.${lesson.activity.accepts}`)}
+                  {lesson.activity.autoApprove ? ` ${t('activity.autoApprove')}` : ''}
+                </p>
+              </section>
+            )}
+
+            {/* La entrega (§2b): el formulario, o el estado de la que ya se mandó. Sin texto, el
+                medidor va al final, con ella. */}
+            {((lesson.requiresSubmission && lesson.activity !== null) || !hasText) && (
+              <div>
+                {lesson.requiresSubmission && lesson.activity !== null && (
+                  <SubmissionForm
+                    assignmentId={lesson.assignmentId}
+                    submission={submission}
+                    accepts={lesson.activity.accepts}
+                    prompts={lesson.activity.prompts}
+                    dateLabel={
+                      submission
+                        ? format.dateTime(
+                            new Date(submission.reviewedAt ?? submission.submittedAt),
+                            {
+                              day: 'numeric',
+                              month: 'long',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              // Sin «p. m.»: la abreviatura termina en punto y la frase también, y
+                              // salía «12:20 p. m..» (visto con Estudiante Uno, 23/9).
+                              hour12: false,
+                            }
+                          )
+                        : null
+                    }
+                  />
+                )}
+                {!hasText && evidence}
+              </div>
+            )}
+          </div>
+
+          {lesson.outline.length >= 3 && (
+            <LessonOutline items={lesson.outline} label={t('lesson.outline')} />
+          )}
+        </div>
 
         <LessonNav
           previous={navigation.previous}
@@ -285,13 +327,21 @@ export default async function LessonPage({
           form={lesson.form}
           submission={submission?.status ?? null}
           requiresSubmission={lesson.requiresSubmission}
+          reading={{
+            requiredSeconds,
+            savedSeconds: progress?.secondsOnLesson ?? 0,
+            savedScrolled: progress?.scrolledToEnd ?? false,
+          }}
         />
       </WithRouteRail>
     </Page>
   );
 }
 
-/** Dónde cae este tema en la ruta: su módulo y «tema x de y» contando solo los temas. */
+/**
+ * Dónde cae este tema en la ruta: su módulo y «paso x de y» contando temas y exámenes, como el
+ * riel («5 de 8 completados»); hasta el 4/10 contaba solo los temas y los dos números no casaban.
+ */
 function placeInRoute(
   route: Array<{
     name: string;
@@ -301,13 +351,12 @@ function placeInRoute(
   assignmentId: string
 ): { module: string; index: number; total: number } | null {
   for (const block of route) {
-    const lessons = block.items.filter((item) => item.kind === 'LESSON');
-    const index = lessons.findIndex((item) => item.assignmentId === assignmentId);
+    const index = block.items.findIndex((item) => item.assignmentId === assignmentId);
     if (index >= 0) {
       return {
         module: `${block.position}. ${block.name}`,
         index: index + 1,
-        total: lessons.length,
+        total: block.items.length,
       };
     }
   }
@@ -338,6 +387,7 @@ async function LessonNav({
   form,
   submission,
   requiresSubmission,
+  reading,
 }: {
   previous: LessonNeighbour | null;
   next: LessonNeighbour | null;
@@ -348,6 +398,7 @@ async function LessonNav({
   form: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
   submission: 'SUBMITTED' | 'RETURNED' | 'APPROVED' | null;
   requiresSubmission: boolean;
+  reading: { requiredSeconds: number; savedSeconds: number; savedScrolled: boolean };
 }) {
   const t = await getTranslations('learn');
 
@@ -387,6 +438,16 @@ async function LessonNav({
         </a>
       </Button>
     );
+  } else if (
+    next &&
+    !next.enabled &&
+    next.blockedBy === currentTitle &&
+    form === 'MARKDOWN' &&
+    status !== 'COMPLETED'
+  ) {
+    // Lo único que falta es leer este tema (5/10): el botón ya está, deshabilitado, con la
+    // cuenta atrás o «Lee hasta el final»; antes era una frase y no se sabía cuánto faltaba.
+    action = track('blocked', <ReadingCountdown {...reading} />);
   } else if (next) {
     // Habilitado: el botón; bloqueado: el texto que dice qué falta (sin enlace que no lleve
     // a ninguna parte).
@@ -434,13 +495,23 @@ async function NavLink({
       : `/aprender/examen/${item.assignmentId}`;
 
   if (!item.enabled) {
+    const reason =
+      item.blockedBy === currentTitle
+        ? t('lesson.completeToContinue', { title: item.title })
+        : item.blockedBy
+          ? t('blockedBy', { title: item.blockedBy })
+          : item.locked
+            ? t('lesson.nextLocked')
+            : t('notYet');
     return (
-      <span className="type-caption text-text-muted block text-left sm:max-w-[20rem] sm:text-right">
-        {item.blockedBy === currentTitle
-          ? t('lesson.completeToContinue', { title: item.title })
-          : item.blockedBy
-            ? t('blockedBy', { title: item.blockedBy })
-            : t('notYet')}
+      <span className="type-caption text-text-muted inline-flex items-center gap-1.5 text-left sm:max-w-[20rem] sm:text-right">
+        {/* En el teléfono (4/10) la barra ya dice el estado arriba; aquí basta el candado y
+            «Siguiente»: la frase entera eran dos líneas más bajo el pulgar. */}
+        <Lock aria-hidden className="size-4 shrink-0 sm:hidden" />
+        <span className="sm:hidden" aria-hidden="true">
+          {t('lesson.nextShortLocked')}
+        </span>
+        <span className="sr-only sm:not-sr-only">{reason}</span>
       </span>
     );
   }

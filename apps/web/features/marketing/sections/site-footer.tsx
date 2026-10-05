@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { BrandLogo } from '@/components/atoms/brand-logo';
 import { SiteContainer } from '../site-container';
+import { AlbaLogo } from '../brand/alba-logo';
 import { whatsappUrl } from '../contact-links';
 import type { LandingInstitution } from '../landing';
 
 /**
- * Pie pequeño: logo y lema, columnas con enlaces que existen y el contacto real. Sin redes:
- * no hay ninguna que enlazar. Deja sitio abajo para el botón flotante.
+ * Pie compacto (ALBA, 5/10): logo y lema, «Explora», «Soporte» y «Legal» con enlaces que
+ * existen, y la línea de derechos. Sin redes ni centro de ayuda: no hay ninguno que enlazar
+ * todavía. Deja sitio abajo para el botón flotante en el teléfono.
  */
 export async function SiteFooter({
   institution,
@@ -19,39 +20,38 @@ export async function SiteFooter({
   const t = await getTranslations('landing');
   const wa = whatsappUrl(institution.supportPhone);
   const year = new Date().getFullYear();
-  const link = 'site-small min-h-touch inline-flex items-center hover:text-[var(--site-blue)]';
+  const link =
+    'site-small min-h-touch inline-flex items-center hover:text-[var(--site-blue)] hover:underline';
   return (
-    <footer className="border-t border-[var(--site-line)] pb-24 sm:pb-0">
-      <SiteContainer className="grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr] lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div className="space-y-4">
-          <BrandLogo className="h-10" />
+    <footer className="border-t border-[var(--site-line)] bg-[var(--site-bg)] pb-24 sm:pb-0">
+      <SiteContainer className="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))]">
+        <div className="space-y-3">
+          <AlbaLogo className="h-10" />
           <p className="site-small m-0 max-w-xs">{t('footer.tagline')}</p>
         </div>
-        <FooterColumn title={t('footer.platform')}>
+        <FooterColumn title={t('footer.explore')}>
           <a href="#programas" className={link}>
             {t('nav.programs')}
           </a>
           <a href="#como-funciona" className={link}>
             {t('nav.how')}
           </a>
+          <a href="#historias" className={link}>
+            {t('nav.stories')}
+          </a>
           <a href="#preguntas" className={link}>
             {t('nav.faq')}
           </a>
         </FooterColumn>
-        <FooterColumn title={t('footer.institution')}>
+        <FooterColumn title={t('footer.support')}>
+          {wa && (
+            <a href={wa} target="_blank" rel="noreferrer" className={link}>
+              {t('footer.write')}
+            </a>
+          )}
           <a href={`mailto:${institution.supportEmail}`} className={link}>
             {institution.supportEmail}
           </a>
-          {institution.supportPhone && (
-            <a
-              href={wa ?? `tel:${institution.supportPhone.replace(/\s/g, '')}`}
-              target={wa ? '_blank' : undefined}
-              rel={wa ? 'noreferrer' : undefined}
-              className={link}
-            >
-              {institution.supportPhone}
-            </a>
-          )}
           <Link href={signedIn ? '/ingresar' : '/auth/login'} className={link}>
             {signedIn ? t('nav.enter') : t('nav.login')}
           </Link>
@@ -74,15 +74,14 @@ export async function SiteFooter({
 }
 
 function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
+  const items = (Array.isArray(children) ? children : [children]).filter(Boolean);
   return (
     <div>
-      <h2 className="mb-2 text-sm font-bold">{title}</h2>
+      <h2 className="m-0 mb-1 text-sm font-semibold text-[var(--site-navy)]">{title}</h2>
       <ul className="m-0 flex list-none flex-col p-0">
-        {Array.isArray(children) ? (
-          children.map((c, i) => c && <li key={i}>{c}</li>)
-        ) : (
-          <li>{children}</li>
-        )}
+        {items.map((child, index) => (
+          <li key={index}>{child}</li>
+        ))}
       </ul>
     </div>
   );

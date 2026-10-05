@@ -115,7 +115,6 @@ export default async function StaffHomePage() {
             {...inbox.funnels.submissions}
           />
         </StatGrid>
-        <p className="type-caption text-text-muted mt-3">{t('funnels.note')}</p>
       </PageSection>
 
       <PageSection

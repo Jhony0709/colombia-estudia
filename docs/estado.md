@@ -4824,6 +4824,371 @@ la deuda fichada, resumida:
 | Comisión de Wompi configurable y total con recargo    | Sin tarifa acordada                   |
 | `/familia`, `open_text`, DIAN, segunda institución    | Post-MVP (ROADMAP)                    |
 
+## 4/10 — El panel del estudiante: héroe de continuar, cifras, ritmo, exámenes, fechas
+
+Auditoría y plan en el proyecto (`claude/colombia-estudia-auditoria-estudiante-0410.md`),
+navegado como «Estudiante Tres» a 1600 y 480 px, claro y oscuro. Sin schema ni archivos
+protegidos.
+
+**`/aprender`** (`app/(student)/aprender/page.tsx`, `dashboard-cards.tsx`)
+
+- Un solo **héroe de continuar**: la tarjeta «Actividad actual» pasa a ser el héroe azul de
+  marca (portada del componente o, sin ella, la foto), con la actividad, su forma y minutos, el
+  componente, el avance del programa (barra `on-accent`) y «Continuar». Misma lógica de estados
+  (empezar, espera, bloqueado, cerrado). El héroe de ánimo queda solo sin matrícula. En el
+  teléfono el botón sale en la primera pantalla (antes, tras pantalla y media).
+- **Cifras** (`ProgressKpis`): avance del programa (medidor), tiempo que queda (de cuánto) y
+  días con estudio en 14 días (`DayStrip`). Sustituye a la franja de tres números.
+- **Tu ritmo** (`RhythmCard` + `molecules/charts/ActivityColumns`): pasos completados por día,
+  14 días (7 en el teléfono), tooltip con puntero y teclado (una parada, flechas).
+  Datos: `features/learn/server/activity.service.ts#getStudyActivity` sobre `LearningEvent`:
+  paso = tema terminado por el estudiante, actividad enviada o examen entregado (no la
+  aprobación del instructor ni lo marcado a mano); día activo = cualquier evento; días de
+  Bogotá.
+- **Tus exámenes** (`ExamsCard` + `ExamBullet`): mejor nota contra el umbral, estado en texto e
+  icono. `ResultsForStudent.assessments[].passPercent` nuevo (`attempt.service.ts`).
+- **Próximas fechas** (`AgendaCard`): baldosa con mes y día; fechas de cohorte y acceso en UTC
+  (`@db.Date`) y con año si es otro.
+- **Ayuda** por WhatsApp (`primaryContact`, `supportPhone`) con mensaje escrito; correo si no hay
+  teléfono.
+- Copia: «Lo que toca hoy y cómo vas.» con una matrícula (antes «Elige uno…» con una sola).
+
+**Navegación**: pestañas Inicio · Calendario · Resultados · Biblioteca (`lib/nav/student-nav.ts`;
+Resultados sale del menú de la persona). Iconos de la barra inferior.
+
+**Otras pantallas**: Resultados con la bala en cada tarjeta de examen; Calendario con baldosas
+de fecha y la agenda en tarjeta; `EmptyState` con `icon` (Resultados, Biblioteca, Constancias,
+Notificaciones); barra del tema en el teléfono: el siguiente bloqueado se dice «Siguiente
+bloqueado» con candado (la frase entera desde `sm`), dos filas en vez de tres.
+
+**Motion**: `.chart-grow-x`/`.chart-grow-y` en `globals.css` (medidores y columnas crecen desde
+su base, `duration.normal`, `easing.enter`, solo `transform`); tooltip con opacidad
+`duration.fast`. Reduced motion: corte por la regla global.
+
+**Tests**: `activity.service.test.ts` (5), `ActivityColumns.test.tsx` (4). `tsc` limpio.
+
+**Fuera, con razón**: atajos de una tecla en el player (WCAG 2.1.4 pide poder apagarlos y no
+hay ajuste de usuario), rachas y medallas (`PRODUCT_DECISIONS.md:145`), entrada escalonada (sin
+token).
+
+De tu lado: `pnpm test:unit`, `pnpm lint` (dos `eslint-disable` justificados en
+`ActivityColumns`: foco itinerante en `<li>`).
+
+## 4/10 — Auditoría de Gestión aplicada: atajos, pestañas, tablas en el teléfono
+
+Auditoría (navegada como admin a 1920 y 640 px) y prompt adaptado en el proyecto:
+`claude/colombia-estudia-auditoria-gestion-0410.md`, `claude/colombia-estudia-prompt-auditoria-uiux-0410.md`.
+Sin cambios de schema ni archivos protegidos.
+
+**Atajos y feedback**
+
+- Persona → matrícula: `personas/[personId]/page.tsx` enlaza cada matrícula a su ficha y a su
+  cartera (`billing.manage`); la cabecera lleva «Ver la matrícula en …» a la más reciente.
+  `people.service.ts#getPersonDetail` devuelve `cohortId`.
+- Ficha de persona: Matrículas sube detrás de Datos; Acudencia a la vista solo si es menor o
+  tiene vínculos; Consentimientos, Acudencia vacía y Anonimizar en un `<details>` «Más datos y
+  acciones», lo irreversible al final con texto `status-error` y botón `quiet`.
+- Ficha de matrícula: «Ver la cartera» en la cabecera junto a «Ver la persona»; sale la sección
+  Cartera que era un solo enlace.
+- Actividad reciente: `person_registered` («Se registró por la web») en `people-rail.tsx`.
+- Botón «Fijar» de la ruta de cohorte: `aria-label` propio y `title` reescrito (decía «Fijada…»
+  en el botón sin fijar); la etiqueta pasa a «Fijar».
+- Examen nuevo: `assessments.service.ts#NEW_ASSESSMENT_RULES` = 2 intentos, 60 %,
+  `FULL_AFTER_LAST_ATTEMPT` (regla del cliente, 3/10); el diagnóstico conserva 1 / sin umbral /
+  `SCORE_ONLY`. El `@default(1)` del schema no cambia.
+- Inicio: fuera la nota de desarrollo sobre telemetría (`staff.funnels.note`).
+
+**Sistema**
+
+- `CohortSections` (`cohortes/[cohortId]/cohort-sections.tsx`): las pestañas de la cohorte
+  también en Actividades y Avance, filtradas por capacidad (un instructor que solo revisa no
+  ve pestañas). Cifras con `features/cohorts/server/cohort-nav.service.ts` (tres `count`). La
+  de Ruta solo en la ficha. Cartera marcada `external`. La ficha pasa a `Page wide` como las
+  otras dos.
+- `SectionNav`: `flex-wrap` desde `sm` y opción `external` con flecha.
+- `DataTable.hideBelow: 'sm' | 'md' | 'lg'`; aplicado en Personas, Cohortes, Cartera,
+  Actividades, Avance, Exámenes y matrículas de la cohorte (Acciones `narrow`). En la lista de
+  matrículas el nombre abre la matrícula y sale el enlace «Detalle».
+- `StatCard`/`StatGrid`: bajo `sm`, dos por fila y sin icono.
+- `StaffShell` (`app/(staff)/_shell/staff-shell.tsx`) compartido por `(staff)` y `(admin)`: el
+  área de administración recupera el conmutador de espacios.
+- Talleres en la ruta de la cohorte y en el constructor (`workshop` calculado en
+  `assignments.service.ts` y `builder.service.ts` con `workshopStart`); el constructor quita la
+  asignatura repetida de cada fila y cambia «Añadir el examen de este tema» ×N por un botón de
+  icono al lado del tema (`aria-label` con el título).
+- `PageHelp`: 48 px en el teléfono y `phoneSide="start"` en el editor de temas.
+- SSOT: `03-ui/layout-y-componentes.md` (prioridad de columnas, cifras, patrón de alta,
+  pestañas, `PageHelp`).
+
+**Tests**: `DataTable.test.tsx` +1 (`hideBelow`), `assessments.service.test.ts` +1 (reglas del
+examen nuevo y del diagnóstico). `tsc` limpio; jest/eslint no corren en la VM.
+
+**Verificado en Chrome** (admin, 1920 / 720 / 480 px): ficha de persona con enlaces y «Más»;
+pestañas en Actividades y Avance; ruta y constructor con taller; «Gestión» en Institución;
+«Se registró por la web»; Personas y matrículas sin columnas cortadas; cifras compactas.
+
+**No hecho**: limpiar los títulos duplicados del contenido importado (`**APRENDER ES
+AVANZAR**`, `**1. …**`): es dato, no UI.
+
+## 4/10 — Cómo se lee un tema: medida, título repetido, marcas con un sentido, índice
+
+Evaluación en el proyecto (`claude/colombia-estudia-auditoria-contenido-0410.md`), navegado
+como «Estudiante Tres». Sin schema; `packages/types/src/content.ts` y `packages/domain` sin
+tocar.
+
+- **Medida**: token nuevo `--size-measure: 38rem` + `.max-w-measure` (plugin de tokens). Con
+  `max-w-reading` (68ch) la línea medía 95 caracteres de Atkinson; ahora ~75. `.contenido`
+  pasa a 17 px / 1.65; tamaños de lectura 1.25 y 1.5; «estrecho» = medida − 6rem.
+- **Render** (`render.ts`): `renderLesson()` devuelve `{ html, outline }` (`renderLessonHtml`
+  queda como envoltorio). Opción `title`: el primer bloque que repite el título (con o sin
+  «Taller 1.», sin mirar mayúsculas) se quita — 4 de 6 temas del componente 1 lo traían. Ids
+  en los `h2` del primer nivel (con el prefijo `user-content-` del saneado), tablas en
+  `div.tabla` (único `className` admitido en `div`), imagen sola con título → `figure.figura`
+  con pie, `loading="lazy"` en todas. Player y vista previa pasan el título.
+- **Marcas**: la raya amarilla queda solo en el `h1`; `h2` por tamaño, `h3` sin borde. Borde
+  izquierdo con fondo e icono = recuadros (`:::callout`, icono por máscara `data:`); sin fondo
+  = cita (gris) e idea clave (amarilla, un escalón más grande). Recuadro de objetivos en
+  acento. El flotado de «En este tema aprenderás» (27/9) se retira: la medida ya no crece y a
+  la derecha va el índice.
+- **Player**: texto, objetivo, actividad y entrega a la misma medida; desde `xl`, «En este
+  tema» (`lesson-outline.tsx`, con 3+ secciones, marca la que se lee). El medidor de evidencia
+  va dentro del bloque del texto (sus dos invisibles dejaban 80 px); sin texto, la actividad no
+  lleva raya encima. «Paso n de m» cuenta temas y exámenes, como el riel. Overline solo desde
+  `lg` (`PageHeader.overlineFromLg`). `TaskBar` con `!-mt-8` (banda de 64 px en el teléfono).
+  Riel pegado en `top-20`. «Ruta del componente» con chevron.
+- **Medios**: iframe con fondo y radio mientras carga; PDF como tarjeta con icono.
+- **Editor**: minutos sugeridos por extensión (150 palabras/min, botón «Usar») y aviso de
+  títulos en mayúsculas (`features/content/editor/text-hints.ts`); no bloquean.
+
+**Tests**: `render.test.ts` +8 (corridos con un arnés de Node en la VM: 47/47);
+`text-hints.test.ts` nuevo (4, funciones comprobadas a mano). `tsc` limpio.
+
+**Pendiente**: reiniciar `pnpm dev` si el CSS no trae `max-w-measure` (el plugin se carga al
+arrancar); jest/eslint; ver el teléfono (la ventana de Chrome no se dejó redimensionar);
+mayúsculas de los títulos importados (datos del cliente); probar con video, imagen y fórmulas
+reales.
+
+## 5/10 — Portada ALBA Futuro Educativo (rebranding, primera parte: el layout)
+
+Referencias en `docs/brand/alba-brand-board.png` y `alba-landing-reference.png`; prompt del
+diseño en la conversación del 5/10. Solo la web pública: tokens del producto, `BrandLogo`,
+favicon y Open Graph siguen siendo de Colombia Estudia hasta que llegue el logo oficial.
+
+- **Piel** (`features/marketing/site.css`): paleta navy/azul/amarillo/blanco (sin rojo),
+  Lexend 400–700, botones en píldora, marco de 1280 px, contrastes medidos en la cabecera.
+- **Primitivas** (`features/marketing/brand/`): `AlbaLogo` (provisional), `AlbaWave` (capas
+  del isotipo, animables), `WaveSeparator` (`rise`/`fall`/`swell`, `accent`, `cut` sobre foto),
+  `PhotoMask` (máscaras SVG en `public/brand/masks/` vía `mask-image`), `StoryVisual`,
+  `WhatsAppIcon`.
+- **Secciones**: cabecera con anclas centradas y menú del teléfono (`mobile-menu.tsx`), hero
+  con arco y ondas, «Volver a estudiar», programas (tarjeta navy del bachillerato + tres
+  servicios que vienen con él), historias (navy), proceso con curva SVG (vertical en el
+  teléfono), mosaico, valores, preguntas, cierre navy con paisaje y pie compacto. Un
+  separador en onda entre cada cambio de color.
+- **Copy** (`landing.*`): el del prompt, salvo lo que hoy no es verdad: sin apoyo presencial
+  («100 % en línea»), sin historias publicadas (el CTA invita a contar la propia), sin redes ni
+  centro de ayuda, «muchas personas» en vez de «miles». Preguntas: las cuatro del manual más
+  validez del título y precio. «Comenzar» y «Quiero conocer mi ruta» llevan a `/registro`.
+- **Fotos**: las generadas del 19/9 y 23/9 repartidas en ocho huecos nuevos (`media.ts`, con
+  su encargo); ninguna se repite en la página. `hero-student.webp` y `editorial-colombia.jpg`
+  quedan sin uso.
+- Movidos a `_to_delete/features-marketing-0510/`: `banner`, `editorial`, `facts-bar`,
+  `how-it-works`, `brand-shapes`.
+
+`tsc` limpio, prettier. **Sin ver en el navegador** (el servidor de desarrollo no estaba
+arriba).
+
+**Pendiente**: verlo a 1440/1280/1024/768/430/390/360; logo oficial (y con él favicon, OG y
+`BrandLogo`); nombre de la institución en `/admin/institucion` (pie y mensaje de WhatsApp lo
+leen de ahí); fotos reales (el titular «Personas reales, historias reales» va hoy junto a
+fotos generadas); `public.spec.ts` (axe, sin desplazamiento horizontal, FAQ con teclado).
+
+## 5/10 — Portada ALBA: verificación y sistema de movimiento
+
+**Verificación del layout** (Chrome 1440 y 500): título del hero a dos líneas como el mockup
+(`clamp(2.25rem, 1.1rem + 2.4vw, 3.5rem)`), foto de «Volver a estudiar» cuadrada en escritorio,
+trazos en vez de rellenos en el óvalo de «Historias», sol del cierre asomando por el borde de
+abajo, separadores que bajan 4 unidades bajo su cuadro (la raya gris de un píxel entre
+secciones), `.alba-wave` sin `width` (pisaba `w-[116%]`: el CSS de la piel va después de las
+utilidades). Sin desplazamiento horizontal.
+
+**Movimiento** (`features/marketing/motion/`, Motion 12 ya instalado; sin librerías nuevas):
+
+- `tokens.ts` (duraciones .16/.32/.5/.8/1.1/.22, curvas `[0.22,1,0.36,1]` y
+  `[0.16,1,0.3,1]`, distancias 24/16/12, escalonados .05/.07/.1) con espejo `--mo-*` en
+  `site.css`.
+- Primitivos: `Reveal` (fade, fade-up, slide-left/right, mask, settle, grow), `Stagger`
+  (con `data-mo-icon` y `data-mo-label`), `MaskReveal`, `Parallax`, `AnimatedWave`
+  (separator/draw/rise), `AnimatedTimeline`, `MotionRoot`; `FaqItem` para el acordeón.
+- CSP: nada de estilos en el HTML. El estado oculto lo pone el CSS solo cuando `MotionRoot` marca
+  `data-mo-ready` al hidratar (sin JS todo se ve; lo que ya está en pantalla se marca revelado
+  en la misma tarea, sin parpadeo); Motion escribe por CSSOM y al terminar devuelve el elemento
+  al CSS (`release`), para no tapar los hover.
+- Hero al cargar: CSS puro (no espera a hidratar ni retrasa el LCP): cabecera, eyebrow, título
+  (24 px), entradilla (16), CTA (escala .98), beneficios, foto con recorte de arriba abajo y
+  1.04 → 1, ondas desde ejes distintos (60 ms). Parallax de foto (+40), sol (−30) y ondas (+20)
+  solo en escritorio con ratón.
+- Por sección: foto con máscara desde la izquierda y texto desde la derecha; separadores que se
+  descubren a lo ancho alternando el origen; tarjetas escalonadas; óvalo desde abajo y trazos
+  dibujados (`pathLength`); la línea del proceso dibujada con el scroll, puntos .6 → 1 y
+  marcadores .35 → 1; mosaico con máscara vertical cada 100 ms; valores en grupo (50 ms);
+  acordeón de alto 220 ms interrumpible; cierre con paisaje 1.04 → 1, estela que sube y sol.
+- Microinteracciones (CSS, solo `hover: hover` y `pointer: fine`): botones 1.015 / .985 y
+  flecha 4 px, filas a azul claro, tarjetas de servicio −4 px, tarjeta navy con foto 1.03 y
+  círculo que crece, mosaico 1.025. Cabecera despegada: blanco .85 con desenfoque fijo y borde.
+- Teléfono: 12 px, sin parallax, sin hover, máscaras → fundidos, ondas quietas, línea estática.
+  `prefers-reduced-motion`: nada se oculta ni se anima; `scroll-behavior: auto`.
+- Descartado: la altura de la cabecera 76 → 68 (movía la página bajo el dedo), la onda de la
+  tarjeta navy (no existe en el diseño; no se añade), atenuar el texto de los pasos a .35 (AA),
+  barra de progreso global.
+
+Ajuste del mismo día (Jhonny: «retarda un poco todas las animaciones de entrada»): entradas un
+30 % más lentas —`reveal` .65, `slow` 1, `wave` 1.4, `settle` 1.3 s, escalonados .065/.09/.13 y
+los retardos del hero ×1.33—; las microinteracciones no cambian.
+
+**Logo oficial (mismo día)**: `logoAlba.png` (solo el isotipo) → `docs/brand/alba-isotipo-original.png`
+y derivados `alba-*` en `public/brand/`, más `app/icon.png`, `apple-icon.png` y
+`opengraph-image.png` (proceso en `docs/brand/README.md`). `BrandLogo` (producto) y `AlbaLogo`
+(portada, ya sin el SVG provisional) los usan; `alt` por defecto «ALBA Futuro Educativo».
+
+`tsc` limpio, prettier. Verificado en Chrome (escritorio y 500 px): entrada del hero, revelados,
+línea del proceso, acordeón con ratón y con Enter, hover, cabecera, consola sin errores nuevos.
+**No verificado**: movimiento reducido en el navegador (cubierto por el proyecto
+`prefers-reduced-motion` de `public.spec.ts`, que corre Jhonny), Safari, dispositivo real lento.
+
+## 5/10 — Pantallas de acceso con la marca ALBA
+
+Mockup de Jhonny (login a dos columnas). `AuthShell` rehecho: a la izquierda, fija a la altura
+de la pantalla, la foto arriba y un bloque navy con las ondas del isotipo (azul y amarillo), el
+titular de cada pantalla con la última palabra en amarillo («Tu historia también puede
+continuar.»), entradilla y tres beneficios; a la derecha, en blanco, logo centrado, formulario y
+una franja de confianza (con la política de datos enlazada si existe). Lexend en todo el
+cascarón; colores de marca en `.auth-brand` (globals.css), el formulario sigue en tokens.
+
+Login: «Inicia sesión» + «Continúa tu proceso educativo.», iconos dentro de los campos,
+«¿Olvidaste tu contraseña?» bajo la contraseña, «Entrar →», una «o» y «Recibir un enlace de
+acceso» como botón secundario, «¿No tienes cuenta? Crear cuenta». Todos los `h1` de acceso con
+`auth-title`. Fuera, a propósito: «Continuar con Google» (no hay proveedor), selector de idioma
+(solo `es-CO`) y la banda de foto del teléfono (`auth-strip` queda sin uso). Título por defecto de
+la app y `friendlyName` del segundo factor: «ALBA Futuro Educativo» (los TOTP ya enrolados
+conservan el nombre viejo en la app del teléfono).
+
+`tsc` limpio. Visto en Chrome: login y registro a 1440, login a 500.
+
+**Mismo día, después**: ondas del acceso rehechas como el mockup (navy que baja hacia la
+derecha, cinta amarilla que nace dentro del azul); `upgrade-insecure-requests` solo en
+producción (`middleware.ts`, protegido: desde el teléfono por la IP de la red subía CSS y JS a
+https y no cargaban); botón de WhatsApp de la portada con el círculo verde (glifo navy, 7:1) y
+un halo amarillo que late en bucle espaciado: el primero a los 6 s y después uno cada 10 s
+(1.4 s de latido); se calla para la sesión cuando la persona pasa el ratón, enfoca o toca el
+botón (`fab-quiet.tsx`, `sessionStorage`), que es el mecanismo para detenerlo que pide WCAG
+2.2.2; nada con movimiento reducido.
+`allowedDevOrigins: ['192.168.1.*']` en `next.config.ts` (protegido; solo `next dev`) para
+que el teléfono en la red local pida `/_next/*` y el HMR sin el aviso «Cross origin request
+detected».
+
+Campana del estudiante y del acudiente como menú (`NotificationMenu`): al abrir pide los
+últimos 6 (`GET /api/notifications?limit=6`), marca leídos los que llegaron sin leer (un
+`PATCH …/read` por aviso) y los deja marcados como nuevos mientras el menú siga abierto;
+cada aviso lleva a su destino y «Ver todas» al centro. `DropdownItem` admite `multiline` y
+`description` como nodo. Visto en Chrome con datos simulados (la sesión era de staff).
+
+Temas de lectura sin minutos (0 o vacío) ya no esperan: `requiredReadingSeconds` en
+`packages/domain/src/lesson-completion.ts` (protegido; pedido por Jhonny) da 0 y basta el
+scroll; antes, vacío eran 120 s. Los que sí esperan muestran el «Siguiente» deshabilitado con
+la cuenta atrás (`reading-countdown.tsx`), luego «Lee hasta el final» si falta el scroll y
+«Guardando tu avance» mientras el servidor confirma. `evidence-recorder.tsx` emite
+`ce:reading` cada segundo y manda la evidencia en el segundo exacto en que se cumple.
+
+Examen: «Hay respuestas sin guardar» al entregar justo después de responder la última. El
+autosave tenía un booleano de «en camino» y `flush()` volvía al instante si había un envío
+viajando; `submit` veía la respuesta aún en la cola. Ahora `flush()` devuelve la promesa del
+envío en curso y `submit` la espera y manda lo que quede (hasta tres vueltas). Si el servidor
+rechaza el guardado, el mensaje dice el motivo: sesión cerrada (las respuestas siguen en
+`localStorage` y se reenvían al volver) u otro error, en vez de culpar siempre a la conexión.
+Dos tests nuevos en `AttemptPlayer.test.tsx`.
+
+Sin salida tras el último examen (Estudiante Tres, INTRO: un componente, 8 de 8, cuestionario
+calificado 6/10). La matrícula solo pasaba a `COMPLETED` con el job diario o al abrir
+«Constancias»; entretanto `/aprender` quedaba sin `resume` ni `upcoming` y el héroe decía
+«Continúa donde quedaste» sin botón. Ahora `issueAfterProgress` (certificates.service, mejor
+esfuerzo) emite al calificar un intento, al completar un tema por evidencia y al aprobar una
+entrega (automática o del instructor); `/aprender` lo llama también cuando una ruta activa ya
+no tiene nada pendiente. Si aun así la matrícula no se completa (final sin aprobar), el héroe
+dice «Completaste la ruta» con el enlace a resultados.
+
+Panel al terminar: con el programa elegido `COMPLETED`, `/aprender` deja la ruta, el ritmo y los
+exámenes y enseña «Cursos abiertos» (el catálogo, ahora arriba) y «Cursos completados»
+(`completed-courses.tsx`: programa, cohorte, fecha y enlace a la constancia de programa
+verificable, y a resultados), con la agenda y la ayuda al lado. El héroe lleva «Elegir mi
+siguiente curso» a `#cursos-abiertos`. Con otra matrícula activa, el panel normal añade
+«Cursos completados» al final.
+
+## 3/10 — Lo que decidió el cliente: talleres, componentes a mano, último intento
+
+Decisiones en `PRODUCT_DECISIONS.md` (3/10); mapa cliente → modelo en el doc de la reunión.
+Regla general autorizada por Jhonny: «por ahora no hay menores de edad».
+
+**Schema (protegido, avisado), tres migraciones; `prisma generate` hecho aquí:**
+
+- `Assessment.closingText String?` — `20261003000000_assessment_closing_text`.
+- `ReviewPolicy` + `FULL_AFTER_LAST_ATTEMPT` — `20261003000100_review_policy_last_attempt`.
+- `EnrollmentModule` (`enrollmentId × moduleId` único, `unlockedAt`, `unlockedById`,
+  `availableFrom/Until`, `CHECK from <= until`) con relaciones en `Institution`, `Person`,
+  `Module`, `Enrollment` — `20261003000200_enrollment_module_unlock`.
+
+**Ruta taller a taller** (`features/learn/server/outline.ts`): `OutlineItem.subjectId/Name`;
+`sortItems` agrupa por asignatura en el orden de su primer tema (temas + sus exámenes, luego
+el cuestionario del taller, al final los del componente sin taller); `workshopStart` para la
+etiqueta «Lengua castellana» en `/aprender` y el riel. `cohort.service.ts`, `builder.service.ts`
+y `assignments.service.ts` traen `subject`. Tests `outline.test.ts` +3.
+
+**«Aprender es avanzar» por taller**: `assessments.service.ts#updateAssessmentDetails`
+(`closingText`, audita), ruta de detalles, `assessment-details-form.tsx`;
+`attempt.service.ts` lee `assessment.closingText ?? module.closingText ?? null`.
+
+**Último intento** (`attempt.service.ts`): `reviewLevel` recibe `exhausted`;
+`attemptsExhausted({ attempts, attemptsAllowed, passPercent })` (exportada; los
+`IN_PROGRESS` cuentan como usados; el bono de ajuste amplía el cupo) en los tres sitios que
+deciden qué se enseña (`getAssessmentForStudent`, `getAttemptForStudent` —`loadOwnAttempt`
+ahora trae los intentos hermanos del estudiante—, `getResultsForStudent`). Enum en la ruta
+de detalles y en el editor; mensajes admin/estudiante; `attemptsValue` dice «es el último»
+con uno restante. Test `attempt-exhausted.test.ts` (6).
+
+**Componentes habilitados a mano**:
+
+- `outline.ts`: `ModuleAccess` (`OPEN | LOCKED | NOT_YET | CLOSED`), `moduleAccess({ first,
+unlock, progression, now })`; `sequence` acepta `access` por módulo (ausente = abierto), el
+  motivo del componente manda sobre la secuencia; `unavailableReason` suma `'LOCKED'`.
+- `cohort.service.ts`: lee `enrollmentModule` de la matrícula, calcula el acceso (primero de
+  la ruta abierto), `OutlineModule.access`; las portadas de **todos** los componentes se
+  firman en una llamada (`lib/media/storage.ts#createReadUrls`, `createSignedUrls`).
+- Puertas: `LessonGate` y la del intento suman `{ kind: 'LOCKED' }`; `LessonNeighbour.locked`
+  para la barra del tema («El siguiente componente se habilita cuando el equipo lo active»).
+- `/aprender`: la tarjeta de actividad actual dice «Terminaste lo que tienes habilitado» con el
+  nombre del siguiente; cada componente lleva su portada (gris si bloqueado) y el motivo
+  (`moduleAccess.*`); la portada del hero es la del componente por el que se va
+  (`currentModule`, antes la primera con URL). `resultados` y filas de ítem con el motivo.
+- Staff: `features/cohorts/server/module-access.service.ts` (`listModuleAccess`,
+  `setModuleAccess`: upsert/borrado, audita `enrollment_module.unlock|update|lock`, notifica
+  `module_unlocked` solo al habilitar, idempotente, fechas como días en Bogotá);
+  `PUT /api/cohorts/enrollments/[enrollmentId]/modules/[moduleId]` (`cohort.manage`); sección
+  «Componentes» en `/cohortes/[id]/matriculas/[id]` (`module-access.tsx`: Habilitar · Fechas ·
+  Bloquear; solo con matrícula `ACTIVE` y progresión `LINEAR`). `NotificationList` →
+  «Ir a mi ruta». Tests `outline.test.ts` +8, `module-access.service.test.ts` (9).
+- SSOT: `04-business-logic/contenido-y-evaluaciones.md` (§ Secuencia reescrito, § reviewPolicy),
+  `05-database/schema.md`, `02-api/endpoints.md`.
+
+**No hecho / decisiones abiertas**: el admin (builder, pestaña «Ruta» de la cohorte) todavía
+no pinta las etiquetas de taller; qué pasa al terminar todo el bachillerato («felicitaciones»)
+sigue sin definir; una matrícula de menor con componentes de pago no tiene regla de
+habilitación (ver PRODUCT_DECISIONS). `tsc` limpio; jest no corre en la VM.
+
+De tu lado: `pnpm prisma migrate deploy --schema=prisma/schema.prisma`,
+`pnpm --filter @colombia-estudia/web db:generate`, `pnpm test:unit`, `pnpm lint`. En Chrome:
+como estudiante, `/aprender` con dos componentes (el segundo gris y «se habilita cuando el
+equipo lo active»); como operación, la ficha de la matrícula → «Componentes» → Habilitar.
+
 ## 29/9 — MFA del personal como ajuste de la institución
 
 Decisión en `PRODUCT_DECISIONS.md`. **Schema (protegido, avisado)**:

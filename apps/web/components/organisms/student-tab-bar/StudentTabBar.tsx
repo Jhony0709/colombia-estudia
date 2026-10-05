@@ -12,14 +12,22 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CalendarDays, Library, UserRound, type LucideIcon } from 'lucide-react';
+import {
+  ChartColumn,
+  CalendarDays,
+  House,
+  Library,
+  UserRound,
+  type LucideIcon,
+} from 'lucide-react';
 import type { NavDestination } from '@/lib/nav/staff-nav';
 import { isActive } from '@/lib/nav/is-active';
 import { cn } from '@/lib/utils';
 
 const ICONS: Record<string, LucideIcon> = {
-  '/aprender': BookOpen,
+  '/aprender': House,
   '/aprender/calendario': CalendarDays,
+  '/aprender/resultados': ChartColumn,
   '/aprender/biblioteca': Library,
   '/aprender/mi-cuenta': UserRound,
 };

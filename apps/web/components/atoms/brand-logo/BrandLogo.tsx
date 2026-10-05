@@ -1,14 +1,14 @@
 /**
- * El logo de Colombia Estudia, según el tema: a color sobre claro, blanco sobre oscuro.
- * SSOT: reference/03-ui/tokens.md § Marca; manual de marca (variantes "color sobre fondo
- * blanco" y "blanco sobre fondo azul").
+ * El logo de ALBA Futuro Educativo (5/10; antes Colombia Estudia), según el tema: a color sobre
+ * claro, blanco sobre oscuro. SSOT: docs/brand/README.md (ALBA) y alba-brand-board.png.
  *
  * Dos `<img>` y una utilidad por tema (`only-light` / `only-dark`, design-tokens): sin
- * JavaScript, sin parpadeo, y cubre `.dark` y `.theme-system` a la vez. El azul del logo
- * (#002C80) da 1.49:1 sobre el lienzo oscuro, por eso ahí va la variante blanca y no la de
- * color. Solo una de las dos está en el árbol de accesibilidad: `display: none` saca a la otra.
+ * JavaScript, sin parpadeo, y cubre `.dark` y `.theme-system` a la vez. Solo una de las dos está
+ * en el árbol de accesibilidad: `display: none` saca a la otra.
  *
- * Origen de los ficheros: docs/brand/colombia-estudia-logo-original.png (PNG, no hay vector).
+ * Origen: el isotipo oficial (`docs/brand/alba-isotipo-original.png`, 1254 px, solo el símbolo)
+ * limpio y recortado, y el nombre compuesto en Lexend 700/500 (`docs/brand/README.md` cuenta
+ * cómo). No hay vector todavía.
  */
 
 import Image from 'next/image';
@@ -16,15 +16,15 @@ import { cn } from '@/lib/utils';
 
 const VARIANTS = {
   horizontal: {
-    light: '/brand/logo-horizontal.png',
-    dark: '/brand/logo-horizontal-white.png',
-    width: 800,
-    height: 394,
+    light: '/brand/alba-logo-horizontal.png',
+    dark: '/brand/alba-logo-horizontal-white.png',
+    width: 1229,
+    height: 400,
   },
   isotipo: {
-    light: '/brand/isotipo.png',
-    dark: '/brand/isotipo-white.png',
-    width: 203,
+    light: '/brand/alba-isotipo.png',
+    dark: '/brand/alba-isotipo-white.png',
+    width: 256,
     height: 256,
   },
 } as const;
@@ -41,7 +41,7 @@ export interface BrandLogoProps {
 
 export function BrandLogo({
   variant = 'horizontal',
-  alt = 'Colombia Estudia',
+  alt = 'ALBA Futuro Educativo',
   className,
   priority = false,
 }: BrandLogoProps) {

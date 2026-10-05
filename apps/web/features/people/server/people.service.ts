@@ -429,6 +429,7 @@ export interface PersonDetail {
   invitation: InvitationState;
   enrollments: Array<{
     id: string;
+    cohortId: string;
     cohortCode: string;
     cohortName: string;
     status: string;
@@ -497,7 +498,7 @@ export async function getPersonDetail({
           id: true,
           status: true,
           accessUntil: true,
-          cohort: { select: { code: true, name: true } },
+          cohort: { select: { id: true, code: true, name: true } },
         },
         orderBy: { enrolledAt: 'desc' },
       },
@@ -557,6 +558,7 @@ export async function getPersonDetail({
     invitation: deriveInvitationState(person.invitations, now),
     enrollments: person.enrollments.map((e) => ({
       id: e.id,
+      cohortId: e.cohort.id,
       cohortCode: e.cohort.code,
       cohortName: e.cohort.name,
       status: e.status,

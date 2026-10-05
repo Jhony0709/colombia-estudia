@@ -13,7 +13,7 @@
 
 import type { Metadata } from 'next';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { FileText, Headphones, Video } from 'lucide-react';
+import { FileText, Headphones, Video, Library } from 'lucide-react';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { getRequestContext } from '@/lib/authz/request-context';
@@ -139,7 +139,7 @@ export default async function LibraryPage({
     <Page>
       <PageHeader title={tl('title')} description={tl('description')} />
       {empty ? (
-        <EmptyState title={tl('empty')} description={tl('emptyHint')} />
+        <EmptyState icon={Library} title={tl('empty')} description={tl('emptyHint')} />
       ) : (
         <>
           {canFilter && (

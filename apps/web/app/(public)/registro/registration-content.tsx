@@ -117,7 +117,7 @@ export default function RegistrationContent({
     const e = done.enrollment;
     return (
       <section className="space-y-4">
-        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+        <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
           {t('success')}
         </h1>
         {e.status === 'ENROLLED' ? (
@@ -141,7 +141,7 @@ export default function RegistrationContent({
   return (
     <section className="space-y-4">
       <div className="space-y-2">
-        <h1 ref={headingRef} tabIndex={-1} className="type-heading text-text outline-none">
+        <h1 ref={headingRef} tabIndex={-1} className="auth-title text-text outline-none">
           {t('title')}
         </h1>
         <p className="type-body text-text-muted">

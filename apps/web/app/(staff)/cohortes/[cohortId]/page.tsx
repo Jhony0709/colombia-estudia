@@ -24,7 +24,6 @@ import { listPendingContentUpdates } from '@/features/cohorts/server/cohorts.ser
 import { listCohortAssignments } from '@/features/cohorts/server/assignments.service';
 import { getCohortProgress } from '@/features/cohorts/server/progress.service';
 import { StatCard, StatGrid } from '@/components/molecules/stat-card';
-import { SectionNav, type SectionNavItem } from '@/components/molecules/section-nav';
 import {
   Users,
   UserRound,
@@ -48,6 +47,7 @@ import { EnrollSheet, EnrollmentActions } from './enrollment-actions';
 import { BulkInvitations } from './bulk-invitations';
 import { LiveSessions } from './live-sessions';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
+import { CohortSections } from './cohort-sections';
 
 export const metadata: Metadata = { title: 'Cohorte' };
 
@@ -109,28 +109,6 @@ export default async function CohortDetailPage({
   const outdated = assignments?.outdated ?? 0;
   const routeCount = updates.length + outdated;
 
-  const nav: SectionNavItem[] = [
-    { href: base as Route, label: tc('sections.resumen') },
-    { href: `${base}?seccion=ruta` as Route, label: tc('sections.ruta'), count: routeCount },
-    {
-      href: `${base}?seccion=personas` as Route,
-      label: tc('sections.personas'),
-      count: cohort.enrollments.length,
-    },
-    {
-      href: `${base}/actividades` as Route,
-      label: tc('sections.actividades'),
-      count: submissions.SUBMITTED,
-    },
-    ...(canReadProgress ? [{ href: `${base}/avance` as Route, label: tc('sections.avance') }] : []),
-    {
-      href: `${base}?seccion=sesiones` as Route,
-      label: tc('sections.sesiones'),
-      count: upcomingSessions,
-    },
-    { href: `/cartera?cohorte=${cohort.id}` as Route, label: tc('sections.cartera') },
-  ];
-
   // Lo que requiere atención, en el resumen, con el enlace a donde se actúa.
   const attention: Array<{ key: string; text: string; href: Route }> = [];
   if (submissions.SUBMITTED > 0) {
@@ -170,7 +148,7 @@ export default async function CohortDetailPage({
   }
 
   return (
-    <Page>
+    <Page wide>
       <PageHeader
         overline={cohort.programName}
         title={`${cohort.code} — ${cohort.name}`}
@@ -224,7 +202,17 @@ export default async function CohortDetailPage({
         }
       />
 
-      <SectionNav label={tc('sections.label')} items={nav} />
+      <CohortSections
+        institutionId={ctx.institution.id}
+        cohortId={cohort.id}
+        capabilities={ctx.capabilities}
+        counts={{
+          personas: cohort.enrollments.length,
+          actividades: submissions.SUBMITTED,
+          sesiones: upcomingSessions,
+        }}
+        routeCount={routeCount}
+      />
 
       {section === 'resumen' && (
         <>
@@ -382,8 +370,10 @@ export default async function CohortDetailPage({
                   header: t('student'),
                   cell: (e) => (
                     <>
+                      {/* El nombre abre la matrícula (4/10): componentes, progreso, ajustes;
+                          la persona queda a un clic desde ahí («Ver la persona»). */}
                       <Link
-                        href={`/personas/${e.personCode}`}
+                        href={`/cohortes/${cohort.id}/matriculas/${e.id}`}
                         className="text-text-link underline underline-offset-4"
                       >
                         {e.name}
@@ -417,21 +407,15 @@ export default async function CohortDetailPage({
                   key: 'accessUntil',
                   header: t('accessUntil'),
                   numeric: true,
+                  hideBelow: 'md',
                   cell: (e) => e.accessUntil,
                 },
                 {
                   key: 'actions',
                   header: t('actions'),
+                  narrow: true,
                   cell: (e) => (
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Link
-                        href={`/cohortes/${cohort.id}/matriculas/${e.id}`}
-                        className="text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
-                      >
-                        {t('detail')}
-                      </Link>
-                      <EnrollmentActions enrollmentId={e.id} name={e.name} status={e.status} />
-                    </div>
+                    <EnrollmentActions enrollmentId={e.id} name={e.name} status={e.status} />
                   ),
                 },
               ]}

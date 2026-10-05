@@ -43,7 +43,7 @@ export interface IsLessonCompletedInput {
  * | Forma | Evidencia de completado |
  * |-------|-------------------------|
  * | VIDEO | posición ≥ 90 % O transcripción leída hasta el final |
- * | MARKDOWN | scroll al final Y tiempo ≥ min(estimatedMinutes × 0.5, 2 min) |
+ * | MARKDOWN | scroll al final Y tiempo ≥ min(estimatedMinutes × 0.5, 2 min); sin minutos, solo scroll |
  * | SUBMISSION | Submission con estado APPROVED |
  */
 export function isLessonCompleted(input: IsLessonCompletedInput): boolean {
@@ -86,23 +86,19 @@ function isVideoCompleted(evidence: LessonEvidence, videoDurationSeconds: number
 }
 
 /**
- * MARKDOWN completion: scrolledToEnd AND time >= min(estimatedMinutes * 30, 120)
- *
- * // AMBIGUO(contenido-y-evaluaciones.md:148): estimatedMinutes null → 120s minimum
+ * Seconds a MARKDOWN lesson must stay visible: min(estimatedMinutes * 30, 120).
+ * 0 or null minutes → no wait (Jhonny, 5/10; until then null meant 120 s).
  */
+export function requiredReadingSeconds(estimatedMinutes: number | null): number {
+  if (estimatedMinutes === null || estimatedMinutes <= 0) return 0;
+  return Math.min(estimatedMinutes * 30, 120);
+}
+
+/** MARKDOWN completion: scrolledToEnd AND time >= requiredReadingSeconds. */
 function isMarkdownCompleted(evidence: LessonEvidence, estimatedMinutes: number | null): boolean {
-  // Must have scrolled to end
   if (evidence.scrolledToEnd !== true) {
     return false;
   }
 
-  // Calculate required seconds
-  // estimatedMinutes * 0.5 min = estimatedMinutes * 30 seconds
-  // Cap at 120 seconds (2 minutes)
-  // AMBIGUO(:148): estimatedMinutes null → 120s minimum
-  const requiredSeconds = estimatedMinutes !== null ? Math.min(estimatedMinutes * 30, 120) : 120;
-
-  const actualSeconds = evidence.secondsOnLesson ?? 0;
-
-  return actualSeconds >= requiredSeconds;
+  return (evidence.secondsOnLesson ?? 0) >= requiredReadingSeconds(estimatedMinutes);
 }

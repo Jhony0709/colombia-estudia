@@ -208,6 +208,36 @@ describe('createAssessment', () => {
     expect(mockAssessmentCreate).not.toHaveBeenCalled();
   });
 
+  // 4/10 (regla del cliente del 3/10): un examen calificable nace con 2 intentos, 60 % y las
+  // respuestas al agotarlos; el diagnóstico, con las de la base.
+  it('un examen nuevo nace con las reglas de la institución; el diagnóstico no', async () => {
+    await createAssessment({
+      institutionId: 'i1',
+      actorId: 'p1',
+      programId: 'prog1',
+      kind: 'SUBJECT',
+      title: 'Cuestionario',
+    });
+    expect(mockVersionCreate.mock.calls.at(-1)?.[0]?.data).toMatchObject({
+      maxAttempts: 2,
+      passPercent: 60,
+      reviewPolicy: 'FULL_AFTER_LAST_ATTEMPT',
+    });
+
+    await createAssessment({
+      institutionId: 'i1',
+      actorId: 'p1',
+      programId: 'prog1',
+      kind: 'DIAGNOSTIC',
+      title: 'Diagnóstico',
+    });
+    expect(mockVersionCreate.mock.calls.at(-1)?.[0]?.data).toMatchObject({
+      maxAttempts: 1,
+      passPercent: null,
+      reviewPolicy: 'SCORE_ONLY',
+    });
+  });
+
   it('audita la creación', async () => {
     await createAssessment({
       institutionId: 'i1',
