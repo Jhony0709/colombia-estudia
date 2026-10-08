@@ -7,6 +7,8 @@
  * `cohort.service.ts` trae los datos; esto decide.
  */
 
+import { isPassing } from '@colombia-estudia/domain';
+
 export type ItemKind = 'LESSON' | 'ASSESSMENT';
 
 export type ItemStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
@@ -287,4 +289,37 @@ export function workshopStart(
   if (!item?.subjectName) return null;
   const previous = index > 0 ? items[index - 1] : null;
   return previous && previous.subjectId === item.subjectId ? null : item.subjectName;
+}
+
+/** Un número de la base: `Decimal` de Prisma o ya convertido. */
+type Amount = number | { toNumber(): number };
+const amount = (v: Amount) => (typeof v === 'number' ? v : v.toNumber());
+
+/**
+ * El estado de un cuestionario en la ruta, a partir de los intentos (8/10, Jhonny: «si pierdo
+ * un intento y tengo más intentos, no debería poder seguir; primero debo agotarlos»).
+ *
+ * Completado = aprobó en algún intento, o ya no le quedan intentos (todos cerrados). Perder los
+ * dos no bloquea la ruta (cliente, 3/10): agotar los intentos también lo completa. Sin umbral
+ * (`passPercent` nulo), cualquier intento calificado aprueba (`isPassing`).
+ */
+export function assessmentStatus(
+  attempts: Array<{ status: string; score: Amount | null; maxScore: Amount | null }>,
+  rules: { attemptsAllowed: number; passPercent: number | null }
+): ItemStatus {
+  if (attempts.length === 0) return 'NOT_STARTED';
+  const passed = attempts.some(
+    (a) =>
+      a.status === 'GRADED' &&
+      a.score !== null &&
+      a.maxScore !== null &&
+      isPassing({
+        score: amount(a.score),
+        maxScore: amount(a.maxScore),
+        passPercent: rules.passPercent,
+      })
+  );
+  if (passed) return 'COMPLETED';
+  const open = attempts.some((a) => a.status === 'IN_PROGRESS' || a.status === 'SUBMITTED');
+  return !open && attempts.length >= rules.attemptsAllowed ? 'COMPLETED' : 'IN_PROGRESS';
 }

@@ -80,6 +80,10 @@ const attempt = (questions: AttemptView['questions']): AttemptView => ({
   review: 'NONE',
   score: null,
   questions,
+  outcome: null,
+  attemptsLeft: 1,
+  activeAttemptId: null,
+  next: null,
 });
 
 beforeEach(() => {
@@ -232,5 +236,84 @@ describe('el reloj', () => {
       <AttemptPlayer attempt={{ ...attempt([question(1)]), timed: true, deadlineAt: soon() }} />
     );
     expect(screen.getByRole('timer')).toBeInTheDocument();
+  });
+});
+
+describe('el resultado (8/10)', () => {
+  const graded = (over: Partial<AttemptView>): AttemptView => ({
+    ...attempt([question(1)]),
+    status: 'GRADED',
+    review: 'SCORE',
+    submittedAt: new Date().toISOString(),
+    ...over,
+  });
+
+  it('aprobado: el siguiente paso de la ruta, sin reintentar', () => {
+    render(
+      <AttemptPlayer
+        attempt={graded({
+          outcome: 'PASSED',
+          score: { value: 2, max: 2, percent: 100, passed: true },
+          next: { href: '/aprender/tema/as-2', title: 'Tema 2' },
+        })}
+      />
+    );
+    expect(screen.getByRole('heading', { name: 'result.passedTitle' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /closing\.next/ })).toHaveAttribute(
+      'href',
+      '/aprender/tema/as-2'
+    );
+    expect(screen.queryByRole('link', { name: /closing\.retry/ })).not.toBeInTheDocument();
+  });
+
+  it('no aprobado con intentos: invita a reintentar y no deja seguir', () => {
+    render(
+      <AttemptPlayer
+        attempt={graded({
+          outcome: 'RETRY',
+          attemptsLeft: 1,
+          score: { value: 0, max: 2, percent: 0, passed: false },
+        })}
+      />
+    );
+    expect(screen.getByText('closing.lastAttempt')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /closing\.retry/ })).toHaveAttribute(
+      'href',
+      '/aprender/examen/as-1'
+    );
+    expect(screen.queryByRole('link', { name: /closing\.next/ })).not.toBeInTheDocument();
+  });
+
+  it('sin intentos: la misma calma y el siguiente paso', () => {
+    render(
+      <AttemptPlayer
+        attempt={graded({
+          outcome: 'DONE',
+          attemptsLeft: 0,
+          score: { value: 0, max: 2, percent: 0, passed: false },
+          next: { href: '/aprender/examen/as-3', title: null },
+        })}
+      />
+    );
+    expect(screen.getByRole('heading', { name: 'result.doneTitle' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /closing\.next/ })).toHaveAttribute(
+      'href',
+      '/aprender/examen/as-3'
+    );
+  });
+
+  it('visto desde el historial, si aprobó en otro intento lo dice y deja seguir', () => {
+    render(
+      <AttemptPlayer
+        attempt={graded({
+          outcome: 'PASSED_OTHER',
+          attemptsLeft: 0,
+          score: { value: 0, max: 2, percent: 0, passed: false },
+          next: { href: '/aprender/curso/en-1', title: null },
+        })}
+      />
+    );
+    expect(screen.getByRole('heading', { name: 'result.passedOtherTitle' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /closing\.retry/ })).not.toBeInTheDocument();
   });
 });

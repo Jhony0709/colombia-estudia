@@ -72,6 +72,7 @@ describe('POST /api/auth/magic-link', () => {
       email: 'user@example.com',
       options: {
         emailRedirectTo: expect.stringContaining('/auth/callback'),
+        shouldCreateUser: false,
       },
     });
   });
@@ -88,6 +89,7 @@ describe('POST /api/auth/magic-link', () => {
       email: 'user@example.com',
       options: {
         emailRedirectTo: expect.stringContaining('next=%2Faprender'),
+        shouldCreateUser: false,
       },
     });
   });
@@ -108,6 +110,12 @@ describe('POST /api/auth/magic-link', () => {
     expect(redirectUrl).not.toContain('next=');
   });
 
+  it('no crea cuentas: las cuentas nacen en el registro o la invitación', async () => {
+    await POST(createRequest({ email: 'nadie@example.com' }));
+
+    expect(mockSignInWithOtp.mock.calls[0][0].options.shouldCreateUser).toBe(false);
+  });
+
   it('uses request origin for emailRedirectTo', async () => {
     const req = new NextRequest(new URL('/api/auth/magic-link', 'https://app.colombiaestudia.co'), {
       method: 'POST',
@@ -124,6 +132,7 @@ describe('POST /api/auth/magic-link', () => {
       email: 'user@example.com',
       options: {
         emailRedirectTo: expect.stringContaining('https://app.colombiaestudia.co/auth/callback'),
+        shouldCreateUser: false,
       },
     });
   });

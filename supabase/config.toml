@@ -242,6 +242,16 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Correos de Auth con la marca (8/10). En los proyectos alojados se pegan en el panel
+# (docs/runbooks/dominio-y-correo.md); aquí sirven al Supabase local.
+[auth.email.template.recovery]
+subject = "Restablece tu contraseña de ALBA Futuro Educativo"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Tu enlace para entrar a ALBA Futuro Educativo"
+content_path = "./supabase/templates/magic_link.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"

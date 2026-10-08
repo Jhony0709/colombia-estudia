@@ -11,18 +11,24 @@
  * días») y la acción a la derecha (Unirse, Abrir el examen). El fin de acceso sale **una
  * sola vez**, arriba, con la distancia («faltan 84 días»), no como una fila más entre los
  * plazos. Los días se cuentan en Bogotá; las fechas sin hora (`@db.Date`) en UTC.
+ *
+ * 8/10 (Jhonny: «mejora la UI/UX de /aprender/calendario»): arriba **lo próximo** —la sesión o
+ * el plazo que viene, con su acción—; cada fila dice de qué programa es (antes, el código de la
+ * cohorte); el cuestionario ya hecho sale «Hecho» y sin botón; vacío con salida al catálogo.
  */
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { CalendarDays, Video, ClipboardCheck, Flag } from 'lucide-react';
+import { CalendarDays, ChevronDown, CircleCheck, Video, ClipboardCheck, Flag } from 'lucide-react';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { getCalendarForStudent } from '@/features/learn/server/calendar.service';
 import type { CalendarItem } from '@/features/cohorts/server/live-sessions.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/atoms/button';
+import { Badge } from '@/components/atoms/badge';
 
 export const metadata: Metadata = { title: 'Calendario' };
 
@@ -93,6 +99,12 @@ export default async function CalendarPage() {
     buckets[days <= 0 ? 'today' : days <= 7 ? 'week' : 'later'].push(item);
   }
 
+  // Lo próximo (8/10): lo primero que pide algo —una sesión o un plazo sin hacer—; si no hay,
+  // la primera fecha que viene.
+  const next =
+    upcoming.find((i) => i.kind === 'LIVE_SESSION' || (i.kind === 'ASSESSMENT_DUE' && !i.done)) ??
+    null;
+
   const when = (item: CalendarItem) => {
     const start = new Date(item.at);
     const dateOnly = item.kind !== 'LIVE_SESSION' && item.kind !== 'ASSESSMENT_DUE';
@@ -135,10 +147,23 @@ export default async function CalendarPage() {
         <span className="type-caption text-text-muted">{tc('joinLater')}</span>
       );
     }
+    if (item.kind === 'ASSESSMENT_DUE' && item.done) {
+      return (
+        <Badge variant="success">
+          <span className="inline-flex items-center gap-1">
+            <CircleCheck aria-hidden className="size-3.5" />
+            {tc('done')}
+          </span>
+        </Badge>
+      );
+    }
     if (item.kind === 'ASSESSMENT_DUE' && item.href) {
       return (
         <Button asChild variant="secondary">
-          <Link href={item.href}>{tc('openExam')}</Link>
+          <Link href={item.href}>
+            {tc('openExam')}
+            <span className="sr-only"> {item.title}</span>
+          </Link>
         </Button>
       );
     }
@@ -176,8 +201,14 @@ export default async function CalendarPage() {
             {tc(`kind.${item.kind}`)}
             {far && <> · {far}</>}
           </p>
-          <p className="type-body-emphasis m-0">{item.title}</p>
+          <p className={cn('type-body-emphasis m-0', item.done && 'text-text-muted')}>
+            {isDateOnly(item) ? item.programName : item.title}
+          </p>
           <p className="type-body m-0">{when(item)}</p>
+          {/* De qué programa es; en las fechas de la cohorte, el nombre de la cohorte. */}
+          <p className="type-caption text-text-muted m-0">
+            {isDateOnly(item) ? item.title : item.programName}
+          </p>
           {item.description && (
             <p className="type-caption text-text-muted m-0 mt-1">{item.description}</p>
           )}
@@ -214,15 +245,25 @@ export default async function CalendarPage() {
       <PageHeader title={tc('title')} description={tc('description')} />
 
       {items.length === 0 ? (
-        <EmptyState title={tc('empty')} description={tc('emptyHint')} />
+        <EmptyState
+          icon={CalendarDays}
+          title={tc('empty')}
+          description={tc('emptyHint')}
+          action={
+            <Button asChild variant="secondary">
+              <Link href="/aprender#cursos-abiertos">{tc('emptyAction')}</Link>
+            </Button>
+          }
+        />
       ) : (
         <>
           {access.length > 0 && (
             <ul className="m-0 list-none space-y-1 p-0">
               {access.map((item) => (
-                <li key={item.id} className="type-body text-text-muted m-0">
+                <li key={item.id} className="type-body text-text-muted m-0 flex items-start gap-2">
+                  <CalendarDays aria-hidden className="mt-1 size-4 shrink-0" />
                   {tc('accessUntil', {
-                    cohort: item.title,
+                    cohort: item.programName,
                     // Con año: «faltan 362 días» y «20 de septiembre» sin año se leen como hoy.
                     date: format.dateTime(new Date(item.at), {
                       day: 'numeric',
@@ -237,23 +278,33 @@ export default async function CalendarPage() {
             </ul>
           )}
 
+          {next && <NextUp item={next} when={when(next)} distance={distance(next)} />}
+
           <PageSection title={tc('upcoming')} id="proximo" card>
             {upcoming.length === 0 ? (
               <p className="type-body text-text-muted">{tc('nothingUpcoming')}</p>
             ) : (
               <>
-                <Group bucket="today" />
-                <Group bucket="week" />
+                {/* Un tramo vacío no se pinta (8/10); si toda la semana está libre, una línea. */}
+                {buckets.today.length + buckets.week.length === 0 && (
+                  <p className="type-body text-text-muted m-0 pb-2">{tc('freeWeek')}</p>
+                )}
+                {buckets.today.length > 0 && <Group bucket="today" />}
+                {buckets.week.length > 0 && <Group bucket="week" />}
                 {buckets.later.length > 0 && <Group bucket="later" />}
               </>
             )}
           </PageSection>
           {past.length > 0 && (
-            <details>
-              <summary className="type-body-emphasis min-h-touch inline-flex cursor-pointer items-center">
+            <details className="group">
+              <summary className="type-body-emphasis min-h-touch inline-flex cursor-pointer list-none items-center gap-1.5 [&::-webkit-details-marker]:hidden">
                 {tc('past', { count: past.length })}
+                <ChevronDown
+                  aria-hidden
+                  className="duration-normal ease-standard size-4 transition-transform group-open:rotate-180"
+                />
               </summary>
-              <ul className="divide-border-muted mt-2 divide-y">
+              <ul className="divide-border-muted bg-surface-base border-border-muted rounded-card mt-2 divide-y border px-4 sm:px-5">
                 {past.map((item) => (
                   <Item key={item.id} item={item} showPast />
                 ))}
@@ -263,5 +314,67 @@ export default async function CalendarPage() {
         </>
       )}
     </Page>
+  );
+}
+
+/**
+ * Lo próximo (8/10): la sesión o el plazo que viene, en grande y con su acción, sobre el azul de
+ * la marca como el héroe del panel. Lo demás sigue en la agenda.
+ */
+async function NextUp({
+  item,
+  when,
+  distance,
+}: {
+  item: CalendarItem;
+  when: string;
+  distance: string | null;
+}) {
+  const tc = await getTranslations('learn.calendar');
+  const Icon = ICON[item.kind];
+  const live = item.kind === 'LIVE_SESSION';
+  return (
+    <section
+      aria-labelledby="calendario-proximo"
+      className="bg-accent-base text-text-on-accent rounded-card motion-enter-md flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+    >
+      <div className="min-w-0 space-y-2">
+        <p className="type-overline m-0 inline-flex items-center gap-1.5 uppercase opacity-90">
+          <Icon aria-hidden className="size-4 shrink-0" />
+          {tc('next')} · {tc(`kind.${item.kind}`)}
+          {distance && <> · {distance}</>}
+        </p>
+        <h2 id="calendario-proximo" className="type-heading m-0 text-balance">
+          {item.title}
+        </h2>
+        <p className="type-body m-0 opacity-90">
+          {when} · {item.programName}
+        </p>
+      </div>
+      <div className="shrink-0">
+        {live ? (
+          item.joinable && item.href ? (
+            <Button asChild size="lg" variant="secondary">
+              <a href={item.href} target="_blank" rel="noopener noreferrer">
+                <Video aria-hidden className="size-4 shrink-0" />
+                {tc('join')}
+                <span className="sr-only"> {tc('newTab')}</span>
+              </a>
+            </Button>
+          ) : (
+            <p className="type-caption m-0 max-w-[16rem] opacity-90">{tc('joinLater')}</p>
+          )
+        ) : (
+          item.href && (
+            <Button asChild size="lg" variant="secondary">
+              <Link href={item.href}>
+                <ClipboardCheck aria-hidden className="size-4 shrink-0" />
+                {tc('openExam')}
+              </Link>
+            </Button>
+          )
+        )}
+      </div>
+    </section>
   );
 }

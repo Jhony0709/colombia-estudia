@@ -181,6 +181,10 @@ Añadidos el 6/10 (aprobados por Jhonny) para la coreografía de
 escalera, máximo seis), `duration.typeChar` (8ms por carácter del tecleo) y
 `motion.distance.{sm,md}` (0.25rem · 0.5rem, cuánto sube una entrada).
 
+Añadidos el 8/10 (pedido de Jhonny) para el resultado del cuestionario: `duration.breath`
+(4800ms, una respiración completa, bajo los 5 s de WCAG 2.2.2) y `easing.overshoot`
+(`cubic-bezier(0.34, 1.56, 0.64, 1)`, el rebote corto del éxito). Uso en `ResultMoment`.
+
 **Movimiento reducido elegido en la plataforma** (6/10): la cookie `ce-motion=reduced` la lee el
 layout raíz y pone `data-motion="reduced"` en `<html>` desde el servidor, como el tema; la
 misma regla de corte seco de `prefers-reduced-motion` aplica bajo ese atributo.

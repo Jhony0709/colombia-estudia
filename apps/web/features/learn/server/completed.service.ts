@@ -10,7 +10,7 @@
 import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
-import { createReadUrls } from '@/lib/media/storage';
+import { COVER_URL_SECONDS, createReadUrls } from '@/lib/media/storage';
 
 export interface CompletedWorkshop {
   id: string;
@@ -76,7 +76,7 @@ export async function listCompletedCourses({
     module.coverMedia?.status === 'READY' ? module.coverMedia.providerRef : null
   );
   const paths = covers.filter((path): path is string => path !== null);
-  const signed = await createReadUrls(paths);
+  const signed = await createReadUrls(paths, COVER_URL_SECONDS);
   const urlOf = new Map(paths.map((path, index) => [path, signed[index] ?? null]));
 
   return courses.map(({ row, module }, index) => {

@@ -10,6 +10,7 @@
  * Server Component. Sin cursos completados no se pinta nada.
  */
 
+import { CoverImage } from '@/components/atoms/cover-image';
 import Link from 'next/link';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { Award, ChevronRight, CircleCheck, Image as ImageIcon } from 'lucide-react';
@@ -33,21 +34,25 @@ export async function CompletedCourses({ courses }: { courses: CompletedCourse[]
               >
                 {/* Decorativa: el nombre va debajo (WCAG 1.1.1). Sin portada, el bloque hundido
                     de «Cursos abiertos». */}
-                {course.coverUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- URL firmada de Storage.
-                  <img
-                    src={course.coverUrl}
-                    alt=""
-                    className="bg-surface-sunken aspect-[16/9] w-full object-cover"
-                  />
-                ) : (
-                  <div
-                    aria-hidden="true"
-                    className="bg-surface-sunken text-text-subtle flex aspect-[16/9] w-full items-center justify-center"
-                  >
-                    <ImageIcon className="size-8" />
-                  </div>
-                )}
+                {(() => {
+                  const placeholder = (
+                    <div
+                      aria-hidden="true"
+                      className="bg-surface-sunken text-text-subtle flex aspect-[16/9] w-full items-center justify-center"
+                    >
+                      <ImageIcon className="size-8" />
+                    </div>
+                  );
+                  return course.coverUrl ? (
+                    <CoverImage
+                      src={course.coverUrl}
+                      className="bg-surface-sunken aspect-[16/9] w-full object-cover"
+                      fallback={placeholder}
+                    />
+                  ) : (
+                    placeholder
+                  );
+                })()}
 
                 <div className="flex flex-1 flex-col gap-3 p-4">
                   <div className="space-y-1">

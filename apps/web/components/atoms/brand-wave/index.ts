@@ -1,0 +1,1 @@
+export { BrandWave } from './BrandWave';

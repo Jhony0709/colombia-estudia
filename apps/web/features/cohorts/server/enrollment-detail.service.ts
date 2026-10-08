@@ -9,6 +9,7 @@
  */
 
 import 'server-only';
+import { assessmentStatus } from '@/features/learn/server/outline';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
@@ -217,8 +218,13 @@ export async function getEnrollmentDetail({
     .sort((x, y) => x.modulePosition - y.modulePosition || x.position - y.position);
 
   const completedLessons = lessons.filter((l) => l.status === 'COMPLETED').length;
-  const completedAssessments = assessments.filter((a) =>
-    a.attempts.some((t) => t.status === 'GRADED')
+  // La misma regla que la ruta del estudiante (8/10): aprobó o agotó los intentos.
+  const completedAssessments = assessments.filter(
+    (a) =>
+      assessmentStatus(a.attempts, {
+        attemptsAllowed: a.attemptsAllowed,
+        passPercent: a.passPercent,
+      }) === 'COMPLETED'
   ).length;
 
   return {

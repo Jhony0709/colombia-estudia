@@ -188,6 +188,8 @@ export const designTokensPlugin = plugin(
       '--duration-slow': '500ms',
       '--duration-stagger': '60ms',
       '--duration-type-char': '8ms',
+      // Resultado del cuestionario (8/10): una respiración completa, bajo los 5 s de WCAG 2.2.2.
+      '--duration-breath': '4800ms',
     };
 
     // Cuánto sube una entrada (6/10, experiencia-colombia-estudia).
@@ -201,6 +203,8 @@ export const designTokensPlugin = plugin(
       '--easing-standard': 'cubic-bezier(0.4, 0, 0.2, 1)',
       '--easing-enter': 'cubic-bezier(0, 0, 0.2, 1)',
       '--easing-exit': 'cubic-bezier(0.4, 0, 1, 1)',
+      // Rebote corto del éxito del cuestionario (8/10).
+      '--easing-overshoot': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
     };
 
     // Elevacion: cuatro, y cada una por una razon. Ver `ElevationTokens`.

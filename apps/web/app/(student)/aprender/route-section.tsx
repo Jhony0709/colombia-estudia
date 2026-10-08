@@ -14,6 +14,7 @@ import { workshopStart, type SequencedItem } from '@/features/learn/server/outli
 import { PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { ProgressBar } from '@/components/atoms/progress-bar';
+import { CoverImage } from '@/components/atoms/cover-image';
 import { FORM_ICONS, formOf, hrefFor, itemMeta } from './route-rail';
 import { UnlockRequestButton } from './unlock-request-button';
 
@@ -189,14 +190,13 @@ async function ModuleBlock({
         <summary className="min-h-touch flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2">
           {/* La portada del componente (3/10), decorativa; en gris cuando está bloqueado. */}
           {module.coverUrl && (
-            // eslint-disable-next-line @next/next/no-img-element -- URL firmada de Storage.
-            <img
+            <CoverImage
               src={module.coverUrl}
-              alt=""
               className={cn(
                 'bg-surface-sunken rounded-control size-12 shrink-0 object-cover',
                 locked && 'opacity-60 grayscale'
               )}
+              fallback={null}
             />
           )}
           <span className="min-w-0 flex-1">

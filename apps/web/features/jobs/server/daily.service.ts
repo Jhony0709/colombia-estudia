@@ -20,6 +20,7 @@ import 'server-only';
 
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { getMailer, isMailConfigured } from '@/lib/mail';
+import { renderOverdueEmail } from '@/lib/mail/templates/overdue';
 import { fetchTransaction } from '@/lib/billing/wompi';
 import { logger } from '@/lib/observability/logger';
 import { expireIfDue } from '@/features/learn/server/attempt.service';
@@ -52,7 +53,7 @@ export async function runDailyJob({ now = new Date() }: { now?: Date } = {}): Pr
   DailyJobReport[]
 > {
   const institutions = await prisma.institution.findMany({
-    select: { id: true, name: true, emailFromName: true, supportEmail: true },
+    select: { id: true, name: true, emailFromName: true, supportEmail: true, primaryDomain: true },
   });
   const reports: DailyJobReport[] = [];
   for (const inst of institutions) {
@@ -66,7 +67,13 @@ async function runForInstitution({
   institution,
   now,
 }: {
-  institution: { id: string; name: string; emailFromName: string; supportEmail: string };
+  institution: {
+    id: string;
+    name: string;
+    emailFromName: string;
+    supportEmail: string;
+    primaryDomain: string | null;
+  };
   now: Date;
 }): Promise<DailyJobReport> {
   const institutionId = institution.id;
@@ -148,7 +155,9 @@ async function runForInstitution({
           select: {
             payerType: true,
             payerPerson: { select: { id: true, givenName: true, email: true } },
-            enrollment: { select: { cohort: { select: { code: true } } } },
+            enrollment: {
+              select: { cohort: { select: { code: true, program: { select: { name: true } } } } },
+            },
           },
         },
       },
@@ -166,7 +175,7 @@ async function runForInstitution({
         personId: payer.id,
         type: 'overdue_reminder',
         title: 'Tienes una cuota vencida',
-        body: `La cuota ${i.position} de ${i.paymentPlan.enrollment.cohort.code} ($${i.amount.toNumber().toLocaleString('es-CO')}) venció el ${day(i.dueOn)}. Puedes pagarla en «Mi cuenta» o escribirnos para un acuerdo.`,
+        body: `La cuota ${i.position} de ${i.paymentPlan.enrollment.cohort.program.name} ($${i.amount.toNumber().toLocaleString('es-CO')}) venció el ${day(i.dueOn)}. Puedes pagarla en «Mi cuenta» o escribirnos para un acuerdo.`,
         href: '/aprender/mi-cuenta',
         dedupeKey: `overdue_reminder:${i.id}:${day(now)}`,
       });
@@ -174,12 +183,17 @@ async function runForInstitution({
         report.overdueReminders++;
         if (mailer && payer.email) {
           try {
-            await mailer.send({
-              to: payer.email,
-              subject: `${institution.name}: tienes una cuota vencida`,
-              text: `Hola ${payer.givenName}. La cuota ${i.position} de ${i.paymentPlan.enrollment.cohort.code} venció el ${day(i.dueOn)}. Entra a tu cuenta para pagarla o escríbenos para acordar un plan. Tu acceso a las clases no cambia por esto.`,
-              html: `<p>Hola ${payer.givenName}.</p><p>La cuota ${i.position} de ${i.paymentPlan.enrollment.cohort.code} venció el ${day(i.dueOn)}. Entra a tu cuenta para pagarla o escríbenos para acordar un plan.</p><p>Tu acceso a las clases no cambia por esto.</p>`,
+            const mail = renderOverdueEmail({
+              givenName: payer.givenName,
+              institutionName: institution.name,
+              position: i.position,
+              programName: i.paymentPlan.enrollment.cohort.program.name,
+              dueOn: day(i.dueOn),
+              origin: institution.primaryDomain
+                ? `https://${institution.primaryDomain}`
+                : (process.env.NEXT_PUBLIC_APP_URL ?? null),
             });
+            await mailer.send({ to: payer.email, ...mail });
           } catch (err) {
             logger.warn({
               event: 'job-overdue-mail-failed',

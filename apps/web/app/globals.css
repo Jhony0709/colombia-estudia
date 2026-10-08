@@ -297,6 +297,134 @@ html[data-motion='reduced'] *::after {
 }
 
 /**
+ * Resultado del cuestionario (8/10, Jhonny). Dos momentos, `ResultMoment`:
+ * - **amanecer** (aprobó): el disco entra con rebote, el check se descubre de izquierda a
+ *   derecha, ocho rayos de sol salen y se apagan, ocho chispas entre ellos, y dos ondas se
+ *   abren. Todo empieza antes de los 600 ms (P1) y termina en su estado de reposo.
+ * - **respiración** (no aprobó): una sola respiración, inhalar y exhalar, en `duration.breath`
+ *   (4,8 s: WCAG 2.2.2 no pide pausa bajo 5 s). Sin rojo: el azul de marca, en calma.
+ * Solo `transform` y `opacity`. Movimiento reducido = corte por la regla global, y cada
+ * animación termina en un estado que se lee bien quieto.
+ */
+@keyframes result-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes result-reveal {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes result-ray {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scaleY(0.3);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.75rem) scaleY(1);
+  }
+}
+@keyframes result-ripple {
+  from {
+    opacity: 0.55;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+@keyframes result-spark {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.4);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-0.25rem) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.6rem) scale(0.4);
+  }
+}
+@keyframes result-breathe {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.82);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(0.9);
+  }
+}
+@keyframes result-breathe-halo {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.85);
+  }
+  45% {
+    opacity: 0.45;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+}
+.result-moment * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.result-pop {
+  animation: result-pop var(--duration-normal) var(--easing-overshoot) both;
+}
+.result-reveal {
+  transform-origin: left center;
+  animation: result-reveal var(--duration-normal) var(--easing-enter)
+    calc(var(--duration-stagger) * 4) both;
+}
+.result-ray {
+  transform-origin: center bottom;
+  animation: result-ray var(--duration-slow) var(--easing-enter) calc(var(--duration-stagger) * 3)
+    both;
+}
+.result-ripple {
+  animation: result-ripple calc(var(--duration-slow) * 2) var(--easing-exit)
+    calc(var(--duration-stagger) * 2) both;
+}
+.result-ripple--late {
+  animation-delay: calc(var(--duration-stagger) * 6);
+}
+.result-spark {
+  animation: result-spark var(--duration-slow) var(--easing-enter) calc(var(--duration-stagger) * 5)
+    both;
+}
+.result-breathe {
+  animation: result-breathe var(--duration-breath) var(--easing-standard) both;
+}
+.result-breathe-halo {
+  animation: result-breathe-halo var(--duration-breath) var(--easing-standard) both;
+}
+
+/**
  * Coreografía del estudiante (6/10, `.claude/skills/experiencia-colombia-estudia` §2 y §5).
  * Solo tokens. `--motion-order` ordena bloques de una pantalla (0, 1, 2…: cada paso son dos
  * `stagger`); dentro de `.motion-stagger` cada hijo suma un `stagger`, hasta el sexto.
@@ -891,4 +1019,28 @@ html[data-reading-width='narrow'] .contenido {
   line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 700;
+}
+
+/**
+ * La constancia impresa (8/10): «Descargar PDF» es imprimir, y sale la hoja sola, en A4 apaisado,
+ * sin márgenes ni sombra y con los colores de la marca (`print-color-adjust`). Página con
+ * nombre: no cambia cómo se imprime el resto de la aplicación.
+ */
+@page certificate {
+  size: A4 landscape;
+  margin: 0;
+}
+@media print {
+  .certificate-sheet {
+    page: certificate;
+    width: 100%;
+    height: 100vh;
+    aspect-ratio: auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

@@ -53,20 +53,20 @@ export function EnrollmentSwitcher({
               ? 'text-text-on-accent opacity-90 hover:opacity-100'
               : 'text-text-muted hover:bg-surface-sunken hover:text-text'
           )}
-          aria-label={t('switcher.label', { program: selected.programName, code: selected.code })}
+          aria-label={t('switcher.label', { program: selected.programName })}
         >
-          <span className="truncate">
-            {selected.programName} · {selected.code}
-          </span>
+          {/* Sin el código de la cohorte (8/10): es del equipo, no del estudiante. */}
+          <span className="truncate">{selected.programName}</span>
           <ChevronsUpDown aria-hidden className="size-4 shrink-0" />
         </button>
       </DropdownTrigger>
-      <DropdownMenu aria-label={t('switcher.menu')}>
+      {/* Abre hacia la derecha: el selector va al borde izquierdo del héroe. */}
+      <DropdownMenu aria-label={t('switcher.menu')} align="start">
         {options.map((option) => (
           <DropdownItem
             key={option.enrollmentId}
             itemKey={option.enrollmentId}
-            description={`${option.code} · ${option.cohortName} · ${t('progress', {
+            description={`${option.cohortName} · ${t('progress', {
               completed: option.completed,
               total: option.total,
             })}`}

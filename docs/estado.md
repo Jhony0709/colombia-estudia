@@ -5339,6 +5339,172 @@ hoy a 180 días, contenido asignado. Cada programa en una transacción; si exist
 `--validar` pasa en la VM (con el cargador de strip-types: `tsx` no corre aquí, su esbuild es de
 macOS); la escritura no se probó (sin base de datos desde la VM).
 
+**Cuestionario: completar y resultado (8/10)**, decisión en `PRODUCT_DECISIONS.md`. Regla en
+`outline.ts#assessmentStatus` (aprobó, o agotó intentos con todos cerrados; PIAR incluido), usada
+por la ruta (`cohort.service.ts`, ahora lee `score`, `maxAttempts`, `passPercent` y el PIAR) y
+por la ficha de matrícula de staff (`enrollment-detail.service.ts`, antes «un calificado»).
+`getAttemptForStudent` añade `outcome` (PASSED / RETRY / DONE / PENDING), `attemptsLeft`,
+`activeAttemptId` y `next` (el paso siguiente de la ruta, no el panel). `AttemptReview` rehecho:
+`ResultMoment` (`components/atoms/motion`, CSS `.result-*` en `globals.css`) con amanecer o
+respiración, sin colores de aviso al perder; reintentar o continuar el intento abierto; seguir al
+siguiente paso. Tokens nuevos `duration.breath` y `easing.overshoot` (**reiniciar el dev**: el
+plugin de Tailwind se lee al arrancar; sin eso las animaciones no corren). **Fuga corregida**:
+`attemptsExhausted` contaba el intento abierto como usado y, con el último en curso, la revisión
+del anterior mostraba las respuestas correctas; ahora no (test actualizado). Hidratación: la fecha
+de «Entregado el…» difería entre el ICU del servidor y el del navegador. Tests: 7 de
+`assessmentStatus` (pasan en el arnés), 3 del resultado en `AttemptPlayer.test.tsx` (sin correr).
+Visto en Chrome: respiración e intento abierto en datos reales; el amanecer, en fotogramas
+detenidos inyectados.
+
+**Curso terminado** (`/aprender/curso/[enrollmentId]`, 8/10, Jhonny: «proponer volver a la lista
+de cursos»). Con el gate `COMPLETED`, en vez del `EmptyState` «Terminaste el programa»:
+`CompletedCourse` con `ResultMoment` de éxito, «Terminaste {programa}», «Ver los cursos que puedes
+tomar» (a `/aprender#cursos-abiertos`; sin cursos, «Volver al inicio»), «Mis resultados» y «Mis
+constancias»; debajo «Sigue con otro curso» con hasta tres tarjetas del catálogo que no tomó
+(`CourseCard`). Se quitó «Respira con calma…» del resultado del cuestionario (Jhonny: «too
+much»). Visto en Chrome con Estudiante Uno; `tsc` limpio.
+
+**Catálogo como tienda** (`/aprender`, 8/10, Jhonny: «vistas tipo e-commerce o carrusel, por
+secciones o tipos, con filtros y orden, fondo tenue»). `CatalogSection` pinta las tarjetas en el
+servidor y se las da a `catalog-explorer.tsx` (cliente, solo para filtrar y ordenar sin ir al
+servidor). Sobre `bg-surface-sunken`: barra con búsqueda (desde 7 cursos, sin tildes), chips por
+tipo de programa con conteo (`CatalogCourse.programKind`, nuevo), precio Todos / Gratis / De pago
+(`SegmentedControl`), vista Por programa / Cuadrícula y orden (Recomendados, precio menor y mayor
+primero, cierran antes, nombre). «Por programa»: un estante por programa con el tipo como
+antetítulo, carrusel con `scroll-snap`, flechas solo si no cabe, región enfocable para el teclado
+(WCAG 2.1.1). «Recomendados»: lo que puede tomar (gratis antes que de pago), luego lo pedido, lo
+que cursa y al final lo terminado. Contador en `role="status"`, «Quitar filtros» y estado vacío.
+Los filtros que no separan nada no aparecen. Visto en Chrome con los cursos de prueba (14 cursos,
+5 tipos): estantes, flechas del carrusel, cuadrícula y orden por precio. Los textos nuevos
+tardaron en verse: el servidor de desarrollo no recargó `es-CO.json` hasta tocar el archivo.
+
+**Portadas con la firma vencida (8/10, Jhonny: `InvalidJWT … "exp" claim timestamp check
+failed`).** Las portadas se firmaban por 10 minutos (`READ_URL_SECONDS`); una página abierta un
+rato o recuperada con «atrás» pedía la imagen vencida. Ahora `COVER_URL_SECONDS` (1 hora) para
+portadas del catálogo, la ruta y los completados (`createReadUrl`/`createReadUrls` aceptan
+`expiresIn`; archivos de entregas y biblioteca siguen en 10 minutos, `plan/04-seguridad.md:20`), y
+`components/atoms/cover-image` (cliente): si la imagen falla, también antes de hidratar, pone el
+relleno de «sin portada» (azul de marca en el catálogo, la foto de marca en el héroe). Visto en
+Chrome: firma de 3600 s que carga, y una firma rota forzada cae al relleno.
+
+**Auditoría de lo del 7–8/10 (8/10, Jhonny: «Audita»).** Corregido:
+
+- Resultado visto desde el historial: un intento perdido de un cuestionario que se aprobó en otro
+  decía «Completaste tus intentos». `outcome` gana `PASSED_OTHER` («Aprobaste en otro intento»,
+  respiración y el siguiente paso); test nuevo en `AttemptPlayer.test.tsx`.
+- Carrusel: al llegar al borde, la flecha con el foco se apagaba y el foco caía al `<body>`
+  (WCAG 2.4.3); ahora pasa a la otra flecha. La lista ya no lleva `tabIndex=-1` cuando cabe.
+- Orden «Precio: mayor primero»: el comparador no era consistente con dos cursos sin precio.
+- Los chips de tipo cuentan con el precio y la búsqueda aplicados (antes, el total fijo).
+- Encabezados: en la cuadrícula y en «Sigue con otro curso» las tarjetas saltaban de `h2` a
+  `h4`. La cuadrícula lleva un `h3` `sr-only` («Todos los cursos») y `CourseCard` acepta
+  `headingLevel`.
+- El ancho de la tarjeta (`17.5rem`), repetido en tres sitios, vive en `course-card-layout.ts`.
+- «de este examen» → «de este cuestionario» en `learn.attempt.result.hidden`; comentarios
+  viejos de `catalog-section.tsx` (`<details>`, «solo los botones llevan JavaScript»); la IIFE
+  del héroe de `page.tsx`.
+  Visto en Chrome: foco de las flechas, conteos con «Gratis», `h3` de la cuadrícula y encabezados
+  de la página del curso terminado. `tsc` limpio; `outline.test.ts` 41/41 en el arnés.
+  `attempt-exhausted.test.ts` y `AttemptPlayer.test.tsx` necesitan jest.
+
+**Héroe del programa terminado (8/10, Jhonny: «uno que invite a seguir aprendiendo y a escoger
+uno de los cursos, con un mensaje motivacional que cambie cada vez que se recarga»).**
+`aprender/keep-learning-hero.tsx` sustituye a `CurrentActivity` cuando la matrícula elegida está
+terminada: «Terminaste {programa}» de antetítulo, uno de ocho mensajes al azar como título
+(`learn.keepLearning.messages`, sin exclamaciones), cuántos cursos puede elegir, «Elegir mi
+siguiente curso» (a `#cursos-abiertos`; sin cursos, «Mis resultados») y los enlaces a resultados
+y constancias. El selector de matrículas se conserva. Se quitan el `catalogHref` de
+`CurrentActivity`, `learn.completed.nextCourse` y `learn.dashboardHintDone` (la descripción de
+la cabecera repetía lo del héroe). Visto en Chrome: tres cargas, tres mensajes.
+
+**Resultados rehechos (8/10, Jhonny: «mejora la UI/UX de /aprender/resultados»).** Lo que
+fallaba: un programa terminado salía como «Todavía no tienes exámenes asignados» aunque tenía
+intentos (`getResultsForStudent` solo leía la ruta de las matrículas sin `gate`); tres listas
+sueltas (exámenes, notas, intentos) que repetían lo mismo; códigos de cohorte
+(`PRUEBA-GRATIS-1`) y «examen», «asignatura». Ahora:
+
+- `attempt.service.ts`: `programs` (cada matrícula con su estado `ACTIVE`/`COMPLETED`/`CLOSED`),
+  `cohortId`/`programName`/`subjectName` en las filas, y los cuestionarios que la ruta ya no trae
+  salen de sus intentos (`fromHistory`, estado con `assessmentStatus`). Aditivo: el panel y
+  `family.service` siguen igual.
+- La página: resumen con `StatCard` (aprobados, por presentar, intentos entregados) y un bloque
+  por programa con su estado; cada cuestionario en una tarjeta con su frase, la bala contra el
+  umbral y «Tus intentos» (cada uno enlaza a su revisión); al lado, «Notas por taller» con barra.
+  Sin resultados, un vacío con «Ir al inicio». Mensajes `learn.results` reescritos.
+  Visto en Chrome con el programa de prueba terminado: tarjeta con los dos intentos, notas al lado,
+  encabezados h1 → h2 → h3 → h4, los enlaces de intento responden. Sin probar: un programa en curso
+  con cuestionarios pendientes o bloqueados (no hay ese estudiante en local) y el teléfono (la
+  ventana no se dejó redimensionar).
+  Después (Jhonny): «Tus intentos (N)» plegado, con el mismo `WorkshopsDisclosure` de «Ver talleres».
+
+**Constancias con la marca (8/10, Jhonny: «mejora la UI/UX de /aprender/certificados y de la
+constancia, agrégale la marca»).**
+
+- `/certificado/[code]`: arriba, para quien verifica, «Constancia auténtica y vigente. La emitió
+  {institución} el {fecha}» (o la revocada); acciones «Copiar enlace» y «Descargar PDF». La hoja:
+  logo, código, «Constancia de finalización» con la raya amarilla, el nombre en azul, fecha y
+  estado, sello (isotipo en anillo amarillo), lo que no es, y la onda de la marca al pie; el
+  isotipo tenue como marca de agua. Siempre clara (`theme-light-scope`). Antes el comentario
+  decía que había `@media print` en `globals.css` y no existía: ahora `@page certificate` (A4
+  apaisado, sin margen) y `.certificate-sheet` en impresión, con `print-color-adjust: exact`.
+- `/aprender/certificados`: cada constancia es una miniatura del papel con su tipo, el nombre,
+  qué completó, la fecha y la onda; al pie el código, «Copiar enlace» y «Ver constancia». Las de
+  programa primero. «En camino»: avance y pasos que faltan de cada programa activo. Vacío con
+  «Ir al inicio».
+- Nuevos: `components/atoms/brand-wave` (la onda con tokens; la portada del catálogo la usa en
+  vez de su `CoverWave`) y `components/molecules/copy-link-button` (portapapeles con la vía
+  antigua de respaldo y aviso en `role="status"`).
+  Visto en Chrome: la lista, la hoja, el código inexistente, copiar el enlace. La regla `@page`
+  llega al navegador; la impresión a PDF no la vi (no se puede abrir el diálogo desde aquí).
+
+**Calendario (8/10, Jhonny: «sigue con /aprender/calendario»).**
+
+- `live-sessions.service.ts` (`getCalendarForEnrollment`): cada ítem trae `programName` y `done`
+  (el cuestionario completo según `assessmentStatus`, con el bono del PIAR); las fechas de la
+  cohorte se titulan con el nombre de la cohorte, no con el código (también lo ve «Próximas
+  fechas» del panel). Aditivo para `/api/learn/calendar`.
+- La página: «Lo próximo» sobre el azul de la marca (la sesión o el plazo sin hacer que viene,
+  con «Unirse» o «Abrir el cuestionario»); cada fila dice su programa; el cuestionario hecho sale
+  «Hecho» y sin botón; los tramos vacíos no se pintan (si toda la semana está libre, una línea);
+  «N fechas pasadas» con chevron y en tarjeta; vacío con «Ver los cursos abiertos». «Examen» →
+  «cuestionario», «cohorte» → «programa» en los textos.
+  Visto en Chrome tras inscribir a Estudiante Uno en Introducción (gratis): acceso, «Después» y la
+  fecha pasada. Sin datos para ver «Lo próximo» ni «Hecho» (no hay sesiones en vivo ni plazos en
+  local). De paso se confirmó que Inicio, Calendario y Biblioteca solo salen en la barra con una
+  matrícula activa (`lesson.read`).
+
+**Héroe de `/aprender` (8/10, Jhonny: «mejora la UI/UX del hero»).** En `CurrentActivity`:
+
+- Tira de pasos del componente («Por componente · Dos · paso 1 de 3»): un segmento por paso,
+  hecho en amarillo, el actual en blanco y lo demás tenue; a la derecha, el % del programa cuando
+  ya hay avance. Sustituye a la barra y a «N pasos en…» cuando hay algo que retomar; sin eso
+  (esperando, ruta hecha) queda la barra de antes.
+- «Ver la ruta del curso» al lado de «Empezar/Continuar», no en una fila aparte.
+- La línea de la forma dice el taller («Lectura · 1 min · Taller de prueba»); el componente ya va
+  en la tira.
+- La onda de la marca (`BrandWave base="canvas"`, nueva variante) cierra el héroe sobre el fondo de
+  la página; también en `KeepLearningHero`.
+- La raya clara entre el azul y la foto (borde fraccional del 46 %): el velo empieza un píxel antes.
+- Selector de programas: sin el código de la cohorte (antes «PRUEBA-COMP-1» en el héroe y en el
+  menú); el menú dice cohorte y avance y abre hacia la derecha (`align="start"`).
+  Visto en Chrome con Estudiante Uno (Prueba · Por componente, entrada en el componente 2).
+
+**Dominio, buzones y correo (8/10, Jhonny).** Decidido: dominio `albafuturoeducativo.com` en
+Cloudflare (lo compra el cliente), buzones en Zoho Mail Lite, envío de la plataforma por Resend
+desde el dominio raíz. Paso a paso en `docs/runbooks/dominio-y-correo.md`. Código:
+
+- `lib/mail/templates/layout.ts` (nuevo): marco de marca para los correos; la invitación lo usa y
+  el recordatorio de cuota del job diario también (`lib/mail/templates/overdue.ts`, nuevo: nombra
+  el programa, no el código de la cohorte, y escapa el nombre; la notificación en la app igual).
+- `supabase/templates/recovery.html` y `magic_link.html` (nuevos), con el mismo marco, enlazados
+  en `supabase/config.toml` para el Supabase local; test que vigila sus colores contra los tokens.
+- `app/api/auth/magic-link/route.ts`: `shouldCreateUser: false` (antes cualquier correo creaba un
+  usuario de Auth sin persona); test actualizado.
+- `reference/08-env-vars.md`: `EMAIL_DOMAIN` = `albafuturoeducativo.com`.
+- Lint: `catalog-explorer.tsx` sin `tabIndex` en la lista (jsx-a11y/no-noninteractive-tabindex).
+  Arnés: `supabase-templates` 6/6, `invitation` 10/10, `overdue` 4/4. `tsc` y eslint limpios en lo
+  tocado. Pendiente fuera del código: todo el runbook (compras, DNS, Supabase, Vercel).
+
 ## 6/10 — Solicitudes: el estudiante pide, operación resuelve
 
 Decisión en `PRODUCT_DECISIONS.md` (6/10). **Schema (protegido, aprobado)**: `AccessRequest`

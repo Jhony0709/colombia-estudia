@@ -49,10 +49,11 @@ describe('attemptsExhausted', () => {
     ).toBe(true);
   });
 
-  it('el intento en curso cuenta como usado', () => {
+  // 8/10: con el último en curso, enseñar las respuestas del anterior regalaría el abierto.
+  it('con el último intento en curso todavía no está agotado', () => {
     expect(
       attemptsExhausted({ attempts: [graded(4), open], attemptsAllowed: 2, passPercent: 70 })
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it('el bono de ajuste razonable amplía el cupo', () => {

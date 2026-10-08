@@ -27,12 +27,12 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useFormatter } from 'next-intl';
-import { Clock, EyeOff, Eye, CircleCheck, Circle, CircleX } from 'lucide-react';
+import { Clock, EyeOff, Eye, CircleCheck, Circle, ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
-import { CountUp } from '@/components/atoms/motion';
+import { CountUp, ResultMoment } from '@/components/atoms/motion';
 import { ProgressBar } from '@/components/atoms/progress-bar';
 import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
 import { useAnnounce } from '@/lib/a11y/announce';
@@ -75,6 +75,11 @@ export interface AttemptView {
   review: 'NONE' | 'SCORE' | 'FULL';
   score: { value: number; max: number; percent: number; passed: boolean } | null;
   questions: AttemptQuestion[];
+  /** Qué sigue (8/10): ver `AttemptForStudent.outcome`. */
+  outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'DONE' | 'PENDING' | null;
+  attemptsLeft: number;
+  activeAttemptId: string | null;
+  next: { href: string; title: string | null } | null;
 }
 
 type Answer = string | string[] | null;
@@ -831,87 +836,154 @@ function Question({
 function AttemptReview({ attempt }: { attempt: AttemptView }) {
   const t = useTranslations('learn.attempt');
   const format = useFormatter();
+  const { outcome } = attempt;
+  const passed = outcome === 'PASSED';
+  // Aprobado: amanecer; no aprobado (con o sin intentos): respiración, sin rojo (8/10).
+  const moment = passed
+    ? 'success'
+    : outcome === 'RETRY' || outcome === 'DONE' || outcome === 'PASSED_OTHER'
+      ? 'breath'
+      : null;
+  const title =
+    outcome === 'PASSED'
+      ? t('result.passedTitle')
+      : outcome === 'RETRY'
+        ? attempt.status === 'EXPIRED'
+          ? t('result.expired')
+          : t('result.retryTitle')
+        : outcome === 'PASSED_OTHER'
+          ? t('result.passedOtherTitle')
+          : outcome === 'DONE'
+            ? t('result.doneTitle')
+            : attempt.status === 'EXPIRED'
+              ? t('result.expired')
+              : t('result.submitted');
 
   return (
     <div className="space-y-6">
       <section
         aria-label={t('resultLabel')}
         className={cn(
-          // Resultado (experiencia-colombia-estudia §6): la nota cuenta, luego insignia y cierre.
-          'rounded-card motion-enter-md border p-5',
-          attempt.score?.passed
+          // Resultado (experiencia-colombia-estudia §6): el momento, la nota y luego el cierre.
+          'rounded-card motion-enter-md flex flex-col items-start gap-5 border p-6 sm:flex-row sm:items-center sm:p-8',
+          passed
             ? 'border-status-success-base bg-status-success-muted'
-            : attempt.score
-              ? 'border-status-warning-base bg-status-warning-muted'
-              : 'border-border-muted bg-surface-base'
+            : 'border-border-muted bg-surface-base'
         )}
       >
-        <h2 className="type-heading inline-flex items-center gap-2">
-          {attempt.status === 'EXPIRED' ? (
-            <CircleX className="size-5" aria-hidden="true" />
-          ) : attempt.score?.passed ? (
-            <CircleCheck className="size-5" aria-hidden="true" />
-          ) : (
-            <Circle className="size-5" aria-hidden="true" />
+        {moment && <ResultMoment kind={moment} />}
+        <div className="min-w-0 space-y-2">
+          {attempt.submittedAt && (
+            // El ICU del servidor y el del navegador escriben la fecha distinto («a las» / «,»).
+            <p className="type-caption text-text-muted m-0" suppressHydrationWarning>
+              {t('result.submittedOn', {
+                date: format.dateTime(new Date(attempt.submittedAt), {
+                  day: 'numeric',
+                  month: 'long',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  timeZone: 'America/Bogota',
+                }),
+              })}
+            </p>
           )}
-          {attempt.status === 'EXPIRED' ? t('result.expired') : t('result.submitted')}
-        </h2>
-        {attempt.submittedAt && (
-          <p className="type-caption text-text-muted mt-1">
-            {t('result.submittedOn', {
-              date: format.dateTime(new Date(attempt.submittedAt), {
-                day: 'numeric',
-                month: 'long',
-                hour: 'numeric',
-                minute: '2-digit',
-              }),
-            })}
-          </p>
-        )}
-        {attempt.score ? (
-          <p className="type-display mt-3" role="status">
-            <CountUp
-              value={attempt.score.value}
-              decimals={Number.isInteger(attempt.score.value) ? 0 : 1}
-            />
-            {t('result.scoreRest', { max: attempt.score.max, percent: attempt.score.percent })}{' '}
-            <span className="motion-enter motion-order-2 inline-block">
-              <Badge variant={attempt.score.passed ? 'success' : 'warning'}>
-                {attempt.score.passed ? t('result.passed') : t('result.notPassed')}
-              </Badge>
-            </span>
-          </p>
-        ) : (
-          <p className="type-body mt-3" role="status">
-            {attempt.status === 'EXPIRED' ? t('result.expiredBody') : t('result.hidden')}
-          </p>
-        )}
+          <h2 className="type-heading text-text m-0 inline-flex items-center gap-2">
+            {!moment &&
+              (attempt.score?.passed ? (
+                <CircleCheck className="size-5" aria-hidden="true" />
+              ) : (
+                <Circle className="size-5" aria-hidden="true" />
+              ))}
+            {title}
+          </h2>
+          {attempt.score ? (
+            <p className="type-display text-text m-0" role="status">
+              <CountUp
+                value={attempt.score.value}
+                decimals={Number.isInteger(attempt.score.value) ? 0 : 1}
+              />
+              {t('result.scoreRest', { max: attempt.score.max, percent: attempt.score.percent })}
+              {passed && (
+                <>
+                  {' '}
+                  <span className="motion-enter motion-order-2 inline-block">
+                    <Badge variant="success">{t('result.passed')}</Badge>
+                  </span>
+                </>
+              )}
+            </p>
+          ) : (
+            <p className="type-body text-text-muted m-0" role="status">
+              {attempt.status === 'EXPIRED' ? t('result.expiredBody') : t('result.hidden')}
+            </p>
+          )}
+        </div>
       </section>
 
       {/*
-        El cierre «tirando la buena» (24/9, pedido de los clientes: «al enviar la evaluación
-        sale ese texto y pasa al siguiente componente»). Es general, no se guarda en la base
-        (decisión de Jhonny): felicita por terminar y manda a «Mis programas», que ya sabe
-        cuál es el siguiente paso (E2). Solo tras una entrega, nunca tras un vencimiento.
+        «Aprender es avanzar» (24/9; 8/10). Aprobado o sin intentos: el cierre del taller y el
+        botón al paso que sigue en la ruta. Con intentos: la invitación a reintentar y nada de
+        seguir: el cuestionario no cuenta como hecho hasta aprobar o agotar los intentos.
       */}
-      {attempt.status !== 'EXPIRED' && (
+      {outcome !== null && (
         <section
           aria-labelledby="attempt-closing-title"
-          className="border-border-muted bg-surface-base rounded-card motion-enter motion-order-3 border p-5"
+          className="border-border-muted bg-surface-base rounded-card motion-enter motion-order-3 space-y-3 border p-5 sm:p-6"
         >
-          <h2 id="attempt-closing-title" className="type-subheading text-text">
+          <h2 id="attempt-closing-title" className="type-subheading text-text m-0">
             {t('closing.title')}
           </h2>
-          {/* Por componente cuando el equipo lo escribió (25/9); si no, el general. Los
-              saltos de línea del texto se respetan: es un texto de cierre, no Markdown. */}
-          <p className="type-body text-text-muted max-w-reading mt-2 whitespace-pre-line">
-            {attempt.closingText ?? t('closing.body')}
-          </p>
-          <div className="mt-4">
-            <Button asChild>
-              <Link href="/aprender">{t('closing.next')}</Link>
-            </Button>
-          </div>
+          {outcome === 'RETRY' ? (
+            <>
+              <p className="type-body text-text-muted max-w-reading m-0">
+                {t('closing.retryBody')}
+              </p>
+              <p className="type-body-emphasis text-text m-0">
+                {attempt.activeAttemptId
+                  ? t('closing.activeAttempt')
+                  : attempt.attemptsLeft === 1
+                    ? t('closing.lastAttempt')
+                    : t('closing.attemptsLeft', { count: attempt.attemptsLeft })}
+              </p>
+              <div className="pt-1">
+                <Button asChild>
+                  <Link
+                    href={
+                      attempt.activeAttemptId
+                        ? `/aprender/examen/${attempt.assignmentId}/intento/${attempt.activeAttemptId}`
+                        : `/aprender/examen/${attempt.assignmentId}`
+                    }
+                  >
+                    <RotateCcw aria-hidden className="size-4 shrink-0" />
+                    {attempt.activeAttemptId ? t('closing.continueAttempt') : t('closing.retry')}
+                  </Link>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Del taller cuando el equipo lo escribió (3/10); si no, el general. Los saltos
+                  de línea se respetan: es un texto de cierre, no Markdown. */}
+              <p className="type-body text-text-muted max-w-reading m-0 whitespace-pre-line">
+                {outcome === 'PENDING'
+                  ? t('closing.pendingBody')
+                  : (attempt.closingText ?? t('closing.body'))}
+              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
+                <Button asChild>
+                  <Link href={attempt.next?.href ?? '/aprender'}>
+                    {attempt.next ? t('closing.next') : t('closing.toRoute')}
+                    <ArrowRight aria-hidden className="size-4 shrink-0" />
+                  </Link>
+                </Button>
+                {attempt.next?.title && (
+                  <span className="type-caption text-text-muted">
+                    {t('closing.nextTitle', { title: attempt.next.title })}
+                  </span>
+                )}
+              </div>
+            </>
+          )}
         </section>
       )}
 

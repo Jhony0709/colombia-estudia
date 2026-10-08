@@ -25,11 +25,12 @@ import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
-import { createReadUrl } from '@/lib/media/storage';
+import { COVER_URL_SECONDS, createReadUrl } from '@/lib/media/storage';
 import { enrollPerson } from '@/features/cohorts/server/enrollments.service';
 import { getCohortOutline } from './cohort.service';
 import { currentPriceFor } from '@/features/billing/server/prices.service';
 import { openEnrollRequest } from '@/features/requests/server/requests.service';
+import type { ProgramKind } from '@/lib/programs/kinds';
 
 export interface CatalogWorkshop {
   name: string;
@@ -60,6 +61,8 @@ export interface CatalogCourse {
   workshops: CatalogWorkshop[];
   programId: string;
   programName: string;
+  /** Qué clase de programa es (8/10): filtra el catálogo por tipo. */
+  programKind: ProgramKind;
   /** Dónde está en su programa (7/10): «Componente 1 de 2». */
   position: number;
   programModules: number;
@@ -142,6 +145,7 @@ export async function listOpenCourses({
         select: {
           id: true,
           name: true,
+          kind: true,
           pricing: true,
           modules: {
             where: { archivedAt: null },
@@ -172,7 +176,10 @@ export async function listOpenCourses({
 
   const cover = async (m: { coverMedia: { providerRef: string; status: string } | null }) =>
     m.coverMedia && m.coverMedia.status === 'READY'
-      ? await createReadUrl(m.coverMedia.providerRef, { asAttachment: false })
+      ? await createReadUrl(m.coverMedia.providerRef, {
+          asAttachment: false,
+          expiresIn: COVER_URL_SECONDS,
+        })
       : null;
   const courses: CatalogCourse[] = [];
   // Un componente por tarjeta, gratuito o de pago (Jhonny, 7/10: «la lista de componentes, con
@@ -206,6 +213,7 @@ export async function listOpenCourses({
         workshops: workshopsOf(m),
         programId: c.program.id,
         programName: c.program.name,
+        programKind: c.program.kind,
         position: index + 1,
         programModules: total,
         cohortCode: c.code,

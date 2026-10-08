@@ -177,12 +177,16 @@ export interface DurationTokens {
   stagger: string;
   /** Un carácter del tecleo de la pregunta conversacional (6/10). */
   typeChar: string;
+  /** Una respiración del resultado no aprobado del cuestionario (8/10). */
+  breath: string;
 }
 
 export interface EasingTokens {
   standard: string;
   enter: string;
   exit: string;
+  /** El éxito del cuestionario (8/10): entra con un rebote corto. */
+  overshoot: string;
 }
 
 /** Cuánto sube una entrada (6/10): `sm` para bloques y filas, `md` para el héroe. */

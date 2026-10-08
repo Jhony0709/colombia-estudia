@@ -2,7 +2,7 @@
  * Invitation email template.
  * SSOT: plan/03-identidad-y-acceso.md §"Invitación"
  *
- * Los colores se INTERPOLAN desde los tokens, no se copian.
+ * Los colores se INTERPOLAN desde los tokens, no se copian (hoy, en `layout.ts`).
  *
  * Un correo no puede usar variables CSS —la mitad de los clientes no las resuelven y el botón
  * saldría sin fondo— pero sí puede llevar el hexadecimal que sale del token al construir la
@@ -14,35 +14,13 @@
  * defecto de todos ellos es blanco.
  */
 
-import { light } from '@colombia-estudia/design-tokens';
+import { escapeHtml, renderBrandedEmail } from './layout';
 
 interface InvitationEmailData {
   givenName: string;
   institutionName: string;
   inviteUrl: string;
   expiresAt: Date;
-}
-
-/**
- * Escape HTML special characters to prevent XSS.
- */
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => {
-    switch (c) {
-      case '&':
-        return '&amp;';
-      case '<':
-        return '&lt;';
-      case '>':
-        return '&gt;';
-      case '"':
-        return '&quot;';
-      case "'":
-        return '&#39;';
-      default:
-        return c;
-    }
-  });
 }
 
 /**
@@ -76,24 +54,15 @@ export function renderInvitationEmail(data: InvitationEmailData): {
 
   const subject = `${data.givenName}, tienes una invitación de ${data.institutionName}`;
 
-  const html = `<!DOCTYPE html>
-<html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
-<body style="font-family:system-ui,-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:${light.text.default};">
-  <h1 style="font-size:24px;margin-bottom:16px;">Hola, ${safeName}</h1>
-  <p style="font-size:16px;line-height:1.5;margin-bottom:24px;">
-    Tienes una invitación de <strong>${safeInstitution}</strong>.
-  </p>
-  <p style="margin:24px 0;">
-    <a href="${data.inviteUrl}" style="display:inline-block;background:${light.accent.base};color:${light.text.onAccent};padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:500;">
-      Activar mi cuenta
-    </a>
-  </p>
-  <p style="font-size:14px;color:${light.text.muted};">
-    Este enlace vence el ${expiresFormatted}. Si no solicitaste esta invitación, ignora este correo.
-  </p>
-</body>
-</html>`;
+  // El marco de marca (8/10); el logo sale del mismo origen que el enlace.
+  const html = renderBrandedEmail({
+    origin: new URL(data.inviteUrl).origin,
+    preheader: `Activa tu cuenta de ${data.institutionName}.`,
+    heading: `Hola, ${safeName}`,
+    paragraphs: [`Tienes una invitación de <strong>${safeInstitution}</strong>.`],
+    cta: { href: data.inviteUrl, label: 'Activar mi cuenta' },
+    footnote: `Este enlace vence el ${expiresFormatted}. Si no solicitaste esta invitación, ignora este correo.`,
+  });
 
   const text = `Hola, ${data.givenName}
 

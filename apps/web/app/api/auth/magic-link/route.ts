@@ -32,6 +32,9 @@ export const POST = apiHandler({
     email,
     options: {
       emailRedirectTo: callbackUrl.toString(),
+      // Las cuentas nacen en el registro o en la invitación (8/10): con `true`, cualquier correo
+      // creaba un usuario de Auth sin persona y Supabase mandaba «confirma tu registro».
+      shouldCreateUser: false,
     },
   });
 

@@ -1237,6 +1237,21 @@ $90.000 c/m»), que el cliente dio por superada.
 `Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
 schema.
 
+## 2026-10-08 — Un cuestionario se completa al aprobar o al agotar los intentos
+
+**Decisión** (Jhonny, 8/10): perder un intento con más intentos por delante **no** deja seguir al
+siguiente paso; el cuestionario cuenta como hecho cuando se aprueba o cuando se usaron todos los
+intentos (con el PIAR, los extra también), y entonces se sigue aunque no se apruebe (cliente,
+3/10). La pantalla del resultado: al aprobar, un momento de éxito (el sol de la marca con su
+check), «Aprender es avanzar» y «Seguir con el siguiente paso», que lleva al paso siguiente de la
+ruta; al no aprobar, sin rojo, una respiración en calma, «Aprender es avanzar» y «Intentar de
+nuevo» (o «Continuar el intento» si hay uno abierto); sin intentos, la misma calma y el botón de
+seguir. Las respuestas correctas de un intento no se muestran mientras el último sigue abierto.
+
+**Por qué**: si perder ya contaba como hecho, el segundo intento era opcional y el estudiante
+podía saltarse el cuestionario. Y enseñar las respuestas del intento 1 con el 2 abierto las
+regalaba.
+
 ## 2026-10-08 — Precios: se corrigen si nadie los usa; las fechas son días de Bogotá
 
 **Decisión** (revisión del flujo de precios pedida por Jhonny, 8/10): un precio que ningún plan

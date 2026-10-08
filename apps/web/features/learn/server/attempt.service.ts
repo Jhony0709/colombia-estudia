@@ -43,6 +43,7 @@ import type { JsonObject } from '@/lib/db/prisma';
 import { notify } from '@/features/notifications/server/notifications.service';
 import { getCohortOutline, listMyEnrollments, type OutlineModule } from './cohort.service';
 import type { LessonGate } from './lesson.service';
+import { assessmentStatus } from './outline';
 
 export type ReviewPolicy =
   'NONE' | 'SCORE_ONLY' | 'FULL_AFTER_GRADED' | 'FULL_AFTER_DUE' | 'FULL_AFTER_LAST_ATTEMPT';
@@ -147,6 +148,18 @@ export interface AttemptForStudent {
   review: 'NONE' | 'SCORE' | 'FULL';
   score: { value: number; max: number; percent: number; passed: boolean } | null;
   questions: AttemptQuestionView[];
+  /**
+   * Qué sigue (8/10): aprobó; aprobó en otro intento (este se ve desde el historial); puede
+   * reintentar (y no sigue hasta agotar los intentos); ya no le quedan (sigue igual); o espera
+   * calificación. Nulo mientras está en curso. Se calcula con la
+   * nota real aunque la política no la muestre: decide el paso, no enseña el número.
+   */
+  outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'DONE' | 'PENDING' | null;
+  attemptsLeft: number;
+  /** Otro intento de este cuestionario que sigue abierto: se continúa ese, no se empieza otro. */
+  activeAttemptId: string | null;
+  /** El siguiente paso de la ruta cuando el cuestionario quedó completo; si no hay, la ruta. */
+  next: { href: string; title: string | null } | null;
 }
 
 const blocked = (gate: LessonGate): AssessmentForStudent => ({
@@ -220,8 +233,9 @@ function reviewLevel({
 }
 
 /**
- * Si ya no hay más intentos que jugar: se usaron todos los permitidos, o alguno aprobó. Los
- * `IN_PROGRESS` cuentan como usados (el cupo ya está gastado aunque no se haya entregado).
+ * Si ya no hay más intentos que jugar: alguno aprobó, o se usaron todos los permitidos y
+ * ninguno sigue abierto. Con el último en curso todavía no (8/10): las respuestas correctas
+ * de un intento anterior servirían para el que está abierto.
  */
 export function attemptsExhausted({
   attempts,
@@ -236,8 +250,11 @@ export function attemptsExhausted({
   attemptsAllowed: number;
   passPercent: number | null;
 }): boolean {
-  if (attempts.length >= attemptsAllowed) return true;
-  return attempts.some((a) => a.status === 'GRADED' && scoreView(a, passPercent)?.passed === true);
+  if (attempts.some((a) => a.status === 'GRADED' && scoreView(a, passPercent)?.passed === true)) {
+    return true;
+  }
+  const open = attempts.some((a) => a.status === 'IN_PROGRESS');
+  return !open && attempts.length >= attemptsAllowed;
 }
 
 function scoreView(
@@ -855,7 +872,7 @@ function attemptSelect(personId: string) {
         dueAt: true,
         attempts: {
           where: { studentId: personId },
-          select: { status: true, score: true, maxScore: true },
+          select: { id: true, status: true, score: true, maxScore: true },
         },
       },
     },
@@ -987,6 +1004,9 @@ export async function getAttemptForStudent({
   const policy = row.assessmentVersion.reviewPolicy as ReviewPolicy;
   const status = row.status as AttemptStatus;
   const accommodation = row.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
+  const attemptsAllowed =
+    row.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0);
+  const passPercent = row.assessmentVersion.passPercent;
   const review = reviewLevel({
     policy,
     status,
@@ -994,11 +1014,52 @@ export async function getAttemptForStudent({
     now,
     exhausted: attemptsExhausted({
       attempts: row.assignment.attempts,
-      attemptsAllowed:
-        row.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
-      passPercent: row.assessmentVersion.passPercent,
+      attemptsAllowed,
+      passPercent,
     }),
   });
+
+  const outcome: AttemptForStudent['outcome'] =
+    status === 'IN_PROGRESS'
+      ? null
+      : status === 'SUBMITTED'
+        ? 'PENDING'
+        : status === 'GRADED' && scoreView(row, passPercent)?.passed === true
+          ? 'PASSED'
+          : row.assignment.attempts.some(
+                (a) =>
+                  a.id !== row.id &&
+                  a.status === 'GRADED' &&
+                  scoreView(a, passPercent)?.passed === true
+              )
+            ? 'PASSED_OTHER'
+            : assessmentStatus(row.assignment.attempts, { attemptsAllowed, passPercent }) ===
+                'COMPLETED'
+              ? 'DONE'
+              : 'RETRY';
+  // El botón de seguir lleva al paso que sigue en la ruta, no al panel (8/10).
+  let next: AttemptForStudent['next'] = null;
+  if (outcome === 'PASSED' || outcome === 'PASSED_OTHER' || outcome === 'DONE') {
+    const outline = await getCohortOutline({
+      institutionId,
+      personId,
+      assignmentId: row.assessmentAssignmentId,
+      now,
+    });
+    const step = outline.resume;
+    next = step
+      ? {
+          href:
+            step.kind === 'LESSON'
+              ? `/aprender/tema/${step.assignmentId}`
+              : `/aprender/examen/${step.assignmentId}`,
+          title: step.title,
+        }
+      : {
+          href: outline.enrollmentId ? `/aprender/curso/${outline.enrollmentId}` : '/aprender',
+          title: null,
+        };
+  }
   const stored = parseAnswers(row.answers);
 
   return {
@@ -1040,6 +1101,12 @@ export async function getAttemptForStudent({
         feedbackHtml: review === 'FULL' && a?.feedback ? renderInlineHtml(a.feedback) : null,
       };
     }),
+    outcome,
+    attemptsLeft: Math.max(0, attemptsAllowed - row.assignment.attempts.length),
+    activeAttemptId:
+      row.assignment.attempts.find((a) => a.status === 'IN_PROGRESS' && a.id !== row.id)?.id ??
+      null,
+    next,
   };
 }
 
@@ -1049,9 +1116,21 @@ export interface ResultsForStudent {
   /** Notas por asignatura (schema `Score`), de todas las matrículas. */
   scores: Array<{
     subjectName: string;
+    cohortId: string;
     cohortCode: string;
+    programName: string;
     value: number;
     updatedAt: string;
+  }>;
+  /**
+   * Los programas con algo que mostrar (8/10), para agrupar la página: los de la persona, del
+   * activo al terminado. `CLOSED`: acceso vencido, retirado o aún no empieza.
+   */
+  programs: Array<{
+    cohortId: string;
+    programName: string;
+    cohortName: string;
+    state: 'ACTIVE' | 'COMPLETED' | 'CLOSED';
   }>;
   /**
    * Mis exámenes (21/9): uno por examen asignado en las cohortes activas, esté hecho o no —
@@ -1062,8 +1141,16 @@ export interface ResultsForStudent {
     assignmentId: string;
     title: string;
     moduleName: string;
+    /** El taller del cuestionario; nulo si es del componente. */
+    subjectName: string | null;
+    cohortId: string;
     cohortCode: string;
     programName: string;
+    /**
+     * Sacado de los intentos (8/10): su programa ya no está activo (terminado, vencido), así que
+     * la ruta no lo trae. Se ve la nota y el historial; no se abre.
+     */
+    fromHistory: boolean;
     status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
     enabled: boolean;
     blockedBy: string | null;
@@ -1082,7 +1169,10 @@ export interface ResultsForStudent {
     assignmentId: string;
     title: string;
     moduleName: string;
+    subjectName: string | null;
+    cohortId: string;
     cohortCode: string;
+    programName: string;
     number: number;
     status: AttemptStatus;
     submittedAt: string | null;
@@ -1134,7 +1224,7 @@ export async function getResultsForStudent({
         value: true,
         updatedAt: true,
         subject: { select: { name: true } },
-        cohort: { select: { code: true } },
+        cohort: { select: { id: true, code: true, program: { select: { name: true } } } },
       },
     }),
     db.attempt.findMany({
@@ -1154,8 +1244,14 @@ export async function getResultsForStudent({
         assignment: {
           select: {
             dueAt: true,
-            cohort: { select: { code: true } },
-            assessment: { select: { title: true, module: { select: { name: true } } } },
+            cohort: { select: { id: true, code: true, program: { select: { name: true } } } },
+            assessment: {
+              select: {
+                title: true,
+                module: { select: { name: true } },
+                subject: { select: { name: true } },
+              },
+            },
           },
         },
         assessmentVersion: {
@@ -1191,7 +1287,10 @@ export async function getResultsForStudent({
       assignmentId: a.assessmentAssignmentId,
       title: a.assignment.assessment.title,
       moduleName: a.assignment.assessment.module?.name ?? '',
+      subjectName: a.assignment.assessment.subject?.name ?? null,
+      cohortId: a.assignment.cohort.id,
       cohortCode: a.assignment.cohort.code,
+      programName: a.assignment.cohort.program.name,
       number: a.number,
       status,
       submittedAt: a.submittedAt ? a.submittedAt.toISOString() : null,
@@ -1248,8 +1347,11 @@ export async function getResultsForStudent({
             assignmentId: item.assignmentId,
             title: item.title,
             moduleName: module.name,
+            subjectName: item.subjectName ?? null,
+            cohortId: outline.cohort?.id ?? '',
             cohortCode: outline.cohort?.code ?? '',
             programName: outline.cohort?.programName ?? '',
+            fromHistory: false,
             status: item.status,
             enabled: item.enabled,
             blockedBy: item.blockedBy,
@@ -1263,14 +1365,65 @@ export async function getResultsForStudent({
     )
   );
 
+  // Lo que la ruta ya no trae (programa terminado o vencido): el cuestionario sale de sus
+  // intentos, con su mejor nota visible (8/10). Antes la página decía «no tienes exámenes».
+  const listed = new Set(assessmentRows.map((row) => row.assignmentId));
+  for (const a of attempts) {
+    if (listed.has(a.assessmentAssignmentId)) continue;
+    listed.add(a.assessmentAssignmentId);
+    const own = attempts.filter((x) => x.assessmentAssignmentId === a.assessmentAssignmentId);
+    const visible = attemptRows.filter(
+      (x) => x.assignmentId === a.assessmentAssignmentId && x.score !== null
+    );
+    const best = visible.reduce<{ percent: number; passed: boolean } | null>(
+      (acc, x) =>
+        x.score && (acc === null || x.score.percent > acc.percent)
+          ? { percent: x.score.percent, passed: x.score.passed }
+          : acc,
+      null
+    );
+    const accommodation = a.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
+    const row = attemptRows.find((x) => x.id === a.id)!;
+    assessmentRows.push({
+      assignmentId: a.assessmentAssignmentId,
+      title: row.title,
+      moduleName: row.moduleName,
+      subjectName: row.subjectName,
+      cohortId: row.cohortId,
+      cohortCode: row.cohortCode,
+      programName: row.programName,
+      fromHistory: true,
+      status: assessmentStatus(own, {
+        attemptsAllowed:
+          a.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
+        passPercent: a.assessmentVersion.passPercent,
+      }),
+      enabled: false,
+      blockedBy: null,
+      unavailableReason: null,
+      dueAt: null,
+      best,
+      visibleAttempts: visible.length,
+      passPercent: a.assessmentVersion.passPercent,
+    });
+  }
+
   return {
     assessments: assessmentRows,
     scores: scores.map((s) => ({
       subjectName: s.subject.name,
+      cohortId: s.cohort.id,
       cohortCode: s.cohort.code,
+      programName: s.cohort.program.name,
       value: s.value.toNumber(),
       updatedAt: s.updatedAt.toISOString(),
     })),
     attempts: attemptRows,
+    programs: mine.map((row) => ({
+      cohortId: row.cohort.id,
+      programName: row.cohort.programName,
+      cohortName: row.cohort.name,
+      state: row.gate === null ? 'ACTIVE' : row.gate.kind === 'COMPLETED' ? 'COMPLETED' : 'CLOSED',
+    })),
   };
 }

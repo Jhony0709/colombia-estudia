@@ -10,11 +10,12 @@
  * cuestionarios) y cuánto cuesta. El grupo dice lo común: cuántos componentes, el precio por
  * componente y hasta cuándo está abierta la cohorte. Nada de códigos internos.
  *
- * - `CatalogSection`: la lista, un grupo por programa; todas las tarjetas son la misma, del
- *   mismo ancho, tenga el grupo uno o varios componentes (Jhonny, 7/10).
+ * - `CatalogSection`: la lista. Pinta las tarjetas en el servidor y las entrega a
+ *   `CatalogExplorer` (8/10), que las filtra, ordena y coloca por programa o en cuadrícula.
  * - `FeaturedCourse`: el curso destacado de quien todavía no tiene ninguno; es el héroe.
  *
- * Server Components: solo los botones llevan JavaScript. Sin cursos no se pinta nada.
+ * Server Components salvo los botones, «Ver talleres» y el explorador (filtrar sin ir al
+ * servidor). Sin cursos no se pinta nada.
  */
 
 import type { Route } from 'next';
@@ -25,6 +26,8 @@ import { PageSection } from '@/components/templates/page';
 import { Badge } from '@/components/atoms/badge';
 import { Tooltip } from '@/components/atoms/tooltip';
 import { Button } from '@/components/atoms/button';
+import { CoverImage } from '@/components/atoms/cover-image';
+import { BrandWave } from '@/components/atoms/brand-wave';
 import type { CatalogCourse } from '@/features/learn/server/catalog.service';
 import type { PendingEnroll } from '@/features/requests/server/requests.service';
 import { whatsappUrl } from '@/features/marketing/contact-links';
@@ -32,6 +35,7 @@ import { cn } from '@/lib/utils';
 import { EnrollButton } from './enroll-button';
 import { RequestButton } from './request-button';
 import { WorkshopsDisclosure } from './workshops-disclosure';
+import { CatalogExplorer, type ExplorerGroup, type ExplorerItem } from './catalog-explorer';
 
 /** Los detalles de un curso: su ruta si está en él; si no, la página del curso bloqueado. */
 export const courseHref = (course: CatalogCourse): Route =>
@@ -69,16 +73,9 @@ const untilOf = (course: CatalogCourse, format: Format) =>
   });
 
 function Cover({ course, className }: { course: CatalogCourse; className?: string }) {
-  // Decorativa: el nombre del curso va al lado (WCAG 1.1.1). URL firmada de Storage.
-  return course.coverUrl ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={course.coverUrl}
-      alt=""
-      className={cn('bg-surface-sunken aspect-[2/1] w-full object-cover', className)}
-    />
-  ) : (
-    // Sin portada, el azul de marca con el icono del programa: una tarjeta gris parecía rota.
+  // Sin portada (o con la firma vencida), el azul de marca con el icono del programa: una
+  // tarjeta gris parecía rota.
+  const placeholder = (
     <div
       aria-hidden="true"
       className={cn(
@@ -89,34 +86,14 @@ function Cover({ course, className }: { course: CatalogCourse; className?: strin
       <Layers className="size-10 opacity-80" />
     </div>
   );
-}
-
-/**
- * La onda pequeña del landing (`AlbaWave` «side», 7/10) como borde inferior de la portada, con
- * tokens de la app en vez de los colores del sitio: sol, azul y el fondo de la tarjeta.
- */
-function CoverWave() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 600 160"
-      preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-x-0 -bottom-px block h-[28%] w-full"
-    >
-      <path
-        className="fill-brand-yellow"
-        d="M0 70C120 40 260 50 380 96C460 126 540 136 600 128V160H0Z"
-      />
-      <path
-        className="fill-accent-base"
-        d="M0 104C140 76 280 86 400 122C480 146 550 152 600 148V160H0Z"
-      />
-      <path
-        className="fill-surface-base"
-        d="M0 140C150 120 300 126 430 148C500 158 560 160 600 158V160H0Z"
-      />
-    </svg>
+  return course.coverUrl ? (
+    <CoverImage
+      src={course.coverUrl}
+      className={cn('bg-surface-sunken aspect-[2/1] w-full object-cover', className)}
+      fallback={placeholder}
+    />
+  ) : (
+    placeholder
   );
 }
 
@@ -244,10 +221,7 @@ function Action({
   );
 }
 
-/**
- * «Ver talleres» (7/10, Jhonny): desplegable con cada taller y lo que trae. `<details>`: abre y
- * cierra con teclado y sin JavaScript; plegado no empuja el pie de la tarjeta.
- */
+/** «Ver talleres» (7/10, Jhonny): desplegable con cada taller y lo que trae (`WorkshopsDisclosure`). */
 function WorkshopList({ course, t }: { course: CatalogCourse; t: Translate }) {
   if (course.workshops.length === 0) return null;
   return (
@@ -306,17 +280,20 @@ export async function CourseCard({
   contact,
   requested,
   detail = false,
+  headingLevel = 4,
 }: {
   course: CatalogCourse;
   contact: CatalogContact;
   requested: Record<string, PendingEnroll>;
   /** En la página del curso: sin enlace en el título ni «Ver talleres» (el contenido va al lado). */
   detail?: boolean;
+  /** Bajo el `h3` de un estante, 4; directamente bajo una sección (`h2`), 3. */
+  headingLevel?: 3 | 4;
 }) {
   const [t, format] = await Promise.all([getTranslations('learn.catalog'), getFormatter()]);
   const id = `curso-${course.cohortId}-${course.moduleId}`;
   const asked = Boolean(requested[course.cohortId]);
-  const Heading = detail ? 'h2' : 'h4';
+  const Heading = detail ? 'h2' : (`h${headingLevel}` as const);
   // Lo suyo se marca y no se ofrece (7/10): «En curso» lleva a su ruta; «Terminado», a nada.
   const status = course.enrollment
     ? course.enrollment.status === 'ACTIVE'
@@ -332,7 +309,8 @@ export async function CourseCard({
     >
       <div className="relative">
         <Cover course={course} className="aspect-[9/4]" />
-        <CoverWave />
+        {/* La onda del landing como borde inferior de la portada (7/10). */}
+        <BrandWave className="absolute inset-x-0 -bottom-px h-[28%]" />
         <PositionBadge course={course} t={t} />
         {/* El estado como pastilla flotante: en curso, terminado o ya pedido (el grupo lo explica). */}
         {status && (
@@ -450,90 +428,105 @@ export async function CatalogSection({
   title?: string;
 }) {
   if (courses.length === 0) return null;
-  const [t, format] = await Promise.all([getTranslations('learn.catalog'), getFormatter()]);
+  const [t, tk, format] = await Promise.all([
+    getTranslations('learn.catalog'),
+    getTranslations('admin.curriculum.kind'),
+    getFormatter(),
+  ]);
 
-  // Un grupo por cohorte (su programa con fechas), en el orden en que llegan: gratuitos primero.
-  const groups = new Map<string, CatalogCourse[]>();
-  for (const course of courses) {
-    const list = groups.get(course.cohortId) ?? [];
-    list.push(course);
-    groups.set(course.cohortId, list);
+  // «Recomendados» (8/10): primero lo que puede tomar —gratis antes que de pago—, luego lo que
+  // ya pidió, lo que está cursando y al final lo terminado. Dentro, el orden del programa.
+  const rank = (c: CatalogCourse) =>
+    c.enrollment?.status === 'COMPLETED'
+      ? 4
+      : c.enrollment || c.beforeEntry
+        ? 3
+        : requested[c.cohortId]
+          ? 2
+          : c.free
+            ? 0
+            : 1;
+  const groupRank = new Map<string, number>();
+  for (const c of courses) {
+    groupRank.set(c.cohortId, Math.min(groupRank.get(c.cohortId) ?? 9, rank(c)));
   }
+  const ordered = courses
+    .map((c, index) => ({ c, index }))
+    .sort(
+      (a, b) => groupRank.get(a.c.cohortId)! - groupRank.get(b.c.cohortId)! || a.index - b.index
+    )
+    .map(({ c }) => c);
+
+  // Un grupo por cohorte (su programa con fechas).
+  const byCohort = new Map<string, CatalogCourse[]>();
+  for (const course of ordered) {
+    const list = byCohort.get(course.cohortId) ?? [];
+    list.push(course);
+    byCohort.set(course.cohortId, list);
+  }
+
+  const groups: ExplorerGroup[] = [...byCohort.entries()].flatMap(([cohortId, items]) => {
+    const [first] = items;
+    if (!first) return [];
+    const pending = requested[cohortId];
+    const wa = pending
+      ? whatsappUrl(
+          contact.phone,
+          t('requestMessage', { name: contact.name, course: first.programName })
+        )
+      : null;
+    return [
+      {
+        id: cohortId,
+        kind: tk(first.programKind),
+        title: first.programName,
+        meta: t('groupMeta', { count: first.programModules, date: untilOf(first, format) }),
+        notice: pending ? (
+          <div className="bg-surface-base border-border-muted rounded-control flex flex-wrap items-center justify-between gap-3 border p-3">
+            <p className="type-caption text-text m-0 flex items-start gap-2">
+              <CircleCheck aria-hidden className="text-status-success-base size-4 shrink-0" />
+              {t('groupRequested', {
+                date: format.dateTime(new Date(pending.at), { day: 'numeric', month: 'long' }),
+                module: items.find((c) => c.moduleId === pending.moduleId)?.name ?? first.name,
+              })}
+            </p>
+            {/* El mismo atajo que se ofrece al pedir: escribir ya, con el mensaje hecho. */}
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="type-label text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
+              >
+                {t('writeUs')}
+                <span className="sr-only"> {t('newTab')}</span>
+              </a>
+            )}
+          </div>
+        ) : null,
+      },
+    ];
+  });
+
+  const items: ExplorerItem[] = ordered.map((course) => ({
+    key: `${course.cohortId}-${course.moduleId}`,
+    groupId: course.cohortId,
+    card: <CourseCard course={course} contact={contact} requested={requested} />,
+    meta: {
+      kind: course.programKind,
+      free: course.free,
+      amount: course.price?.amount ?? null,
+      endsOn: course.endsOn,
+      name: course.name,
+      programName: course.programName,
+    },
+  }));
 
   return (
     <PageSection id="cursos-abiertos" title={title ?? t('title')} description={t('hint')}>
-      <div className="space-y-8">
-        {[...groups.entries()].map(([cohortId, items]) => {
-          const [first] = items;
-          if (!first) return null;
-          const groupId = `programa-${cohortId}`;
-          const pending = requested[cohortId];
-          const wa = pending
-            ? whatsappUrl(
-                contact.phone,
-                t('requestMessage', { name: contact.name, course: first.programName })
-              )
-            : null;
-          return (
-            <section key={cohortId} aria-labelledby={groupId} className="space-y-3">
-              <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-                <div className="min-w-0">
-                  <h3 id={groupId} className="type-body-emphasis text-text m-0">
-                    {first.programName}
-                  </h3>
-                  <p className="type-caption text-text-muted m-0">
-                    {t('groupMeta', {
-                      count: first.programModules,
-                      date: untilOf(first, format),
-                    })}
-                  </p>
-                </div>
-              </div>
-              {pending && (
-                <div className="bg-surface-sunken rounded-control flex flex-wrap items-center justify-between gap-3 p-3">
-                  <p className="type-caption text-text m-0 flex items-start gap-2">
-                    <CircleCheck aria-hidden className="text-status-success-base size-4 shrink-0" />
-                    {t('groupRequested', {
-                      date: format.dateTime(new Date(pending.at), {
-                        day: 'numeric',
-                        month: 'long',
-                      }),
-                      module:
-                        items.find((c) => c.moduleId === pending.moduleId)?.name ?? first.name,
-                    })}
-                  </p>
-                  {/* El mismo atajo que se ofrece al pedir: escribir ya, con el mensaje hecho. */}
-                  {wa && (
-                    <a
-                      href={wa}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="type-label text-text-link min-h-touch inline-flex items-center underline underline-offset-4"
-                    >
-                      {t('writeUs')}
-                      <span className="sr-only"> {t('newTab')}</span>
-                    </a>
-                  )}
-                </div>
-              )}
-              <ul
-                className={cn(
-                  // `items-start`: abrir «Ver talleres» en una tarjeta no estira la de al lado.
-                  // Columnas de ancho fijo (`auto-fill`): la tarjeta mide igual en todos los grupos; en el
-                  // teléfono, una a todo el ancho.
-                  'motion-stagger m-0 grid list-none items-start gap-4 p-0',
-                  'sm:grid-cols-[repeat(auto-fill,17.5rem)]'
-                )}
-              >
-                {items.map((course) => (
-                  <li key={course.moduleId} className="min-w-0">
-                    <CourseCard course={course} contact={contact} requested={requested} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          );
-        })}
+      {/* El catálogo sobre un fondo tenue (8/10): se lee como una tienda aparte del panel. */}
+      <div className="bg-surface-sunken rounded-card p-3 sm:p-5">
+        <CatalogExplorer groups={groups} items={items} />
       </div>
     </PageSection>
   );

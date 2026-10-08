@@ -19,6 +19,14 @@ export const MEDIA_BUCKET = 'media';
 /** Diez minutos, de `plan/04-seguridad.md:20`. */
 export const READ_URL_SECONDS = 10 * 60;
 
+/**
+ * Las portadas (8/10): una hora. Son imágenes decorativas del catálogo, no archivos de nadie, y
+ * a los diez minutos una página que llevaba un rato abierta (o que se recuperó con «atrás»)
+ * pedía la imagen con la firma vencida y Storage respondía `InvalidJWT`. `CoverImage` cubre
+ * además el caso de que venza igual.
+ */
+export const COVER_URL_SECONDS = 60 * 60;
+
 /** La subida también caduca: una URL de escritura eterna es una puerta abierta. */
 export const UPLOAD_URL_SECONDS = 10 * 60;
 
@@ -90,11 +98,15 @@ export async function createUploadUrl(path: string): Promise<{ signedUrl: string
  */
 export async function createReadUrl(
   path: string,
-  { asAttachment = true, fileName }: { asAttachment?: boolean; fileName?: string } = {}
+  {
+    asAttachment = true,
+    fileName,
+    expiresIn = READ_URL_SECONDS,
+  }: { asAttachment?: boolean; fileName?: string; expiresIn?: number } = {}
 ): Promise<string> {
   const { data, error } = await admin()
     .storage.from(MEDIA_BUCKET)
-    .createSignedUrl(path, READ_URL_SECONDS, {
+    .createSignedUrl(path, expiresIn, {
       ...(asAttachment ? { download: fileName ?? true } : {}),
     });
 
@@ -109,11 +121,14 @@ export async function createReadUrl(
  * Varias URLs de lectura en una sola llamada (3/10): las portadas de todos los componentes
  * de una ruta. Devuelve `null` donde Storage no pudo firmar, en el mismo orden.
  */
-export async function createReadUrls(paths: string[]): Promise<Array<string | null>> {
+export async function createReadUrls(
+  paths: string[],
+  expiresIn: number = READ_URL_SECONDS
+): Promise<Array<string | null>> {
   if (paths.length === 0) return [];
   const { data, error } = await admin()
     .storage.from(MEDIA_BUCKET)
-    .createSignedUrls(paths, READ_URL_SECONDS);
+    .createSignedUrls(paths, expiresIn);
 
   if (error || !data) {
     throw new Error(`No se pudo crear las URL de lectura: ${error?.message ?? 'sin datos'}`);

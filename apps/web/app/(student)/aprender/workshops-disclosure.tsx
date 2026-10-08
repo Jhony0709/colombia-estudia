@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * «Ver talleres» de la tarjeta del catálogo (7/10): acordeón con `grid-template-rows` 0fr → 1fr
+ * «Ver talleres» de la tarjeta del catálogo (7/10) y «Tus intentos» de Resultados (8/10): acordeón con `grid-template-rows` 0fr → 1fr
  * (la excepción de motion para acordeones); al abrir, la lista entra con `motion-enter`.
  * Cerrado, `invisible` la saca del foco y del árbol de accesibilidad al terminar la transición.
  */

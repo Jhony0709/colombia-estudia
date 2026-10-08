@@ -46,9 +46,10 @@ función que ordena, tanto para el estudiante como para el builder del admin.
 
 Reglas de `progression`:
 
-- `LINEAR`: el ítem N se habilita al completar el N-1, cruzando talleres. Un examen cuenta
-  como completado con un intento `GRADED`, apruebe o no: perder el cuestionario **no bloquea**
-  la ruta (cliente, 3/10). La `DIAGNOSTIC` es obligatoria antes del primer tema y nunca
+- `LINEAR`: el ítem N se habilita al completar el N-1, cruzando talleres. Un cuestionario cuenta
+  como completado cuando **aprueba** o cuando **agota sus intentos** con todos cerrados (8/10,
+  Jhonny; `assessmentStatus` en `features/learn/server/outline.ts`): perder con intentos por
+  delante no deja seguir; perderlos todos **no bloquea** la ruta (cliente, 3/10). La `DIAGNOSTIC` es obligatoria antes del primer tema y nunca
   cuenta para aprobar; sus resultados los ve operaciones.
 - `FREE`: todo abierto, con el orden como sugerencia.
 

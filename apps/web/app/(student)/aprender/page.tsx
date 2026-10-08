@@ -28,6 +28,7 @@ import { HowItWorks } from './how-it-works';
 import { UnlockRequestButton } from './unlock-request-button';
 import { listMyPendingRequests } from '@/features/requests/server/requests.service';
 import { CatalogSection, FeaturedCourse } from './catalog-section';
+import { KeepLearningHero } from './keep-learning-hero';
 import Image from 'next/image';
 import { AgendaCard, ExamsCard, HelpCard, ProgressKpis, RhythmCard } from './dashboard-cards';
 import {
@@ -46,6 +47,9 @@ import { ProgressBar } from '@/components/atoms/progress-bar';
 import { PrimaryActionTracker } from '@/components/molecules/primary-action-tracker';
 import { EnrollmentSwitcher } from './enrollment-switcher';
 import { InView } from '@/components/atoms/motion';
+import { CoverImage } from '@/components/atoms/cover-image';
+import { BrandWave } from '@/components/atoms/brand-wave';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = { title: 'Aprender' };
 
@@ -187,14 +191,31 @@ export default async function LearnPage({
   // Las fechas de cierre no piden nada hoy; el primer día solo cuentan las que sí.
   const firstDayAgenda = agenda.filter((e) => e.kind !== 'COHORT_END' && e.kind !== 'ACCESS_UNTIL');
   const completedSection = <CompletedCourses courses={completedCourses} />;
+  // E2 (23/9): con dos o más matrículas, un selector en el héroe; con una, nada.
+  const switcher =
+    mine.length > 1 ? (
+      <EnrollmentSwitcher
+        tone="on-accent"
+        selectedId={selected.enrollmentId}
+        options={mine.map((row) => ({
+          enrollmentId: row.enrollmentId,
+          programName: row.cohort.programName,
+          code: row.cohort.code,
+          cohortName: row.cohort.name,
+          completed: row.progress.completed,
+          total: row.progress.total,
+        }))}
+      />
+    ) : null;
 
   return (
     <Page wide>
       <PageHeader
         title={t('greeting', { name: ctx.person.givenName })}
         description={
+          // Terminado: lo dice el héroe (8/10).
           finished
-            ? t('dashboardHintDone')
+            ? undefined
             : firstDay
               ? t('dashboardHintFirst')
               : mine.length > 1
@@ -209,44 +230,33 @@ export default async function LearnPage({
         }
       />
 
-      <CurrentActivity
-        row={selected}
-        cover={current?.coverUrl ?? null}
-        moduleName={selected.resume ? (current?.name ?? null) : null}
-        catalogHref={
-          finished && courses.some((c) => !c.enrollment && !c.beforeEntry)
-            ? '#cursos-abiertos'
-            : null
-        }
-        lockedNext={
-          selected.upcoming?.unavailableReason === 'LOCKED' && !selected.resume
-            ? (outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.name ?? null)
-            : null
-        }
-        lockedNextId={selected.upcoming?.moduleId ?? null}
-        requestedAt={
-          selected.upcoming
-            ? (pending.unlock[`${selected.enrollmentId}:${selected.upcoming.moduleId}`] ?? null)
-            : null
-        }
-        switcher={
-          // E2 (23/9): con dos o más matrículas, un selector en el héroe; con una, nada.
-          mine.length > 1 ? (
-            <EnrollmentSwitcher
-              tone="on-accent"
-              selectedId={selected.enrollmentId}
-              options={mine.map((row) => ({
-                enrollmentId: row.enrollmentId,
-                programName: row.cohort.programName,
-                code: row.cohort.code,
-                cohortName: row.cohort.name,
-                completed: row.progress.completed,
-                total: row.progress.total,
-              }))}
-            />
-          ) : null
-        }
-      />
+      {finished ? (
+        // Terminado (8/10): el héroe invita a elegir el siguiente curso.
+        <KeepLearningHero
+          program={selected.cohort.programName}
+          openCourses={courses.filter((c) => !c.enrollment && !c.beforeEntry).length}
+          switcher={switcher}
+        />
+      ) : (
+        <CurrentActivity
+          row={selected}
+          cover={current?.coverUrl ?? null}
+          moduleName={selected.resume ? (current?.name ?? null) : null}
+          steps={selected.resume && current ? current.items : null}
+          lockedNext={
+            selected.upcoming?.unavailableReason === 'LOCKED' && !selected.resume
+              ? (outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.name ?? null)
+              : null
+          }
+          lockedNextId={selected.upcoming?.moduleId ?? null}
+          requestedAt={
+            selected.upcoming
+              ? (pending.unlock[`${selected.enrollmentId}:${selected.upcoming.moduleId}`] ?? null)
+              : null
+          }
+          switcher={switcher}
+        />
+      )}
 
       {!selected.gate && !firstDay && <ProgressKpis outline={outline} activity={activity} />}
 
@@ -411,7 +421,7 @@ async function CurrentActivity({
   lockedNextId,
   requestedAt,
   switcher,
-  catalogHref,
+  steps,
 }: {
   row: MyEnrollment;
   cover: string | null;
@@ -424,8 +434,8 @@ async function CurrentActivity({
   /** ISO: ya lo pidió y sigue sin resolver. */
   requestedAt: string | null;
   switcher: React.ReactNode;
-  /** Programa terminado y cursos abiertos (5/10): el héroe lleva a elegir el siguiente. */
-  catalogHref: string | null;
+  /** Los pasos del componente por el que va (8/10): la tira de avance del héroe. */
+  steps: OutlineModule['items'] | null;
 }) {
   const [t, format] = await Promise.all([getTranslations('learn'), getFormatter()]);
   const { cohort, gate, progress, resume, upcoming } = row;
@@ -437,6 +447,10 @@ async function CurrentActivity({
   const percent =
     progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100);
   const starting = !gate && progress.completed === 0;
+  // Dónde está dentro del componente (8/10): «paso 2 de 6», con una tira de segmentos.
+  const stepIndex =
+    resume && steps ? steps.findIndex((i) => i.assignmentId === resume.assignmentId) : -1;
+  const strip = Boolean(!gate && resume && steps && stepIndex >= 0 && steps.length <= 24);
 
   const body = gate
     ? t(`gate.${gate.kind}.body`, {
@@ -470,6 +484,19 @@ async function CurrentActivity({
             ? t('routeDone.body', { program: cohort.programName })
             : null;
 
+  // La foto de marca: sin portada y también cuando la firma de la portada venció (8/10).
+  const brandPhoto = (
+    <Image
+      src="/photos/aprender-hero-wide.webp"
+      alt=""
+      width={1600}
+      height={500}
+      sizes="(min-width: 640px) 46vw, 0px"
+      priority
+      className="h-full w-full object-cover object-right-top"
+    />
+  );
+
   return (
     // El héroe ES lo que toca hoy (4/10): antes había un héroe de ánimo con su propio
     // «Continuar aprendiendo» y, debajo, esta tarjeta con otro «Continuar». En el teléfono el
@@ -484,23 +511,18 @@ async function CurrentActivity({
           solo desde `sm`; en el teléfono el texto y el botón van primero. */}
       <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[46%] sm:block">
         {cover ? (
-          // eslint-disable-next-line @next/next/no-img-element -- URL firmada de Storage.
-          <img src={cover} alt="" className="h-full w-full object-cover" />
+          <CoverImage src={cover} className="h-full w-full object-cover" fallback={brandPhoto} />
         ) : (
-          <Image
-            src="/photos/aprender-hero-wide.webp"
-            alt=""
-            width={1600}
-            height={500}
-            sizes="(min-width: 640px) 46vw, 0px"
-            priority
-            className="h-full w-full object-cover object-right-top"
-          />
+          brandPhoto
         )}
-        <div className="hero-cover-scrim absolute inset-0" />
+        {/* Un píxel más a la izquierda: el borde fraccional de la foto dejaba una raya. */}
+        <div className="hero-cover-scrim absolute inset-y-0 -left-px right-0" />
       </div>
 
-      <div className="relative max-w-[36rem] space-y-5 p-6 sm:p-10">
+      {/* La onda del landing cierra el héroe sobre el fondo de la página (8/10). */}
+      <BrandWave base="canvas" className="absolute inset-x-0 -bottom-px h-12 sm:h-20" />
+
+      <div className="relative max-w-[36rem] space-y-5 p-6 pb-16 sm:p-10 sm:pb-24">
         <div className="space-y-2">
           {switcher ?? (
             <p className="type-overline m-0 uppercase opacity-90">
@@ -534,7 +556,12 @@ async function CurrentActivity({
               })()}
               <span className="min-w-0">
                 {itemMeta(resume, t)}
-                {moduleName ? ` · ${moduleName}` : ''}
+                {/* El taller; el componente lo dice la tira de pasos. */}
+                {resume.subjectName
+                  ? ` · ${resume.subjectName}`
+                  : !strip && moduleName
+                    ? ` · ${moduleName}`
+                    : ''}
               </span>
             </p>
           )}
@@ -550,6 +577,39 @@ async function CurrentActivity({
             requestedAt={requestedAt}
             tone="on-accent"
           />
+        )}
+
+        {strip && steps && (
+          <div className="space-y-2">
+            <p className="type-caption m-0 flex flex-wrap justify-between gap-x-4 opacity-90">
+              <span>
+                {t('hero.step', {
+                  module: moduleName ?? '',
+                  current: stepIndex + 1,
+                  total: steps.length,
+                })}
+              </span>
+              {!starting && (
+                <span className="tabular-nums">{t('hero.programPercent', { percent })}</span>
+              )}
+            </p>
+            {/* Hecho en amarillo (el sol de la marca), el actual en blanco, lo demás tenue. */}
+            <ol aria-hidden="true" className="m-0 flex list-none gap-1 p-0">
+              {steps.map((step, i) => (
+                <li
+                  key={step.assignmentId}
+                  className={cn(
+                    'h-1.5 max-w-10 flex-1 rounded-full',
+                    i === stepIndex
+                      ? 'bg-text-on-accent'
+                      : step.status === 'COMPLETED'
+                        ? 'bg-brand-yellow'
+                        : 'bg-text-on-accent opacity-30'
+                  )}
+                />
+              ))}
+            </ol>
+          </div>
         )}
 
         {!gate && (
@@ -572,51 +632,45 @@ async function CurrentActivity({
                 </Button>
               </PrimaryActionTracker>
             )}
-            {starting ? (
-              // El primer día una barra al 0 % no dice nada (6/10): el tamaño de la ruta, sí.
-              <p className="type-caption m-0 opacity-90">
-                {t('hero.routeSize', { total: progress.total, program: cohort.programName })}
-              </p>
-            ) : (
-              <div className="min-w-[12rem] flex-1 space-y-1.5">
-                <ProgressBar
-                  percent={percent}
-                  label={t('progressLabel', { program: cohort.programName })}
-                  tone="on-accent"
-                  grow
-                />
-                <p className="type-caption m-0 opacity-90">
-                  {t('hero.progress', {
-                    percent,
-                    completed: progress.completed,
-                    total: progress.total,
-                    program: cohort.programName,
-                  })}
-                </p>
-              </div>
-            )}
+            {/* La ruta completa vive en la página del curso (7/10); junto a la acción (8/10). */}
+            <Link
+              href={`/aprender/curso/${row.enrollmentId}`}
+              className="type-body min-h-touch inline-flex items-center gap-1.5 underline underline-offset-4"
+            >
+              {t('course.seeRoute')}
+              <ArrowRight aria-hidden className="size-4 shrink-0" />
+            </Link>
           </div>
         )}
 
-        {/* La ruta completa vive en la página del curso (7/10). */}
-        {!gate && (
-          <Link
-            href={`/aprender/curso/${row.enrollmentId}`}
-            className="type-body min-h-touch inline-flex items-center gap-1.5 underline underline-offset-4"
-          >
-            {t('course.seeRoute')}
-            <ArrowRight aria-hidden className="size-4 shrink-0" />
-          </Link>
-        )}
-        {gate?.kind === 'COMPLETED' && catalogHref && (
-          <Button asChild size="lg" variant="secondary">
-            <a href={catalogHref}>
-              {t('completed.nextCourse')}
-              <ArrowRight aria-hidden className="size-4 shrink-0" />
-            </a>
-          </Button>
-        )}
-        {(gate?.kind === 'ACCESS_EXPIRED' || gate?.kind === 'COMPLETED' || routeDone) && (
+        {/* Sin tira (esperando, ruta hecha): el avance del programa, como antes. */}
+        {!gate &&
+          !strip &&
+          (starting ? (
+            <p className="type-caption m-0 opacity-90">
+              {t('hero.routeSize', { total: progress.total, program: cohort.programName })}
+            </p>
+          ) : (
+            <div className="max-w-[24rem] space-y-1.5">
+              <ProgressBar
+                percent={percent}
+                label={t('progressLabel', { program: cohort.programName })}
+                tone="on-accent"
+                grow
+              />
+              <p className="type-caption m-0 opacity-90">
+                {t('hero.progress', {
+                  percent,
+                  completed: progress.completed,
+                  total: progress.total,
+                  program: cohort.programName,
+                })}
+              </p>
+            </div>
+          ))}
+
+        {/* Programa terminado: `KeepLearningHero` (8/10). */}
+        {(gate?.kind === 'ACCESS_EXPIRED' || routeDone) && (
           <Link
             href="/aprender/resultados"
             className="type-body min-h-touch inline-flex items-center underline underline-offset-4"

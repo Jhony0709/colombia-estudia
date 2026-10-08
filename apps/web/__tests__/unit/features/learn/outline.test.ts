@@ -7,6 +7,7 @@
  */
 
 import {
+  assessmentStatus,
   sequence,
   moduleAccess,
   sortItems,
@@ -489,5 +490,44 @@ describe('workshopStart', () => {
       'Matemáticas',
       null,
     ]);
+  });
+});
+
+describe('assessmentStatus (8/10)', () => {
+  const graded = (score: number) => ({ status: 'GRADED', score, maxScore: 10 });
+  const rules = { attemptsAllowed: 2, passPercent: 60 };
+
+  it('sin intentos no está empezado', () => {
+    expect(assessmentStatus([], rules)).toBe('NOT_STARTED');
+  });
+
+  it('perder con intentos por delante no lo completa', () => {
+    expect(assessmentStatus([graded(3)], rules)).toBe('IN_PROGRESS');
+  });
+
+  it('aprobar lo completa', () => {
+    expect(assessmentStatus([graded(7)], rules)).toBe('COMPLETED');
+  });
+
+  it('agotar los intentos lo completa aunque no apruebe', () => {
+    expect(assessmentStatus([graded(3), graded(4)], rules)).toBe('COMPLETED');
+  });
+
+  it('un vencido sin respuestas cuenta como intento usado', () => {
+    expect(
+      assessmentStatus([graded(3), { status: 'EXPIRED', score: null, maxScore: null }], rules)
+    ).toBe('COMPLETED');
+  });
+
+  it('con un intento abierto todavía no', () => {
+    expect(
+      assessmentStatus([graded(3), { status: 'IN_PROGRESS', score: null, maxScore: null }], rules)
+    ).toBe('IN_PROGRESS');
+  });
+
+  it('sin umbral, cualquier calificado aprueba', () => {
+    expect(assessmentStatus([graded(0)], { attemptsAllowed: 2, passPercent: null })).toBe(
+      'COMPLETED'
+    );
   });
 });

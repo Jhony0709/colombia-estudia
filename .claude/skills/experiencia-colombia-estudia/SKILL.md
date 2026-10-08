@@ -31,7 +31,9 @@ la marca: sus valores se traducen a nuestros tokens.
   sin emojis ni exclamaciones (doctrina de UI). Lo que ya se sabe no se pregunta: se muestra
   inferido y editable.
 - **P7 — Un solo momento por pantalla, ligado a un dato.** La nota, el avance, la constancia.
-  `duration.slow` sigue reservado a la celebración del programa completado, una vez.
+  `duration.slow` sigue reservado a la celebración del programa completado, una vez; excepción
+  (Jhonny, 8/10): el amanecer del cuestionario aprobado y la respiración del no aprobado
+  (`duration.breath`, una sola, bajo 5 s), en `ResultMoment`.
 - **P8 — Lo repetido no se anima** (frontend §2 M2): avanzar preguntas del intento, recorrer
   listas con teclado, abrir el mismo menú por décima vez.
 - **P9 — Movimiento reducido = corte**, venga del sistema operativo **o** de la preferencia
@@ -132,23 +134,24 @@ las únicas que se usan para esto.
 
 Lo que no aparece en la columna «Se anima» va con corte. El texto de lectura nunca se anima.
 
-| Pantalla                       | Se anima (en este orden)                                                            | Momento (P7)                                               | Nunca                                          |
-| ------------------------------ | ----------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------- |
-| `/aprender` (panel)            | héroe: entrada `md` → KPIs: escalera → tarjetas de abajo: entrada en vista          | barra del héroe crece al cargar (`ProgressBar grow`)       | saludo, fecha, ruta                            |
-| Panel terminado                | héroe → «Cursos abiertos»: escalera → «Cursos completados»: escalera                | check de la tarjeta recién completada                      | —                                              |
-| Panel sin matrícula            | curso destacado: entrada `md` → «Más cursos»: escalera; aside: entrada `order-1`    | inscribirse lleva directo al primer tema                   | saludo                                         |
-| Panel del primer día           | héroe: entrada `md` → ruta y «Cómo funciona»: entrada `order-1`                     | —                                                          | sin KPIs ni barra al 0 %                       |
-| Tema (`/aprender/tema`)        | nada al entrar; al completarse, el pie cambia por crossfade y el check entra `fast` | completar el tema                                          | el texto, el índice, la cuenta atrás (dígitos) |
-| Examen (antes de empezar)      | bloque de condiciones: entrada                                                      | —                                                          | —                                              |
-| Intento                        | cambio de pregunta: crossfade (ya existe); índice: estado `fast`                    | —                                                          | opciones en escalera (P8), el reloj            |
-| Resultado del intento          | nota: conteo → insignia aprobado: entrada → cierre «Aprender es avanzar»: entrada   | la nota                                                    | la revisión de preguntas                       |
-| Resultados                     | barras: `chart-grow` (ya existe) en vista, una vez                                  | —                                                          | la tabla                                       |
-| Constancias                    | tarjetas: escalera                                                                  | la recién emitida: celebración `slow`, una vez (pendiente) | —                                              |
-| Notificaciones (menú y página) | menú: grow (Dropdown); punto de nuevo: fade `fast` al marcar leído                  | —                                                          | la lista                                       |
-| Calendario, biblioteca, cuenta | un solo bloque: entrada                                                             | —                                                          | listas y tablas                                |
-| Acceso (`AuthShell`)           | panel de foto: entrada `md`; formulario: corte                                      | —                                                          | los campos                                     |
-| Registro                       | formulario conversacional (§4)                                                      | la pantalla final con la matrícula                         | —                                              |
-| Familia                        | como el panel                                                                       | —                                                          | —                                              |
+| Pantalla                       | Se anima (en este orden)                                                                                         | Momento (P7)                                               | Nunca                                             |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| `/aprender` (panel)            | héroe: entrada `md` → KPIs: escalera → tarjetas de abajo: entrada en vista                                       | barra del héroe crece al cargar (`ProgressBar grow`)       | saludo, fecha, ruta                               |
+| Catálogo (`/aprender`, 8/10)   | nada al filtrar ni al ordenar (P8); el carrusel se desliza con `scroll-behavior` (corte con movimiento reducido) | —                                                          | las tarjetas al cambiar de filtro                 |
+| Panel terminado                | héroe → «Cursos abiertos»: escalera → «Cursos completados»: escalera                                             | check de la tarjeta recién completada                      | —                                                 |
+| Panel sin matrícula            | curso destacado: entrada `md` → «Más cursos»: escalera; aside: entrada `order-1`                                 | inscribirse lleva directo al primer tema                   | saludo                                            |
+| Panel del primer día           | héroe: entrada `md` → ruta y «Cómo funciona»: entrada `order-1`                                                  | —                                                          | sin KPIs ni barra al 0 %                          |
+| Tema (`/aprender/tema`)        | nada al entrar; al completarse, el pie cambia por crossfade y el check entra `fast`                              | completar el tema                                          | el texto, el índice, la cuenta atrás (dígitos)    |
+| Examen (antes de empezar)      | bloque de condiciones: entrada                                                                                   | —                                                          | —                                                 |
+| Intento                        | cambio de pregunta: crossfade (ya existe); índice: estado `fast`                                                 | —                                                          | opciones en escalera (P8), el reloj               |
+| Resultado del intento          | momento (`ResultMoment`): amanecer al aprobar, respiración al no aprobar → nota: conteo → cierre: entrada        | aprobar (8/10, Jhonny): amanecer; sin rojo al perder       | la revisión de preguntas, la respiración en bucle |
+| Resultados                     | barras: `chart-grow` (ya existe) en vista, una vez                                                               | —                                                          | la tabla                                          |
+| Constancias                    | tarjetas: escalera                                                                                               | la recién emitida: celebración `slow`, una vez (pendiente) | —                                                 |
+| Notificaciones (menú y página) | menú: grow (Dropdown); punto de nuevo: fade `fast` al marcar leído                                               | —                                                          | la lista                                          |
+| Calendario, biblioteca, cuenta | un solo bloque: entrada                                                                                          | —                                                          | listas y tablas                                   |
+| Acceso (`AuthShell`)           | panel de foto: entrada `md`; formulario: corte                                                                   | —                                                          | los campos                                        |
+| Registro                       | formulario conversacional (§4)                                                                                   | la pantalla final con la matrícula                         | —                                                 |
+| Familia                        | como el panel                                                                                                    | —                                                          | —                                                 |
 
 ## Checklist
 

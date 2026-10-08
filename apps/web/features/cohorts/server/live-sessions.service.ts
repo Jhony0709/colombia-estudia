@@ -15,6 +15,7 @@ import 'server-only';
 
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
+import { assessmentStatus } from '@/features/learn/server/outline';
 
 export interface LiveSessionRow {
   id: string;
@@ -221,6 +222,10 @@ export interface CalendarItem {
   /** Sesión en vivo: si «Unirse» está activo (desde 15 min antes hasta el final). */
   joinable: boolean;
   description: string | null;
+  /** El programa de la cohorte (8/10): el estudiante no conoce el código. */
+  programName: string;
+  /** Cuestionario ya completo (aprobado o sin intentos, `assessmentStatus`): no pide nada. */
+  done: boolean;
 }
 
 /**
@@ -242,15 +247,24 @@ export async function getCalendarForEnrollment({
     where: { id: enrollmentId },
     select: {
       accessUntil: true,
+      studentId: true,
+      accommodation: { select: { allowedAttemptsBonus: true } },
       cohort: {
         select: {
           id: true,
           code: true,
+          name: true,
+          program: { select: { name: true } },
           startsOn: true,
           endsOn: true,
           assessmentAssignments: {
             where: { dueAt: { not: null } },
-            select: { id: true, dueAt: true, assessment: { select: { title: true } } },
+            select: {
+              id: true,
+              dueAt: true,
+              assessment: { select: { title: true } },
+              assessmentVersion: { select: { maxAttempts: true, passPercent: true } },
+            },
           },
           liveSessions: {
             where: { archivedAt: null },
@@ -269,37 +283,54 @@ export async function getCalendarForEnrollment({
   });
   if (!e) return [];
 
+  // Lo ya hecho no se ofrece como pendiente (8/10): los intentos del estudiante, por plazo.
+  const attempts = await db.attempt.findMany({
+    where: {
+      studentId: e.studentId,
+      assessmentAssignmentId: { in: e.cohort.assessmentAssignments.map((a) => a.id) },
+    },
+    select: { assessmentAssignmentId: true, status: true, score: true, maxScore: true },
+  });
+  const bonus = e.accommodation?.allowedAttemptsBonus ?? 0;
+  const program = e.cohort.program.name;
+
   const JOIN_BEFORE_MS = 15 * 60 * 1000;
   const items: CalendarItem[] = [
     {
       kind: 'COHORT_START',
       id: `start-${e.cohort.id}`,
-      title: e.cohort.code,
+      title: e.cohort.name,
       at: e.cohort.startsOn.toISOString(),
       endsAt: null,
       href: null,
       joinable: false,
       description: null,
+      programName: program,
+      done: false,
     },
     {
       kind: 'COHORT_END',
       id: `end-${e.cohort.id}`,
-      title: e.cohort.code,
+      title: e.cohort.name,
       at: e.cohort.endsOn.toISOString(),
       endsAt: null,
       href: null,
       joinable: false,
       description: null,
+      programName: program,
+      done: false,
     },
     {
       kind: 'ACCESS_UNTIL',
       id: `access-${enrollmentId}`,
-      title: e.cohort.code,
+      title: e.cohort.name,
       at: e.accessUntil.toISOString(),
       endsAt: null,
       href: null,
       joinable: false,
       description: null,
+      programName: program,
+      done: false,
     },
     ...e.cohort.assessmentAssignments.map((a): CalendarItem => ({
       kind: 'ASSESSMENT_DUE',
@@ -310,6 +341,15 @@ export async function getCalendarForEnrollment({
       href: `/aprender/examen/${a.id}`,
       joinable: false,
       description: null,
+      programName: program,
+      done:
+        assessmentStatus(
+          attempts.filter((x) => x.assessmentAssignmentId === a.id),
+          {
+            attemptsAllowed: a.assessmentVersion.maxAttempts + bonus,
+            passPercent: a.assessmentVersion.passPercent,
+          }
+        ) === 'COMPLETED',
     })),
     ...e.cohort.liveSessions.map((s): CalendarItem => ({
       kind: 'LIVE_SESSION',
@@ -320,6 +360,8 @@ export async function getCalendarForEnrollment({
       href: s.url,
       joinable: now.getTime() >= s.startsAt.getTime() - JOIN_BEFORE_MS && now < s.endsAt,
       description: s.description,
+      programName: program,
+      done: false,
     })),
   ];
 
