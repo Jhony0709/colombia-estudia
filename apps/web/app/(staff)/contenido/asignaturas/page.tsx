@@ -15,7 +15,7 @@ import { PageHelp } from '@/components/organisms/page-help';
 import { SubjectsManager } from './subjects-manager';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 
-export const metadata: Metadata = { title: 'Asignaturas' };
+export const metadata: Metadata = { title: 'Talleres' };
 
 export default async function SubjectsPage() {
   await requireCapability('institution.manage');

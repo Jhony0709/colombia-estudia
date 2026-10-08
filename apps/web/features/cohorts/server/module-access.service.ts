@@ -17,6 +17,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { notify } from '@/features/notifications/server/notifications.service';
 import { moduleAccess, type ModuleAccess } from '@/features/learn/server/outline';
+import { closeRequests } from '@/features/requests/server/requests.service';
 
 export interface ModuleAccessRow {
   moduleId: string;
@@ -30,6 +31,8 @@ export interface ModuleAccessRow {
   /** Día en Bogotá, AAAA-MM-DD; nulo sin límite. */
   availableFrom: string | null;
   availableUntil: string | null;
+  /** ISO: el estudiante pidió habilitarlo y sigue sin resolver (6/10). */
+  requestedAt: string | null;
 }
 
 export interface ModuleAccessList {
@@ -79,7 +82,7 @@ export async function listModuleAccess({
   const enrollment = await loadEnrollment(institutionId, enrollmentId);
   const progression = enrollment.cohort.progression === 'FREE' ? 'FREE' : 'LINEAR';
 
-  const [modules, unlocks] = await Promise.all([
+  const [modules, unlocks, requests] = await Promise.all([
     db.module.findMany({
       where: {
         programId: enrollment.cohort.programId,
@@ -99,8 +102,13 @@ export async function listModuleAccess({
         unlockedBy: { select: { givenName: true, familyName: true } },
       },
     }),
+    db.accessRequest.findMany({
+      where: { enrollmentId, kind: 'UNLOCK', status: 'PENDING' },
+      select: { moduleId: true, createdAt: true },
+    }),
   ]);
   const unlockOf = new Map(unlocks.map((row) => [row.moduleId, row]));
+  const requestOf = new Map(requests.map((row) => [row.moduleId, row.createdAt.toISOString()]));
 
   return {
     applies: progression === 'LINEAR',
@@ -118,6 +126,7 @@ export async function listModuleAccess({
           : null,
         availableFrom: bogotaDay(unlock?.availableFrom ?? null),
         availableUntil: bogotaDay(unlock?.availableUntil ?? null),
+        requestedAt: requestOf.get(component.id) ?? null,
       };
     }),
   };
@@ -221,6 +230,8 @@ export async function setModuleAccess({
           },
           select: { id: true },
         });
+
+    await closeRequests(tx, { kind: 'UNLOCK', enrollmentId, moduleId }, { actorId, now });
 
     await tx.auditLog.create({
       data: {

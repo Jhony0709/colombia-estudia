@@ -43,6 +43,12 @@ export const NOTIFICATION_TYPES = [
   'lesson_reopened',
   // 3/10: operación habilitó el siguiente componente para la matrícula.
   'module_unlocked',
+  // 6/10: un estudiante pide la matrícula de un curso de pago; la hace operación.
+  'enrollment_requested',
+  // 6/10: un estudiante pide que le habiliten el siguiente componente.
+  'unlock_requested',
+  // 6/10: operación descartó una solicitud del estudiante.
+  'request_dismissed',
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

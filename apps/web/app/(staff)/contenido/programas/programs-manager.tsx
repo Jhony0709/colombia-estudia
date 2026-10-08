@@ -246,7 +246,13 @@ function ProgramDetail({
       )}
       <ModuleList program={program} busy={busy} send={send} />
       {/* La lista de precios (25/9): lo que cuesta el programa y a qué grados aplica. */}
-      <ProgramPrices programId={program.id} prices={program.prices} busy={busy} send={send} />
+      <ProgramPrices
+        programId={program.id}
+        prices={program.prices}
+        free={program.pricing === 'FREE'}
+        busy={busy}
+        send={send}
+      />
     </div>
   );
 }

@@ -188,8 +188,9 @@ describe('scopeArgs', () => {
 
   describe('TENANT_SCOPED_MODELS list', () => {
     // 37 desde el 25/9: `ProgramPrice` (fase de negocio 1) y `Counter` (códigos legibles).
-    it('should have exactly 37 models', () => {
-      expect(TENANT_SCOPED_MODELS.length).toBe(37);
+    // 39 desde el 6/10: `EnrollmentModule` (faltaba desde el 3/10) y `AccessRequest`.
+    it('should have exactly 39 models', () => {
+      expect(TENANT_SCOPED_MODELS.length).toBe(39);
     });
 
     it('should not include Institution', () => {

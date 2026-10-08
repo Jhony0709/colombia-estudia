@@ -210,7 +210,7 @@ export default async function CalendarPage() {
   };
 
   return (
-    <Page>
+    <Page enter>
       <PageHeader title={tc('title')} description={tc('description')} />
 
       {items.length === 0 ? (

@@ -13,3 +13,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS "Certificate_enrollmentId_program_key" ON "Cer
 
 -- Person: unique (institutionId, lower(email)) where email IS NOT NULL - case-insensitive email per institution
 CREATE UNIQUE INDEX IF NOT EXISTS "person_email_ci_unique" ON "Person"("institutionId", lower(email)) WHERE email IS NOT NULL;
+
+-- AccessRequest (6/10): una sola solicitud abierta por persona, tipo, cohorte y componente.
+-- Va en la migración 20261006000000_access_request; aquí queda la referencia.
+CREATE UNIQUE INDEX IF NOT EXISTS "AccessRequest_one_pending_key" ON "AccessRequest"("personId", "kind", "cohortId", "moduleId") WHERE "status" = 'PENDING';

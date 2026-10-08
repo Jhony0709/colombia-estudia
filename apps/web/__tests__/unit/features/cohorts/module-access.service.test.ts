@@ -5,6 +5,7 @@
  */
 
 const mockNotify = jest.fn();
+const mockCloseRequests = jest.fn();
 
 const tx = {
   enrollmentModule: { create: jest.fn(), update: jest.fn(), delete: jest.fn() },
@@ -15,6 +16,7 @@ const db = {
   enrollment: { findFirst: jest.fn() },
   module: { findFirst: jest.fn(), findMany: jest.fn() },
   enrollmentModule: { ...tx.enrollmentModule, findFirst: jest.fn(), findMany: jest.fn() },
+  accessRequest: { findMany: jest.fn() },
   $transaction: (fn: (t: typeof tx) => unknown) => fn(tx),
 };
 
@@ -22,6 +24,9 @@ jest.mock('server-only', () => ({}));
 jest.mock('@/lib/db/tenant', () => ({ createTenantClient: jest.fn(() => db) }));
 jest.mock('@/features/notifications/server/notifications.service', () => ({
   notify: (...args: unknown[]) => mockNotify(...args),
+}));
+jest.mock('@/features/requests/server/requests.service', () => ({
+  closeRequests: (...args: unknown[]) => mockCloseRequests(...args),
 }));
 
 import { listModuleAccess, setModuleAccess } from '@/features/cohorts/server/module-access.service';
@@ -42,9 +47,32 @@ beforeEach(() => {
   db.enrollmentModule.findFirst.mockResolvedValue(null);
   tx.enrollmentModule.create.mockResolvedValue({ id: 'em-1' });
   tx.enrollmentModule.update.mockResolvedValue({ id: 'em-1' });
+  db.accessRequest.findMany.mockResolvedValue([]);
 });
 
 describe('setModuleAccess', () => {
+  // 6/10: si el estudiante lo había pedido, la solicitud queda hecha en la misma transacción.
+  it('habilitar cierra la solicitud abierta de ese componente', async () => {
+    await setModuleAccess({ ...BASE, moduleId: 'mod-2', unlocked: true });
+
+    expect(mockCloseRequests).toHaveBeenCalledWith(
+      tx,
+      { kind: 'UNLOCK', enrollmentId: 'enr-1', moduleId: 'mod-2' },
+      { actorId: 'staff-1', now: NOW }
+    );
+  });
+
+  it('bloquear no toca las solicitudes', async () => {
+    db.enrollmentModule.findFirst.mockResolvedValue({
+      id: 'em-1',
+      availableFrom: null,
+      availableUntil: null,
+    });
+    await setModuleAccess({ ...BASE, moduleId: 'mod-2', unlocked: false });
+
+    expect(mockCloseRequests).not.toHaveBeenCalled();
+  });
+
   it('habilitar crea la fila con quién y cuándo, audita `unlock` y avisa al estudiante', async () => {
     const result = await setModuleAccess({ ...BASE, moduleId: 'mod-2', unlocked: true });
 
@@ -219,6 +247,28 @@ describe('listModuleAccess', () => {
       availableFrom: null,
       availableUntil: '2026-12-15',
     });
+  });
+
+  it('dice cuándo pidió el estudiante el componente bloqueado (6/10)', async () => {
+    db.module.findMany.mockResolvedValue([
+      { id: 'mod-1', name: 'Fundamentos', position: 1 },
+      { id: 'mod-2', name: 'Consolidación', position: 2 },
+    ]);
+    db.enrollmentModule.findMany.mockResolvedValue([]);
+    db.accessRequest.findMany.mockResolvedValue([{ moduleId: 'mod-2', createdAt: NOW }]);
+
+    const result = await listModuleAccess({
+      institutionId: 'inst-1',
+      enrollmentId: 'enr-1',
+      now: NOW,
+    });
+
+    expect(db.accessRequest.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { enrollmentId: 'enr-1', kind: 'UNLOCK', status: 'PENDING' },
+      })
+    );
+    expect(result.modules.map((m) => m.requestedAt)).toEqual([null, NOW.toISOString()]);
   });
 
   it('en una cohorte FREE no aplica y todo está abierto', async () => {

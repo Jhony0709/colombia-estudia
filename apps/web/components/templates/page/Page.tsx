@@ -17,6 +17,11 @@ export interface PageProps {
    * el 19/9): lista + columna de contexto no caben en 64rem. El resto sigue en `max-w-content`.
    */
   wide?: boolean;
+  /**
+   * La pantalla entra como un bloque (6/10, experiencia-colombia-estudia §6). No en pantallas
+   * con barras fijas dentro: el `transform` de la entrada las ataría a la página mientras dura.
+   */
+  enter?: boolean;
 }
 
 /**
@@ -28,12 +33,13 @@ export interface PageProps {
  * y la tarjeta ancha es lo que se lee a saltos. El texto corrido sigue limitado por
  * `max-w-reading` allí donde se lee; esto solo es el ancho del marco.
  */
-export function Page({ children, wide = false }: PageProps) {
+export function Page({ children, wide = false, enter = false }: PageProps) {
   return (
     <div
       className={cn(
         'mx-auto w-full space-y-8 px-4 py-8 sm:px-6',
-        wide ? 'max-w-site' : 'max-w-content'
+        wide ? 'max-w-site' : 'max-w-content',
+        enter && 'motion-enter'
       )}
     >
       {children}
@@ -123,7 +129,9 @@ export function PageSection({
   const headingId = `${id ?? title.toLowerCase().replace(/\s+/g, '-')}-heading`;
 
   return (
-    <section aria-labelledby={headingId} className="space-y-4">
+    // `id` en la sección (7/10): los enlaces `#componentes` o `#cursos-abiertos` apuntaban a nada;
+    // solo el título tenía id, con sufijo. `scroll-mt` deja la sección bajo la barra fija.
+    <section id={id} aria-labelledby={headingId} className="scroll-mt-24 space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div className="space-y-1">
           <h2 id={headingId} className="type-subheading text-text">

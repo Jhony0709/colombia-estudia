@@ -186,6 +186,14 @@ export const designTokensPlugin = plugin(
       '--duration-fast': '150ms',
       '--duration-normal': '300ms',
       '--duration-slow': '500ms',
+      '--duration-stagger': '60ms',
+      '--duration-type-char': '8ms',
+    };
+
+    // Cuánto sube una entrada (6/10, experiencia-colombia-estudia).
+    const motionDistanceVars = {
+      '--motion-distance-sm': '0.25rem',
+      '--motion-distance-md': '0.5rem',
     };
 
     // Easing variables
@@ -219,6 +227,7 @@ export const designTokensPlugin = plugin(
         ...sizeVars,
         ...densityVars,
         ...durationVars,
+        ...motionDistanceVars,
         ...easingVars,
         ...elevationVars,
       },
@@ -494,6 +503,7 @@ export const designTokensPlugin = plugin(
         fast: 'var(--duration-fast)',
         normal: 'var(--duration-normal)',
         slow: 'var(--duration-slow)',
+        stagger: 'var(--duration-stagger)',
       },
       transitionTimingFunction: {
         standard: 'var(--easing-standard)',

@@ -52,7 +52,7 @@ const STAFF_CAPABILITIES: readonly Capability[] = [
 
 /**
  * El orden de la pantalla es **el orden en que se crea un curso** (Jhonny, 19/9), que es el
- * que impone el modelo: una asignatura y un programa antes que un tema (`Lesson.subjectId` y
+ * que impone el modelo: un programa y un taller antes que un tema (`Lesson.subjectId` y
  * `moduleId` son obligatorios), los temas y evaluaciones publicados antes de abrir una
  * cohorte (`openCohort` falla si falta alguna versión publicada), y la cohorte antes que las
  * matrículas. Leer la barra de arriba abajo enseña el modelo sin abrir la ayuda.
@@ -64,25 +64,29 @@ const STAFF_CAPABILITIES: readonly Capability[] = [
 const NAV: readonly NavDefinition[] = [
   // Ola 3 (23/9): la pantalla de situación, arriba del todo y para todo el staff.
   { href: '/inicio', label: 'Inicio', capability: 'staff', section: 'inicio' },
-  {
-    href: '/contenido/asignaturas',
-    label: 'Asignaturas',
-    capability: 'institution.manage',
-    section: 'plan',
-  },
+  // Nombres del modelo de negocio (7/10): programa → componente → taller → tema → cuestionario.
   {
     href: '/contenido/programas',
     label: 'Programas',
     capability: 'institution.manage',
     section: 'plan',
   },
+  {
+    href: '/contenido/asignaturas',
+    label: 'Talleres',
+    capability: 'institution.manage',
+    section: 'plan',
+  },
   { href: '/contenido/temas', label: 'Temas', capability: 'lesson.author', section: 'contenido' },
   {
     href: '/contenido/examenes',
-    label: 'Exámenes',
+    label: 'Cuestionarios',
     capability: 'lesson.author',
     section: 'contenido',
   },
+  // Lo que piden los estudiantes (6/10): matricularse en un curso de pago o seguir al
+  // siguiente componente. Primero de Operación: es lo que alguien está esperando.
+  { href: '/solicitudes', label: 'Solicitudes', capability: 'cohort.manage', section: 'operacion' },
   { href: '/cohortes', label: 'Cohortes', capability: 'cohort.manage', section: 'operacion' },
   { href: '/personas', label: 'Personas', capability: 'people.manage', section: 'operacion' },
   { href: '/cartera', label: 'Cartera', capability: 'billing.manage', section: 'operacion' },

@@ -21,6 +21,9 @@ ganan sobre esta skill, y esta skill gana sobre cualquier skill externa o intuic
 - **deslizar**: solo para sheets desde el borde inferior en móvil y para el panel de
   transcripción. Nada más se desliza.
 - **pulse / parpadeo**: PROHIBIDO en texto y en el cronómetro. Veto explícito.
+- **entrada, escalera, tecleo, eco, conteo, apagado** (6/10): los define
+  `experiencia-colombia-estudia` §2 para lo que ve el estudiante, con estas mismas reglas. La
+  entrada sube 4 px (`motion.distance.sm`): no cuenta como «deslizar».
 
 ## Doctrina (reglas no negociables)
 

@@ -393,7 +393,7 @@ describe('publishAssessment', () => {
 
     await expect(
       publishAssessment({ institutionId: 'i1', actorId: 'p1', versionId: 'v1' })
-    ).rejects.toThrow(/impiden publicarla/);
+    ).rejects.toThrow(/impiden publicarlo/);
 
     expect(mockVersionUpdate).not.toHaveBeenCalled();
   });
@@ -406,7 +406,7 @@ describe('publishAssessment', () => {
 
     await expect(
       publishAssessment({ institutionId: 'i1', actorId: 'p1', versionId: 'v1' })
-    ).rejects.toThrow(/impiden publicarla/);
+    ).rejects.toThrow(/impiden publicarlo/);
   });
 
   // La fuga que la regla SÍ detecta: la estructural.
@@ -418,7 +418,7 @@ describe('publishAssessment', () => {
 
     await expect(
       publishAssessment({ institutionId: 'i1', actorId: 'p1', versionId: 'v1' })
-    ).rejects.toThrow(/impiden publicarla/);
+    ).rejects.toThrow(/impiden publicarlo/);
   });
 
   it('una versión publicada no se vuelve a publicar', async () => {

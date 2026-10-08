@@ -136,7 +136,7 @@ export default async function LibraryPage({
   const filteredEmpty = !empty && modules.length === 0 && recordings.length === 0;
 
   return (
-    <Page>
+    <Page enter>
       <PageHeader title={tl('title')} description={tl('description')} />
       {empty ? (
         <EmptyState icon={Library} title={tl('empty')} description={tl('emptyHint')} />

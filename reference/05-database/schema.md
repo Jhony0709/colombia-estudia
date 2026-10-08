@@ -77,6 +77,14 @@ matrícula; borrarla vuelve a bloquear. El primero de la ruta no necesita fila. 
 `Assessment.closingText` (3/10) es el «Aprender es avanzar» del taller; manda sobre
 `Module.closingText`.
 
+**Lo que pide el estudiante (6/10).** `AccessRequest` (`kind` `ENROLL | UNLOCK`, `status`
+`PENDING | DONE | DISMISSED`; `personId`, `cohortId`, `moduleId`, `enrollmentId` solo en
+`UNLOCK` por `CHECK`; `resolvedAt`, `resolvedById` → `Person` `SET NULL`). Índice único parcial:
+una sola `PENDING` por persona, tipo, cohorte y componente. No se resuelve a mano: `enrollPerson`
+y `setModuleAccess` la cierran (`DONE`) en su transacción; descartar audita
+`access_request.dismissed`. RLS como el resto (en su migración). En `TENANT_SCOPED_MODELS` desde
+el 6/10, junto con `EnrollmentModule`, que faltaba desde el 3/10.
+
 **`answerKey` separado de `content`** y excluido del cliente Prisma por defecto (`omit`).
 La única lectura es `grading.ts`. Un `include` olvidado no filtra las respuestas.
 

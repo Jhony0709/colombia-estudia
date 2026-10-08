@@ -52,6 +52,16 @@ const PUBLIC_ROUTES = new Map([
     'learn/catalog/[cohortId]/enroll/route.ts',
     'exige sesión; se inscribe a sí mismo y solo en cohortes abiertas de programas gratuitos',
   ],
+  // 6/10: pedir la matrícula de un curso de pago. No matricula; avisa al equipo.
+  [
+    'learn/catalog/[cohortId]/request/route.ts',
+    'exige sesión; avisa al equipo de su propia solicitud y solo en cohortes abiertas de pago',
+  ],
+  // 6/10: pedir que habiliten el siguiente componente de la propia matrícula.
+  [
+    'learn/enrollments/[enrollmentId]/modules/[moduleId]/request/route.ts',
+    'exige sesión; solo la matrícula propia (personId de la sesión) y un componente LOCKED',
+  ],
   // Fases 5 y 6 (19/9): tres rutas que se autentican por otra cosa que una capacidad.
   [
     'certificates/[code]/route.ts',

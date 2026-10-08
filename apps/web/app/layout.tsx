@@ -3,6 +3,7 @@ import { cookies, headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { THEME_COOKIE, themeClass, themeColorScheme, toTheme } from '@/lib/theme/theme';
+import { MOTION_COOKIE, toMotionPreference } from '@/lib/motion/preference';
 import { AnnounceProvider } from '@/lib/a11y/announce';
 import { AccessibilityPreferencesProvider } from '@/lib/a11y/preferences-provider';
 import { TooltipProvider } from '@/components/atoms/tooltip';
@@ -67,12 +68,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     página prerenderizada esta cookie no existiría en tiempo de build.
   */
   const theme = toTheme(cookieStore.get(THEME_COOKIE)?.value);
+  // Movimiento reducido elegido en la plataforma (6/10): igual que el tema, desde el servidor.
+  const motion = toMotionPreference(cookieStore.get(MOTION_COOKIE)?.value);
 
   return (
     // `atkinson.variable` define --font-sans, que el plugin de design-tokens usa como
     // primera familia de `fontFamily.sans`. Si la fuente no cargara, el token cae
     // al stack del sistema y nada se rompe.
-    <html lang="es-CO" className={`${atkinson.variable} ${themeClass(theme)}`.trim()}>
+    <html
+      lang="es-CO"
+      className={`${atkinson.variable} ${themeClass(theme)}`.trim()}
+      data-motion={motion === 'reduced' ? 'reduced' : undefined}
+    >
       <body>
         <NextIntlClientProvider messages={messages}>
           <AccessibilityPreferencesProvider>

@@ -191,7 +191,7 @@
         "archived": "Precio archivado.",
         "archive": "Archivar",
         "confirmArchive": "Confirmar archivado",
-        "inUse": "{count, plural, one {usado en 1 plan de pagos} other {usado en # planes de pagos}}",
+        "inUse": "{count, plural, one {En 1 plan de pagos} other {En # planes de pagos}}",
         "cancel": "Cancelar",
         "save": "Guardar el precio",
         "colGrades": "Grados",
@@ -216,7 +216,26 @@
         "gradesHint": "Vacío = todo el programa. Para bachillerato: 6 a 8, 9 a 11.",
         "validFrom": "Vigente desde",
         "validTo": "Vigente hasta",
-        "validToHint": "Vacío = sin fecha de fin."
+        "validToHint": "Vacío = sin fecha de fin. Incluye todo ese día.",
+        "colState": "Hoy",
+        "state": {
+          "CURRENT": "Se cobra",
+          "SCHEDULED": "Programado",
+          "REPLACED": "Reemplazado",
+          "EXPIRED": "Vencido"
+        },
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirmDelete": "Eliminar el precio",
+        "deleteHint": "Ningún plan de pagos lo usa: se borra y queda en la auditoría.",
+        "archiveHint": "Ya lo usan planes de pagos: lo conservan, pero deja de ofrecerse.",
+        "deleted": "Precio eliminado.",
+        "saved": "Precio actualizado.",
+        "saveChanges": "Guardar los cambios",
+        "newTitle": "Nuevo precio",
+        "editTitle": "Editar el precio",
+        "replacesHint": "Desde ese día reemplaza al que se cobra hoy para los mismos grados.",
+        "freeProgram": "Programa gratuito: no lleva precio."
       },
       "programs": "Programas",
       "programsHint": "{count, plural, =0 {Todavía no hay ningún programa} one {Un programa} other {# programas}}. Un programa agrupa los componentes que recorre una cohorte.",
@@ -279,15 +298,15 @@
       "confirmDelete": "Confirmar eliminación",
       "moduleMoved": "Orden actualizado.",
       "lessonCount": "{count, plural, =0 {sin temas} one {# tema} other {# temas}}",
-      "subjects": "Asignaturas",
-      "subjectsHint": "{count, plural, =0 {Todavía no hay ninguna asignatura} one {Una asignatura} other {# asignaturas}}. Cada tema pertenece a una.",
-      "subjectsEmpty": "Aún no hay asignaturas. Crea la primera.",
-      "newSubject": "Nombre de la nueva asignatura",
+      "subjects": "Talleres",
+      "subjectsHint": "{count, plural, =0 {Todavía no hay ningún taller} one {Un taller} other {# talleres}}. Cada tema pertenece a uno.",
+      "subjectsEmpty": "Aún no hay talleres. Crea el primero.",
+      "newSubject": "Nombre del nuevo taller",
       "subjectName": "Nombre",
       "subjectCode": "Código",
-      "subjectCreated": "Asignatura creada.",
-      "subjectSaved": "Asignatura actualizada.",
-      "subjectArchived": "Asignatura archivada.",
+      "subjectCreated": "Taller creado.",
+      "subjectSaved": "Taller actualizado.",
+      "subjectArchived": "Taller archivado.",
       "add": "Añadir",
       "create": "Crear",
       "save": "Guardar",
@@ -302,8 +321,8 @@
       "moveDownNamed": "Bajar {name}",
       "moveUp": "Subir",
       "moveDown": "Bajar",
-      "newSubjectTitle": "Nueva asignatura",
-      "subjectsListTitle": "Asignaturas de la institución",
+      "newSubjectTitle": "Nuevo taller",
+      "subjectsListTitle": "Talleres de la institución",
       "table": {
         "grade": "Grado",
         "caption": "Programas de la institución, con sus componentes, temas y días de acceso",
@@ -545,7 +564,7 @@
       "program": "Programa: {name}",
       "modules": "{count, plural, one {# componente} other {# componentes}}",
       "lessons": "{count, plural, =0 {Ningún tema publicado} one {# tema publicado} other {# temas publicados}}",
-      "assessments": "{count, plural, =0 {Ningún examen publicado} one {# examen publicado} other {# exámenes publicados}}",
+      "assessments": "{count, plural, =0 {Ningún cuestionario publicado} one {# cuestionario publicado} other {# cuestionarios publicados}}",
       "enrollments": "{count, plural, =0 {Nadie matriculado todavía} one {# persona matriculada} other {# personas matriculadas}}",
       "dates": "{startsOn} → {endsOn} · {progression}",
       "missingTitle": "{count, plural, one {# pieza sigue en borrador y no se asignará} other {# piezas siguen en borrador y no se asignarán}}",
@@ -569,7 +588,7 @@
     },
     "missingKind": {
       "lesson": "Tema sin versión publicada",
-      "assessment": "Examen sin versión publicada"
+      "assessment": "Cuestionario sin versión publicada"
     },
     "overline": "Operación",
     "description": "Cada cohorte agrupa a quienes estudian el mismo programa en las mismas fechas.",
@@ -577,7 +596,7 @@
     "emptyFilteredHint": "Prueba con otro estado o quita el filtro.",
     "newCohortHint": "Queda planeada: no admite contenido asignado hasta que la abras.",
     "statusTitle": "Estado de la cohorte",
-    "plannedNotice": "Esta cohorte está planeada: los estudiantes matriculados todavía no pueden entrar a estudiar. Ábrela cuando el contenido esté listo — al abrirla se congela la versión publicada de cada tema y de cada examen.",
+    "plannedNotice": "Esta cohorte está planeada: los estudiantes matriculados todavía no pueden entrar a estudiar. Ábrela cuando el contenido esté listo — al abrirla se congela la versión publicada de cada tema y de cada cuestionario.",
     "openNotice": "Esta cohorte está abierta: quien tenga matrícula activa puede entrar a estudiar.",
     "home": "Inicio",
     "search": "Buscar",
@@ -612,6 +631,7 @@
         "enrollment_created": "Matrícula registrada",
         "enrollment_withdrawn": "Matrícula retirada",
         "enrollment_extended": "Acceso prorrogado",
+        "enrollment_completed": "Matrícula completada",
         "other": "{entity}: {action}",
         "import_run": "Importación de estudiantes"
       }
@@ -628,7 +648,7 @@
       "added": "{count, plural, one {# pieza añadida} other {# piezas añadidas}}.",
       "kind": {
         "lesson": "Tema",
-        "assessment": "Examen"
+        "assessment": "Cuestionario"
       }
     },
     "progress": "Avance",
@@ -675,9 +695,9 @@
     "route": {
       "title": "La ruta de esta cohorte",
       "plannedTitle": "Todavía no hay nada asignado",
-      "plannedHint": "Al abrir la cohorte se asigna la versión publicada de cada tema y examen. Hasta entonces, la ruta vive en el constructor del programa.",
+      "plannedHint": "Al abrir la cohorte se asigna la versión publicada de cada tema y cuestionario. Hasta entonces, la ruta vive en el constructor del programa.",
       "emptyModule": "Este componente no tiene nada asignado en esta cohorte.",
-      "programItems": "Exámenes del programa",
+      "programItems": "Cuestionarios del programa",
       "version": "v{number}",
       "updateTo": "Actualizar a v{number}",
       "reopens": "Reabre el tema a quien ya lo completó",
@@ -827,7 +847,8 @@
       "reviewSubmissions": "Revisar actividades",
       "viewLesson": "Ver el tema",
       "fixSubmission": "Corregir la actividad",
-      "viewPerson": "Ver la persona"
+      "viewPerson": "Ver la persona",
+      "reviewRequest": "Ver la solicitud"
     },
     "emptyTitle": "Todavía no tienes avisos",
     "emptyHint": "Aquí aparecerán las solicitudes y los cambios que necesiten tu atención.",
@@ -872,8 +893,8 @@
     "colTitle": "Tema",
     "colCode": "Código",
     "colModule": "Componente",
-    "colLesson": "Examen del tema",
-    "colSubject": "Asignatura",
+    "colLesson": "Tema",
+    "colSubject": "Taller",
     "colPosition": "Orden",
     "colStatus": "Estado",
     "colFlags": "Notas",
@@ -887,37 +908,37 @@
     "flagSubmission": "Con actividad",
     "emptyTitle": "Todavía no hay temas",
     "emptyHint": "Crea el primero con «Nuevo tema».",
-    "assessmentsTitle": "{count, plural, one {1 examen} other {# exámenes}}",
-    "assessmentsCaption": "Exámenes del programa con su estado de publicación",
+    "assessmentsTitle": "{count, plural, one {1 cuestionario} other {# cuestionarios}}",
+    "assessmentsCaption": "Cuestionarios del programa con su estado de publicación",
     "colKind": "Tipo",
     "colQuestions": "Preguntas",
-    "emptyAssessmentsTitle": "Todavía no hay exámenes",
-    "emptyAssessmentsHint": "Crea el primero con «Nuevo examen».",
+    "emptyAssessmentsTitle": "Todavía no hay cuestionarios",
+    "emptyAssessmentsHint": "Crea el primero con «Nuevo cuestionario».",
     "kind": {
       "DIAGNOSTIC": "Diagnóstico",
-      "SUBJECT": "Parcial",
+      "SUBJECT": "Del taller",
       "FINAL": "Final"
     },
     "createLessonTitle": "Crear un tema",
     "createLessonHint": "Al crearlo se abre su borrador para que empieces a escribirlo.",
-    "createAssessmentTitle": "Crear un examen",
+    "createAssessmentTitle": "Crear un cuestionario",
     "createAssessmentHint": "Nace vacío y sin clave de respuestas: no se puede publicar hasta que tenga preguntas.",
     "createLesson": "Crear el tema y empezar a escribir",
-    "createAssessment": "Crear el examen",
+    "createAssessment": "Crear el cuestionario",
     "formTitle": "Título",
     "formModule": "Componente",
-    "formSubject": "Asignatura",
+    "formSubject": "Taller",
     "formProgram": "Programa",
     "formKind": "Tipo",
     "formNoModule": "Sin componente",
-    "formLesson": "Examen del tema",
-    "formLessonHint": "Con un tema, el examen aparece justo después de ese tema. Sin tema, al final del componente.",
+    "formLesson": "Tema",
+    "formLessonHint": "Con un tema, el cuestionario aparece justo después de ese tema. Sin tema, al final del componente.",
     "formNoLesson": "Del componente (al final)",
     "formRequiresSubmission": "Este tema se completa con una actividad revisada, no leyéndolo",
-    "createNeedsCurriculum": "Para crear un tema hacen falta al menos un componente y una asignatura. Los componentes se crean dentro de su programa, en Programas; las asignaturas, en Asignaturas.",
-    "createNeedsProgram": "Para crear un examen hace falta al menos un programa. Se crea en Programas.",
+    "createNeedsCurriculum": "Para crear un tema hacen falta al menos un componente y un taller. Los componentes se crean dentro de su programa, en Programas; los talleres, en Talleres.",
+    "createNeedsProgram": "Para crear un cuestionario hace falta al menos un programa. Se crea en Programas.",
     "filterSearch": "Buscar un tema",
-    "filterSearchHint": "Por título, componente o asignatura. Las tildes dan igual.",
+    "filterSearchHint": "Por título, componente o taller. Las tildes dan igual.",
     "filterProgram": "Programa",
     "filterProgramAll": "Todos los programas",
     "filterStatus": "Estado",
@@ -941,22 +962,22 @@
     "noMatchesTitle": "Ningún tema coincide",
     "noMatchesHint": "Prueba con otra palabra, o quita los filtros.",
     "lessonsTitle": "Temas",
-    "assessmentsPageTitle": "Exámenes",
-    "assessmentsSummary": "{total, plural, =0 {Todavía no hay exámenes} other {Un examen se publica cuando tiene preguntas y clave de respuestas}}.",
+    "assessmentsPageTitle": "Cuestionarios",
+    "assessmentsSummary": "{total, plural, =0 {Todavía no hay cuestionarios} other {Un cuestionario se publica cuando tiene preguntas y clave de respuestas}}.",
     "newLesson": "Nuevo tema",
-    "newAssessment": "Nuevo examen",
+    "newAssessment": "Nuevo cuestionario",
     "stats": {
       "label": "Indicadores",
       "lessons": "Temas",
       "published": "Publicados",
       "drafts": "Solo borrador",
       "withSubmission": "Con actividad",
-      "assessments": "Exámenes",
+      "assessments": "Cuestionarios",
       "assessmentsPublished": "Publicados",
       "noVersion": "Sin versión",
       "questions": "Preguntas en total"
     },
-    "colAssessmentTitle": "Examen"
+    "colAssessmentTitle": "Cuestionario"
   },
   "editor": {
     "versionLine": "Borrador, versión {number}",
@@ -1025,7 +1046,7 @@
     "detailsObjectiveHint": "Qué debe poder hacer el estudiante al terminar. Aparece bajo el título en la pantalla del estudiante.",
     "detailsFieldClosing": "Mensaje de cierre («Aprender es avanzar»)",
     "detailsClosingHint": "Se muestra al terminar este cuestionario, antes de pasar al siguiente taller. Si se deja vacío, se usa el del componente o el mensaje general.",
-    "detailsFieldSubject": "Asignatura",
+    "detailsFieldSubject": "Taller",
     "detailsFieldModule": "Componente",
     "detailsRequiresSubmission": "Este tema se completa con una actividad revisada, no leyéndolo",
     "detailsLockedPublished": "No se puede cambiar: el tema ya tiene una versión publicada, y cambiarlo ahora reordenaría la ruta o cambiaría qué lo da por completado a quien lo está estudiando.",
@@ -1040,14 +1061,14 @@
     "delete": {
       "open": "Eliminar el tema",
       "title": "Eliminar «{title}»",
-      "body": "{versions, plural, one {Se borra el tema con su única versión} other {Se borra el tema con sus # versiones}} y no se puede deshacer. Solo es posible porque ninguna cohorte lo tiene asignado y no tiene examen del tema.",
+      "body": "{versions, plural, one {Se borra el tema con su única versión} other {Se borra el tema con sus # versiones}} y no se puede deshacer. Solo es posible porque ninguna cohorte lo tiene asignado y no tiene cuestionario del tema.",
       "confirmLabel": "Escribe el título del tema para confirmar",
       "confirm": "Eliminar definitivamente",
       "cancel": "Cancelar",
       "error": "No se pudo eliminar. Inténtalo otra vez.",
       "blocked": {
         "assigned": "Este tema ya está en una cohorte, así que no se puede eliminar: si sobra, archívalo y quien ya lo tiene asignado lo seguirá viendo.",
-        "hasExam": "Este tema tiene un examen del tema: elimina o desvincula el examen antes de poder eliminar el tema."
+        "hasExam": "Este tema tiene un cuestionario del tema: elimina o desvincula el cuestionario antes de poder eliminar el tema."
       }
     },
     "helpTitle": "Cómo se escribe un tema",
@@ -1113,10 +1134,10 @@
       "minutes": "Duración",
       "minutesOk": "{minutes} min estimados",
       "minutesMissing": "Sin minutos estimados",
-      "exam": "Examen del tema",
+      "exam": "Cuestionario del tema",
       "examNone": "Ninguno todavía",
       "examOne": "«{title}» · {status, select, published {publicado} other {en borrador}}",
-      "examMany": "{count} exámenes · {published} publicados",
+      "examMany": "{count} cuestionarios · {published} publicados",
       "examLink": "Añadir desde la ruta",
       "publish": "Publicación",
       "publishNone": "Sin versión publicada",
@@ -1161,20 +1182,20 @@
   },
   "assessmentEditor": {
     "versionLine": "Borrador, versión {number}",
-    "detailsTitle": "Datos del examen",
-    "detailsFieldTitle": "Título del examen",
-    "detailsFieldSubject": "Asignatura",
-    "detailsNoSubject": "Sin asignatura",
+    "detailsTitle": "Datos del cuestionario",
+    "detailsFieldTitle": "Título del cuestionario",
+    "detailsFieldSubject": "Taller",
+    "detailsNoSubject": "Sin taller",
     "detailsFieldObjective": "Objetivo de aprendizaje",
     "detailsObjectiveHint": "Qué debe demostrar el estudiante al aprobarlo. Opcional.",
-    "detailsLockedPublished": "No se puede cambiar: el examen ya tiene una versión publicada, y moverlo ahora cambiaría el sitio que ocupa en la ruta de quien lo está estudiando.",
+    "detailsLockedPublished": "No se puede cambiar: el cuestionario ya tiene una versión publicada, y moverlo ahora cambiaría el sitio que ocupa en la ruta de quien lo está estudiando.",
     "detailsSave": "Guardar los datos",
     "detailsSaved": "Datos guardados.",
     "detailsError": "No se pudieron guardar los datos. Inténtalo otra vez.",
     "kind": {
-      "DIAGNOSTIC": "Examen diagnóstico",
-      "SUBJECT": "Examen parcial",
-      "FINAL": "Examen final"
+      "DIAGNOSTIC": "Cuestionario diagnóstico",
+      "SUBJECT": "Cuestionario del taller",
+      "FINAL": "Cuestionario final"
     },
     "questionsLabel": "Preguntas",
     "questionsHint": "Cada pregunta necesita su enunciado, cuánto vale y —salvo en respuesta escrita— sus opciones.",
@@ -1205,14 +1226,14 @@
     "keyLoadError": "No se pudo cargar la clave.",
     "keySaveError": "No se pudo guardar la clave.",
     "issuesTitle": "Avisos",
-    "validating": "Revisando el examen…",
-    "noIssues": "El examen cumple las reglas de publicación.",
+    "validating": "Revisando el cuestionario…",
+    "noIssues": "El cuestionario cumple las reglas de publicación.",
     "error": "Impide publicar",
     "warning": "Aviso",
     "publishTitle": "Publicar",
-    "readyToPublish": "El examen está listo. Las cohortes que ya lo tienen siguen con la versión que tienen asignada hasta que la cambies desde la cohorte.",
+    "readyToPublish": "El cuestionario está listo. Las cohortes que ya lo tienen siguen con la versión que tienen asignada hasta que la cambies desde la cohorte.",
     "blockedErrors": "{count, plural, one {Hay 1 problema que impide publicar} other {Hay # problemas que impiden publicar}}.",
-    "blockedCapability": "Puedes editar este examen, pero publicarlo lo decide alguien con permiso de publicación.",
+    "blockedCapability": "Puedes editar este cuestionario, pero publicarlo lo decide alguien con permiso de publicación.",
     "publish": "Publicar esta versión",
     "publishedOk": "Publicada la versión {number}.",
     "publishError": "No se pudo publicar. Revisa los avisos.",
@@ -1238,14 +1259,14 @@
     "keyNoQuestions": "Añade preguntas primero: la clave se marca sobre ellas.",
     "keyPickOne": "Cuál es la correcta",
     "keyPickMany": "Cuáles son correctas",
-    "keyMissingHere": "Sin respuesta marcada. El examen no se puede publicar así.",
+    "keyMissingHere": "Sin respuesta marcada. El cuestionario no se puede publicar así.",
     "keyAcceptedAnswers": "Respuestas que se dan por buenas",
     "keyAcceptedHint": "Se comparan sin distinguir mayúsculas. Añade las formas de escribirlo que quieras aceptar.",
     "keyAnswerNumber": "Respuesta {number}",
     "keyAddAnswer": "Añadir otra forma de responder",
     "keyRemoveAnswer": "Quitar",
     "keyFeedback": "Qué se le dice al estudiante",
-    "keyFeedbackHint": "Opcional. Aparece al ver el resultado, según lo que muestre el examen.",
+    "keyFeedbackHint": "Opcional. Aparece al ver el resultado, según lo que muestre el cuestionario.",
     "type": {
       "single_choice": "Una sola respuesta",
       "multiple_choice": "Varias respuestas",
@@ -1270,14 +1291,14 @@
     "removeCancel": "Dejarla como está",
     "confirmPublish": "Sí, publicar",
     "cancel": "Cancelar",
-    "confirmPending": "{count, plural, one {La cohorte abierta {list} no tiene este examen todavía: podrá añadirlo} other {Las cohortes abiertas {list} no tienen este examen todavía: podrán añadirlo}} desde «Actualizaciones del programa».",
-    "confirmFollowing": "{following, plural, =0 {Ninguna cohorte abierta recibe esta versión al publicar} one {La cohorte abierta que sigue la última versión la recibe al publicar; los intentos ya abiertos conservan su examen} other {Las # cohortes abiertas que siguen la última versión la reciben al publicar; los intentos ya abiertos conservan su examen}}{pinned, plural, =0 {.} one {; una está fijada en su versión y se mueve desde la cohorte.} other {; # están fijadas en su versión y se mueven desde la cohorte.}}",
+    "confirmPending": "{count, plural, one {La cohorte abierta {list} no tiene este cuestionario todavía: podrá añadirlo} other {Las cohortes abiertas {list} no tienen este cuestionario todavía: podrán añadirlo}} desde «Actualizaciones del programa».",
+    "confirmFollowing": "{following, plural, =0 {Ninguna cohorte abierta recibe esta versión al publicar} one {La cohorte abierta que sigue la última versión la recibe al publicar; los intentos ya abiertos conservan su cuestionario} other {Las # cohortes abiertas que siguen la última versión la reciben al publicar; los intentos ya abiertos conservan su cuestionario}}{pinned, plural, =0 {.} one {; una está fijada en su versión y se mueve desde la cohorte.} other {; # están fijadas en su versión y se mueven desde la cohorte.}}",
     "readiness": {
       "route": "En la ruta",
       "routeDetail": "{program} · Componente {position} «{module}»",
-      "routeOfLesson": "examen de «{title}»",
-      "routeOfModule": "examen del componente",
-      "routeOfProgram": "examen del programa, fuera de la ruta",
+      "routeOfLesson": "cuestionario de «{title}»",
+      "routeOfModule": "cuestionario del componente",
+      "routeOfProgram": "cuestionario del programa, fuera de la ruta",
       "routeLink": "Ver la ruta",
       "questions": "Preguntas",
       "questionsNone": "Ninguna todavía",
@@ -1299,6 +1320,20 @@
     }
   },
   "learn": {
+    "preview": {
+      "title": "Contenido",
+      "lockedFree": "Se abre cuando te inscribes. Aquí ves todo lo que trae.",
+      "lockedPaid": "Se abre cuando el equipo complete tu matrícula. Aquí ves todo lo que trae.",
+      "beforeEntry": "No está en tu ruta: tu matrícula empieza en un componente posterior. Si necesitas tomarlo, escríbenos.",
+      "moduleItems": "Del componente",
+      "locked": "Bloqueado",
+      "siblings": "Otros componentes de {program}"
+    },
+    "course": {
+      "seeRoute": "Ver la ruta del curso",
+      "progress": "{completed} de {total} completados · {percent} %",
+      "routeTitle": "Tu ruta"
+    },
     "title": "Aprender",
     "free": "Gratis",
     "dashboardTitle": "Mis programas",
@@ -1320,14 +1355,14 @@
     "moduleSummary": "{completed} de {total} completados{minutes, plural, =0 {} other { · # min}}",
     "moduleLocked": "Se abre al completar “{title}”",
     "moduleAccess": {
-      "LOCKED": "Se habilita cuando el equipo lo active. Escríbenos cuando quieras continuar.",
+      "LOCKED": "Se habilita cuando el equipo lo active.",
       "NOT_YET": "Se habilita el {date}.",
       "CLOSED": "Cerró el {date}. Escríbenos si necesitas volver a abrirlo."
     },
     "nextComponent": {
       "overline": "Siguiente componente",
       "title": "Terminaste lo que tienes habilitado",
-      "body": "Lo que sigue es “{module}”. El equipo lo habilita cuando lo pidas: escríbenos y seguimos."
+      "body": "Lo que sigue es «{module}». Pídelo aquí y el equipo lo habilita; te avisamos cuando esté listo."
     },
     "form": {
       "VIDEO": "Vídeo",
@@ -1345,6 +1380,7 @@
     "hero": {
       "resume": "Continúa donde ibas",
       "progress": "{percent} % de {program} · {completed} de {total} completados",
+      "routeSize": "{total, plural, =1 {1 paso} other {# pasos}} en {program}, a tu ritmo",
       "eyebrow": "Tu aprendizaje importa",
       "title": "Sigue avanzando en tu programa",
       "body": "Cada actividad te acerca a nuevas habilidades para tu bienestar y tu futuro.",
@@ -1471,7 +1507,7 @@
     "noSessionHint": "Inicia sesión para ver tu programa.",
     "catalog": {
       "title": "Cursos abiertos",
-      "hint": "Cursos gratuitos en los que puedes inscribirte ahora.",
+      "hint": "Cada componente dice de qué programa hace parte. Los gratuitos empiezan ya; los de pago los matricula el equipo contigo.",
       "noEnrollmentHint": "Todavía no estás en ningún programa. Elige un curso para empezar.",
       "free": "Gratis",
       "grade": "{grade}.º",
@@ -1481,9 +1517,45 @@
       "program": "Programa",
       "dates": "Fechas",
       "dateRange": "Del {from} al {to}",
-      "cta": "Inscribirme",
-      "enrolled": "Quedaste inscrito en {name}. Ya puedes empezar.",
-      "error": "No se pudo completar la inscripción. Inténtalo de nuevo."
+      "cta": "Inscribirme y empezar",
+      "enrolled": "Quedaste inscrito en {name}. Abrimos tu primer tema.",
+      "error": "No se pudo completar la inscripción. Inténtalo de nuevo.",
+      "more": "Más cursos",
+      "paid": "De pago",
+      "price": "{amount} {period}",
+      "period": {
+        "ONE_TIME": "pago único",
+        "MONTHLY": "al mes",
+        "PER_MODULE": "por componente"
+      },
+      "availableUntil": "disponible hasta el {date}",
+      "featuredFree": "Empieza aquí, gratis",
+      "featuredPaid": "Empieza aquí",
+      "request": "Quiero inscribirme",
+      "requested": "Listo: le avisamos al equipo. Te escribirán para completar tu matrícula y el pago.",
+      "requestError": "No pudimos enviar tu solicitud. Inténtalo de nuevo.",
+      "writeUs": "Escribir por WhatsApp",
+      "newTab": "(se abre en una pestaña nueva)",
+      "requestMessage": "Hola, soy {name} y quiero inscribirme en {course}.",
+      "firstHint": "Elige tu primer curso. Los gratuitos empiezan en cuanto te inscribes.",
+      "requestedOn": "Lo pediste el {date}. El equipo te escribe para completar tu matrícula y el pago.",
+      "others": "Cursos que puedes tomar",
+      "componentOf": "Componente {position} de {total}",
+      "componentOfProgram": "Componente {position} de {total} de {program}",
+      "partOf": "Parte de {program}",
+      "workshops": "Talleres",
+      "moreWorkshops": "+{count}",
+      "activityCount": "{count, plural, =1 {1 actividad} other {# actividades}}",
+      "assessmentCount": "{count, plural, =1 {1 cuestionario} other {# cuestionarios}}",
+      "groupMeta": "{count, plural, =1 {1 componente} other {# componentes}} · abierto hasta el {date}",
+      "groupRequested": "Pediste inscribirte el {date}, empezando por {module}. El equipo te escribe para completar tu matrícula y el pago.",
+      "requestedPill": "Solicitado",
+      "priceOnRequest": "Precio a consultar",
+      "showWorkshops": "Ver talleres ({count})",
+      "withQuiz": "con cuestionario",
+      "enrolledPill": "En curso",
+      "completedPill": "Terminado",
+      "goToRoute": "Ir a mi ruta"
     },
     "gate": {
       "NO_ENROLLMENT": {
@@ -1728,6 +1800,7 @@
         "expiredBody": "No había ninguna respuesta guardada cuando venció el plazo, así que este intento no se calificó.",
         "submittedOn": "Entregado el {date}",
         "score": "{value} de {max} ({percent} %)",
+        "scoreRest": " de {max} ({percent} %)",
         "passed": "Aprobado",
         "notPassed": "No aprobado",
         "hidden": "Tu institución decidió no mostrar la nota de este examen."
@@ -1868,6 +1941,9 @@
       "width": "Ancho",
       "widthBase": "Normal",
       "widthNarrow": "Estrecho",
+      "motion": "Movimiento",
+      "motionSystem": "Como mi equipo",
+      "motionReduced": "Reducido en toda la plataforma",
       "hint": "Cómo se ve el texto de los temas en este aparato. Se guarda en tu navegador.",
       "transcriptOpen": "Transcripción siempre desplegada",
       "transcriptOpenHint": "Al abrir un tema con video, la transcripción aparece abierta debajo."
@@ -1958,12 +2034,13 @@
     },
     "completed": {
       "title": "Cursos completados",
-      "hint": "Lo que ya terminaste. Cada constancia se puede verificar con su código.",
-      "finished": "Terminado",
+      "hint": "Los componentes que ya terminaste, con sus talleres. Cada constancia se puede verificar con su código.",
       "finishedOn": "Terminado el {date}",
       "certificate": "Ver constancia",
       "results": "Ver resultados",
-      "nextCourse": "Elegir mi siguiente curso"
+      "nextCourse": "Elegir mi siguiente curso",
+      "workshops": "{count, plural, one {Taller} other {Talleres}}",
+      "lessons": "{count, plural, one {1 tema} other {# temas}}"
     },
     "bar": {
       "needsSubmission": "Te falta enviar la actividad para completar este tema.",
@@ -1983,6 +2060,28 @@
     "switcher": {
       "label": "Cambiar de programa, ahora en {program} · {code}",
       "menu": "Tus programas"
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "read": {
+        "title": "Estudia cada tema",
+        "body": "Se marca como completado cuando lo lees hasta el final o ves el video."
+      },
+      "practice": {
+        "title": "Haz las actividades",
+        "body": "Algunas las revisa tu docente; te avisamos cuando estén aprobadas."
+      },
+      "exam": {
+        "title": "Presenta el examen",
+        "body": "Al final del curso. Con la nota para aprobar recibes tu constancia."
+      }
+    },
+    "dashboardHintFirst": "Empieza por el primer tema. Tu avance aparecerá aquí en cuanto completes el primero.",
+    "unlockRequest": {
+      "cta": "Pedir que lo habiliten",
+      "done": "Listo: pediste habilitar {module}. Te avisamos cuando esté listo.",
+      "requestedOn": "Lo pediste el {date}. Te avisamos cuando esté habilitado.",
+      "error": "No pudimos enviar tu solicitud. Inténtalo de nuevo."
     }
   },
   "issues": {
@@ -2064,7 +2163,7 @@
       "fix": "Revisa el detalle de abajo."
     },
     "questions-required": {
-      "message": "El examen no tiene preguntas.",
+      "message": "El cuestionario no tiene preguntas.",
       "fix": "Añade al menos una pregunta."
     },
     "code-unique": {
@@ -2128,8 +2227,8 @@
       "fix": "Escríbela, o quítala."
     },
     "answer-key-leak": {
-      "message": "El contenido del examen incluye una palabra reservada de la clave de respuestas.",
-      "fix": "Quítala: el examen y el solucionario nunca viajan en el mismo sitio."
+      "message": "El contenido del cuestionario incluye una palabra reservada de la clave de respuestas.",
+      "fix": "Quítala: el cuestionario y el solucionario nunca viajan en el mismo sitio."
     },
     "raw-html": {
       "message": "El contenido tiene HTML escrito a mano.",
@@ -2198,13 +2297,13 @@
       "statesTitle": "Los estados",
       "statesBody": "«Borrador» es una versión que se está escribiendo. «Publicado» es la que las cohortes ven. «Sin publicar» es un tema que aún no ha salido nunca. Publicar un borrador sobre una versión publicada la sustituye para todos.",
       "findTitle": "Buscar y filtrar",
-      "findBody": "El buscador mira el título, el componente y la asignatura, sin distinguir tildes. Los grupos son los componentes, en el orden en que un estudiante los recorre."
+      "findBody": "El buscador mira el título, el componente y el taller, sin distinguir tildes. Los grupos son los componentes, en el orden en que un estudiante los recorre."
     },
     "assessments": {
-      "whatTitle": "Qué es un examen",
-      "whatBody": "Un examen es un cuestionario de un tema, de un componente o del programa entero. Nace vacío y sin clave de respuestas.",
-      "publishTitle": "Publicar un examen",
-      "publishBody": "No se puede publicar hasta que tenga al menos una pregunta y todas tengan su respuesta correcta marcada. El panel del examen dice qué falta, pregunta por pregunta."
+      "whatTitle": "Qué es un cuestionario",
+      "whatBody": "Un cuestionario evalúa un taller, un tema, un componente o el programa entero. Nace vacío y sin clave de respuestas.",
+      "publishTitle": "Publicar un cuestionario",
+      "publishBody": "No se puede publicar hasta que tenga al menos una pregunta y todas tengan su respuesta correcta marcada. El panel del cuestionario dice qué falta, pregunta por pregunta."
     },
     "programs": {
       "whatTitle": "Programas y componentes",
@@ -2213,8 +2312,8 @@
       "archiveBody": "Un programa o un componente archivado sale de las listas y de los desplegables, pero sigue existiendo para las cohortes que ya lo tienen asignado."
     },
     "subjects": {
-      "whatTitle": "Para qué sirve una asignatura",
-      "whatBody": "Cada tema pertenece a una asignatura, y es por ella por lo que se agrupa el progreso y se emiten las certificaciones. El código es una abreviatura para los listados; puede quedar vacío."
+      "whatTitle": "Para qué sirve un taller",
+      "whatBody": "Cada tema pertenece a un taller, y es por él por lo que se agrupa el progreso y se emiten las certificaciones. El mismo taller se repite en varios componentes con temas más avanzados. El código es una abreviatura para los listados; puede quedar vacío."
     }
   },
   "blockEditor": {
@@ -2530,9 +2629,9 @@
     "import": "Importar estudiantes",
     "content": "Contenido",
     "lessons": "Temas",
-    "assessments": "Exámenes",
+    "assessments": "Cuestionarios",
     "programs": "Programas",
-    "subjects": "Asignaturas",
+    "subjects": "Talleres",
     "institution": "Institución",
     "notifications": "Notificaciones",
     "new": "Nuevo"
@@ -2604,7 +2703,7 @@
     "personLink": "Ver la persona",
     "withdrawn": "Retirada. Motivo: {reason}",
     "progressTitle": "Progreso",
-    "progressHint": "{completed} de {total} completados (temas y exámenes).",
+    "progressHint": "{completed} de {total} completados (temas y cuestionarios).",
     "lessonsCaption": "Temas de la cohorte y su estado para esta matrícula",
     "noLessons": "La cohorte no tiene temas asignados",
     "noLessonsHint": "Se asignan al abrir la cohorte.",
@@ -2653,7 +2752,8 @@
       "cancel": "Cancelar",
       "error": "No se pudo guardar. Inténtalo de nuevo.",
       "unlocked": "«{name}» habilitado. El estudiante recibió un aviso.",
-      "locked": "«{name}» bloqueado."
+      "locked": "«{name}» bloqueado.",
+      "requested": "Lo pidió el {date}"
     },
     "override": {
       "open": "Marcar completado",
@@ -2665,14 +2765,14 @@
       "error": "No se pudo marcar. Inténtalo de nuevo.",
       "done": "«{title}» marcado como completado."
     },
-    "assessmentsTitle": "Exámenes",
-    "assessmentsCaption": "Exámenes de la cohorte y los intentos de esta matrícula",
-    "noAssessments": "La cohorte no tiene exámenes asignados",
+    "assessmentsTitle": "Cuestionarios",
+    "assessmentsCaption": "Cuestionarios de la cohorte y los intentos de esta matrícula",
+    "noAssessments": "La cohorte no tiene cuestionarios asignados",
     "noAssessmentsHint": "Se asignan al abrir la cohorte.",
-    "assessment": "Examen",
+    "assessment": "Cuestionario",
     "kind": {
       "DIAGNOSTIC": "Diagnóstico",
-      "SUBJECT": "Parcial",
+      "SUBJECT": "Del taller",
       "FINAL": "Final"
     },
     "attempts": "Intentos",
@@ -2694,7 +2794,7 @@
       "extraTimeNone": "Sin tiempo adicional",
       "extraTimeValue": "{percent} % más",
       "bonus": "Intentos adicionales",
-      "bonusHint": "Se suman al máximo de cada examen.",
+      "bonusHint": "Se suman al máximo de cada cuestionario.",
       "exempt": "Sin límite de tiempo",
       "exemptHint": "El intento no tiene cronómetro. Siguen aplicando la fecha límite y el fin del acceso.",
       "captions": "Requiere subtítulos",
@@ -2747,13 +2847,13 @@
   "cohortProgress": {
     "title": "Avance",
     "crumb": "Avance",
-    "description": "Cómo va cada estudiante: temas completados con evidencia, exámenes y última conexión. Lo marcado a mano se muestra aparte y no suma.",
+    "description": "Cómo va cada estudiante: temas completados con evidencia, cuestionarios y última conexión. Lo marcado a mano se muestra aparte y no suma.",
     "statsLabel": "Resumen del avance",
     "active": "Matrículas activas",
     "evidenceAverage": "Avance con evidencia (%)",
     "atRisk": "En riesgo",
-    "assessmentsPassed": "Exámenes aprobados",
-    "summary": "Tasa de finalización {completion} · avance manual o importado {manual} · {taken} exámenes presentados · mediana de días hasta completar: {median}.",
+    "assessmentsPassed": "Cuestionarios aprobados",
+    "summary": "Tasa de finalización {completion} · avance manual o importado {manual} · {taken} cuestionarios presentados · mediana de días hasta completar: {median}.",
     "rowCount": "{count, plural, =0 {Sin matrículas} one {# matrícula} other {# matrículas}}",
     "exportCsv": "Exportar CSV",
     "tableCaption": "Avance por estudiante",
@@ -3054,7 +3154,7 @@
     "noModulesTitle": "Este programa todavía no tiene componentes",
     "noModulesHint": "Los componentes se crean en Programas. Vuelve aquí para llenarlos.",
     "manageModules": "Gestionar los componentes del programa",
-    "programAssessments": "Exámenes del programa",
+    "programAssessments": "Cuestionarios del programa",
     "programAssessmentsHint": "Sin componente (diagnósticos): no van en la ruta, se asignan aparte.",
     "moduleN": "Componente {position}",
     "moduleEmpty": "Vacío",
@@ -3063,10 +3163,10 @@
     "addContentIn": "Añadir contenido en {module}",
     "addLesson": "Tema",
     "addLessonHint": "Contenido para aprender, con o sin actividad",
-    "addModuleExam": "Examen del componente",
+    "addModuleExam": "Cuestionario del componente",
     "addModuleExamHint": "Va al final del componente, después de todos los temas",
-    "addLessonExam": "Añadir el examen de este tema",
-    "addLessonExamNamed": "Añadir el examen de «{title}»",
+    "addLessonExam": "Añadir el cuestionario de este tema",
+    "addLessonExamNamed": "Añadir el cuestionario de «{title}»",
     "status": {
       "none": "Sin versión",
       "draft": "Borrador (v{number})",
@@ -3077,22 +3177,22 @@
       "VIDEO": "Vídeo",
       "MARKDOWN": "Lectura",
       "SUBMISSION": "Actividad",
-      "ASSESSMENT": "Examen"
+      "ASSESSMENT": "Cuestionario"
     },
     "minutes": "{count} min",
     "questions": "{count, plural, =0 {Sin preguntas} one {# pregunta} other {# preguntas}}",
     "assessmentKind": {
       "DIAGNOSTIC": "Diagnóstico",
-      "SUBJECT": "Parcial",
+      "SUBJECT": "Del taller",
       "FINAL": "Final"
     },
     "newLessonTitle": "Nuevo tema",
-    "newExamTitle": "Nuevo examen",
+    "newExamTitle": "Nuevo cuestionario",
     "contextModule": "En {module}",
     "contextLesson": "En {module}, justo después de “{lesson}”",
     "fieldTitle": "Título",
-    "fieldSubject": "Asignatura",
-    "noSubjects": "No hay asignaturas. Crea una en Asignaturas antes de crear temas.",
+    "fieldSubject": "Taller",
+    "noSubjects": "No hay talleres. Crea uno en Talleres antes de crear temas.",
     "completionQuestion": "¿Cómo completa el estudiante este tema?",
     "completion": {
       "READ": "Al revisar el contenido",
@@ -3103,7 +3203,7 @@
     "fieldKind": "Tipo",
     "cancel": "Cancelar",
     "createLesson": "Crear el tema y escribirlo",
-    "createExam": "Crear el examen",
+    "createExam": "Crear el cuestionario",
     "createError": "No se pudo crear. Inténtalo otra vez."
   },
   "readiness": {
@@ -3136,13 +3236,34 @@
     "submit": "Crear cuenta",
     "haveAccount": "¿Ya tienes cuenta?",
     "login": "Inicia sesión",
-    "success": "¡Cuenta creada!",
+    "success": "Cuenta creada",
     "enrolled": "Ya estás en {code} — {name}. Puedes empezar a estudiar.",
     "enrolledFree": "Tu componente de introducción es gratis y ya está listo: estás en {code} — {name}. Entra y empieza a estudiar.",
     "operationsPending": "Tu cuenta está lista. El equipo te matriculará en tu cohorte y te avisará.",
     "enter": "Entrar",
     "goToLogin": "Ir a iniciar sesión",
-    "genericError": "No pudimos crear tu cuenta. Inténtalo de nuevo."
+    "genericError": "No pudimos crear tu cuenta. Inténtalo de nuevo.",
+    "convo": {
+      "sections": {
+        "you": "Sobre ti",
+        "contact": "Contacto",
+        "account": "Tu cuenta",
+        "ready": "Listo"
+      },
+      "name": "Para empezar, ¿cómo te llamas?",
+      "nameMissing": "Escribe tu nombre y tu apellido.",
+      "birthDate": "Gracias, {name}. ¿Cuál es tu fecha de nacimiento?",
+      "birthDateInvalid": "Escribe una fecha de nacimiento válida.",
+      "email": "¿A qué correo te escribimos?",
+      "emailInvalid": "Revisa el correo: le falta algo, como la @ o el dominio.",
+      "phone": "¿Y un número de celular? Es opcional.",
+      "noPhone": "Sin celular",
+      "skip": "Omitir",
+      "password": "Crea una contraseña para entrar a tu cuenta.",
+      "policy": "Antes de terminar, ¿aceptas la política de tratamiento de datos?",
+      "accept": "Acepto la política",
+      "ready": "Todo listo, {name}. Revisa tus datos arriba y crea tu cuenta."
+    }
   },
   "family": {
     "title": "Mi familia",
@@ -3243,7 +3364,8 @@
       "planned_missing": "{count, plural, one {Al abrir esta cohorte se quedaría fuera 1 pieza sin publicar} other {Al abrir esta cohorte se quedarían fuera # piezas sin publicar}}",
       "content_updates": "{count, plural, one {Hay 1 contenido publicado que esta cohorte no tiene} other {Hay # contenidos publicados que esta cohorte no tiene}}",
       "invitations": "{count, plural, one {1 invitación vence en los próximos 7 días} other {# invitaciones vencen en los próximos 7 días}}",
-      "overdue": "{count, plural, one {1 cuota vencida sin pagar} other {# cuotas vencidas sin pagar}}"
+      "overdue": "{count, plural, one {1 cuota vencida sin pagar} other {# cuotas vencidas sin pagar}}",
+      "requests": "{count, plural, =1 {1 solicitud de un estudiante espera respuesta} other {# solicitudes de estudiantes esperan respuesta}}"
     },
     "funnels": {
       "title": "Últimos 30 días",
@@ -3262,7 +3384,7 @@
       "title": "El recorrido del estudiante",
       "description": "Personas distintas que dieron cada paso en los últimos 30 días. Los dos primeros y el último los declara la pantalla; los demás los decide el servidor.",
       "steps": {
-        "saw_action": "Vieron qué hacer en Mis programas",
+        "saw_action": "Vieron qué hacer en su panel",
         "clicked_action": "Entraron al tema desde ahí",
         "opened_lesson": "Abrieron un tema",
         "reached_end": "Llegaron al final del contenido",
@@ -3292,5 +3414,64 @@
     "paidOf": "Has pagado {paid} de {total}.",
     "consequenceAdult": "Para matricularte en una cohorte nueva con cuotas vencidas necesitarás un acuerdo de pago con la institución.",
     "minorNotice": "El acceso a las clases nunca depende de los pagos."
+  },
+  "conversation": {
+    "progress": "Paso {n} de {total} · {section}",
+    "continue": "Continuar",
+    "editLabel": "Cambiar la respuesta a «{question}»: {answer}"
+  },
+  "requests": {
+    "home": "Inicio",
+    "overline": "Operación",
+    "title": "Solicitudes",
+    "description": "Lo que piden los estudiantes desde su panel: inscribirse en un curso de pago o seguir con el siguiente componente. Se cierran solas cuando matriculas o habilitas, desde aquí o desde la ficha.",
+    "tabs": {
+      "label": "Solicitudes",
+      "open": "Abiertas",
+      "closed": "Cerradas"
+    },
+    "caption": "Solicitudes abiertas, la más antigua primero",
+    "captionClosed": "Últimas solicitudes cerradas",
+    "empty": "No hay solicitudes abiertas",
+    "emptyHint": "Cuando un estudiante pida un curso de pago o el siguiente componente, aparece aquí y en Inicio.",
+    "emptyClosed": "Todavía no se ha cerrado ninguna solicitud",
+    "columns": {
+      "person": "Persona",
+      "what": "Qué pide",
+      "when": "Desde",
+      "context": "Para decidir",
+      "actions": "Acciones",
+      "outcome": "Resultado"
+    },
+    "kind": {
+      "ENROLL": "Inscribirse en {program}",
+      "ENROLLContext": "{cohort} · entra por {module}",
+      "UNLOCK": "Habilitar {module}",
+      "UNLOCKContext": "{program} · {cohort}"
+    },
+    "context": {
+      "minorNoGuardian": "Menor sin acudiente registrado",
+      "noEnrollment": "Aún sin matrícula",
+      "noPlan": "Sin plan de pagos",
+      "upToDate": "Al día",
+      "overdue": "{count, plural, =1 {1 cuota vencida} other {# cuotas vencidas}}"
+    },
+    "actions": {
+      "enroll": "Matricular",
+      "cohortClosed": "La cohorte ya no está abierta",
+      "unlock": "Habilitar",
+      "unlocked": "{module} quedó habilitado y la solicitud, hecha.",
+      "withDates": "Con fechas",
+      "dismiss": "Descartar",
+      "confirmDismiss": "Sí, descartar",
+      "dismissed": "Solicitud descartada.",
+      "cancel": "Cancelar"
+    },
+    "status": {
+      "PENDING": "Abierta",
+      "DONE": "Hecha por {name}",
+      "DISMISSED": "Descartada por {name}",
+      "someone": "el equipo"
+    }
   }
 }

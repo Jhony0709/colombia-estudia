@@ -25,12 +25,15 @@ import { THEME_COOKIE, toTheme } from '@/lib/theme/theme';
 import { buildStudentNav } from '@/lib/nav/student-nav';
 import { buildSpaces } from '@/lib/nav/spaces';
 import { countUnread } from '@/features/notifications/server/notifications.service';
+import { hasResults } from '@/features/learn/server/attempt.service';
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const ctx = await requireStudentSession();
-  const unread = ctx.person
-    ? await countUnread({ institutionId: ctx.institution.id, personId: ctx.person.id })
-    : 0;
+  const who = ctx.person ? { institutionId: ctx.institution.id, personId: ctx.person.id } : null;
+  const [unread, results] = who
+    ? await Promise.all([countUnread(who), hasResults(who)])
+    : [0, false];
+  const nav = buildStudentNav(ctx.capabilities, { hasResults: results });
   const theme = toTheme((await cookies()).get(THEME_COOKIE)?.value);
 
   return (
@@ -38,7 +41,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       <StudentTopNav
         theme={theme}
         institutionName={ctx.institution.name}
-        items={buildStudentNav(ctx.capabilities)}
+        items={nav}
         spaces={buildSpaces(ctx.capabilities)}
         personName={ctx.person ? `${ctx.person.givenName} ${ctx.person.familyName}` : null}
         unreadNotifications={unread}
@@ -50,7 +53,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       <main id="contenido" className="min-w-0 pb-20 lg:pb-0">
         {children}
       </main>
-      <StudentTabBar items={buildStudentNav(ctx.capabilities)} />
+      <StudentTabBar items={nav} />
     </div>
   );
 }

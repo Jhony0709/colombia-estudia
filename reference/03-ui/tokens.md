@@ -176,6 +176,15 @@ respetan. Sin ellas se usa lo del sistema.
 `duration.{instant,fast,normal,slow}` · `easing.{standard,enter,exit}` · Doctrina en
 `.claude/skills/motion-colombia-estudia`. `prefers-reduced-motion` = corte seco.
 
+Añadidos el 6/10 (aprobados por Jhonny) para la coreografía de
+`.claude/skills/experiencia-colombia-estudia`: `duration.stagger` (60ms, entre elementos de una
+escalera, máximo seis), `duration.typeChar` (8ms por carácter del tecleo) y
+`motion.distance.{sm,md}` (0.25rem · 0.5rem, cuánto sube una entrada).
+
+**Movimiento reducido elegido en la plataforma** (6/10): la cookie `ce-motion=reduced` la lee el
+layout raíz y pone `data-motion="reduced"` en `<html>` desde el servidor, como el tema; la
+misma regla de corte seco de `prefers-reduced-motion` aplica bajo ese atributo.
+
 ## Prohibido
 
 Hex literales en componentes; `px` para texto; grises inventados; color como único

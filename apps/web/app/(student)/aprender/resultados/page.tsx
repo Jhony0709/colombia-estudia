@@ -60,7 +60,7 @@ export default async function ResultsPage() {
     });
 
   return (
-    <Page>
+    <Page enter>
       <PageHeader title={tr('title')} description={tr('description')} />
 
       {/*

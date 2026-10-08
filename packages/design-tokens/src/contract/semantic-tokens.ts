@@ -173,6 +173,10 @@ export interface DurationTokens {
   fast: string;
   normal: string;
   slow: string;
+  /** Separación entre los elementos de una escalera (6/10, experiencia-colombia-estudia §2). */
+  stagger: string;
+  /** Un carácter del tecleo de la pregunta conversacional (6/10). */
+  typeChar: string;
 }
 
 export interface EasingTokens {
@@ -181,9 +185,16 @@ export interface EasingTokens {
   exit: string;
 }
 
+/** Cuánto sube una entrada (6/10): `sm` para bloques y filas, `md` para el héroe. */
+export interface MotionDistanceTokens {
+  sm: string;
+  md: string;
+}
+
 export interface MotionTokens {
   duration: DurationTokens;
   easing: EasingTokens;
+  distance: MotionDistanceTokens;
 }
 
 export interface ReadingPreferences {

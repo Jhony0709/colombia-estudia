@@ -119,7 +119,7 @@ export default async function AssessmentPage({
       : `${a.moduleName} · ${kindLabel}`;
 
   return (
-    <Page wide>
+    <Page wide enter>
       <WithRouteRail
         rail={
           <RouteRail
@@ -286,7 +286,7 @@ function BackLink({ label, enrollmentId }: { label: string; enrollmentId?: strin
   return (
     <p className="type-body">
       <Link
-        href={enrollmentId ? `/aprender?matricula=${enrollmentId}#ruta` : '/aprender'}
+        href={enrollmentId ? `/aprender/curso/${enrollmentId}` : '/aprender'}
         className="text-text-link min-h-touch inline-flex items-center underline"
       >
         {label}

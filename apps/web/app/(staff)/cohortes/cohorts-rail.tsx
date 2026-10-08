@@ -15,6 +15,7 @@ const KNOWN = new Set([
   'enrollment_created',
   'enrollment_withdrawn',
   'enrollment_extended',
+  'enrollment_completed',
   'import_run',
 ]);
 

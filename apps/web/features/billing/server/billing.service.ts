@@ -609,10 +609,11 @@ export async function createPaymentPlans({
   const priceId = input.priceId ?? null;
   if (priceId) {
     const price = await db.programPrice.findFirst({
-      where: { id: priceId },
+      where: { id: priceId, archivedAt: null },
       select: { programId: true },
     });
-    if (!price) throw new APIError('El precio de lista no existe', 'VALIDATION_ERROR');
+    if (!price)
+      throw new APIError('El precio de lista no existe o está archivado', 'VALIDATION_ERROR');
     if (enrollments.some((e) => e.cohort.programId !== price.programId)) {
       throw new APIError('El precio de lista es de otro programa', 'VALIDATION_ERROR');
     }

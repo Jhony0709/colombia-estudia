@@ -25,7 +25,7 @@ import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { StatCard, StatGrid } from '@/components/molecules/stat-card';
 import { CircleCheck, ClipboardList, FileQuestionMark, ListChecks } from 'lucide-react';
 
-export const metadata: Metadata = { title: 'Exámenes' };
+export const metadata: Metadata = { title: 'Cuestionarios' };
 
 export default async function AssessmentsPage() {
   await requireCapability('lesson.author');

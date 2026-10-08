@@ -46,3 +46,4 @@ debug.log
 
 # Scratch local (nunca al repo: puede contener CSV con datos de personas)
 _to_delete/
+packages/scripts/seed/*

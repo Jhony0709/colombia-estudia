@@ -1,12 +1,13 @@
 'use client';
 
 /**
- * «Inscribirme» en un curso gratuito abierto (25/9). Un botón, una petición, y al volver la
- * página se vuelve a pedir al servidor (`router.refresh()`): la matrícula nueva ya sale
- * arriba como «Empieza por aquí» sin que nadie recargue.
+ * «Inscribirme y empezar» en un curso gratuito abierto (25/9; 6/10). Un botón, una petición,
+ * y de ahí al primer paso del curso: inscribirse es para empezar. Si todavía no hay nada que
+ * abrir (la cohorte empieza más tarde), se vuelve a pedir el panel, que lo explica.
  */
 
 import { useState } from 'react';
+import type { Route } from 'next';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/atoms/button';
@@ -37,13 +38,17 @@ export function EnrollButton({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ moduleId }),
       });
-      const payload = await res.json().catch(() => null);
+      const payload = (await res.json().catch(() => null)) as {
+        data?: { startHref: string | null };
+      } | null;
       if (!res.ok) {
         setError(apiErrorText(payload, t('error')));
         return;
       }
       announce(t('enrolled', { name: courseName }));
-      router.refresh();
+      const start = payload?.data?.startHref;
+      if (start) router.push(start as Route);
+      else router.refresh();
     } catch {
       setError(t('error'));
     } finally {

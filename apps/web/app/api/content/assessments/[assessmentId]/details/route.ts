@@ -15,7 +15,7 @@ import { APIError } from '@/lib/core/errors';
 import { updateAssessmentDetails } from '@/features/content/server/assessments.service';
 
 const schema = z.object({
-  title: z.string().trim().min(1, 'El examen necesita un título').max(200),
+  title: z.string().trim().min(1, 'El cuestionario necesita un título').max(200),
   kind: z.enum(['DIAGNOSTIC', 'SUBJECT', 'FINAL']),
   moduleId: z.string().cuid().nullable(),
   lessonId: z.string().cuid().nullable(),

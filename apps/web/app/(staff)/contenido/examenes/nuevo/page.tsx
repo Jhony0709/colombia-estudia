@@ -21,7 +21,7 @@ import { Page, PageHeader } from '@/components/templates/page';
 import { CreateAssessmentForm } from '../../create-forms';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 
-export const metadata: Metadata = { title: 'Nuevo examen' };
+export const metadata: Metadata = { title: 'Nuevo cuestionario' };
 
 export default async function NewAssessmentPage() {
   await requireCapability('lesson.author');

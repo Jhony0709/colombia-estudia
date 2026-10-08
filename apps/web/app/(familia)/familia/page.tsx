@@ -84,7 +84,7 @@ export default async function FamilyPage() {
   });
 
   return (
-    <Page>
+    <Page enter>
       <PageHeader title={t('title')} description={t('description')} />
 
       {/*
@@ -120,7 +120,7 @@ export default async function FamilyPage() {
           supportEmail={ctx.institution.supportEmail}
         />
       ) : (
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="motion-stagger grid gap-4 md:grid-cols-2">
           {wards.map((ward) => (
             <li
               key={ward.enrollmentId}

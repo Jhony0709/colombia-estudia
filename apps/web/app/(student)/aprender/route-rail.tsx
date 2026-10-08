@@ -73,7 +73,7 @@ export async function RouteRail({
   return (
     <nav aria-label={t('rail.label')} className="space-y-2">
       <Link
-        href={`/aprender?matricula=${enrollmentId}#ruta`}
+        href={`/aprender/curso/${enrollmentId}`}
         className="type-caption text-text-link min-h-touch inline-flex items-center underline"
       >
         {t('rail.allRoute')}

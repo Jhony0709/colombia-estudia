@@ -1201,3 +1201,88 @@ de cuándo habilitar es de operación.
 **Descartado**: bloquear al perder el cuestionario; fechas por tema; un certificado por
 componente; una bandera por programa para apagar el bloqueo (hoy lo apaga `progression:
 FREE` de la cohorte).
+
+## 2026-10-06 — Los cursos de pago también se ven en `/aprender`, y se piden
+
+**Decisión**: el catálogo de `/aprender` enseña los cursos abiertos **gratuitos y de pago**
+(Jhonny, 6/10: «habrá cursos gratis y otros de pago según el modelo de negocio»), los
+gratuitos primero. Cada tarjeta dice el precio vigente (`currentPriceFor`: monto y periodo) o
+«Gratis», los temas, si tiene examen y hasta cuándo está abierta. El gratuito se toma ya
+(«Inscribirme y empezar» lleva al primer tema). El de pago **no** se matricula solo: «Quiero
+inscribirme» avisa a operación y administración (aviso `enrollment_requested`, uno por persona,
+curso y día) y ofrece WhatsApp con el mensaje escrito. La matrícula de pago la sigue haciendo
+operación, con plan de pagos y, si es menor, acudiente.
+
+**Qué cambia de la decisión del 25/9**: allí «lo de pago no aparece». Ahora aparece, pero el
+camino de matrícula es el mismo: la persona solo pide.
+
+**Razón**: quien termina el curso gratuito de entrada no tenía cómo saber que había más, ni a
+qué precio, sin escribir a la institución. Pedir desde la tarjeta deja el rastro en operación.
+
+**Descartado**: pagar en línea desde la tarjeta (no hay pasarela; los pagos los registra
+operación); esconder el precio hasta pedir.
+
+## 2026-10-06 — Los componentes del bachillerato son generales y cuestan lo mismo
+
+**Decisión** (cliente, vía Jhonny, 6/10): un componente no tiene grado fijo. El contenido de
+Fundamentos y Consolidación se escribió para los grados 6 y 7, pero la idea es que sirva en
+general, así que en la plataforma van sin `Module.grade` y la matrícula entra por posición, no
+por grado (`enrollments.service.ts`: un programa sin grados acepta `startsAtModule`). El precio es
+uno solo: 95.000 COP por componente (`ProgramPrice` sin rango de grados, `PER_MODULE`).
+
+**Qué reemplaza**: la clasificación del documento del cliente («grado 6 a 8 $120.000 c/m; 9 a 11
+$90.000 c/m»), que el cliente dio por superada.
+
+**Abierto**: si más adelante un componente debe declarar para qué grados se escribió (6 y 7), hoy
+`Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
+schema.
+
+## 2026-10-08 — Precios: se corrigen si nadie los usa; las fechas son días de Bogotá
+
+**Decisión** (revisión del flujo de precios pedida por Jhonny, 8/10): un precio que ningún plan
+de pagos referencia se **edita o se borra** (borrar deja la fila en la auditoría); uno que ya usa
+algún plan sigue la regla del 25/9: se archiva y se crea otro con la fecha desde la que aplica.
+Cambiar el precio en el tiempo no exige archivar: el nuevo, desde su fecha, **reemplaza** al
+anterior para los mismos grados, y la lista lo dice (Se cobra / Programado / Reemplazado /
+Vencido). Un programa gratuito no lleva precio. Dos precios para los mismos grados desde el mismo
+día se rechazan.
+
+**Por qué**: la regla «no se edita ni se borra» existía por los planes que lo referencian; sin
+planes, solo dejaba basura archivada por cada error de digitación. Y «vigente hasta el 31» tiene
+que incluir el 31 en Colombia (reference/04-business-logic/acceso-y-cartera.md:98), no terminar
+a las 7 p. m. del 30.
+
+## 2026-10-06 — El estudiante pide; operación resuelve desde una bandeja
+
+**Decisión** (Jhonny, 6/10, aprobada la propuesta del lado del admin): lo que el estudiante
+necesita de operación se pide desde `/aprender` y queda como solicitud (`AccessRequest`), no como
+un mensaje por fuera:
+
+- **Inscribirse en un curso de pago** («Quiero inscribirme» en la tarjeta del componente). El
+  catálogo lista **componentes**, agrupados por su programa, y cada tarjeta dice de cuál hace
+  parte y en qué lugar («Componente 1 de 2»), sus talleres y su carga (Jhonny, 7/10; el 6/10 se
+  había probado una tarjeta por programa). Pedido el programa, el grupo lo dice una vez y las
+  tarjetas dejan de ofrecer el botón. La lista también muestra los cursos donde la persona ya
+  está, marcados «En curso» (con «Ir a mi ruta») o «Terminado», para que el catálogo sea el mapa
+  completo de lo que ofrece la institución (Jhonny, 7/10: la Introducción, como gratis); los
+  retirados no.
+
+- **Habilitar el siguiente componente** («Pedir que lo habiliten» en el héroe y en la ruta, solo
+  en el siguiente bloqueado).
+
+Operación las ve en `/solicitudes` y primero en «Requiere atención», con lo que hace falta para
+decidir (cartera de la matrícula, menor sin acudiente) y las acciones en la fila: matricular
+(la hoja de siempre, con la persona y la entrada puestas) o habilitar (un clic, o con fechas en la
+ficha). Hacer lo pedido cierra la solicitud desde donde sea (la de matrícula, con cualquier cohorte
+del mismo programa) y al estudiante se le avisa; descartar es explícito, se audita y también se le
+avisa.
+
+**Por qué**: el bloqueo por componente (3/10) dependía de que el estudiante «escriba»; sin un
+camino en la plataforma, el pedido se perdía en WhatsApp y no había forma de saber qué estaba
+pendiente. La cartera se muestra para decidir; habilitar no la mira (`RestrictionPolicy` sigue
+siendo quien decide sobre la mora, y la de un menor nunca toca su acceso académico).
+
+**Schema**: tabla nueva `AccessRequest` (migración `20261006000000_access_request`).
+
+**Descartado**: resolver solicitudes a mano («marcar hecha») —se cierran solas al hacerlas—; pedir
+cualquier componente futuro, no solo el siguiente.

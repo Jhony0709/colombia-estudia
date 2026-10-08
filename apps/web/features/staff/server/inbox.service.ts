@@ -21,7 +21,8 @@ export type AttentionKind =
   | 'planned_missing' // cohorte planificada con piezas sin publicar
   | 'content_updates' // cohorte abierta con contenido publicado que no tiene
   | 'invitations' // invitaciones que vencen en 7 días
-  | 'overdue'; // cuotas vencidas sin pagar
+  | 'overdue' // cuotas vencidas sin pagar
+  | 'requests'; // solicitudes de estudiantes: inscribirse en un curso de pago o habilitar un componente (6/10)
 
 export interface AttentionItem {
   kind: AttentionKind;
@@ -288,6 +289,12 @@ export async function getStaffInbox({
         });
       }
     }
+  }
+
+  // Lo que pide un estudiante va primero: alguien espera del otro lado.
+  const requests = await db.accessRequest.count({ where: { status: 'PENDING' } });
+  if (requests > 0) {
+    attention.unshift({ kind: 'requests', count: requests, href: '/solicitudes' });
   }
 
   if (invitations > 0) {

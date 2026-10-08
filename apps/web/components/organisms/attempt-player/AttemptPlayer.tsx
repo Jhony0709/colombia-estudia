@@ -32,6 +32,7 @@ import { Button } from '@/components/atoms/button';
 import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
+import { CountUp } from '@/components/atoms/motion';
 import { ProgressBar } from '@/components/atoms/progress-bar';
 import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
 import { useAnnounce } from '@/lib/a11y/announce';
@@ -836,7 +837,8 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
       <section
         aria-label={t('resultLabel')}
         className={cn(
-          'rounded-card border p-5',
+          // Resultado (experiencia-colombia-estudia §6): la nota cuenta, luego insignia y cierre.
+          'rounded-card motion-enter-md border p-5',
           attempt.score?.passed
             ? 'border-status-success-base bg-status-success-muted'
             : attempt.score
@@ -868,14 +870,16 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
         )}
         {attempt.score ? (
           <p className="type-display mt-3" role="status">
-            {t('result.score', {
-              value: attempt.score.value,
-              max: attempt.score.max,
-              percent: attempt.score.percent,
-            })}{' '}
-            <Badge variant={attempt.score.passed ? 'success' : 'warning'}>
-              {attempt.score.passed ? t('result.passed') : t('result.notPassed')}
-            </Badge>
+            <CountUp
+              value={attempt.score.value}
+              decimals={Number.isInteger(attempt.score.value) ? 0 : 1}
+            />
+            {t('result.scoreRest', { max: attempt.score.max, percent: attempt.score.percent })}{' '}
+            <span className="motion-enter motion-order-2 inline-block">
+              <Badge variant={attempt.score.passed ? 'success' : 'warning'}>
+                {attempt.score.passed ? t('result.passed') : t('result.notPassed')}
+              </Badge>
+            </span>
           </p>
         ) : (
           <p className="type-body mt-3" role="status">
@@ -893,7 +897,7 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
       {attempt.status !== 'EXPIRED' && (
         <section
           aria-labelledby="attempt-closing-title"
-          className="border-border-muted bg-surface-base rounded-card border p-5"
+          className="border-border-muted bg-surface-base rounded-card motion-enter motion-order-3 border p-5"
         >
           <h2 id="attempt-closing-title" className="type-subheading text-text">
             {t('closing.title')}

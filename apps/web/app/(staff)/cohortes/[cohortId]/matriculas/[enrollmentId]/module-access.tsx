@@ -126,7 +126,17 @@ function ModuleRow({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* 6/10: el estudiante lo pidió desde su ruta; habilitar cierra la solicitud. */}
+          {row.requestedAt && row.state === 'LOCKED' && (
+            <Badge variant="info">
+              {t('requested', {
+                date: new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'short' }).format(
+                  new Date(row.requestedAt)
+                ),
+              })}
+            </Badge>
+          )}
           <Badge variant={TONE[row.state]}>{t(`state.${row.state}`)}</Badge>
           {canManage && !row.first && !editing && (
             <>

@@ -79,6 +79,9 @@ export function EnrollSheet({
   disabled,
   modules,
   prominent = false,
+  initialHandle = '',
+  initialStartsAt = '',
+  triggerLabel,
 }: {
   cohortId: string;
   disabled: boolean;
@@ -86,6 +89,14 @@ export function EnrollSheet({
   modules: Array<{ id: string; name: string; position: number; grade: number | null }>;
   /** En la cabecera de una cohorte abierta es LA acción (ola 2, 23/9): relleno. */
   prominent?: boolean;
+  /**
+   * Desde una solicitud (6/10): la persona ya se sabe —se comprueba al abrir— y el punto de
+   * entrada (posición o grado, como el `select`) también.
+   */
+  initialHandle?: string;
+  initialStartsAt?: string;
+  /** Otro texto para el botón que abre la hoja, p. ej. «Matricular» en una fila. */
+  triggerLabel?: string;
 }) {
   const t = useTranslations('enrollments');
   const { busy, error, done, send, clear } = useEnrollmentMutation();
@@ -104,13 +115,13 @@ export function EnrollSheet({
   }
 
   const reset = () => {
-    setHandle('');
-    setStartsAt('');
+    setHandle(initialHandle);
+    setStartsAt(initialStartsAt);
     setPreview(null);
     setCheckError(null);
   };
 
-  const check = async () => {
+  const check = async (personHandle = handle) => {
     setChecking(true);
     setCheckError(null);
     setPreview(null);
@@ -120,7 +131,7 @@ export function EnrollSheet({
       const res = await fetch(`/api/cohorts/${cohortId}/enrollments/preview`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ personHandle: handle }),
+        body: JSON.stringify({ personHandle }),
       });
       const payload = (await res.json().catch(() => null)) as {
         data?: EnrollmentPreview;
@@ -166,9 +177,10 @@ export function EnrollSheet({
         onClick={() => {
           reset();
           setOpen(true);
+          if (initialHandle) void check(initialHandle);
         }}
       >
-        {t('sheet.open')}
+        {triggerLabel ?? t('sheet.open')}
       </Button>
 
       <Sheet

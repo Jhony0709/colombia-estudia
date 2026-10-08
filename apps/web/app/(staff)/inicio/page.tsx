@@ -39,6 +39,7 @@ const NEEDS: Record<AttentionKind, Capability> = {
   content_updates: 'cohort.manage',
   invitations: 'people.manage',
   overdue: 'billing.manage',
+  requests: 'cohort.manage',
 };
 
 export default async function StaffHomePage() {

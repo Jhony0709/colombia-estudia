@@ -88,6 +88,7 @@ model Institution {
   learningEvents        LearningEvent[]
   accommodations        Accommodation[]
   enrollmentModules     EnrollmentModule[]
+  accessRequests        AccessRequest[]
   paymentPlans          PaymentPlan[]
   programPrices         ProgramPrice[]
   installments          Installment[]
@@ -166,6 +167,8 @@ model Person {
   paymentPlansPaid     PaymentPlan[]      @relation("PlanPayerPerson")
   programPricesCreated ProgramPrice[]     @relation("PriceCreatedBy")
   modulesUnlocked      EnrollmentModule[] @relation("ModuleUnlockedBy")
+  accessRequests       AccessRequest[]    @relation("AccessRequestPerson")
+  accessRequestsClosed AccessRequest[]    @relation("AccessRequestResolver")
   agreementsSigned     PaymentAgreement[] @relation("AgreementPayerPerson")
   learningEvents       LearningEvent[]
   notifications        Notification[]
@@ -353,6 +356,7 @@ model Module {
   assessments       Assessment[]
   certificates      Certificate[]
   enrollmentModules EnrollmentModule[]
+  accessRequests    AccessRequest[]
 
   @@unique([programId, position])
   @@unique([institutionId, sourceRef])
@@ -413,6 +417,7 @@ model Cohort {
   assessmentAssignments AssessmentAssignment[]
   scores                Score[]
   liveSessions          LiveSession[]
+  accessRequests        AccessRequest[]
   /// La institución que la tiene como cohorte de introducción, si es esta.
   introOf               Institution?           @relation("IntroCohort")
 
@@ -466,6 +471,7 @@ model Enrollment {
   certificates      Certificate[]
   submissions       Submission[]
   modules           EnrollmentModule[]
+  accessRequests    AccessRequest[]
 
   @@unique([studentId, cohortId])
   @@unique([institutionId, sourceRef])
@@ -496,6 +502,51 @@ model EnrollmentModule {
 
   @@unique([enrollmentId, moduleId])
   @@index([institutionId, enrollmentId])
+}
+
+enum AccessRequestKind {
+  /// Quiere inscribirse en un curso de pago (la matrícula la hace operación).
+  ENROLL
+  /// Quiere que le habiliten el siguiente componente de su matrícula.
+  UNLOCK
+}
+
+enum AccessRequestStatus {
+  PENDING
+  /// Se hizo lo pedido (matrícula creada o componente habilitado), desde donde fuera.
+  DONE
+  /// Operación la descartó sin hacerla.
+  DISMISSED
+}
+
+/// Lo que un estudiante pide desde `/aprender` y resuelve operación (6/10): inscribirse en un
+/// curso de pago o habilitar el siguiente componente. Se cierra sola cuando lo pedido ocurre
+/// (`enrollPerson`, `setModuleAccess`), sea desde la bandeja, la ficha o en lote.
+/// SQL: una sola PENDING por (personId, kind, cohortId, moduleId).
+model AccessRequest {
+  id            String              @id @default(cuid())
+  institutionId String
+  personId      String
+  kind          AccessRequestKind
+  cohortId      String
+  /// ENROLL: el componente por el que quiere entrar; UNLOCK: el que pide habilitar.
+  moduleId      String
+  /// Solo UNLOCK: la matrícula en la que se habilita.
+  enrollmentId  String?
+  status        AccessRequestStatus @default(PENDING)
+  createdAt     DateTime            @default(now())
+  resolvedAt    DateTime?
+  resolvedById  String?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  person      Person      @relation("AccessRequestPerson", fields: [personId], references: [id])
+  cohort      Cohort      @relation(fields: [cohortId], references: [id])
+  module      Module      @relation(fields: [moduleId], references: [id])
+  enrollment  Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
+  resolvedBy  Person?     @relation("AccessRequestResolver", fields: [resolvedById], references: [id])
+
+  @@index([institutionId, status, createdAt])
+  @@index([personId, status])
 }
 
 // ───────────────────────────── Contenido (catálogo versionado, Markdown) ─────────────────────────────

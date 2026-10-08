@@ -217,7 +217,7 @@ export async function createAssessment({
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new APIError(
-          'Otro examen ocupó esa posición en el componente mientras se creaba este. Inténtalo otra vez.',
+          'Otro cuestionario ocupó esa posición en el componente mientras se creaba este. Inténtalo otra vez.',
           'CONFLICT'
         );
       }
@@ -564,7 +564,7 @@ async function requireDraft(institutionId: string, versionId: string) {
   if (!version) throw new APIError('Assessment version not found', 'NOT_FOUND');
   if (!isVersionEditable(toPublishStatus(version.status))) {
     throw new APIError(
-      'Esa versión ya está publicada y no se puede editar. Abre el examen otra vez para empezar la siguiente.',
+      'Esa versión ya está publicada y no se puede editar. Abre el cuestionario otra vez para empezar la siguiente.',
       'CONFLICT'
     );
   }
@@ -716,7 +716,7 @@ export async function publishAssessment({
   const validation = await validateAssessmentDraft({ institutionId, versionId });
   if (!validation.ok) {
     throw new APIError(
-      `La evaluación todavía tiene ${validation.errors.length} problema(s) que impiden publicarla.`,
+      `El cuestionario todavía tiene ${validation.errors.length} problema(s) que impiden publicarlo.`,
       'INVALID_CONTENT',
       { errors: validation.errors }
     );

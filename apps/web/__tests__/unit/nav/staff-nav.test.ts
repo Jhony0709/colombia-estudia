@@ -20,10 +20,11 @@ describe('buildStaffNav', () => {
       ).map((i) => i.href)
     ).toEqual([
       '/inicio',
-      '/contenido/asignaturas',
       '/contenido/programas',
+      '/contenido/asignaturas',
       '/contenido/temas',
       '/contenido/examenes',
+      '/solicitudes',
       '/cohortes',
       '/personas',
       '/admin/institucion',
@@ -32,7 +33,7 @@ describe('buildStaffNav', () => {
   });
 
   // Un INSTRUCTOR tiene lesson.author y ninguna de las de operaciones: escribe temas y
-  // evaluaciones, pero programas y asignaturas siguen pidiendo institution.manage.
+  // cuestionarios, pero programas y talleres siguen pidiendo institution.manage.
   it('a un INSTRUCTOR le enseña lo que escribe, no la forma del programa', () => {
     expect(buildStaffNav(caps('lesson.author', 'lesson.read')).map((i) => i.href)).toEqual([
       '/inicio',
@@ -44,7 +45,7 @@ describe('buildStaffNav', () => {
   it('hides the institution link from OPERATIONS', () => {
     expect(
       buildStaffNav(caps('people.manage', 'cohort.manage', 'billing.manage')).map((i) => i.href)
-    ).toEqual(['/inicio', '/cohortes', '/personas', '/cartera']);
+    ).toEqual(['/inicio', '/solicitudes', '/cohortes', '/personas', '/cartera']);
   });
 
   // INCLUSION_COORDINATOR solo tiene accommodation.manage: ve el reporte de inclusión y nada más (19/9).

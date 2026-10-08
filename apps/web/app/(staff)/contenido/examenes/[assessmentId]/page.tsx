@@ -22,7 +22,7 @@ import { listLessons } from '@/features/content/server/lessons.service';
 import { Page } from '@/components/templates/page';
 import { AssessmentEditor } from './assessment-editor';
 
-export const metadata: Metadata = { title: 'Editar examen' };
+export const metadata: Metadata = { title: 'Editar cuestionario' };
 
 type Params = Promise<{ assessmentId: string }>;
 

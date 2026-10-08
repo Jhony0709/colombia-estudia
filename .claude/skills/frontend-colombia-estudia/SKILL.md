@@ -15,13 +15,14 @@ enruta. Lo único propio es lo que ninguno de los tres documentos cubría: dónd
 cliente/servidor, cómo se elige la duración de una animación dentro de la escala, y cómo se
 detecta una pantalla que parece generada.
 
-| Momento                                       | Dónde manda                 |
-| --------------------------------------------- | --------------------------- |
-| Qué forma tiene la pantalla, qué componente   | `layout-y-componentes.md`   |
-| Qué valor usar                                | `tokens.md`                 |
-| Qué se anima y cómo                           | `motion-colombia-estudia`   |
-| Barrido antes de cerrar (`/audit-ui`)         | `ui-craft-colombia-estudia` |
-| Frontera cliente/servidor, coste, autocrítica | **aquí**                    |
+| Momento                                       | Dónde manda                    |
+| --------------------------------------------- | ------------------------------ |
+| Qué forma tiene la pantalla, qué componente   | `layout-y-componentes.md`      |
+| Qué valor usar                                | `tokens.md`                    |
+| Qué se anima y cómo                           | `motion-colombia-estudia`      |
+| Coreografía de una pantalla del estudiante    | `experiencia-colombia-estudia` |
+| Barrido antes de cerrar (`/audit-ui`)         | `ui-craft-colombia-estudia`    |
+| Frontera cliente/servidor, coste, autocrítica | **aquí**                       |
 
 ---
 
@@ -128,11 +129,12 @@ es una contradicción**: su regla habla de _entradas_, donde arrancar despacio s
 pesado. Para salidas, acelerar es lo correcto y es lo que hacen los sistemas serios. Queda
 escrito aquí para que nadie lo «corrija» dentro de seis meses.
 
-### M4 — Escalonar necesita un token que no existe
+### M4 — Escalonar solo con `duration.stagger`
 
 Escalonar la entrada de una lista pide un retardo entre elementos, y **no tenemos token para
 eso**. Hasta que el contrato lo tenga: no se escalona. Un literal de 40 ms es exactamente lo
-que la regla 1 de la doctrina prohíbe.
+que la regla 1 de la doctrina prohíbe. **Superado el 6/10**: existe `duration.stagger`; la
+escalera se hace con `.motion-stagger` (`experiencia-colombia-estudia` §2 y §5), nunca a mano.
 
 ---
 

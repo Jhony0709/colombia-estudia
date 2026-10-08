@@ -410,7 +410,7 @@ export async function deleteLesson({
     }
     if (lesson._count.assessments > 0) {
       throw new APIError(
-        'Este tema tiene un examen del tema. Elimina o desvincula el examen antes.',
+        'Este tema tiene un cuestionario del tema. Elimina o desvincula el cuestionario antes.',
         'CONFLICT'
       );
     }

@@ -25,6 +25,7 @@ import { Callout } from '@/components/atoms/callout';
 import { requiredReadingSeconds } from '@colombia-estudia/domain';
 import { EvidenceRecorder } from './evidence-recorder';
 import { ReadingCountdown } from './reading-countdown';
+import { EnterOnChange } from '@/components/atoms/motion';
 import { SubmissionForm } from './submission-form';
 import { TranscriptPanel } from './transcript-panel';
 import { LessonTools } from './lesson-tools';
@@ -165,7 +166,7 @@ export default async function LessonPage({
       {/* Avance de lectura (27/9): la línea fina del borde superior; solo si el texto no cabe. */}
       <ReadingProgress />
       <TaskBar
-        backHref={`/aprender?matricula=${lesson.enrollmentId}#ruta`}
+        backHref={`/aprender/curso/${lesson.enrollmentId}`}
         backLabel={t('task.back')}
         place={meta}
         action={<LessonTools assignmentId={lesson.assignmentId} compact />}
@@ -461,18 +462,26 @@ async function LessonNav({
     <StickyActionBar
       label={t('lesson.navLabel')}
       status={
-        <span className="inline-flex items-center gap-2">
+        // Al completarse en la sesión, el estado y la acción entran (experiencia §6); al
+        // cargar, nada se mueve.
+        <EnterOnChange value={status} className="inline-flex items-center gap-2">
           {status === 'COMPLETED' && (
             <CircleCheck aria-hidden className="text-status-success-base size-4 shrink-0" />
           )}
           {statusText}
-        </span>
+        </EnterOnChange>
       }
       // «Volver a la ruta» se fue de aquí (auditoría 27/9): bajo `lg` lo lleva la barra de
       // tarea y desde `lg` el riel («Ver toda la ruta»); en el pie era el tercer enlace de una
       // barra que en el teléfono ocupaba tres filas.
       secondary={previous ? <NavLink item={previous} direction="previous" /> : null}
-      action={action}
+      action={
+        action ? (
+          <EnterOnChange value={status} className="inline-flex">
+            {action}
+          </EnterOnChange>
+        ) : null
+      }
     />
   );
 }

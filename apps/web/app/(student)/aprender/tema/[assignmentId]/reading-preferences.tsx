@@ -14,6 +14,7 @@ import { useEffect, useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Sheet } from '@/components/organisms/sheet';
 import { cn } from '@/lib/utils';
+import { applyMotionPreference, type MotionPreference } from '@/lib/motion/preference';
 
 type Size = 'base' | 'lg' | 'xl';
 type Spacing = 'base' | 'wide';
@@ -75,11 +76,14 @@ export function ReadingPreferences({
 }) {
   const t = useTranslations('learn.reading');
   const [prefs, setPrefs] = useState<Prefs>(DEFAULTS);
+  // Va en cookie y vale para toda la plataforma (6/10), no solo para el texto del tema.
+  const [motion, setMotion] = useState<MotionPreference>('system');
 
   useEffect(() => {
     const initial = load();
     setPrefs(initial);
     apply(initial);
+    setMotion(document.documentElement.dataset.motion === 'reduced' ? 'reduced' : 'system');
     return () => {
       // Al salir del tema, la interfaz vuelve a su tamaño: la preferencia es del contenido.
       const html = document.documentElement;
@@ -135,6 +139,18 @@ export function ReadingPreferences({
             { value: 'narrow', label: t('widthNarrow') },
           ]}
           onChange={(width) => update({ width })}
+        />
+        <Group
+          label={t('motion')}
+          value={motion}
+          options={[
+            { value: 'system', label: t('motionSystem') },
+            { value: 'reduced', label: t('motionReduced') },
+          ]}
+          onChange={(next) => {
+            setMotion(next);
+            applyMotionPreference(next);
+          }}
         />
         <label className="min-h-touch flex cursor-pointer items-start gap-3">
           <input

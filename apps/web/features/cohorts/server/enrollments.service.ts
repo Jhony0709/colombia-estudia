@@ -5,6 +5,8 @@
 
 import 'server-only';
 
+import { closeRequests } from '@/features/requests/server/requests.service';
+import { notify } from '@/features/notifications/server/notifications.service';
 import { calculateAgeAt, bogotaDate } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
 import { isUniqueViolation } from '@/lib/db/errors';
@@ -256,8 +258,10 @@ export async function enrollPerson({
       id: true,
       status: true,
       accessUntil: true,
+      programId: true,
       program: {
         select: {
+          name: true,
           defaultAccessDays: true,
           modules: { where: { archivedAt: null }, select: { position: true, grade: true } },
         },
@@ -310,8 +314,9 @@ export async function enrollPerson({
   // vigente se **avisa**; no se bloquea. La política es de la cartera, no del acceso.
   const warning = await overdueWithoutAgreementWarning({ institutionId, personId: person.id, now });
 
+  let result: { enrollmentId: string; warning: string | null; requested: boolean };
   try {
-    return await db.$transaction(async (tx) => {
+    result = await db.$transaction(async (tx) => {
       const enrollment = await tx.enrollment.create({
         data: {
           institutionId,
@@ -363,7 +368,14 @@ export async function enrollPerson({
         },
       });
 
-      return { enrollmentId: enrollment.id, warning };
+      // Si la persona lo había pedido (6/10), la solicitud queda hecha.
+      const requested = await closeRequests(
+        tx,
+        { kind: 'ENROLL', personId: person.id, programId: cohort.programId },
+        { actorId, now }
+      );
+
+      return { enrollmentId: enrollment.id, warning, requested: requested > 0 };
     });
   } catch (err) {
     if (isUniqueViolation(err)) {
@@ -371,6 +383,20 @@ export async function enrollPerson({
     }
     throw err;
   }
+
+  // Lo había pedido desde `/aprender` (6/10): que sepa que ya está, sin esperar el WhatsApp.
+  // Fuera de la transacción, como los demás avisos: no se deshace con un ROLLBACK.
+  if (result.requested) {
+    await notify(institutionId, {
+      personId: person.id,
+      type: 'enrollment_created',
+      title: 'Ya estás matriculado',
+      body: `Tu matrícula en ${cohort.program.name} está lista. Entra a tu ruta para empezar.`,
+      href: '/aprender',
+      dedupeKey: `enrollment_created:${result.enrollmentId}`,
+    });
+  }
+  return { enrollmentId: result.enrollmentId, warning: result.warning };
 }
 
 export interface EnrollmentPreview {

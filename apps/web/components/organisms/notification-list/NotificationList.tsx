@@ -81,6 +81,10 @@ const ACTION_BY_TYPE: Record<string, string> = {
   submission_received: 'reviewSubmissions',
   problem_reported: 'viewLesson',
   reinvite_requested: 'viewPerson',
+  enrollment_requested: 'reviewRequest',
+  unlock_requested: 'reviewRequest',
+  request_dismissed: 'goToRoute',
+  enrollment_created: 'goToRoute',
 };
 
 interface DayGroup {

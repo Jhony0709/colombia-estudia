@@ -3,11 +3,13 @@
  * usuario puede cambiar la preferencia con la página abierta.
  */
 
+import { motionReduced } from '@/lib/motion/preference';
+
 const matches = (query: string) =>
   typeof window !== 'undefined' && window.matchMedia(query).matches;
 
-/** `prefers-reduced-motion: reduce` → estado final directo, sin animar nada. */
-export const prefersReducedMotion = () => matches('(prefers-reduced-motion: reduce)');
+/** Movimiento reducido del sistema o de la plataforma (6/10) → estado final directo. */
+export const prefersReducedMotion = () => motionReduced();
 
 /** Teléfono o pantalla táctil: desplazamientos cortos, sin parallax ni hover. */
 export const isCompact = () =>

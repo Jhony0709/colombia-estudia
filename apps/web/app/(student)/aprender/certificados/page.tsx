@@ -67,7 +67,7 @@ export default async function CertificatesPage() {
       {certificates.length === 0 ? (
         <EmptyState icon={Award} title={tc('empty')} description={tc('emptyHint')} />
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2">
+        <ul className="motion-stagger grid gap-4 sm:grid-cols-2">
           {certificates.map((c) => (
             <li
               key={c.id}

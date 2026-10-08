@@ -21,7 +21,7 @@ const FIELD_NAMES: Record<string, string> = {
   description: 'Descripción',
   learningObjective: 'Objetivo de aprendizaje',
   moduleId: 'Componente',
-  subjectId: 'Asignatura',
+  subjectId: 'Taller',
   programId: 'Programa',
   kind: 'Tipo',
   content: 'Contenido',

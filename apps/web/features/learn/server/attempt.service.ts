@@ -1094,6 +1094,28 @@ export interface ResultsForStudent {
  * Funciona con el acceso vencido (`score.read.own` sobrevive a `accessUntil`): no pasa por
  * la secuencia ni por la cohorte, lee lo que es del estudiante y ya.
  */
+/**
+ * Si la persona ya tiene algo que ver en «Resultados» (6/10): una nota o un intento entregado.
+ * Sin eso la pestaña no se muestra; el primer día era un destino vacío más en la barra.
+ */
+export async function hasResults({
+  institutionId,
+  personId,
+}: {
+  institutionId: string;
+  personId: string;
+}): Promise<boolean> {
+  const db = createTenantClient(institutionId);
+  const [score, attempt] = await Promise.all([
+    db.score.findFirst({ where: { studentId: personId }, select: { id: true } }),
+    db.attempt.findFirst({
+      where: { studentId: personId, status: { not: 'IN_PROGRESS' } },
+      select: { id: true },
+    }),
+  ]);
+  return score !== null || attempt !== null;
+}
+
 export async function getResultsForStudent({
   institutionId,
   personId,

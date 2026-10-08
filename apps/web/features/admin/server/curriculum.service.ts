@@ -13,6 +13,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import {
   PROGRAM_PRICE_SELECT,
   toProgramPriceView,
+  withPriceStates,
   type ProgramPriceView,
 } from '@/features/billing/server/prices.service';
 import { isUniqueViolation } from '@/lib/db/errors';
@@ -127,7 +128,7 @@ export async function listCurriculum(
         },
         prices: {
           where: { archivedAt: null },
-          orderBy: [{ gradeFrom: 'asc' }, { validFrom: 'desc' }],
+          orderBy: [{ gradeFrom: 'asc' }, { validFrom: 'desc' }, { createdAt: 'desc' }],
           select: PROGRAM_PRICE_SELECT,
         },
       },
@@ -143,7 +144,7 @@ export async function listCurriculum(
     programs: await Promise.all(
       programs.map(async (p) => ({
         ...p,
-        prices: p.prices.map(toProgramPriceView),
+        prices: withPriceStates(p.prices.map(toProgramPriceView)),
         modules: await Promise.all(
           p.modules.map(async (m) => ({
             id: m.id,
@@ -505,7 +506,15 @@ export async function deleteModule({
       select: {
         id: true,
         name: true,
-        _count: { select: { lessons: true, assessments: true, certificates: true } },
+        _count: {
+          select: {
+            lessons: true,
+            assessments: true,
+            certificates: true,
+            enrollmentModules: true,
+            accessRequests: true,
+          },
+        },
       },
     });
     if (!target) throw new APIError('Module not found', 'NOT_FOUND');
@@ -516,10 +525,14 @@ export async function deleteModule({
       );
     }
     if (target._count.assessments > 0) {
-      throw new APIError('Este componente tiene exámenes: archívalo.', 'CONFLICT');
+      throw new APIError('Este componente tiene cuestionarios: archívalo.', 'CONFLICT');
     }
     if (target._count.certificates > 0) {
       throw new APIError('Este componente ya emitió constancias: archívalo.', 'CONFLICT');
+    }
+    // Habilitado para alguien (3/10) o pedido por un estudiante (6/10): la fila lo referencia.
+    if (target._count.enrollmentModules > 0 || target._count.accessRequests > 0) {
+      throw new APIError('Este componente ya tiene estudiantes: archívalo.', 'CONFLICT');
     }
 
     await tx.module.delete({ where: { id: moduleId } });
@@ -666,7 +679,7 @@ export async function createSubject({
       return subject;
     });
   } catch (err) {
-    asConflict(err, `Ya existe una asignatura llamada ${data.name}`);
+    asConflict(err, `Ya existe un taller llamado ${data.name}`);
   }
 }
 
@@ -708,7 +721,7 @@ export async function updateSubject({
       return { id: subjectId };
     });
   } catch (err) {
-    asConflict(err, `Ya existe una asignatura llamada ${data.name}`);
+    asConflict(err, `Ya existe un taller llamado ${data.name}`);
   }
 }
 

@@ -56,7 +56,7 @@ export default async function MyAccountPage({
   const online = isWompiConfigured();
 
   return (
-    <Page>
+    <Page enter>
       <PageHeader title={t('title')} description={t('description')} />
 
       {returned && <Alert severity="info">{t('returned')}</Alert>}

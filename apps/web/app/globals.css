@@ -39,6 +39,16 @@ body {
     scroll-behavior: auto !important;
   }
 }
+/* La misma regla cuando se elige en la plataforma (6/10, `lib/motion/preference.ts`). */
+html[data-motion='reduced'],
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
 
 /**
  * Screen reader only utility.
@@ -284,6 +294,126 @@ body {
 }
 .attempt-question {
   animation: question-fade-in var(--duration-normal) var(--easing-enter);
+}
+
+/**
+ * Coreografía del estudiante (6/10, `.claude/skills/experiencia-colombia-estudia` §2 y §5).
+ * Solo tokens. `--motion-order` ordena bloques de una pantalla (0, 1, 2…: cada paso son dos
+ * `stagger`); dentro de `.motion-stagger` cada hijo suma un `stagger`, hasta el sexto.
+ * Con movimiento reducido no hay animación ni retardo (abajo).
+ */
+@keyframes motion-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-distance-sm));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes motion-enter-md {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-distance-md));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.motion-enter,
+.motion-enter-md,
+.motion-stagger > *,
+.motion-inview[data-motion-in] {
+  animation: motion-enter var(--duration-normal) var(--easing-enter) both;
+  animation-delay: calc(
+    (var(--motion-order, 0) * 2 + var(--motion-i, 0)) *
+      var(--duration-stagger, var(--duration-instant))
+  );
+}
+.motion-enter-md {
+  animation-name: motion-enter-md;
+}
+.motion-inview[data-motion-in] {
+  --motion-order: 0;
+}
+.motion-inview[data-motion-pending] {
+  opacity: 0;
+}
+.motion-order-1 {
+  --motion-order: 1;
+}
+.motion-order-2 {
+  --motion-order: 2;
+}
+.motion-order-3 {
+  --motion-order: 3;
+}
+.motion-stagger > :nth-child(2) {
+  --motion-i: 1;
+}
+.motion-stagger > :nth-child(3) {
+  --motion-i: 2;
+}
+.motion-stagger > :nth-child(4) {
+  --motion-i: 3;
+}
+.motion-stagger > :nth-child(5) {
+  --motion-i: 4;
+}
+.motion-stagger > :nth-child(n + 6) {
+  --motion-i: 5;
+}
+.typed-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -0.125em;
+  background: var(--accent-base);
+}
+/* Formulario conversacional (§4): la respuesta espera a que termine el tecleo y entra en
+   escalera (campos, error, botones), como los campos del chat de Lemonade pero con tokens. La
+   salida de un paso y el historial los mueve `motion/react` en el organismo. */
+.convo-answer:not([data-revealed]) {
+  opacity: 0;
+  pointer-events: none;
+}
+.convo-answer[data-revealed] > * {
+  animation: motion-enter var(--duration-normal) var(--easing-enter) both;
+  animation-delay: calc(var(--motion-i, 0) * var(--duration-stagger, var(--duration-instant)));
+}
+.convo-answer > :nth-child(2) {
+  --motion-i: 1;
+}
+.convo-answer > :nth-child(n + 3) {
+  --motion-i: 2;
+}
+/* Dos campos en fila (nombre y apellido): el segundo entra un paso después. */
+.convo-answer[data-revealed] > .grid > * {
+  animation: motion-enter var(--duration-normal) var(--easing-enter) both;
+}
+.convo-answer[data-revealed] > .grid > :nth-child(2) {
+  animation-delay: var(--duration-stagger, var(--duration-instant));
+}
+@media (prefers-reduced-motion: reduce) {
+  .convo-answer[data-revealed] > *,
+  .convo-answer[data-revealed] > .grid > *,
+  .motion-enter,
+  .motion-enter-md,
+  .motion-stagger > *,
+  .motion-inview[data-motion-in] {
+    animation: none;
+  }
+}
+html[data-motion='reduced'] .convo-answer[data-revealed] > *,
+html[data-motion='reduced'] .convo-answer[data-revealed] > .grid > *,
+html[data-motion='reduced'] .motion-enter,
+html[data-motion='reduced'] .motion-enter-md,
+html[data-motion='reduced'] .motion-stagger > *,
+html[data-motion='reduced'] .motion-inview[data-motion-in] {
+  animation: none;
 }
 
 /**

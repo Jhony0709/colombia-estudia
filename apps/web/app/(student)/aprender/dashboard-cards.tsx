@@ -108,7 +108,10 @@ export async function ProgressKpis({
   return (
     // En el teléfono, dos por fila y la tercera a lo ancho: tres tarjetas apiladas empujaban el
     // ritmo y las fechas una pantalla más abajo.
-    <section aria-label={t('label')} className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+    <section
+      aria-label={t('label')}
+      className="motion-stagger motion-order-1 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4"
+    >
       <div className={tile}>
         <p className="type-caption text-text-muted m-0 inline-flex items-center gap-2">
           <Target aria-hidden className="size-4" />

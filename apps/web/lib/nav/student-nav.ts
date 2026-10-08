@@ -4,6 +4,8 @@
  *
  * «Mi cuenta» (`/aprender/mi-cuenta`) solo con `billing.read.own`: el estudiante adulto que
  * paga o el acudiente; un plan que paga un aliado no la da (decisión 8).
+ *
+ * «Resultados» aparece con el primer resultado (6/10): antes era una pestaña vacía.
  */
 
 import type { Capability } from '@colombia-estudia/domain';
@@ -11,6 +13,8 @@ import type { NavDestination } from './staff-nav';
 
 interface StudentDefinition extends NavDestination {
   needs: Capability;
+  /** Solo cuando ya hay algo que ver. */
+  needsResults?: true;
 }
 
 /**
@@ -25,8 +29,13 @@ const NAV: readonly StudentDefinition[] = [
     label: 'Inicio',
     needs: 'lesson.read',
     section: 'estudiar',
-    // El player y los exámenes son «Mis programas»; los otros destinos tienen su prefijo.
-    activeUnder: ['/aprender/tema/', '/aprender/examen/'],
+    // El player, los exámenes y las páginas de curso cuelgan de Inicio; los otros, su prefijo.
+    activeUnder: [
+      '/aprender/tema/',
+      '/aprender/examen/',
+      '/aprender/curso/',
+      '/aprender/catalogo/',
+    ],
   },
   { href: '/aprender/calendario', label: 'Calendario', needs: 'lesson.read', section: 'estudiar' },
   // Resultados sube a pestaña (4/10): «¿cómo me fue?» es de las tres preguntas del estudiante y
@@ -36,6 +45,7 @@ const NAV: readonly StudentDefinition[] = [
     label: 'Resultados',
     needs: 'score.read.own',
     section: 'estudiar',
+    needsResults: true,
   },
   { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'estudiar' },
   {
@@ -60,9 +70,10 @@ const NAV: readonly StudentDefinition[] = [
 ];
 
 export function buildStudentNav(
-  capabilities: ReadonlyMap<Capability, readonly unknown[]>
+  capabilities: ReadonlyMap<Capability, readonly unknown[]>,
+  { hasResults = true }: { hasResults?: boolean } = {}
 ): NavDestination[] {
-  return NAV.filter((d) => (capabilities.get(d.needs)?.length ?? 0) > 0).map(
-    ({ href, label, section, activeUnder }) => ({ href, label, section, activeUnder })
-  );
+  return NAV.filter(
+    (d) => (capabilities.get(d.needs)?.length ?? 0) > 0 && (hasResults || !d.needsResults)
+  ).map(({ href, label, section, activeUnder }) => ({ href, label, section, activeUnder }));
 }

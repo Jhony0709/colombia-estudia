@@ -65,7 +65,7 @@ export function AuthShell({ intent, dataPolicyUrl, children }: AuthShellProps) {
         mide su texto, así el titular nunca se monta sobre la foto en pantallas bajas. La foto lleva
         `alt`: la persona es parte del mensaje.
       */}
-      <figure className="auth-panel m-0 hidden overflow-hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:self-start">
+      <figure className="auth-panel motion-enter-md m-0 hidden overflow-hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:self-start">
         <div className="relative min-h-[12rem] flex-1">
           {media && (
             <Image

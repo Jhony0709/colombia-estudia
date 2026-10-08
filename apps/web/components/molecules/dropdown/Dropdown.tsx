@@ -12,7 +12,7 @@
  * Por debajo sigue Radix DropdownMenu: teclado (flechas, Home/End, letra), foco, `Escape`,
  * cierre al pulsar fuera, portal y colocación. Lo que pone `motion` es la entrada y la
  * salida —escala 0.95 → 1 con muelle, y el fundido al cerrar, que Radix por sí solo no puede
- * animar porque desmonta el contenido de golpe—. Con `prefers-reduced-motion` no hay
+ * animar porque desmonta el contenido de golpe—. Con movimiento reducido (sistema o plataforma) no hay
  * animación: aparece y desaparece, sin más.
  *
  * Colores solo por token (`surface`, `text`, `border`, `status`): un ítem `danger` tiñe el
@@ -20,7 +20,8 @@
  */
 
 import * as Radix from '@radix-ui/react-dropdown-menu';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useMotionReduced } from '@/lib/motion/use-motion-reduced';
 import { Check } from 'lucide-react';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -109,7 +110,7 @@ export function DropdownMenu({
   className,
 }: DropdownMenuProps) {
   const { open } = useContext(OpenContext);
-  const reduced = useReducedMotion() === true;
+  const reduced = useMotionReduced();
 
   return (
     <MenuContext.Provider value={{ onAction }}>

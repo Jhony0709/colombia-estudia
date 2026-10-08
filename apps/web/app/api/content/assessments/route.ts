@@ -24,7 +24,7 @@ const body = z.object({
   lessonId: z.string().cuid().nullable().optional(),
   subjectId: z.string().cuid().nullable().optional(),
   kind: z.enum(['DIAGNOSTIC', 'SUBJECT', 'FINAL']),
-  title: z.string().trim().min(1, 'El examen necesita un título').max(200),
+  title: z.string().trim().min(1, 'El cuestionario necesita un título').max(200),
   /**
    * `.optional()` **además** de `optionalText`: son dos cosas distintas y confundirlas
    * dejó rota la creación de contenido desde el 18/9. `optionalText` dice que el texto

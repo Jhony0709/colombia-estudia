@@ -5124,6 +5124,262 @@ verificable, y a resultados), con la agenda y la ayuda al lado. El héroe lleva 
 siguiente curso» a `#cursos-abiertos`. Con otra matrícula activa, el panel normal añade
 «Cursos completados» al final.
 
+«Cursos completados» por componente (lo que el cliente llama curso), no por matrícula:
+`listCompletedCourses` (`features/learn/server/completed.service.ts`) parte de las constancias
+de módulo vigentes, así que también salen los componentes terminados de un programa en curso.
+Tarjeta como la de «Cursos abiertos»: portada, «Programa › grupo» como línea de contexto (no
+`nav` de migas: no es dónde está la página), el componente, la fecha, sus talleres (asignaturas,
+en el orden de su primer tema, con cuántos temas) y la constancia verificable del componente.
+
+## 6/10 — Skill `experiencia-colombia-estudia`
+
+Principios destilados de Lemonade (doc del proyecto `claude/colombia-estudia-lemonade-ux-0610.md`)
+reunidos en `.claude/skills/experiencia-colombia-estudia`: nueve principios, vocabulario nuevo
+(entrada, escalera, tecleo, eco, conteo, apagado), el formulario conversacional, las primitivas
+y el mapa de motion por pantalla del estudiante. `motion-colombia-estudia` y
+`frontend-colombia-estudia` la enlazan. Pendiente de aprobar: tokens `duration.stagger`,
+`duration.typeChar`, `motion.distance.sm/md`. Brecha encontrada: la preferencia
+`reading.motion` escribe `--reading-motion` (`preferences-provider.tsx:110`) y nadie la lee.
+
+**Aplicado el mismo 6/10 (aprobado por Jhonny, cuatro pasos con auditoría):**
+
+1. **Movimiento reducido + tokens.** Cookie `ce-motion` (`lib/motion/preference.ts`) → el layout
+   raíz pone `data-motion="reduced"` en `<html>`; `globals.css` corta bajo ese atributo igual que
+   con `prefers-reduced-motion`; se elige en «Cómo leer» del tema. `useMotionReduced()` para
+   `motion/react` (Dropdown) y `motionReduced()` para la portada. Tokens `duration.stagger`
+   (60ms), `duration.typeChar` (8ms), `motion.distance.sm/md` en `design-tokens` y `tokens.md`.
+   **Hace falta reiniciar `pnpm dev`** para que el plugin los publique.
+2. **Primitivas.** Clases `.motion-enter(-md)`, `.motion-stagger`, `.motion-order-1..3` en
+   `globals.css`; `components/atoms/motion` (`InView`, `CountUp`, `TypedPrompt`,
+   `EnterOnChange`); `lib/motion/tokens.ts` lee duración y curva de las variables. Con la pestaña
+   oculta no se anima nada que dependa de frames.
+3. **Registro conversacional.** `components/organisms/conversational-form` + `/registro`: seis
+   preguntas en cuatro secciones, píldoras editables, menor de edad sin paso de política, errores
+   del servidor de vuelta a su pregunta, un solo envío. Visto en Chrome con datos de prueba sin
+   enviar.
+4. **Mapa por pantalla** (`experiencia-colombia-estudia` §6 y «Estado de aplicación»).
+
+**Corrección (Jhonny: «olvidaste las transiciones de los pasos y campos en /registro»).** Los
+pasos cambiaban de golpe: solo la zona de respuesta tenía entrada. Ahora `ConversationalForm`
+usa `motion/react` (`AnimatePresence mode="wait"` + `layout`, tokens por
+`lib/motion/use-motion-tokens.ts`): sale la pregunta respondida, entra la píldora y la pregunta
+nueva, y los campos entran en escalera. Medido en Chrome en `/registro`; con movimiento reducido,
+corte y foco al campo en < 120 ms.
+
+Tests nuevos: `TypedPrompt.test.tsx`, `ConversationalForm.test.tsx`.
+
+**Validación de escenarios de `/registro` (6/10, Chrome en localhost):** nombre vacío o sin
+apellido, fecha futura y de hace más de 120 años, correo sin dominio y contraseña de menos de 12
+se frenan en su pregunta con su motivo; correo ya registrado (`estudiante3@yopmail.com`) → 409
+`CONFLICT` y vuelve a la pregunta del correo con «Ya hay una cuenta con este correo…»; al
+corregirlo salta directo al final con lo demás intacto; adulto con celular y política → 200
+(`laura.prueba.0610@example.test`); menor sin política por la API → 200, `isMinor: true`
+(`mateo.prueba.0610@example.test`). Las dos matrículas salieron `NO_INTRO_COHORT`: la
+institución no tiene cohorte de introducción configurada (`/admin/institucion`), así que el
+camino `ENROLLED` no se probó. Corregido: los rechazos del servicio sin `details` (correo,
+política, fecha, contraseña filtrada) ahora vuelven a su pregunta (`stepOfError`), el error
+de un campo se muestra con su motivo y no con el nombre interno, y el título de éxito pasó a
+«Cuenta creada» (repetía «Tu cuenta está lista» del texto de abajo). Páginas de prueba en
+`_to_delete/prueba-motion-0610/`.
+
+## 6/10 — `/aprender` para quien llega: la crítica del primer día, aplicada
+
+Pedido: aplicar la crítica de `/aprender` para un usuario nuevo, con cursos gratis y de pago.
+Decisión en `PRODUCT_DECISIONS.md` (6/10).
+
+- **Inscribirse lleva al tema**: `catalog.service.ts#selfEnroll` devuelve
+  `{ enrollmentId, startHref }` (el `resume` de `getCohortOutline`); `enroll-button.tsx` navega
+  ahí («Inscribirme y empezar»).
+- **Gratis y de pago**: `listOpenFreeCourses` → `listOpenCourses` (las dos `pricing`, gratuitos
+  primero, `free` y `price`). `requestEnrollment` (solo PAID y abierta, si no 404) avisa a
+  `OPERATIONS`/`ADMIN` con `enrollment_requested` (nuevo tipo; `NotificationList` → «Ver
+  persona»). `POST /api/learn/catalog/[cohortId]/request` (sin capacidad: es la persona sobre sí
+  misma; entrada en la allowlist del route-guard). `catalog-section.tsx` rehecho: `FeaturedCourse`
+  y `CatalogSection` (lista con uno o dos, rejilla con más; precio, temas, examen, grado, hasta
+  cuándo); `request-button.tsx` (pide y ofrece WhatsApp). Tests en `catalog.service.test.ts`.
+- **Sin matrícula**: saludo → curso destacado como héroe → «Más cursos» → al lado «Cómo
+  funciona» y ayuda. `home-hero.tsx` queda sin uso (y las claves `learn.hero.eyebrow|title|body|cta|start`).
+- **Primer día** (matrícula abierta, nada completado): sin KPIs, ritmo, exámenes ni catálogo;
+  héroe sin barra al 0 % («8 pasos en Introducción, a tu ritmo»); ruta + `how-it-works.tsx`,
+  fechas que piden algo y ayuda.
+- **«Resultados» aparece con el primer resultado**: `attempt.service.ts#hasResults` (una nota o
+  un intento no `IN_PROGRESS`); `buildStudentNav(caps, { hasResults })`; layout del estudiante.
+  Test `__tests__/unit/nav/student-nav.test.ts` (3, pasan en el arnés).
+- «Cohorte» se queda: es el término del glosario (`reference/09-glossary.md:27`).
+
+Verificado en Chrome como `mateo.prueba.0610@example.test`: héroe del primer día y barra sin
+«Resultados». **No verificado**: la rama sin matrícula y las tarjetas de pago (no hay un
+programa `PAID` con cohorte abierta en local; crear uno en `/contenido/programas` con precio y
+una cohorte abierta), y jest/eslint. `tsc` limpio.
+
+**Bachillerato de desarrollo desde el documento del cliente (6/10)**: `packages/scripts/seed/bachillerato.ts`
+(antes `mapa-conceptual.ts`, que no llegó a correrse) carga `seed/contenido/bachillerato/`: el
+documento `COLOMBIA ESTUDIA_ (1).md` del 2/10 convertido a un `.md` por tema y un `taller.json`
+por taller (actividades con enunciados, cuestionario con clave, cierre «Aprender es avanzar»), sin
+imágenes y auditado en `AUDITORIA.md` (56 cambios, 16 puntos para el autor). Fundamentos: 8 temas,
+12 actividades, 4 cuestionarios; Consolidación: 2 temas, 4 actividades, 2 cuestionarios.
+`programa.json` manda en cada corrida: programa, precios (generales o por rango de grado), grados,
+orden de componentes y de talleres (`orden`). Cliente, 6/10: componentes generales (el contenido es
+de grados 6 y 7, pero sin grado fijo) y 95.000 por componente; ver `PRODUCT_DECISIONS.md`.
+El contenido se crea una vez (versión 1 publicada); lo que un seed anterior dejó y ya no está se
+retira si nadie lo empezó. Valida todo antes de escribir (`--validar`, sin base: pasa aquí con
+`parseLessonMarkdown`, `validateLessonForPublish` y `validateAssessmentForPublish`). La escritura
+no se pudo correr aquí (sin motor de Prisma en la VM).
+
+## 7/10 — «Otros cursos»: la lista de componentes
+
+Jhonny: «debería salir la lista de componentes con su diseño moderno y de qué módulo hacen
+parte». `listOpenCourses` vuelve a un componente por tarjeta también en los de pago, con
+`position`/`programModules`, `workshops` (asignaturas en el orden de la ruta), `activityCount` y
+`assessmentCount`. `catalog-section.tsx` rehecho: un grupo por programa («Bachillerato por ciclos ·
+2 componentes · abierto hasta…»); tarjeta con portada (sin imagen, el azul de marca), «Componente
+1 de 2», «Parte de …», talleres como etiquetas, temas · actividades · cuestionarios con icono y
+precio. Pedido el programa, el grupo dice «Pediste inscribirte el …, empezando por …» con
+WhatsApp, y las tarjetas ya no ofrecen el botón (antes cada una decía «Lo pediste»). `PageSection`
+pone su `id` en la sección (los enlaces `#cursos-abiertos` y `#componentes` no llevaban a nada).
+Visto en Chrome como Mateo con el bachillerato del seed. `tsc` limpio; jest sin correr.
+
+Después, el mismo día: la parte baja de la tarjeta toma la referencia que pasó Jhonny (precio
+grande en color de marca con el periodo debajo, borde y fila de carga repartida con iconos,
+acción); estado en pastilla flotante sobre la portada («En curso», «Terminado», «Solicitado»).
+«Ver talleres (N)» es un `<details>` con cada taller y su resumen (temas · actividades · con
+cuestionario). La lista incluye también las cohortes donde la persona ya está (Jhonny: «el de
+introducción también debería listarse, pero como gratis»): `listOpenCourses` excluye solo las
+matrículas retiradas y devuelve `enrollment {id, status}`; en curso, «Ir a mi ruta»; terminado,
+sin acción. `catalogHref` de la página solo apunta al catálogo si queda algo sin tomar. Rejilla
+con `items-start` (abrir un desplegable estiraba la vecina). `tsc` limpio; la última parte (la
+Introducción listada) **sin ver en Chrome**: el servidor de desarrollo no respondía.
+
+Último ajuste del 7/10 (Jhonny): la Introducción usa la misma tarjeta que los demás (se quitó la
+variante ancha; todos los grupos comparten columnas, así la tarjeta mide igual en todo el
+catálogo). «Ver talleres» pasa a `workshops-disclosure.tsx` (cliente): `grid-template-rows`
+0fr → 1fr con `duration-normal`, `ease-enter` al abrir y `ease-exit` al cerrar, la lista entra con
+`motion-enter`, cerrado queda `invisible` (fuera del foco); corte seco con movimiento reducido por
+la regla global. Tarjeta compactada de 526 a ~350 px de alto: portada 3:1, `p-4 gap-2`, título
+`type-body-emphasis`, precio `type-subheading` con el periodo al lado y en la misma fila que la
+acción; la fecha sale de la tarjeta (la dice el grupo; se quitó `learn.catalog.until`). Visto en
+Chrome (alturas y la transición medidas); `tsc` limpio; jest y lint sin correr.
+
+Y después: la carga de la tarjeta es icono + número (`Load compact`); la palabra va en `sr-only`
+(lo que lee el lector) y en el `Tooltip` del sistema al pasar el ratón; en táctil se lee completa
+en «Ver talleres». El héroe la sigue mostrando con palabra. Portada 9:4 con `CoverWave` como borde
+inferior: la onda «side» de `AlbaWave` del landing con tokens de la app (`fill-brand-yellow`,
+`fill-accent-base`, `fill-surface-base`) en vez de `--site-*`, que solo existen bajo `.site`.
+Tarjeta ~395 px. Visto en Chrome (tooltip incluido). Ancho: rejilla `repeat(auto-fill,
+minmax(14.5rem,1fr))`, la misma en todos los grupos (249 × ~335 px con la barra lateral; una
+columna a ancho completo en el teléfono). Luego: columnas fijas de 17,5rem (`sm:grid-cols-[repeat(auto-fill,17.5rem)]`, 280 px);
+el precio va en la fila de la carga, sin «por componente» a la vista (queda en `sr-only`), y la
+acción, cuando hay, en su propia fila. Tarjeta sin acción: 280 × 312 px.
+
+**La ruta pasa a la página del curso** (Jhonny: «no debería verse en /aprender, sino en la página
+de los detalles del curso»). Nueva `/aprender/curso/[enrollmentId]` (migas, cohorte, avance,
+«Empezar/Continuar», «Tu ruta», ayuda; ajena → 404, comprobado). `RouteSection` y sus piezas
+salen de `aprender/page.tsx` a `aprender/route-section.tsx` (sin cambios, más un `title`
+opcional). `/aprender` ya no pinta la ruta; el héroe enlaza «Ver la ruta del curso». Apuntan a la
+página nueva: «Ir a mi ruta» (catálogo), «Ver toda la ruta» (riel), la vuelta del tema y del
+examen (antes `/aprender?matricula=…#ruta`). «Inicio» queda activo bajo `/aprender/curso/`.
+Mensajes `learn.course.*`; `reference/01-routing/routes.md` con la fila nueva. Visto en Chrome
+como Mateo; `tsc` limpio; jest y lint sin correr.
+
+**Detalles de un curso no tomado, bloqueado** (Jhonny: «para los cursos bloqueados puedo de igual
+manera ver los detalles, pero saldrán bloqueados»). Nueva `/aprender/catalogo/[cohortId]/[moduleId]`
+con `getCoursePreview` (`catalog.service.ts`: el curso tal como lo lista el catálogo + su contenido
+agrupado por taller, cuestionario al final, exámenes sin taller aparte, y los otros componentes).
+Todo con candado y sin enlace; aviso de por qué (gratis / de pago / ya pedido + WhatsApp); al lado
+la misma `CourseCard` (`detail`: sin enlace ni «Ver talleres», título h2). Si ya está en la
+cohorte, redirige a su ruta; lo que el catálogo no lista, 404 (comprobado). En el catálogo, el
+título de cada tarjeta enlaza a sus detalles (`courseHref`). «Inicio» activo bajo
+`/aprender/catalogo/`. Test: `getCoursePreview` ×3 en `catalog.service.test.ts` (sin correr).
+Visto en Chrome con Fundamentos (Mateo, solicitado).
+
+**Gestión con los nombres del modelo de negocio** (Jhonny, 7/10; cliente 3/10: programa →
+componente → taller → tema/actividad → cuestionario). Barra: Plan de estudios = Programas,
+Talleres (antes Asignaturas, y ahora después de Programas); Contenido = Temas, Cuestionarios
+(antes Exámenes); «Solicitudes» con icono (`Inbox`, faltaba). 88 cadenas de gestión en
+`es-CO.json` (Asignatura → Taller con su género, Examen → Cuestionario; tipos «Cuestionario
+diagnóstico / del taller / final», corto «Del taller»; columna «Tema» en vez de «Examen del
+tema»), `metadata` de las páginas, errores de API y de servicio que ve el staff
+(`api-error-text.ts`, zod de cuestionarios, `curriculum`/`lessons`/`assessments.service`). Inicio:
+«Matrícula completada» en Actividad reciente (salía `enrollment: completed`) y «Vieron qué hacer en
+su panel» (decía «Mis programas»). Glosario (`reference/09-glossary.md`) al día. **Sin tocar**:
+las URLs (`/contenido/asignaturas`, `/contenido/examenes`) ni el lado del estudiante, que sigue
+diciendo «Examen». `staff-nav.test.ts` actualizado y pasa en el arnés; `tsc` limpio.
+
+**Revisión del flujo de precios (8/10)**, decisión en `PRODUCT_DECISIONS.md`. Hallazgos (antes):
+fechas en UTC, no en días de Bogotá (un precio «desde el 8» se cobraba desde las 7 p. m. del 7 y
+«hasta el 31» dejaba de cobrarse el 30 a las 7 p. m.; el formulario proponía «mañana» después de
+las 7 p. m.); archivar no comprobaba que el precio fuera del programa de la URL; empate de fechas
+sin desempate (`orderBy` solo por `validFrom`); se podía poner precio a un programa gratuito y su
+fila decía «sus matrículas no generan cobro»; la lista no decía cuál se cobra hoy (dos «Desde …»
+iguales con un precio programado); fechas ISO crudas; periodo por defecto «Por mes» (el negocio es
+por componente); el número de planes que usan un precio solo lo oía el lector de pantalla; sin
+editar ni borrar; un plan podía referenciar un precio archivado. Cambios: `prices.service.ts`
+(`withPriceStates`, `updateProgramPrice`, `deleteProgramPrice`, días de Bogotá, desempate por
+`createdAt`, gemelos `CONFLICT`, gratuito rechazado, `programId` en archivar, auditoría con
+`before` completo), ruta `PATCH …/prices/[priceId]` con `op` archive/update/delete y `schema.ts`
+compartido, `billing.service.ts` (precio archivado no vale para un plan), `program-prices.tsx`
+(columna «Hoy», fechas legibles, Editar/Eliminar si nadie lo usa, Archivar con «En N planes» a la
+vista y aviso de consecuencia, «Por componente» por defecto, aviso de reemplazo). Test nuevo
+`prices.service.test.ts` (sin correr: el arnés no tiene `jest.mock`); la lógica de estados se
+comprobó aparte en node. En Chrome: añadir programado, gemelo 409, editar 100.000 → 105.000;
+la eliminación se pulsó pero la extensión se desconectó antes de verla.
+
+**Catálogo y punto de entrada (8/10, Jhonny: «se muestra sin la marca En curso»).** La marca «En
+curso» iba por cohorte (`catalog.service.ts`): entrando por el componente 2, la tarjeta del 1
+decía «En curso» con «Ir a mi ruta» aunque la ruta no lo muestra. Ahora `CatalogCourse.beforeEntry`
+(posición menor que `Enrollment.startsAtModule`): esas tarjetas van sin marca, sin acción y con
+`enrollment` nulo; su página de detalles dice «No está en tu ruta…». Test nuevo en
+`catalog.service.test.ts` (sin correr). `tsc` limpio.
+
+**Cursos de prueba** (`packages/scripts/seed/cursos-prueba.ts`): un programa por forma de curso
+(gratis; 50.000 por componente con 3 componentes; por grados 6, 7 y 8 con precios 6–7 y 8; 80.000
+por mes con progresión libre; 300.000 una vez), cada componente con un taller «Taller de prueba»:
+un tema, una actividad y un cuestionario de dos preguntas (2 intentos, 60 %). Cohorte abierta de
+hoy a 180 días, contenido asignado. Cada programa en una transacción; si existe, no se toca.
+`--validar` pasa en la VM (con el cargador de strip-types: `tsx` no corre aquí, su esbuild es de
+macOS); la escritura no se probó (sin base de datos desde la VM).
+
+## 6/10 — Solicitudes: el estudiante pide, operación resuelve
+
+Decisión en `PRODUCT_DECISIONS.md` (6/10). **Schema (protegido, aprobado)**: `AccessRequest`
+(+ enums `AccessRequestKind`, `AccessRequestStatus`; relaciones en `Institution`, `Person` ×2,
+`Cohort`, `Module`, `Enrollment`), migración `20261006000000_access_request` escrita a mano (índice
+único parcial, `CHECK` de `enrollmentId`, RLS). `lib/db/tenant.ts` (protegido): `AccessRequest` y
+`EnrollmentModule` en `TENANT_SCOPED_MODELS` (este faltaba desde el 3/10, error mío); test 37 → 39.
+
+- `features/requests/server/requests.service.ts`: `openEnrollRequest`, `requestUnlock` (solo un
+  componente `LOCKED` de la matrícula propia y activa), `closeRequests` (en la transacción de
+  `enrollPerson` y de `setModuleAccess`), `listMyPendingRequests`, `listRequests` (con cartera de la
+  matrícula y menor sin acudiente), `countPendingRequests`, `dismissRequest` (audita).
+- Aviso nuevo `unlock_requested`; los dos llevan a `/solicitudes` («Ver la solicitud»).
+- API: `POST /api/learn/enrollments/[enrollmentId]/modules/[moduleId]/request` (sesión; allowlist
+  del route-guard) y `PATCH /api/access-requests/[requestId]` (`cohort.manage`).
+- Estudiante: «Pedir que lo habiliten» en el héroe («Terminaste lo que tienes habilitado») y en el
+  siguiente componente bloqueado de la ruta (`unlock-request-button.tsx`); «Lo pediste el …» si ya
+  estaba. Catálogo: un programa de pago es una tarjeta («N componentes», precio por componente) y
+  dice si ya se pidió. El primer día vuelve a mostrar los otros cursos (regresión mía de la mañana).
+- Operación: `/solicitudes` (Abiertas / Cerradas), primera de Operación en la barra y primera en
+  «Requiere atención»; `EnrollSheet` acepta persona y entrada iniciales; la ficha de matrícula
+  marca «Lo pidió el …» en el componente.
+- Tests: `requests.service.test.ts` (nuevo), `catalog`, `module-access`, `enrollments`,
+  `staff-nav` (pasa en el arnés), `scope-args`.
+
+`tsc` limpio contra un cliente Prisma generado con el schema nuevo (generado aparte, sin tocar
+`node_modules`). **Sin verificar**: jest, y nada en el navegador: hasta aplicar la migración y
+regenerar el cliente, `/aprender`, `/inicio` y la ficha de matrícula fallan (piden la tabla
+nueva). De tu lado, en orden: `pnpm db:migrate:deploy`, `pnpm db:generate`, reiniciar el dev,
+`pnpm test:unit`, `pnpm lint`. Hueco viejo que no se tocó: `002-rls.sql` y el test de integración
+de aislamiento no cubren `ProgramPrice`, `Counter` ni `EnrollmentModule`.
+
+**Auditoría (6/10), corregido:** el servidor aceptaba pedir cualquier componente bloqueado (la
+pantalla y la decisión dicen solo el siguiente); el héroe y la ruta no se sincronizaban tras pedir
+(`router.refresh`); borrar un componente vacío con solicitudes o habilitaciones fallaba con error de
+FK (ahora `CONFLICT`); el estudiante no se enteraba de que lo matricularon ni de que se descartó su
+solicitud (avisos `enrollment_created` y `request_dismissed`); la de matrícula solo se cerraba con
+esa cohorte (ahora con cualquiera del programa); el índice parcial queda también en
+`001-partial-indexes.sql`. Además, un `git status` mío dejó `.git/index.lock` vacío (la VM no puede
+borrar); se movió a `_to_delete/git-lock-0610/`.
+
 ## 3/10 — Lo que decidió el cliente: talleres, componentes a mano, último intento
 
 Decisiones en `PRODUCT_DECISIONS.md` (3/10); mapa cliente → modelo en el doc de la reunión.

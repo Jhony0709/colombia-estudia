@@ -17,6 +17,15 @@ const db = {
 };
 
 jest.mock('server-only', () => ({}));
+// 6/10: matricular cierra la solicitud de la persona, si la había.
+const mockCloseRequests = jest.fn();
+jest.mock('@/features/requests/server/requests.service', () => ({
+  closeRequests: (...args: unknown[]) => mockCloseRequests(...args),
+}));
+const mockNotify = jest.fn();
+jest.mock('@/features/notifications/server/notifications.service', () => ({
+  notify: (...args: unknown[]) => mockNotify(...args),
+}));
 jest.mock('@/lib/db/errors', () => ({
   isUniqueViolation: (err: unknown) => (err as { unique?: boolean })?.unique === true,
 }));
@@ -78,7 +87,9 @@ describe('enrollPerson', () => {
     id: 'cohort-1',
     status: 'OPEN',
     accessUntil: null,
+    programId: 'prog-1',
     program: {
+      name: 'Bachillerato por ciclos',
       defaultAccessDays: 300,
       modules: [
         { position: 1, grade: null },
@@ -131,6 +142,46 @@ describe('enrollPerson', () => {
       data: expect.objectContaining({ isMinorAtEnrollment: true, studentId: 'p1' }),
       select: { id: true },
     });
+  });
+
+  it('closes the open request of that person for that program and tells them (6/10)', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: MINOR_BIRTH });
+    db.guardianship.findFirst.mockResolvedValue({ id: 'g1' });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+    db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+    db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+    mockCloseRequests.mockResolvedValueOnce(1);
+
+    const result = await enrollPerson({
+      ...BASE,
+      cohortId: 'cohort-1',
+      personHandle: '123',
+      now: NOW,
+    });
+
+    expect(result).toEqual({ enrollmentId: 'enr-1', warning: null });
+    expect(mockCloseRequests).toHaveBeenCalledWith(
+      expect.anything(),
+      { kind: 'ENROLL', personId: 'p1', programId: 'prog-1' },
+      { actorId: 'actor-1', now: NOW }
+    );
+    expect(mockNotify).toHaveBeenCalledWith(
+      'inst-1',
+      expect.objectContaining({ personId: 'p1', type: 'enrollment_created', href: '/aprender' })
+    );
+  });
+
+  it('without a request, the student is not told twice (the invitation already does)', async () => {
+    db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: MINOR_BIRTH });
+    db.guardianship.findFirst.mockResolvedValue({ id: 'g1' });
+    db.cohort.findFirst.mockResolvedValue(cohort);
+    db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+    db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+    mockCloseRequests.mockResolvedValueOnce(0);
+
+    await enrollPerson({ ...BASE, cohortId: 'cohort-1', personHandle: '123', now: NOW });
+
+    expect(mockNotify).not.toHaveBeenCalled();
   });
 
   it('enrols a minor who has a guardian, flagging isMinorAtEnrollment', async () => {
