@@ -305,7 +305,7 @@ export async function CourseCard({
   return (
     <article
       aria-labelledby={id}
-      className="bg-surface-base border-border-muted rounded-card elevation-resting flex h-full flex-col overflow-hidden border"
+      className="bg-surface-base border-border-muted rounded-card elevation-resting relative flex h-full flex-col overflow-hidden border"
     >
       <div className="relative">
         <Cover course={course} className="aspect-[9/4]" />

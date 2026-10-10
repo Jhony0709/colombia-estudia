@@ -352,11 +352,13 @@ function Shelf({
       </div>
       {group.notice}
       {/* Sin `tabIndex` (lint jsx-a11y): cada tarjeta tiene enlaces y botones, y al tabular el
-          navegador desliza hasta ellos; las flechas cubren el resto (WCAG 2.1.1). */}
+          navegador desliza hasta ellos; las flechas cubren el resto (WCAG 2.1.1).
+          `relative`: sin él, los `sr-only` de las tarjetas escapan del recorte y ensanchan
+          la página en el teléfono. */}
       <ul
         ref={ref}
         aria-label={label}
-        className="-mx-1 my-0 flex snap-x snap-mandatory list-none items-start gap-4 overflow-x-auto scroll-smooth px-1 pb-3"
+        className="relative -mx-1 my-0 flex snap-x snap-mandatory list-none items-start gap-4 overflow-x-auto scroll-smooth px-1 pb-3"
       >
         {children.map((i) => (
           <li key={i.key} className={cn(COURSE_CARD_WIDTH, 'shrink-0 snap-start')}>

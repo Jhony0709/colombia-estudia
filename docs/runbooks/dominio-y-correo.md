@@ -1,7 +1,7 @@
 # Dominio, buzones y correo de la plataforma — albafuturoeducativo.com
 
 Creado el 8/10. Decisiones (Jhonny, 8/10): el dominio lo compra el cliente en **Cloudflare**;
-buzones en **Zoho Mail Lite** (cristian@, ana@, info@); la plataforma envía por **Resend** desde
+un solo buzón en **Zoho Mail Lite**, `info@albafuturoeducativo.com` (Jhonny, 8/10); la plataforma envía por **Resend** desde
 el **dominio raíz** (`no-reply@albafuturoeducativo.com`). Origen: reunión con el cliente del 3/10.
 
 Quién hace qué: el cliente paga y es dueño de las cuentas (Cloudflare, Zoho, Resend); Jhonny entra
@@ -12,7 +12,7 @@ como miembro y configura. Nada de esto se hace desde el código: el código ya e
 | Servicio             | Plan                       | Costo                                                                               |
 | -------------------- | -------------------------- | ----------------------------------------------------------------------------------- |
 | Cloudflare Registrar | `.com` a precio de costo   | ~10,5 USD/año, renovación igual                                                     |
-| Zoho Mail            | Mail Lite 5 GB, pago anual | ~1 USD por usuario/mes (3 buzones ≈ 36 USD/año)                                     |
+| Zoho Mail            | Mail Lite 5 GB, pago anual | ~1 USD/mes, facturado por año (1 buzón ≈ 12 USD/año)                                |
 | Resend               | Free                       | 0 USD: 3.000 correos/mes, 100/día, 3 dominios. Pro (20 USD/mes) al pasar de 100/día |
 
 ## 1. Comprar el dominio (cliente, Cloudflare)
@@ -39,8 +39,7 @@ registro. El proxy naranja rompe Vercel (certificado) y no aplica al correo.
 1. zoho.com/mail → _Mail Lite_ → «usar un dominio que ya tengo» → `albafuturoeducativo.com`.
    Centro de datos: **US** (los registros de abajo son los de zoho.com).
 2. Verificar el dominio con el TXT que da Zoho (`zoho-verification=zb…` en `@`).
-3. Crear `cristian@` y `ana@`. Para `info@`, dos opciones: buzón propio (una licencia más) o
-   **grupo** que reparte a cristian y ana (no gasta licencia). Decide el cliente.
+3. Crear el buzón `info@`. Si más adelante hace falta otra dirección (p. ej. `soporte@`), un alias de `info@` no gasta licencia.
 4. Registros en Cloudflare (los valores exactos los da Zoho en _Domains → Email configuration_):
 
 | Tipo | Nombre             | Valor                          | Prioridad |
@@ -111,7 +110,7 @@ Zoho y Resend, subir a `p=quarantine`.
 2. En Gmail, _Mostrar original_: **SPF, DKIM y DMARC = PASS**, remitente
    `no-reply@albafuturoeducativo.com`, responder a `info@…`.
 3. mail-tester.com: 9/10 o más.
-4. Escribir a cristian@, ana@ e info@ desde fuera y responder desde ellos.
+4. Escribir a info@ desde fuera y responder desde él.
 5. Vimeo: añadir `albafuturoeducativo.com` a los dominios permitidos de embed.
 
 ## 9. Lo que ya está en el código (8/10)
