@@ -15,6 +15,15 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 async function expectNoA11yViolations(page: import('@playwright/test').Page) {
+  // axe mide el estado asentado: a media entrada (hero) el texto está semitransparente.
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => undefined))
+    )
+  );
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
     .analyze();
