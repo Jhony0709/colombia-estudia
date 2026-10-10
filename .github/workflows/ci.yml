@@ -133,6 +133,7 @@ jobs:
           NODE_ENV: production
           NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
       - name: Log del servidor (si fallo)
         if: failure()
         run: cat /tmp/next-server.log
