@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -20,6 +20,7 @@ jobs:
 
   migrate-staging:
     needs: ci
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     environment: staging
     steps:
@@ -33,7 +34,7 @@ jobs:
 
   migrate-prod:
     needs: ci
-    if: vars.HAS_PROD == 'true'
+    if: github.ref == 'refs/heads/main' && vars.HAS_PROD == 'true'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -46,20 +47,26 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL_PROD }}
 
   deploy-vercel:
-    needs: migrate-staging
-    if: vars.DEPLOY_FROM_ACTIONS == 'true'
+    needs: [migrate-staging, migrate-prod]
+    # Despliega solo si migró la base de su entorno: main → producción, develop → staging.
+    if: >-
+      ${{ !cancelled() && vars.DEPLOY_FROM_ACTIONS == 'true' &&
+      ((github.ref == 'refs/heads/main' && needs.migrate-prod.result == 'success') ||
+      (github.ref == 'refs/heads/develop' && needs.migrate-staging.result == 'success')) }}
     runs-on: ubuntu-latest
+    env:
+      VERCEL_TARGET: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - name: Pull Vercel environment
-        run: npx vercel pull --yes --environment=production
+        run: npx vercel pull --yes --environment=$VERCEL_TARGET
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       - name: Build
-        run: npx vercel build --prod
+        run: npx vercel build --target=$VERCEL_TARGET
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -69,7 +76,7 @@ jobs:
         run: |
           # vercel prints the deployment URL to stdout and the inspector URL to stderr:
           # keep them apart so the smoke test hits the deployment, not the dashboard.
-          url=$(npx vercel deploy --prebuilt --prod)
+          url=$(npx vercel deploy --prebuilt --target=$VERCEL_TARGET)
           echo "url=$url" >> $GITHUB_OUTPUT
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
