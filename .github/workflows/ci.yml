@@ -105,7 +105,7 @@ jobs:
           # El log del servidor va a un archivo y se vuelca si algo falla: sin esto, cuando
           # una pagina responde 500 solo se ve el HTML de error de Next y no el stack.
           pnpm start > /tmp/next-server.log 2>&1 &
-          npx wait-on http://localhost:3000 --timeout 60000
+          npx wait-on http://localhost:3030 --timeout 60000
           pnpm a11y
         env:
           NODE_ENV: production

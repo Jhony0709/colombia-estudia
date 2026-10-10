@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3030',
     trace: 'on-first-retry',
   },
   projects: [
@@ -40,7 +40,7 @@ export default defineConfig({
   webServer: {
     // CI runs against the production build (next start); locally the dev server is fine.
     command: process.env.CI ? 'pnpm start' : 'pnpm dev',
-    url: 'http://localhost:3000',
+    url: 'http://localhost:3030',
     reuseExistingServer: !process.env.CI,
   },
 });

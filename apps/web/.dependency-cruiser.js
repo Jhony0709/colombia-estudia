@@ -37,7 +37,8 @@ module.exports = {
         path: '^features/([^/]+)/components/',
       },
       to: {
-        path: '^features/(?!\\1)[^/]+/server/',
+        path: '^features/[^/]+/server/',
+        pathNot: '^features/$1/server/',
       },
     },
 

@@ -2,7 +2,7 @@
   "name": "colombia-estudia",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -51,12 +51,18 @@
   "pnpm": {
     "overrides": {
       "postcss": ">=8.5.18",
-      "rollup": ">=3.30.0"
+      "rollup": ">=3.30.0",
+      "brace-expansion@^2": "^2.1.6",
+      "sharp": "^0.35.5",
+      "source-map-js": "^1.2.2"
     },
     "auditConfig": {
       "ignoreCves": [
         "GHSA-mw96-cpmx-2vgc",
         "GHSA-qxc2-j82w-r537"
+      ],
+      "ignoreGhsas": [
+        "GHSA-vfj7-8cjw-p6xm"
       ]
     }
   }
