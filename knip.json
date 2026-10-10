@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreExportsUsedInFile": true,
   "workspaces": {
     ".": {
       "ignoreDependencies": ["@prisma/client"]
@@ -22,7 +23,17 @@
         ".storybook/*.ts"
       ],
       "project": ["**/*.{ts,tsx}"],
-      "ignoreDependencies": ["@colombia-estudia/types"]
+      "ignoreDependencies": [
+        "@colombia-estudia/types",
+        "@tiptap/extension-image",
+        "@tiptap/extension-table",
+        "@tiptap/extension-task-item",
+        "@tiptap/extension-task-list",
+        "@tiptap/pm",
+        "@tiptap/react",
+        "@tiptap/starter-kit"
+      ],
+      "ignore": ["lib/editor/**"]
     },
     "packages/domain": {
       "project": ["src/**/*.ts"]

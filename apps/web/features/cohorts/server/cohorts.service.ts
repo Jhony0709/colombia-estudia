@@ -95,14 +95,6 @@ export function planCohortOpening(
 
 // ─────────────────────────── Queries ───────────────────────────
 
-export interface CohortFilters {
-  status: CohortStatus | null;
-  /** Programa por id; `null` = todos. */
-  programId: string | null;
-  /** Busca en código y nombre. */
-  q: string;
-}
-
 export async function listCohorts({
   institutionId,
   status,

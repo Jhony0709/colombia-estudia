@@ -14,7 +14,6 @@ import { isUniqueViolation } from '@/lib/db/errors';
 import { APIError } from '@/lib/core/errors';
 
 export type ConsentChannel = 'PAPER' | 'EMAIL';
-export const CONSENT_CHANNELS: readonly ConsentChannel[] = ['PAPER', 'EMAIL'];
 
 /**
  * Finds a person by document number or email, which is what operations has at hand when

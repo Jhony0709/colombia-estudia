@@ -47,5 +47,3 @@ export const motionTokens = {
   /** Porción visible para revelar (una sola vez). */
   amount: 0.2,
 } as const;
-
-export type MotionEase = (typeof motionTokens.easing)[keyof typeof motionTokens.easing];

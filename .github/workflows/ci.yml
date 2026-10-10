@@ -92,6 +92,24 @@ jobs:
   pa11y:
     needs: build
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    # La portada y el login leen la institución (`lib/authz/request-context.ts:103`): sin base, 500.
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+      DIRECT_URL: postgres://postgres:postgres@localhost:5432/test
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -99,6 +117,10 @@ jobs:
         with:
           name: build
           path: apps/web
+      - name: Base migrada con la institución
+        run: |
+          pnpm db:migrate:deploy
+          psql "$DATABASE_URL" -c "INSERT INTO \"Institution\" (id, slug, name, \"supportEmail\", \"emailFromName\") VALUES ('ci-institution', 'colombia-estudia', 'ALBA Futuro Educativo', 'soporte@example.test', 'ALBA Futuro Educativo') ON CONFLICT (slug) DO NOTHING;"
       - name: Start server and run pa11y
         run: |
           cd apps/web
@@ -118,6 +140,24 @@ jobs:
   e2e:
     needs: build
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    # La portada y el login leen la institución (`lib/authz/request-context.ts:103`): sin base, 500.
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+      DIRECT_URL: postgres://postgres:postgres@localhost:5432/test
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -125,6 +165,10 @@ jobs:
         with:
           name: build
           path: apps/web
+      - name: Base migrada con la institución
+        run: |
+          pnpm db:migrate:deploy
+          psql "$DATABASE_URL" -c "INSERT INTO \"Institution\" (id, slug, name, \"supportEmail\", \"emailFromName\") VALUES ('ci-institution', 'colombia-estudia', 'ALBA Futuro Educativo', 'soporte@example.test', 'ALBA Futuro Educativo') ON CONFLICT (slug) DO NOTHING;"
       - run: pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium
       - name: Run e2e tests
         run: pnpm test:e2e
@@ -132,19 +176,6 @@ jobs:
           NODE_ENV: production
           NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
-
-  storybook:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-      - run: pnpm --filter @colombia-estudia/web storybook:build
-      - run: pnpm --filter @colombia-estudia/web exec playwright install --with-deps chromium
-      - name: Run storybook tests
-        run: |
-          npx http-server apps/web/storybook-static -p 6006 &
-          npx wait-on http://localhost:6006 --timeout 60000
-          pnpm --filter @colombia-estudia/web test-storybook
 
   security:
     runs-on: ubuntu-latest

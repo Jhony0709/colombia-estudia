@@ -34,7 +34,6 @@ export type PayerType = 'PERSON' | 'PARTNER';
 export type PaymentMethod = 'TRANSFER' | 'BRE_B' | 'CASH' | 'GATEWAY';
 export type Periodicity = 'MONTHLY' | 'BIWEEKLY' | 'WEEKLY';
 
-export const PAYMENT_METHODS: readonly PaymentMethod[] = ['TRANSFER', 'BRE_B', 'CASH', 'GATEWAY'];
 export const PERIODICITIES: readonly Periodicity[] = ['MONTHLY', 'BIWEEKLY', 'WEEKLY'];
 export const ACCOUNT_STATUSES: readonly AccountStatus[] = [
   'CURRENT',
