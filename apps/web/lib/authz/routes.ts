@@ -34,7 +34,7 @@ const PUBLIC_PREFIXES = [
  * `/` es pública desde el 19/9: sin sesión muestra la portada (web pública); con sesión sigue
  * redirigiendo al área del rol (app/page.tsx). Solo el `/` exacto: `/aprender` sigue protegida.
  */
-const PUBLIC_EXACT = ['/', '/api/health'] as const;
+const PUBLIC_EXACT = ['/', '/api/health', '/robots.txt', '/sitemap.xml'] as const;
 
 // ─────────────────────────── Protection Check ───────────────────────────
 

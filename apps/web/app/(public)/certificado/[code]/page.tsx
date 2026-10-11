@@ -22,7 +22,11 @@ import { CopyLinkButton } from '@/components/molecules/copy-link-button';
 import { cn } from '@/lib/utils';
 import { PrintButton } from './print-button';
 
-export const metadata: Metadata = { title: 'Verificar constancia' };
+// Muestra el nombre del estudiante: se comparte por enlace, no por buscador (SEO-06).
+export const metadata: Metadata = {
+  title: 'Verificar constancia',
+  robots: { index: false, follow: false },
+};
 
 export default async function PublicCertificatePage({
   params,

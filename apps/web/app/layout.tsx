@@ -11,6 +11,7 @@ import { ToastProvider } from '@/components/organisms/toaster';
 import { FocusManager } from '@/lib/a11y/focus-manager';
 import { SkipLink } from '@/lib/a11y/skip-link';
 import { StyleNonce } from '@/lib/csp/style-nonce';
+import { siteUrl } from '@/lib/seo/site-url';
 import { atkinson } from './fonts/sans';
 import './globals.css';
 
@@ -31,8 +32,10 @@ import './globals.css';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'ALBA Futuro Educativo',
+  metadataBase: new URL(siteUrl()),
+  title: { default: 'ALBA Futuro Educativo', template: '%s · ALBA Futuro Educativo' },
   description: 'Termina tu bachillerato a tu ritmo, 100 % en línea y con acompañamiento.',
+  openGraph: { siteName: 'ALBA Futuro Educativo', locale: 'es_CO', type: 'website' },
 };
 
 /**

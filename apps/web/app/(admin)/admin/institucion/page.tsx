@@ -18,10 +18,7 @@ import { InstitutionForm } from './institution-form';
 import { RegistrationForm } from './registration-form';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const ctx = await getRequestContext();
-  return { title: `Institución · ${ctx.institution.name}` };
-}
+export const metadata: Metadata = { title: 'Institución' };
 
 export default async function InstitutionPage() {
   await requireCapability('institution.manage');

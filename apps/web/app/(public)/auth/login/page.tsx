@@ -5,8 +5,16 @@
  * Server component wrapping LoginContent in Suspense.
  */
 
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import LoginContent from './login-content';
+
+export const metadata: Metadata = {
+  title: 'Inicia sesión',
+  description: 'Entra a tu cuenta de ALBA Futuro Educativo para continuar tu bachillerato.',
+  alternates: { canonical: '/auth/login' },
+  robots: { index: true, follow: true },
+};
 
 export default function LoginPage() {
   return (

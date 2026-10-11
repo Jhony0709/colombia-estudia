@@ -27,6 +27,9 @@ describe('isProtected', () => {
       // Registro público (Fase B, 23/9): con sesión redirige (app/(public)/registro/page.tsx).
       '/registro',
       '/api/auth/register',
+      // SEO-01 (11/10): sin esto el middleware los mandaba al login.
+      '/robots.txt',
+      '/sitemap.xml',
     ])('%s is NOT protected', (path) => {
       expect(isProtected(path)).toBe(false);
     });
@@ -34,6 +37,7 @@ describe('isProtected', () => {
 
   describe('protected routes', () => {
     it.each([
+      '/robots.txt.bak',
       '/ingresar',
       '/inicio',
       '/aprender',

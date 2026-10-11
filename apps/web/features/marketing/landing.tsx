@@ -8,7 +8,7 @@
  * AA, foco visible, objetivos de 44 px, HTML semántico, movimiento reducido.
  *
  * Una sola narrativa, unida por las ondas del isotipo: hero → la realidad adulta → el programa
- * → historias → el proceso → personas → valores → preguntas → el cierre. Siempre en claro.
+ * → historias → el proceso → valores → preguntas → el cierre. Siempre en claro.
  *
  * Movimiento (5/10): `motion/` (tokens y primitivos) y la entrada del hero en `site.css`. Cada
  * sección anima solo lo suyo y una vez; las secciones de color nunca se desvanecen enteras (bajo
@@ -28,12 +28,12 @@ import { AdultLearning } from './sections/adult-learning';
 import { Programs } from './sections/programs';
 import { Stories } from './sections/stories';
 import { ProcessTimeline } from './sections/process-timeline';
-import { RealPeople } from './sections/real-people';
 import { ValueStrip } from './sections/value-strip';
 import { Faq } from './sections/faq';
 import { FinalCta } from './sections/final-cta';
 import { SiteFooter } from './sections/site-footer';
 import { FloatingContact } from './sections/floating-contact';
+import { StructuredData } from './structured-data';
 import './site.css';
 
 export interface LandingInstitution {
@@ -57,6 +57,12 @@ export async function Landing({
     institution.supportEmail,
     t('contact.message', { name: institution.name })
   );
+  // «Cuéntanos tu historia» abre el chat con el grado en el que se quedó la persona.
+  const storyContact = primaryContact(
+    institution.supportPhone,
+    institution.supportEmail,
+    t('stories.whatsappMessage')
+  );
   return (
     <div className={cn('site theme-light-scope min-h-screen', lexend.variable)}>
       <SiteHeader signedIn={signedIn} />
@@ -67,10 +73,9 @@ export async function Landing({
         <WaveSeparator from="white" to="tint" variant="fall" accent="blue" origin="left" />
         <Programs contact={contact} />
         <WaveSeparator from="tint" to="navy" variant="rise" accent="sun" origin="right" tall />
-        <Stories contact={contact} />
+        <Stories contact={storyContact} />
         <WaveSeparator from="navy" to="white" variant="fall" accent="blue" origin="left" />
         <ProcessTimeline />
-        <RealPeople />
         <ValueStrip />
         <Faq contact={contact} />
         <FinalCta contact={contact} signedIn={signedIn} />
@@ -78,6 +83,7 @@ export async function Landing({
       <SiteFooter institution={institution} signedIn={signedIn} />
       <FloatingContact contact={contact} />
       <MotionRoot />
+      <StructuredData institution={institution} />
     </div>
   );
 }

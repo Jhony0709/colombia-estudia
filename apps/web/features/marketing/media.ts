@@ -16,9 +16,6 @@ export type MediaId =
   | 'home-adult' // adulto estudiando en casa («Volver a estudiar puede sentirse diferente»)
   | 'home-program' // foto de la tarjeta navy del programa
   | 'home-story' // vida adulta con responsabilidades («Historias reales», máscara ovalada)
-  | 'home-mosaic-place' // mosaico: estudiar desde cualquier sitio (pieza grande, vertical)
-  | 'home-mosaic-work' // mosaico: compatible con el trabajo (pieza apaisada)
-  | 'home-mosaic-future' // mosaico: un futuro mejor (pieza apaisada)
   | 'home-final' // paisaje panorámico, fondo del CTA final bajo un velo navy
   // Columna izquierda de las pantallas de acceso (23/9): una por intención.
   | 'auth-login' // iniciar sesión
@@ -68,23 +65,6 @@ export const MEDIA_SLOTS: readonly MediaSlot[] = [
     ratio: '1/1',
     brief:
       'Vida adulta con responsabilidades: estudiar con la familia cerca, de noche o al final del día; cuadrada, la persona en el tercio izquierdo.',
-  },
-  {
-    id: 'home-mosaic-place',
-    ratio: '3/4',
-    brief: 'Estudiar en tránsito o fuera de casa (bus, parque, descanso del trabajo); vertical.',
-  },
-  {
-    id: 'home-mosaic-work',
-    ratio: '16/9',
-    brief:
-      'Trabajo y estudio en la misma jornada (puesto de trabajo, mesa con portátil); apaisada.',
-  },
-  {
-    id: 'home-mosaic-future',
-    ratio: '16/9',
-    brief:
-      'Personas adultas sonriendo, al aire libre o en familia; apaisada, sin campus ni birretes.',
   },
   {
     id: 'home-final',
@@ -150,27 +130,6 @@ export const MEDIA: Record<MediaId, EditorialMedia | null> = {
     width: 1600,
     height: 900,
     focalPoint: { x: 0.25, y: 0.5 },
-  },
-  'home-mosaic-place': {
-    src: '/photos/recover-bus.jpg',
-    alt: 'Joven lee en su teléfono sentada junto a la ventana de un bus, con un cuaderno en las piernas y la ciudad afuera.',
-    width: 1086,
-    height: 1448,
-    focalPoint: { x: 0.6, y: 0.5 },
-  },
-  'home-mosaic-work': {
-    src: '/photos/login-strip.jpg',
-    alt: 'Mesa de madera con un cuaderno abierto, un bolígrafo, una taza y un portátil, con luz de ventana.',
-    width: 2172,
-    height: 724,
-    focalPoint: { x: 0.75, y: 0.5 },
-  },
-  'home-mosaic-future': {
-    src: '/photos/final-students.jpg',
-    alt: 'Tres personas ríen juntas al aire libre, una de ellas con un cuaderno, entre árboles al sol.',
-    width: 2000,
-    height: 727,
-    focalPoint: { x: 0.5, y: 0.4 },
   },
   'home-final': {
     src: '/photos/hero-city.jpg',

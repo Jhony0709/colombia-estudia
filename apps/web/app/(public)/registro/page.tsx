@@ -12,7 +12,11 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
 import RegistrationContent from './registration-content';
 
-export const metadata: Metadata = { title: 'Regístrate' };
+export const metadata: Metadata = {
+  title: 'Regístrate',
+  description: 'Crea tu cuenta en ALBA Futuro Educativo y empieza tu bachillerato en línea.',
+  alternates: { canonical: '/registro' },
+};
 
 export default async function RegistrationPage() {
   const ctx = await getRequestContext();

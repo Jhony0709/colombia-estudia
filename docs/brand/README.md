@@ -105,3 +105,6 @@ recortar el fondo con rembg). Valen como ilustración de marketing; el manual pi
 reales y diversas, y eso sigue pendiente del cliente. Nunca junto a un nombre, un testimonio o
 una cifra. Los originales PNG (12 MB) no están en el repo: quedaron en `_to_delete/` para que
 Jhonny decida dónde guardarlos.
+
+Estado 11/10: `hero-student`, `editorial-colombia` y `final-students` ya no se usan y están en
+`_to_delete/photos-sin-uso-1110/`; los huecos vigentes son los de `media.ts`.

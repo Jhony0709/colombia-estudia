@@ -15,7 +15,7 @@ export default function NotFound() {
       <p className="type-body mt-3">Puede que el enlace esté mal escrito o que ya no exista.</p>
       <div className="mt-6">
         <Button asChild variant="secondary">
-          <Link href="/ingresar">Ir al inicio</Link>
+          <Link href="/">Ir al inicio</Link>
         </Button>
       </div>
     </main>

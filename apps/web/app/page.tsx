@@ -14,12 +14,16 @@ import { Landing } from '@/features/marketing/landing';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('landing');
+  // `absolute`: el título ya lleva la marca y no pasa por la plantilla del layout.
   return {
-    title: t('meta.title'),
+    title: { absolute: t('meta.title') },
     description: t('meta.description'),
+    alternates: { canonical: '/' },
     openGraph: {
       title: t('meta.title'),
       description: t('meta.description'),
+      url: '/',
+      siteName: 'ALBA Futuro Educativo',
       type: 'website',
       locale: 'es_CO',
     },

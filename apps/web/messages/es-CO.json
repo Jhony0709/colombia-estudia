@@ -2558,7 +2558,7 @@
     "programs": {
       "eyebrow": "Programas",
       "title": "Encuentra el camino que se adapta a ti.",
-      "link": "Pregunta por la próxima cohorte",
+      "link": "Quiero matricularme",
       "featured": {
         "bachillerato": {
           "name": "Bachillerato acelerado",
@@ -2577,7 +2577,7 @@
         "tutor": {
           "title": "Tutor y acompañamiento",
           "tags": ["Tutor profesional", "Seguimiento"],
-          "body": "Un tutor resuelve tus dudas y, si te atrasas, alguien te escribe.",
+          "body": "Un tutor resuelve tus dudas y te acompaña en tu proceso de validación, con soporte por WhatsApp las 24 horas.",
           "cta": "Cómo funciona el acompañamiento"
         },
         "diploma": {
@@ -2594,7 +2594,8 @@
       "titleB": "Empiezas desde donde estás.",
       "body1": "Trabajo, familia, responsabilidades… la vida no se detiene.",
       "body2": "En ALBA creemos en tu historia y te damos las herramientas para que sigas construyendo tu futuro.",
-      "cta": "Cuéntanos tu historia"
+      "cta": "Cuéntanos tu historia",
+      "whatsappMessage": "Hola, quiero retomar mis estudios. Me quedé en el grado ___ y me gustaría saber cómo terminar mi bachillerato."
     },
     "process": {
       "eyebrow": "Así funciona",
@@ -2613,18 +2614,6 @@
           "title": "Empieza a avanzar",
           "body": "Estudia, recibe apoyo y alcanza tu meta."
         }
-      }
-    },
-    "people": {
-      "eyebrow": "Hecho para la vida real",
-      "titleA": "Personas reales,",
-      "titleB": "historias reales.",
-      "body": "Como tú, muchas personas están retomando sus estudios para abrir nuevas oportunidades en sus vidas.",
-      "cta": "Conoce los programas",
-      "labels": {
-        "place": "Estudia desde donde estés",
-        "work": "Compatible con tu trabajo",
-        "future": "Un mejor futuro para ti y tu familia"
       }
     },
     "values": {
@@ -2677,7 +2666,7 @@
         },
         "price": {
           "q": "¿Cuánto cuesta?",
-          "a": "Escríbenos y te contamos el valor, las becas disponibles y las formas de pago para la próxima cohorte."
+          "a": "Escríbenos y te contamos el valor, las becas o cupones disponibles y las formas de pago."
         }
       }
     },
@@ -2689,7 +2678,7 @@
       "ctaSecondary": "Hablar con orientación"
     },
     "footer": {
-      "tagline": "Tu historia también puede continuar.",
+      "tagline": "Aprender es avanzar.",
       "explore": "Explora",
       "support": "Soporte",
       "legal": "Legal",
@@ -2698,7 +2687,7 @@
       "rights": "© {year} {name}. Todos los derechos reservados."
     },
     "meta": {
-      "title": "ALBA Futuro Educativo · Tu historia también puede continuar",
+      "title": "ALBA Futuro Educativo · Termina tu bachillerato virtual",
       "description": "Termina tu bachillerato con un programa flexible, 100 % en línea y con acompañamiento real, pensado para la vida adulta."
     },
     "contact": {

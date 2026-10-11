@@ -9,7 +9,6 @@ export type RevealVariant =
   | 'fade-up'
   | 'slide-left'
   | 'slide-right'
-  | 'mask'
   /** Solo escala, de 1.04 a 1: un fondo que se asienta (el paisaje del cierre). */
   | 'settle'
   /** Solo escala, de .96 a 1: el sol del cierre. */
@@ -30,8 +29,6 @@ export function revealKeyframes(variant: RevealVariant, distance?: number) {
       return { opacity: [0, 1], x: [d, 0] };
     case 'slide-right':
       return { opacity: [0, 1], x: [-d, 0] };
-    case 'mask':
-      return { clipPath: maskFrames('bottom') };
     case 'settle':
       return { scale: [1.04, 1] };
     case 'grow':
@@ -39,18 +36,15 @@ export function revealKeyframes(variant: RevealVariant, distance?: number) {
   }
 }
 
-/**
- * La foto se descubre desde un borde. `round` mantiene las esquinas redondeadas del hueco
- * durante el recorte; al terminar, el recorte queda abierto del todo.
- */
-export function maskFrames(from: MaskFrom, round = '0px') {
+/** La foto se descubre desde un borde; al terminar, el recorte queda abierto del todo. */
+export function maskFrames(from: MaskFrom) {
   const closed = {
     bottom: 'inset(100% 0% 0% 0%',
     top: 'inset(0% 0% 100% 0%',
     left: 'inset(0% 100% 0% 0%',
     right: 'inset(0% 0% 0% 100%',
   }[from];
-  return [`${closed} round ${round})`, `inset(0% 0% 0% 0% round ${round})`];
+  return [`${closed})`, 'inset(0% 0% 0% 0%)'];
 }
 
 type Frames = Partial<
