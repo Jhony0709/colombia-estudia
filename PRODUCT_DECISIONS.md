@@ -1237,6 +1237,25 @@ $90.000 c/m»), que el cliente dio por superada.
 `Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
 schema.
 
+## 2026-10-11 — Una encuesta corta al terminar cada componente, recomendada y con nombre
+
+**Decisión** (Jhonny, 11/10): al terminar un componente se invita a una encuesta de cuatro
+medidores de 1 a 5 —talleres útiles, entendió los temas, actividades claras, atención del tutor y
+por WhatsApp (con «No la necesité»)— y un campo de recomendaciones opcional. Es **recomendada**:
+no condiciona «Pedir que lo habiliten» ni la habilitación de operación. **Con nombre**, para poder
+escribirle a quien dice que no entendió; una nota de 2 o menos avisa a operación y administración.
+Formulario conversacional (experiencia §4); el equipo lo lee en `/cohortes/[cohortId]/opiniones`.
+
+**Por qué**: detectar fallas del contenido y de la atención componente a componente y corregir con
+calma. Obligatoria habría dado respuestas de trámite (todo 5 para pasar).
+
+**Schema**: tabla nueva `ModuleFeedback` (migración `20261011000000_module_feedback`), una por
+matrícula y componente, con `CHECK` de 1 a 5 y RLS como el resto. La política de datos suma la
+finalidad (sección 4).
+
+**Descartado**: obligatoria; anónima; preguntas editables desde el admin (mismas para todos los
+componentes, para poder comparar).
+
 ## 2026-10-08 — Un cuestionario se completa al aprobar o al agotar los intentos
 
 **Decisión** (Jhonny, 8/10): perder un intento con más intentos por delante **no** deja seguir al

@@ -71,7 +71,9 @@ No tocan los MX de Zoho: el MX de Resend está en `send.`, no en la raíz. 3. _V
   (`docs/runbooks/rotacion-secretos.md`).
 
 5. Vercel (Production): `RESEND_API_KEY=<vercel-produccion>`, `EMAIL_DOMAIN=albafuturoeducativo.com`.
-   Redesplegar. Sin estas dos, la app usa `ConsoleMailer` y **no envía** (`lib/mail/index.ts`).
+   Redesplegar. Repetir en el entorno `staging`. Sin estas dos, en un build de producción
+   (Production y staging) `getMailer` lanza error y las invitaciones fallan (`lib/mail/index.ts:42-45`);
+   solo en desarrollo cae a `ConsoleMailer`.
 
 ## 5. DMARC
 

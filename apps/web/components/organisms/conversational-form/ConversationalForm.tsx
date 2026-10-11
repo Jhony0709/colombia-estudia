@@ -115,7 +115,7 @@ export function ConversationalForm({
   useEffect(() => {
     if (!revealed || !interacted.current) return;
     const control = activeRef.current?.querySelector<HTMLElement>(
-      '[data-answer] input:not([type=hidden]):not([readonly]), [data-answer] button, [data-answer] a'
+      '[data-answer] input:not([type=hidden]):not([readonly]), [data-answer] textarea, [data-answer] button, [data-answer] a'
     );
     control?.focus({ preventScroll: true });
   }, [revealed, current]);

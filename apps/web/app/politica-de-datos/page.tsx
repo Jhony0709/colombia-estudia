@@ -1,4 +1,4 @@
-/** `/politica-de-datos` (Ley 1581, 11/10): responsable desde la institución, texto en `dataPolicy.*`. */
+/** `/politica-de-datos` (Ley 1581, 11/10): responsable de la institución, texto en `dataPolicy`. */
 
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';

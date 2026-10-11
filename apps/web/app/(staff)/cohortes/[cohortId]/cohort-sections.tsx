@@ -56,7 +56,10 @@ export async function CohortSections({
         ]
       : []),
     ...(can('progress.read.cohort')
-      ? [{ href: `${base}/avance` as Route, label: tc('sections.avance') }]
+      ? [
+          { href: `${base}/avance` as Route, label: tc('sections.avance') },
+          { href: `${base}/opiniones` as Route, label: tc('sections.opiniones') },
+        ]
       : []),
     ...(manage
       ? [

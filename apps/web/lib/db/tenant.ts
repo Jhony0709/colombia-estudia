@@ -61,6 +61,8 @@ export const TENANT_SCOPED_MODELS = [
   // 6/10: `EnrollmentModule` faltaba desde el 3/10; `AccessRequest` es nueva.
   'EnrollmentModule',
   'AccessRequest',
+  // 11/10: la opinión al terminar un componente.
+  'ModuleFeedback',
 ] as const;
 
 type TenantScopedModel = (typeof TENANT_SCOPED_MODELS)[number];

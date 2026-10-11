@@ -16,12 +16,14 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { getCohortOutline } from '@/features/learn/server/cohort.service';
 import { listOpenCourses } from '@/features/learn/server/catalog.service';
 import { listMyPendingRequests } from '@/features/requests/server/requests.service';
+import { getFeedbackInvite } from '@/features/feedback/server/feedback.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { ResultMoment } from '@/components/atoms/motion';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { Button } from '@/components/atoms/button';
 import { cn } from '@/lib/utils';
 import { HelpCard } from '../../dashboard-cards';
+import { FeedbackInvite } from '../../feedback-invite';
 import { RouteSection } from '../../route-section';
 import { CourseCard } from '../../catalog-section';
 import { hrefFor } from '../../route-rail';
@@ -50,6 +52,7 @@ export default async function CoursePage({
   if (outline.enrollmentId !== enrollmentId || !outline.cohort) notFound();
 
   const { cohort, gate, progress, resume } = outline;
+  const invite = await getFeedbackInvite({ institutionId, enrollmentId, outline });
   const percent =
     progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100);
   const starting = progress.completed === 0;
@@ -88,6 +91,7 @@ export default async function CoursePage({
       />
       <div className="motion-enter grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
         <div className="min-w-0 space-y-8">
+          {invite && <FeedbackInvite enrollmentId={enrollmentId} {...invite} />}
           {gate?.kind === 'COMPLETED' ? (
             <CompletedCourse
               program={cohort.programName}

@@ -36,7 +36,8 @@ function buildCsp(nonce: string): string {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ''}`,
-    `style-src 'self' 'nonce-${nonce}'`,
+    // `style="color:transparent"` que next/image pone en cada <img> (11/10, consola de prod).
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-hashes' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='`,
     "img-src 'self' data: blob: https://*.supabase.co https://i.vimeocdn.com",
     "media-src 'self' https://*.supabase.co",
     'frame-src https://player.vimeo.com https://checkout.wompi.co',

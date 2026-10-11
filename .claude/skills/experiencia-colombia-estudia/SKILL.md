@@ -151,6 +151,7 @@ Lo que no aparece en la columna «Se anima» va con corte. El texto de lectura n
 | Calendario, biblioteca, cuenta | un solo bloque: entrada                                                                                          | —                                                          | listas y tablas                                   |
 | Acceso (`AuthShell`)           | panel de foto: entrada `md`; formulario: corte                                                                   | —                                                          | los campos                                        |
 | Registro                       | formulario conversacional (§4)                                                                                   | la pantalla final con la matrícula                         | —                                                 |
+| Encuesta del componente        | formulario conversacional (§4); el medidor se llena al pasar y al elegir (`fast`)                                | «Recibimos tu opinión»: check con entrada `md`             | el medidor al moverse con el teclado              |
 | Familia                        | como el panel                                                                                                    | —                                                          | —                                                 |
 
 ## Checklist

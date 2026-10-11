@@ -85,6 +85,7 @@ const ACTION_BY_TYPE: Record<string, string> = {
   unlock_requested: 'reviewRequest',
   request_dismissed: 'goToRoute',
   enrollment_created: 'goToRoute',
+  feedback_low: 'viewFeedback',
 };
 
 interface DayGroup {

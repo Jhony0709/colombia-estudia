@@ -89,6 +89,7 @@ model Institution {
   accommodations        Accommodation[]
   enrollmentModules     EnrollmentModule[]
   accessRequests        AccessRequest[]
+  moduleFeedback        ModuleFeedback[]
   paymentPlans          PaymentPlan[]
   programPrices         ProgramPrice[]
   installments          Installment[]
@@ -357,6 +358,7 @@ model Module {
   certificates      Certificate[]
   enrollmentModules EnrollmentModule[]
   accessRequests    AccessRequest[]
+  moduleFeedback    ModuleFeedback[]
 
   @@unique([programId, position])
   @@unique([institutionId, sourceRef])
@@ -472,6 +474,7 @@ model Enrollment {
   submissions       Submission[]
   modules           EnrollmentModule[]
   accessRequests    AccessRequest[]
+  moduleFeedback    ModuleFeedback[]
 
   @@unique([studentId, cohortId])
   @@unique([institutionId, sourceRef])
@@ -547,6 +550,29 @@ model AccessRequest {
 
   @@index([institutionId, status, createdAt])
   @@index([personId, status])
+}
+
+/// La opinión del estudiante al terminar un componente (11/10): recomendada, no obligatoria, y
+/// con nombre para poder ayudar a quien dice que no entendió. Una por matrícula y componente.
+/// SQL: cada nota entre 1 y 5; `support` nulo = no necesitó la atención.
+model ModuleFeedback {
+  id            String   @id @default(cuid())
+  institutionId String
+  enrollmentId  String
+  moduleId      String
+  usefulness    Int
+  understanding Int
+  clarity       Int
+  support       Int?
+  comment       String?
+  createdAt     DateTime @default(now())
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
+  module      Module      @relation(fields: [moduleId], references: [id])
+
+  @@unique([enrollmentId, moduleId])
+  @@index([institutionId, moduleId, createdAt])
 }
 
 // ───────────────────────────── Contenido (catálogo versionado, Markdown) ─────────────────────────────

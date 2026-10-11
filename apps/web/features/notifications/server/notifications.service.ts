@@ -49,6 +49,8 @@ export const NOTIFICATION_TYPES = [
   'unlock_requested',
   // 6/10: operación descartó una solicitud del estudiante.
   'request_dismissed',
+  // 11/10: un estudiante calificó un componente con 2 o menos.
+  'feedback_low',
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

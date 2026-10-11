@@ -670,6 +670,7 @@
       "personas": "Personas",
       "actividades": "Actividades",
       "avance": "Avance",
+      "opiniones": "Opiniones",
       "sesiones": "Sesiones",
       "cartera": "Cartera"
     },
@@ -848,7 +849,8 @@
       "viewLesson": "Ver el tema",
       "fixSubmission": "Corregir la actividad",
       "viewPerson": "Ver la persona",
-      "reviewRequest": "Ver la solicitud"
+      "reviewRequest": "Ver la solicitud",
+      "viewFeedback": "Ver la opinión"
     },
     "emptyTitle": "Todavía no tienes avisos",
     "emptyHint": "Aquí aparecerán las solicitudes y los cambios que necesiten tu atención.",
@@ -3618,6 +3620,7 @@
           "Darte soporte por WhatsApp (también mediante un asistente automático), correo o la plataforma, y enviarte avisos sobre tu proceso.",
           "Contarte sobre nuevos programas y jornadas de matrícula. Puedes pedir en cualquier momento que dejemos de hacerlo.",
           "Proteger la plataforma, prevenir fraudes y diagnosticar errores.",
+          "Conocer tu opinión al terminar cada componente, con tu nombre, para mejorar los cursos y escribirte si algo no funcionó.",
           "Elaborar estadísticas agregadas, que no identifican a nadie, para mejorar el servicio.",
           "Cumplir obligaciones legales, contables y tributarias, y atender requerimientos de autoridades competentes."
         ]
@@ -3727,5 +3730,95 @@
       "title": "14. Vigencia",
       "body": "Esta política rige desde el {date}."
     }
+  },
+  "moduleFeedback": {
+    "metaTitle": "Cuéntanos cómo te fue",
+    "overline": "Encuesta del componente",
+    "title": "¿Cómo te fue en {module}?",
+    "description": "Cuatro preguntas y un espacio para tus ideas. Toma menos de un minuto y nos ayuda a mejorar.",
+    "later": "Ahora no",
+    "crumb": "Encuesta",
+    "sections": {
+      "usefulness": "Los talleres",
+      "understanding": "Los temas",
+      "clarity": "Actividades",
+      "support": "Atención",
+      "comment": "Tus ideas",
+      "send": "Enviar"
+    },
+    "questions": {
+      "usefulness": {
+        "prompt": "{name}, ¿qué tan útiles te parecieron los talleres de este componente?",
+        "words": ["Nada útiles", "Poco útiles", "Más o menos", "Útiles", "Muy útiles"]
+      },
+      "understanding": {
+        "prompt": "¿Qué tanto entendiste los temas?",
+        "words": ["Casi nada", "Poco", "Más o menos", "Casi todo", "Todo"]
+      },
+      "clarity": {
+        "prompt": "¿Qué tan claras estaban las actividades y los cuestionarios?",
+        "words": ["Nada claras", "Poco claras", "Más o menos", "Claras", "Muy claras"]
+      },
+      "support": {
+        "prompt": "¿Y la atención del tutor y por WhatsApp, cuando la necesitaste?",
+        "words": ["Muy mala", "Mala", "Regular", "Buena", "Excelente"],
+        "skip": "No la necesité"
+      }
+    },
+    "valueLabel": "{value} de 5, {word}",
+    "answer": "{value} de 5 · {word}",
+    "comment": {
+      "prompt": "Por último, ¿qué nos recomiendas para mejorar?",
+      "label": "Tus recomendaciones",
+      "hint": "Opcional. Lo lee el equipo académico.",
+      "placeholder": "Lo que te gustó, lo que faltó o lo que cambiarías",
+      "count": "{count} de {max}",
+      "skip": "Omitir",
+      "empty": "Sin comentarios",
+      "tooLong": "Escribe hasta {max} caracteres."
+    },
+    "ready": "Gracias, {name}. ¿Enviamos tu opinión?",
+    "missing": "Falta esta respuesta.",
+    "submit": "Enviar mi opinión",
+    "error": "No pudimos enviar tu opinión. Inténtalo de nuevo.",
+    "done": {
+      "title": "Recibimos tu opinión",
+      "body": "La lee el equipo académico para mejorar los próximos componentes. Gracias por tomarte el tiempo.",
+      "back": "Volver a mi ruta",
+      "next": "Si ya quieres seguir, pide que habiliten {module}."
+    },
+    "answered": {
+      "title": "Ya nos contaste cómo te fue",
+      "body": "Respondiste esta encuesta el {date}. Gracias."
+    },
+    "invite": {
+      "title": "¿Cómo te fue en {module}?",
+      "body": "Cuatro preguntas y un espacio para tus ideas. Nos ayuda a mejorar el próximo componente.",
+      "cta": "Contar cómo me fue"
+    }
+  },
+  "feedbackReport": {
+    "metaTitle": "Opiniones",
+    "title": "Opiniones de los estudiantes",
+    "description": "Lo que respondieron al terminar cada componente: el promedio de cada pregunta de 1 a 5, y las respuestas con comentario o con una nota de 2 o menos.",
+    "crumb": "Opiniones",
+    "emptyTitle": "Todavía no hay opiniones",
+    "emptyHint": "Aparecen cuando un estudiante termina un componente y responde la encuesta. Es recomendada, no obligatoria.",
+    "responses": "{count, plural, =0 {Sin respuestas} one {# respuesta} other {# respuestas}}",
+    "lowCount": "{count, plural, one {# con nota baja} other {# con nota baja}}",
+    "scores": {
+      "usefulness": "Útiles",
+      "understanding": "Entendió",
+      "clarity": "Claridad",
+      "support": "Atención"
+    },
+    "average": "{value} de 5",
+    "noData": "Sin datos",
+    "entriesTitle": "Comentarios y notas bajas",
+    "noEntries": "Nadie dejó comentarios ni notas bajas en este componente.",
+    "low": "Nota baja",
+    "notNeeded": "No la necesitó",
+    "noComment": "Sin comentario",
+    "viewEnrollment": "Ver la matrícula de {name}"
   }
 }
