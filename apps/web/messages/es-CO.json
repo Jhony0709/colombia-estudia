@@ -3554,5 +3554,178 @@
       "DISMISSED": "Descartada por {name}",
       "someone": "el equipo"
     }
+  },
+  "dataPolicy": {
+    "meta": {
+      "title": "Política de tratamiento de datos personales",
+      "description": "Qué datos personales trata ALBA Futuro Educativo, para qué, con quién los comparte, qué cookies usa y cómo ejercer tus derechos según la Ley 1581 de 2012."
+    },
+    "eyebrow": "Legal",
+    "title": "Política de tratamiento de datos personales",
+    "version": "Versión {version} · Vigente desde el {date}",
+    "effectiveDate": "11 de octubre de 2026",
+    "intro": "En ALBA Futuro Educativo tratamos tus datos personales para ofrecerte el bachillerato en línea y acompañarte en él. Esta política explica qué datos usamos, para qué, con quién los compartimos y cómo puedes conocerlos, actualizarlos, corregirlos o pedir que los eliminemos. Cumple la Ley 1581 de 2012 y el Decreto 1074 de 2015 (capítulo 25), que reúne la reglamentación del Decreto 1377 de 2013.",
+    "tocLabel": "Contenido de esta política",
+    "controller": {
+      "title": "1. Responsable del tratamiento",
+      "lead": "El responsable de tus datos personales es:",
+      "brand": "Marca",
+      "legalName": "Razón social",
+      "taxId": "NIT",
+      "address": "Domicilio",
+      "email": "Correo",
+      "phone": "Teléfono y WhatsApp",
+      "web": "Sitio web",
+      "channels": "Por estos mismos canales atendemos las consultas y los reclamos sobre tus datos (sección 9)."
+    },
+    "sections": [
+      {
+        "id": "definiciones",
+        "title": "2. Definiciones",
+        "items": [
+          "Titular: la persona a quien se refieren los datos. Puedes ser estudiante, acudiente, persona interesada o parte del equipo.",
+          "Dato personal: cualquier información que te identifica o que permite identificarte.",
+          "Dato sensible: el que afecta tu intimidad o cuyo uso indebido puede generar discriminación, como los datos relativos a la salud.",
+          "Tratamiento: cualquier operación sobre datos personales, como recogerlos, guardarlos, usarlos, compartirlos o suprimirlos.",
+          "Responsable: quien decide sobre el tratamiento. Encargado: quien trata los datos por cuenta del responsable.",
+          "Autorización: tu consentimiento previo, expreso e informado para el tratamiento."
+        ]
+      },
+      {
+        "id": "datos",
+        "title": "3. Qué datos tratamos",
+        "items": [
+          "Identificación y contacto: nombres, apellidos, correo electrónico, teléfono, fecha de nacimiento y, al formalizar la matrícula, tipo y número de documento.",
+          "Datos académicos: matrícula, grado desde el que empiezas, avance, respuestas a actividades y cuestionarios, entregas, calificaciones y constancias.",
+          "Datos de pago: plan de pagos, cuotas, pagos registrados y sus referencias. No recibimos ni guardamos números de tarjetas: si pagas en línea, la pasarela de pagos los procesa directamente.",
+          "Datos del acudiente de un menor de edad: identificación, contacto, parentesco y si es quien paga.",
+          "Ajustes razonables: los apoyos de accesibilidad que necesitas para estudiar y presentar evaluaciones (sección 5).",
+          "Uso de la plataforma: actividad dentro de los cursos y registros de auditoría de las acciones del personal sobre tus datos.",
+          "Datos técnicos: dirección IP, navegador y dispositivo, que los servicios de alojamiento registran por seguridad y para diagnosticar errores.",
+          "Comunicaciones: los mensajes que nos envías por WhatsApp, correo o la plataforma."
+        ]
+      },
+      {
+        "id": "finalidades",
+        "title": "4. Para qué usamos tus datos",
+        "items": [
+          "Crear y administrar tu cuenta, y verificar tu identidad al iniciar sesión.",
+          "Matricularte, darte acceso a los contenidos y llevar el registro de tu avance, tus evaluaciones y tus resultados.",
+          "Aplicar los ajustes razonables que solicites.",
+          "Expedir constancias de finalización y permitir que cualquiera las verifique con su código.",
+          "Gestionar el proceso académico con la institución educativa en convenio que expide el título y con las autoridades educativas, cuando la ley lo exija.",
+          "Gestionar pagos, planes de pago, acuerdos y recordatorios de cartera.",
+          "Darte soporte por WhatsApp (también mediante un asistente automático), correo o la plataforma, y enviarte avisos sobre tu proceso.",
+          "Contarte sobre nuevos programas y jornadas de matrícula. Puedes pedir en cualquier momento que dejemos de hacerlo.",
+          "Proteger la plataforma, prevenir fraudes y diagnosticar errores.",
+          "Elaborar estadísticas agregadas, que no identifican a nadie, para mejorar el servicio.",
+          "Cumplir obligaciones legales, contables y tributarias, y atender requerimientos de autoridades competentes."
+        ]
+      },
+      {
+        "id": "sensibles",
+        "title": "5. Datos sensibles",
+        "paragraphs": [
+          "Los ajustes razonables, como tiempo adicional, evaluaciones sin cronómetro, intentos extra, subtítulos obligatorios o el uso de tecnologías de apoyo, pueden revelar información sobre tu salud o una discapacidad. Por eso los tratamos como datos sensibles.",
+          "Responder preguntas sobre datos sensibles es facultativo: no estás obligado a hacerlo, y negarte no te impide matricularte. Solo los tratamos con tu autorización explícita y para aplicar los ajustes. No pedimos ni guardamos diagnósticos médicos. Solo accede a ellos el personal que debe aplicarlos, y los reportes de inclusión muestran conteos sin nombres."
+        ]
+      },
+      {
+        "id": "menores",
+        "title": "6. Niñas, niños y adolescentes",
+        "paragraphs": [
+          "Tratamos los datos de menores de 18 años respetando su interés superior y sus derechos fundamentales, y solo para fines educativos.",
+          "La autorización la otorga su representante legal (madre, padre o acudiente). Un menor puede crear su cuenta y empezar el componente gratuito de introducción; para matricularlo en un programa de pago pedimos los datos del acudiente y su autorización. Mientras esa autorización no exista, solo tratamos los datos mínimos para la cuenta y ese componente.",
+          "Los derechos de los menores los ejerce su representante legal. La falta de pago nunca afecta el acceso académico de un menor de edad."
+        ]
+      },
+      {
+        "id": "compartir",
+        "title": "7. Con quién compartimos tus datos",
+        "paragraphs": ["No vendemos tus datos. Los compartimos solo en estos casos:"],
+        "items": [
+          "Con la institución educativa en convenio que expide el título, y con las autoridades educativas cuando la ley lo exija, para el registro académico y la certificación.",
+          "Con la entidad aliada que financia tu matrícula, si es el caso: solo tu avance y tus resultados en ese programa.",
+          "Con proveedores que tratan los datos por nuestra cuenta (encargados), bajo contratos que les exigen confidencialidad y seguridad: alojamiento y base de datos (Vercel y Supabase), correo electrónico, video (Vimeo), monitoreo de errores (Sentry), mensajería (WhatsApp, de Meta) y, cuando el pago en línea esté habilitado, la pasarela de pagos (Wompi).",
+          "Con autoridades judiciales o administrativas, cuando lo ordenen en ejercicio de sus funciones."
+        ],
+        "closing": [
+          "Varios de estos proveedores guardan los datos en servidores de Estados Unidos. La Superintendencia de Industria y Comercio reconoce a Estados Unidos como país con un nivel adecuado de protección de datos (Circular Externa 005 de 2017)."
+        ]
+      },
+      {
+        "id": "derechos",
+        "title": "8. Tus derechos",
+        "paragraphs": ["Como titular, puedes:"],
+        "items": [
+          "Conocer, actualizar y rectificar tus datos, incluidos los parciales, inexactos, incompletos o fraccionados.",
+          "Pedir prueba de la autorización que nos diste.",
+          "Saber, si lo pides, qué uso le hemos dado a tus datos.",
+          "Presentar quejas ante la Superintendencia de Industria y Comercio, después de haber hecho tu consulta o reclamo ante nosotros.",
+          "Revocar la autorización o pedir que suprimamos tus datos, salvo cuando debamos conservarlos por un deber legal o contractual, como el registro académico.",
+          "Acceder gratis a tus datos personales."
+        ]
+      },
+      {
+        "id": "procedimiento",
+        "title": "9. Cómo ejercer tus derechos",
+        "paragraphs": [
+          "Escríbenos al correo o al WhatsApp de la sección 1. Indica tu nombre, tu documento o el correo de tu cuenta, lo que pides y cómo prefieres que te respondamos. Si actúas en nombre de otra persona, adjunta el documento que te autoriza.",
+          "Consultas: te respondemos en un máximo de 10 días hábiles. Si no es posible, te explicamos el motivo y te respondemos dentro de los 5 días hábiles siguientes.",
+          "Reclamos (para corregir, actualizar o suprimir datos, revocar la autorización o denunciar un incumplimiento): te respondemos en un máximo de 15 días hábiles, prorrogables 8 días hábiles más si te informamos el motivo. Si al reclamo le falta información, te la pedimos dentro de los 5 días siguientes. Si no la recibimos en 2 meses, entenderemos que desististe. Mientras se resuelve, tus datos quedan marcados como «reclamo en trámite».",
+          "Responde las solicitudes el equipo de soporte de ALBA Futuro Educativo."
+        ]
+      },
+      {
+        "id": "seguridad",
+        "title": "10. Seguridad",
+        "paragraphs": [
+          "Protegemos tus datos con conexiones cifradas, acceso por roles (cada persona del equipo ve solo lo que necesita para su trabajo), registro de auditoría de los cambios y copias de respaldo. Si ocurre un incidente que afecte tus datos, lo informaremos a la Superintendencia de Industria y Comercio y, cuando corresponda, a ti."
+        ]
+      },
+      {
+        "id": "conservacion",
+        "title": "11. Cuánto tiempo conservamos tus datos",
+        "paragraphs": [
+          "Conservamos tus datos mientras tengas una relación con nosotros y, después, el tiempo que exijan las normas educativas, contables y tributarias. Cuando ya no sean necesarios, o si pides su supresión y no hay un deber legal de conservarlos, los anonimizamos: dejan de identificarte. Nuestras bases de datos estarán vigentes mientras ALBA Futuro Educativo preste sus servicios."
+        ]
+      }
+    ],
+    "cookies": {
+      "title": "12. Cookies y almacenamiento en tu navegador",
+      "lead": "Usamos solo cookies necesarias para que la plataforma funcione y para recordar tus preferencias. No usamos cookies publicitarias, de redes sociales ni de analítica de terceros, así que no te pedimos aceptarlas.",
+      "caption": "Cookies que usa la plataforma",
+      "name": "Nombre",
+      "purpose": "Para qué sirve",
+      "duration": "Duración",
+      "rows": [
+        {
+          "name": "sb-…-auth-token",
+          "purpose": "Mantener tu sesión iniciada de forma segura (Supabase).",
+          "duration": "Hasta 400 días, o hasta que cierres sesión"
+        },
+        {
+          "name": "ce-theme",
+          "purpose": "Recordar si prefieres el tema claro u oscuro.",
+          "duration": "1 año"
+        },
+        {
+          "name": "ce-motion",
+          "purpose": "Recordar si prefieres reducir las animaciones.",
+          "duration": "1 año"
+        }
+      ],
+      "local": "Dentro de la plataforma también guardamos en el almacenamiento local de tu navegador tus preferencias de lectura y los borradores de lo que escribes, para que no se pierdan si se recarga la página. Esos datos no salen de tu dispositivo.",
+      "video": "Los videos de los cursos se reproducen con Vimeo en modo «no rastrear»: el reproductor no instala cookies de seguimiento.",
+      "control": "Puedes borrar o bloquear las cookies desde la configuración de tu navegador. Si bloqueas las de sesión, no podrás iniciar sesión. Si algún día usamos cookies de analítica o de terceros, actualizaremos esta política y te pediremos tu consentimiento antes de activarlas."
+    },
+    "changes": {
+      "title": "13. Cambios a esta política",
+      "body": "Si hacemos cambios sustanciales, te los comunicaremos por la plataforma o por correo antes de aplicarlos. Si cambian las finalidades, te pediremos una nueva autorización. Cada versión lleva un número y su fecha de vigencia al inicio de esta página."
+    },
+    "validity": {
+      "title": "14. Vigencia",
+      "body": "Esta política rige desde el {date}."
+    }
   }
 }

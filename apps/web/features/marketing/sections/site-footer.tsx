@@ -30,18 +30,18 @@ export async function SiteFooter({
           <p className="site-small m-0 max-w-xs">{t('footer.tagline')}</p>
         </div>
         <FooterColumn title={t('footer.explore')}>
-          <a href="#programas" className={link}>
+          <Link href="/#programas" className={link}>
             {t('nav.programs')}
-          </a>
-          <a href="#como-funciona" className={link}>
+          </Link>
+          <Link href="/#como-funciona" className={link}>
             {t('nav.how')}
-          </a>
-          <a href="#historias" className={link}>
+          </Link>
+          <Link href="/#historias" className={link}>
             {t('nav.stories')}
-          </a>
-          <a href="#preguntas" className={link}>
+          </Link>
+          <Link href="/#preguntas" className={link}>
             {t('nav.faq')}
-          </a>
+          </Link>
         </FooterColumn>
         <FooterColumn title={t('footer.support')}>
           {wa && (

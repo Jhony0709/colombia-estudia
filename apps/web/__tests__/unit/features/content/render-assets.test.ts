@@ -66,7 +66,7 @@ describe('resolveRenderAssets', () => {
 
     const assets = await resolveRenderAssets({ institutionId: 'i1', assetIds: [VIDEO_ID] });
 
-    expect(assets.get(VIDEO_ID)?.src).toBe('https://player.vimeo.com/video/123');
+    expect(assets.get(VIDEO_ID)?.src).toBe('https://player.vimeo.com/video/123?dnt=1');
     expect(mockCreateReadUrl).not.toHaveBeenCalled();
   });
 

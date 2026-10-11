@@ -14,11 +14,11 @@ import { MobileMenu, type MenuLink } from './mobile-menu';
 export async function SiteHeader({ signedIn }: { signedIn: boolean }) {
   const t = await getTranslations('landing.nav');
   const links: MenuLink[] = [
-    { href: '#inicio', label: t('home') },
-    { href: '#programas', label: t('programs') },
-    { href: '#como-funciona', label: t('how') },
-    { href: '#historias', label: t('stories') },
-    { href: '#preguntas', label: t('faq') },
+    { href: '/#inicio', label: t('home') },
+    { href: '/#programas', label: t('programs') },
+    { href: '/#como-funciona', label: t('how') },
+    { href: '/#historias', label: t('stories') },
+    { href: '/#preguntas', label: t('faq') },
   ];
   const login = signedIn
     ? { href: '/ingresar', label: t('enter') }

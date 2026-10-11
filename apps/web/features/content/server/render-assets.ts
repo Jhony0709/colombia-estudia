@@ -24,7 +24,8 @@ async function sourceFor(asset: {
   kind: string;
 }): Promise<string | null> {
   if (asset.provider === 'VIMEO') {
-    return `https://player.vimeo.com/video/${asset.providerRef}`;
+    // `dnt=1`: sin cookies de seguimiento de Vimeo (política de datos, §12).
+    return `https://player.vimeo.com/video/${asset.providerRef}?dnt=1`;
   }
 
   if (asset.provider === 'STORAGE') {

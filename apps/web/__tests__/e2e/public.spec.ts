@@ -63,6 +63,15 @@ test.describe('Login', () => {
   });
 });
 
+test.describe('Política de datos', () => {
+  test('carga sin sesión, tiene un h1 y pasa axe', async ({ page }) => {
+    await page.goto('/politica-de-datos');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/datos personales/i);
+    await expect(page.locator('#cookies')).toBeVisible();
+    await expectNoA11yViolations(page);
+  });
+});
+
 test.describe('Constancia pública', () => {
   test('un código inexistente dice que no existe, sin filtrar nada', async ({ page }) => {
     await page.goto('/certificado/ABCDEFGHJK');

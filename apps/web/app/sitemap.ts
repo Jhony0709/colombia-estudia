@@ -4,5 +4,7 @@ import { siteUrl } from '@/lib/seo/site-url';
 /** `/sitemap.xml` (SEO-01): las páginas indexables (D3, 11/10). Sin `lastModified` inventado. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
-  return [{ url: `${base}/` }, { url: `${base}/registro` }, { url: `${base}/auth/login` }];
+  return ['/', '/registro', '/auth/login', '/politica-de-datos'].map((path) => ({
+    url: `${base}${path}`,
+  }));
 }

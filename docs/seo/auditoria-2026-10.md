@@ -14,7 +14,8 @@ cita `archivo:línea`; lo observado en producción se marca **[prod]** y lo infe
   en `certificado/*` y en `invitacion/*`. Sustituye a la recomendación de SEO-06.
 - **D8**: el WhatsApp es el teléfono de soporte, `+573102502207`. Es un dato de la institución
   de producción; no hay código que cambiar.
-- **D9**: pendiente (política de tratamiento de datos).
+- **D9**: política propia en `/politica-de-datos` (indexable, en el sitemap). Faltan la razón social,
+  el NIT y el domicilio del responsable.
 
 Implementado en el árbol (sin commit): SEO-01, 05, 06 (según D3), 08, 13 y 14.
 

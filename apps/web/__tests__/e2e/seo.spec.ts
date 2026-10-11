@@ -15,7 +15,12 @@ test.describe('Rastreo', () => {
     expect(res.status()).toBe(200);
     expect(res.headers()['content-type']).toMatch(/xml/);
     const body = await res.text();
-    for (const path of ['/</loc>', '/registro</loc>', '/auth/login</loc>']) {
+    for (const path of [
+      '/</loc>',
+      '/registro</loc>',
+      '/auth/login</loc>',
+      '/politica-de-datos</loc>',
+    ]) {
       expect(body).toContain(path);
     }
   });
@@ -39,7 +44,7 @@ test.describe('Metadatos', () => {
     expect(graph.find((node) => node['@type'] === 'WebSite')?.name).toBe('ALBA Futuro Educativo');
   });
 
-  for (const path of ['/auth/login', '/registro']) {
+  for (const path of ['/auth/login', '/registro', '/politica-de-datos']) {
     test(`${path} es indexable y lleva la marca (D3)`, async ({ page }) => {
       await page.goto(path);
       await expect(page).toHaveTitle(/· ALBA Futuro Educativo$/);

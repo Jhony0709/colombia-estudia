@@ -30,6 +30,7 @@ describe('isProtected', () => {
       // SEO-01 (11/10): sin esto el middleware los mandaba al login.
       '/robots.txt',
       '/sitemap.xml',
+      '/politica-de-datos',
     ])('%s is NOT protected', (path) => {
       expect(isProtected(path)).toBe(false);
     });
