@@ -43,7 +43,7 @@ const BENEFITS = [
 
 export interface AuthShellProps {
   intent: AuthIntent;
-  /** Política de datos de la institución, si la tiene: enlaza «Tus datos están protegidos». */
+  /** Política de datos de la institución; sin ella, la propia `/politica-de-datos`. */
   dataPolicyUrl?: string | null;
   children: React.ReactNode;
 }
@@ -141,18 +141,14 @@ export function AuthShell({ intent, dataPolicyUrl, children }: AuthShellProps) {
         <ul className="auth-trust mt-10 grid w-full max-w-xl list-none gap-4 p-4 sm:grid-cols-3 sm:gap-0 sm:p-5">
           <li className="auth-trust-item">
             <ShieldCheck aria-hidden="true" className="size-6 shrink-0" />
-            {dataPolicyUrl ? (
-              <a
-                href={dataPolicyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-muted hover:text-text underline-offset-2 hover:underline"
-              >
-                {t('trust.privacy')}
-              </a>
-            ) : (
-              <span>{t('trust.privacy')}</span>
-            )}
+            <a
+              href={dataPolicyUrl ?? '/politica-de-datos'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-text-muted hover:text-text underline-offset-2 hover:underline"
+            >
+              {t('trust.privacy')}
+            </a>
           </li>
           <li className="auth-trust-item">
             <UsersRound aria-hidden="true" className="size-6 shrink-0" />

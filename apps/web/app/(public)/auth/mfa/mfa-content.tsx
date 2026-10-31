@@ -151,7 +151,7 @@ export default function MfaContent() {
       if (res.ok) {
         setDone(true);
         // Navegación completa: los server components deben volver a pintarse con aal2.
-        window.location.assign(next);
+        window.location.replace(next);
         return;
       }
       setFailures((n) => n + 1);

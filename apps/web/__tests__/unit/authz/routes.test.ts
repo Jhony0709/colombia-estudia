@@ -117,6 +117,14 @@ describe('isValidNextUrl', () => {
       expect(isValidNextUrl('/redirect?url=https://evil.com')).toBe(false);
     });
 
+    it('rejects tab, newline and other control characters (31/10)', () => {
+      for (const url of ['/\t/evil.com', '/\n/evil.com', '/\r/evil.com', '/\u0000/evil.com']) {
+        expect(isValidNextUrl(url)).toBe(false);
+      }
+      // Codificados siguen siendo una ruta propia: el navegador no los decodifica al resolver.
+      expect(isValidNextUrl('/%09/evil.com')).toBe(true);
+    });
+
     it('rejects URL with backslash', () => {
       expect(isValidNextUrl('/path\\..\\evil')).toBe(false);
     });

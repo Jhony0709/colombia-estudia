@@ -2,9 +2,8 @@
  * Authentication module exports (server side).
  * SSOT: plan/03-identidad-y-acceso.md
  *
- * The browser client lives in `./supabase-browser` and is imported directly by client
- * components; it is deliberately not re-exported from here, because this barrel pulls
- * `server-only` code.
+ * There is no browser client: the session cookies are HttpOnly and every Auth call goes
+ * through the API routes.
  */
 
 export { createServerSupabaseClient, getSupabaseAdmin, getSupabaseUser } from './supabase-server';

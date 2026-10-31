@@ -31,6 +31,8 @@ export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
 
   return createServerClient(url, publishableKey, {
+    // @supabase/ssr las deja legibles desde JS por defecto; nada en el navegador las lee.
+    cookieOptions: { httpOnly: true, secure: process.env.NODE_ENV === 'production' },
     cookies: {
       getAll() {
         return cookieStore.getAll();

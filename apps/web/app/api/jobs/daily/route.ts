@@ -3,7 +3,7 @@
  * `Authorization: Bearer …`, que es como Vercel la manda), no por sesión.
  * SSOT: endpoints.md:103, plan/09 §7.
  *
- * `vercel.json` con el `crons` lo añade Jhonny (protegido: `.github/*`, y el deploy es suyo).
+ * Programado en `apps/web/vercel.json`: 10:00 UTC, 05:00 en Bogotá.
  */
 
 import { timingSafeEqual } from 'node:crypto';
@@ -30,3 +30,6 @@ export async function POST(req: Request) {
 
 // Vercel Cron llama con GET; se acepta igual con el mismo secreto.
 export const GET = POST;
+
+// Hasta 5 minutos: el job recorre todas las instituciones y cohortes.
+export const maxDuration = 300;

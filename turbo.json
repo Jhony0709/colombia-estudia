@@ -17,7 +17,11 @@
     "WOMPI_PUBLIC_KEY",
     "WOMPI_PRIVATE_KEY",
     "WOMPI_EVENTS_SECRET",
-    "SENTRY_DSN"
+    "WOMPI_INTEGRITY_SECRET",
+    "WOMPI_API_URL",
+    "WOMPI_CHECKOUT_URL",
+    "SENTRY_DSN",
+    "RUN_DB_TESTS"
   ],
   "ui": "tui",
   "tasks": {

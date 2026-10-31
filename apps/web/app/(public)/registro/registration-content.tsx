@@ -328,16 +328,14 @@ export default function RegistrationContent({
                 >
                   {t('convo.accept')}
                 </Button>
-                {dataPolicyUrl && (
-                  <a
-                    href={dataPolicyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="type-body text-text-link min-h-touch inline-flex items-center underline"
-                  >
-                    {t('viewPolicy')}
-                  </a>
-                )}
+                <a
+                  href={dataPolicyUrl ?? '/politica-de-datos'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="type-body text-text-link min-h-touch inline-flex items-center underline"
+                >
+                  {t('viewPolicy')}
+                </a>
               </div>
             ),
           },

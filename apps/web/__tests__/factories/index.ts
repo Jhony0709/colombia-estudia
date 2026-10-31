@@ -1154,6 +1154,73 @@ export const invitationFactory = {
   },
 };
 
+/** Precio de un programa (25/9). */
+export const programPriceFactory = {
+  create: async (prisma: PrismaClientType, institutionId: string, programId: string) =>
+    prisma.programPrice.create({
+      data: {
+        id: cuid(),
+        institutionId,
+        programId,
+        amount: 95000,
+        period: 'PER_MODULE',
+        validFrom: new Date('2026-01-01T00:00:00.000Z'),
+      },
+    }),
+};
+
+/** Contador de códigos (25/9); su llave es (institución, nombre). */
+export const counterFactory = {
+  create: async (prisma: PrismaClientType, institutionId: string) =>
+    prisma.counter.create({ data: { institutionId, name: `test-${cuid()}`, seq: 1 } }),
+};
+
+/** Habilitación de un componente para una matrícula (3/10). */
+export const enrollmentModuleFactory = {
+  create: async (
+    prisma: PrismaClientType,
+    institutionId: string,
+    enrollmentId: string,
+    moduleId: string
+  ) =>
+    prisma.enrollmentModule.create({ data: { id: cuid(), institutionId, enrollmentId, moduleId } }),
+};
+
+/** Solicitud de inscripción o de habilitación (6/10). */
+export const accessRequestFactory = {
+  create: async (
+    prisma: PrismaClientType,
+    institutionId: string,
+    personId: string,
+    cohortId: string,
+    moduleId: string
+  ) =>
+    prisma.accessRequest.create({
+      data: { id: cuid(), institutionId, personId, cohortId, moduleId, kind: 'ENROLL' },
+    }),
+};
+
+/** Opinión al terminar un componente (11/10). */
+export const moduleFeedbackFactory = {
+  create: async (
+    prisma: PrismaClientType,
+    institutionId: string,
+    enrollmentId: string,
+    moduleId: string
+  ) =>
+    prisma.moduleFeedback.create({
+      data: {
+        id: cuid(),
+        institutionId,
+        enrollmentId,
+        moduleId,
+        usefulness: 5,
+        understanding: 4,
+        clarity: 4,
+      },
+    }),
+};
+
 /**
  * All factories grouped for easy access
  */
@@ -1194,4 +1261,9 @@ export const factories = {
   auditLog: auditLogFactory,
   notification: notificationFactory,
   invitation: invitationFactory,
+  programPrice: programPriceFactory,
+  counter: counterFactory,
+  enrollmentModule: enrollmentModuleFactory,
+  accessRequest: accessRequestFactory,
+  moduleFeedback: moduleFeedbackFactory,
 };

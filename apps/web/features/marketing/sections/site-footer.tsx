@@ -56,13 +56,11 @@ export async function SiteFooter({
             {signedIn ? t('nav.enter') : t('nav.login')}
           </Link>
         </FooterColumn>
-        {institution.dataPolicyUrl && (
-          <FooterColumn title={t('footer.legal')}>
-            <a href={institution.dataPolicyUrl} className={link}>
-              {t('footer.dataPolicy')}
-            </a>
-          </FooterColumn>
-        )}
+        <FooterColumn title={t('footer.legal')}>
+          <a href={institution.dataPolicyUrl ?? '/politica-de-datos'} className={link}>
+            {t('footer.dataPolicy')}
+          </a>
+        </FooterColumn>
       </SiteContainer>
       <div className="border-t border-[var(--site-line)]">
         <SiteContainer className="py-5">

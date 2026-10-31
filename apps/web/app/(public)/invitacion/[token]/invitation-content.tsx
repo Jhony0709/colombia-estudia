@@ -61,7 +61,7 @@ export default function InvitationContent({
   useEffect(() => {
     if (step === 'success') {
       const timer = setTimeout(() => {
-        window.location.assign(nextRef.current);
+        window.location.replace(nextRef.current);
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -239,16 +239,14 @@ export default function InvitationContent({
             />
             <span className="type-body text-text">
               {t('acceptPolicy')}{' '}
-              {dataPolicyUrl && (
-                <a
-                  href={dataPolicyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-text-link underline"
-                >
-                  {t('viewPolicy')}
-                </a>
-              )}
+              <a
+                href={dataPolicyUrl ?? '/politica-de-datos'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-link underline"
+              >
+                {t('viewPolicy')}
+              </a>
             </span>
           </label>
 

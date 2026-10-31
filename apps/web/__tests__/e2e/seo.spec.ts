@@ -36,7 +36,10 @@ test.describe('Metadatos', () => {
   test('la portada: título, canonical, OG y JSON-LD', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveTitle(/bachillerato/i);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/$/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      /^https?:\/\/[^/]+\/?$/
+    );
     await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
     const raw = await page.locator('script[type="application/ld+json"]').textContent();

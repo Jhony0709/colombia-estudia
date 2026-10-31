@@ -107,7 +107,17 @@ export function isValidNextUrl(next: string | null | undefined): boolean {
     return false;
   }
 
-  return true;
+  // El navegador quita tabuladores y saltos de línea: «/\t/evil.com» se vuelve //evil.com (31/10).
+  if ([...next].some((c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127)) {
+    return false;
+  }
+
+  // Y lo que quede tiene que resolverse en el mismo origen.
+  try {
+    return new URL(next, 'https://origen.invalid').origin === 'https://origen.invalid';
+  } catch {
+    return false;
+  }
 }
 
 /**

@@ -6,7 +6,10 @@
  */
 
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
+import { getRequestContext } from '@/lib/authz/request-context';
+import { sanitizeNextUrl } from '@/lib/authz/routes';
 import LoginContent from './login-content';
 
 export const metadata: Metadata = {
@@ -16,7 +19,20 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string | string[] }>;
+}) {
+  // Con sesión, el login no se vuelve a mostrar (p. ej. al volver atrás tras entrar).
+  const ctx = await getRequestContext();
+  if (ctx.person) {
+    const { next } = await searchParams;
+    redirect(
+      ctx.mfaPending ? '/auth/mfa' : sanitizeNextUrl(typeof next === 'string' ? next : null)
+    );
+  }
+
   return (
     <Suspense
       fallback={

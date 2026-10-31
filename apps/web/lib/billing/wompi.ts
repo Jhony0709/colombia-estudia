@@ -12,14 +12,23 @@
  * Centavos solo aquí: el resto del sistema habla en pesos enteros.
  */
 
+import 'server-only';
 import { createHash, timingSafeEqual } from 'node:crypto';
 
-const API_URL = process.env.WOMPI_API_URL || 'https://sandbox.wompi.co/v1';
 const CHECKOUT_URL = process.env.WOMPI_CHECKOUT_URL || 'https://checkout.wompi.co/p/';
+
+// Sin `WOMPI_API_URL`, el ambiente lo dice la llave: con una de producción no se consulta sandbox.
+function apiUrl(): string {
+  if (process.env.WOMPI_API_URL) return process.env.WOMPI_API_URL;
+  return process.env.WOMPI_PRIVATE_KEY?.startsWith('prv_prod_')
+    ? 'https://production.wompi.co/v1'
+    : 'https://sandbox.wompi.co/v1';
+}
 
 export function isWompiConfigured(): boolean {
   return Boolean(
     process.env.WOMPI_PUBLIC_KEY &&
+    process.env.WOMPI_PRIVATE_KEY &&
     process.env.WOMPI_INTEGRITY_SECRET &&
     process.env.WOMPI_EVENTS_SECRET
   );
@@ -100,7 +109,7 @@ export function verifyEventChecksum(event: WompiEvent): boolean {
 export async function fetchTransaction(id: string): Promise<WompiTransaction | null> {
   const key = process.env.WOMPI_PRIVATE_KEY;
   if (!key) return null;
-  const res = await fetch(`${API_URL}/transactions/${encodeURIComponent(id)}`, {
+  const res = await fetch(`${apiUrl()}/transactions/${encodeURIComponent(id)}`, {
     headers: { Authorization: `Bearer ${key}` },
     cache: 'no-store',
   });

@@ -4,7 +4,7 @@
  * Verifies that the tenant-scoped Prisma client properly isolates
  * data between institutions. This is a critical security test.
  *
- * Coverage: All 35 tenant-scoped models from TENANT_SCOPED_MODELS
+ * Coverage: every tenant-scoped model in TENANT_SCOPED_MODELS (40 on 31/10)
  *
  * Run with: set -a; source .env; set +a; RUN_DB_TESTS=1 pnpm --filter @colombia-estudia/web test:integration
  */
@@ -18,7 +18,7 @@ import { factories } from '../../factories';
 const describeWithDb = process.env.RUN_DB_TESTS === '1' ? describe : describe.skip;
 
 // Models with composite primary keys (no single `id` field)
-const COMPOSITE_KEY_MODELS = ['LessonVersionAsset'] as const;
+const COMPOSITE_KEY_MODELS = ['LessonVersionAsset', 'Counter'] as const;
 
 // Models with bigint id
 const BIGINT_ID_MODELS = ['LearningEvent', 'AuditLog'] as const;
@@ -69,6 +69,11 @@ const PARENTS: Record<string, readonly string[]> = {
   AuditLog: [],
   Notification: ['Person'],
   Invitation: ['Person'],
+  ProgramPrice: ['Program'],
+  Counter: [],
+  EnrollmentModule: ['Enrollment', 'Module'],
+  AccessRequest: ['Person', 'Cohort', 'Module'],
+  ModuleFeedback: ['Enrollment', 'Module'],
 } as const;
 
 /**
@@ -149,6 +154,9 @@ function extractEntityId(model: string, entity: Record<string, unknown>): Entity
       lessonVersionId: entity.lessonVersionId as string,
       mediaAssetId: entity.mediaAssetId as string,
     };
+  }
+  if (model === 'Counter') {
+    return { institutionId: entity.institutionId as string, name: entity.name as string };
   }
   return entity.id as EntityId;
 }
@@ -398,6 +406,22 @@ async function createEntity(model: string, ctx: GraphContext, db: typeof prisma)
 
     case 'Invitation':
       return factories.invitation.create(db, institutionId, getPerson(), getPerson());
+    case 'ProgramPrice':
+      return factories.programPrice.create(db, institutionId, getProgram());
+    case 'Counter':
+      return factories.counter.create(db, institutionId);
+    case 'EnrollmentModule':
+      return factories.enrollmentModule.create(db, institutionId, getEnrollment(), getModule());
+    case 'AccessRequest':
+      return factories.accessRequest.create(
+        db,
+        institutionId,
+        getPerson(),
+        getCohort(),
+        getModule()
+      );
+    case 'ModuleFeedback':
+      return factories.moduleFeedback.create(db, institutionId, getEnrollment(), getModule());
 
     default:
       throw new Error(`Unknown model: ${model}`);
@@ -431,7 +455,7 @@ async function cleanupInstitution(institutionId: string): Promise<void> {
 
 const TEST_SLUG_PREFIX = 'test-iso-';
 
-/** Hook timeout: the whole graph (35 models x 2 institutions) is built against staging. */
+/** Hook timeout: the whole graph (40 models x 2 institutions) is built against staging. */
 const GRAPH_TIMEOUT_MS = 120_000;
 
 describeWithDb('Tenant Isolation', () => {

@@ -74,7 +74,7 @@ colombia-estudia/
 │       │   └── templates/    AreaLayout, TwoPane, FocusedTask
 │       ├── lib/
 │       │   ├── db/           prisma.ts, tenant.ts (cliente extendido), transactions.ts
-│       │   ├── auth/         supabase-server.ts, supabase-browser.ts, session.ts
+│       │   ├── auth/         supabase-server.ts, session.ts
 │       │   ├── authz/        with-capability.ts, request-context.ts
 │       │   ├── http/         api-handler.ts (envuelve: zod + errores + logging), responses.ts
 │       │   ├── core/         errors.ts, result.ts, ids.ts, dates.ts (America/Bogota)

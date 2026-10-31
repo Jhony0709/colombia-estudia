@@ -129,7 +129,7 @@ model Person {
   id                 String    @id @default(cuid())
   institutionId      String
   /// Código legible `PER-0001` (25/9): lo asigna el trigger `assign_code` al insertar. Único por institución.
-  code               String    @default(dbgenerated("''::text"))
+  code               String    @default("")
   givenName          String
   familyName         String
   documentType       String?
@@ -330,7 +330,7 @@ model Module {
   id            String    @id @default(cuid())
   institutionId String
   /// Código legible `COM-0001` (25/9), asignado por el trigger `assign_code`. Único por institución.
-  code          String    @default(dbgenerated("''::text"))
+  code          String    @default("")
   programId     String
   position      Int
   name          String
@@ -598,7 +598,7 @@ model Lesson {
   id                   String          @id @default(cuid())
   institutionId        String
   /// Código legible `TEM-0001` (25/9), asignado por el trigger `assign_code`. Único por institución.
-  code                 String          @default(dbgenerated("''::text"))
+  code                 String          @default("")
   programId            String
   moduleId             String
   subjectId            String
@@ -698,7 +698,7 @@ model Assessment {
   id                String         @id @default(cuid())
   institutionId     String
   /// Código legible `EXA-0001` (25/9), asignado por el trigger `assign_code`. Único por institución.
-  code              String         @default(dbgenerated("''::text"))
+  code              String         @default("")
   programId         String
   moduleId          String?
   subjectId         String?

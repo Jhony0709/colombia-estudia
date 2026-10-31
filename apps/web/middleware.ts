@@ -99,12 +99,15 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      cookieOptions: { httpOnly: true, secure: process.env.NODE_ENV === 'production' },
       cookies: {
         getAll() {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          // `requestHeaders` se copió antes del refresco: sin esto el servidor ve la sesión vieja.
+          requestHeaders.set('cookie', request.headers.get('cookie') ?? '');
           response = NextResponse.next({
             request: { headers: requestHeaders },
           });

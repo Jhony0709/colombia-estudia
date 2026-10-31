@@ -67,7 +67,8 @@ export default function LoginContent() {
       if (res.ok) {
         const data = (await res.json()) as { data: { next: string } };
         // Full navigation so server components re-render with the new session cookies.
-        window.location.assign(data.data.next);
+        // `replace`: el login no queda en el historial y «atrás» no vuelve a él.
+        window.location.replace(data.data.next);
         return;
       }
 
