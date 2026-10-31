@@ -66,7 +66,7 @@ export async function planBulkInvitations({
   if (!cohort) throw new APIError('Cohort not found', 'NOT_FOUND');
 
   const enrollments = await db.enrollment.findMany({
-    where: { cohortId, status: 'ACTIVE' },
+    where: { cohortId, status: 'ACTIVE', isPreview: false },
     orderBy: { enrolledAt: 'asc' },
     select: {
       student: {

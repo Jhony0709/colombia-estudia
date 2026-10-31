@@ -82,6 +82,7 @@ const attempt = (questions: AttemptView['questions']): AttemptView => ({
   questions,
   outcome: null,
   attemptsLeft: 1,
+  preview: false,
   activeAttemptId: null,
   next: null,
 });

@@ -72,7 +72,12 @@ export async function propagateLessonVersion(
   if (version.invalidatesProgress) {
     const completed = await tx.lessonProgress.findMany({
       where: { lessonAssignmentId: { in: ids }, status: 'COMPLETED' },
-      select: { id: true, studentId: true, lessonAssignmentId: true },
+      select: {
+        id: true,
+        studentId: true,
+        lessonAssignmentId: true,
+        enrollment: { select: { isPreview: true } },
+      },
     });
     if (completed.length > 0) {
       await tx.lessonProgress.updateMany({
@@ -80,8 +85,9 @@ export async function propagateLessonVersion(
         data: { status: 'IN_PROGRESS', completedAt: null, lessonVersionId: version.id },
       });
       for (const id of ids) {
+        // La vista de estudiante (31/10) se reabre, pero ni cuenta ni recibe aviso.
         const studentIds = completed
-          .filter((p) => p.lessonAssignmentId === id)
+          .filter((p) => p.lessonAssignmentId === id && !p.enrollment.isPreview)
           .map((p) => p.studentId);
         if (studentIds.length > 0) reopened.push({ assignmentId: id, studentIds });
       }

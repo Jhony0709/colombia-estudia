@@ -96,6 +96,8 @@ export interface AssessmentForStudent {
     dueAt: string | null;
     passPercent: number | null;
     reviewPolicy: ReviewPolicy;
+    /** Vista de estudiante (31/10): intentos sin límite, sin reloj y revisión completa. */
+    preview: boolean;
   } | null;
   /** El intento abierto, si lo hay: la pantalla previa lleva a continuarlo, no a empezar otro. */
   active: { id: string; deadlineAt: string | null } | null;
@@ -126,6 +128,8 @@ export interface AttemptQuestionView {
 export interface AttemptForStudent {
   id: string;
   assignmentId: string;
+  /** La matrícula del intento: la franja de la vista de estudiante la necesita (31/10). */
+  enrollmentId: string;
   number: number;
   status: AttemptStatus;
   title: string;
@@ -156,6 +160,8 @@ export interface AttemptForStudent {
    */
   outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'DONE' | 'PENDING' | null;
   attemptsLeft: number;
+  /** Vista de estudiante (31/10): se repite sin límite; `attemptsLeft` no aplica. */
+  preview: boolean;
   /** Otro intento de este cuestionario que sigue abierto: se continúa ese, no se empieza otro. */
   activeAttemptId: string | null;
   /** El siguiente paso de la ruta cuando el cuestionario quedó completo; si no hay, la ruta. */
@@ -297,6 +303,7 @@ async function gradeAndClose({
       enrollmentId: true,
       studentId: true,
       assessmentAssignmentId: true,
+      enrollment: { select: { isPreview: true } },
       assessmentVersion: {
         select: {
           content: true,
@@ -421,14 +428,16 @@ async function gradeAndClose({
     }
   });
 
-  await notify(institutionId, {
-    personId: attempt.studentId,
-    type: 'attempt_graded',
-    title: expired ? 'Tu examen se entregó al vencer el tiempo' : 'Tu examen fue calificado',
-    body: `${attempt.assessmentVersion.assessment.title}: ya puedes ver el resultado en tus resultados.`,
-    href: `/aprender/examen/${attempt.assessmentAssignmentId}/intento/${attempt.id}`,
-    dedupeKey: `attempt_graded:${attempt.id}`,
-  });
+  // En la vista de estudiante el resultado ya está en pantalla: sin aviso (31/10).
+  if (!attempt.enrollment.isPreview)
+    await notify(institutionId, {
+      personId: attempt.studentId,
+      type: 'attempt_graded',
+      title: expired ? 'Tu examen se entregó al vencer el tiempo' : 'Tu examen fue calificado',
+      body: `${attempt.assessmentVersion.assessment.title}: ya puedes ver el resultado en tus resultados.`,
+      href: `/aprender/examen/${attempt.assessmentAssignmentId}/intento/${attempt.id}`,
+      dedupeKey: `attempt_graded:${attempt.id}`,
+    });
 
   // Si era el último paso, la matrícula se cierra ya y no al pasar el job.
   await issueAfterProgress({ institutionId, enrollmentId: attempt.enrollmentId, now });
@@ -531,6 +540,7 @@ async function resolveAssessment({
 
   const db = createTenantClient(institutionId);
   const enrollmentId = outline.enrollmentId;
+  const preview = outline.preview;
 
   const assignment = await db.assessmentAssignment.findFirst({
     where: { id: assignmentId, cohortId: outline.cohort.id },
@@ -605,25 +615,28 @@ async function resolveAssessment({
   const version = assignment.assessmentVersion;
   const content = parseContent(version.content);
   const policy = version.reviewPolicy as ReviewPolicy;
-  const attemptsAllowed = getAttemptsAllowed({
-    assessmentVersion: {
-      id: '',
-      timeLimitMinutes: version.timeLimitMinutes,
-      maxAttempts: version.maxAttempts,
-    },
-    accommodation: accommodation
-      ? {
-          enrollmentId,
-          extraTimeFactor: accommodation.extraTimeFactor.toNumber(),
-          exemptFromTimer: accommodation.exemptFromTimer,
-          allowedAttemptsBonus: accommodation.allowedAttemptsBonus,
-        }
-      : null,
-  });
+  // Vista de estudiante (31/10): sin límite de intentos ni reloj.
+  const attemptsAllowed = preview
+    ? Infinity
+    : getAttemptsAllowed({
+        assessmentVersion: {
+          id: '',
+          timeLimitMinutes: version.timeLimitMinutes,
+          maxAttempts: version.maxAttempts,
+        },
+        accommodation: accommodation
+          ? {
+              enrollmentId,
+              extraTimeFactor: accommodation.extraTimeFactor.toNumber(),
+              exemptFromTimer: accommodation.exemptFromTimer,
+              allowedAttemptsBonus: accommodation.allowedAttemptsBonus,
+            }
+          : null,
+      });
   const timerExempt = accommodation?.exemptFromTimer ?? false;
   const factor = accommodation?.extraTimeFactor.toNumber() ?? 1;
   const timeLimitMinutes =
-    version.timeLimitMinutes === null || timerExempt
+    version.timeLimitMinutes === null || timerExempt || preview
       ? null
       : Math.round(version.timeLimitMinutes * factor);
 
@@ -632,7 +645,7 @@ async function resolveAssessment({
     ? 'IN_PROGRESS'
     : attempts.length >= attemptsAllowed
       ? 'NO_ATTEMPTS_LEFT'
-      : assignment.dueAt !== null && assignment.dueAt <= now
+      : !preview && assignment.dueAt !== null && assignment.dueAt <= now
         ? 'PAST_DUE'
         : null;
 
@@ -657,6 +670,7 @@ async function resolveAssessment({
       dueAt: assignment.dueAt ? assignment.dueAt.toISOString() : null,
       passPercent: version.passPercent,
       reviewPolicy: policy,
+      preview,
     },
     active: active
       ? { id: active.id, deadlineAt: active.deadlineAt ? active.deadlineAt.toISOString() : null }
@@ -668,17 +682,19 @@ async function resolveAssessment({
       startedAt: a.startedAt.toISOString(),
       submittedAt: a.submittedAt ? a.submittedAt.toISOString() : null,
       score:
-        reviewLevel({
-          policy,
-          status: a.status as AttemptStatus,
-          dueAt: assignment.dueAt,
-          now,
-          exhausted: attemptsExhausted({
-            attempts,
-            attemptsAllowed,
-            passPercent: version.passPercent,
-          }),
-        }) === 'NONE'
+        (preview && a.status === 'GRADED'
+          ? 'FULL'
+          : reviewLevel({
+              policy,
+              status: a.status as AttemptStatus,
+              dueAt: assignment.dueAt,
+              now,
+              exhausted: attemptsExhausted({
+                attempts,
+                attemptsAllowed,
+                passPercent: version.passPercent,
+              }),
+            })) === 'NONE'
           ? null
           : scoreView(a, version.passPercent),
     })),
@@ -761,31 +777,33 @@ export async function startAttempt({
       }
     : null;
 
-  const deadlineAt = getAttemptDeadline({
-    assessmentVersion: {
-      id: assignment.assessmentVersionId,
-      timeLimitMinutes: assignment.assessmentVersion.timeLimitMinutes,
-      maxAttempts: assignment.assessmentVersion.maxAttempts,
-    },
-    assignment: { id: assignment.id, dueAt: assignment.dueAt },
-    enrollment: {
-      id: enrollment.id,
-      studentId: personId,
-      cohortId: '',
-      status: 'ACTIVE',
-      isMinorAtEnrollment: false,
-      accessUntil: enrollment.accessUntil,
-    },
-    accommodation: snapshot
-      ? {
-          enrollmentId: enrollment.id,
-          extraTimeFactor: snapshot.extraTimeFactor,
-          exemptFromTimer: snapshot.exemptFromTimer,
-          allowedAttemptsBonus: snapshot.allowedAttemptsBonus,
-        }
-      : null,
-    startedAt: now,
-  });
+  const deadlineAt = view.assessment.preview
+    ? null
+    : getAttemptDeadline({
+        assessmentVersion: {
+          id: assignment.assessmentVersionId,
+          timeLimitMinutes: assignment.assessmentVersion.timeLimitMinutes,
+          maxAttempts: assignment.assessmentVersion.maxAttempts,
+        },
+        assignment: { id: assignment.id, dueAt: assignment.dueAt },
+        enrollment: {
+          id: enrollment.id,
+          studentId: personId,
+          cohortId: '',
+          status: 'ACTIVE',
+          isMinorAtEnrollment: false,
+          accessUntil: enrollment.accessUntil,
+        },
+        accommodation: snapshot
+          ? {
+              enrollmentId: enrollment.id,
+              extraTimeFactor: snapshot.extraTimeFactor,
+              exemptFromTimer: snapshot.exemptFromTimer,
+              allowedAttemptsBonus: snapshot.allowedAttemptsBonus,
+            }
+          : null,
+        startedAt: now,
+      });
 
   const attempt = await db.$transaction(async (tx) => {
     const created = await tx.attempt.create({
@@ -841,6 +859,8 @@ const ATTEMPT_SELECT = {
   maxScore: true,
   assessmentAssignmentId: true,
   appliedAccommodation: true,
+  enrollmentId: true,
+  enrollment: { select: { isPreview: true } },
   assessmentVersion: {
     select: {
       content: true,
@@ -1004,20 +1024,25 @@ export async function getAttemptForStudent({
   const policy = row.assessmentVersion.reviewPolicy as ReviewPolicy;
   const status = row.status as AttemptStatus;
   const accommodation = row.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
-  const attemptsAllowed =
-    row.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0);
+  const preview = row.enrollment.isPreview;
+  const attemptsAllowed = preview
+    ? Infinity
+    : row.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0);
   const passPercent = row.assessmentVersion.passPercent;
-  const review = reviewLevel({
-    policy,
-    status,
-    dueAt: row.assignment.dueAt,
-    now,
-    exhausted: attemptsExhausted({
-      attempts: row.assignment.attempts,
-      attemptsAllowed,
-      passPercent,
-    }),
-  });
+  const review =
+    preview && status === 'GRADED'
+      ? 'FULL'
+      : reviewLevel({
+          policy,
+          status,
+          dueAt: row.assignment.dueAt,
+          now,
+          exhausted: attemptsExhausted({
+            attempts: row.assignment.attempts,
+            attemptsAllowed,
+            passPercent,
+          }),
+        });
 
   const outcome: AttemptForStudent['outcome'] =
     status === 'IN_PROGRESS'
@@ -1039,7 +1064,12 @@ export async function getAttemptForStudent({
               : 'RETRY';
   // El botón de seguir lleva al paso que sigue en la ruta, no al panel (8/10).
   let next: AttemptForStudent['next'] = null;
-  if (outcome === 'PASSED' || outcome === 'PASSED_OTHER' || outcome === 'DONE') {
+  if (
+    outcome === 'PASSED' ||
+    outcome === 'PASSED_OTHER' ||
+    outcome === 'DONE' ||
+    (preview && outcome === 'RETRY')
+  ) {
     const outline = await getCohortOutline({
       institutionId,
       personId,
@@ -1065,6 +1095,7 @@ export async function getAttemptForStudent({
   return {
     id: row.id,
     assignmentId: row.assessmentAssignmentId,
+    enrollmentId: row.enrollmentId,
     number: row.number,
     status,
     title: row.assessmentVersion.assessment.title,
@@ -1077,6 +1108,7 @@ export async function getAttemptForStudent({
       row.assessmentVersion.assessment.module?.closingText ??
       null,
     timed:
+      !preview &&
       row.assessmentVersion.timeLimitMinutes !== null &&
       !(row.appliedAccommodation as { exemptFromTimer?: boolean } | null)?.exemptFromTimer,
     deadlineAt: row.deadlineAt ? row.deadlineAt.toISOString() : null,
@@ -1102,7 +1134,8 @@ export async function getAttemptForStudent({
       };
     }),
     outcome,
-    attemptsLeft: Math.max(0, attemptsAllowed - row.assignment.attempts.length),
+    attemptsLeft: preview ? 0 : Math.max(0, attemptsAllowed - row.assignment.attempts.length),
+    preview,
     activeAttemptId:
       row.assignment.attempts.find((a) => a.status === 'IN_PROGRESS' && a.id !== row.id)?.id ??
       null,
@@ -1240,6 +1273,7 @@ export async function getResultsForStudent({
         score: true,
         maxScore: true,
         assessmentAssignmentId: true,
+        enrollment: { select: { isPreview: true } },
         appliedAccommodation: true,
         assignment: {
           select: {
@@ -1294,7 +1328,9 @@ export async function getResultsForStudent({
       number: a.number,
       status,
       submittedAt: a.submittedAt ? a.submittedAt.toISOString() : null,
+      // En la vista de estudiante la revisión es completa (31/10).
       score:
+        !(a.enrollment.isPreview && status === 'GRADED') &&
         reviewLevel({ policy, status, dueAt: a.assignment.dueAt, now, exhausted }) === 'NONE'
           ? null
           : scoreView(a, a.assessmentVersion.passPercent),

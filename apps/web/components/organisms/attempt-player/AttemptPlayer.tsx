@@ -78,6 +78,8 @@ export interface AttemptView {
   /** Qué sigue (8/10): ver `AttemptForStudent.outcome`. */
   outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'DONE' | 'PENDING' | null;
   attemptsLeft: number;
+  /** Vista de estudiante (31/10): se repite sin límite. */
+  preview: boolean;
   activeAttemptId: string | null;
   next: { href: string; title: string | null } | null;
 }
@@ -936,16 +938,18 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
           {outcome === 'RETRY' ? (
             <>
               <p className="type-body text-text-muted max-w-reading m-0">
-                {t('closing.retryBody')}
+                {attempt.preview ? t('closing.previewRetryBody') : t('closing.retryBody')}
               </p>
               <p className="type-body-emphasis text-text m-0">
                 {attempt.activeAttemptId
                   ? t('closing.activeAttempt')
-                  : attempt.attemptsLeft === 1
-                    ? t('closing.lastAttempt')
-                    : t('closing.attemptsLeft', { count: attempt.attemptsLeft })}
+                  : attempt.preview
+                    ? t('closing.previewAttempts')
+                    : attempt.attemptsLeft === 1
+                      ? t('closing.lastAttempt')
+                      : t('closing.attemptsLeft', { count: attempt.attemptsLeft })}
               </p>
-              <div className="pt-1">
+              <div className="flex flex-wrap items-center gap-3 pt-1">
                 <Button asChild>
                   <Link
                     href={
@@ -958,6 +962,15 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
                     {attempt.activeAttemptId ? t('closing.continueAttempt') : t('closing.retry')}
                   </Link>
                 </Button>
+                {/* En la vista de estudiante presentarlo basta para seguir (31/10). */}
+                {attempt.preview && attempt.next && (
+                  <Button asChild variant="secondary">
+                    <Link href={attempt.next.href}>
+                      {t('closing.next')}
+                      <ArrowRight aria-hidden className="size-4 shrink-0" />
+                    </Link>
+                  </Button>
+                )}
               </div>
             </>
           ) : (

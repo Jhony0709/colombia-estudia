@@ -19,7 +19,9 @@ import { requireCapability } from '@/lib/authz/with-capability';
 import { getProgramBuilder } from '@/features/content/server/builder.service';
 import { Page, PageHeader } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
+import { listPreviewCohorts } from '@/features/cohorts/server/preview.service';
 import { ProgramBuilderView } from './program-builder';
+import { StudentPreviewPicker } from './student-preview-picker';
 
 export const metadata: Metadata = { title: 'Constructor del programa' };
 
@@ -32,10 +34,13 @@ export default async function ProgramBuilderPage({
   const ctx = await getRequestContext();
   const { programId } = await params;
 
-  const [builder, t, tc] = await Promise.all([
+  // Vista de estudiante (31/10): solo administración, y solo cohortes con contenido.
+  const canPreview = (ctx.capabilities.get('institution.manage')?.length ?? 0) > 0;
+  const [builder, t, tc, previewCohorts] = await Promise.all([
     getProgramBuilder({ institutionId: ctx.institution.id, programId }),
     getTranslations('builder'),
     getTranslations('crumbs'),
+    canPreview ? listPreviewCohorts({ institutionId: ctx.institution.id, programId }) : [],
   ]);
   if (!builder) notFound();
 
@@ -58,6 +63,9 @@ export default async function ProgramBuilderPage({
           published: builder.readiness.published,
           total: builder.readiness.total,
         })}
+        action={
+          previewCohorts.length > 0 ? <StudentPreviewPicker cohorts={previewCohorts} /> : undefined
+        }
       />
 
       <ProgramBuilderView builder={builder} />

@@ -54,6 +54,7 @@ export function EvidenceRecorder({
   initialStatus,
   requiredSeconds = 0,
   scrolledBefore = false,
+  completeOnOpen = false,
 }: {
   assignmentId: string;
   form: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
@@ -62,6 +63,8 @@ export function EvidenceRecorder({
   requiredSeconds?: number;
   /** El final ya se vio en otra visita: el servidor lo guardó y no hace falta volver a bajar. */
   scrolledBefore?: boolean;
+  /** Vista de estudiante (31/10): se manda al abrir y el servidor lo completa. */
+  completeOnOpen?: boolean;
 }) {
   const t = useTranslations('learn.evidence');
   const router = useRouter();
@@ -146,6 +149,8 @@ export function EvidenceRecorder({
       const scrolled = snap.current.scrolledToEnd || scrolledBefore;
       if (scrolled && snap.current.secondsOnLesson === requiredSeconds) void flush(false, true);
     }, 1000);
+
+    if (completeOnOpen) void flush(false, true);
 
     // Envío periódico.
     const timer = window.setInterval(() => void flush(), FLUSH_MS);
@@ -259,7 +264,7 @@ export function EvidenceRecorder({
       document.removeEventListener('visibilitychange', onHide);
       void flush(true);
     };
-    // `assignmentId`, `form`, `requiredSeconds` y `scrolledBefore` no cambian sin desmontar la página.
+    // `assignmentId`, `form`, `requiredSeconds`, `scrolledBefore` y `completeOnOpen` no cambian sin desmontar la página.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignmentId, form]);
 

@@ -131,7 +131,7 @@ export async function listCohorts({
       endsOn: true,
       program: { select: { code: true, name: true } },
       partner: { select: { name: true } },
-      _count: { select: { enrollments: true } },
+      _count: { select: { enrollments: { where: { isPreview: false } } } },
     },
   });
 
@@ -175,7 +175,9 @@ export async function getCohortStats({
   const [open, planned, activeEnrollments, endingSoon] = await Promise.all([
     db.cohort.count({ where: { status: 'OPEN' } }),
     db.cohort.count({ where: { status: 'PLANNED' } }),
-    db.enrollment.count({ where: { status: 'ACTIVE', cohort: { status: 'OPEN' } } }),
+    db.enrollment.count({
+      where: { status: 'ACTIVE', isPreview: false, cohort: { status: 'OPEN' } },
+    }),
     db.cohort.count({ where: { status: 'OPEN', endsOn: { gte: now, lte: in30 } } }),
   ]);
   return { open, planned, activeEnrollments, endingSoon };
@@ -549,7 +551,7 @@ export async function getOpeningPreflight({
       program: {
         select: { name: true, modules: { where: { archivedAt: null }, select: { id: true } } },
       },
-      _count: { select: { enrollments: true } },
+      _count: { select: { enrollments: { where: { isPreview: false } } } },
     },
   });
   if (!cohort) return null;

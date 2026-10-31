@@ -217,7 +217,12 @@ async function runForInstitution({
       title: true,
       startsAt: true,
       cohort: {
-        select: { enrollments: { where: { status: 'ACTIVE' }, select: { studentId: true } } },
+        select: {
+          enrollments: {
+            where: { status: 'ACTIVE', isPreview: false },
+            select: { studentId: true },
+          },
+        },
       },
     },
   });

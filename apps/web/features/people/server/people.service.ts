@@ -494,6 +494,7 @@ export async function getPersonDetail({
       memberships: { where: { revokedAt: null }, select: { role: true } },
       invitations: { select: { acceptedAt: true, expiresAt: true } },
       enrollments: {
+        where: { isPreview: false },
         select: {
           id: true,
           status: true,

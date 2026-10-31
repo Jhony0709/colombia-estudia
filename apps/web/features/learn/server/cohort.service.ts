@@ -88,6 +88,8 @@ export interface CohortOutline {
   progress: { completed: number; total: number };
   /** Decisión 8: se dice que la financia una entidad aliada, sin nombrarla. */
   partnerFunded: boolean;
+  /** Vista de estudiante de un admin (31/10): todo abierto, sin fechas ni secuencia. */
+  preview: boolean;
 }
 
 const isoDay = (date: Date) => date.toISOString().slice(0, 10);
@@ -101,6 +103,7 @@ const EMPTY: CohortOutline = {
   upcoming: null,
   progress: { completed: 0, total: 0 },
   partnerFunded: false,
+  preview: false,
 };
 
 /**
@@ -153,6 +156,7 @@ export async function getCohortOutline({
       status: true,
       accessUntil: true,
       startsAtModule: true,
+      isPreview: true,
       cohort: {
         select: {
           id: true,
@@ -189,10 +193,12 @@ export async function getCohortOutline({
   };
 
   const partnerFunded = enrollment.paymentPlan?.payerType === 'PARTNER';
+  const preview = enrollment.isPreview;
 
   // Los estados terminales van antes que los datos: si el acceso venció, cargar la ruta
   // entera es trabajo para una pantalla que no la va a enseñar.
   const gate = ((): CohortGate | null => {
+    if (preview) return null;
     if (enrollment.status === 'WITHDRAWN') return { kind: 'WITHDRAWN' };
     if (enrollment.status === 'COMPLETED') return { kind: 'COMPLETED' };
     if (enrollment.accessUntil < today) {
@@ -207,7 +213,14 @@ export async function getCohortOutline({
   })();
 
   if (gate) {
-    return { ...EMPTY, gate, enrollmentId: enrollment.id, cohort: cohortInfo, partnerFunded };
+    return {
+      ...EMPTY,
+      gate,
+      enrollmentId: enrollment.id,
+      cohort: cohortInfo,
+      partnerFunded,
+      preview,
+    };
   }
 
   // Grado de entrada (20/9): quien entra a un módulo posterior no ve los anteriores, y no
@@ -294,6 +307,11 @@ export async function getCohortOutline({
     ]);
 
   const attemptsBonus = accommodation?.allowedAttemptsBonus ?? 0;
+  // Sin fechas en la vista de estudiante: se ve todo lo asignado, venza cuando venza.
+  const windowOf = (from: Date, until: Date | null) =>
+    preview
+      ? { availableFrom: new Date(0), availableUntil: null }
+      : { availableFrom: from, availableUntil: until };
 
   const items: OutlineItem[] = [
     ...lessonAssignments.map((assignment): OutlineItem => {
@@ -320,8 +338,7 @@ export async function getCohortOutline({
             ? 'VIDEO'
             : 'MARKDOWN',
         estimatedMinutes: assignment.lessonVersion.estimatedMinutes,
-        availableFrom: assignment.availableFrom,
-        availableUntil: assignment.availableUntil,
+        ...windowOf(assignment.availableFrom, assignment.availableUntil),
       };
     }),
     ...assessmentAssignments.flatMap((assignment): OutlineItem[] => {
@@ -339,17 +356,23 @@ export async function getCohortOutline({
           subjectId: assignment.assessment.subject?.id ?? null,
           subjectName: assignment.assessment.subject?.name ?? null,
           position: assignment.assessment.position,
-          status: assessmentStatus(assignment.attempts, {
-            attemptsAllowed: assignment.assessmentVersion.maxAttempts + attemptsBonus,
-            passPercent: assignment.assessmentVersion.passPercent,
-          }),
+          // En la vista de estudiante basta con haberlo presentado (31/10).
+          status: preview
+            ? assignment.attempts.some((a) => a.status === 'GRADED')
+              ? 'COMPLETED'
+              : assignment.attempts.length > 0
+                ? 'IN_PROGRESS'
+                : 'NOT_STARTED'
+            : assessmentStatus(assignment.attempts, {
+                attemptsAllowed: assignment.assessmentVersion.maxAttempts + attemptsBonus,
+                passPercent: assignment.assessmentVersion.passPercent,
+              }),
           form: 'ASSESSMENT',
           estimatedMinutes: assignment.assessmentVersion.timeLimitMinutes,
           dueAt: assignment.dueAt,
-          availableFrom: assignment.availableFrom,
           // `dueAt` es la fecha de entrega, no el cierre del acceso: una evaluación vencida
           // se sigue viendo, y quien decide si admite un intento es el motor de intentos.
-          availableUntil: null,
+          ...windowOf(assignment.availableFrom, null),
         },
       ];
     }),
@@ -364,7 +387,7 @@ export async function getCohortOutline({
       moduleAccess({
         first: index === 0,
         unlock: unlockOf.get(module.id) ?? null,
-        progression: cohortInfo.progression,
+        progression: preview ? 'FREE' : cohortInfo.progression,
         now,
       }),
     ])
@@ -378,7 +401,7 @@ export async function getCohortOutline({
 
   const sequenced = sequence({
     modules: byModule,
-    progression: cohortInfo.progression,
+    progression: preview ? 'FREE' : cohortInfo.progression,
     now,
   });
 
@@ -412,6 +435,7 @@ export async function getCohortOutline({
     upcoming: nextPoint(all),
     progress: progressOf(all),
     partnerFunded,
+    preview,
   };
 }
 
@@ -424,6 +448,7 @@ export interface MyEnrollment {
   resume: SequencedItem | null;
   upcoming: SequencedItem | null;
   partnerFunded: boolean;
+  preview: boolean;
 }
 
 /**
@@ -466,6 +491,7 @@ export async function listMyEnrollments({
             resume: outline.resume,
             upcoming: outline.upcoming,
             partnerFunded: outline.partnerFunded,
+            preview: outline.preview,
           },
         ]
       : []

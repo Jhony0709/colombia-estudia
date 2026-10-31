@@ -154,6 +154,7 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
           status: true,
           isMinorAtEnrollment: true,
           accessUntil: true,
+          isPreview: true,
           paymentPlan: {
             select: {
               payerType: true,
@@ -199,6 +200,7 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
           student: {
             select: {
               enrollments: {
+                where: { isPreview: false },
                 select: {
                   id: true,
                   cohortId: true,
@@ -319,10 +321,26 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
     }))
   );
 
+  // La vista de estudiante (31/10) solo abre algo mientras la persona administra la institución.
+  const administers =
+    (resolveCapabilities({
+      memberships: membershipsForCapabilities,
+      enrollments: [],
+      guardianships: [],
+      wardEnrollments: [],
+      partnerContactOf: [],
+      accountStatusByEnrollment,
+      restrictionPolicy,
+      now,
+    }).get('institution.manage')?.length ?? 0) > 0;
+  const previewIds = new Set(person.enrollments.filter((e) => e.isPreview).map((e) => e.id));
+
   // Resolve capabilities
   const capabilities = resolveCapabilities({
     memberships: membershipsForCapabilities,
-    enrollments: enrollmentsWithPayer,
+    enrollments: administers
+      ? enrollmentsWithPayer
+      : enrollmentsWithPayer.filter((e) => !previewIds.has(e.id)),
     guardianships: person.guardianOf.map((g) => ({
       guardianId: g.guardianId,
       studentId: g.studentId,

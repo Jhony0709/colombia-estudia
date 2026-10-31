@@ -133,4 +133,23 @@ describe('submitLesson', () => {
       now: NOW,
     });
   });
+
+  it('en la vista de estudiante toda actividad se aprueba al enviarla y no avisa (31/10)', async () => {
+    mockGetCohortOutline.mockResolvedValue({ ...outline, preview: true });
+    db.lessonAssignment.findFirst.mockResolvedValue(assignment(false));
+
+    await submitLesson(BASE);
+
+    expect(db.submission.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ status: 'APPROVED' }) })
+    );
+    expect(tx.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          after: expect.objectContaining({ rule: 'enrollment.isPreview' }),
+        }),
+      })
+    );
+    expect(mockNotifyMany).not.toHaveBeenCalled();
+  });
 });

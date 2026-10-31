@@ -18,6 +18,7 @@ import { Page, PageHeader } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { AttemptPlayer } from '@/components/organisms/attempt-player';
 import { TaskBar, TaskMode } from '@/components/organisms/task-mode';
+import { PreviewStrip } from '../../../../../preview-strip';
 
 export const metadata: Metadata = { title: 'Intento' };
 
@@ -55,27 +56,30 @@ export default async function AttemptPage({
   if (attempt.assignmentId !== assignmentId) notFound();
 
   return (
-    <Page>
-      {/* Modo tarea (E2, 23/9): en el teléfono, sin barra global mientras se presenta. */}
-      <TaskMode />
-      <TaskBar
-        backHref={`/aprender/examen/${attempt.assignmentId}`}
-        backLabel={ta('backToAssessment')}
-        place={`${ta('attemptNumber', { number: attempt.number })} · ${attempt.title}`}
-      />
-      <PageHeader
-        overline={ta('attemptNumber', { number: attempt.number })}
-        title={attempt.title}
-        back={
-          <Link
-            href={`/aprender/examen/${attempt.assignmentId}`}
-            className="text-text-link min-h-touch inline-flex items-center underline"
-          >
-            {ta('backToAssessment')}
-          </Link>
-        }
-      />
-      <AttemptPlayer attempt={attempt} />
-    </Page>
+    <>
+      <PreviewStrip enrollmentId={attempt.enrollmentId} />
+      <Page>
+        {/* Modo tarea (E2, 23/9): en el teléfono, sin barra global mientras se presenta. */}
+        <TaskMode />
+        <TaskBar
+          backHref={`/aprender/examen/${attempt.assignmentId}`}
+          backLabel={ta('backToAssessment')}
+          place={`${ta('attemptNumber', { number: attempt.number })} · ${attempt.title}`}
+        />
+        <PageHeader
+          overline={ta('attemptNumber', { number: attempt.number })}
+          title={attempt.title}
+          back={
+            <Link
+              href={`/aprender/examen/${attempt.assignmentId}`}
+              className="text-text-link min-h-touch inline-flex items-center underline"
+            >
+              {ta('backToAssessment')}
+            </Link>
+          }
+        />
+        <AttemptPlayer attempt={attempt} />
+      </Page>
+    </>
   );
 }

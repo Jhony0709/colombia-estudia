@@ -30,6 +30,7 @@ export function ModuleFeedbackFlow({
   firstName,
   backHref,
   nextLocked,
+  preview = false,
 }: {
   enrollmentId: string;
   moduleId: string;
@@ -37,6 +38,8 @@ export function ModuleFeedbackFlow({
   backHref: string;
   /** El siguiente componente bloqueado, para pedirlo al terminar. */
   nextLocked: { id: string; name: string; requestedAt: string | null } | null;
+  /** Vista de estudiante (31/10): se guarda, pero no la lee nadie. */
+  preview?: boolean;
 }) {
   const t = useTranslations('moduleFeedback');
   const { announce } = useAnnounce();
@@ -198,7 +201,9 @@ export function ModuleFeedbackFlow({
           >
             {t('done.title')}
           </h2>
-          <p className="type-body text-text-muted max-w-reading m-0">{t('done.body')}</p>
+          <p className="type-body text-text-muted max-w-reading m-0">
+            {preview ? t('done.previewBody') : t('done.body')}
+          </p>
         </div>
         {nextLocked && (
           <div className="space-y-2">

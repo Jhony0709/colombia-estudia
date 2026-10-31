@@ -103,6 +103,7 @@ export async function getCohortDetail({
         },
       },
       enrollments: {
+        where: { isPreview: false },
         orderBy: { enrolledAt: 'desc' },
         select: {
           id: true,
@@ -468,7 +469,7 @@ export async function previewEnrollment({
         select: { guardian: { select: { givenName: true, familyName: true } } },
       },
       enrollments: {
-        where: { OR: [{ cohortId }, { status: 'ACTIVE' }] },
+        where: { OR: [{ cohortId }, { status: 'ACTIVE', isPreview: false }] },
         select: {
           cohortId: true,
           status: true,
@@ -587,7 +588,7 @@ export async function withdrawEnrollment({
 
   return db.$transaction(async (tx) => {
     const enrollment = await tx.enrollment.findFirst({
-      where: { id: enrollmentId, institutionId },
+      where: { id: enrollmentId, institutionId, isPreview: false },
       select: { id: true, status: true, paymentPlan: { select: { id: true } } },
     });
     if (!enrollment) {
@@ -649,7 +650,7 @@ export async function extendEnrollment({
 
   return db.$transaction(async (tx) => {
     const enrollment = await tx.enrollment.findFirst({
-      where: { id: enrollmentId, institutionId },
+      where: { id: enrollmentId, institutionId, isPreview: false },
       select: { id: true, status: true, accessUntil: true },
     });
     if (!enrollment) {

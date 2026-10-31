@@ -217,7 +217,7 @@ export async function dryRunImport({
   const withoutAgreement = new Set<string>();
   if (requireAgreement && knownIds.length > 0) {
     const priorEnrollments = await db.enrollment.findMany({
-      where: { studentId: { in: knownIds }, cohortId: { not: cohortId } },
+      where: { studentId: { in: knownIds }, cohortId: { not: cohortId }, isPreview: false },
       select: {
         studentId: true,
         paymentAgreements: { where: { status: 'ACTIVE' }, select: { id: true } },

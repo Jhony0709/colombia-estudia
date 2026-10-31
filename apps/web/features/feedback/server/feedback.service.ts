@@ -33,6 +33,8 @@ export interface ModuleFeedbackContext {
   answeredAt: string | null;
   /** El siguiente componente bloqueado, para ofrecer pedir que lo habiliten al terminar. */
   nextLocked: { id: string; name: string } | null;
+  /** Vista de estudiante (31/10): se guarda, pero no cuenta ni avisa. */
+  preview: boolean;
 }
 
 /** Un componente está terminado cuando tiene ítems y todos están completados. */
@@ -68,6 +70,7 @@ export async function getModuleFeedbackContext({
       id: true,
       status: true,
       startsAtModule: true,
+      isPreview: true,
       cohort: { select: { id: true, programId: true, program: { select: { name: true } } } },
     },
   });
@@ -110,6 +113,7 @@ export async function getModuleFeedbackContext({
     eligible,
     answeredAt: existing?.createdAt.toISOString() ?? null,
     nextLocked,
+    preview: enrollment.isPreview,
   };
 }
 
@@ -178,7 +182,7 @@ export async function submitModuleFeedback({
   }
 
   const lowest = lowestScore(input);
-  if (lowest <= LOW_SCORE) {
+  if (lowest <= LOW_SCORE && !context.preview) {
     const person = await db.person.findFirst({
       where: { id: personId },
       select: { givenName: true, familyName: true },
@@ -354,7 +358,7 @@ export async function getCohortFeedback({
       select: { id: true, position: true, name: true },
     }),
     db.moduleFeedback.findMany({
-      where: { enrollment: { cohortId } },
+      where: { enrollment: { cohortId, isPreview: false } },
       select: {
         id: true,
         moduleId: true,

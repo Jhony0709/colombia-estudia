@@ -111,6 +111,19 @@ describe('submitModuleFeedback', () => {
     );
   });
 
+  it('en la vista de estudiante se guarda, pero una nota baja no avisa (31/10)', async () => {
+    db.enrollment.findFirst.mockResolvedValueOnce({
+      id: 'e-1',
+      status: 'ACTIVE',
+      startsAtModule: 1,
+      isPreview: true,
+      cohort: { id: 'c-1', programId: 'prog-1', program: { name: 'Bachillerato' } },
+    });
+    await submitModuleFeedback({ ...ARGS, input: { ...INPUT, understanding: 1 } });
+    expect(db.moduleFeedback.create).toHaveBeenCalled();
+    expect(mockNotifyMany).not.toHaveBeenCalled();
+  });
+
   it('si ya respondió, devuelve la anterior y no guarda otra', async () => {
     db.moduleFeedback.findFirst.mockResolvedValue({ createdAt: NOW });
     const result = await submitModuleFeedback({ ...ARGS, input: INPUT });

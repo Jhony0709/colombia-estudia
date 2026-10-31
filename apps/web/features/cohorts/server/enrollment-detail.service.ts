@@ -86,7 +86,7 @@ export async function getEnrollmentDetail({
   const db = createTenantClient(institutionId);
 
   const e = await db.enrollment.findFirst({
-    where: { id: enrollmentId, cohortId },
+    where: { id: enrollmentId, cohortId, isPreview: false },
     select: {
       id: true,
       status: true,
@@ -284,7 +284,7 @@ export async function overrideLessonProgress({
   const db = createTenantClient(institutionId);
 
   const enrollment = await db.enrollment.findFirst({
-    where: { id: enrollmentId },
+    where: { id: enrollmentId, isPreview: false },
     select: { id: true, studentId: true, cohortId: true },
   });
   if (!enrollment) throw new APIError('Not found', 'NOT_FOUND');

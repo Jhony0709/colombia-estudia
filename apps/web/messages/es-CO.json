@@ -691,7 +691,9 @@
       "closeHint": "Deja de admitir matrículas. Quien ya está dentro conserva su acceso hasta su propia fecha.",
       "closeConfirm": "Sí, cerrar la cohorte",
       "cancel": "Cancelar",
-      "seePeople": "Ver quién está matriculado"
+      "seePeople": "Ver quién está matriculado",
+      "preview": "Ver como estudiante",
+      "previewError": "No se pudo abrir la vista de estudiante"
     },
     "route": {
       "title": "La ruta de esta cohorte",
@@ -1766,6 +1768,7 @@
       "timeExempt": "Sin límite de tiempo (ajuste razonable)",
       "attempts": "Intentos",
       "attemptsValue": "{left, plural, one {Te queda # de {allowed}: es el último} other {Te quedan # de {allowed}}}",
+      "attemptsPreview": "Sin límite en la vista de estudiante",
       "dueAt": "Fecha límite",
       "pass": "Para aprobar",
       "passValue": "{percent} % o más",
@@ -1802,7 +1805,9 @@
       },
       "view": "Ver",
       "attemptsInProgress": "Tienes un intento en curso. {left, plural, =0 {Cuando lo entregues, habrás usado tu único intento} one {Cuando lo entregues te quedará # más} other {Cuando lo entregues te quedarán # más}}.",
-      "inProgressBody": "Tienes un intento en curso: tus respuestas están guardadas y puedes seguir donde lo dejaste."
+      "inProgressBody": "Tienes un intento en curso: tus respuestas están guardadas y puedes seguir donde lo dejaste.",
+      "previewBody": "Vista de estudiante: sin límite de intentos ni de tiempo, y al entregar ves la revisión completa.",
+      "reviewPreview": "Completa en la vista de estudiante"
     },
     "attempt": {
       "attemptNumber": "Intento {number}",
@@ -1878,11 +1883,13 @@
         "toRoute": "Ir a mi ruta",
         "retryBody": "Equivocarse también es aprender. Repasa con calma lo que no salió y vuelve a intentarlo cuando quieras: este paso cuenta cuando apruebes o completes tus intentos.",
         "lastAttempt": "Te queda un intento: es el último.",
+        "previewAttempts": "En la vista de estudiante lo puedes repetir sin límite.",
         "attemptsLeft": "{count, plural, one {Te queda # intento.} other {Te quedan # intentos.}}",
         "retry": "Intentar de nuevo",
         "activeAttempt": "Tienes otro intento en curso: tus respuestas siguen guardadas.",
         "continueAttempt": "Continuar el intento",
-        "pendingBody": "Tu intento quedó entregado. Cuando tenga su nota, lo verás aquí y en tu ruta."
+        "pendingBody": "Tu intento quedó entregado. Cuando tenga su nota, lo verás aquí y en tu ruta.",
+        "previewRetryBody": "En la vista de estudiante presentarlo basta para seguir: repítelo si quieres ver otras respuestas."
       }
     },
     "results": {
@@ -2172,6 +2179,18 @@
       "done": "Listo: pediste habilitar {module}. Te avisamos cuando esté listo.",
       "requestedOn": "Lo pediste el {date}. Te avisamos cuando esté habilitado.",
       "error": "No pudimos enviar tu solicitud. Inténtalo de nuevo."
+    },
+    "studentPreview": {
+      "label": "Vista de estudiante",
+      "title": "Vista de estudiante: {program} · {cohort}. Todo está abierto, sin espera ni revisión, y nada de esto cuenta en los reportes.",
+      "reset": "Reiniciar",
+      "exit": "Salir",
+      "resetTitle": "¿Reiniciar la vista de estudiante?",
+      "resetConfirm": "Se borran tu avance, tus entregas, tus intentos y tus opiniones en esta vista. Vuelves a empezar el curso desde cero.",
+      "resetConfirmButton": "Sí, reiniciar",
+      "cancel": "Cancelar",
+      "resetDone": "Listo: la vista de estudiante empieza de nuevo.",
+      "resetError": "No se pudo reiniciar la vista de estudiante"
     }
   },
   "issues": {
@@ -3287,7 +3306,10 @@
     "cancel": "Cancelar",
     "createLesson": "Crear el tema y escribirlo",
     "createExam": "Crear el cuestionario",
-    "createError": "No se pudo crear. Inténtalo otra vez."
+    "createError": "No se pudo crear. Inténtalo otra vez.",
+    "previewAsStudent": "Ver como estudiante",
+    "previewPickCohort": "Elige la cohorte que quieres recorrer",
+    "previewError": "No se pudo abrir la vista de estudiante"
   },
   "readiness": {
     "title": "Preparación",
@@ -3785,7 +3807,8 @@
       "title": "Recibimos tu opinión",
       "body": "La lee el equipo académico para mejorar los próximos componentes. Gracias por tomarte el tiempo.",
       "back": "Volver a mi ruta",
-      "next": "Si ya quieres seguir, pide que habiliten {module}."
+      "next": "Si ya quieres seguir, pide que habiliten {module}.",
+      "previewBody": "Es la vista de estudiante: tu respuesta se guarda, pero no aparece en las opiniones de la cohorte."
     },
     "answered": {
       "title": "Ya nos contaste cómo te fue",

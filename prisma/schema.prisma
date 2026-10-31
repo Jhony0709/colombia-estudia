@@ -459,6 +459,9 @@ model Enrollment {
   withdrawnAt         DateTime?
   withdrawReason      String?
   sourceRef           String?
+  /// Vista de estudiante de un administrador (31/10): todo abierto, sin espera ni revisión, y
+  /// fuera de listados, conteos, cartera, constancias y avisos al personal. Se reinicia.
+  isPreview           Boolean          @default(false)
 
   institution Institution @relation(fields: [institutionId], references: [id])
   student     Person      @relation(fields: [studentId], references: [id])

@@ -403,6 +403,7 @@ export async function listBilling({
   const db = createTenantClient(institutionId);
   const rows = await db.enrollment.findMany({
     where: {
+      isPreview: false,
       ...(filters.cohortId ? { cohortId: filters.cohortId } : {}),
       ...(filters.partnerId ? { paymentPlan: { partnerId: filters.partnerId } } : {}),
       ...(filters.q
@@ -592,7 +593,7 @@ export async function createPaymentPlans({
 
   const db = createTenantClient(institutionId);
   const enrollments = await db.enrollment.findMany({
-    where: { id: { in: enrollmentIds } },
+    where: { id: { in: enrollmentIds }, isPreview: false },
     select: {
       id: true,
       studentId: true,
@@ -1312,7 +1313,7 @@ export async function activeEnrollmentIdsOfCohort({
 }): Promise<string[]> {
   const db = createTenantClient(institutionId);
   const rows = await db.enrollment.findMany({
-    where: { cohortId, status: 'ACTIVE' },
+    where: { cohortId, status: 'ACTIVE', isPreview: false },
     select: { id: true },
   });
   return rows.map((r) => r.id);

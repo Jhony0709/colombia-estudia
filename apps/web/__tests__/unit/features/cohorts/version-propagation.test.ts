@@ -93,8 +93,9 @@ describe('propagateLessonVersion', () => {
       { id: 'la-2', lessonVersion: { number: 2 } },
     ]);
     db.lessonProgress.findMany.mockResolvedValue([
-      { id: 'p1', studentId: 's1', lessonAssignmentId: 'la-1' },
-      { id: 'p2', studentId: 's2', lessonAssignmentId: 'la-1' },
+      { id: 'p1', studentId: 's1', lessonAssignmentId: 'la-1', enrollment: { isPreview: false } },
+      { id: 'p2', studentId: 's2', lessonAssignmentId: 'la-1', enrollment: { isPreview: false } },
+      { id: 'p3', studentId: 'adm', lessonAssignmentId: 'la-1', enrollment: { isPreview: true } },
     ]);
 
     const result = await propagateLessonVersion(tx, {
@@ -104,7 +105,7 @@ describe('propagateLessonVersion', () => {
     });
 
     expect(db.lessonProgress.updateMany).toHaveBeenCalledWith({
-      where: { id: { in: ['p1', 'p2'] } },
+      where: { id: { in: ['p1', 'p2', 'p3'] } },
       data: { status: 'IN_PROGRESS', completedAt: null, lessonVersionId: 'lv-3' },
     });
     expect(result.reopened).toEqual([{ assignmentId: 'la-1', studentIds: ['s1', 's2'] }]);

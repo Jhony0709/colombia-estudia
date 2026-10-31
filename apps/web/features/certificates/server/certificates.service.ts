@@ -112,8 +112,9 @@ export async function issueDueCertificatesForEnrollment({
 }): Promise<{ issued: number; completed: boolean }> {
   const db = createTenantClient(institutionId);
 
+  // La vista de estudiante (31/10) no emite constancias ni cierra la matrícula.
   const e = await db.enrollment.findFirst({
-    where: { id: enrollmentId, status: 'ACTIVE' },
+    where: { id: enrollmentId, status: 'ACTIVE', isPreview: false },
     select: {
       id: true,
       studentId: true,
@@ -326,7 +327,7 @@ export async function issueDueCertificates({
 }): Promise<{ issued: number; completedEnrollments: number }> {
   const db = createTenantClient(institutionId);
   const active = await db.enrollment.findMany({
-    where: { status: 'ACTIVE' },
+    where: { status: 'ACTIVE', isPreview: false },
     select: { id: true },
   });
   let issued = 0;

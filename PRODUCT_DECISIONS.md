@@ -1237,6 +1237,41 @@ $90.000 c/m»), que el cliente dio por superada.
 `Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
 schema.
 
+## 2026-10-31 — Vista de estudiante para administración, con matrícula de prueba reiniciable
+
+**Decisión** (Jhonny, 31/10): un administrador (`institution.manage`) abre «Ver como estudiante»
+desde «Gestión» de la cohorte o desde el constructor del programa (eligiendo cohorte) y recorre
+la ruta de esa cohorte —mismas versiones, mismo orden, mismo cierre— con una matrícula de prueba
+(`Enrollment.isPreview`, migración `20261031000000_enrollment_preview`). Una franja en el área
+del estudiante dice que es una prueba y ofrece «Reiniciar» y «Salir».
+
+**Reglas en la vista**: todo abierto, sin secuencia, fechas ni habilitación de componentes;
+abrir un tema lo completa (sin espera de lectura); las actividades se aprueban al enviarlas;
+los cuestionarios no tienen límite de intentos ni reloj, la revisión es completa y basta con
+presentarlos para que cuenten como hechos; la encuesta se llena pero no cuenta ni avisa.
+
+**Fuera de todo**: listados y conteos de cohortes y personas, avance y CSV, aliados, bandejas
+de actividades y opiniones, inicio, cartera y planes, reporte de inclusión, invitaciones en
+lote, recordatorios de sesiones, constancias (no se emiten ni cierran la matrícula) y avisos al
+personal. Reportar un problema del contenido sí avisa: es un reporte real.
+
+**Descartado**: una vista sin guardar nada (no permitiría ver el cierre ni la encuesta); dar la
+membresía `STUDENT` al administrador.
+
+**Tras la auditoría (31/10)**: la franja va en cada página con la matrícula en pantalla (curso,
+tema, examen, intento, encuesta), no la última abierta; quien solo tiene vistas no ve el
+catálogo (inscribirse lo matricularía de verdad); la vista deja de dar capacidades si la persona
+pierde `institution.manage`; las rutas del personal por `enrollmentId` (retiro, prórroga,
+componentes, PIAR, marcar un tema) responden `NOT_FOUND` con una vista; reabrir por versión nueva
+la reabre pero no la cuenta ni le avisa.
+
+**Límites conocidos**: con una vista en una cohorte no se puede matricular de verdad a esa misma
+persona ahí (`@@unique([studentId, cohortId])`) y la vista no se elimina, solo se reinicia;
+reiniciar mientras se entrega un intento en otra pestaña puede fallar (la nota nueva apunta al
+intento) y se reintenta; el panel de actividad de `/aprender` conserva los días de la vista
+(`LearningEvent` es append-only) y los archivos de entregas borradas quedan para el barrido de
+medios.
+
 ## 2026-10-11 — Una encuesta corta al terminar cada componente, recomendada y con nombre
 
 **Decisión** (Jhonny, 11/10): al terminar un componente se invita a una encuesta de cuatro

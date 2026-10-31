@@ -84,7 +84,7 @@ export async function getCohortProgress({
 
   const [enrollments, lessonAssignments, attempts] = await Promise.all([
     db.enrollment.findMany({
-      where: { cohortId },
+      where: { cohortId, isPreview: false },
       orderBy: [{ student: { familyName: 'asc' } }, { student: { givenName: 'asc' } }],
       select: {
         id: true,
@@ -102,7 +102,7 @@ export async function getCohortProgress({
       select: { lesson: { select: { module: { select: { position: true } } } } },
     }),
     db.attempt.findMany({
-      where: { assignment: { cohortId }, status: 'GRADED' },
+      where: { assignment: { cohortId }, status: 'GRADED', enrollment: { isPreview: false } },
       select: {
         enrollmentId: true,
         score: true,

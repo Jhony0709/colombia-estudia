@@ -24,7 +24,7 @@ export async function getCohortNavCounts({
 }): Promise<CohortNavCounts> {
   const db = createTenantClient(institutionId);
   const [personas, actividades, sesiones] = await Promise.all([
-    db.enrollment.count({ where: { cohortId } }),
+    db.enrollment.count({ where: { cohortId, isPreview: false } }),
     db.submission.count({ where: { status: 'SUBMITTED', assignment: { cohortId } } }),
     db.liveSession.count({ where: { cohortId, archivedAt: null, endsAt: { gte: now } } }),
   ]);

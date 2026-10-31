@@ -77,10 +77,12 @@ describe('updateAssignmentToLatest — tema', () => {
       lessonAssignment({ number: 2, invalidatesProgress: true })
     );
     db.lessonProgress.findMany.mockResolvedValue([
-      { id: 'lp-1', studentId: 'stu-1' },
-      { id: 'lp-2', studentId: 'stu-2' },
+      { id: 'lp-1', studentId: 'stu-1', enrollment: { isPreview: false } },
+      { id: 'lp-2', studentId: 'stu-2', enrollment: { isPreview: false } },
       // La misma persona con dos filas no recibe dos avisos.
-      { id: 'lp-3', studentId: 'stu-1' },
+      { id: 'lp-3', studentId: 'stu-1', enrollment: { isPreview: false } },
+      // La vista de estudiante (31/10) se reabre, pero ni cuenta ni recibe aviso.
+      { id: 'lp-4', studentId: 'admin-1', enrollment: { isPreview: true } },
     ]);
 
     const result = await updateAssignmentToLatest({ ...BASE, kind: 'lesson', now: NOW });
@@ -88,11 +90,11 @@ describe('updateAssignmentToLatest — tema', () => {
     expect(result).toEqual({ from: 1, to: 2, reopened: 3 });
     expect(db.lessonProgress.findMany).toHaveBeenCalledWith({
       where: { lessonAssignmentId: 'la-1', status: 'COMPLETED' },
-      select: { id: true, studentId: true },
+      select: { id: true, studentId: true, enrollment: { select: { isPreview: true } } },
     });
     // Solo el estado: nada de borrar `LessonEvidence`.
     expect(db.lessonProgress.updateMany).toHaveBeenCalledWith({
-      where: { id: { in: ['lp-1', 'lp-2', 'lp-3'] } },
+      where: { id: { in: ['lp-1', 'lp-2', 'lp-3', 'lp-4'] } },
       data: { status: 'IN_PROGRESS', completedAt: null, lessonVersionId: 'lv-2' },
     });
     expect(notifyMany).toHaveBeenCalledTimes(1);

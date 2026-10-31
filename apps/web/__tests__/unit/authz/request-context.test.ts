@@ -413,4 +413,58 @@ describe('getRequestContext', () => {
     expect(ctx.aal).toBe('aal1');
     expect(ctx.mfaPending).toBe(false); // No staff membership, so no MFA required
   });
+
+  // Vista de estudiante (31/10): la matrícula de prueba solo abre algo mientras la persona
+  // administra la institución.
+  it.each([
+    ['con institution.manage la conserva', true, ['e-real', 'e-preview']],
+    ['sin institution.manage la descarta', false, ['e-real']],
+  ])('matrícula de prueba: %s', async (_label, administers, expected) => {
+    mockGet.mockReturnValue(null);
+    mockResolveInstitution.mockResolvedValue(institution);
+    mockGetSupabaseUser.mockResolvedValue({ id: 'auth-user-1' });
+    mockGetAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: 'aal2' } });
+    const enrollment = (id: string, isPreview: boolean) => ({
+      id,
+      studentId: 'person-1',
+      cohortId: 'c-1',
+      status: 'ACTIVE',
+      isMinorAtEnrollment: false,
+      accessUntil: new Date('2099-12-31T00:00:00.000Z'),
+      isPreview,
+      paymentPlan: null,
+      paymentAgreements: [],
+      accommodation: null,
+    });
+    mockFindUniquePerson.mockResolvedValue({
+      id: 'person-1',
+      givenName: 'Ana',
+      familyName: 'Admin',
+      email: 'ana@example.com',
+      authUserId: 'auth-user-1',
+      memberships: [
+        { personId: 'person-1', institutionId: 'inst-1', role: 'ADMIN', revokedAt: null },
+      ],
+      enrollments: [enrollment('e-real', false), enrollment('e-preview', true)],
+      guardianOf: [],
+      partnerContacts: [],
+    });
+    mockFindUniquePolicy.mockResolvedValue(null);
+
+    const { resolveCapabilities } = await import('@colombia-estudia/domain');
+    const mockResolve = resolveCapabilities as jest.Mock;
+    mockResolve.mockClear();
+    mockResolve.mockImplementation((input: { enrollments: unknown[] }) =>
+      input.enrollments.length === 0 && administers
+        ? new Map([['institution.manage', [{ institution: true }]]])
+        : new Map()
+    );
+
+    const { getRequestContext } = await import('@/lib/authz/request-context');
+    await getRequestContext();
+
+    const last = mockResolve.mock.calls.at(-1)![0] as { enrollments: { id: string }[] };
+    expect(last.enrollments.map((e) => e.id)).toEqual(expected);
+    mockResolve.mockImplementation(() => new Map());
+  });
 });

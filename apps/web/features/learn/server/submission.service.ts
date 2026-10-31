@@ -271,7 +271,8 @@ export async function submitLesson({
 
   // Aprobación automática (27/9): la entrega nace `APPROVED`, sin revisor, y el tema se
   // completa en la misma transacción. Nadie recibe «actividad por revisar».
-  const autoApprove = assignment.lesson.activityAutoApprove;
+  // En la vista de estudiante (31/10) toda actividad se aprueba sola.
+  const autoApprove = outline.preview || assignment.lesson.activityAutoApprove;
 
   const id = await db.$transaction(async (tx) => {
     const data = {
@@ -347,7 +348,10 @@ export async function submitLesson({
           entityId: row.id,
           action: 'auto_approved',
           before: { status: existing?.status ?? null },
-          after: { status: 'APPROVED', rule: 'lesson.activityAutoApprove' },
+          after: {
+            status: 'APPROVED',
+            rule: outline.preview ? 'enrollment.isPreview' : 'lesson.activityAutoApprove',
+          },
           occurredAt: now,
         },
       });

@@ -92,6 +92,8 @@ export default async function LearnPage({
     await issueAfterProgress({ institutionId, enrollmentId: row.enrollmentId });
   }
   const mine = done.length > 0 ? await listMyEnrollments({ institutionId, personId }) : listed;
+  // Solo vistas de estudiante (31/10): sin catálogo, que inscribiría de verdad al admin.
+  const catalog = mine.length > 0 && mine.every((row) => row.preview) ? [] : courses;
 
   const contact = { phone: ctx.institution.supportPhone ?? null, name: ctx.person.givenName };
   const help = (
@@ -266,7 +268,7 @@ export default async function LearnPage({
             {/* Los otros cursos también el primer día (6/10): esconderlos hacía parecer
                 obligatorio el que tocó en el registro. */}
             <CatalogSection
-              courses={courses}
+              courses={catalog}
               contact={contact}
               requested={pending.enroll}
               title={t('catalog.others')}
@@ -283,7 +285,7 @@ export default async function LearnPage({
       {finished && (
         <div className="motion-enter motion-order-1 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
           <div className="min-w-0 space-y-8">
-            <CatalogSection courses={courses} contact={contact} requested={pending.enroll} />
+            <CatalogSection courses={catalog} contact={contact} requested={pending.enroll} />
             {completedSection}
           </div>
           <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
@@ -310,7 +312,7 @@ export default async function LearnPage({
 
           <InView className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
             <div className="min-w-0 space-y-8">
-              <CatalogSection courses={courses} contact={contact} requested={pending.enroll} />
+              <CatalogSection courses={catalog} contact={contact} requested={pending.enroll} />
               {completedSection}
             </div>
             {resources.length > 0 && (

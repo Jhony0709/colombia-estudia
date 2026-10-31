@@ -148,15 +148,18 @@ export async function recordEvidence({
   const videoDurationSeconds = storedDuration ?? evidence.videoDurationSeconds ?? null;
 
   const alreadyCompleted = existing?.status === 'COMPLETED';
+  // Vista de estudiante (31/10): abrir el tema lo completa; una actividad, solo al entregarla.
   const completes =
     !alreadyCompleted &&
-    isLessonCompleted({
-      form,
-      evidence,
-      videoDurationSeconds,
-      estimatedMinutes: assignment.lessonVersion.estimatedMinutes,
-      submissionStatus: null,
-    });
+    (outline.preview
+      ? form !== 'SUBMISSION'
+      : isLessonCompleted({
+          form,
+          evidence,
+          videoDurationSeconds,
+          estimatedMinutes: assignment.lessonVersion.estimatedMinutes,
+          submissionStatus: null,
+        }));
 
   const status = alreadyCompleted ? 'COMPLETED' : completes ? 'COMPLETED' : 'IN_PROGRESS';
   const completedAt = alreadyCompleted ? existing!.completedAt : completes ? now : null;

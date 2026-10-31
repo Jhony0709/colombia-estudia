@@ -57,7 +57,7 @@ const endOfDay = (day: string) => new Date(`${day}T23:59:59.999-05:00`);
 async function loadEnrollment(institutionId: string, enrollmentId: string) {
   const db = createTenantClient(institutionId);
   const enrollment = await db.enrollment.findFirst({
-    where: { id: enrollmentId },
+    where: { id: enrollmentId, isPreview: false },
     select: {
       id: true,
       studentId: true,

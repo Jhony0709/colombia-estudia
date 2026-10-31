@@ -181,6 +181,7 @@ export default async function CohortDetailPage({
               code={cohort.code}
               status={cohort.status}
               canExport={canReadProgress}
+              canPreview={(ctx.capabilities.get('institution.manage')?.length ?? 0) > 0}
             />
             {cohort.status === 'PLANNED' ? (
               <CohortStatusAction

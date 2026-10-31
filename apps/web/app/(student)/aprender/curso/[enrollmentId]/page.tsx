@@ -28,6 +28,7 @@ import { RouteSection } from '../../route-section';
 import { CourseCard } from '../../catalog-section';
 import { hrefFor } from '../../route-rail';
 import { COURSE_CARD_GRID } from '../../course-card-layout';
+import { PreviewStrip } from '../../../preview-strip';
 
 export const metadata: Metadata = { title: 'Tu curso' };
 
@@ -58,66 +59,72 @@ export default async function CoursePage({
   const starting = progress.completed === 0;
 
   return (
-    <Page wide>
-      <PageHeader
-        back={
-          <Breadcrumb
-            label={tc('label')}
-            items={[{ label: tc('home'), href: '/aprender' }, { label: cohort.programName }]}
-          />
-        }
-        overline={cohort.name}
-        title={cohort.programName}
-        description={
-          gate
-            ? undefined
-            : t('course.progress', {
-                completed: progress.completed,
-                total: progress.total,
-                percent,
-              })
-        }
-        action={
-          !gate && resume ? (
-            <Button asChild>
-              <Link href={hrefFor(resume)}>
-                {starting ? t('startLabel') : t('continueLabel')}
-                <span className="sr-only"> {resume.title}</span>
-                <ArrowRight aria-hidden className="size-4 shrink-0" />
-              </Link>
-            </Button>
-          ) : undefined
-        }
-      />
-      <div className="motion-enter grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-        <div className="min-w-0 space-y-8">
-          {invite && <FeedbackInvite enrollmentId={enrollmentId} {...invite} />}
-          {gate?.kind === 'COMPLETED' ? (
-            <CompletedCourse
-              program={cohort.programName}
-              institutionId={institutionId}
-              personId={personId}
-              contact={{ phone: ctx.institution.supportPhone ?? null, name: ctx.person.givenName }}
-              requested={pending.enroll}
+    <>
+      <PreviewStrip enrollmentId={enrollmentId} />
+      <Page wide>
+        <PageHeader
+          back={
+            <Breadcrumb
+              label={tc('label')}
+              items={[{ label: tc('home'), href: '/aprender' }, { label: cohort.programName }]}
             />
-          ) : (
-            <RouteSection
-              outline={outline}
-              supportEmail={ctx.institution.supportEmail}
-              requested={pending.unlock}
-              title={t('course.routeTitle')}
+          }
+          overline={cohort.name}
+          title={cohort.programName}
+          description={
+            gate
+              ? undefined
+              : t('course.progress', {
+                  completed: progress.completed,
+                  total: progress.total,
+                  percent,
+                })
+          }
+          action={
+            !gate && resume ? (
+              <Button asChild>
+                <Link href={hrefFor(resume)}>
+                  {starting ? t('startLabel') : t('continueLabel')}
+                  <span className="sr-only"> {resume.title}</span>
+                  <ArrowRight aria-hidden className="size-4 shrink-0" />
+                </Link>
+              </Button>
+            ) : undefined
+          }
+        />
+        <div className="motion-enter grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
+          <div className="min-w-0 space-y-8">
+            {invite && <FeedbackInvite enrollmentId={enrollmentId} {...invite} />}
+            {gate?.kind === 'COMPLETED' ? (
+              <CompletedCourse
+                program={cohort.programName}
+                institutionId={institutionId}
+                personId={personId}
+                contact={{
+                  phone: ctx.institution.supportPhone ?? null,
+                  name: ctx.person.givenName,
+                }}
+                requested={pending.enroll}
+              />
+            ) : (
+              <RouteSection
+                outline={outline}
+                supportEmail={ctx.institution.supportEmail}
+                requested={pending.unlock}
+                title={t('course.routeTitle')}
+              />
+            )}
+          </div>
+          <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
+            <HelpCard
+              phone={ctx.institution.supportPhone ?? null}
+              email={ctx.institution.supportEmail ?? null}
+              name={ctx.person.givenName}
             />
-          )}
+          </aside>
         </div>
-        <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
-          <HelpCard
-            phone={ctx.institution.supportPhone ?? null}
-            email={ctx.institution.supportEmail ?? null}
-            name={ctx.person.givenName}
-          />
-        </aside>
-      </div>
-    </Page>
+      </Page>
+    </>
   );
 }
 

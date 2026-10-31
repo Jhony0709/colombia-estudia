@@ -247,6 +247,7 @@ export async function getCalendarForEnrollment({
     where: { id: enrollmentId },
     select: {
       accessUntil: true,
+      isPreview: true,
       studentId: true,
       accommodation: { select: { allowedAttemptsBonus: true } },
       cohort: {
@@ -320,18 +321,23 @@ export async function getCalendarForEnrollment({
       programName: program,
       done: false,
     },
-    {
-      kind: 'ACCESS_UNTIL',
-      id: `access-${enrollmentId}`,
-      title: e.cohort.name,
-      at: e.accessUntil.toISOString(),
-      endsAt: null,
-      href: null,
-      joinable: false,
-      description: null,
-      programName: program,
-      done: false,
-    },
+    // La vista de estudiante no vence (31/10): su «acceso hasta 2099» no se enseña.
+    ...(e.isPreview
+      ? []
+      : [
+          {
+            kind: 'ACCESS_UNTIL' as const,
+            id: `access-${enrollmentId}`,
+            title: e.cohort.name,
+            at: e.accessUntil.toISOString(),
+            endsAt: null,
+            href: null,
+            joinable: false,
+            description: null,
+            programName: program,
+            done: false,
+          },
+        ]),
     ...e.cohort.assessmentAssignments.map((a): CalendarItem => ({
       kind: 'ASSESSMENT_DUE',
       id: a.id,

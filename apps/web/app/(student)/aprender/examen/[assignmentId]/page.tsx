@@ -20,6 +20,7 @@ import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
 import { StartAttempt } from './start-attempt';
 import { RouteRail, WithRouteRail } from '../../route-rail';
+import { PreviewStrip } from '../../../preview-strip';
 import {
   CalendarClock,
   CircleCheck,
@@ -119,153 +120,165 @@ export default async function AssessmentPage({
       : `${a.moduleName} · ${kindLabel}`;
 
   return (
-    <Page wide enter>
-      <WithRouteRail
-        rail={
-          <RouteRail
-            modules={view.route}
-            currentId={a.assignmentId}
-            enrollmentId={a.enrollmentId}
-          />
-        }
-        header={
-          <PageHeader
-            overline={overline}
-            title={a.title}
-            description={
-              a.instructionsHtml ? (
-                <span dangerouslySetInnerHTML={{ __html: a.instructionsHtml }} />
-              ) : undefined
-            }
-          />
-        }
-      >
-        {/*
+    <>
+      <PreviewStrip enrollmentId={a.enrollmentId} />
+      <Page wide enter>
+        <WithRouteRail
+          rail={
+            <RouteRail
+              modules={view.route}
+              currentId={a.assignmentId}
+              enrollmentId={a.enrollmentId}
+            />
+          }
+          header={
+            <PageHeader
+              overline={overline}
+              title={a.title}
+              description={
+                a.instructionsHtml ? (
+                  <span dangerouslySetInnerHTML={{ __html: a.instructionsHtml }} />
+                ) : undefined
+              }
+            />
+          }
+        >
+          {/*
         La pantalla previa como la de Coursera (21/9): la acción arriba y, al lado, «Qué
         esperar» con los datos que deciden si empiezo ahora o después. Las reglas del intento
         van debajo, en texto: son lo que se lee una vez.
       */}
-        <PageSection title={ta('beforeTitle')} card>
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_18rem]">
-            <div className="space-y-4">
-              <p className="type-body">
-                {view.active
-                  ? ta('inProgressBody')
-                  : a.passPercent !== null
-                    ? ta('mustPass', { percent: a.passPercent })
-                    : ta('mustTake')}
-              </p>
-              {view.cannotStart === null || view.cannotStart === 'IN_PROGRESS' ? (
-                <StartAttempt assignmentId={a.assignmentId} continuing={view.active !== null} />
-              ) : (
-                <Alert severity="warning">{ta(`cannotStart.${view.cannotStart}`)}</Alert>
-              )}
-              <ul className="type-body text-text-muted list-disc space-y-1 pl-5">
-                {a.timeLimitMinutes !== null && <li>{ta('noPause')}</li>}
-                <li>{ta('autosave')}</li>
-                <li>{ta('oneOpen')}</li>
-              </ul>
-            </div>
+          <PageSection title={ta('beforeTitle')} card>
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_18rem]">
+              <div className="space-y-4">
+                <p className="type-body">
+                  {view.active
+                    ? ta('inProgressBody')
+                    : a.preview
+                      ? ta('previewBody')
+                      : a.passPercent !== null
+                        ? ta('mustPass', { percent: a.passPercent })
+                        : ta('mustTake')}
+                </p>
+                {view.cannotStart === null || view.cannotStart === 'IN_PROGRESS' ? (
+                  <StartAttempt assignmentId={a.assignmentId} continuing={view.active !== null} />
+                ) : (
+                  <Alert severity="warning">{ta(`cannotStart.${view.cannotStart}`)}</Alert>
+                )}
+                <ul className="type-body text-text-muted list-disc space-y-1 pl-5">
+                  {a.timeLimitMinutes !== null && <li>{ta('noPause')}</li>}
+                  <li>{ta('autosave')}</li>
+                  <li>{ta('oneOpen')}</li>
+                </ul>
+              </div>
 
-            <div className="border-border rounded-control border p-4">
-              <p className="type-body-emphasis m-0 mb-3">{ta('whatToExpect')}</p>
-              <dl className="space-y-3">
-                {a.dueAt && <Fact icon={CalendarClock} label={ta('dueAt')} value={when(a.dueAt)} />}
-                {/*
+              <div className="border-border rounded-control border p-4">
+                <p className="type-body-emphasis m-0 mb-3">{ta('whatToExpect')}</p>
+                <dl className="space-y-3">
+                  {a.dueAt && (
+                    <Fact icon={CalendarClock} label={ta('dueAt')} value={when(a.dueAt)} />
+                  )}
+                  {/*
                   E3 (23/9): con un intento abierto, «te quedan 0 de 1» era verdad contable y
                   mentira humana —todavía tiene su oportunidad—. Se dice que hay uno en curso
                   y qué pasa al entregarlo; sin intento abierto, lo de siempre.
                 */}
-                <Fact
-                  icon={Target}
-                  label={ta('attempts')}
-                  value={
-                    view.active
-                      ? ta('attemptsInProgress', { left: attemptsLeft, allowed: a.attemptsAllowed })
-                      : ta('attemptsValue', { left: attemptsLeft, allowed: a.attemptsAllowed })
-                  }
-                />
-                <Fact
-                  icon={Clock}
-                  label={ta('time')}
-                  value={
-                    a.timeLimitMinutes === null
-                      ? a.timerExempt
-                        ? ta('timeExempt')
-                        : ta('timeUnlimited')
-                      : ta('timeValue', { minutes: a.timeLimitMinutes })
-                  }
-                />
-                <Fact
-                  icon={ListChecks}
-                  label={ta('questions')}
-                  value={ta('questionsValue', { count: a.questionCount, points: a.totalPoints })}
-                />
-                {a.passPercent !== null && (
                   <Fact
-                    icon={CircleCheck}
-                    label={ta('pass')}
-                    value={ta('passValue', { percent: a.passPercent })}
+                    icon={Target}
+                    label={ta('attempts')}
+                    value={
+                      a.preview
+                        ? ta('attemptsPreview')
+                        : view.active
+                          ? ta('attemptsInProgress', {
+                              left: attemptsLeft,
+                              allowed: a.attemptsAllowed,
+                            })
+                          : ta('attemptsValue', { left: attemptsLeft, allowed: a.attemptsAllowed })
+                    }
                   />
-                )}
-                <Fact
-                  icon={Eye}
-                  label={ta('review')}
-                  value={ta(`reviewPolicy.${a.reviewPolicy}`)}
-                />
-              </dl>
+                  <Fact
+                    icon={Clock}
+                    label={ta('time')}
+                    value={
+                      a.timeLimitMinutes === null
+                        ? a.timerExempt
+                          ? ta('timeExempt')
+                          : ta('timeUnlimited')
+                        : ta('timeValue', { minutes: a.timeLimitMinutes })
+                    }
+                  />
+                  <Fact
+                    icon={ListChecks}
+                    label={ta('questions')}
+                    value={ta('questionsValue', { count: a.questionCount, points: a.totalPoints })}
+                  />
+                  {a.passPercent !== null && (
+                    <Fact
+                      icon={CircleCheck}
+                      label={ta('pass')}
+                      value={ta('passValue', { percent: a.passPercent })}
+                    />
+                  )}
+                  <Fact
+                    icon={Eye}
+                    label={ta('review')}
+                    value={a.preview ? ta('reviewPreview') : ta(`reviewPolicy.${a.reviewPolicy}`)}
+                  />
+                </dl>
+              </div>
             </div>
-          </div>
-        </PageSection>
-
-        {view.attempts.length > 0 && (
-          <PageSection title={ta('historyTitle')}>
-            <ol className="divide-border-muted divide-y">
-              {view.attempts.map((attempt) => (
-                <li
-                  key={attempt.id}
-                  className="flex flex-wrap items-center justify-between gap-3 py-3"
-                >
-                  <div>
-                    <p className="type-body-emphasis m-0">
-                      {ta('attemptNumber', { number: attempt.number })}
-                    </p>
-                    <p className="type-caption text-text-muted m-0">
-                      {attempt.submittedAt
-                        ? ta('submittedOn', { date: when(attempt.submittedAt) })
-                        : ta('startedOn', { date: when(attempt.startedAt) })}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {attempt.score ? (
-                      <Badge variant={attempt.score.passed ? 'success' : 'warning'}>
-                        {ta('scoreValue', {
-                          value: attempt.score.value,
-                          max: attempt.score.max,
-                          percent: attempt.score.percent,
-                        })}
-                      </Badge>
-                    ) : (
-                      <Badge variant={attempt.status === 'IN_PROGRESS' ? 'info' : 'neutral'}>
-                        {ta(`status.${attempt.status}`)}
-                      </Badge>
-                    )}
-                    <Link
-                      href={`/aprender/examen/${a.assignmentId}/intento/${attempt.id}`}
-                      className="text-text-link min-h-touch inline-flex items-center underline"
-                    >
-                      {attempt.status === 'IN_PROGRESS' ? ta('continue') : ta('view')}
-                    </Link>
-                  </div>
-                </li>
-              ))}
-            </ol>
           </PageSection>
-        )}
 
-        <BackLink label={t('lesson.backToOutline')} enrollmentId={a.enrollmentId} />
-      </WithRouteRail>
-    </Page>
+          {view.attempts.length > 0 && (
+            <PageSection title={ta('historyTitle')}>
+              <ol className="divide-border-muted divide-y">
+                {view.attempts.map((attempt) => (
+                  <li
+                    key={attempt.id}
+                    className="flex flex-wrap items-center justify-between gap-3 py-3"
+                  >
+                    <div>
+                      <p className="type-body-emphasis m-0">
+                        {ta('attemptNumber', { number: attempt.number })}
+                      </p>
+                      <p className="type-caption text-text-muted m-0">
+                        {attempt.submittedAt
+                          ? ta('submittedOn', { date: when(attempt.submittedAt) })
+                          : ta('startedOn', { date: when(attempt.startedAt) })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {attempt.score ? (
+                        <Badge variant={attempt.score.passed ? 'success' : 'warning'}>
+                          {ta('scoreValue', {
+                            value: attempt.score.value,
+                            max: attempt.score.max,
+                            percent: attempt.score.percent,
+                          })}
+                        </Badge>
+                      ) : (
+                        <Badge variant={attempt.status === 'IN_PROGRESS' ? 'info' : 'neutral'}>
+                          {ta(`status.${attempt.status}`)}
+                        </Badge>
+                      )}
+                      <Link
+                        href={`/aprender/examen/${a.assignmentId}/intento/${attempt.id}`}
+                        className="text-text-link min-h-touch inline-flex items-center underline"
+                      >
+                        {attempt.status === 'IN_PROGRESS' ? ta('continue') : ta('view')}
+                      </Link>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </PageSection>
+          )}
+
+          <BackLink label={t('lesson.backToOutline')} enrollmentId={a.enrollmentId} />
+        </WithRouteRail>
+      </Page>
+    </>
   );
 }
 

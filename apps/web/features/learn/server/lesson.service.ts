@@ -81,6 +81,8 @@ export interface LessonForStudent {
     assignmentId: string;
     /** La matrícula por la que se abre (21/9): «volver a la ruta» vuelve a ESE programa. */
     enrollmentId: string;
+    /** Vista de estudiante (31/10): sin espera de lectura y la actividad se aprueba sola. */
+    preview: boolean;
     title: string;
     moduleName: string;
     language: string;
@@ -288,6 +290,7 @@ export async function getLessonForStudent({
     lesson: {
       assignmentId,
       enrollmentId: outline.enrollmentId,
+      preview: outline.preview,
       title: assignment.lesson.title,
       moduleName: assignment.lesson.module.name,
       language: assignment.lesson.language,
@@ -306,7 +309,7 @@ export async function getLessonForStudent({
               assignment.lesson.activityAccepts === 'FILE'
                 ? []
                 : promptsOf(assignment.lesson.activityPrompts),
-            autoApprove: assignment.lesson.activityAutoApprove,
+            autoApprove: outline.preview || assignment.lesson.activityAutoApprove,
           }
         : null,
       form: lessonFormOf({ parsed, requiresSubmission: assignment.lesson.requiresSubmission }),

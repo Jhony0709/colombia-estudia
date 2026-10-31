@@ -73,7 +73,7 @@ export async function countSubmissions({
   const db = createTenantClient(institutionId);
   const rows = await db.submission.groupBy({
     by: ['status'],
-    where: { assignment: { cohortId } },
+    where: { assignment: { cohortId }, enrollment: { isPreview: false } },
     _count: { _all: true },
   });
   const counts: SubmissionCounts = { SUBMITTED: 0, RETURNED: 0, APPROVED: 0 };
@@ -137,6 +137,7 @@ export async function listSubmissions({
   const rows = await db.submission.findMany({
     where: {
       assignment: { cohortId, ...(lessonId ? { lessonId } : {}) },
+      enrollment: { isPreview: false },
       ...(status ? { status } : {}),
     },
     // Las pendientes más antiguas primero: la cola se atiende por orden de llegada.

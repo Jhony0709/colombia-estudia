@@ -205,17 +205,21 @@ export async function getStaffInbox({
         },
         select: {
           id: true,
-          lessonProgress: { where: { status: 'COMPLETED' }, take: 1, select: { id: true } },
+          lessonProgress: {
+            where: { status: 'COMPLETED', enrollment: { isPreview: false } },
+            take: 1,
+            select: { id: true },
+          },
         },
       }),
       db.lessonProgress.groupBy({
         by: ['status'],
-        where: { startedAt: { gte: since } },
+        where: { startedAt: { gte: since }, enrollment: { isPreview: false } },
         _count: { _all: true },
       }),
       db.submission.groupBy({
         by: ['status'],
-        where: { submittedAt: { gte: since } },
+        where: { submittedAt: { gte: since }, enrollment: { isPreview: false } },
         _count: { _all: true },
       }),
     ]);
@@ -309,12 +313,41 @@ export async function getStaffInbox({
   }
 
   // El recorrido: personas distintas por paso. Un `groupBy` por paso; son seis consultas
-  // pequeñas sobre un índice (`institutionId, type, occurredAt`).
+  // pequeñas sobre un índice (`institutionId, type, occurredAt`). Sin la vista de estudiante
+  // (31/10): sus matrículas, y lo que no lleva matrícula de quien solo tiene vistas.
+  const previews = await db.enrollment.findMany({
+    where: { isPreview: true },
+    select: { id: true, studentId: true },
+  });
+  const learners = await db.enrollment.findMany({
+    where: { isPreview: false, studentId: { in: previews.map((e) => e.studentId) } },
+    select: { studentId: true },
+  });
+  const learning = new Set(learners.map((e) => e.studentId));
+  const notPreview = {
+    AND: [
+      { OR: [{ enrollmentId: null }, { enrollmentId: { notIn: previews.map((e) => e.id) } }] },
+      {
+        OR: [
+          { enrollmentId: { not: null } },
+          {
+            studentId: {
+              notIn: previews.map((e) => e.studentId).filter((id) => !learning.has(id)),
+            },
+          },
+        ],
+      },
+    ],
+  };
   const journey = await Promise.all(
     JOURNEY.map(async (step) => {
       const rows = await db.learningEvent.groupBy({
         by: ['studentId'],
-        where: { type: { in: step.types }, occurredAt: { gte: since }, ...(step.where ?? {}) },
+        where: {
+          type: { in: step.types },
+          occurredAt: { gte: since },
+          AND: [notPreview, ...(step.where ? [step.where] : [])],
+        },
       });
       return { key: step.key, people: rows.length };
     })

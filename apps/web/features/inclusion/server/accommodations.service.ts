@@ -126,7 +126,7 @@ export async function upsertAccommodation({
   const db = createTenantClient(institutionId);
 
   const enrollment = await db.enrollment.findFirst({
-    where: { id: enrollmentId },
+    where: { id: enrollmentId, isPreview: false },
     select: { id: true, studentId: true },
   });
   if (!enrollment) throw new APIError('Not found', 'NOT_FOUND');
@@ -268,11 +268,11 @@ export async function getInclusionReport({
         id: true,
         code: true,
         name: true,
-        enrollments: { where: { status: 'ACTIVE' }, select: { id: true } },
+        enrollments: { where: { status: 'ACTIVE', isPreview: false }, select: { id: true } },
       },
     }),
     db.accommodation.findMany({
-      where: { enrollment: { status: 'ACTIVE' } },
+      where: { enrollment: { status: 'ACTIVE', isPreview: false } },
       select: {
         id: true,
         createdById: true,

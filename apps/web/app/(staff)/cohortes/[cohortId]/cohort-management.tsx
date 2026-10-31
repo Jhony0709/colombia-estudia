@@ -10,7 +10,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Download, FileUp, Lock, MoreHorizontal } from 'lucide-react';
+import { Download, Eye, FileUp, Lock, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
 import { Sheet } from '@/components/organisms/sheet';
@@ -22,20 +22,26 @@ import {
   DropdownTrigger,
 } from '@/components/molecules/dropdown';
 import { apiErrorText } from '@/lib/http/api-error-text';
+import { openStudentPreview } from '@/lib/preview/student-preview';
+import { useToast } from '@/components/organisms/toaster';
 
 export function CohortManagement({
   cohortId,
   code,
   status,
   canExport,
+  canPreview,
 }: {
   cohortId: string;
   code: string;
   status: string;
   canExport: boolean;
+  /** Vista de estudiante (31/10): solo administración. */
+  canPreview: boolean;
 }) {
   const t = useTranslations('cohorts');
   const router = useRouter();
+  const { toast } = useToast();
   const [closing, setClosing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,6 +70,12 @@ export function CohortManagement({
     }
   };
 
+  const preview = async () => {
+    const result = await openStudentPreview(cohortId, t('management.previewError'));
+    if ('href' in result) router.push(result.href);
+    else toast({ severity: 'error', title: result.error, key: 'cohort-preview' });
+  };
+
   return (
     <>
       <Dropdown>
@@ -74,6 +86,15 @@ export function CohortManagement({
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label={t('management.label')} align="end">
+          {canPreview && status !== 'ARCHIVED' && (
+            <DropdownItem
+              itemKey="preview"
+              startContent={<Eye aria-hidden className="size-4" />}
+              onSelect={() => void preview()}
+            >
+              {t('management.preview')}
+            </DropdownItem>
+          )}
           {openForEnrolment && (
             <DropdownItem
               itemKey="import"
