@@ -264,7 +264,7 @@ describe('listMyPendingRequests', () => {
     const result = await listMyPendingRequests({ institutionId: 'inst-1', personId: 'p-1' });
 
     expect(result).toEqual({
-      enroll: { 'c-9': { at: NOW.toISOString(), moduleId: 'm-9' } },
+      enroll: { 'c-9:m-9': { at: NOW.toISOString(), moduleId: 'm-9' } },
       unlock: { 'e-1:m-2': NOW.toISOString() },
     });
   });

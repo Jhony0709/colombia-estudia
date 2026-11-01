@@ -1237,6 +1237,20 @@ $90.000 c/m»), que el cliente dio por superada.
 `Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
 schema.
 
+## 2026-11-01 — La solicitud de matrícula se ve por componente; Fundamentos vuelve como componente 1
+
+**Qué**: en el catálogo, «Solicitado» se marca solo en el componente pedido, no en todos los de la
+cohorte. El aviso del grupo nombra los componentes pedidos. La solicitud ya se guardaba por
+componente (`AccessRequest.moduleId`); lo que fallaba era la vista, que la buscaba por cohorte
+(`listMyPendingRequests` → `pendingEnrollKey(cohortId, moduleId)`). Al matricular se siguen
+cerrando todas las solicitudes del programa.
+
+El Bachillerato tiene 10 componentes más la Introducción (sin número): Fundamentos es el
+componente 1, como en el documento maestro del cliente.
+
+**Por qué**: Jhonny, 1/11: pedir el componente 5 marcaba todos como solicitados. Y el cliente
+confirma 10 componentes; el 11/10 se había tomado la Introducción por el componente 1.
+
 ## 2026-10-31 — Vista de estudiante para administración, con matrícula de prueba reiniciable
 
 **Decisión** (Jhonny, 31/10): un administrador (`institution.manage`) abre «Ver como estudiante»

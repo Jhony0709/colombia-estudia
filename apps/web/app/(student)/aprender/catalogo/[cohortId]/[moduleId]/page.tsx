@@ -15,7 +15,10 @@ import { getFormatter, getTranslations } from 'next-intl/server';
 import { CircleCheck, Lock } from 'lucide-react';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { getCoursePreview, type PreviewItem } from '@/features/learn/server/catalog.service';
-import { listMyPendingRequests } from '@/features/requests/server/requests.service';
+import {
+  listMyPendingRequests,
+  pendingEnrollKey,
+} from '@/features/requests/server/requests.service';
 import { whatsappUrl } from '@/features/marketing/contact-links';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
@@ -48,11 +51,11 @@ export default async function CoursePreviewPage({
   if (course.enrollment) redirect(courseHref(course));
 
   const contact = { phone: ctx.institution.supportPhone ?? null, name: ctx.person.givenName };
-  const asked = pending.enroll[cohortId];
+  const asked = pending.enroll[pendingEnrollKey(cohortId, moduleId)];
   const notice = asked
     ? t('catalog.groupRequested', {
         date: format.dateTime(new Date(asked.at), { day: 'numeric', month: 'long' }),
-        module: siblings.find((s) => s.moduleId === asked.moduleId)?.name ?? course.name,
+        module: course.name,
       })
     : course.beforeEntry
       ? t('preview.beforeEntry')

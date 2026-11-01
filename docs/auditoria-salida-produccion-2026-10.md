@@ -20,7 +20,7 @@ Archivo protegido: 🔒.
   sobre Postgres 16 limpio con las 25 migraciones. Llega a staging y producción solo por el CI.
 - **B3:** `next` y `eslint-config-next` a `15.5.28` exacto. Falta `pnpm install`, build y e2e.
 - **B4:** sin `dataPolicyUrl`, los cuatro enlaces (registro, invitación, pie, `AuthShell`) van a
-  `/politica-de-datos`. El dato en `/admin/institucion` sigue pendiente.
+  `/politica-de-datos`. En producción, `dataPolicyUrl` ya está puesto (01/11).
 - **B5:** `crons` en `apps/web/vercel.json` y `maxDuration = 300` en la ruta. Falta `CRON_SECRET` en
   Vercel Production.
 - **B6:** sin `WOMPI_API_URL`, la URL sale de la llave (`prv_prod_` → producción);
@@ -32,6 +32,11 @@ Archivo protegido: 🔒.
   cookie refrescada. `lib/auth/supabase-browser.ts` movido a `_to_delete/val-0111/`.
 - **A19:** la expresión del canonical en `seo.spec.ts`.
 - **A1 (01/11, en Vercel):** el apex es Production y `www` redirige 308 al apex.
+- **A7 (01/11):** en producción «Exigir verificación en dos pasos al personal» está activado.
+- **Search Console (01/11):** propiedad de dominio `albafuturoeducativo.com` verificada por TXT en
+  Cloudflare (no borrar el registro) y `sitemap.xml` enviado: «Correcto», 4 páginas.
+- **Bing Webmaster Tools (01/11):** `https://albafuturoeducativo.com/` verificado por CNAME en Cloudflare
+  (no borrar) y `sitemap.xml` enviado (en proceso).
 - **Siguen abiertos:** B7 (paneles), A4-A18 y todo lo de las secciones 4-6.
 
 ## 1. Veredicto

@@ -1581,7 +1581,7 @@
       "activityCount": "{count, plural, =1 {1 actividad} other {# actividades}}",
       "assessmentCount": "{count, plural, =1 {1 cuestionario} other {# cuestionarios}}",
       "groupMeta": "{count, plural, =1 {1 componente} other {# componentes}} · abierto hasta el {date}",
-      "groupRequested": "Pediste inscribirte el {date}, empezando por {module}. El equipo te escribe para completar tu matrícula y el pago.",
+      "groupRequested": "Pediste inscribirte el {date} en {module}. El equipo te escribe para completar tu matrícula y el pago.",
       "requestedPill": "Solicitado",
       "priceOnRequest": "Precio a consultar",
       "showWorkshops": "Ver talleres ({count})",

@@ -230,6 +230,11 @@ export async function closeRequests(
   return result.count;
 }
 
+/** Clave de `enroll`: se pide por componente, no por cohorte (1/11). */
+export function pendingEnrollKey(cohortId: string, moduleId: string): string {
+  return `${cohortId}:${moduleId}`;
+}
+
 /** Una solicitud de matrícula abierta: cuándo y por qué componente pidió entrar. */
 export interface PendingEnroll {
   /** ISO */
@@ -254,7 +259,10 @@ export async function listMyPendingRequests({
   const unlock: Record<string, string> = {};
   for (const row of rows) {
     if (row.kind === 'ENROLL') {
-      enroll[row.cohortId] = { at: row.createdAt.toISOString(), moduleId: row.moduleId };
+      enroll[pendingEnrollKey(row.cohortId, row.moduleId)] = {
+        at: row.createdAt.toISOString(),
+        moduleId: row.moduleId,
+      };
     } else if (row.enrollmentId) {
       unlock[`${row.enrollmentId}:${row.moduleId}`] = row.createdAt.toISOString();
     }

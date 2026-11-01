@@ -29,7 +29,7 @@ import { Button } from '@/components/atoms/button';
 import { CoverImage } from '@/components/atoms/cover-image';
 import { BrandWave } from '@/components/atoms/brand-wave';
 import type { CatalogCourse } from '@/features/learn/server/catalog.service';
-import type { PendingEnroll } from '@/features/requests/server/requests.service';
+import { pendingEnrollKey, type PendingEnroll } from '@/features/requests/server/requests.service';
 import { whatsappUrl } from '@/features/marketing/contact-links';
 import { cn } from '@/lib/utils';
 import { EnrollButton } from './enroll-button';
@@ -209,7 +209,7 @@ function Action({
       cohortId={course.cohortId}
       moduleId={course.moduleId}
       courseName={course.name}
-      requestedAt={requested[course.cohortId]?.at ?? null}
+      requestedAt={requested[pendingEnrollKey(course.cohortId, course.moduleId)]?.at ?? null}
       whatsappHref={whatsappUrl(
         contact.phone,
         t('requestMessage', {
@@ -292,7 +292,7 @@ export async function CourseCard({
 }) {
   const [t, format] = await Promise.all([getTranslations('learn.catalog'), getFormatter()]);
   const id = `curso-${course.cohortId}-${course.moduleId}`;
-  const asked = Boolean(requested[course.cohortId]);
+  const asked = Boolean(requested[pendingEnrollKey(course.cohortId, course.moduleId)]);
   const Heading = detail ? 'h2' : (`h${headingLevel}` as const);
   // Lo suyo se marca y no se ofrece (7/10): «En curso» lleva a su ruta; «Terminado», a nada.
   const status = course.enrollment
@@ -371,7 +371,7 @@ export async function FeaturedCourse({
 }: {
   course: CatalogCourse;
   contact: CatalogContact;
-  /** Cursos de pago ya pedidos: `cohortId` → ISO (6/10). */
+  /** Componentes de pago ya pedidos, por `pendingEnrollKey` (1/11). */
   requested?: Record<string, PendingEnroll>;
 }) {
   const [t, format] = await Promise.all([getTranslations('learn.catalog'), getFormatter()]);
@@ -422,7 +422,7 @@ export async function CatalogSection({
 }: {
   courses: CatalogCourse[];
   contact: CatalogContact;
-  /** Cursos de pago ya pedidos: `cohortId` → ISO (6/10). */
+  /** Componentes de pago ya pedidos, por `pendingEnrollKey` (1/11). */
   requested?: Record<string, PendingEnroll>;
   /** Otro título cuando va debajo del destacado («Más cursos»). */
   title?: string;
@@ -441,7 +441,7 @@ export async function CatalogSection({
       ? 4
       : c.enrollment || c.beforeEntry
         ? 3
-        : requested[c.cohortId]
+        : requested[pendingEnrollKey(c.cohortId, c.moduleId)]
           ? 2
           : c.free
             ? 0
@@ -468,7 +468,8 @@ export async function CatalogSection({
   const groups: ExplorerGroup[] = [...byCohort.entries()].flatMap(([cohortId, items]) => {
     const [first] = items;
     if (!first) return [];
-    const pending = requested[cohortId];
+    const asked = items.filter((c) => requested[pendingEnrollKey(c.cohortId, c.moduleId)]);
+    const pending = asked[0] ? requested[pendingEnrollKey(cohortId, asked[0].moduleId)] : null;
     const wa = pending
       ? whatsappUrl(
           contact.phone,
@@ -487,7 +488,7 @@ export async function CatalogSection({
               <CircleCheck aria-hidden className="text-status-success-base size-4 shrink-0" />
               {t('groupRequested', {
                 date: format.dateTime(new Date(pending.at), { day: 'numeric', month: 'long' }),
-                module: items.find((c) => c.moduleId === pending.moduleId)?.name ?? first.name,
+                module: new Intl.ListFormat('es-CO').format(asked.map((c) => c.name)),
               })}
             </p>
             {/* El mismo atajo que se ofrece al pedir: escribir ya, con el mensaje hecho. */}
