@@ -196,6 +196,7 @@ export default async function CohortDetailPage({
                 cohortId={cohort.id}
                 disabled={!openForEnrolment}
                 modules={cohort.modules}
+                progression={cohort.progression === 'LINEAR' ? 'LINEAR' : 'FREE'}
                 prominent
               />
             )}

@@ -218,6 +218,168 @@ export async function getCohortProgress({
   };
 }
 
+/** El avance de una matrícula fuera de su cohorte (1/11): la ficha de la persona y `/personas`. */
+export interface EnrollmentProgress {
+  enrollmentId: string;
+  personId: string;
+  cohortCode: string;
+  programName: string;
+  status: string;
+  enrolledAt: string;
+  assigned: number;
+  evidenceCompleted: number;
+  manualCompleted: number;
+  /** Temas completados con evidencia / asignados, 0–100: el mismo número que `/avance`. */
+  percent: number;
+  assessmentsTaken: number;
+  assessmentsPassed: number;
+  lastActivityAt: string | null;
+  atRisk: boolean;
+  /** El primer componente con temas sin completar (el último si ya terminó); `null` sin temas. */
+  currentModule: { name: string; index: number; total: number; done: boolean } | null;
+}
+
+/** Componente en curso: el primero, desde el de entrada, con algún tema sin completar. */
+export function currentModuleOf(
+  assignments: Array<{ id: string; module: { id: string; name: string; position: number } }>,
+  completed: ReadonlySet<string>,
+  startsAtModule: number | null
+): EnrollmentProgress['currentModule'] {
+  const modules = new Map<string, { name: string; position: number; ids: string[] }>();
+  for (const a of assignments) {
+    if (a.module.position < (startsAtModule ?? 1)) continue;
+    const entry = modules.get(a.module.id) ?? {
+      name: a.module.name,
+      position: a.module.position,
+      ids: [],
+    };
+    entry.ids.push(a.id);
+    modules.set(a.module.id, entry);
+  }
+  const ordered = [...modules.values()].sort((x, y) => x.position - y.position);
+  if (ordered.length === 0) return null;
+  const at = ordered.findIndex((m) => m.ids.some((id) => !completed.has(id)));
+  const index = at === -1 ? ordered.length - 1 : at;
+  return { name: ordered[index]!.name, index: index + 1, total: ordered.length, done: at === -1 };
+}
+
+/**
+ * Avance de matrículas de cualquier cohorte, con las reglas de `getCohortProgress`: lo asignado
+ * desde el componente de entrada, el porcentaje solo con evidencia y «en riesgo» por el último
+ * `LearningEvent`. Sin las matrículas de prueba.
+ */
+export async function progressByEnrollment({
+  institutionId,
+  enrollmentIds,
+  now = new Date(),
+}: {
+  institutionId: string;
+  enrollmentIds: string[];
+  now?: Date;
+}): Promise<Map<string, EnrollmentProgress>> {
+  const out = new Map<string, EnrollmentProgress>();
+  if (enrollmentIds.length === 0) return out;
+  const db = createTenantClient(institutionId);
+
+  const enrollments = await db.enrollment.findMany({
+    where: { id: { in: enrollmentIds }, isPreview: false },
+    select: {
+      id: true,
+      status: true,
+      enrolledAt: true,
+      startsAtModule: true,
+      cohortId: true,
+      studentId: true,
+      cohort: { select: { code: true, program: { select: { name: true } } } },
+      lessonProgress: { select: { status: true, source: true, lessonAssignmentId: true } },
+    },
+  });
+  if (enrollments.length === 0) return out;
+  const ids = enrollments.map((e) => e.id);
+
+  const [assignments, attempts, lastEvents] = await Promise.all([
+    db.lessonAssignment.findMany({
+      where: { cohortId: { in: [...new Set(enrollments.map((e) => e.cohortId))] } },
+      select: {
+        id: true,
+        cohortId: true,
+        lesson: { select: { module: { select: { id: true, name: true, position: true } } } },
+      },
+    }),
+    db.attempt.findMany({
+      where: { enrollmentId: { in: ids }, status: 'GRADED' },
+      select: {
+        enrollmentId: true,
+        score: true,
+        maxScore: true,
+        assessmentVersion: { select: { passPercent: true } },
+      },
+    }),
+    db.learningEvent.groupBy({
+      by: ['enrollmentId'],
+      where: { enrollmentId: { in: ids } },
+      _max: { occurredAt: true },
+    }),
+  ]);
+
+  const lastEventAt = new Map(lastEvents.map((r) => [r.enrollmentId, r._max.occurredAt]));
+  const riskIds = new Set(
+    atRisk({
+      enrollments: enrollments.map((e) => ({
+        id: e.id,
+        status: e.status as 'ACTIVE' | 'COMPLETED' | 'WITHDRAWN',
+        lastLearningEventAt: lastEventAt.get(e.id) ?? null,
+      })),
+      now,
+    })
+  );
+
+  for (const e of enrollments) {
+    const own = assignments
+      .filter((a) => a.cohortId === e.cohortId)
+      .map((a) => ({ id: a.id, module: a.lesson.module }));
+    const inScope = own.filter((a) => a.module.position >= (e.startsAtModule ?? 1));
+    // Como `getCohortProgress`: completados sobre asignados desde el componente de entrada.
+    const completed = e.lessonProgress.filter((p) => p.status === 'COMPLETED');
+    const evidenceCompleted = completed.filter((p) => p.source === 'EVIDENCE').length;
+    const { taken, passed } = assessmentsTakenAndPassed({
+      attempts: attempts
+        .filter((a) => a.enrollmentId === e.id)
+        .map((a) => ({
+          enrollmentId: a.enrollmentId,
+          status: 'GRADED',
+          score: a.score ? a.score.toNumber() : 0,
+          maxScore: a.maxScore ? a.maxScore.toNumber() : 0,
+          passPercent: a.assessmentVersion.passPercent,
+        })),
+      enrollmentCount: 1,
+    });
+    const last = lastEventAt.get(e.id) ?? null;
+    out.set(e.id, {
+      enrollmentId: e.id,
+      personId: e.studentId,
+      cohortCode: e.cohort.code,
+      programName: e.cohort.program.name,
+      status: e.status,
+      enrolledAt: e.enrolledAt.toISOString(),
+      assigned: inScope.length,
+      evidenceCompleted,
+      manualCompleted: completed.length - evidenceCompleted,
+      percent: inScope.length === 0 ? 0 : Math.round((evidenceCompleted / inScope.length) * 100),
+      assessmentsTaken: taken,
+      assessmentsPassed: passed,
+      lastActivityAt: last ? last.toISOString() : null,
+      atRisk: riskIds.has(e.id),
+      currentModule: currentModuleOf(
+        own,
+        new Set(completed.map((p) => p.lessonAssignmentId)),
+        e.startsAtModule
+      ),
+    });
+  }
+  return out;
+}
+
 /**
  * El CSV por estudiante (reportes.md «Exportación»), sin BOM: lo pone la ruta, como en el
  * resto de exportaciones (`lib/csv/serialize.ts`).

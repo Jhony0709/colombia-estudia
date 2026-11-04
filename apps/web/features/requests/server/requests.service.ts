@@ -293,6 +293,8 @@ export interface StaffRequestRow {
     name: string;
     programName: string;
     open: boolean;
+    /** En LINEAR, al matricular se eligen qué componentes quedan abiertos (4/11). */
+    progression: 'LINEAR' | 'FREE';
     /** Los componentes, para la hoja de matrícula (punto de entrada). */
     modules: Array<{ id: string; name: string; position: number; grade: number | null }>;
   };
@@ -347,6 +349,7 @@ export async function listRequests({
           code: true,
           name: true,
           status: true,
+          progression: true,
           program: {
             select: {
               name: true,
@@ -398,6 +401,7 @@ export async function listRequests({
       name: row.cohort.name,
       programName: row.cohort.program.name,
       open: row.cohort.status === 'OPEN',
+      progression: row.cohort.progression,
       modules: row.cohort.program.modules,
     },
     module: row.module,

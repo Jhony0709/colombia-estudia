@@ -10,6 +10,7 @@ const db = {
   cohort: { findFirst: jest.fn() },
   enrollment: { create: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
   membership: { findFirst: jest.fn(), create: jest.fn() },
+  enrollmentModule: { create: jest.fn() },
   installment: { updateMany: jest.fn(), findFirst: jest.fn() },
   // La política de cartera (19/9): apagada en estos tests, así que `enrollPerson` no avisa.
   restrictionPolicy: { findFirst: jest.fn().mockResolvedValue(null) },
@@ -248,6 +249,72 @@ describe('enrollPerson', () => {
 
     expect(db.enrollment.create.mock.calls[0][0].data.startsAtModule).toBe(3);
     expect(db.auditLog.create.mock.calls[0][0].data.after.startsAtModule).toBe(3);
+  });
+
+  describe('componentes abiertos al matricular (4/11)', () => {
+    const linear = {
+      ...cohort,
+      progression: 'LINEAR',
+      program: {
+        ...cohort.program,
+        modules: [
+          { id: 'mod-1', position: 1, grade: null },
+          { id: 'mod-2', position: 2, grade: null },
+          { id: 'mod-3', position: 3, grade: null },
+        ],
+      },
+    };
+    const enrol = (over: Partial<Parameters<typeof enrollPerson>[0]>) =>
+      enrollPerson({ ...BASE, cohortId: 'cohort-1', personHandle: '123', now: NOW, ...over });
+
+    beforeEach(() => {
+      db.person.findFirst.mockResolvedValue({ id: 'p1', birthDate: ADULT_BIRTH });
+      db.enrollment.create.mockResolvedValue({ id: 'enr-1' });
+      db.membership.findFirst.mockResolvedValue({ id: 'm1' });
+      db.enrollmentModule.create.mockResolvedValue({ id: 'em-1' });
+    });
+
+    it('opens the later components the staff chose, audited, besides the entry one', async () => {
+      db.cohort.findFirst.mockResolvedValue(linear);
+
+      await enrol({ startsAtModule: 1, unlockModuleIds: ['mod-2', 'mod-3', 'mod-2'] });
+
+      expect(db.enrollmentModule.create).toHaveBeenCalledTimes(2);
+      expect(db.enrollmentModule.create.mock.calls[0][0].data).toMatchObject({
+        enrollmentId: 'enr-1',
+        moduleId: 'mod-2',
+        unlockedById: 'actor-1',
+      });
+      const unlocks = db.auditLog.create.mock.calls.filter(
+        (c) => c[0].data.entity === 'enrollment_module'
+      );
+      expect(unlocks).toHaveLength(2);
+      expect(unlocks[0][0].data.after.reason).toBe('enrollment');
+    });
+
+    it('opens only the entry component when nothing else is chosen', async () => {
+      db.cohort.findFirst.mockResolvedValue(linear);
+
+      await enrol({ startsAtModule: 2 });
+
+      expect(db.enrollmentModule.create).not.toHaveBeenCalled();
+    });
+
+    it('refuses the entry component or an earlier one, and any in a FREE cohort', async () => {
+      db.cohort.findFirst.mockResolvedValue(linear);
+      await expect(enrol({ startsAtModule: 2, unlockModuleIds: ['mod-1'] })).rejects.toMatchObject({
+        code: 'VALIDATION_ERROR',
+      });
+      await expect(enrol({ startsAtModule: 2, unlockModuleIds: ['mod-2'] })).rejects.toMatchObject({
+        code: 'VALIDATION_ERROR',
+      });
+
+      db.cohort.findFirst.mockResolvedValue({ ...linear, progression: 'FREE' });
+      await expect(enrol({ unlockModuleIds: ['mod-2'] })).rejects.toMatchObject({
+        code: 'VALIDATION_ERROR',
+      });
+      expect(db.enrollment.create).not.toHaveBeenCalled();
+    });
   });
 
   it('defaults the entry module to null (whole program)', async () => {

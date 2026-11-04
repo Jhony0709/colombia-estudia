@@ -122,6 +122,18 @@ export default async function RequestsPage({
               modules={row.cohort.modules}
               initialHandle={row.person.handle}
               initialStartsAt={entry}
+              progression={row.cohort.progression}
+              // Lo demás que pidió la misma persona en la cohorte, ya marcado (4/11).
+              initialUnlock={rows
+                .filter(
+                  (r) =>
+                    r.kind === 'ENROLL' &&
+                    r.status === 'PENDING' &&
+                    r.person.id === row.person.id &&
+                    r.cohort.id === row.cohort.id &&
+                    r.module.position > row.module.position
+                )
+                .map((r) => r.module.id)}
               triggerLabel={t('actions.enroll')}
               prominent
             />

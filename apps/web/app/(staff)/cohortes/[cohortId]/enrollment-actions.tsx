@@ -81,6 +81,8 @@ export function EnrollSheet({
   prominent = false,
   initialHandle = '',
   initialStartsAt = '',
+  initialUnlock = [],
+  progression = 'FREE',
   triggerLabel,
 }: {
   cohortId: string;
@@ -95,6 +97,10 @@ export function EnrollSheet({
    */
   initialHandle?: string;
   initialStartsAt?: string;
+  /** Componentes que ya vienen marcados para abrir: los demás que la persona pidió (4/11). */
+  initialUnlock?: string[];
+  /** En LINEAR se eligen los componentes abiertos desde ya; en FREE todo lo está. */
+  progression?: 'LINEAR' | 'FREE';
   /** Otro texto para el botón que abre la hoja, p. ej. «Matricular» en una fila. */
   triggerLabel?: string;
 }) {
@@ -104,6 +110,7 @@ export function EnrollSheet({
   const [handle, setHandle] = useState('');
   // '' = desde el primer módulo (se manda `null`); si no, la posición del módulo elegido.
   const [startsAt, setStartsAt] = useState('');
+  const [unlock, setUnlock] = useState<string[]>([]);
   const [preview, setPreview] = useState<EnrollmentPreview | null>(null);
   const [checking, setChecking] = useState(false);
   const [checkError, setCheckError] = useState<string | null>(null);
@@ -117,6 +124,7 @@ export function EnrollSheet({
   const reset = () => {
     setHandle(initialHandle);
     setStartsAt(initialStartsAt);
+    setUnlock(initialUnlock);
     setPreview(null);
     setCheckError(null);
   };
@@ -152,9 +160,12 @@ export function EnrollSheet({
     const ok = await send(
       `/api/cohorts/${cohortId}/enrollments`,
       'POST',
-      graded
-        ? { personHandle: handle, entryGrade: startsAt === '' ? null : Number(startsAt) }
-        : { personHandle: handle, startsAtModule: startsAt === '' ? null : Number(startsAt) },
+      {
+        ...(graded
+          ? { personHandle: handle, entryGrade: startsAt === '' ? null : Number(startsAt) }
+          : { personHandle: handle, startsAtModule: startsAt === '' ? null : Number(startsAt) }),
+        unlockModuleIds: unlock.filter((id) => later.some((m) => m.id === id)),
+      },
       t('enrolled')
     );
     if (ok) reset();
@@ -168,6 +179,18 @@ export function EnrollSheet({
     new Set(modules.map((m) => m.grade).filter((g): g is number => g !== null))
   ).sort((a, b) => a - b);
   const graded = grades.length > 0;
+
+  // Los componentes después del de entrada: los que se pueden dejar abiertos al matricular.
+  const entryPosition =
+    startsAt === ''
+      ? Math.min(...modules.map((m) => m.position))
+      : graded
+        ? Math.min(...modules.filter((m) => m.grade === Number(startsAt)).map((m) => m.position))
+        : Number(startsAt);
+  const entryName = modules.find((m) => m.position === entryPosition)?.name ?? '';
+  const later = progression === 'LINEAR' ? modules.filter((m) => m.position > entryPosition) : [];
+  const toggle = (id: string, on: boolean) =>
+    setUnlock((current) => (on ? [...current, id] : current.filter((x) => x !== id)));
 
   return (
     <>
@@ -262,6 +285,43 @@ export function EnrollSheet({
                 ))}
               </FormSelect>
             </FormField>
+          )}
+
+          {canEnrol && later.length > 0 && (
+            <fieldset className="space-y-2">
+              <legend className="type-label text-text">{t('unlock.legend')}</legend>
+              <p className="type-caption text-text-muted m-0">
+                {t('unlock.hint', { entry: entryName })}
+              </p>
+              <ul className="m-0 list-none space-y-1 p-0">
+                {later.map((m) => (
+                  <li key={m.id} className="flex items-center gap-2">
+                    <input
+                      id={`unlock-${m.id}`}
+                      type="checkbox"
+                      checked={unlock.includes(m.id)}
+                      onChange={(e) => toggle(m.id, e.target.checked)}
+                      className="size-5"
+                    />
+                    <label htmlFor={`unlock-${m.id}`} className="type-body text-text">
+                      {t('moduleOption', { position: m.position, name: m.name })}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="quiet"
+                  onClick={() => setUnlock(later.map((m) => m.id))}
+                >
+                  {t('unlock.all')}
+                </Button>
+                <Button type="button" variant="quiet" onClick={() => setUnlock([])}>
+                  {t('unlock.none')}
+                </Button>
+              </div>
+            </fieldset>
           )}
 
           <div role="status" aria-live="polite">

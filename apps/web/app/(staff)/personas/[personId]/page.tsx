@@ -22,6 +22,7 @@ import { PersonRoles } from './person-roles';
 import { PersonGuardians, PersonConsent } from './person-relationships';
 import { PersonInvitation } from './person-invitation';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
+import { ProgressSummary } from '../progress-summary';
 
 export const metadata: Metadata = { title: 'Detalle de persona' };
 
@@ -145,6 +146,11 @@ export default async function PersonDetailPage({ params }: { params: Params }) {
                     {t(`enrollmentStatus.${e.status}`)} ·{' '}
                     {t('accessUntil', { date: e.accessUntil })}
                   </span>
+                  {e.progress && (
+                    <span className="mt-2 block">
+                      <ProgressSummary progress={e.progress} detail />
+                    </span>
+                  )}
                 </span>
                 {can('billing.manage') && (
                   <Link

@@ -14,6 +14,8 @@ const schema = z.object({
   /** Grado de entrada (20/9): posición del primer módulo de su ruta. Nulo = todo el programa. */
   startsAtModule: z.number().int().min(1).nullable().optional(),
   entryGrade: z.number().int().min(0).max(13).nullable().optional(),
+  /** Componentes posteriores al de entrada que se habilitan desde ya (4/11). */
+  unlockModuleIds: z.array(z.string().trim().min(1)).max(50).optional(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -27,5 +29,6 @@ export const POST = apiHandler<Input>({ schema, capability: 'cohort.manage' })(
       personHandle: input.personHandle,
       startsAtModule: input.startsAtModule ?? null,
       entryGrade: input.entryGrade ?? null,
+      unlockModuleIds: input.unlockModuleIds ?? [],
     })
 );

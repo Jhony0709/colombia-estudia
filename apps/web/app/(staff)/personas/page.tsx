@@ -48,6 +48,7 @@ import { StatCard, StatGrid } from '@/components/molecules/stat-card';
 import { Page, PageHeader } from '@/components/templates/page';
 import { BulkActions, PersonRowActions } from './people-actions';
 import { PeopleRail } from './people-rail';
+import { ProgressSummary } from './progress-summary';
 
 export const metadata: Metadata = { title: 'Personas' };
 
@@ -59,6 +60,7 @@ function queryFor(f: Partial<PeopleFilters>, page?: number): string {
   if (f.q) search.set('q', f.q);
   if (f.role) search.set('rol', f.role);
   if (f.invitation) search.set('invitacion', f.invitation);
+  if (f.origin) search.set('origen', f.origin);
   if (f.sort && f.sort !== 'nombre') search.set('orden', f.sort);
   if (f.pageSize && f.pageSize !== 50) search.set('mostrar', String(f.pageSize));
   if (page && page > 1) search.set('pagina', String(page));
@@ -101,7 +103,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
     getFormatter(),
   ]);
 
-  const filtered = Boolean(filters.q || filters.role || filters.invitation);
+  const filtered = Boolean(filters.q || filters.role || filters.invitation || filters.origin);
   const chips: FilterChip[] = [];
   if (filters.q)
     chips.push({
@@ -121,6 +123,12 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
       label: t(`invitations.${filters.invitation}`),
       removeHref: hrefFor({ ...filters, invitation: null }),
     });
+  if (filters.origin)
+    chips.push({
+      key: 'origen',
+      label: t(`origins.${filters.origin}`),
+      removeHref: hrefFor({ ...filters, origin: null }),
+    });
 
   const pageIds = result.rows.map((p) => p.id);
   const reinvitable = result.rows
@@ -139,9 +147,14 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
         title={t('title')}
         description={t('description')}
         action={
-          <Button asChild variant="secondary">
-            <a href={`/api/people/export${queryFor(filters)}`}>{t('exportCsv')}</a>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="secondary">
+              <Link href="/personas/registros">{t('registrationsLink')}</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <a href={`/api/people/export${queryFor(filters)}`}>{t('exportCsv')}</a>
+            </Button>
+          </div>
         }
       />
 
@@ -208,6 +221,14 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
                       {t(`invitations.${state}`)}
                     </option>
                   ))}
+                </FormSelect>
+              </FormField>
+            </div>
+            <div className="w-48">
+              <FormField label={t('origin')} name="origen">
+                <FormSelect name="origen" defaultValue={filters.origin ?? ''}>
+                  <option value="">{t('anyOrigin')}</option>
+                  <option value="registro">{t('origins.registro')}</option>
                 </FormSelect>
               </FormField>
             </div>
@@ -333,19 +354,40 @@ export default async function PeoplePage({ searchParams }: { searchParams: Searc
                 hideBelow: 'md',
                 header: t('invitation'),
                 // La palabra dice el estado; la píldora solo lo hace visible de lejos.
-                cell: (person) => (
-                  <Badge
-                    variant={
-                      person.invitation === 'accepted'
-                        ? 'success'
-                        : person.invitation === 'expired'
-                          ? 'warning'
-                          : 'neutral'
-                    }
-                  >
-                    {t(`invitations.${person.invitation}`)}
-                  </Badge>
-                ),
+                cell: (person) =>
+                  person.registered && person.invitation === 'none' ? (
+                    <Badge variant="info">{t('registeredBadge')}</Badge>
+                  ) : (
+                    <Badge
+                      variant={
+                        person.invitation === 'accepted'
+                          ? 'success'
+                          : person.invitation === 'expired'
+                            ? 'warning'
+                            : 'neutral'
+                      }
+                    >
+                      {t(`invitations.${person.invitation}`)}
+                    </Badge>
+                  ),
+              },
+              {
+                key: 'progress',
+                hideBelow: 'md',
+                header: t('progressColumn'),
+                cell: (person) =>
+                  person.progress ? (
+                    <span className="block space-y-1">
+                      <span className="type-caption text-text-muted block">
+                        {person.progress.cohortCode}
+                        {person.enrollmentCount > 1 &&
+                          ` · ${t('progress.more', { count: person.enrollmentCount - 1 })}`}
+                      </span>
+                      <ProgressSummary progress={person.progress} />
+                    </span>
+                  ) : (
+                    <span className="type-caption text-text-muted">{t('progress.none')}</span>
+                  ),
               },
               {
                 key: 'created',

@@ -21,6 +21,10 @@ import { APIError } from '@/lib/core/errors';
 import { maskEmail } from '@/lib/pii/mask';
 import { toCsv } from '@/lib/csv/serialize';
 import { listRecentActivity, type RecentActivity } from '@/lib/audit/recent-activity';
+import {
+  progressByEnrollment,
+  type EnrollmentProgress,
+} from '@/features/cohorts/server/progress.service';
 
 export { toCsv };
 
@@ -32,7 +36,7 @@ const PAGE_SIZE = 50;
  */
 export { ROLES, INVITATION_STATES, type InvitationState } from '@/lib/people/catalogs';
 
-export const PEOPLE_SORTS = ['nombre', 'reciente'] as const;
+export const PEOPLE_SORTS = ['nombre', 'reciente', 'avance'] as const;
 export type PeopleSort = (typeof PEOPLE_SORTS)[number];
 export const PAGE_SIZES = [20, 50, 100] as const;
 
@@ -40,8 +44,10 @@ export interface PeopleFilters {
   q: string;
   role: Role | null;
   invitation: InvitationState | null;
+  /** `registro`: solo quien se dio de alta en `/registro` (1/11). */
+  origin: 'registro' | null;
   page: number;
-  /** `nombre` (apellido, nombre) o `reciente` (alta más nueva primero). */
+  /** `nombre`, `reciente` (alta más nueva primero) o `avance` (menos avance primero, 1/11). */
   sort: PeopleSort;
   pageSize: number;
 }
@@ -56,6 +62,11 @@ export interface PersonRow {
   roles: Role[];
   invitation: InvitationState;
   createdAt: Date;
+  /** Se dio de alta sola en `/registro` (`AuditLog person.registered`). */
+  registered: boolean;
+  /** Avance de su matrícula principal: la activa más reciente, o la última. */
+  progress: EnrollmentProgress | null;
+  enrollmentCount: number;
 }
 
 export interface PeoplePage {
@@ -106,6 +117,7 @@ export function parsePeopleFilters(
     invitation: (INVITATION_LIST as readonly string[]).includes(invitation)
       ? (invitation as InvitationState)
       : null,
+    origin: one('origen') === 'registro' ? 'registro' : null,
     page: Number.isFinite(page) && page > 1 ? page : 1,
     sort: (PEOPLE_SORTS as readonly string[]).includes(sort) ? (sort as PeopleSort) : 'nombre',
     pageSize: (PAGE_SIZES as readonly number[]).includes(pageSize) ? pageSize : PAGE_SIZE,
@@ -114,8 +126,26 @@ export function parsePeopleFilters(
 
 // ─────────────────────────── Queries ───────────────────────────
 
-function whereFor(filters: PeopleFilters, now: Date) {
+/** Quién se dio de alta en `/registro`: la única marca es su `AuditLog` (registration.service). */
+async function registeredPersonIds(db: ReturnType<typeof createTenantClient>): Promise<string[]> {
+  const rows = await db.auditLog.findMany({
+    where: { entity: 'person', action: 'registered' },
+    select: { entityId: true },
+  });
+  return rows.map((r) => r.entityId);
+}
+
+/** La matrícula que resume a la persona: la activa más reciente; si no hay, la última. */
+export function mainEnrollmentId(
+  enrollments: Array<{ id: string; status: string; enrolledAt: Date }>
+): string | null {
+  const recent = [...enrollments].sort((a, b) => b.enrolledAt.getTime() - a.enrolledAt.getTime());
+  return (recent.find((e) => e.status === 'ACTIVE') ?? recent[0])?.id ?? null;
+}
+
+function whereFor(filters: PeopleFilters, now: Date, registered: readonly string[]) {
   const where: Record<string, unknown> = { anonymizedAt: null };
+  if (filters.origin === 'registro') where.id = { in: [...registered] };
 
   if (filters.q) {
     where.OR = [
@@ -158,6 +188,9 @@ function whereFor(filters: PeopleFilters, now: Date) {
   return where;
 }
 
+/** Con `orden=avance` se ordena en memoria: hasta aquí, el resto queda fuera del orden. */
+const PROGRESS_SORT_LIMIT = 2000;
+
 export async function listPeople({
   institutionId,
   filters,
@@ -168,42 +201,105 @@ export async function listPeople({
   now?: Date;
 }): Promise<PeoplePage> {
   const db = createTenantClient(institutionId);
-  const where = whereFor(filters, now);
+  const registered = await registeredPersonIds(db);
+  const where = whereFor(filters, now, registered);
+  const skip = (filters.page - 1) * filters.pageSize;
+  const enrollmentsSelect = {
+    where: { isPreview: false },
+    select: { id: true, status: true, enrolledAt: true },
+  } as const;
+  const select = {
+    id: true,
+    code: true,
+    givenName: true,
+    familyName: true,
+    email: true,
+    createdAt: true,
+    memberships: { where: { revokedAt: null }, select: { role: true } },
+    invitations: { select: { acceptedAt: true, expiresAt: true } },
+    enrollments: enrollmentsSelect,
+  } as const;
 
-  const [total, people] = await Promise.all([
-    db.person.count({ where }),
-    db.person.findMany({
-      where,
-      orderBy:
-        filters.sort === 'reciente'
-          ? [{ createdAt: 'desc' }, { familyName: 'asc' }]
-          : [{ familyName: 'asc' }, { givenName: 'asc' }],
-      skip: (filters.page - 1) * filters.pageSize,
-      take: filters.pageSize,
-      select: {
-        id: true,
-        code: true,
-        givenName: true,
-        familyName: true,
-        email: true,
-        createdAt: true,
-        memberships: { where: { revokedAt: null }, select: { role: true } },
-        invitations: { select: { acceptedAt: true, expiresAt: true } },
-      },
-    }),
-  ]);
+  let total: number;
+  let people;
+  let progress: Map<string, EnrollmentProgress>;
+  if (filters.sort === 'avance') {
+    const [count, all] = await Promise.all([
+      db.person.count({ where }),
+      db.person.findMany({
+        where,
+        orderBy: [{ familyName: 'asc' }, { givenName: 'asc' }],
+        take: PROGRESS_SORT_LIMIT,
+        select: {
+          id: true,
+          enrollments: enrollmentsSelect,
+          memberships: { where: { revokedAt: null, role: 'STUDENT' }, select: { role: true } },
+        },
+      }),
+    ]);
+    total = count;
+    const mains = all.map((p) => ({
+      id: p.id,
+      main: mainEnrollmentId(p.enrollments),
+      student: p.memberships.length > 0,
+    }));
+    progress = await progressByEnrollment({
+      institutionId,
+      enrollmentIds: mains.flatMap((m) => (m.main ? [m.main] : [])),
+      now,
+    });
+    // Menos avance primero: un estudiante sin matrícula va antes que todos; el equipo, al final.
+    const pct = (m: (typeof mains)[number]) =>
+      m.main ? (progress.get(m.main)?.percent ?? 0) : m.student ? -1 : 101;
+    const pageIds = mains
+      .map((m, index) => ({ ...m, index }))
+      .sort((a, b) => pct(a) - pct(b) || a.index - b.index)
+      .slice(skip, skip + filters.pageSize)
+      .map((m) => m.id);
+    const rows = await db.person.findMany({ where: { id: { in: pageIds } }, select });
+    people = pageIds.flatMap((id) => rows.filter((r) => r.id === id));
+  } else {
+    [total, people] = await Promise.all([
+      db.person.count({ where }),
+      db.person.findMany({
+        where,
+        orderBy:
+          filters.sort === 'reciente'
+            ? [{ createdAt: 'desc' }, { familyName: 'asc' }]
+            : [{ familyName: 'asc' }, { givenName: 'asc' }],
+        skip,
+        take: filters.pageSize,
+        select,
+      }),
+    ]);
+    progress = await progressByEnrollment({
+      institutionId,
+      enrollmentIds: people.flatMap((p) => {
+        const main = mainEnrollmentId(p.enrollments);
+        return main ? [main] : [];
+      }),
+      now,
+    });
+  }
 
+  const registeredSet = new Set(registered);
   return {
-    rows: people.map((person) => ({
-      id: person.id,
-      code: person.code,
-      givenName: person.givenName,
-      familyName: person.familyName,
-      emailMasked: maskEmail(person.email),
-      roles: person.memberships.map((m) => m.role),
-      invitation: deriveInvitationState(person.invitations, now),
-      createdAt: person.createdAt,
-    })),
+    rows: people.map((person) => {
+      const main = mainEnrollmentId(person.enrollments);
+      return {
+        id: person.id,
+        code: person.code,
+        givenName: person.givenName,
+        familyName: person.familyName,
+        emailMasked: maskEmail(person.email),
+        roles: person.memberships.map((m) => m.role),
+        invitation: deriveInvitationState(person.invitations, now),
+        createdAt: person.createdAt,
+        registered: registeredSet.has(person.id),
+        progress: main ? (progress.get(main) ?? null) : null,
+        enrollmentCount: person.enrollments.length,
+      };
+    }),
     total,
     page: filters.page,
     pageSize: filters.pageSize,
@@ -343,7 +439,7 @@ export async function exportPeople({
   now?: Date;
 }): Promise<string> {
   const db = createTenantClient(institutionId);
-  const where = whereFor(filters, now);
+  const where = whereFor(filters, now, await registeredPersonIds(db));
 
   const people = await db.person.findMany({
     where,
@@ -434,6 +530,8 @@ export interface PersonDetail {
     cohortName: string;
     status: string;
     accessUntil: string;
+    /** Su avance (1/11), con las reglas de `/cohortes/[id]/avance`. */
+    progress: EnrollmentProgress | null;
   }>;
   /** `hasAccount` (Fase C, 23/9): si el acudiente ya puede entrar a `/familia` o hay que invitarlo. */
   guardians: Array<{
@@ -543,6 +641,12 @@ export async function getPersonDetail({
     },
   });
 
+  const progress = await progressByEnrollment({
+    institutionId,
+    enrollmentIds: person.enrollments.map((e) => e.id),
+    now,
+  });
+
   return {
     id: person.id,
     code: person.code,
@@ -564,6 +668,7 @@ export async function getPersonDetail({
       cohortName: e.cohort.name,
       status: e.status,
       accessUntil: dateOnly(e.accessUntil),
+      progress: progress.get(e.id) ?? null,
     })),
     guardians: person.guardians.map((g) => ({
       id: g.guardian.id,

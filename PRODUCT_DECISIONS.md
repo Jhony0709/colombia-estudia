@@ -1237,6 +1237,34 @@ $90.000 c/m»), que el cliente dio por superada.
 `Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
 schema.
 
+## 2026-11-04 — Al matricular se eligen los componentes abiertos
+
+**Qué** (Jhonny, 4/11): quien matricula, desde una solicitud o desde la cohorte, decide si abre solo
+el componente de entrada (el pedido) o también otros posteriores. La hoja de matrícula lista los
+componentes después del de entrada con casillas, «Marcar todos» y «Ninguno»; desde una solicitud
+vienen marcados los demás componentes que la misma persona pidió en esa cohorte. Solo en
+progresión LINEAR (en FREE todo está abierto). Cada componente queda como habilitado por quien
+matriculó, con su `AuditLog enrollment_module.unlock` (`reason: enrollment`), y se puede bloquear
+después desde la ficha de la matrícula. Sin cambios de schema.
+
+## 2026-11-04 — El avance de cada persona, en Personas y en un embudo de registros
+
+**Qué** (Jhonny, 4/11): el equipo ve el progreso de las personas sin abrir cohorte por cohorte.
+
+- `/personas`: columna «Avance» con la matrícula principal (la activa más reciente): componente en
+  curso («Componente 3 de 10»), porcentaje de temas, última actividad y «En riesgo». Filtro
+  «Origen: Se registró» y orden «Menos avance» (en memoria, hasta 2000 personas; un estudiante
+  sin matrícula va primero y quien no es estudiante, al final).
+- Ficha de la persona: el mismo resumen por matrícula, con cuestionarios y lo marcado a mano.
+- `/personas/registros`: quién se registró en el periodo (7, 30, 90 días o todo) y cuántos
+  empezaron y terminaron la Introducción, pidieron un componente o se matricularon en un programa
+  de pago. Cada paso se cuenta por separado.
+
+**Reglas**: las de `/cohortes/[id]/avance` (`progressByEnrollment`): porcentaje solo con evidencia,
+lo asignado desde el componente de entrada, «en riesgo» a los 14 días sin `LearningEvent`. Sin
+matrículas de prueba. «Se registró» sale del `AuditLog person.registered`; la Introducción es
+cualquier programa gratuito. Sin cambios de schema.
+
 ## 2026-11-01 — La solicitud de matrícula se ve por componente; Fundamentos vuelve como componente 1
 
 **Qué**: en el catálogo, «Solicitado» se marca solo en el componente pedido, no en todos los de la

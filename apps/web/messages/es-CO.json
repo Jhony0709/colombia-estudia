@@ -465,7 +465,8 @@
     "sort": "Ordenar",
     "sorts": {
       "nombre": "Por apellido",
-      "reciente": "Más recientes"
+      "reciente": "Más recientes",
+      "avance": "Menos avance"
     },
     "perPage": "Mostrar",
     "perPageUnit": "por página",
@@ -528,7 +529,30 @@
     "guardianHasAccount": "Ya tiene cuenta y ve el avance en «Mi familia».",
     "guardianNoAccount": "Todavía no tiene cuenta.",
     "guardianOpen": "Ver su ficha",
-    "guardianInvite": "Enviarle la invitación desde su ficha"
+    "guardianInvite": "Enviarle la invitación desde su ficha",
+    "origin": "Origen",
+    "anyOrigin": "Cualquier origen",
+    "origins": {
+      "registro": "Se registró"
+    },
+    "registeredBadge": "Se registró",
+    "progressColumn": "Avance",
+    "registrationsLink": "Registros",
+    "progress": {
+      "label": "Avance en {program}",
+      "module": "Componente {index} de {total}: {name}",
+      "done": "{total, plural, one {Completó el componente} other {Completó los # componentes}}",
+      "percent": "{percent} % de los temas",
+      "lastActivity": "Última actividad: {date}",
+      "noActivity": "Sin actividad todavía",
+      "atRisk": "En riesgo",
+      "atRiskHint": "Sin actividad en 14 días o más",
+      "assessments": "Cuestionarios aprobados: {passed} de {taken} presentados",
+      "manual": "{count, plural, one {# tema marcado a mano o importado} other {# temas marcados a mano o importados}} (aparte)",
+      "noLessons": "Sin temas asignados",
+      "none": "Sin matrícula",
+      "more": "{count, plural, one {y # matrícula más} other {y # matrículas más}}"
+    }
   },
   "cohorts": {
     "title": "Cohortes",
@@ -791,6 +815,12 @@
       "notEnrolled": "No está en esta cohorte",
       "elsewhere": "{count, plural, one {Cursa también otra cohorte} other {Cursa también # cohortes}}",
       "accessUntil": "Tendría acceso hasta el {date}"
+    },
+    "unlock": {
+      "legend": "Componentes abiertos desde ya",
+      "hint": "«{entry}» queda abierto al matricular. Marca los que también quieres habilitar; los demás se habilitan después desde la ficha de la matrícula.",
+      "all": "Marcar todos",
+      "none": "Ninguno"
     }
   },
   "import": {
@@ -2732,7 +2762,8 @@
     "subjects": "Talleres",
     "institution": "Institución",
     "notifications": "Notificaciones",
-    "new": "Nuevo"
+    "new": "Nuevo",
+    "registrations": "Registros"
   },
   "submissions": {
     "title": "Actividades",
@@ -3843,5 +3874,44 @@
     "notNeeded": "No la necesitó",
     "noComment": "Sin comentario",
     "viewEnrollment": "Ver la matrícula de {name}"
+  },
+  "registrations": {
+    "title": "Registros",
+    "overline": "Personas",
+    "description": "Quién se dio de alta en /registro y hasta dónde llegó. Cada paso se cuenta por separado.",
+    "period": "Periodo",
+    "periods": {
+      "7": "7 días",
+      "30": "30 días",
+      "90": "90 días",
+      "0": "Todo"
+    },
+    "stepsLabel": "Embudo del registro",
+    "steps": {
+      "registered": "Se registraron",
+      "startedIntro": "Empezaron la Introducción",
+      "finishedIntro": "Terminaron la Introducción",
+      "requested": "Pidieron un componente",
+      "enrolled": "Matriculados en un programa de pago"
+    },
+    "share": "{percent} % de los registros",
+    "rowStep": {
+      "registered": "Solo se registró",
+      "startedIntro": "Empezó la Introducción",
+      "finishedIntro": "Terminó la Introducción",
+      "requested": "Pidió un componente",
+      "enrolled": "Matriculado"
+    },
+    "tableCaption": "Personas registradas en el periodo, de la más reciente a la más antigua",
+    "name": "Persona",
+    "registeredAt": "Se registró",
+    "step": "Hasta dónde llegó",
+    "intro": "Introducción",
+    "paid": "Programa de pago",
+    "noIntro": "Sin matrícula en la Introducción",
+    "empty": "Nadie se registró en este periodo",
+    "emptyHint": "Comparte el enlace /registro o elige un periodo más largo.",
+    "truncated": "Se muestran las {count} más recientes; el embudo cuenta a todas.",
+    "back": "Personas"
   }
 }

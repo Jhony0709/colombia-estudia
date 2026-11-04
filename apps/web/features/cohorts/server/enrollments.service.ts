@@ -200,6 +200,7 @@ export async function enrollPerson({
   personHandle,
   startsAtModule: startsAtModuleInput = null,
   entryGrade = null,
+  unlockModuleIds = [],
   now = new Date(),
 }: {
   institutionId: string;
@@ -212,6 +213,11 @@ export async function enrollPerson({
    * primer componente de ese grado. Se guardan los dos.
    */
   entryGrade?: number | null;
+  /**
+   * Componentes posteriores al de entrada que quedan habilitados desde ya (4/11): quien
+   * matricula decide si abre solo el pedido o varios. El de entrada no hace falta.
+   */
+  unlockModuleIds?: string[];
   now?: Date;
 }): Promise<{ enrollmentId: string; warning: string | null }> {
   const db = createTenantClient(institutionId);
@@ -260,11 +266,15 @@ export async function enrollPerson({
       status: true,
       accessUntil: true,
       programId: true,
+      progression: true,
       program: {
         select: {
           name: true,
           defaultAccessDays: true,
-          modules: { where: { archivedAt: null }, select: { position: true, grade: true } },
+          modules: {
+            where: { archivedAt: null },
+            select: { id: true, position: true, grade: true },
+          },
         },
       },
     },
@@ -305,6 +315,28 @@ export async function enrollPerson({
     throw new APIError('El programa no tiene un componente en esa posición', 'VALIDATION_ERROR');
   }
 
+  // Solo en progresión LINEAR (en FREE todo está abierto) y solo componentes de la ruta.
+  const entryPosition =
+    startsAtModule ?? Math.min(...cohort.program.modules.map((m) => m.position));
+  const unlockIds = [...new Set(unlockModuleIds)];
+  if (unlockIds.length > 0) {
+    if (cohort.progression !== 'LINEAR') {
+      throw new APIError(
+        'En esta cohorte todos los componentes ya están abiertos',
+        'VALIDATION_ERROR'
+      );
+    }
+    const later = new Set(
+      cohort.program.modules.filter((m) => m.position > entryPosition).map((m) => m.id)
+    );
+    if (unlockIds.some((id) => !later.has(id))) {
+      throw new APIError(
+        'Solo se pueden habilitar componentes posteriores al de entrada',
+        'VALIDATION_ERROR'
+      );
+    }
+  }
+
   const accessUntil = resolveAccessUntil({
     cohortAccessUntil: cohort.accessUntil,
     defaultAccessDays: cohort.program.defaultAccessDays,
@@ -330,6 +362,31 @@ export async function enrollPerson({
         },
         select: { id: true },
       });
+
+      for (const moduleId of unlockIds) {
+        const row = await tx.enrollmentModule.create({
+          data: {
+            institutionId,
+            enrollmentId: enrollment.id,
+            moduleId,
+            unlockedAt: now,
+            unlockedById: actorId,
+          },
+          select: { id: true },
+        });
+        await tx.auditLog.create({
+          data: {
+            institutionId,
+            actorId,
+            entity: 'enrollment_module',
+            entityId: row.id,
+            action: 'unlock',
+            before: {},
+            after: { enrollmentId: enrollment.id, moduleId, reason: 'enrollment' },
+            occurredAt: now,
+          },
+        });
+      }
 
       const hasRole = await tx.membership.findFirst({
         where: { personId: person.id, role: 'STUDENT', revokedAt: null },
@@ -365,6 +422,7 @@ export async function enrollPerson({
             accessUntil: isoDay(accessUntil),
             startsAtModule,
             entryGrade,
+            unlockedModules: unlockIds.length,
           },
         },
       });

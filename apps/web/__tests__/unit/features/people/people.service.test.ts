@@ -9,6 +9,7 @@ jest.mock('@/lib/db/tenant', () => ({ createTenantClient: jest.fn() }));
 
 import {
   deriveInvitationState,
+  mainEnrollmentId,
   parsePeopleFilters,
   toCsv,
   roleChangeNeedsInstitutionManage,
@@ -71,6 +72,7 @@ describe('parsePeopleFilters', () => {
       q: 'ana',
       role: 'STUDENT',
       invitation: 'pending',
+      origin: null,
       page: 3,
       sort: 'reciente',
       pageSize: 20,
@@ -88,6 +90,7 @@ describe('parsePeopleFilters', () => {
       q: '',
       role: null,
       invitation: null,
+      origin: null,
       page: 1,
       sort: 'nombre',
       pageSize: 50,
@@ -143,5 +146,40 @@ describe('roleChangeNeedsInstitutionManage', () => {
     for (const role of ['OPERATIONS', 'INSTRUCTOR', 'STUDENT', 'GUARDIAN'] as const) {
       expect(roleChangeNeedsInstitutionManage(role)).toBe(false);
     }
+  });
+});
+
+describe('parsePeopleFilters › origen y avance (1/11)', () => {
+  it('reads origen=registro and the progress sort; anything else is ignored', () => {
+    expect(parsePeopleFilters({ origen: 'registro', orden: 'avance' })).toMatchObject({
+      origin: 'registro',
+      sort: 'avance',
+    });
+    expect(parsePeopleFilters({ origen: 'invitacion' }).origin).toBeNull();
+  });
+});
+
+describe('mainEnrollmentId', () => {
+  const e = (id: string, status: string, day: string) => ({
+    id,
+    status,
+    enrolledAt: new Date(`2026-${day}T12:00:00.000Z`),
+  });
+
+  it('prefers the most recent active enrollment', () => {
+    expect(
+      mainEnrollmentId([
+        e('old', 'ACTIVE', '09-01'),
+        e('done', 'COMPLETED', '10-20'),
+        e('new', 'ACTIVE', '10-01'),
+      ])
+    ).toBe('new');
+  });
+
+  it('falls back to the most recent one, and to null without enrollments', () => {
+    expect(mainEnrollmentId([e('a', 'COMPLETED', '09-01'), e('b', 'WITHDRAWN', '10-01')])).toBe(
+      'b'
+    );
+    expect(mainEnrollmentId([])).toBeNull();
   });
 });
