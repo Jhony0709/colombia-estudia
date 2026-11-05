@@ -1221,6 +1221,21 @@ export const moduleFeedbackFactory = {
     }),
 };
 
+/** Conversación de WhatsApp y su primer mensaje (5/11). */
+export const conversationFactory = {
+  create: async (prisma: PrismaClientType, institutionId: string) =>
+    prisma.conversation.create({
+      data: { id: cuid(), institutionId, channel: 'WHATSAPP', contact: `57300${cuid().slice(-7)}` },
+    }),
+};
+
+export const conversationMessageFactory = {
+  create: async (prisma: PrismaClientType, institutionId: string, conversationId: string) =>
+    prisma.conversationMessage.create({
+      data: { id: cuid(), institutionId, conversationId, direction: 'INBOUND', body: 'Hola' },
+    }),
+};
+
 /**
  * All factories grouped for easy access
  */
@@ -1266,4 +1281,6 @@ export const factories = {
   enrollmentModule: enrollmentModuleFactory,
   accessRequest: accessRequestFactory,
   moduleFeedback: moduleFeedbackFactory,
+  conversation: conversationFactory,
+  conversationMessage: conversationMessageFactory,
 };

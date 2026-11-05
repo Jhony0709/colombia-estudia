@@ -63,6 +63,9 @@ export const TENANT_SCOPED_MODELS = [
   'AccessRequest',
   // 11/10: la opinión al terminar un componente.
   'ModuleFeedback',
+  // 5/11: la bandeja de mensajes.
+  'Conversation',
+  'ConversationMessage',
 ] as const;
 
 type TenantScopedModel = (typeof TENANT_SCOPED_MODELS)[number];

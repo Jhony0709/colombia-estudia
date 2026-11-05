@@ -11,8 +11,6 @@ export const CHOICES = {
   advisor: 'asesor',
 } as const;
 
-export type Choice = (typeof CHOICES)[keyof typeof CHOICES];
-
 /** El saludo: lista interactiva (título ≤ 24 caracteres, descripción ≤ 72). */
 export function menu(institutionName: string) {
   return {

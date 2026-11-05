@@ -19,13 +19,6 @@ const logNotSent = (conversationId: string, err: unknown) =>
   logger.warn({ event: 'conversation-courtesy-not-sent', conversationId, error: String(err) });
 
 export type ConversationView = 'waiting' | 'mine' | 'open' | 'bot' | 'closed';
-export const CONVERSATION_VIEWS: readonly ConversationView[] = [
-  'waiting',
-  'mine',
-  'open',
-  'bot',
-  'closed',
-];
 
 export interface ConversationRow {
   id: string;
