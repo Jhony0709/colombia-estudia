@@ -19,6 +19,8 @@ import { EmptyState } from '@/components/molecules/empty-state';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
 import { StartAttempt } from './start-attempt';
+import { RequestAttempt } from './request-attempt';
+import { businessPhone } from '@/lib/whatsapp/cloud-api';
 import { RouteRail, WithRouteRail } from '../../route-rail';
 import { PreviewStrip } from '../../../preview-strip';
 import {
@@ -162,6 +164,14 @@ export default async function AssessmentPage({
                 </p>
                 {view.cannotStart === null || view.cannotStart === 'IN_PROGRESS' ? (
                   <StartAttempt assignmentId={a.assignmentId} continuing={view.active !== null} />
+                ) : view.blocked ? (
+                  <RequestAttempt
+                    assignmentId={a.assignmentId}
+                    title={a.title}
+                    name={ctx.person.givenName}
+                    phone={businessPhone() ?? ctx.institution.supportPhone ?? null}
+                    request={view.attemptRequest}
+                  />
                 ) : (
                   <Alert severity="warning">{ta(`cannotStart.${view.cannotStart}`)}</Alert>
                 )}

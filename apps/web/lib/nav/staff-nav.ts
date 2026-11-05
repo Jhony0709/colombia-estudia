@@ -29,6 +29,8 @@ export interface NavDestination {
    * (`/aprender/tema/…`) pero no el calendario (`/aprender/calendario`).
    */
   activeUnder?: readonly string[];
+  /** Pendientes del destino (5/11: chats esperando asesor): va sobre el icono. */
+  count?: number;
 }
 
 interface NavDefinition extends NavDestination {
@@ -87,6 +89,8 @@ const NAV: readonly NavDefinition[] = [
   // Lo que piden los estudiantes (6/10): matricularse en un curso de pago o seguir al
   // siguiente componente. Primero de Operación: es lo que alguien está esperando.
   { href: '/solicitudes', label: 'Solicitudes', capability: 'cohort.manage', section: 'operacion' },
+  // Los chats de WhatsApp (5/11): lo que el bot no resuelve y espera a un asesor.
+  { href: '/mensajes', label: 'Mensajes', capability: 'cohort.manage', section: 'operacion' },
   { href: '/cohortes', label: 'Cohortes', capability: 'cohort.manage', section: 'operacion' },
   { href: '/personas', label: 'Personas', capability: 'people.manage', section: 'operacion' },
   { href: '/cartera', label: 'Cartera', capability: 'billing.manage', section: 'operacion' },

@@ -208,7 +208,7 @@ export default async function LessonPage({
           {/* Una sola medida (4/10): texto, actividad y entrega comparten el borde derecho. Desde
             `xl`, el índice del tema ocupa lo que sobra a la derecha. */}
           <div className="xl:grid xl:grid-cols-[minmax(0,var(--size-measure))_minmax(0,1fr)] xl:gap-12">
-            <div className="max-w-measure min-w-0 space-y-10">
+            <div className="max-w-measure min-w-0 space-y-6 lg:space-y-10">
               {/* Un recurso que falta se dice. Un hueco silencioso deja al estudiante creyendo que
               la página cargó entera. */}
               {lesson.missingAssets.length > 0 && (
@@ -334,6 +334,7 @@ export default async function LessonPage({
             form={lesson.form}
             submission={submission?.status ?? null}
             requiresSubmission={lesson.requiresSubmission}
+            acceptsFile={lesson.activity !== null && lesson.activity.accepts !== 'TEXT'}
             reading={{
               requiredSeconds,
               savedSeconds: progress?.secondsOnLesson ?? 0,
@@ -395,6 +396,7 @@ async function LessonNav({
   form,
   submission,
   requiresSubmission,
+  acceptsFile,
   reading,
 }: {
   previous: LessonNeighbour | null;
@@ -406,6 +408,8 @@ async function LessonNav({
   form: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
   submission: 'SUBMITTED' | 'RETURNED' | 'APPROVED' | null;
   requiresSubmission: boolean;
+  /** La barra dice que también vale una foto de la hoja (5/11, Kris). */
+  acceptsFile: boolean;
   reading: { requiredSeconds: number; savedSeconds: number; savedScrolled: boolean };
 }) {
   const t = await getTranslations('learn');
@@ -419,7 +423,9 @@ async function LessonNav({
           ? t('bar.inReview')
           : submission === 'RETURNED'
             ? t('bar.returned')
-            : t('bar.needsSubmission')
+            : acceptsFile
+              ? t('bar.needsSubmissionFile')
+              : t('bar.needsSubmission')
         : t(`evidence.status.${status}`, { form: t(`evidence.form.${form}`) });
 
   let action: React.ReactNode = null;

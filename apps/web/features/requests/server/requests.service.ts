@@ -1,9 +1,10 @@
 import 'server-only';
 
 /**
- * Las solicitudes del estudiante (6/10): inscribirse en un curso de pago (`ENROLL`) o que le
- * habiliten el siguiente componente (`UNLOCK`). Las resuelve operación desde `/solicitudes`,
- * la ficha de la matrícula o la cohorte.
+ * Las solicitudes del estudiante (6/10): inscribirse en un curso de pago (`ENROLL`), que le
+ * habiliten el siguiente componente (`UNLOCK`) u otra oportunidad en un examen que perdió con
+ * todos los intentos (`ATTEMPT`, 5/11). Las resuelve operación desde `/solicitudes`, la ficha
+ * de la matrícula o la cohorte.
  *
  * Una solicitud no se resuelve a mano: se cierra sola cuando lo pedido ocurre —`enrollPerson`
  * crea la matrícula, `setModuleAccess` habilita el componente— desde donde sea (`closeRequests`).
@@ -15,7 +16,7 @@ import 'server-only';
  */
 
 import { calculateAgeAt } from '@colombia-estudia/domain';
-import { createTenantClient } from '@/lib/db/tenant';
+import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { isUniqueViolation } from '@/lib/db/errors';
 import {
@@ -24,8 +25,12 @@ import {
   staffPersonIds,
 } from '@/features/notifications/server/notifications.service';
 import { getCohortOutline } from '@/features/learn/server/cohort.service';
+import { getAssessmentForStudent } from '@/features/learn/server/attempt.service';
+import { logger } from '@/lib/observability/logger';
+import { SERVICE_WINDOW_MS, sendTemplate, sendText } from '@/lib/whatsapp/cloud-api';
+import { siteUrl } from '@/lib/seo/site-url';
 
-export type RequestKind = 'ENROLL' | 'UNLOCK';
+export type RequestKind = 'ENROLL' | 'UNLOCK' | 'ATTEMPT';
 export type RequestStatus = 'PENDING' | 'DONE' | 'DISMISSED';
 
 export interface OpenedRequest {
@@ -44,6 +49,7 @@ async function openRequest(
     cohortId: string;
     moduleId: string;
     enrollmentId: string | null;
+    assessmentAssignmentId?: string | null;
     now: Date;
   }
 ): Promise<OpenedRequest> {
@@ -53,6 +59,7 @@ async function openRequest(
     kind: data.kind,
     cohortId: data.cohortId,
     moduleId: data.moduleId,
+    assessmentAssignmentId: data.assessmentAssignmentId ?? null,
     status: 'PENDING' as const,
   };
   const found = await db.accessRequest.findFirst({ where, select: { id: true, createdAt: true } });
@@ -66,6 +73,7 @@ async function openRequest(
         cohortId: data.cohortId,
         moduleId: data.moduleId,
         enrollmentId: data.enrollmentId,
+        assessmentAssignmentId: data.assessmentAssignmentId ?? null,
         createdAt: data.now,
       },
       select: { id: true, createdAt: true },
@@ -86,7 +94,7 @@ async function openRequest(
 async function notifyStaff(
   institutionId: string,
   input: {
-    type: 'enrollment_requested' | 'unlock_requested';
+    type: 'enrollment_requested' | 'unlock_requested' | 'attempt_requested';
     title: string;
     body: string;
     key: string;
@@ -203,6 +211,166 @@ export async function requestUnlock({
 }
 
 /**
+ * La persona perdió un examen con todos sus intentos y pide otra oportunidad (5/11, Kris).
+ * Solo si su examen está detenido (`blocked`): con intentos por delante no hay nada que pedir.
+ */
+export async function requestAttempt({
+  institutionId,
+  personId,
+  assignmentId,
+  now = new Date(),
+}: {
+  institutionId: string;
+  personId: string;
+  assignmentId: string;
+  now?: Date;
+}): Promise<OpenedRequest> {
+  const view = await getAssessmentForStudent({ institutionId, personId, assignmentId, now });
+  if (view.gate || !view.assessment) throw new APIError('Not found', 'NOT_FOUND');
+  if (!view.blocked) {
+    throw new APIError('Este examen no está esperando otra oportunidad', 'CONFLICT');
+  }
+
+  const db = createTenantClient(institutionId);
+  const [assignment, person] = await Promise.all([
+    db.assessmentAssignment.findFirst({
+      where: { id: assignmentId },
+      select: {
+        cohortId: true,
+        cohort: { select: { code: true } },
+        assessment: { select: { moduleId: true } },
+      },
+    }),
+    db.person.findFirst({
+      where: { id: personId },
+      select: { givenName: true, familyName: true },
+    }),
+  ]);
+  if (!assignment?.assessment.moduleId) throw new APIError('Not found', 'NOT_FOUND');
+
+  const opened = await openRequest(institutionId, {
+    personId,
+    kind: 'ATTEMPT',
+    cohortId: assignment.cohortId,
+    moduleId: assignment.assessment.moduleId,
+    enrollmentId: view.assessment.enrollmentId,
+    assessmentAssignmentId: assignmentId,
+    now,
+  });
+  if (!opened.already) {
+    await notifyStaff(institutionId, {
+      type: 'attempt_requested',
+      title: 'Solicitud de otra oportunidad',
+      body: `${person?.givenName ?? ''} ${person?.familyName ?? ''} perdió ${view.assessment.title} (${assignment.cohort.code}) y pide otra oportunidad.`.trim(),
+      key: `access_request:${opened.id}`,
+    });
+  }
+  return opened;
+}
+
+/** `wa_id` de un teléfono guardado: solo dígitos y, si es un celular colombiano, con el 57. */
+export function whatsappIdOf(phone: string | null): string | null {
+  const digits = phone?.replace(/\D/g, '') ?? '';
+  if (/^3\d{9}$/.test(digits)) return `57${digits}`;
+  return digits.length >= 11 ? digits : null;
+}
+
+/**
+ * Operación concede otra oportunidad (5/11): la solicitud `ATTEMPT` queda hecha y eso suma un
+ * intento a ese examen (`attempt.service`). Audita, avisa en la plataforma y, si se puede, por
+ * WhatsApp: libre dentro de las 24 h de su último mensaje, con plantilla después.
+ */
+export async function grantAttempt({
+  institutionId,
+  actorId,
+  requestId,
+  now = new Date(),
+}: {
+  institutionId: string;
+  actorId: string;
+  requestId: string;
+  now?: Date;
+}): Promise<{ status: 'DONE'; whatsapp: 'sent' | 'skipped' | 'failed' }> {
+  const db = createTenantClient(institutionId);
+  const row = await db.accessRequest.findFirst({
+    where: { id: requestId },
+    select: {
+      id: true,
+      status: true,
+      kind: true,
+      personId: true,
+      whatsappId: true,
+      whatsappAt: true,
+      assessmentAssignmentId: true,
+      assessmentAssignment: { select: { assessment: { select: { title: true } } } },
+      person: { select: { givenName: true, phone: true } },
+    },
+  });
+  if (!row) throw new APIError('Not found', 'NOT_FOUND');
+  if (row.kind !== 'ATTEMPT' || !row.assessmentAssignmentId || !row.assessmentAssignment) {
+    throw new APIError('Esta solicitud no es de un examen', 'CONFLICT');
+  }
+  if (row.status !== 'PENDING') throw new APIError('Esta solicitud ya está cerrada', 'CONFLICT');
+
+  await db.$transaction(async (tx) => {
+    await tx.accessRequest.update({
+      where: { id: row.id },
+      data: { status: 'DONE', resolvedAt: now, resolvedById: actorId },
+    });
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'access_request',
+        entityId: row.id,
+        action: 'attempt_granted',
+        after: { personId: row.personId, assessmentAssignmentId: row.assessmentAssignmentId },
+        occurredAt: now,
+      },
+    });
+  });
+
+  const title = row.assessmentAssignment.assessment.title;
+  const href = `/aprender/examen/${row.assessmentAssignmentId}`;
+  await notify(institutionId, {
+    personId: row.personId,
+    type: 'attempt_granted',
+    title: 'Tienes otra oportunidad',
+    body: `Ya puedes presentar de nuevo ${title}.`,
+    href,
+    dedupeKey: `attempt_granted:${row.id}`,
+  });
+
+  const to = row.whatsappId ?? whatsappIdOf(row.person.phone);
+  if (!to) return { status: 'DONE', whatsapp: 'skipped' };
+  const institution = await prisma.institution.findUnique({
+    where: { id: institutionId },
+    select: { whatsappPhoneNumberId: true },
+  });
+  const from = institution?.whatsappPhoneNumberId ?? null;
+  const inWindow =
+    row.whatsappId !== null &&
+    row.whatsappAt !== null &&
+    now.getTime() - row.whatsappAt.getTime() < SERVICE_WINDOW_MS;
+  const template = process.env.WHATSAPP_TEMPLATE_ATTEMPT_GRANTED;
+  const result = inWindow
+    ? await sendText(
+        to,
+        `Hola, ${row.person.givenName}. Ya tienes otra oportunidad en «${title}». Puedes presentarlo aquí: ${siteUrl()}${href}`,
+        from
+      )
+    : template
+      ? await sendTemplate(to, template, [row.person.givenName, title], { phoneNumberId: from })
+      : null;
+  if (!result) return { status: 'DONE', whatsapp: 'skipped' };
+  if (!result.sent) {
+    logger.warn({ event: 'whatsapp-send-failed', requestId: row.id, reason: result.reason });
+    return { status: 'DONE', whatsapp: result.reason === 'not_configured' ? 'skipped' : 'failed' };
+  }
+  return { status: 'DONE', whatsapp: 'sent' };
+}
+
+/**
  * Cierra como hechas las solicitudes abiertas que lo pedido acaba de cumplir. Va dentro de
  * la transacción de quien lo cumple (`enrollPerson`, `setModuleAccess`).
  */
@@ -263,7 +431,7 @@ export async function listMyPendingRequests({
         at: row.createdAt.toISOString(),
         moduleId: row.moduleId,
       };
-    } else if (row.enrollmentId) {
+    } else if (row.kind === 'UNLOCK' && row.enrollmentId) {
       unlock[`${row.enrollmentId}:${row.moduleId}`] = row.createdAt.toISOString();
     }
   }
@@ -299,8 +467,12 @@ export interface StaffRequestRow {
     modules: Array<{ id: string; name: string; position: number; grade: number | null }>;
   };
   module: { id: string; name: string; position: number; grade: number | null };
-  /** UNLOCK: la matrícula, para habilitar y enlazar la ficha. */
+  /** UNLOCK y ATTEMPT: la matrícula, para habilitar y enlazar la ficha. */
   enrollmentId: string | null;
+  /** ATTEMPT: el examen en el que pide otra oportunidad. */
+  assessment: { assignmentId: string; title: string } | null;
+  /** ISO: su último mensaje por WhatsApp con el código de la solicitud; nulo si no escribió. */
+  whatsappAt: string | null;
   /**
    * La cartera de la matrícula, para decidir sin salir de la fila. `null` sin plan de pagos
    * (o en ENROLL, que aún no tiene matrícula).
@@ -363,6 +535,8 @@ export async function listRequests({
         },
       },
       module: { select: { id: true, name: true, position: true, grade: true } },
+      assessmentAssignment: { select: { id: true, assessment: { select: { title: true } } } },
+      whatsappAt: true,
       enrollment: {
         select: {
           paymentPlan: {
@@ -406,6 +580,13 @@ export async function listRequests({
     },
     module: row.module,
     enrollmentId: row.enrollmentId,
+    assessment: row.assessmentAssignment
+      ? {
+          assignmentId: row.assessmentAssignment.id,
+          title: row.assessmentAssignment.assessment.title,
+        }
+      : null,
+    whatsappAt: row.whatsappAt?.toISOString() ?? null,
     billing: row.enrollment?.paymentPlan
       ? { overdue: row.enrollment.paymentPlan.installments.length }
       : null,
@@ -439,6 +620,7 @@ export async function dismissRequest({
       personId: true,
       module: { select: { name: true } },
       cohort: { select: { program: { select: { name: true } } } },
+      assessmentAssignment: { select: { assessment: { select: { title: true } } } },
     },
   });
   if (!row) throw new APIError('Not found', 'NOT_FOUND');
@@ -463,7 +645,10 @@ export async function dismissRequest({
   });
 
   // Sin esto el estudiante solo veía reaparecer el botón: que sepa que se cerró y qué hacer.
-  const subject = row.kind === 'ENROLL' ? row.cohort.program.name : row.module.name;
+  const subject =
+    row.kind === 'ENROLL'
+      ? row.cohort.program.name
+      : (row.assessmentAssignment?.assessment.title ?? row.module.name);
   await notify(institutionId, {
     personId: row.personId,
     type: 'request_dismissed',

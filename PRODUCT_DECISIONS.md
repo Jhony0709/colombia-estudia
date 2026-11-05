@@ -1237,6 +1237,64 @@ $90.000 c/m»), que el cliente dio por superada.
 `Module.grade` es un solo número; haría falta un rango (`gradeFrom`/`gradeTo`), que es cambio de
 schema.
 
+## 2026-11-05 — Bot de WhatsApp y bandeja de mensajes en el admin
+
+**Decisión** (Jhonny, 5/11): el número de WhatsApp de ALBA lo atiende un bot que saluda con un menú
+(«Programas y precios», «Cómo inscribirme», «Soporte de la plataforma», «Hablar con un asesor»;
+irán cambiando). «Hablar con un asesor» deja el chat esperando en `/mensajes` y avisa a quienes
+atienden (plantilla `nuevo_chat` a sus WhatsApp, con «Tomar chat», y aviso en la plataforma). El
+primero que lo toma es el único que responde, desde la bandeja, hasta cerrarlo; si la persona
+vuelve a escribir después, la atiende el bot otra vez.
+
+**Por qué una bandeja y no el WhatsApp personal de cada asesor**: todo lo que manda el número de
+ALBA cae en un solo chat del WhatsApp personal, mezclado; la bandeja da un hilo por persona, el
+historial, el reparto y no expone números personales. Queda abierta a otros canales
+(`MessagingChannel`).
+
+**Límites de la primera versión**: solo texto (un archivo llega como `[image]`, `[audio]`…); en
+WhatsApp se responde dentro de las 24 h desde su último mensaje; la bandeja se refresca cada pocos
+segundos, sin tiempo real; sin aviso automático si nadie toma el chat en X minutos (necesita un
+cron más frecuente que el diario).
+
+**Configuración**: `/admin/institucion` › WhatsApp: el Phone number ID y los WhatsApp de quienes
+atienden (5/11: +57 310 250 2207, +57 313 835 0120 y +33 6 52 61 47 89).
+
+**Schema**: `Conversation`, `ConversationMessage` y sus enums; `Institution.whatsappPhoneNumberId`
+y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de aprobación: añadir
+los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
+cada consulta lleva su `institutionId`.
+
+## 2026-11-05 — Perder un examen con todos los intentos detiene la ruta; otra oportunidad por WhatsApp
+
+**Decisión** (Kris, 4/11; aprobada por Jhonny el 5/11): si el estudiante usa todos los intentos sin
+aprobar, el cuestionario **no** cuenta como hecho y no puede seguir al siguiente paso. La pantalla
+del examen y la del resultado le dicen que pida otra oportunidad: el botón deja una solicitud
+`ATTEMPT` en `/solicitudes` y abre WhatsApp, al número del negocio, con el código de la solicitud
+ya escrito. Operación pulsa «Dar otra oportunidad»: la solicitud queda hecha, eso suma un intento a
+ese examen, se audita (`access_request.attempt_granted`) y al estudiante se le avisa en la
+plataforma y por WhatsApp (libre si escribió en las últimas 24 h; después, con la plantilla
+`WHATSAPP_TEMPLATE_ATTEMPT_GRANTED`). Reemplaza la regla del 8/10 de que agotar los intentos
+completaba el cuestionario.
+
+**Por qué**: da seriedad al proceso y deja ver cuánto se esfuerza cada estudiante en aprobar. El
+riesgo es que un bloqueo sin respuesta haga abandonar: por eso el pedido llega a la bandeja y al
+WhatsApp del asesor en el mismo clic.
+
+**WhatsApp Cloud API**: webhook `/api/webhooks/whatsapp` (reto con `WHATSAPP_VERIFY_TOKEN`, firma
+`X-Hub-Signature-256` con `WHATSAPP_APP_SECRET`). Un mensaje con el código de una solicitud abierta
+guarda desde qué WhatsApp escribió y le confirma que se recibió; sin código no hace nada (lo
+atiende el asesor). Sin las variables, todo sigue funcionando con el aviso de la plataforma y el
+enlace `wa.me`.
+
+**Mismo día** (Kris): las actividades con preguntas se pueden resolver en una hoja y subir una foto
+o un escaneo en lugar de escribir cada respuesta; la pantalla y la barra del pie lo dicen.
+
+**Schema**: `AccessRequestKind.ATTEMPT`; `AccessRequest.assessmentAssignmentId`, `whatsappId`,
+`whatsappAt`; el índice de «una abierta» incluye el examen (migración
+`20261105000000_access_request_attempt`).
+
+**Pendiente**: dar otra oportunidad desde la ficha de la matrícula sin que el estudiante la pida.
+
 ## 2026-11-04 — Al matricular se eligen los componentes abiertos
 
 **Qué** (Jhonny, 4/11): quien matricula, desde una solicitud o desde la cohorte, decide si abre solo
@@ -1333,7 +1391,7 @@ finalidad (sección 4).
 **Descartado**: obligatoria; anónima; preguntas editables desde el admin (mismas para todos los
 componentes, para poder comparar).
 
-## 2026-10-08 — Un cuestionario se completa al aprobar o al agotar los intentos
+## 2026-10-08 — Un cuestionario se completa al aprobar o al agotar los intentos — **SUPERADA el 5/11** en lo de agotar los intentos
 
 **Decisión** (Jhonny, 8/10): perder un intento con más intentos por delante **no** deja seguir al
 siguiente paso; el cuestionario cuenta como hecho cuando se aprueba o cuando se usaron todos los

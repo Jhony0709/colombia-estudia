@@ -152,4 +152,70 @@ describe('submitLesson', () => {
     );
     expect(mockNotifyMany).not.toHaveBeenCalled();
   });
+
+  describe('con enunciados (5/11)', () => {
+    // Un rechazo antes de leer deja en cola el `null` de «¿hay entrega previa?».
+    beforeEach(() => {
+      db.submission.findFirst.mockReset();
+      db.submission.findFirst.mockResolvedValueOnce(null).mockResolvedValue({
+        id: 'sub-1',
+        status: 'SUBMITTED',
+        text: null,
+        answers: null,
+        feedback: null,
+        submittedAt: NOW,
+        reviewedAt: null,
+        file: null,
+      });
+    });
+
+    const withPrompts = (accepts: 'TEXT' | 'TEXT_OR_FILE') => ({
+      ...assignment(false),
+      lesson: {
+        ...assignment(false).lesson,
+        activityAccepts: accepts,
+        activityPrompts: ['¿A?', '¿B?'],
+      },
+    });
+
+    it('la foto de la hoja vale por las respuestas escritas', async () => {
+      db.lessonAssignment.findFirst.mockResolvedValue(withPrompts('TEXT_OR_FILE'));
+      db.mediaAsset.findFirst.mockResolvedValue({ id: 'asset-1' });
+
+      await submitLesson({ ...BASE, text: null, answers: ['', ''], fileAssetId: 'asset-1' });
+
+      expect(db.submission.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ fileAssetId: 'asset-1', text: null }),
+        })
+      );
+    });
+
+    it('sin archivo siguen siendo obligatorias todas las respuestas', async () => {
+      db.lessonAssignment.findFirst.mockResolvedValue(withPrompts('TEXT_OR_FILE'));
+
+      await expect(
+        submitLesson({ ...BASE, text: null, answers: ['Sí', ''], fileAssetId: null })
+      ).rejects.toThrow('Responde todas las preguntas');
+      expect(db.submission.create).not.toHaveBeenCalled();
+    });
+
+    it('con archivo guarda lo que sí escribió, pregunta por pregunta', async () => {
+      db.lessonAssignment.findFirst.mockResolvedValue(withPrompts('TEXT_OR_FILE'));
+      db.mediaAsset.findFirst.mockResolvedValue({ id: 'asset-1' });
+
+      await submitLesson({ ...BASE, text: null, answers: ['Sí'], fileAssetId: 'asset-1' });
+
+      expect(db.submission.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            answers: [
+              { prompt: '¿A?', answer: 'Sí' },
+              { prompt: '¿B?', answer: '' },
+            ],
+          }),
+        })
+      );
+    });
+  });
 });

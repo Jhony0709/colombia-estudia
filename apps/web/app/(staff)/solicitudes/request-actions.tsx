@@ -9,7 +9,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { LockOpen } from 'lucide-react';
+import { LockOpen, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
@@ -76,6 +76,37 @@ export function UnlockAction({
         <LockOpen aria-hidden className="size-4 shrink-0" />
         {t('unlock')}
         <span className="sr-only"> {moduleName}</span>
+      </Button>
+      {error && (
+        <span role="alert" className="type-caption text-status-error-base">
+          {error}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/** Otra oportunidad en el examen (5/11): suma un intento y avisa al estudiante. */
+export function GrantAttemptAction({ requestId, title }: { requestId: string; title: string }) {
+  const t = useTranslations('requests.actions');
+  const { busy, error, send } = useSend();
+  return (
+    <span className="inline-flex flex-col items-start gap-1">
+      <Button
+        type="button"
+        loading={busy}
+        onClick={() =>
+          void send(
+            `/api/access-requests/${requestId}`,
+            'PATCH',
+            { action: 'grant' },
+            t('granted', { title })
+          )
+        }
+      >
+        <RotateCcw aria-hidden className="size-4 shrink-0" />
+        {t('grant')}
+        <span className="sr-only"> {title}</span>
       </Button>
       {error && (
         <span role="alert" className="type-caption text-status-error-base">

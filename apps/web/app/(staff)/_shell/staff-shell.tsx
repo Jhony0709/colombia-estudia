@@ -12,6 +12,8 @@ import { THEME_COOKIE, toTheme } from '@/lib/theme/theme';
 import { buildStaffNav } from '@/lib/nav/staff-nav';
 import { buildSpaces } from '@/lib/nav/spaces';
 import { countUnread } from '@/features/notifications/server/notifications.service';
+import { countWaitingConversations } from '@/features/messaging/server/conversations.service';
+import { logger } from '@/lib/observability/logger';
 
 export async function StaffShell({ children }: { children: React.ReactNode }) {
   await requireStaffSession();
@@ -19,6 +21,16 @@ export async function StaffShell({ children }: { children: React.ReactNode }) {
   const unread = ctx.person
     ? await countUnread({ institutionId: ctx.institution.id, personId: ctx.person.id })
     : 0;
+  const items = buildStaffNav(ctx.capabilities);
+  // Los chats que esperan asesor (5/11), sobre el icono de Mensajes: solo si lo ve.
+  const messages = items.find((item) => item.href === '/mensajes');
+  // Un contador no tumba el marco: si la consulta falla (migración sin aplicar), sin número.
+  if (messages) {
+    messages.count = await countWaitingConversations(ctx.institution.id).catch((err: unknown) => {
+      logger.warn({ event: 'nav-waiting-count-failed', error: String(err) });
+      return 0;
+    });
+  }
 
   // El layout raíz ya puso la clase en `<html>`; esto es solo para que el conmutador de la
   // barra lateral arranque marcando la opción correcta en vez de adivinarla al hidratar.
@@ -29,7 +41,7 @@ export async function StaffShell({ children }: { children: React.ReactNode }) {
       <SideNav
         theme={theme}
         institutionName={ctx.institution.name}
-        items={buildStaffNav(ctx.capabilities)}
+        items={items}
         spaces={buildSpaces(ctx.capabilities)}
         personName={ctx.person ? `${ctx.person.givenName} ${ctx.person.familyName}` : null}
         unreadNotifications={unread}

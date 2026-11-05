@@ -207,7 +207,7 @@ export function SubmissionForm({
     const trimmed = wantsText ? text.trim() : '';
     const trimmedAnswers = hasPrompts ? answers.map((a) => a.trim()) : [];
     if (accepts === 'FILE' && !file) return setError(t('errors.needFile'));
-    if (hasPrompts && trimmedAnswers.some((a) => a === '')) {
+    if (hasPrompts && !file && trimmedAnswers.some((a) => a === '')) {
       return setError(t('errors.answerAll'));
     }
     if (!hasPrompts && accepts === 'TEXT' && !trimmed) return setError(t('errors.needText'));
@@ -323,8 +323,8 @@ export function SubmissionForm({
                   onChange={(e) => setAnswer(index, e.target.value)}
                   rows={4}
                   maxLength={5_000}
-                  required
-                  aria-required="true"
+                  required={!file}
+                  aria-required={!file}
                   disabled={busy}
                   aria-describedby={error ? ids.error : undefined}
                   className={cn(
@@ -335,7 +335,9 @@ export function SubmissionForm({
                 />
               </li>
             ))}
-            <li className="type-caption text-text-muted list-none">{t('answersHint')}</li>
+            <li className="type-caption text-text-muted list-none">
+              {wantsFile ? t('answersHintFile') : t('answersHint')}
+            </li>
           </ol>
         )}
 

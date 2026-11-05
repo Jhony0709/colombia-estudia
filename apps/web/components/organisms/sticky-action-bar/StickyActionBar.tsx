@@ -33,13 +33,13 @@ export function StickyActionBar({
     <nav
       aria-label={label}
       className={cn(
-        'border-border bg-surface-base sticky bottom-0 z-10 -mx-4 mt-12 border-t px-4 py-3 sm:mx-0 sm:px-0',
+        'border-border bg-surface-base sticky bottom-0 z-10 -mx-4 mt-8 border-t px-4 py-2 sm:mx-0 sm:mt-12 sm:px-0 sm:py-3',
         className
       )}
     >
       {/* Teléfono: el estado en su fila y debajo salida + acción. Desde `sm`, una sola fila:
           el estado ocupa lo que sobra (y se parte si hace falta), la acción no se encoge. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:flex-nowrap">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 sm:flex-nowrap">
         {status !== undefined && (
           <p
             role="status"

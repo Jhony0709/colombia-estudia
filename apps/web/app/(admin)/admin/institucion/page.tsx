@@ -13,9 +13,11 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { requireCapability } from '@/lib/authz/with-capability';
 import { getInstitutionOverview } from '@/features/admin/server/institution.service';
 import { getRegistrationSettings } from '@/features/admin/server/registration.service';
+import { getWhatsAppSettings } from '@/features/admin/server/whatsapp-settings.service';
 import { Page, PageHeader } from '@/components/templates/page';
 import { InstitutionForm } from './institution-form';
 import { RegistrationForm } from './registration-form';
+import { WhatsAppForm } from './whatsapp-form';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 
 export const metadata: Metadata = { title: 'Institución' };
@@ -24,9 +26,10 @@ export default async function InstitutionPage() {
   await requireCapability('institution.manage');
   const ctx = await getRequestContext();
 
-  const [overview, registration, t] = await Promise.all([
+  const [overview, registration, whatsapp, t] = await Promise.all([
     getInstitutionOverview(ctx.institution.id),
     getRegistrationSettings(ctx.institution.id),
+    getWhatsAppSettings(ctx.institution.id),
     getTranslations('admin.institution'),
   ]);
 
@@ -52,6 +55,9 @@ export default async function InstitutionPage() {
 
       {/* El registro público (Fase B): su propia sección y su propio botón. */}
       <RegistrationForm settings={registration} />
+
+      {/* WhatsApp (5/11): el número de Meta y quienes atienden `/mensajes`. */}
+      <WhatsAppForm settings={whatsapp} />
     </Page>
   );
 }

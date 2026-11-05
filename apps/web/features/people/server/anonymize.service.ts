@@ -3,8 +3,8 @@
  * personales dejen de existir aquí. SSOT: plan/03 «Sesión» (borra el usuario de Auth),
  * plan/10 §3, prisma `Person.anonymizedAt`, catálogo `person.anonymized`.
  *
- * Qué se borra: nombre, documento, fecha de nacimiento, correo, teléfono y el usuario de
- * Auth (no podrá entrar). Qué se conserva: la fila (`id`) y todo lo que cuelga de ella
+ * Qué se borra: nombre, documento, fecha de nacimiento, correo, teléfono, el usuario de
+ * Auth (no podrá entrar) y sus chats de WhatsApp (5/11), que guardan su número y lo que escribió. Qué se conserva: la fila (`id`) y todo lo que cuelga de ella
  * —matrículas, progreso, intentos, notas, cartera, auditoría—, porque son registros de la
  * institución (académicos y contables) que la ley obliga a guardar y que ya no identifican
  * a nadie sin los campos borrados. Las membresías se revocan y las invitaciones pendientes
@@ -69,6 +69,11 @@ export async function anonymizePerson({
     await tx.invitation.updateMany({
       where: { personId: person.id, acceptedAt: null },
       data: { expiresAt: now },
+    });
+    await tx.conversation.deleteMany({ where: { institutionId, personId: person.id } });
+    await tx.accessRequest.updateMany({
+      where: { personId: person.id },
+      data: { whatsappId: null, whatsappAt: null },
     });
     await tx.auditLog.create({
       data: {

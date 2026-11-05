@@ -58,7 +58,8 @@ export function RouteRailFrame({
   return (
     <div
       className={cn(
-        'lg:grid lg:items-start lg:gap-8',
+        // En el teléfono (5/11), 16 px bajo la barra de tarea: con 32 el título quedaba suelto.
+        'max-lg:!mt-4 lg:grid lg:items-start lg:gap-8',
         collapsed ? 'lg:grid-cols-[auto_minmax(0,1fr)]' : 'lg:grid-cols-[15rem_minmax(0,1fr)]'
       )}
     >
@@ -87,9 +88,9 @@ export function RouteRailFrame({
         {!collapsed && rail}
       </aside>
       <div className="min-w-0">
-        {header && <div className="mb-6 lg:mb-8">{header}</div>}
-        <div className="mb-6 lg:hidden">{mobileRail}</div>
-        <div className="space-y-10">{children}</div>
+        {header && <div className="mb-4 lg:mb-8">{header}</div>}
+        <div className="mb-4 lg:hidden">{mobileRail}</div>
+        <div className="space-y-6 lg:space-y-10">{children}</div>
       </div>
     </div>
   );

@@ -150,6 +150,11 @@ export async function getEnrollmentDetail({
           },
         },
         assessmentVersion: { select: { passPercent: true, maxAttempts: true } },
+        // Otras oportunidades concedidas (5/11): cada una suma un intento.
+        accessRequests: {
+          where: { enrollmentId, kind: 'ATTEMPT', status: 'DONE' },
+          select: { id: true },
+        },
         attempts: {
           where: { enrollmentId },
           orderBy: { number: 'asc' },
@@ -205,7 +210,10 @@ export async function getEnrollmentDetail({
       title: a.assessment.title,
       kind: a.assessment.kind,
       passPercent: a.assessmentVersion.passPercent,
-      attemptsAllowed: a.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
+      attemptsAllowed:
+        a.assessmentVersion.maxAttempts +
+        (accommodation?.allowedAttemptsBonus ?? 0) +
+        a.accessRequests.length,
       attempts: a.attempts.map((t) => ({
         id: t.id,
         number: t.number,
@@ -218,13 +226,9 @@ export async function getEnrollmentDetail({
     .sort((x, y) => x.modulePosition - y.modulePosition || x.position - y.position);
 
   const completedLessons = lessons.filter((l) => l.status === 'COMPLETED').length;
-  // La misma regla que la ruta del estudiante (8/10): aprobó o agotó los intentos.
+  // La misma regla que la ruta del estudiante (5/11): solo cuenta si aprobó.
   const completedAssessments = assessments.filter(
-    (a) =>
-      assessmentStatus(a.attempts, {
-        attemptsAllowed: a.attemptsAllowed,
-        passPercent: a.passPercent,
-      }) === 'COMPLETED'
+    (a) => assessmentStatus(a.attempts, { passPercent: a.passPercent }) === 'COMPLETED'
   ).length;
 
   return {

@@ -104,6 +104,13 @@ export interface AssessmentForStudent {
   attempts: AttemptSummary[];
   /** Por qué no se puede empezar uno nuevo. `null` = se puede. */
   cannotStart: 'IN_PROGRESS' | 'NO_ATTEMPTS_LEFT' | 'PAST_DUE' | null;
+  /**
+   * Usó todos los intentos sin aprobar (5/11, Kris): la ruta se detiene aquí hasta que operación
+   * conceda otra oportunidad. Nunca en la vista de estudiante.
+   */
+  blocked: boolean;
+  /** Ya pidió otra oportunidad y sigue sin resolver: el id va como código en WhatsApp. */
+  attemptRequest: { id: string; at: string } | null;
   /** La ruta del programa, para la barra lateral (21/9). Vacía si no se abre. */
   route: OutlineModule[];
 }
@@ -154,11 +161,11 @@ export interface AttemptForStudent {
   questions: AttemptQuestionView[];
   /**
    * Qué sigue (8/10): aprobó; aprobó en otro intento (este se ve desde el historial); puede
-   * reintentar (y no sigue hasta agotar los intentos); ya no le quedan (sigue igual); o espera
-   * calificación. Nulo mientras está en curso. Se calcula con la
+   * reintentar; ya no le quedan y la ruta se detiene hasta otra oportunidad (`BLOCKED`, 5/11);
+   * o espera calificación. Nulo mientras está en curso. Se calcula con la
    * nota real aunque la política no la muestre: decide el paso, no enseña el número.
    */
-  outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'DONE' | 'PENDING' | null;
+  outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'BLOCKED' | 'PENDING' | null;
   attemptsLeft: number;
   /** Vista de estudiante (31/10): se repite sin límite; `attemptsLeft` no aplica. */
   preview: boolean;
@@ -174,6 +181,8 @@ const blocked = (gate: LessonGate): AssessmentForStudent => ({
   active: null,
   attempts: [],
   cannotStart: null,
+  blocked: false,
+  attemptRequest: null,
   route: [],
 });
 
@@ -565,9 +574,16 @@ async function resolveAssessment({
           reviewPolicy: true,
         },
       },
+      // Otra oportunidad (5/11): la hecha suma un intento; la abierta se dice en la pantalla.
+      accessRequests: {
+        where: { enrollmentId, kind: 'ATTEMPT', status: { in: ['PENDING', 'DONE'] } },
+        select: { id: true, status: true, createdAt: true },
+      },
     },
   });
   if (!assignment) return denied({ kind: 'NOT_ASSIGNED' });
+  const granted = assignment.accessRequests.filter((r) => r.status === 'DONE').length;
+  const requested = assignment.accessRequests.find((r) => r.status === 'PENDING') ?? null;
 
   const accommodation = await db.accommodation.findFirst({
     where: { enrollmentId },
@@ -622,7 +638,7 @@ async function resolveAssessment({
         assessmentVersion: {
           id: '',
           timeLimitMinutes: version.timeLimitMinutes,
-          maxAttempts: version.maxAttempts,
+          maxAttempts: version.maxAttempts + granted,
         },
         accommodation: accommodation
           ? {
@@ -648,6 +664,9 @@ async function resolveAssessment({
       : !preview && assignment.dueAt !== null && assignment.dueAt <= now
         ? 'PAST_DUE'
         : null;
+  const passed = attempts.some(
+    (a) => a.status === 'GRADED' && scoreView(a, version.passPercent)?.passed === true
+  );
 
   const view: AssessmentForStudent = {
     gate: null,
@@ -699,6 +718,8 @@ async function resolveAssessment({
           : scoreView(a, version.passPercent),
     })),
     cannotStart,
+    blocked: !preview && cannotStart === 'NO_ATTEMPTS_LEFT' && !passed,
+    attemptRequest: requested ? { id: requested.id, at: requested.createdAt.toISOString() } : null,
     route: outline.modules,
   };
   return { view, enrollmentId, cohortId: outline.cohort.id };
@@ -894,9 +915,18 @@ function attemptSelect(personId: string) {
           where: { studentId: personId },
           select: { id: true, status: true, score: true, maxScore: true },
         },
+        accessRequests: grantsOf(personId),
       },
     },
   } as const;
+}
+
+/** Otras oportunidades concedidas (5/11): cada solicitud `ATTEMPT` hecha suma un intento. */
+function grantsOf(personId: string) {
+  return {
+    where: { personId, kind: 'ATTEMPT' as const, status: 'DONE' as const },
+    select: { id: true },
+  };
 }
 
 /** El intento, del estudiante que pregunta, ya cerrado por plazo si tocaba. */
@@ -1027,7 +1057,9 @@ export async function getAttemptForStudent({
   const preview = row.enrollment.isPreview;
   const attemptsAllowed = preview
     ? Infinity
-    : row.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0);
+    : row.assessmentVersion.maxAttempts +
+      (accommodation?.allowedAttemptsBonus ?? 0) +
+      row.assignment.accessRequests.length;
   const passPercent = row.assessmentVersion.passPercent;
   const review =
     preview && status === 'GRADED'
@@ -1058,18 +1090,17 @@ export async function getAttemptForStudent({
                   scoreView(a, passPercent)?.passed === true
               )
             ? 'PASSED_OTHER'
-            : assessmentStatus(row.assignment.attempts, { attemptsAllowed, passPercent }) ===
-                'COMPLETED'
-              ? 'DONE'
+            : !preview &&
+                attemptsExhausted({
+                  attempts: row.assignment.attempts,
+                  attemptsAllowed,
+                  passPercent,
+                })
+              ? 'BLOCKED'
               : 'RETRY';
   // El botón de seguir lleva al paso que sigue en la ruta, no al panel (8/10).
   let next: AttemptForStudent['next'] = null;
-  if (
-    outcome === 'PASSED' ||
-    outcome === 'PASSED_OTHER' ||
-    outcome === 'DONE' ||
-    (preview && outcome === 'RETRY')
-  ) {
+  if (outcome === 'PASSED' || outcome === 'PASSED_OTHER' || (preview && outcome === 'RETRY')) {
     const outline = await getCohortOutline({
       institutionId,
       personId,
@@ -1278,6 +1309,7 @@ export async function getResultsForStudent({
         assignment: {
           select: {
             dueAt: true,
+            accessRequests: grantsOf(personId),
             cohort: { select: { id: true, code: true, program: { select: { name: true } } } },
             assessment: {
               select: {
@@ -1313,7 +1345,10 @@ export async function getResultsForStudent({
     const accommodation = a.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
     const exhausted = attemptsExhausted({
       attempts: siblings.get(a.assessmentAssignmentId) ?? [],
-      attemptsAllowed: a.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
+      attemptsAllowed:
+        a.assessmentVersion.maxAttempts +
+        (accommodation?.allowedAttemptsBonus ?? 0) +
+        a.assignment.accessRequests.length,
       passPercent: a.assessmentVersion.passPercent,
     });
     return {
@@ -1418,7 +1453,6 @@ export async function getResultsForStudent({
           : acc,
       null
     );
-    const accommodation = a.appliedAccommodation as { allowedAttemptsBonus?: number } | null;
     const row = attemptRows.find((x) => x.id === a.id)!;
     assessmentRows.push({
       assignmentId: a.assessmentAssignmentId,
@@ -1429,11 +1463,7 @@ export async function getResultsForStudent({
       cohortCode: row.cohortCode,
       programName: row.programName,
       fromHistory: true,
-      status: assessmentStatus(own, {
-        attemptsAllowed:
-          a.assessmentVersion.maxAttempts + (accommodation?.allowedAttemptsBonus ?? 0),
-        passPercent: a.assessmentVersion.passPercent,
-      }),
+      status: assessmentStatus(own, { passPercent: a.assessmentVersion.passPercent }),
       enabled: false,
       blockedBy: null,
       unavailableReason: null,

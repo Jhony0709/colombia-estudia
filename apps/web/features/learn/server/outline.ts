@@ -299,13 +299,14 @@ const amount = (v: Amount) => (typeof v === 'number' ? v : v.toNumber());
  * El estado de un cuestionario en la ruta, a partir de los intentos (8/10, Jhonny: «si pierdo
  * un intento y tengo más intentos, no debería poder seguir; primero debo agotarlos»).
  *
- * Completado = aprobó en algún intento, o ya no le quedan intentos (todos cerrados). Perder los
- * dos no bloquea la ruta (cliente, 3/10): agotar los intentos también lo completa. Sin umbral
- * (`passPercent` nulo), cualquier intento calificado aprueba (`isPassing`).
+ * Completado = aprobó en algún intento. Desde el 5/11 (Kris) agotar los intentos sin aprobar ya
+ * no lo completa: la ruta queda detenida hasta que operación conceda otra oportunidad
+ * (solicitud `ATTEMPT`). Reemplaza la decisión del 3/10. Sin umbral (`passPercent` nulo),
+ * cualquier intento calificado aprueba (`isPassing`).
  */
 export function assessmentStatus(
   attempts: Array<{ status: string; score: Amount | null; maxScore: Amount | null }>,
-  rules: { attemptsAllowed: number; passPercent: number | null }
+  rules: { passPercent: number | null }
 ): ItemStatus {
   if (attempts.length === 0) return 'NOT_STARTED';
   const passed = attempts.some(
@@ -319,7 +320,5 @@ export function assessmentStatus(
         passPercent: rules.passPercent,
       })
   );
-  if (passed) return 'COMPLETED';
-  const open = attempts.some((a) => a.status === 'IN_PROGRESS' || a.status === 'SUBMITTED');
-  return !open && attempts.length >= rules.attemptsAllowed ? 'COMPLETED' : 'IN_PROGRESS';
+  return passed ? 'COMPLETED' : 'IN_PROGRESS';
 }

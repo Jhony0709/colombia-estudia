@@ -12,14 +12,23 @@ const tx = {
 const db = {
   accessRequest: { findFirst: jest.fn(), create: jest.fn(), findMany: jest.fn(), count: jest.fn() },
   person: { findFirst: jest.fn() },
+  assessmentAssignment: { findFirst: jest.fn() },
   $transaction: (fn: (t: typeof tx) => unknown) => fn(tx),
 };
 const mockNotifyMany = jest.fn();
 const mockNotify = jest.fn();
 const mockGetCohortOutline = jest.fn();
+const mockGetAssessment = jest.fn();
+const mockSendText = jest.fn();
+const mockSendTemplate = jest.fn();
 
 jest.mock('server-only', () => ({}));
-jest.mock('@/lib/db/tenant', () => ({ createTenantClient: jest.fn(() => db) }));
+jest.mock('@/lib/db/tenant', () => ({
+  createTenantClient: jest.fn(() => db),
+  prisma: {
+    institution: { findUnique: jest.fn(async () => ({ whatsappPhoneNumberId: 'pn-1' })) },
+  },
+}));
 jest.mock('@/lib/db/errors', () => ({
   isUniqueViolation: (err: unknown) => (err as { unique?: boolean })?.unique === true,
 }));
@@ -31,13 +40,26 @@ jest.mock('@/features/notifications/server/notifications.service', () => ({
 jest.mock('@/features/learn/server/cohort.service', () => ({
   getCohortOutline: (...args: unknown[]) => mockGetCohortOutline(...args),
 }));
+jest.mock('@/features/learn/server/attempt.service', () => ({
+  getAssessmentForStudent: (...args: unknown[]) => mockGetAssessment(...args),
+}));
+jest.mock('@/lib/whatsapp/cloud-api', () => ({
+  SERVICE_WINDOW_MS: 24 * 60 * 60 * 1000,
+  sendText: (...args: unknown[]) => mockSendText(...args),
+  sendTemplate: (...args: unknown[]) => mockSendTemplate(...args),
+}));
+jest.mock('@/lib/observability/logger', () => ({ logger: { warn: jest.fn() } }));
+jest.mock('@/lib/seo/site-url', () => ({ siteUrl: () => 'https://alba.test' }));
 
 import {
   closeRequests,
   dismissRequest,
+  grantAttempt,
   listMyPendingRequests,
   openEnrollRequest,
+  requestAttempt,
   requestUnlock,
+  whatsappIdOf,
 } from '@/features/requests/server/requests.service';
 
 const NOW = new Date('2026-10-06T15:00:00.000Z');
@@ -267,5 +289,144 @@ describe('listMyPendingRequests', () => {
       enroll: { 'c-9:m-9': { at: NOW.toISOString(), moduleId: 'm-9' } },
       unlock: { 'e-1:m-2': NOW.toISOString() },
     });
+  });
+});
+
+describe('requestAttempt (5/11)', () => {
+  const view = (blocked: boolean) => ({
+    gate: null,
+    blocked,
+    assessment: { enrollmentId: 'e-1', title: 'Cuestionario 1' },
+  });
+
+  beforeEach(() => {
+    db.assessmentAssignment.findFirst.mockResolvedValue({
+      cohortId: 'c-1',
+      cohort: { code: 'BACH-2026-2' },
+      assessment: { moduleId: 'm-1' },
+    });
+  });
+
+  it('solo con el examen detenido: con intentos por delante no hay nada que pedir', async () => {
+    mockGetAssessment.mockResolvedValue(view(false));
+    await expect(
+      requestAttempt({ institutionId: 'inst-1', personId: 'p-1', assignmentId: 'aa-1', now: NOW })
+    ).rejects.toMatchObject({ code: 'CONFLICT' });
+    expect(db.accessRequest.create).not.toHaveBeenCalled();
+  });
+
+  it('abre una ATTEMPT por examen y avisa a operación una vez', async () => {
+    mockGetAssessment.mockResolvedValue(view(true));
+
+    const opened = await requestAttempt({
+      institutionId: 'inst-1',
+      personId: 'p-1',
+      assignmentId: 'aa-1',
+      now: NOW,
+    });
+
+    expect(opened).toEqual({ id: 'r-1', createdAt: NOW.toISOString(), already: false });
+    expect(db.accessRequest.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          kind: 'ATTEMPT',
+          enrollmentId: 'e-1',
+          moduleId: 'm-1',
+          assessmentAssignmentId: 'aa-1',
+        }),
+      })
+    );
+    expect(mockNotifyMany).toHaveBeenCalledWith(
+      'inst-1',
+      ['staff-1'],
+      expect.objectContaining({ type: 'attempt_requested', href: '/solicitudes' })
+    );
+  });
+});
+
+describe('grantAttempt (5/11)', () => {
+  const pending = (overrides: Record<string, unknown> = {}) => ({
+    id: 'r-1',
+    status: 'PENDING',
+    kind: 'ATTEMPT',
+    personId: 'p-1',
+    whatsappId: null,
+    whatsappAt: null,
+    assessmentAssignmentId: 'aa-1',
+    assessmentAssignment: { assessment: { title: 'Cuestionario 1' } },
+    person: { givenName: 'Ana', phone: null },
+    ...overrides,
+  });
+  const grant = () =>
+    grantAttempt({ institutionId: 'inst-1', actorId: 'staff-1', requestId: 'r-1', now: NOW });
+
+  afterEach(() => {
+    delete process.env.WHATSAPP_TEMPLATE_ATTEMPT_GRANTED;
+  });
+
+  it('la deja hecha, audita y avisa en la plataforma', async () => {
+    db.accessRequest.findFirst.mockResolvedValue(pending());
+
+    expect(await grant()).toEqual({ status: 'DONE', whatsapp: 'skipped' });
+    expect(tx.accessRequest.update).toHaveBeenCalledWith({
+      where: { id: 'r-1' },
+      data: { status: 'DONE', resolvedAt: NOW, resolvedById: 'staff-1' },
+    });
+    expect(tx.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ action: 'attempt_granted' }) })
+    );
+    expect(mockNotify).toHaveBeenCalledWith(
+      'inst-1',
+      expect.objectContaining({ type: 'attempt_granted', href: '/aprender/examen/aa-1' })
+    );
+    expect(mockSendText).not.toHaveBeenCalled();
+  });
+
+  it('dentro de las 24 h de su mensaje le escribe libre al mismo WhatsApp', async () => {
+    db.accessRequest.findFirst.mockResolvedValue(
+      pending({ whatsappId: '573001112233', whatsappAt: new Date(NOW.getTime() - 60_000) })
+    );
+    mockSendText.mockResolvedValue({ sent: true, id: 'wamid.1' });
+
+    expect(await grant()).toEqual({ status: 'DONE', whatsapp: 'sent' });
+    expect(mockSendText).toHaveBeenCalledWith(
+      '573001112233',
+      expect.stringContaining('https://alba.test/aprender/examen/aa-1'),
+      'pn-1'
+    );
+  });
+
+  it('pasadas las 24 h solo con plantilla, al teléfono guardado si no escribió', async () => {
+    process.env.WHATSAPP_TEMPLATE_ATTEMPT_GRANTED = 'otra_oportunidad';
+    db.accessRequest.findFirst.mockResolvedValue(
+      pending({ person: { givenName: 'Ana', phone: '300 111 2233' } })
+    );
+    mockSendTemplate.mockResolvedValue({ sent: true, id: 'wamid.2' });
+
+    expect(await grant()).toEqual({ status: 'DONE', whatsapp: 'sent' });
+    expect(mockSendTemplate).toHaveBeenCalledWith(
+      '573001112233',
+      'otra_oportunidad',
+      ['Ana', 'Cuestionario 1'],
+      { phoneNumberId: 'pn-1' }
+    );
+    expect(mockSendText).not.toHaveBeenCalled();
+  });
+
+  it('una que no es de examen, o ya cerrada, no se concede', async () => {
+    db.accessRequest.findFirst.mockResolvedValue(pending({ kind: 'UNLOCK' }));
+    await expect(grant()).rejects.toMatchObject({ code: 'CONFLICT' });
+    db.accessRequest.findFirst.mockResolvedValue(pending({ status: 'DONE' }));
+    await expect(grant()).rejects.toMatchObject({ code: 'CONFLICT' });
+    expect(tx.accessRequest.update).not.toHaveBeenCalled();
+  });
+});
+
+describe('whatsappIdOf', () => {
+  it('un celular colombiano lleva el 57; lo demás, solo si ya trae indicativo', () => {
+    expect(whatsappIdOf('300 111 2233')).toBe('573001112233');
+    expect(whatsappIdOf('+57 300 111 2233')).toBe('573001112233');
+    expect(whatsappIdOf('601 555 1234')).toBeNull();
+    expect(whatsappIdOf(null)).toBeNull();
   });
 });

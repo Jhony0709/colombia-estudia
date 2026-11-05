@@ -38,6 +38,7 @@ import {
   Library,
   Map,
   Menu,
+  MessageCircle,
   ShieldCheck,
   Users,
   Wallet,
@@ -93,6 +94,7 @@ const ICONS: Record<string, LucideIcon> = {
   '/personas': Users,
   '/cohortes': GraduationCap,
   '/solicitudes': Inbox,
+  '/mensajes': MessageCircle,
   '/contenido/temas': BookOpen,
   '/contenido/examenes': ClipboardCheck,
   '/contenido/programas': Layers,
@@ -181,15 +183,29 @@ function NavBody({
               <ul aria-labelledby={`nav-${section.key}`} className="space-y-0.5">
                 {destinations.map((item) => {
                   const Icon = ICONS[item.href];
+                  const count = item.count ?? 0;
                   return (
                     <li key={item.href}>
                       <NavItem
                         href={item.href}
                         active={isActive(currentPath, item.href, item.activeUnder)}
                         onClick={onNavigate}
-                        icon={Icon ? <Icon className="h-[18px] w-[18px]" /> : undefined}
+                        icon={
+                          Icon ? (
+                            <span className="relative inline-flex">
+                              <Icon className="h-[18px] w-[18px]" />
+                              {/* El número sobre el icono (5/11); el nombre accesible lo dice en texto. */}
+                              {count > 0 && (
+                                <span className="bg-accent-base text-text-on-accent rounded-pill absolute -right-2 -top-1.5 flex h-4 min-w-4 items-center justify-center px-1 text-[0.625rem] font-semibold leading-none">
+                                  {count > 99 ? '99+' : count}
+                                </span>
+                              )}
+                            </span>
+                          ) : undefined
+                        }
                       >
                         {item.label}
+                        {count > 0 && <span className="sr-only"> ({count} esperando)</span>}
                       </NavItem>
                     </li>
                   );

@@ -51,6 +51,14 @@ export const NOTIFICATION_TYPES = [
   'request_dismissed',
   // 11/10: un estudiante calificó un componente con 2 o menos.
   'feedback_low',
+  // 5/11: un estudiante perdió un examen con todos los intentos y pide otra oportunidad.
+  'attempt_requested',
+  // 5/11: operación le concedió otra oportunidad en el examen.
+  'attempt_granted',
+  // 5/11: alguien pidió un asesor por WhatsApp y espera en /mensajes.
+  'conversation_waiting',
+  // 5/11: llegó un mensaje a una conversación que atiendes.
+  'conversation_message',
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

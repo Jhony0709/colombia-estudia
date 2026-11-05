@@ -76,7 +76,7 @@ export interface AttemptView {
   score: { value: number; max: number; percent: number; passed: boolean } | null;
   questions: AttemptQuestion[];
   /** Qué sigue (8/10): ver `AttemptForStudent.outcome`. */
-  outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'DONE' | 'PENDING' | null;
+  outcome: 'PASSED' | 'PASSED_OTHER' | 'RETRY' | 'BLOCKED' | 'PENDING' | null;
   attemptsLeft: number;
   /** Vista de estudiante (31/10): se repite sin límite. */
   preview: boolean;
@@ -843,7 +843,7 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
   // Aprobado: amanecer; no aprobado (con o sin intentos): respiración, sin rojo (8/10).
   const moment = passed
     ? 'success'
-    : outcome === 'RETRY' || outcome === 'DONE' || outcome === 'PASSED_OTHER'
+    : outcome === 'RETRY' || outcome === 'BLOCKED' || outcome === 'PASSED_OTHER'
       ? 'breath'
       : null;
   const title =
@@ -855,8 +855,8 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
           : t('result.retryTitle')
         : outcome === 'PASSED_OTHER'
           ? t('result.passedOtherTitle')
-          : outcome === 'DONE'
-            ? t('result.doneTitle')
+          : outcome === 'BLOCKED'
+            ? t('result.blockedTitle')
             : attempt.status === 'EXPIRED'
               ? t('result.expired')
               : t('result.submitted');
@@ -923,9 +923,9 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
       </section>
 
       {/*
-        «Aprender es avanzar» (24/9; 8/10). Aprobado o sin intentos: el cierre del taller y el
-        botón al paso que sigue en la ruta. Con intentos: la invitación a reintentar y nada de
-        seguir: el cuestionario no cuenta como hecho hasta aprobar o agotar los intentos.
+        «Aprender es avanzar» (24/9; 8/10). Aprobado: el cierre del taller y el botón al paso que
+        sigue en la ruta. Con intentos: la invitación a reintentar. Sin intentos ni aprobación
+        (5/11): la ruta se detiene y se pide otra oportunidad desde la pantalla del examen.
       */}
       {outcome !== null && (
         <section
@@ -971,6 +971,20 @@ function AttemptReview({ attempt }: { attempt: AttemptView }) {
                     </Link>
                   </Button>
                 )}
+              </div>
+            </>
+          ) : outcome === 'BLOCKED' ? (
+            <>
+              <p className="type-body text-text-muted max-w-reading m-0">
+                {t('closing.blockedBody')}
+              </p>
+              <div className="pt-1">
+                <Button asChild>
+                  <Link href={`/aprender/examen/${attempt.assignmentId}`}>
+                    {t('closing.anotherChance')}
+                    <ArrowRight aria-hidden className="size-4 shrink-0" />
+                  </Link>
+                </Button>
               </div>
             </>
           ) : (

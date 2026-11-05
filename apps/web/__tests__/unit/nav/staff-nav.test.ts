@@ -25,6 +25,7 @@ describe('buildStaffNav', () => {
       '/contenido/temas',
       '/contenido/examenes',
       '/solicitudes',
+      '/mensajes',
       '/cohortes',
       '/personas',
       '/admin/institucion',
@@ -45,7 +46,7 @@ describe('buildStaffNav', () => {
   it('hides the institution link from OPERATIONS', () => {
     expect(
       buildStaffNav(caps('people.manage', 'cohort.manage', 'billing.manage')).map((i) => i.href)
-    ).toEqual(['/inicio', '/solicitudes', '/cohortes', '/personas', '/cartera']);
+    ).toEqual(['/inicio', '/solicitudes', '/mensajes', '/cohortes', '/personas', '/cartera']);
   });
 
   // INCLUSION_COORDINATOR solo tiene accommodation.manage: ve el reporte de inclusión y nada más (19/9).

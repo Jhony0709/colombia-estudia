@@ -215,7 +215,7 @@ export async function WithRouteRail({
       rail={rail}
       header={header}
       mobileRail={
-        <details className="border-border rounded-card group border p-3">
+        <details className="border-border rounded-card group border px-3 py-0.5">
           {/* Con chevron (4/10): un `summary` en `flex` pierde el triángulo y la caja parecía vacía. */}
           <summary className="type-body-emphasis min-h-touch flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden">
             <ChevronRight
@@ -224,7 +224,7 @@ export async function WithRouteRail({
             />
             {t('rail.toggle')}
           </summary>
-          <div className="mt-3">{rail}</div>
+          <div className="mb-3 mt-1">{rail}</div>
         </details>
       }
       hideLabel={t('rail.hide')}

@@ -27,7 +27,7 @@ import { DataTable } from '@/components/molecules/data-table';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { Badge } from '@/components/atoms/badge';
 import { EnrollSheet } from '../cohortes/[cohortId]/enrollment-actions';
-import { DismissAction, UnlockAction } from './request-actions';
+import { DismissAction, GrantAttemptAction, UnlockAction } from './request-actions';
 
 export const metadata: Metadata = { title: 'Solicitudes' };
 
@@ -69,6 +69,20 @@ export default async function RequestsPage({
           {t('kind.ENROLLContext', { cohort: row.cohort.code, module: row.module.name })}
         </span>
       </>
+    ) : row.kind === 'ATTEMPT' ? (
+      <>
+        <span className="type-body-emphasis text-text block">
+          {t('kind.ATTEMPT', { title: row.assessment?.title ?? row.module.name })}
+        </span>
+        <span className="type-caption text-text-muted block">
+          {t('kind.ATTEMPTContext', { module: row.module.name, cohort: row.cohort.code })}
+        </span>
+        {row.whatsappAt && (
+          <span className="type-caption text-text-muted block">
+            {t('kind.wroteOnWhatsApp')} · {when(row.whatsappAt)}
+          </span>
+        )}
+      </>
     ) : (
       <>
         <span className="type-body-emphasis text-text block">
@@ -102,7 +116,9 @@ export default async function RequestsPage({
   };
 
   const actions = (row: StaffRequestRow) => {
-    const label = `${row.person.name}: ${row.kind === 'ENROLL' ? row.cohort.programName : row.module.name}`;
+    const label = `${row.person.name}: ${
+      row.kind === 'ENROLL' ? row.cohort.programName : (row.assessment?.title ?? row.module.name)
+    }`;
     const first = row.cohort.modules[0];
     // Por dónde entra: la hoja usa la posición sin grados y el grado con grados.
     const graded = row.cohort.modules.some((m) => m.grade !== null);
@@ -140,6 +156,8 @@ export default async function RequestsPage({
           ) : (
             <span className="type-caption text-text-muted">{t('actions.cohortClosed')}</span>
           )
+        ) : row.kind === 'ATTEMPT' ? (
+          <GrantAttemptAction requestId={row.id} title={row.assessment?.title ?? row.module.name} />
         ) : (
           row.enrollmentId && (
             <>

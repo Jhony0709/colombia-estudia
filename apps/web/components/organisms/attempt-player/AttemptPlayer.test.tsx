@@ -285,22 +285,23 @@ describe('el resultado (8/10)', () => {
     expect(screen.queryByRole('link', { name: /closing\.next/ })).not.toBeInTheDocument();
   });
 
-  it('sin intentos: la misma calma y el siguiente paso', () => {
+  it('sin intentos ni aprobación (5/11): no deja seguir, lleva a pedir otra oportunidad', () => {
     render(
       <AttemptPlayer
         attempt={graded({
-          outcome: 'DONE',
+          outcome: 'BLOCKED',
           attemptsLeft: 0,
           score: { value: 0, max: 2, percent: 0, passed: false },
-          next: { href: '/aprender/examen/as-3', title: null },
+          next: null,
         })}
       />
     );
-    expect(screen.getByRole('heading', { name: 'result.doneTitle' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /closing\.next/ })).toHaveAttribute(
+    expect(screen.getByRole('heading', { name: 'result.blockedTitle' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /closing\.anotherChance/ })).toHaveAttribute(
       'href',
-      '/aprender/examen/as-3'
+      '/aprender/examen/as-1'
     );
+    expect(screen.queryByRole('link', { name: /closing\.next/ })).not.toBeInTheDocument();
   });
 
   it('visto desde el historial, si aprobó en otro intento lo dice y deja seguir', () => {

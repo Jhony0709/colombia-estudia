@@ -227,86 +227,77 @@ export async function getCohortOutline({
   // cuentan en su avance. `openCohort` los asigna igual; la matrícula es la que decide.
   const fromModule = enrollment.startsAtModule ?? 1;
 
-  const [modules, unlocks, accommodation, lessonAssignments, assessmentAssignments] =
-    await Promise.all([
-      db.module.findMany({
-        where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
-        orderBy: { position: 'asc' },
-        select: {
-          id: true,
-          name: true,
-          position: true,
-          description: true,
-          coverMedia: { select: { providerRef: true, status: true } },
-        },
-      }),
-      db.enrollmentModule.findMany({
-        where: { enrollmentId: enrollment.id },
-        select: { moduleId: true, availableFrom: true, availableUntil: true },
-      }),
-      // Intentos extra del PIAR: cuentan para saber si ya no le quedan (8/10).
-      db.accommodation.findUnique({
-        where: { enrollmentId: enrollment.id },
-        select: { allowedAttemptsBonus: true },
-      }),
-      db.lessonAssignment.findMany({
-        where: { cohortId: cohort.id },
-        select: {
-          id: true,
-          availableFrom: true,
-          availableUntil: true,
-          lesson: {
-            select: {
-              id: true,
-              title: true,
-              moduleId: true,
-              position: true,
-              requiresSubmission: true,
-              subject: { select: { id: true, name: true } },
-            },
-          },
-          // Los minutos y si embebe vídeo: la forma del ítem en la ruta (misma regla que
-          // `lesson-form.ts`: entrega > vídeo > lectura).
-          lessonVersion: {
-            select: {
-              estimatedMinutes: true,
-              assets: { select: { mediaAsset: { select: { kind: true } } } },
-            },
-          },
-          progress: {
-            where: { enrollmentId: enrollment.id },
-            select: { status: true },
+  const [modules, unlocks, lessonAssignments, assessmentAssignments] = await Promise.all([
+    db.module.findMany({
+      where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
+      orderBy: { position: 'asc' },
+      select: {
+        id: true,
+        name: true,
+        position: true,
+        description: true,
+        coverMedia: { select: { providerRef: true, status: true } },
+      },
+    }),
+    db.enrollmentModule.findMany({
+      where: { enrollmentId: enrollment.id },
+      select: { moduleId: true, availableFrom: true, availableUntil: true },
+    }),
+    db.lessonAssignment.findMany({
+      where: { cohortId: cohort.id },
+      select: {
+        id: true,
+        availableFrom: true,
+        availableUntil: true,
+        lesson: {
+          select: {
+            id: true,
+            title: true,
+            moduleId: true,
+            position: true,
+            requiresSubmission: true,
+            subject: { select: { id: true, name: true } },
           },
         },
-      }),
-      db.assessmentAssignment.findMany({
-        where: { cohortId: cohort.id },
-        select: {
-          id: true,
-          availableFrom: true,
-          dueAt: true,
-          assessment: {
-            select: {
-              id: true,
-              title: true,
-              moduleId: true,
-              lessonId: true,
-              position: true,
-              subject: { select: { id: true, name: true } },
-            },
-          },
-          assessmentVersion: {
-            select: { timeLimitMinutes: true, maxAttempts: true, passPercent: true },
-          },
-          attempts: {
-            where: { enrollmentId: enrollment.id },
-            select: { status: true, score: true, maxScore: true },
+        // Los minutos y si embebe vídeo: la forma del ítem en la ruta (misma regla que
+        // `lesson-form.ts`: entrega > vídeo > lectura).
+        lessonVersion: {
+          select: {
+            estimatedMinutes: true,
+            assets: { select: { mediaAsset: { select: { kind: true } } } },
           },
         },
-      }),
-    ]);
+        progress: {
+          where: { enrollmentId: enrollment.id },
+          select: { status: true },
+        },
+      },
+    }),
+    db.assessmentAssignment.findMany({
+      where: { cohortId: cohort.id },
+      select: {
+        id: true,
+        availableFrom: true,
+        dueAt: true,
+        assessment: {
+          select: {
+            id: true,
+            title: true,
+            moduleId: true,
+            lessonId: true,
+            position: true,
+            subject: { select: { id: true, name: true } },
+          },
+        },
+        assessmentVersion: { select: { timeLimitMinutes: true, passPercent: true } },
+        attempts: {
+          where: { enrollmentId: enrollment.id },
+          select: { status: true, score: true, maxScore: true },
+        },
+      },
+    }),
+  ]);
 
-  const attemptsBonus = accommodation?.allowedAttemptsBonus ?? 0;
   // Sin fechas en la vista de estudiante: se ve todo lo asignado, venza cuando venza.
   const windowOf = (from: Date, until: Date | null) =>
     preview
@@ -364,7 +355,6 @@ export async function getCohortOutline({
                 ? 'IN_PROGRESS'
                 : 'NOT_STARTED'
             : assessmentStatus(assignment.attempts, {
-                attemptsAllowed: assignment.assessmentVersion.maxAttempts + attemptsBonus,
                 passPercent: assignment.assessmentVersion.passPercent,
               }),
           form: 'ASSESSMENT',

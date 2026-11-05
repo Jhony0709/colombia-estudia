@@ -493,9 +493,9 @@ describe('workshopStart', () => {
   });
 });
 
-describe('assessmentStatus (8/10)', () => {
+describe('assessmentStatus (8/10; 5/11)', () => {
   const graded = (score: number) => ({ status: 'GRADED', score, maxScore: 10 });
-  const rules = { attemptsAllowed: 2, passPercent: 60 };
+  const rules = { passPercent: 60 };
 
   it('sin intentos no está empezado', () => {
     expect(assessmentStatus([], rules)).toBe('NOT_STARTED');
@@ -509,25 +509,21 @@ describe('assessmentStatus (8/10)', () => {
     expect(assessmentStatus([graded(7)], rules)).toBe('COMPLETED');
   });
 
-  it('agotar los intentos lo completa aunque no apruebe', () => {
-    expect(assessmentStatus([graded(3), graded(4)], rules)).toBe('COMPLETED');
+  it('agotar los intentos sin aprobar ya no lo completa: la ruta se detiene (5/11)', () => {
+    expect(assessmentStatus([graded(3), graded(4)], rules)).toBe('IN_PROGRESS');
   });
 
-  it('un vencido sin respuestas cuenta como intento usado', () => {
+  it('un vencido sin respuestas tampoco lo completa', () => {
     expect(
       assessmentStatus([graded(3), { status: 'EXPIRED', score: null, maxScore: null }], rules)
-    ).toBe('COMPLETED');
-  });
-
-  it('con un intento abierto todavía no', () => {
-    expect(
-      assessmentStatus([graded(3), { status: 'IN_PROGRESS', score: null, maxScore: null }], rules)
     ).toBe('IN_PROGRESS');
   });
 
+  it('aprobar en la otra oportunidad lo completa', () => {
+    expect(assessmentStatus([graded(3), graded(4), graded(8)], rules)).toBe('COMPLETED');
+  });
+
   it('sin umbral, cualquier calificado aprueba', () => {
-    expect(assessmentStatus([graded(0)], { attemptsAllowed: 2, passPercent: null })).toBe(
-      'COMPLETED'
-    );
+    expect(assessmentStatus([graded(0)], { passPercent: null })).toBe('COMPLETED');
   });
 });

@@ -229,13 +229,17 @@ export async function submitLesson({
   }
   // Con enunciados (24/9), lo escrito va pregunta por pregunta: todas respondidas, y el
   // enunciado se guarda junto a la respuesta para que la revisión vea lo que se preguntó.
+  // Con archivo (5/11) la hoja resuelta vale por las respuestas: lo escrito pasa a opcional.
   let answerRows: SubmissionAnswer[] | null = null;
   if (prompts.length > 0) {
     const given = (answers ?? []).map((a) => a.trim());
-    if (given.length !== prompts.length || given.some((a) => a === '')) {
+    const complete = given.length === prompts.length && given.every((a) => a !== '');
+    if (!complete && !fileAssetId) {
       throw new APIError('Responde todas las preguntas de la actividad', 'VALIDATION_ERROR');
     }
-    answerRows = prompts.map((prompt, i) => ({ prompt, answer: given[i]! }));
+    answerRows = given.some((a) => a !== '')
+      ? prompts.map((prompt, i) => ({ prompt, answer: given[i] ?? '' }))
+      : null;
     text = null;
   } else if (accepts === 'TEXT' && !text) {
     throw new APIError('Esta actividad se entrega con un texto', 'VALIDATION_ERROR');

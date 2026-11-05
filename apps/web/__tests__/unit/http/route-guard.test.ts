@@ -72,7 +72,12 @@ const PUBLIC_ROUTES = new Map([
     'certificates/[code]/route.ts',
     'verificación pública de constancias (endpoints.md:49); límite por IP en lib/http/rate-limit.ts',
   ],
+  [
+    'learn/assessments/[assignmentId]/request/route.ts',
+    'exige sesión; solo el examen propio (personId de la sesión) y detenido sin intentos',
+  ],
   ['webhooks/wompi/route.ts', 'firma de Wompi (checksum del evento), no sesión'],
+  ['webhooks/whatsapp/route.ts', 'firma X-Hub-Signature-256 de Meta, no sesión'],
   ['jobs/daily/route.ts', 'CRON_SECRET en Authorization: Bearer, no sesión'],
 ]);
 

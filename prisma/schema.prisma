@@ -35,32 +35,36 @@ datasource db {
 
 /// La entidad cliente (Valida YA hoy; otra institución mañana). Raíz de tenancy y marca.
 model Institution {
-  id                String    @id @default(cuid())
-  slug              String    @unique
-  name              String
-  legalName         String?
-  taxId             String?
-  timezone          String    @default("America/Bogota")
-  currency          String    @default("COP")
+  id                    String    @id @default(cuid())
+  slug                  String    @unique
+  name                  String
+  legalName             String?
+  taxId                 String?
+  timezone              String    @default("America/Bogota")
+  currency              String    @default("COP")
   /// Marca por institución: los correos y la UI salen con esto, no con variables de entorno.
-  logoAssetId       String?
-  brandColor        String?
-  supportEmail      String
-  supportPhone      String?
-  emailFromName     String
+  logoAssetId           String?
+  brandColor            String?
+  supportEmail          String
+  supportPhone          String?
+  emailFromName         String
   /// Política de tratamiento de datos de la institución (responsable del tratamiento, Ley 1581).
-  dataPolicyUrl     String?
-  dataPolicyVersion String    @default("1")
-  primaryDomain     String?   @unique
+  dataPolicyUrl         String?
+  dataPolicyVersion     String    @default("1")
+  primaryDomain         String?   @unique
   /// { readOnly?: boolean, gatewayFeeBy?: 'INSTITUTION' | 'PAYER' } — validado con Zod; nada de negocio crítico aquí.
-  settings          Json?
+  settings              Json?
   /// Verificación en dos pasos obligatoria para ADMIN/OPERATIONS (29/9). Antes era fija.
-  requireStaffMfa   Boolean   @default(true)
+  requireStaffMfa       Boolean   @default(true)
   /// La cohorte en la que entra quien se registra por `/registro` (25/9, fase de negocio 3;
   /// antes en `settings.introCohortId`). Nula = el registro crea la cuenta sin matrícula.
-  introCohortId     String?   @unique
-  createdAt         DateTime  @default(now())
-  archivedAt        DateTime?
+  introCohortId         String?   @unique
+  /// WhatsApp Cloud API (5/11): el id del número que recibe; el webhook encuentra así la institución.
+  whatsappPhoneNumberId String?   @unique
+  /// Los WhatsApp de quienes atienden la bandeja, con indicativo y solo dígitos (`57310…`).
+  whatsappAgentPhones   String[]  @default([])
+  createdAt             DateTime  @default(now())
+  archivedAt            DateTime?
 
   introCohort Cohort? @relation("IntroCohort", fields: [introCohortId], references: [id])
 
@@ -90,6 +94,8 @@ model Institution {
   enrollmentModules     EnrollmentModule[]
   accessRequests        AccessRequest[]
   moduleFeedback        ModuleFeedback[]
+  conversations         Conversation[]
+  conversationMessages  ConversationMessage[]
   paymentPlans          PaymentPlan[]
   programPrices         ProgramPrice[]
   installments          Installment[]
@@ -151,32 +157,35 @@ model Person {
   institution Institution @relation(fields: [institutionId], references: [id])
 
   memberships          Membership[]
-  guardianOf           Guardianship[]     @relation("GuardianPerson")
-  guardians            Guardianship[]     @relation("StudentPerson")
-  consentsSigned       Consent[]          @relation("ConsentSigner")
-  consentsAbout        Consent[]          @relation("ConsentSubject")
-  partnerContacts      Partner[]          @relation("PartnerContact")
+  guardianOf           Guardianship[]        @relation("GuardianPerson")
+  guardians            Guardianship[]        @relation("StudentPerson")
+  consentsSigned       Consent[]             @relation("ConsentSigner")
+  consentsAbout        Consent[]             @relation("ConsentSubject")
+  partnerContacts      Partner[]             @relation("PartnerContact")
   enrollments          Enrollment[]
   authoredLessons      Lesson[]
   authoredAssessments  Assessment[]
   lessonProgress       LessonProgress[]
-  attempts             Attempt[]          @relation("AttemptStudent")
-  gradedAttempts       Attempt[]          @relation("AttemptGrader")
-  scores               Score[]            @relation("ScoreStudent")
-  scoresRecorded       Score[]            @relation("ScoreRecorder")
+  attempts             Attempt[]             @relation("AttemptStudent")
+  gradedAttempts       Attempt[]             @relation("AttemptGrader")
+  scores               Score[]               @relation("ScoreStudent")
+  scoresRecorded       Score[]               @relation("ScoreRecorder")
   accommodations       Accommodation[]
-  paymentPlansPaid     PaymentPlan[]      @relation("PlanPayerPerson")
-  programPricesCreated ProgramPrice[]     @relation("PriceCreatedBy")
-  modulesUnlocked      EnrollmentModule[] @relation("ModuleUnlockedBy")
-  accessRequests       AccessRequest[]    @relation("AccessRequestPerson")
-  accessRequestsClosed AccessRequest[]    @relation("AccessRequestResolver")
-  agreementsSigned     PaymentAgreement[] @relation("AgreementPayerPerson")
+  paymentPlansPaid     PaymentPlan[]         @relation("PlanPayerPerson")
+  programPricesCreated ProgramPrice[]        @relation("PriceCreatedBy")
+  modulesUnlocked      EnrollmentModule[]    @relation("ModuleUnlockedBy")
+  accessRequests       AccessRequest[]       @relation("AccessRequestPerson")
+  accessRequestsClosed AccessRequest[]       @relation("AccessRequestResolver")
+  agreementsSigned     PaymentAgreement[]    @relation("AgreementPayerPerson")
   learningEvents       LearningEvent[]
   notifications        Notification[]
   uploadedMedia        MediaAsset[]
-  submissionsReviewed  Submission[]       @relation("SubmissionReviewer")
+  submissionsReviewed  Submission[]          @relation("SubmissionReviewer")
   invitations          Invitation[]
-  invitationsCreated   Invitation[]       @relation("InvitationCreator")
+  invitationsCreated   Invitation[]          @relation("InvitationCreator")
+  conversations        Conversation[]        @relation("ConversationPerson")
+  chatsAssigned        Conversation[]        @relation("ConversationAssignee")
+  chatMessages         ConversationMessage[] @relation("ConversationMessageAuthor")
 
   @@unique([institutionId, documentType, documentNumber])
   @@unique([institutionId, email])
@@ -515,6 +524,8 @@ enum AccessRequestKind {
   ENROLL
   /// Quiere que le habiliten el siguiente componente de su matrícula.
   UNLOCK
+  /// Perdió un examen con todos sus intentos y pide otra oportunidad (5/11). DONE = un intento más.
+  ATTEMPT
 }
 
 enum AccessRequestStatus {
@@ -526,33 +537,42 @@ enum AccessRequestStatus {
 }
 
 /// Lo que un estudiante pide desde `/aprender` y resuelve operación (6/10): inscribirse en un
-/// curso de pago o habilitar el siguiente componente. Se cierra sola cuando lo pedido ocurre
-/// (`enrollPerson`, `setModuleAccess`), sea desde la bandeja, la ficha o en lote.
-/// SQL: una sola PENDING por (personId, kind, cohortId, moduleId).
+/// curso de pago, habilitar el siguiente componente u otra oportunidad en un examen (5/11). Se
+/// cierra sola cuando lo pedido ocurre (`enrollPerson`, `setModuleAccess`, `grantAttempt`), sea
+/// desde la bandeja, la ficha o en lote.
+/// SQL: una sola PENDING por (personId, kind, cohortId, moduleId, assessmentAssignmentId).
 model AccessRequest {
-  id            String              @id @default(cuid())
-  institutionId String
-  personId      String
-  kind          AccessRequestKind
-  cohortId      String
+  id                     String              @id @default(cuid())
+  institutionId          String
+  personId               String
+  kind                   AccessRequestKind
+  cohortId               String
   /// ENROLL: el componente por el que quiere entrar; UNLOCK: el que pide habilitar.
-  moduleId      String
-  /// Solo UNLOCK: la matrícula en la que se habilita.
-  enrollmentId  String?
-  status        AccessRequestStatus @default(PENDING)
-  createdAt     DateTime            @default(now())
-  resolvedAt    DateTime?
-  resolvedById  String?
+  moduleId               String
+  /// UNLOCK y ATTEMPT: la matrícula en la que se habilita.
+  enrollmentId           String?
+  /// Solo ATTEMPT: el examen asignado en el que pide otra oportunidad.
+  assessmentAssignmentId String?
+  status                 AccessRequestStatus @default(PENDING)
+  createdAt              DateTime            @default(now())
+  resolvedAt             DateTime?
+  resolvedById           String?
+  /// WhatsApp desde el que escribió con el código de la solicitud (wa_id), para responderle ahí.
+  whatsappId             String?
+  /// Último mensaje suyo por WhatsApp: dentro de 24 h se le puede escribir sin plantilla.
+  whatsappAt             DateTime?
 
-  institution Institution @relation(fields: [institutionId], references: [id])
-  person      Person      @relation("AccessRequestPerson", fields: [personId], references: [id])
-  cohort      Cohort      @relation(fields: [cohortId], references: [id])
-  module      Module      @relation(fields: [moduleId], references: [id])
-  enrollment  Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
-  resolvedBy  Person?     @relation("AccessRequestResolver", fields: [resolvedById], references: [id])
+  institution          Institution           @relation(fields: [institutionId], references: [id])
+  person               Person                @relation("AccessRequestPerson", fields: [personId], references: [id])
+  cohort               Cohort                @relation(fields: [cohortId], references: [id])
+  module               Module                @relation(fields: [moduleId], references: [id])
+  enrollment           Enrollment?           @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
+  resolvedBy           Person?               @relation("AccessRequestResolver", fields: [resolvedById], references: [id])
+  assessmentAssignment AssessmentAssignment? @relation(fields: [assessmentAssignmentId], references: [id], onDelete: Restrict)
 
   @@index([institutionId, status, createdAt])
   @@index([personId, status])
+  @@index([enrollmentId, kind, status])
 }
 
 /// La opinión del estudiante al terminar un componente (11/10): recomendada, no obligatoria, y
@@ -818,7 +838,8 @@ model AssessmentAssignment {
   assessment        Assessment        @relation(fields: [assessmentId], references: [id])
   assessmentVersion AssessmentVersion @relation(fields: [assessmentVersionId], references: [id])
 
-  attempts Attempt[]
+  attempts       Attempt[]
+  accessRequests AccessRequest[]
 
   @@unique([cohortId, assessmentId])
   @@index([institutionId, cohortId])
@@ -1393,4 +1414,77 @@ model Invitation {
 
   @@index([institutionId, personId])
   @@index([tokenHash])
+}
+
+// ───────────────────────────── Mensajería ─────────────────────────────
+
+enum MessagingChannel {
+  WHATSAPP
+}
+
+enum ConversationStatus {
+  /// La atiende el bot (saludo y menú).
+  BOT
+  /// Pidió un asesor y nadie la ha tomado.
+  WAITING
+  /// La atiende `assignedTo` desde `/mensajes`.
+  OPEN
+  /// Se cerró; si vuelve a escribir, la atiende el bot otra vez.
+  CLOSED
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+/// Una conversación con alguien que escribió por un canal (5/11): una por contacto y canal. El bot
+/// la atiende hasta que pide un asesor; entonces espera en `/mensajes` hasta que alguien la toma.
+model Conversation {
+  id            String             @id @default(cuid())
+  institutionId String
+  channel       MessagingChannel
+  /// WhatsApp: el `wa_id` (indicativo y número, solo dígitos).
+  contact       String
+  /// El nombre de su perfil en el canal; no es verificado.
+  contactName   String?
+  /// La persona de la plataforma con ese teléfono, si se encontró.
+  personId      String?
+  status        ConversationStatus @default(BOT)
+  assignedToId  String?
+  assignedAt    DateTime?
+  waitingSince  DateTime?
+  /// Último mensaje suyo: en WhatsApp, dentro de 24 h se responde sin plantilla.
+  lastInboundAt DateTime?
+  lastMessageAt DateTime           @default(now())
+  createdAt     DateTime           @default(now())
+
+  institution Institution           @relation(fields: [institutionId], references: [id])
+  person      Person?               @relation("ConversationPerson", fields: [personId], references: [id], onDelete: SetNull)
+  assignedTo  Person?               @relation("ConversationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  messages    ConversationMessage[]
+
+  @@unique([institutionId, channel, contact])
+  @@index([institutionId, status, lastMessageAt])
+}
+
+/// Un mensaje de una conversación. `externalId` (wamid en WhatsApp) evita guardar dos veces lo
+/// que el webhook reintenta.
+model ConversationMessage {
+  id             String           @id @default(cuid())
+  institutionId  String
+  conversationId String
+  direction      MessageDirection
+  body           String
+  /// Quién lo escribió desde la bandeja. Nulo en lo que llega y en lo que manda el bot.
+  authorId       String?
+  fromBot        Boolean          @default(false)
+  externalId     String?          @unique
+  createdAt      DateTime         @default(now())
+
+  institution  Institution  @relation(fields: [institutionId], references: [id])
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  author       Person?      @relation("ConversationMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([conversationId, createdAt])
 }

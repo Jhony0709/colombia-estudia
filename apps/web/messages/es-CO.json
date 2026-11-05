@@ -151,6 +151,17 @@
     "contact": "Contacta a {email} para más información."
   },
   "admin": {
+    "whatsapp": {
+      "title": "WhatsApp",
+      "hint": "El número de WhatsApp Business de la institución y quienes atienden los chats en Mensajes. Cuando alguien pide un asesor, a estos números les llega el aviso.",
+      "phoneNumberId": "Phone number ID",
+      "phoneNumberIdHint": "Está en WhatsApp Manager › Números de teléfono, debajo del número. Solo cifras.",
+      "agents": "WhatsApp de quienes atienden",
+      "agentsHint": "Uno por línea, con indicativo: +57 310 250 2207. Se avisa a todos; el primero que toma el chat lo atiende.",
+      "save": "Guardar WhatsApp",
+      "saved": "WhatsApp guardado.",
+      "saveError": "No se pudo guardar. Revisa los números e inténtalo de nuevo."
+    },
     "institution": {
       "domain": "Dominio",
       "brandSection": "Marca y contacto",
@@ -871,6 +882,8 @@
     "actions": {
       "viewGrade": "Ver la nota",
       "goToLesson": "Ir al tema",
+      "goToExam": "Ir al examen",
+      "openChat": "Abrir el chat",
       "goToRoute": "Ir a mi ruta",
       "viewSession": "Ver la sesión",
       "viewCertificate": "Ver la constancia",
@@ -1732,15 +1745,16 @@
       "title": "Tu actividad",
       "textLabel": "Texto de la actividad",
       "answersHint": "Todas las preguntas son obligatorias: sin una respuesta en cada campo no se puede enviar. Lo que escribas se guarda en este aparato hasta que envíes.",
+      "answersHintFile": "Responde cada pregunta aquí, o resuélvelas en una hoja y sube abajo una foto o un escaneo. Lo que escribas se guarda en este aparato hasta que envíes.",
       "textHint": {
         "TEXT": "Escribe aquí tu respuesta.",
         "TEXT_OR_FILE": "Escribe aquí tu respuesta, o adjunta un archivo, o las dos cosas."
       },
       "fileLabel": {
-        "FILE": "Archivo",
-        "TEXT_OR_FILE": "Archivo (opcional)"
+        "FILE": "Foto o escaneo de tu hoja",
+        "TEXT_OR_FILE": "Foto o escaneo de tu hoja (opcional)"
       },
-      "fileHint": "PDF, PNG o JPG de hasta 20 MB.",
+      "fileHint": "PDF, PNG o JPG de hasta 20 MB. Una foto con el celular sirve.",
       "send": "Enviar actividad",
       "resend": "Enviar de nuevo",
       "uploading": "Subiendo el archivo…",
@@ -1822,6 +1836,16 @@
         "PAST_DUE": "La fecha límite de este examen ya pasó.",
         "IN_PROGRESS": "Tienes un intento abierto."
       },
+      "anotherChance": {
+        "body": "Usaste todos tus intentos sin aprobar. Para seguir con el componente, un asesor tiene que habilitarte otra oportunidad. Mientras tanto, repasa los temas.",
+        "ask": "Pedir otra oportunidad",
+        "requested": "Listo, pediste otra oportunidad. Escríbenos por WhatsApp para que un asesor la revise.",
+        "requestedOn": "Pediste otra oportunidad el {date}. Te avisamos cuando un asesor la habilite.",
+        "whatsapp": "Escribir por WhatsApp",
+        "newTab": "(se abre en una pestaña nueva)",
+        "error": "No se pudo enviar la solicitud. Inténtalo de nuevo.",
+        "message": "Hola, soy {name}. Perdí el examen «{title}» y quiero pedir otra oportunidad. Código: {code}"
+      },
       "historyTitle": "Tus intentos",
       "attemptNumber": "Intento {number}",
       "submittedOn": "Entregado el {date}",
@@ -1902,7 +1926,7 @@
         "hidden": "Tu institución decidió no mostrar la nota de este cuestionario.",
         "passedTitle": "Aprobaste",
         "retryTitle": "Esta vez no alcanzó, y está bien",
-        "doneTitle": "Completaste tus intentos",
+        "blockedTitle": "Usaste todos tus intentos",
         "passedOtherTitle": "Aprobaste en otro intento"
       },
       "closing": {
@@ -1919,7 +1943,9 @@
         "activeAttempt": "Tienes otro intento en curso: tus respuestas siguen guardadas.",
         "continueAttempt": "Continuar el intento",
         "pendingBody": "Tu intento quedó entregado. Cuando tenga su nota, lo verás aquí y en tu ruta.",
-        "previewRetryBody": "En la vista de estudiante presentarlo basta para seguir: repítelo si quieres ver otras respuestas."
+        "previewRetryBody": "En la vista de estudiante presentarlo basta para seguir: repítelo si quieres ver otras respuestas.",
+        "blockedBody": "No alcanzaste el puntaje para aprobar y ya no te quedan intentos. Para seguir con el componente, pide otra oportunidad: un asesor la habilita.",
+        "anotherChance": "Pedir otra oportunidad"
       }
     },
     "results": {
@@ -2147,8 +2173,8 @@
       "autoApprove": "No pasa por revisión: al enviarla completa, el tema queda completado en el acto.",
       "accepts": {
         "TEXT": "Se entrega escribiendo la respuesta aquí.",
-        "FILE": "Se entrega con un archivo: PDF, PNG o JPG de hasta 20 MB.",
-        "TEXT_OR_FILE": "Se entrega con un texto, un archivo (PDF, PNG o JPG de hasta 20 MB) o los dos."
+        "FILE": "Resuélvela en una hoja y sube una foto o un escaneo: PDF, PNG o JPG de hasta 20 MB.",
+        "TEXT_OR_FILE": "Puedes responder aquí o resolverla en una hoja y subir una foto o un escaneo (PDF, PNG o JPG de hasta 20 MB)."
       },
       "step": "Practica"
     },
@@ -2171,6 +2197,7 @@
     },
     "bar": {
       "needsSubmission": "Te falta enviar la actividad para completar este tema.",
+      "needsSubmissionFile": "Te falta la actividad: escríbela aquí o sube una foto de tu hoja.",
       "inReview": "Tu actividad está en revisión. Cuando la aprueben, el tema queda completado.",
       "returned": "Tu instructor pidió unos cambios en la actividad.",
       "send": "Ir a la actividad",
@@ -3560,7 +3587,7 @@
     "home": "Inicio",
     "overline": "Operación",
     "title": "Solicitudes",
-    "description": "Lo que piden los estudiantes desde su panel: inscribirse en un curso de pago o seguir con el siguiente componente. Se cierran solas cuando matriculas o habilitas, desde aquí o desde la ficha.",
+    "description": "Lo que piden los estudiantes desde su panel: inscribirse en un curso de pago, seguir con el siguiente componente u otra oportunidad en un examen que perdieron. Se cierran solas cuando matriculas, habilitas o das la oportunidad, desde aquí o desde la ficha.",
     "tabs": {
       "label": "Solicitudes",
       "open": "Abiertas",
@@ -3569,7 +3596,7 @@
     "caption": "Solicitudes abiertas, la más antigua primero",
     "captionClosed": "Últimas solicitudes cerradas",
     "empty": "No hay solicitudes abiertas",
-    "emptyHint": "Cuando un estudiante pida un curso de pago o el siguiente componente, aparece aquí y en Inicio.",
+    "emptyHint": "Cuando un estudiante pida un curso de pago, el siguiente componente u otra oportunidad en un examen, aparece aquí y en Inicio.",
     "emptyClosed": "Todavía no se ha cerrado ninguna solicitud",
     "columns": {
       "person": "Persona",
@@ -3583,7 +3610,10 @@
       "ENROLL": "Inscribirse en {program}",
       "ENROLLContext": "{cohort} · entra por {module}",
       "UNLOCK": "Habilitar {module}",
-      "UNLOCKContext": "{program} · {cohort}"
+      "UNLOCKContext": "{program} · {cohort}",
+      "ATTEMPT": "Otra oportunidad en {title}",
+      "ATTEMPTContext": "{module} · {cohort}",
+      "wroteOnWhatsApp": "Escribió por WhatsApp"
     },
     "context": {
       "minorNoGuardian": "Menor sin acudiente registrado",
@@ -3598,6 +3628,8 @@
       "unlock": "Habilitar",
       "unlocked": "{module} quedó habilitado y la solicitud, hecha.",
       "withDates": "Con fechas",
+      "grant": "Dar otra oportunidad",
+      "granted": "Otra oportunidad en {title} concedida. Le avisamos al estudiante.",
       "dismiss": "Descartar",
       "confirmDismiss": "Sí, descartar",
       "dismissed": "Solicitud descartada.",
@@ -3913,5 +3945,63 @@
     "emptyHint": "Comparte el enlace /registro o elige un periodo más largo.",
     "truncated": "Se muestran las {count} más recientes; el embudo cuenta a todas.",
     "back": "Personas"
+  },
+  "messaging": {
+    "home": "Inicio",
+    "overline": "Operación",
+    "title": "Mensajes",
+    "description": "Los chats de WhatsApp. El bot saluda y responde lo básico; cuando alguien pide un asesor, espera aquí hasta que lo tomas. Quien lo toma es quien responde, hasta cerrarlo.",
+    "tabs": {
+      "label": "Mensajes",
+      "waiting": "Esperando",
+      "mine": "Míos",
+      "open": "En curso",
+      "bot": "Con el bot",
+      "closed": "Cerrados"
+    },
+    "caption": "Conversaciones: {view}",
+    "columns": {
+      "contact": "Contacto",
+      "last": "Último mensaje",
+      "status": "Estado",
+      "assignee": "Atiende",
+      "when": "Último movimiento"
+    },
+    "status": {
+      "BOT": "Bot",
+      "WAITING": "Esperando asesor",
+      "OPEN": "En curso",
+      "CLOSED": "Cerrado"
+    },
+    "fromYou": "Equipo:",
+    "fromBot": "Bot:",
+    "empty": "No hay conversaciones aquí",
+    "emptyHint": "Cuando alguien pida un asesor por WhatsApp, aparece en «Esperando» y les llega un aviso a quienes atienden.",
+    "nobody": "Nadie",
+    "student": "En la plataforma: {name}",
+    "thread": {
+      "label": "Conversación con {name}",
+      "bot": "Bot",
+      "team": "Equipo",
+      "empty": "Todavía no hay mensajes.",
+      "noReply": "Pasaron más de 24 horas desde su último mensaje: WhatsApp no deja escribirle sin plantilla. Cuando vuelva a escribir, puedes responder.",
+      "takenBy": "Lo atiende {name}.",
+      "takenByOther": "Lo atiende {name}. Solo responde quien lo tomó.",
+      "back": "Volver a mensajes"
+    },
+    "actions": {
+      "take": "Tomar chat",
+      "taken": "Tomaste el chat.",
+      "reply": "Responder",
+      "replyLabel": "Tu respuesta",
+      "replyHint": "Le llega por WhatsApp desde el número de la institución.",
+      "send": "Enviar",
+      "sent": "Mensaje enviado.",
+      "close": "Cerrar chat",
+      "confirmClose": "Sí, cerrar",
+      "cancel": "Cancelar",
+      "closed": "Chat cerrado.",
+      "error": "No se pudo completar la acción."
+    }
   }
 }

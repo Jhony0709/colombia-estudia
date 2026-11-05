@@ -249,7 +249,6 @@ export async function getCalendarForEnrollment({
       accessUntil: true,
       isPreview: true,
       studentId: true,
-      accommodation: { select: { allowedAttemptsBonus: true } },
       cohort: {
         select: {
           id: true,
@@ -264,7 +263,7 @@ export async function getCalendarForEnrollment({
               id: true,
               dueAt: true,
               assessment: { select: { title: true } },
-              assessmentVersion: { select: { maxAttempts: true, passPercent: true } },
+              assessmentVersion: { select: { passPercent: true } },
             },
           },
           liveSessions: {
@@ -292,7 +291,6 @@ export async function getCalendarForEnrollment({
     },
     select: { assessmentAssignmentId: true, status: true, score: true, maxScore: true },
   });
-  const bonus = e.accommodation?.allowedAttemptsBonus ?? 0;
   const program = e.cohort.program.name;
 
   const JOIN_BEFORE_MS = 15 * 60 * 1000;
@@ -351,10 +349,7 @@ export async function getCalendarForEnrollment({
       done:
         assessmentStatus(
           attempts.filter((x) => x.assessmentAssignmentId === a.id),
-          {
-            attemptsAllowed: a.assessmentVersion.maxAttempts + bonus,
-            passPercent: a.assessmentVersion.passPercent,
-          }
+          { passPercent: a.assessmentVersion.passPercent }
         ) === 'COMPLETED',
     })),
     ...e.cohort.liveSessions.map((s): CalendarItem => ({
