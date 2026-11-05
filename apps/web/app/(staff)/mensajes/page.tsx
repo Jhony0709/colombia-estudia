@@ -138,6 +138,7 @@ export default async function MessagesPage({
             header: t('columns.when'),
             cell: (row) => (
               <time
+                className="type-caption text-text-muted"
                 dateTime={row.lastMessageAt}
                 title={format.dateTime(new Date(row.lastMessageAt), {
                   dateStyle: 'long',

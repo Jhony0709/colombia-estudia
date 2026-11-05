@@ -21,6 +21,7 @@ import { AutoRefresh } from '../auto-refresh';
 import { STATUS_VARIANT } from '../status';
 import { CloseAction, ReplyForm, TakeAction } from '../conversation-actions';
 import { ScrollToLatest } from '../scroll-to-latest';
+import { ThreadItem, ThreadList } from '../thread-motion';
 
 export const metadata: Metadata = { title: 'Chat' };
 
@@ -81,15 +82,21 @@ export default async function ConversationPage({
           {conversation.messages.length === 0 ? (
             <p className="type-body text-text-muted">{t('thread.empty')}</p>
           ) : (
-            <ol className="space-y-3">
+            <ThreadList className="space-y-3">
               {conversation.messages.map((m) => (
-                <li key={m.id} className={cn('flex', m.inbound ? 'justify-start' : 'justify-end')}>
+                <ThreadItem
+                  key={m.id}
+                  inbound={m.inbound}
+                  className={cn('flex', m.inbound ? 'justify-start' : 'justify-end')}
+                >
                   <div
                     className={cn(
                       'rounded-card max-w-[85%] space-y-1 border px-4 py-2',
                       m.inbound
                         ? 'bg-surface-base border-border-muted'
-                        : 'bg-status-info-muted border-transparent'
+                        : m.fromBot
+                          ? 'bg-surface-sunken border-border-muted'
+                          : 'bg-status-info-muted border-transparent'
                     )}
                   >
                     <p className="type-caption text-text-muted m-0">
@@ -113,9 +120,9 @@ export default async function ConversationPage({
                       {m.body}
                     </p>
                   </div>
-                </li>
+                </ThreadItem>
               ))}
-            </ol>
+            </ThreadList>
           )}
         </section>
 

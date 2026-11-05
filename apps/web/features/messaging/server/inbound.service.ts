@@ -38,6 +38,8 @@ async function botSays(
   now: Date
 ) {
   const result = await send();
+  // Después del mensaje que responde: `now` viene en segundos y empataba con él al ordenar.
+  const at = new Date(Math.max(Date.now(), now.getTime() + 1));
   if (!result.sent) {
     logger.warn({
       event: 'whatsapp-bot-send-failed',
@@ -53,12 +55,12 @@ async function botSays(
       body,
       fromBot: true,
       externalId: result.sent ? result.id : null,
-      createdAt: now,
+      createdAt: at,
     },
   });
   await prisma.conversation.update({
     where: { id: conversation.id },
-    data: { lastMessageAt: now },
+    data: { lastMessageAt: at },
   });
 }
 
