@@ -12,6 +12,7 @@ import { MessageCircle } from 'lucide-react';
 import { requireCapability } from '@/lib/authz/with-capability';
 import { getRequestContext } from '@/lib/authz/request-context';
 import {
+  conversationsPulse,
   countWaitingConversations,
   listConversations,
   type ConversationView,
@@ -47,6 +48,8 @@ export default async function MessagesPage({
   const view: ConversationView = (typeof seccion === 'string' && SECTIONS[seccion]) || 'waiting';
   const now = new Date();
 
+  // La huella antes que los datos: lo que cambie entre medias dispara otro refresco.
+  const stamp = await conversationsPulse({ institutionId });
   const [rows, waiting, t, format] = await Promise.all([
     listConversations({ institutionId, personId: ctx.person.id, view }),
     countWaitingConversations(institutionId),
@@ -64,7 +67,7 @@ export default async function MessagesPage({
 
   return (
     <Page wide>
-      <AutoRefresh />
+      <AutoRefresh stamp={stamp} />
       <PageHeader
         back={<Breadcrumb items={[{ label: t('home'), href: '/inicio' }, { label: t('title') }]} />}
         overline={t('overline')}
@@ -120,7 +123,9 @@ export default async function MessagesPage({
             key: 'status',
             header: t('columns.status'),
             cell: (row) => (
-              <Badge variant={STATUS_VARIANT[row.status]}>{t(`status.${row.status}`)}</Badge>
+              <Badge variant={row.unattended ? 'warning' : STATUS_VARIANT[row.status]}>
+                {row.unattended ? t('status.UNATTENDED') : t(`status.${row.status}`)}
+              </Badge>
             ),
           },
           {

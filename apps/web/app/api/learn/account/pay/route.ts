@@ -1,4 +1,7 @@
-/** POST /api/learn/account/pay { installmentId } — crea el checkout de Wompi y devuelve la URL. */
+/**
+ * POST /api/learn/account/pay { installmentId, delivery? } — el link de pago de Bold de una cuota.
+ * Por defecto devuelve la URL para ir a pagar; con `delivery: 'email'` Bold lo envía al correo.
+ */
 
 import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
@@ -11,6 +14,7 @@ const schema = z.object({
   installmentId: z.string().cuid(),
   /** Adónde vuelve el checkout; solo una ruta relativa propia (Fase C: `/familia/…`). */
   returnPath: z.string().optional(),
+  delivery: z.enum(['redirect', 'email']).optional(),
 });
 type Input = z.infer<typeof schema>;
 
@@ -27,6 +31,7 @@ export const POST = apiHandler<Input>({ schema, capability: 'billing.read.own' }
     scopes: ctx.capabilities.get('billing.read.own') ?? [],
     origin: req.nextUrl.origin,
     customerEmail: ctx.person.email ?? null,
+    ...(input.delivery ? { delivery: input.delivery } : {}),
     ...(input.returnPath && isValidNextUrl(input.returnPath)
       ? { returnPath: input.returnPath }
       : {}),

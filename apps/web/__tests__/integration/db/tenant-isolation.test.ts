@@ -76,6 +76,7 @@ const PARENTS: Record<string, readonly string[]> = {
   ModuleFeedback: ['Enrollment', 'Module'],
   Conversation: [],
   ConversationMessage: ['Conversation'],
+  PaymentLink: ['Installment'],
 } as const;
 
 /**
@@ -432,6 +433,8 @@ async function createEntity(model: string, ctx: GraphContext, db: typeof prisma)
         institutionId,
         entities.get('Conversation')?.id as string
       );
+    case 'PaymentLink':
+      return factories.paymentLink.create(db, institutionId, getInstallment());
 
     default:
       throw new Error(`Unknown model: ${model}`);

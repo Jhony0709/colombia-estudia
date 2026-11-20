@@ -15,6 +15,7 @@ import {
   nextPoint,
   progressOf,
   neighbours,
+  neighbourView,
   workshopStart,
   type ModuleAccess,
   type OutlineItem,
@@ -451,6 +452,25 @@ describe('neighbours', () => {
 
   it('una ruta vacía no revienta', () => {
     expect(neighbours([], 'a')).toEqual({ previous: null, next: null });
+  });
+});
+
+describe('neighbourView', () => {
+  it('recorta el vecino a lo que pinta la barra, con el componente cerrado como `locked`', () => {
+    const [b] = [
+      ...lineal([
+        { id: 'm1', items: [item({ assignmentId: 'b', title: 'B', position: 1 })] },
+      ]).values(),
+    ];
+    expect(neighbourView({ ...b!, unavailableReason: 'LOCKED' })).toEqual({
+      assignmentId: 'b',
+      title: 'B',
+      kind: b!.kind,
+      enabled: b!.enabled,
+      blockedBy: b!.blockedBy,
+      locked: true,
+    });
+    expect(neighbourView(null)).toBeNull();
   });
 });
 

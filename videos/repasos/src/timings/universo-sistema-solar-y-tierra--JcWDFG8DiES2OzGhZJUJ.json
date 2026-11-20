@@ -1,0 +1,1092 @@
+{
+  "tema": "universo-sistema-solar-y-tierra",
+  "componente": "Fundamentos",
+  "area": "Ciencias sociales",
+  "titulo": "Teoría del universo, el sistema solar y la Tierra",
+  "siguiente": "Evolución del hombre y civilizaciones antiguas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el universo, el sistema solar y la Tierra.",
+      "voz": "Repaso del tema: el universo, el sistema solar y la Tierra.",
+      "audio": "voz/universo-sistema-solar-y-tierra/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 123,
+      "frames": 151,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 31
+        },
+        {
+          "text": "el universo, el sistema solar y la Tierra.",
+          "from": 39,
+          "to": 118
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "el",
+          "f": 39
+        },
+        {
+          "w": "universo",
+          "f": 45
+        },
+        {
+          "w": "el",
+          "f": 62
+        },
+        {
+          "w": "sistema",
+          "f": 65
+        },
+        {
+          "w": "solar",
+          "f": 77
+        },
+        {
+          "w": "y",
+          "f": 88
+        },
+        {
+          "w": "la",
+          "f": 92
+        },
+        {
+          "w": "tierra",
+          "f": 96
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "El universo",
+      "texto": "El universo es el conjunto del espacio, el tiempo, la materia y la energía. Se originó hace unos 13.800 millones de años con el Big Bang y está en constante expansión. Nuestra galaxia es la Vía Láctea.",
+      "voz": "El universo es el conjunto del espacio, el tiempo, la materia y la energía. Se originó hace unos trece mil ochocientos millones de años con el Big Bang y está en constante expansión. Nuestra galaxia es la Vía Láctea.",
+      "items": [
+        {
+          "titulo": "Big Bang",
+          "texto": "Su origen, hace 13.800 millones de años",
+          "palabra": "big"
+        },
+        {
+          "titulo": "En expansión",
+          "texto": "El universo sigue creciendo",
+          "palabra": "expansión"
+        },
+        {
+          "titulo": "Vía Láctea",
+          "texto": "Nuestra galaxia, una espiral barrada",
+          "palabra": "láctea"
+        }
+      ],
+      "audio": "voz/universo-sistema-solar-y-tierra/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 364,
+      "frames": 392,
+      "chunks": [
+        {
+          "text": "El universo es el conjunto del espacio,",
+          "from": 0,
+          "to": 63
+        },
+        {
+          "text": "el tiempo, la materia y la energía.",
+          "from": 63,
+          "to": 119
+        },
+        {
+          "text": "Se originó hace unos 13.800 millones de años con",
+          "from": 129,
+          "to": 214
+        },
+        {
+          "text": "el Big Bang y está en constante expansión.",
+          "from": 214,
+          "to": 288
+        },
+        {
+          "text": "Nuestra galaxia es la Vía Láctea.",
+          "from": 298,
+          "to": 359
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "universo",
+          "f": 7
+        },
+        {
+          "w": "es",
+          "f": 20
+        },
+        {
+          "w": "el",
+          "f": 23
+        },
+        {
+          "w": "conjunto",
+          "f": 26
+        },
+        {
+          "w": "del",
+          "f": 38
+        },
+        {
+          "w": "espacio",
+          "f": 42
+        },
+        {
+          "w": "el",
+          "f": 59
+        },
+        {
+          "w": "tiempo",
+          "f": 64
+        },
+        {
+          "w": "la",
+          "f": 78
+        },
+        {
+          "w": "materia",
+          "f": 82
+        },
+        {
+          "w": "y",
+          "f": 95
+        },
+        {
+          "w": "la",
+          "f": 98
+        },
+        {
+          "w": "energía",
+          "f": 101
+        },
+        {
+          "w": "se",
+          "f": 129
+        },
+        {
+          "w": "originó",
+          "f": 133
+        },
+        {
+          "w": "hace",
+          "f": 143
+        },
+        {
+          "w": "unos",
+          "f": 149
+        },
+        {
+          "w": "trece",
+          "f": 154
+        },
+        {
+          "w": "mil",
+          "f": 163
+        },
+        {
+          "w": "ochocientos",
+          "f": 169
+        },
+        {
+          "w": "millones",
+          "f": 185
+        },
+        {
+          "w": "de",
+          "f": 196
+        },
+        {
+          "w": "años",
+          "f": 199
+        },
+        {
+          "w": "con",
+          "f": 208
+        },
+        {
+          "w": "el",
+          "f": 212
+        },
+        {
+          "w": "big",
+          "f": 216
+        },
+        {
+          "w": "bang",
+          "f": 222
+        },
+        {
+          "w": "y",
+          "f": 241
+        },
+        {
+          "w": "está",
+          "f": 245
+        },
+        {
+          "w": "en",
+          "f": 251
+        },
+        {
+          "w": "constante",
+          "f": 255
+        },
+        {
+          "w": "expansión",
+          "f": 267
+        },
+        {
+          "w": "nuestra",
+          "f": 298
+        },
+        {
+          "w": "galaxia",
+          "f": 308
+        },
+        {
+          "w": "es",
+          "f": 320
+        },
+        {
+          "w": "la",
+          "f": 323
+        },
+        {
+          "w": "vía",
+          "f": 327
+        },
+        {
+          "w": "láctea",
+          "f": 334
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "El sistema solar",
+      "texto": "El sistema solar se formó hace unos 4.600 millones de años. Lo forman el Sol, ocho planetas, satélites como la Luna y cuerpos menores, como asteroides y cometas.",
+      "voz": "El sistema solar se formó hace unos cuatro mil seiscientos millones de años. Lo forman el Sol, ocho planetas, satélites como la Luna y cuerpos menores, como asteroides y cometas.",
+      "imagenes": [
+        {
+          "src": "fundamentos/sistema-solar.webp",
+          "focos": [
+            {
+              "palabra": "sol",
+              "x": 0.1,
+              "y": 0.45,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "planetas",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            },
+            {
+              "palabra": "luna",
+              "x": 0.35,
+              "y": 0.5,
+              "zoom": 1.9
+            },
+            {
+              "palabra": "asteroides",
+              "x": 0.47,
+              "y": 0.5,
+              "zoom": 1.9
+            },
+            {
+              "palabra": "cometas",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/universo-sistema-solar-y-tierra/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 312,
+      "frames": 340,
+      "chunks": [
+        {
+          "text": "El sistema solar se formó hace",
+          "from": 0,
+          "to": 55
+        },
+        {
+          "text": "unos 4.600 millones de años.",
+          "from": 55,
+          "to": 107
+        },
+        {
+          "text": "Lo forman el Sol, ocho planetas, satélites como la",
+          "from": 115,
+          "to": 211
+        },
+        {
+          "text": "Luna y cuerpos menores, como asteroides y cometas.",
+          "from": 211,
+          "to": 308
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "sistema",
+          "f": 6
+        },
+        {
+          "w": "solar",
+          "f": 17
+        },
+        {
+          "w": "se",
+          "f": 24
+        },
+        {
+          "w": "formó",
+          "f": 29
+        },
+        {
+          "w": "hace",
+          "f": 36
+        },
+        {
+          "w": "unos",
+          "f": 41
+        },
+        {
+          "w": "cuatro",
+          "f": 47
+        },
+        {
+          "w": "mil",
+          "f": 57
+        },
+        {
+          "w": "seiscientos",
+          "f": 64
+        },
+        {
+          "w": "millones",
+          "f": 79
+        },
+        {
+          "w": "de",
+          "f": 91
+        },
+        {
+          "w": "años",
+          "f": 95
+        },
+        {
+          "w": "lo",
+          "f": 115
+        },
+        {
+          "w": "forman",
+          "f": 120
+        },
+        {
+          "w": "el",
+          "f": 131
+        },
+        {
+          "w": "sol",
+          "f": 135
+        },
+        {
+          "w": "ocho",
+          "f": 148
+        },
+        {
+          "w": "planetas",
+          "f": 157
+        },
+        {
+          "w": "satélites",
+          "f": 184
+        },
+        {
+          "w": "como",
+          "f": 204
+        },
+        {
+          "w": "la",
+          "f": 211
+        },
+        {
+          "w": "luna",
+          "f": 215
+        },
+        {
+          "w": "y",
+          "f": 226
+        },
+        {
+          "w": "cuerpos",
+          "f": 230
+        },
+        {
+          "w": "menores",
+          "f": 242
+        },
+        {
+          "w": "como",
+          "f": 255
+        },
+        {
+          "w": "asteroides",
+          "f": 261
+        },
+        {
+          "w": "y",
+          "f": 277
+        },
+        {
+          "w": "cometas",
+          "f": 280
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Los movimientos de la Tierra",
+      "texto": "La Tierra tiene dos movimientos. La rotación es el giro sobre su eje: dura 24 horas y produce el día y la noche. La traslación es el giro alrededor del Sol: dura 365 días y 6 horas, y por eso cada 4 años hay un año bisiesto.",
+      "voz": "La Tierra tiene dos movimientos. La rotación es el giro sobre su eje: dura veinticuatro horas y produce el día y la noche. La traslación es el giro alrededor del Sol: dura trescientos sesenta y cinco días y seis horas, y por eso cada cuatro años hay un año bisiesto.",
+      "columnas": [
+        {
+          "titulo": "Rotación",
+          "palabra": "rotación",
+          "puntos": [
+            {
+              "texto": "Gira sobre su eje",
+              "palabra": "eje"
+            },
+            {
+              "texto": "Dura 24 horas",
+              "palabra": "veinticuatro"
+            },
+            {
+              "texto": "Produce el día y la noche",
+              "palabra": "noche"
+            }
+          ]
+        },
+        {
+          "titulo": "Traslación",
+          "palabra": "traslación",
+          "puntos": [
+            {
+              "texto": "Gira alrededor del Sol",
+              "palabra": "alrededor"
+            },
+            {
+              "texto": "Dura 365 días y 6 horas",
+              "palabra": "trescientos"
+            },
+            {
+              "texto": "Cada 4 años, un año bisiesto",
+              "palabra": "bisiesto"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/universo-sistema-solar-y-tierra/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 466,
+      "frames": 494,
+      "chunks": [
+        {
+          "text": "La Tierra tiene dos movimientos.",
+          "from": 0,
+          "to": 50
+        },
+        {
+          "text": "La rotación es el giro sobre su eje:",
+          "from": 55,
+          "to": 112
+        },
+        {
+          "text": "dura 24 horas y produce el día y la noche.",
+          "from": 122,
+          "to": 198
+        },
+        {
+          "text": "La traslación es el giro alrededor del Sol:",
+          "from": 206,
+          "to": 277
+        },
+        {
+          "text": "dura 365 días y 6 horas, y por",
+          "from": 284,
+          "to": 365
+        },
+        {
+          "text": "eso cada 4 años hay un año bisiesto.",
+          "from": 365,
+          "to": 461
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "tierra",
+          "f": 6
+        },
+        {
+          "w": "tiene",
+          "f": 15
+        },
+        {
+          "w": "dos",
+          "f": 22
+        },
+        {
+          "w": "movimientos",
+          "f": 26
+        },
+        {
+          "w": "la",
+          "f": 55
+        },
+        {
+          "w": "rotación",
+          "f": 60
+        },
+        {
+          "w": "es",
+          "f": 74
+        },
+        {
+          "w": "el",
+          "f": 77
+        },
+        {
+          "w": "giro",
+          "f": 80
+        },
+        {
+          "w": "sobre",
+          "f": 87
+        },
+        {
+          "w": "su",
+          "f": 95
+        },
+        {
+          "w": "eje",
+          "f": 100
+        },
+        {
+          "w": "dura",
+          "f": 122
+        },
+        {
+          "w": "veinticuatro",
+          "f": 130
+        },
+        {
+          "w": "horas",
+          "f": 148
+        },
+        {
+          "w": "y",
+          "f": 157
+        },
+        {
+          "w": "produce",
+          "f": 160
+        },
+        {
+          "w": "el",
+          "f": 170
+        },
+        {
+          "w": "día",
+          "f": 173
+        },
+        {
+          "w": "y",
+          "f": 179
+        },
+        {
+          "w": "la",
+          "f": 181
+        },
+        {
+          "w": "noche",
+          "f": 185
+        },
+        {
+          "w": "la",
+          "f": 206
+        },
+        {
+          "w": "traslación",
+          "f": 211
+        },
+        {
+          "w": "es",
+          "f": 229
+        },
+        {
+          "w": "el",
+          "f": 233
+        },
+        {
+          "w": "giro",
+          "f": 235
+        },
+        {
+          "w": "alrededor",
+          "f": 242
+        },
+        {
+          "w": "del",
+          "f": 258
+        },
+        {
+          "w": "sol",
+          "f": 264
+        },
+        {
+          "w": "dura",
+          "f": 284
+        },
+        {
+          "w": "trescientos",
+          "f": 293
+        },
+        {
+          "w": "sesenta",
+          "f": 308
+        },
+        {
+          "w": "y",
+          "f": 320
+        },
+        {
+          "w": "cinco",
+          "f": 321
+        },
+        {
+          "w": "días",
+          "f": 332
+        },
+        {
+          "w": "y",
+          "f": 341
+        },
+        {
+          "w": "seis",
+          "f": 344
+        },
+        {
+          "w": "horas",
+          "f": 352
+        },
+        {
+          "w": "y",
+          "f": 371
+        },
+        {
+          "w": "por",
+          "f": 377
+        },
+        {
+          "w": "eso",
+          "f": 382
+        },
+        {
+          "w": "cada",
+          "f": 388
+        },
+        {
+          "w": "cuatro",
+          "f": 395
+        },
+        {
+          "w": "años",
+          "f": 404
+        },
+        {
+          "w": "hay",
+          "f": 412
+        },
+        {
+          "w": "un",
+          "f": 417
+        },
+        {
+          "w": "año",
+          "f": 420
+        },
+        {
+          "w": "bisiesto",
+          "f": 427
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "Las capas de la Tierra",
+      "texto": "Por dentro, la Tierra tiene capas. La corteza es sólida y muy fina. El manto es muy caliente y algunas de sus rocas están fundidas. Y el núcleo es de hierro: líquido por fuera y sólido por dentro.",
+      "voz": "Por dentro, la Tierra tiene capas. La corteza es sólida y muy fina. El manto es muy caliente y algunas de sus rocas están fundidas. Y el núcleo es de hierro: líquido por fuera y sólido por dentro.",
+      "imagenes": [
+        {
+          "src": "fundamentos/estructura-interna-de-la-tierra.webp",
+          "focos": [
+            {
+              "palabra": "corteza",
+              "x": 0.55,
+              "y": 0.2,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "manto",
+              "x": 0.5,
+              "y": 0.35,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "núcleo",
+              "x": 0.42,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/universo-sistema-solar-y-tierra/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 335,
+      "frames": 363,
+      "chunks": [
+        {
+          "text": "Por dentro, la Tierra tiene capas.",
+          "from": 0,
+          "to": 53
+        },
+        {
+          "text": "La corteza es sólida y muy fina.",
+          "from": 58,
+          "to": 107
+        },
+        {
+          "text": "El manto es muy caliente y",
+          "from": 117,
+          "to": 155
+        },
+        {
+          "text": "algunas de sus rocas están fundidas.",
+          "from": 155,
+          "to": 208
+        },
+        {
+          "text": "Y el núcleo es de hierro:",
+          "from": 217,
+          "to": 253
+        },
+        {
+          "text": "líquido por fuera y sólido por dentro.",
+          "from": 258,
+          "to": 330
+        }
+      ],
+      "words": [
+        {
+          "w": "por",
+          "f": 0
+        },
+        {
+          "w": "dentro",
+          "f": 8
+        },
+        {
+          "w": "la",
+          "f": 19
+        },
+        {
+          "w": "tierra",
+          "f": 22
+        },
+        {
+          "w": "tiene",
+          "f": 30
+        },
+        {
+          "w": "capas",
+          "f": 38
+        },
+        {
+          "w": "la",
+          "f": 58
+        },
+        {
+          "w": "corteza",
+          "f": 63
+        },
+        {
+          "w": "es",
+          "f": 74
+        },
+        {
+          "w": "sólida",
+          "f": 76
+        },
+        {
+          "w": "y",
+          "f": 88
+        },
+        {
+          "w": "muy",
+          "f": 90
+        },
+        {
+          "w": "fina",
+          "f": 95
+        },
+        {
+          "w": "el",
+          "f": 117
+        },
+        {
+          "w": "manto",
+          "f": 122
+        },
+        {
+          "w": "es",
+          "f": 130
+        },
+        {
+          "w": "muy",
+          "f": 133
+        },
+        {
+          "w": "caliente",
+          "f": 137
+        },
+        {
+          "w": "y",
+          "f": 153
+        },
+        {
+          "w": "algunas",
+          "f": 155
+        },
+        {
+          "w": "de",
+          "f": 165
+        },
+        {
+          "w": "sus",
+          "f": 168
+        },
+        {
+          "w": "rocas",
+          "f": 173
+        },
+        {
+          "w": "están",
+          "f": 183
+        },
+        {
+          "w": "fundidas",
+          "f": 191
+        },
+        {
+          "w": "y",
+          "f": 217
+        },
+        {
+          "w": "el",
+          "f": 221
+        },
+        {
+          "w": "núcleo",
+          "f": 224
+        },
+        {
+          "w": "es",
+          "f": 233
+        },
+        {
+          "w": "de",
+          "f": 236
+        },
+        {
+          "w": "hierro",
+          "f": 240
+        },
+        {
+          "w": "líquido",
+          "f": 258
+        },
+        {
+          "w": "por",
+          "f": 270
+        },
+        {
+          "w": "fuera",
+          "f": 276
+        },
+        {
+          "w": "y",
+          "f": 286
+        },
+        {
+          "w": "sólido",
+          "f": 289
+        },
+        {
+          "w": "por",
+          "f": 300
+        },
+        {
+          "w": "dentro",
+          "f": 306
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el universo, el sistema solar y la Tierra. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el universo, el sistema solar y la Tierra. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/universo-sistema-solar-y-tierra/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 198,
+      "frames": 358,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 24
+        },
+        {
+          "text": "Repasaste el universo, el sistema solar y la Tierra.",
+          "from": 33,
+          "to": 118
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 128,
+          "to": 194
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "el",
+          "f": 49
+        },
+        {
+          "w": "universo",
+          "f": 53
+        },
+        {
+          "w": "el",
+          "f": 70
+        },
+        {
+          "w": "sistema",
+          "f": 75
+        },
+        {
+          "w": "solar",
+          "f": 87
+        },
+        {
+          "w": "y",
+          "f": 96
+        },
+        {
+          "w": "la",
+          "f": 100
+        },
+        {
+          "w": "tierra",
+          "f": 104
+        },
+        {
+          "w": "sigue",
+          "f": 128
+        },
+        {
+          "w": "con",
+          "f": 138
+        },
+        {
+          "w": "el",
+          "f": 143
+        },
+        {
+          "w": "siguiente",
+          "f": 145
+        },
+        {
+          "w": "tema",
+          "f": 158
+        },
+        {
+          "w": "de",
+          "f": 166
+        },
+        {
+          "w": "tu",
+          "f": 169
+        },
+        {
+          "w": "ruta",
+          "f": 173
+        }
+      ]
+    }
+  ]
+}

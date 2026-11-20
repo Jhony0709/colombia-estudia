@@ -1,0 +1,150 @@
+{
+  "tema": "los-numeros-en-ingles",
+  "componente": "Bachillerato",
+  "area": "Inglés",
+  "titulo": "Numbers, dates, time and everyday expressions",
+  "siguiente": "Proyecto de vida",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los números, las fechas y la hora en inglés.",
+      "voz": "Repaso del tema: los números, las fechas y la hora en inglés."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Cardinal numbers",
+      "texto": "Los números cardinales sirven para contar: thirty-five, one hundred twenty-five, two thousand five hundred. Ojo: en inglés los miles se separan con coma, y no con punto como en español.",
+      "voz": "Los números cardinales sirven para contar: thirty-five, one hundred twenty-five, two thousand five hundred. Ojo: en inglés los miles se separan con coma, y no con punto como en español.",
+      "items": [
+        {
+          "titulo": "35",
+          "texto": "Thirty-five",
+          "palabra": "thirty"
+        },
+        {
+          "titulo": "125",
+          "texto": "One hundred twenty-five",
+          "palabra": "hundred"
+        },
+        {
+          "titulo": "2,500",
+          "texto": "Two thousand five hundred",
+          "palabra": "thousand"
+        },
+        {
+          "titulo": "Miles con coma",
+          "texto": "1,250 = mil doscientos cincuenta",
+          "palabra": "coma"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Ordinal numbers",
+      "texto": "Los ordinales indican orden. Los tres primeros son irregulares, first, second y third, y la mayoría termina en th, como fourth o sixth. Se usan en las fechas: the first of January.",
+      "voz": "Los ordinales indican orden. Los tres primeros son irregulares, first, second y third, y la mayoría termina en th, como fourth o sixth. Se usan en las fechas: the first of January.",
+      "items": [
+        {
+          "titulo": "First, second, third",
+          "texto": "Irregulares",
+          "palabra": "first"
+        },
+        {
+          "titulo": "-th",
+          "texto": "Fourth, sixth, seventh",
+          "palabra": "fourth"
+        },
+        {
+          "titulo": "Dates",
+          "texto": "The first of January",
+          "palabra": "january"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "The time",
+      "texto": "Para la hora: it is three o’clock son las tres en punto; a quarter past four, las cuatro y cuarto; half past six, las seis y media; y a quarter to nine, un cuarto para las nueve.",
+      "voz": "Para la hora: it is three o’clock son las tres en punto; a quarter past four, las cuatro y cuarto; half past six, las seis y media; y a quarter to nine, un cuarto para las nueve.",
+      "items": [
+        {
+          "titulo": "o’clock",
+          "texto": "3:00",
+          "palabra": "clock"
+        },
+        {
+          "titulo": "a quarter past",
+          "texto": "4:15",
+          "palabra": "past"
+        },
+        {
+          "titulo": "half past",
+          "texto": "6:30",
+          "palabra": "half"
+        },
+        {
+          "titulo": "a quarter to",
+          "texto": "8:45 · un cuarto para las nueve",
+          "palabra": "to"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Prices and money",
+      "texto": "Para preguntar el precio: how much is it?, o how much are they? Y se responde: it costs thirty thousand pesos.",
+      "voz": "Para preguntar el precio: how much is it?, o how much are they? Y se responde: it costs thirty thousand pesos.",
+      "items": [
+        {
+          "titulo": "How much is it?",
+          "texto": "¿Cuánto cuesta?",
+          "palabra": "much"
+        },
+        {
+          "titulo": "How much are they?",
+          "texto": "¿Cuánto cuestan?",
+          "palabra": "much",
+          "vez": 1
+        },
+        {
+          "titulo": "It costs…",
+          "texto": "Thirty thousand pesos",
+          "palabra": "costs"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Age and phone numbers",
+      "texto": "La edad se dice con el verbo to be: I am 30 years old, y se pregunta con How old are you? Los números de teléfono se leen dígito por dígito, y el cero puede decirse zero u oh.",
+      "voz": "La edad se dice con el verbo to be: I am thirty years old, y se pregunta con how old are you? Los números de teléfono se leen dígito por dígito, y el cero puede decirse zero u oh.",
+      "items": [
+        {
+          "titulo": "I am 30 years old.",
+          "palabra": "years"
+        },
+        {
+          "titulo": "How old are you?",
+          "palabra": "how"
+        },
+        {
+          "titulo": "Phone numbers",
+          "texto": "Dígito por dígito: zero u oh",
+          "palabra": "dígito"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los números, las fechas y la hora en inglés. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los números, las fechas y la hora en inglés. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

@@ -190,8 +190,9 @@ describe('scopeArgs', () => {
     // 37 desde el 25/9: `ProgramPrice` (fase de negocio 1) y `Counter` (códigos legibles).
     // 39 desde el 6/10: `EnrollmentModule` (faltaba desde el 3/10) y `AccessRequest`.
     // 40 desde el 11/10: `ModuleFeedback`.
-    it('should have exactly 42 models', () => {
-      expect(TENANT_SCOPED_MODELS.length).toBe(42);
+    // 43 desde el 19/11: `PaymentLink`.
+    it('should have exactly 43 models', () => {
+      expect(TENANT_SCOPED_MODELS.length).toBe(43);
     });
 
     it('should not include Institution', () => {

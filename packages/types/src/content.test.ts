@@ -60,6 +60,43 @@ describe('parseLessonMarkdown', () => {
       expect(result.issues).toHaveLength(0);
     });
 
+    it(':::escena with a list of 2 to 8 items → no issue (14/11)', () => {
+      const result = parseLessonMarkdown(':::escena{tipo="linea"}\n1. Uno\n2. Dos\n:::\n');
+      expect(result.issues).toEqual([]);
+    });
+
+    it(':::escena comparar and mapa need sublists (19/11)', () => {
+      const columns = '- **A**\n  - uno\n- **B**\n  - dos\n';
+      expect(parseLessonMarkdown(`:::escena{tipo="comparar"}\n${columns}:::\n`).issues).toEqual([]);
+      expect(
+        parseLessonMarkdown(':::escena{tipo="mapa"}\n- A\n  - uno\n- B\n:::\n').issues
+      ).toEqual([]);
+      expect(parseLessonMarkdown(':::escena{tipo="conceptos"}\n- A\n- B\n:::\n').issues).toEqual(
+        []
+      );
+      for (const body of [
+        ':::escena{tipo="comparar"}\n- **A**\n  - uno\n- **B**\n:::\n',
+        `:::escena{tipo="comparar"}\n${columns}${columns}:::\n`,
+        ':::escena{tipo="mapa"}\n- A\n- B\n:::\n',
+      ]) {
+        expect(parseLessonMarkdown(body).issues).toEqual([
+          expect.objectContaining({ rule: 'escena-needs-sublists' }),
+        ]);
+      }
+    });
+
+    it(':::escena with an unknown tipo, no list or a lone item → error', () => {
+      expect(parseLessonMarkdown(':::escena{tipo="rueda"}\n- a\n- b\n:::\n').issues).toEqual([
+        expect.objectContaining({ rule: 'escena-invalid-tipo' }),
+      ]);
+      expect(parseLessonMarkdown(':::escena\nSolo texto\n:::\n').issues).toEqual([
+        expect.objectContaining({ rule: 'escena-needs-list' }),
+      ]);
+      expect(parseLessonMarkdown(':::escena\n- solo uno\n:::\n').issues).toEqual([
+        expect.objectContaining({ rule: 'escena-needs-list' }),
+      ]);
+    });
+
     it(':::callout with an unknown kind → error', () => {
       const result = parseLessonMarkdown(':::callout{kind="rosa"}\nTexto\n:::\n');
       expect(result.issues).toEqual([expect.objectContaining({ rule: 'callout-invalid-kind' })]);

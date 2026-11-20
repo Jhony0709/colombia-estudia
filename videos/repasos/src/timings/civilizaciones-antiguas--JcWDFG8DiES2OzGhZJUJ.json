@@ -1,0 +1,1027 @@
+{
+  "tema": "civilizaciones-antiguas",
+  "componente": "Dominio",
+  "area": "Ciencias sociales",
+  "titulo": "Las civilizaciones antiguas y sus aportes a la humanidad",
+  "siguiente": "Las funciones lineales y su aplicación en situaciones cotidianas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las civilizaciones antiguas y sus aportes a la humanidad.",
+      "voz": "Repaso del tema: las civilizaciones antiguas y sus aportes a la humanidad.",
+      "audio": "voz/civilizaciones-antiguas/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 137,
+      "frames": 165,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 31
+        },
+        {
+          "text": "las civilizaciones antiguas y sus",
+          "from": 33,
+          "to": 92
+        },
+        {
+          "text": "aportes a la humanidad.",
+          "from": 92,
+          "to": 132
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "las",
+          "f": 33
+        },
+        {
+          "w": "civilizaciones",
+          "f": 39
+        },
+        {
+          "w": "antiguas",
+          "f": 60
+        },
+        {
+          "w": "y",
+          "f": 76
+        },
+        {
+          "w": "sus",
+          "f": 78
+        },
+        {
+          "w": "aportes",
+          "f": 85
+        },
+        {
+          "w": "a",
+          "f": 98
+        },
+        {
+          "w": "la",
+          "f": 100
+        },
+        {
+          "w": "humanidad",
+          "f": 102
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es una civilización?",
+      "texto": "Una civilización es una sociedad que construye ciudades, establece normas, crea formas de escritura y desarrolla conocimientos. Las primeras surgieron cerca de los ríos, porque el agua permitía cultivar, alimentarse y transportarse.",
+      "voz": "Una civilización es una sociedad que construye ciudades, establece normas, crea formas de escritura y desarrolla conocimientos. Las primeras surgieron cerca de los ríos, porque el agua permitía cultivar, alimentarse y transportarse.",
+      "items": [
+        {
+          "titulo": "Ciudades",
+          "palabra": "ciudades"
+        },
+        {
+          "titulo": "Normas",
+          "palabra": "normas"
+        },
+        {
+          "titulo": "Escritura",
+          "palabra": "escritura"
+        },
+        {
+          "titulo": "Cerca de los ríos",
+          "texto": "Agua para cultivar y transportarse",
+          "palabra": "ríos"
+        }
+      ],
+      "audio": "voz/civilizaciones-antiguas/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 395,
+      "frames": 423,
+      "chunks": [
+        {
+          "text": "Una civilización es una sociedad que",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "construye ciudades, establece normas, crea formas",
+          "from": 59,
+          "to": 139
+        },
+        {
+          "text": "de escritura y desarrolla conocimientos.",
+          "from": 139,
+          "to": 205
+        },
+        {
+          "text": "Las primeras surgieron cerca de los ríos, porque",
+          "from": 215,
+          "to": 297
+        },
+        {
+          "text": "el agua permitía cultivar, alimentarse y transportarse.",
+          "from": 297,
+          "to": 390
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "civilización",
+          "f": 9
+        },
+        {
+          "w": "es",
+          "f": 30
+        },
+        {
+          "w": "una",
+          "f": 33
+        },
+        {
+          "w": "sociedad",
+          "f": 38
+        },
+        {
+          "w": "que",
+          "f": 49
+        },
+        {
+          "w": "construye",
+          "f": 54
+        },
+        {
+          "w": "ciudades",
+          "f": 69
+        },
+        {
+          "w": "establece",
+          "f": 87
+        },
+        {
+          "w": "normas",
+          "f": 103
+        },
+        {
+          "w": "crea",
+          "f": 118
+        },
+        {
+          "w": "formas",
+          "f": 126
+        },
+        {
+          "w": "de",
+          "f": 137
+        },
+        {
+          "w": "escritura",
+          "f": 139
+        },
+        {
+          "w": "y",
+          "f": 158
+        },
+        {
+          "w": "desarrolla",
+          "f": 162
+        },
+        {
+          "w": "conocimientos",
+          "f": 176
+        },
+        {
+          "w": "las",
+          "f": 215
+        },
+        {
+          "w": "primeras",
+          "f": 222
+        },
+        {
+          "w": "surgieron",
+          "f": 233
+        },
+        {
+          "w": "cerca",
+          "f": 246
+        },
+        {
+          "w": "de",
+          "f": 256
+        },
+        {
+          "w": "los",
+          "f": 258
+        },
+        {
+          "w": "ríos",
+          "f": 264
+        },
+        {
+          "w": "porque",
+          "f": 274
+        },
+        {
+          "w": "el",
+          "f": 282
+        },
+        {
+          "w": "agua",
+          "f": 286
+        },
+        {
+          "w": "permitía",
+          "f": 292
+        },
+        {
+          "w": "cultivar",
+          "f": 308
+        },
+        {
+          "w": "alimentarse",
+          "f": 327
+        },
+        {
+          "w": "y",
+          "f": 350
+        },
+        {
+          "w": "transportarse",
+          "f": 352
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Mesopotamia y Egipto",
+      "texto": "Mesopotamia, la tierra entre los ríos Tigris y Éufrates, construyó canales de riego y creó la escritura cuneiforme. Egipto creció junto al río Nilo: lo gobernaba el faraón, escribía con jeroglíficos y construyó las pirámides.",
+      "voz": "Mesopotamia, la tierra entre los ríos Tigris y Éufrates, construyó canales de riego y creó la escritura cuneiforme. Egipto creció junto al río Nilo: lo gobernaba el faraón, escribía con jeroglíficos y construyó las pirámides.",
+      "columnas": [
+        {
+          "titulo": "Mesopotamia",
+          "palabra": "mesopotamia",
+          "puntos": [
+            {
+              "texto": "Entre el Tigris y el Éufrates",
+              "palabra": "tigris"
+            },
+            {
+              "texto": "Escritura cuneiforme",
+              "palabra": "cuneiforme"
+            }
+          ]
+        },
+        {
+          "titulo": "Egipto",
+          "palabra": "egipto",
+          "puntos": [
+            {
+              "texto": "Junto al Nilo, con el faraón",
+              "palabra": "faraón"
+            },
+            {
+              "texto": "Jeroglíficos y pirámides",
+              "palabra": "jeroglíficos"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/civilizaciones-antiguas/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 404,
+      "frames": 432,
+      "chunks": [
+        {
+          "text": "Mesopotamia, la tierra entre los ríos",
+          "from": 0,
+          "to": 61
+        },
+        {
+          "text": "Tigris y Éufrates, construyó canales de",
+          "from": 61,
+          "to": 126
+        },
+        {
+          "text": "riego y creó la escritura cuneiforme.",
+          "from": 126,
+          "to": 187
+        },
+        {
+          "text": "Egipto creció junto al río Nilo:",
+          "from": 200,
+          "to": 256
+        },
+        {
+          "text": "lo gobernaba el faraón, escribía con",
+          "from": 261,
+          "to": 328
+        },
+        {
+          "text": "jeroglíficos y construyó las pirámides.",
+          "from": 328,
+          "to": 400
+        }
+      ],
+      "words": [
+        {
+          "w": "mesopotamia",
+          "f": 0
+        },
+        {
+          "w": "la",
+          "f": 25
+        },
+        {
+          "w": "tierra",
+          "f": 30
+        },
+        {
+          "w": "entre",
+          "f": 37
+        },
+        {
+          "w": "los",
+          "f": 45
+        },
+        {
+          "w": "ríos",
+          "f": 50
+        },
+        {
+          "w": "tigris",
+          "f": 60
+        },
+        {
+          "w": "y",
+          "f": 72
+        },
+        {
+          "w": "éufrates",
+          "f": 74
+        },
+        {
+          "w": "construyó",
+          "f": 101
+        },
+        {
+          "w": "canales",
+          "f": 116
+        },
+        {
+          "w": "de",
+          "f": 127
+        },
+        {
+          "w": "riego",
+          "f": 130
+        },
+        {
+          "w": "y",
+          "f": 139
+        },
+        {
+          "w": "creó",
+          "f": 141
+        },
+        {
+          "w": "la",
+          "f": 148
+        },
+        {
+          "w": "escritura",
+          "f": 150
+        },
+        {
+          "w": "cuneiforme",
+          "f": 166
+        },
+        {
+          "w": "egipto",
+          "f": 200
+        },
+        {
+          "w": "creció",
+          "f": 216
+        },
+        {
+          "w": "junto",
+          "f": 224
+        },
+        {
+          "w": "al",
+          "f": 232
+        },
+        {
+          "w": "río",
+          "f": 235
+        },
+        {
+          "w": "nilo",
+          "f": 242
+        },
+        {
+          "w": "lo",
+          "f": 261
+        },
+        {
+          "w": "gobernaba",
+          "f": 265
+        },
+        {
+          "w": "el",
+          "f": 280
+        },
+        {
+          "w": "faraón",
+          "f": 283
+        },
+        {
+          "w": "escribía",
+          "f": 300
+        },
+        {
+          "w": "con",
+          "f": 317
+        },
+        {
+          "w": "jeroglíficos",
+          "f": 322
+        },
+        {
+          "w": "y",
+          "f": 347
+        },
+        {
+          "w": "construyó",
+          "f": 350
+        },
+        {
+          "w": "las",
+          "f": 365
+        },
+        {
+          "w": "pirámides",
+          "f": 371
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Grecia y Roma",
+      "texto": "Grecia se organizó en ciudades-Estado, o polis; en Atenas se desarrollaron la filosofía y una democracia en la que solo participaban algunos hombres. Roma creó leyes que influyeron en el derecho, construyó caminos y acueductos, y su lengua, el latín, dio origen al español.",
+      "voz": "Grecia se organizó en ciudades-Estado, o polis; en Atenas se desarrollaron la filosofía y una democracia en la que solo participaban algunos hombres. Roma creó leyes que influyeron en el derecho, construyó caminos y acueductos, y su lengua, el latín, dio origen al español.",
+      "columnas": [
+        {
+          "titulo": "Grecia",
+          "palabra": "grecia",
+          "puntos": [
+            {
+              "texto": "Ciudades-Estado o polis",
+              "palabra": "polis"
+            },
+            {
+              "texto": "Filosofía y democracia en Atenas",
+              "palabra": "filosofía"
+            }
+          ]
+        },
+        {
+          "titulo": "Roma",
+          "palabra": "roma",
+          "puntos": [
+            {
+              "texto": "Leyes, caminos y acueductos",
+              "palabra": "leyes"
+            },
+            {
+              "texto": "El latín, origen del español",
+              "palabra": "latín"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/civilizaciones-antiguas/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 514,
+      "frames": 542,
+      "chunks": [
+        {
+          "text": "Grecia se organizó en ciudades-Estado, o polis;",
+          "from": 0,
+          "to": 75
+        },
+        {
+          "text": "en Atenas se desarrollaron la filosofía y una",
+          "from": 86,
+          "to": 161
+        },
+        {
+          "text": "democracia en la que solo participaban algunos hombres.",
+          "from": 161,
+          "to": 252
+        },
+        {
+          "text": "Roma creó leyes que influyeron en el",
+          "from": 264,
+          "to": 337
+        },
+        {
+          "text": "derecho, construyó caminos y acueductos, y su",
+          "from": 337,
+          "to": 429
+        },
+        {
+          "text": "lengua, el latín, dio origen al español.",
+          "from": 429,
+          "to": 510
+        }
+      ],
+      "words": [
+        {
+          "w": "grecia",
+          "f": 0
+        },
+        {
+          "w": "se",
+          "f": 10
+        },
+        {
+          "w": "organizó",
+          "f": 13
+        },
+        {
+          "w": "en",
+          "f": 25
+        },
+        {
+          "w": "ciudades",
+          "f": 27
+        },
+        {
+          "w": "estado",
+          "f": 39
+        },
+        {
+          "w": "o",
+          "f": 54
+        },
+        {
+          "w": "polis",
+          "f": 59
+        },
+        {
+          "w": "en",
+          "f": 86
+        },
+        {
+          "w": "atenas",
+          "f": 92
+        },
+        {
+          "w": "se",
+          "f": 104
+        },
+        {
+          "w": "desarrollaron",
+          "f": 107
+        },
+        {
+          "w": "la",
+          "f": 127
+        },
+        {
+          "w": "filosofía",
+          "f": 131
+        },
+        {
+          "w": "y",
+          "f": 155
+        },
+        {
+          "w": "una",
+          "f": 158
+        },
+        {
+          "w": "democracia",
+          "f": 164
+        },
+        {
+          "w": "en",
+          "f": 183
+        },
+        {
+          "w": "la",
+          "f": 186
+        },
+        {
+          "w": "que",
+          "f": 189
+        },
+        {
+          "w": "solo",
+          "f": 193
+        },
+        {
+          "w": "participaban",
+          "f": 200
+        },
+        {
+          "w": "algunos",
+          "f": 224
+        },
+        {
+          "w": "hombres",
+          "f": 236
+        },
+        {
+          "w": "roma",
+          "f": 264
+        },
+        {
+          "w": "creó",
+          "f": 272
+        },
+        {
+          "w": "leyes",
+          "f": 281
+        },
+        {
+          "w": "que",
+          "f": 291
+        },
+        {
+          "w": "influyeron",
+          "f": 294
+        },
+        {
+          "w": "en",
+          "f": 311
+        },
+        {
+          "w": "el",
+          "f": 315
+        },
+        {
+          "w": "derecho",
+          "f": 319
+        },
+        {
+          "w": "construyó",
+          "f": 343
+        },
+        {
+          "w": "caminos",
+          "f": 361
+        },
+        {
+          "w": "y",
+          "f": 378
+        },
+        {
+          "w": "acueductos",
+          "f": 381
+        },
+        {
+          "w": "y",
+          "f": 405
+        },
+        {
+          "w": "su",
+          "f": 409
+        },
+        {
+          "w": "lengua",
+          "f": 415
+        },
+        {
+          "w": "el",
+          "f": 431
+        },
+        {
+          "w": "latín",
+          "f": 436
+        },
+        {
+          "w": "dio",
+          "f": 462
+        },
+        {
+          "w": "origen",
+          "f": 467
+        },
+        {
+          "w": "al",
+          "f": 479
+        },
+        {
+          "w": "español",
+          "f": 483
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Su huella en el mundo actual",
+      "texto": "Muchos de sus aportes siguen vivos. El español viene del latín; parte del derecho actual tiene raíces romanas; la democracia tiene antecedentes en Grecia; y la escritura permitió guardar y transmitir el conocimiento.",
+      "voz": "Muchos de sus aportes siguen vivos. El español viene del latín; parte del derecho actual tiene raíces romanas; la democracia tiene antecedentes en Grecia; y la escritura permitió guardar y transmitir el conocimiento.",
+      "items": [
+        {
+          "titulo": "Idioma",
+          "texto": "El español viene del latín",
+          "palabra": "español"
+        },
+        {
+          "titulo": "Derecho",
+          "texto": "Raíces romanas",
+          "palabra": "derecho"
+        },
+        {
+          "titulo": "Política",
+          "texto": "Antecedentes en Grecia",
+          "palabra": "democracia"
+        },
+        {
+          "titulo": "Escritura",
+          "texto": "Guardar el conocimiento",
+          "palabra": "escritura"
+        }
+      ],
+      "audio": "voz/civilizaciones-antiguas/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 406,
+      "frames": 434,
+      "chunks": [
+        {
+          "text": "Muchos de sus aportes siguen vivos.",
+          "from": 0,
+          "to": 67
+        },
+        {
+          "text": "El español viene del latín;",
+          "from": 77,
+          "to": 128
+        },
+        {
+          "text": "parte del derecho actual tiene raíces romanas;",
+          "from": 138,
+          "to": 217
+        },
+        {
+          "text": "la democracia tiene antecedentes en Grecia;",
+          "from": 226,
+          "to": 297
+        },
+        {
+          "text": "y la escritura permitió guardar",
+          "from": 303,
+          "to": 354
+        },
+        {
+          "text": "y transmitir el conocimiento.",
+          "from": 354,
+          "to": 401
+        }
+      ],
+      "words": [
+        {
+          "w": "muchos",
+          "f": 0
+        },
+        {
+          "w": "de",
+          "f": 12
+        },
+        {
+          "w": "sus",
+          "f": 15
+        },
+        {
+          "w": "aportes",
+          "f": 21
+        },
+        {
+          "w": "siguen",
+          "f": 40
+        },
+        {
+          "w": "vivos",
+          "f": 53
+        },
+        {
+          "w": "el",
+          "f": 77
+        },
+        {
+          "w": "español",
+          "f": 83
+        },
+        {
+          "w": "viene",
+          "f": 97
+        },
+        {
+          "w": "del",
+          "f": 106
+        },
+        {
+          "w": "latín",
+          "f": 111
+        },
+        {
+          "w": "parte",
+          "f": 138
+        },
+        {
+          "w": "del",
+          "f": 149
+        },
+        {
+          "w": "derecho",
+          "f": 153
+        },
+        {
+          "w": "actual",
+          "f": 164
+        },
+        {
+          "w": "tiene",
+          "f": 177
+        },
+        {
+          "w": "raíces",
+          "f": 185
+        },
+        {
+          "w": "romanas",
+          "f": 196
+        },
+        {
+          "w": "la",
+          "f": 226
+        },
+        {
+          "w": "democracia",
+          "f": 230
+        },
+        {
+          "w": "tiene",
+          "f": 248
+        },
+        {
+          "w": "antecedentes",
+          "f": 256
+        },
+        {
+          "w": "en",
+          "f": 278
+        },
+        {
+          "w": "grecia",
+          "f": 281
+        },
+        {
+          "w": "y",
+          "f": 303
+        },
+        {
+          "w": "la",
+          "f": 308
+        },
+        {
+          "w": "escritura",
+          "f": 310
+        },
+        {
+          "w": "permitió",
+          "f": 327
+        },
+        {
+          "w": "guardar",
+          "f": 340
+        },
+        {
+          "w": "y",
+          "f": 353
+        },
+        {
+          "w": "transmitir",
+          "f": 357
+        },
+        {
+          "w": "el",
+          "f": 373
+        },
+        {
+          "w": "conocimiento",
+          "f": 376
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/civilizaciones-antiguas/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 163,
+      "frames": 323,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste las civilizaciones antiguas.",
+          "from": 24,
+          "to": 87
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 92,
+          "to": 159
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 24
+        },
+        {
+          "w": "las",
+          "f": 41
+        },
+        {
+          "w": "civilizaciones",
+          "f": 45
+        },
+        {
+          "w": "antiguas",
+          "f": 69
+        },
+        {
+          "w": "sigue",
+          "f": 92
+        },
+        {
+          "w": "con",
+          "f": 103
+        },
+        {
+          "w": "el",
+          "f": 108
+        },
+        {
+          "w": "siguiente",
+          "f": 110
+        },
+        {
+          "w": "tema",
+          "f": 124
+        },
+        {
+          "w": "de",
+          "f": 132
+        },
+        {
+          "w": "tu",
+          "f": 135
+        },
+        {
+          "w": "ruta",
+          "f": 140
+        }
+      ]
+    }
+  ]
+}

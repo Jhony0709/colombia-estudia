@@ -1,0 +1,140 @@
+{
+  "tema": "potenciacion-y-radicacion",
+  "componente": "Desarrollo",
+  "area": "Matemáticas",
+  "titulo": "La potenciación y la radicación de números naturales y enteros",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la potenciación y la radicación.",
+      "voz": "Repaso del tema: la potenciación y la radicación."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La potenciación",
+      "texto": "La potenciación abrevia una multiplicación repetida: 2³ = 2 × 2 × 2 = 8. La base es el número que se multiplica, el exponente dice cuántas veces aparece y la potencia es el resultado.",
+      "voz": "La potenciación abrevia una multiplicación repetida: dos al cubo es dos por dos por dos, que da ocho. La base es el número que se multiplica, el exponente dice cuántas veces aparece y la potencia es el resultado.",
+      "items": [
+        {
+          "titulo": "Base",
+          "texto": "El número que se multiplica: 2",
+          "palabra": "base"
+        },
+        {
+          "titulo": "Exponente",
+          "texto": "Cuántas veces aparece: 3",
+          "palabra": "exponente"
+        },
+        {
+          "titulo": "Potencia",
+          "texto": "El resultado: 8",
+          "palabra": "potencia"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Casos especiales y signos",
+      "texto": "Todo número distinto de cero elevado a cero es 1. Con base negativa, si el exponente es par el resultado es positivo, y si es impar, es negativo.",
+      "voz": "Todo número distinto de cero elevado a cero es uno. Con base negativa, si el exponente es par el resultado es positivo, y si es impar, es negativo.",
+      "items": [
+        {
+          "titulo": "Exponente cero",
+          "texto": "7⁰ = 1",
+          "palabra": "cero"
+        },
+        {
+          "titulo": "Base negativa, exponente par",
+          "texto": "(−2)² = 4",
+          "palabra": "par"
+        },
+        {
+          "titulo": "Base negativa, exponente impar",
+          "texto": "(−2)³ = −8",
+          "palabra": "impar"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Propiedades de la potenciación",
+      "texto": "Con potencias de igual base, en el producto se suman los exponentes y en el cociente se restan. En la potencia de una potencia, se multiplican.",
+      "voz": "Con potencias de igual base, en el producto se suman los exponentes y en el cociente se restan. En la potencia de una potencia, se multiplican.",
+      "items": [
+        {
+          "titulo": "Producto",
+          "texto": "2³ × 2² = 2⁵: se suman",
+          "palabra": "producto"
+        },
+        {
+          "titulo": "Cociente",
+          "texto": "3⁴ ÷ 3² = 3²: se restan",
+          "palabra": "cociente"
+        },
+        {
+          "titulo": "Potencia de una potencia",
+          "texto": "(2³)² = 2⁶: se multiplican",
+          "palabra": "potencia"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La radicación",
+      "texto": "La radicación busca el número que, elevado a una potencia, da otro número: el radicando. La raíz cuadrada de 25 es 5, porque 5² = 25. Y la raíz cúbica de 8 es 2, porque 2³ = 8.",
+      "voz": "La radicación busca el número que, elevado a una potencia, da otro número: el radicando. La raíz cuadrada de veinticinco es cinco, porque cinco al cuadrado es veinticinco. Y la raíz cúbica de ocho es dos, porque dos al cubo es ocho.",
+      "items": [
+        {
+          "titulo": "Radicando",
+          "texto": "El número dentro de la raíz",
+          "palabra": "radicando"
+        },
+        {
+          "titulo": "Raíz cuadrada",
+          "texto": "√25 = 5, porque 5² = 25",
+          "palabra": "cuadrada"
+        },
+        {
+          "titulo": "Raíz cúbica",
+          "texto": "∛8 = 2, porque 2³ = 8",
+          "palabra": "cúbica"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "¿Para qué sirven?",
+      "texto": "Sirven, por ejemplo, para calcular el área de un cuadrado, el volumen de un cubo o el lado de un cuadrado a partir de su área.",
+      "voz": "Sirven, por ejemplo, para calcular el área de un cuadrado, el volumen de un cubo o el lado de un cuadrado a partir de su área.",
+      "items": [
+        {
+          "titulo": "Área de un cuadrado",
+          "texto": "Lado 4 cm: 4² = 16 cm²",
+          "palabra": "área"
+        },
+        {
+          "titulo": "Volumen de un cubo",
+          "texto": "Arista 3 cm: 3³ = 27 cm³",
+          "palabra": "volumen"
+        },
+        {
+          "titulo": "Lado de un cuadrado",
+          "texto": "Área 64 cm²: √64 = 8 cm",
+          "palabra": "lado"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la potenciación y la radicación. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la potenciación y la radicación. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

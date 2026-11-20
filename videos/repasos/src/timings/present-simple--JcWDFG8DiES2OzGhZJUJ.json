@@ -1,0 +1,1152 @@
+{
+  "tema": "present-simple",
+  "componente": "Proyección",
+  "area": "Inglés",
+  "titulo": "Present Simple: daily routines and habits",
+  "siguiente": "El Estado, la economía y la organización de la sociedad",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el presente simple, las rutinas diarias y los hábitos.",
+      "voz": "Repaso del tema: el presente simple, las rutinas diarias y los hábitos.",
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 126,
+      "frames": 154,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "el presente simple, las rutinas",
+          "from": 32,
+          "to": 84
+        },
+        {
+          "text": "diarias y los hábitos.",
+          "from": 84,
+          "to": 121
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "el",
+          "f": 32
+        },
+        {
+          "w": "presente",
+          "f": 38
+        },
+        {
+          "w": "simple",
+          "f": 50
+        },
+        {
+          "w": "las",
+          "f": 62
+        },
+        {
+          "w": "rutinas",
+          "f": 67
+        },
+        {
+          "w": "diarias",
+          "f": 79
+        },
+        {
+          "w": "y",
+          "f": 91
+        },
+        {
+          "w": "los",
+          "f": 94
+        },
+        {
+          "w": "hábitos",
+          "f": 100
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "What is the Present Simple?",
+      "texto": "El presente simple sirve para hablar de rutinas, hábitos, hechos generales y gustos. Por ejemplo: I wake up at 6:00, he drinks coffee every morning, the sun rises in the east, I like music.",
+      "voz": "El presente simple sirve para hablar de rutinas, hábitos, hechos generales y gustos. Por ejemplo: I wake up at six, he drinks coffee every morning, the sun rises in the east, I like music.",
+      "items": [
+        {
+          "titulo": "Daily routines",
+          "texto": "I wake up at 6:00.",
+          "palabra": "rutinas"
+        },
+        {
+          "titulo": "Habits",
+          "texto": "He drinks coffee.",
+          "palabra": "hábitos"
+        },
+        {
+          "titulo": "General facts",
+          "texto": "The sun rises in the east.",
+          "palabra": "hechos"
+        },
+        {
+          "titulo": "Likes",
+          "texto": "I like music.",
+          "palabra": "gustos"
+        }
+      ],
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 325,
+      "frames": 353,
+      "chunks": [
+        {
+          "text": "El presente simple sirve para hablar de",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "rutinas, hábitos, hechos generales y gustos.",
+          "from": 62,
+          "to": 132
+        },
+        {
+          "text": "Por ejemplo:",
+          "from": 140,
+          "to": 161
+        },
+        {
+          "text": "I wake up at 6:00, he drinks coffee every morning,",
+          "from": 162,
+          "to": 250
+        },
+        {
+          "text": "the sun rises in the east, I like music.",
+          "from": 250,
+          "to": 320
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "presente",
+          "f": 6
+        },
+        {
+          "w": "simple",
+          "f": 18
+        },
+        {
+          "w": "sirve",
+          "f": 28
+        },
+        {
+          "w": "para",
+          "f": 37
+        },
+        {
+          "w": "hablar",
+          "f": 42
+        },
+        {
+          "w": "de",
+          "f": 52
+        },
+        {
+          "w": "rutinas",
+          "f": 55
+        },
+        {
+          "w": "hábitos",
+          "f": 72
+        },
+        {
+          "w": "hechos",
+          "f": 87
+        },
+        {
+          "w": "generales",
+          "f": 97
+        },
+        {
+          "w": "y",
+          "f": 114
+        },
+        {
+          "w": "gustos",
+          "f": 117
+        },
+        {
+          "w": "por",
+          "f": 140
+        },
+        {
+          "w": "ejemplo",
+          "f": 146
+        },
+        {
+          "w": "i",
+          "f": 162
+        },
+        {
+          "w": "wake",
+          "f": 167
+        },
+        {
+          "w": "up",
+          "f": 173
+        },
+        {
+          "w": "at",
+          "f": 178
+        },
+        {
+          "w": "six",
+          "f": 182
+        },
+        {
+          "w": "he",
+          "f": 193
+        },
+        {
+          "w": "drinks",
+          "f": 197
+        },
+        {
+          "w": "coffee",
+          "f": 208
+        },
+        {
+          "w": "every",
+          "f": 218
+        },
+        {
+          "w": "morning",
+          "f": 226
+        },
+        {
+          "w": "the",
+          "f": 243
+        },
+        {
+          "w": "sun",
+          "f": 249
+        },
+        {
+          "w": "rises",
+          "f": 255
+        },
+        {
+          "w": "in",
+          "f": 266
+        },
+        {
+          "w": "the",
+          "f": 270
+        },
+        {
+          "w": "east",
+          "f": 274
+        },
+        {
+          "w": "i",
+          "f": 290
+        },
+        {
+          "w": "like",
+          "f": 296
+        },
+        {
+          "w": "music",
+          "f": 302
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "He, she, it",
+      "texto": "Con he, she e it, el verbo cambia. La mayoría agrega -s: works. Otros agregan -es, como watches y goes. Y los que terminan en consonante + y cambian a -ies, como studies.",
+      "voz": "Con he, she e it, el verbo cambia. La mayoría agrega una ese: works. Otros agregan es, como watches y goes. Y los que terminan en consonante más ye cambian a ies, como studies.",
+      "items": [
+        {
+          "titulo": "-s",
+          "texto": "work → works",
+          "palabra": "works"
+        },
+        {
+          "titulo": "-es",
+          "texto": "watch → watches, go → goes",
+          "palabra": "watches"
+        },
+        {
+          "titulo": "-ies",
+          "texto": "study → studies",
+          "palabra": "studies"
+        }
+      ],
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 346,
+      "frames": 374,
+      "chunks": [
+        {
+          "text": "Con he, she e it, el verbo cambia.",
+          "from": 0,
+          "to": 74
+        },
+        {
+          "text": "La mayoría agrega -s:",
+          "from": 85,
+          "to": 134
+        },
+        {
+          "text": "works.",
+          "from": 141,
+          "to": 160
+        },
+        {
+          "text": "Otros agregan -es, como watches y goes.",
+          "from": 167,
+          "to": 227
+        },
+        {
+          "text": "Y los que terminan en consonante +",
+          "from": 229,
+          "to": 288
+        },
+        {
+          "text": "y cambian a -ies, como studies.",
+          "from": 288,
+          "to": 341
+        }
+      ],
+      "words": [
+        {
+          "w": "con",
+          "f": 0
+        },
+        {
+          "w": "he",
+          "f": 9
+        },
+        {
+          "w": "she",
+          "f": 17
+        },
+        {
+          "w": "e",
+          "f": 26
+        },
+        {
+          "w": "it",
+          "f": 32
+        },
+        {
+          "w": "el",
+          "f": 40
+        },
+        {
+          "w": "verbo",
+          "f": 46
+        },
+        {
+          "w": "cambia",
+          "f": 55
+        },
+        {
+          "w": "la",
+          "f": 85
+        },
+        {
+          "w": "mayoría",
+          "f": 90
+        },
+        {
+          "w": "agrega",
+          "f": 103
+        },
+        {
+          "w": "una",
+          "f": 114
+        },
+        {
+          "w": "ese",
+          "f": 121
+        },
+        {
+          "w": "works",
+          "f": 141
+        },
+        {
+          "w": "otros",
+          "f": 167
+        },
+        {
+          "w": "agregan",
+          "f": 179
+        },
+        {
+          "w": "es",
+          "f": 189
+        },
+        {
+          "w": "como",
+          "f": 193
+        },
+        {
+          "w": "watches",
+          "f": 201
+        },
+        {
+          "w": "y",
+          "f": 212
+        },
+        {
+          "w": "goes",
+          "f": 215
+        },
+        {
+          "w": "y",
+          "f": 229
+        },
+        {
+          "w": "los",
+          "f": 233
+        },
+        {
+          "w": "que",
+          "f": 238
+        },
+        {
+          "w": "terminan",
+          "f": 241
+        },
+        {
+          "w": "en",
+          "f": 254
+        },
+        {
+          "w": "consonante",
+          "f": 257
+        },
+        {
+          "w": "más",
+          "f": 277
+        },
+        {
+          "w": "ye",
+          "f": 282
+        },
+        {
+          "w": "cambian",
+          "f": 286
+        },
+        {
+          "w": "a",
+          "f": 296
+        },
+        {
+          "w": "ies",
+          "f": 299
+        },
+        {
+          "w": "como",
+          "f": 307
+        },
+        {
+          "w": "studies",
+          "f": 316
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Negative sentences",
+      "texto": "Para negar se usa don’t con I, you, we y they, y doesn’t con he, she e it. Con doesn’t, el verbo vuelve a su forma básica: she doesn’t study.",
+      "voz": "Para negar se usa don’t con I, you, we y they, y doesn’t con he, she e it. Con doesn’t, el verbo vuelve a su forma básica: she doesn’t study.",
+      "items": [
+        {
+          "titulo": "Don’t",
+          "texto": "I, you, we, they",
+          "palabra": "don"
+        },
+        {
+          "titulo": "Doesn’t",
+          "texto": "He, she, it",
+          "palabra": "doesn"
+        },
+        {
+          "titulo": "Forma básica",
+          "texto": "She doesn’t study.",
+          "palabra": "básica"
+        }
+      ],
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 271,
+      "frames": 299,
+      "chunks": [
+        {
+          "text": "Para negar se usa don’t con I, you, we",
+          "from": 0,
+          "to": 76
+        },
+        {
+          "text": "y they, y doesn’t con he, she e it.",
+          "from": 76,
+          "to": 146
+        },
+        {
+          "text": "Con doesn’t, el verbo vuelve a su forma básica:",
+          "from": 154,
+          "to": 225
+        },
+        {
+          "text": "she doesn’t study.",
+          "from": 227,
+          "to": 266
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "negar",
+          "f": 10
+        },
+        {
+          "w": "se",
+          "f": 20
+        },
+        {
+          "w": "usa",
+          "f": 23
+        },
+        {
+          "w": "don",
+          "f": 31
+        },
+        {
+          "w": "t",
+          "f": 37
+        },
+        {
+          "w": "con",
+          "f": 39
+        },
+        {
+          "w": "i",
+          "f": 46
+        },
+        {
+          "w": "you",
+          "f": 55
+        },
+        {
+          "w": "we",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 72
+        },
+        {
+          "w": "they",
+          "f": 76
+        },
+        {
+          "w": "y",
+          "f": 87
+        },
+        {
+          "w": "doesn",
+          "f": 92
+        },
+        {
+          "w": "t",
+          "f": 100
+        },
+        {
+          "w": "con",
+          "f": 102
+        },
+        {
+          "w": "he",
+          "f": 110
+        },
+        {
+          "w": "she",
+          "f": 119
+        },
+        {
+          "w": "e",
+          "f": 130
+        },
+        {
+          "w": "it",
+          "f": 136
+        },
+        {
+          "w": "con",
+          "f": 154
+        },
+        {
+          "w": "doesn",
+          "f": 161
+        },
+        {
+          "w": "t",
+          "f": 170
+        },
+        {
+          "w": "el",
+          "f": 173
+        },
+        {
+          "w": "verbo",
+          "f": 179
+        },
+        {
+          "w": "vuelve",
+          "f": 187
+        },
+        {
+          "w": "a",
+          "f": 195
+        },
+        {
+          "w": "su",
+          "f": 196
+        },
+        {
+          "w": "forma",
+          "f": 200
+        },
+        {
+          "w": "básica",
+          "f": 210
+        },
+        {
+          "w": "she",
+          "f": 227
+        },
+        {
+          "w": "doesn",
+          "f": 233
+        },
+        {
+          "w": "t",
+          "f": 241
+        },
+        {
+          "w": "study",
+          "f": 243
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Questions",
+      "texto": "Para preguntar se usa do o does al inicio, y el verbo va en forma básica: Do you like music?, Does she work every day? Se responde en corto: Yes, I do, o No, she doesn’t.",
+      "voz": "Para preguntar se usa do o does al inicio, y el verbo va en forma básica: do you like music?, does she work every day? Se responde en corto: yes, I do, o no, she doesn’t.",
+      "items": [
+        {
+          "titulo": "Do",
+          "texto": "Do you like music?",
+          "palabra": "do",
+          "vez": 1
+        },
+        {
+          "titulo": "Does",
+          "texto": "Does she work every day?",
+          "palabra": "does",
+          "vez": 1
+        },
+        {
+          "titulo": "Short answers",
+          "texto": "Yes, I do. / No, she doesn’t.",
+          "palabra": "yes"
+        }
+      ],
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 312,
+      "frames": 340,
+      "chunks": [
+        {
+          "text": "Para preguntar se usa do o does al",
+          "from": 0,
+          "to": 54
+        },
+        {
+          "text": "inicio, y el verbo va en forma básica:",
+          "from": 54,
+          "to": 114
+        },
+        {
+          "text": "Do you like music?, Does she work every day?",
+          "from": 115,
+          "to": 193
+        },
+        {
+          "text": "Se responde en corto:",
+          "from": 202,
+          "to": 238
+        },
+        {
+          "text": "Yes, I do, o No, she doesn’t.",
+          "from": 242,
+          "to": 308
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "preguntar",
+          "f": 9
+        },
+        {
+          "w": "se",
+          "f": 23
+        },
+        {
+          "w": "usa",
+          "f": 26
+        },
+        {
+          "w": "do",
+          "f": 33
+        },
+        {
+          "w": "o",
+          "f": 40
+        },
+        {
+          "w": "does",
+          "f": 44
+        },
+        {
+          "w": "al",
+          "f": 53
+        },
+        {
+          "w": "inicio",
+          "f": 59
+        },
+        {
+          "w": "y",
+          "f": 70
+        },
+        {
+          "w": "el",
+          "f": 71
+        },
+        {
+          "w": "verbo",
+          "f": 74
+        },
+        {
+          "w": "va",
+          "f": 83
+        },
+        {
+          "w": "en",
+          "f": 86
+        },
+        {
+          "w": "forma",
+          "f": 89
+        },
+        {
+          "w": "básica",
+          "f": 99
+        },
+        {
+          "w": "do",
+          "f": 115
+        },
+        {
+          "w": "you",
+          "f": 119
+        },
+        {
+          "w": "like",
+          "f": 123
+        },
+        {
+          "w": "music",
+          "f": 129
+        },
+        {
+          "w": "does",
+          "f": 152
+        },
+        {
+          "w": "she",
+          "f": 158
+        },
+        {
+          "w": "work",
+          "f": 164
+        },
+        {
+          "w": "every",
+          "f": 173
+        },
+        {
+          "w": "day",
+          "f": 181
+        },
+        {
+          "w": "se",
+          "f": 202
+        },
+        {
+          "w": "responde",
+          "f": 208
+        },
+        {
+          "w": "en",
+          "f": 220
+        },
+        {
+          "w": "corto",
+          "f": 223
+        },
+        {
+          "w": "yes",
+          "f": 242
+        },
+        {
+          "w": "i",
+          "f": 251
+        },
+        {
+          "w": "do",
+          "f": 255
+        },
+        {
+          "w": "o",
+          "f": 263
+        },
+        {
+          "w": "no",
+          "f": 268
+        },
+        {
+          "w": "she",
+          "f": 275
+        },
+        {
+          "w": "doesn",
+          "f": 282
+        },
+        {
+          "w": "t",
+          "f": 291
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Adverbs of frequency",
+      "texto": "Los adverbios de frecuencia dicen qué tan seguido hacemos algo y van antes del verbo: I always study English, she usually wakes up early, they sometimes play football, he never drinks coffee.",
+      "voz": "Los adverbios de frecuencia dicen qué tan seguido hacemos algo y van antes del verbo: I always study English, she usually wakes up early, they sometimes play football, he never drinks coffee.",
+      "items": [
+        {
+          "titulo": "always",
+          "texto": "Siempre",
+          "palabra": "always"
+        },
+        {
+          "titulo": "usually",
+          "texto": "Usualmente",
+          "palabra": "usually"
+        },
+        {
+          "titulo": "sometimes",
+          "texto": "Algunas veces",
+          "palabra": "sometimes"
+        },
+        {
+          "titulo": "never",
+          "texto": "Nunca",
+          "palabra": "never"
+        }
+      ],
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 312,
+      "frames": 340,
+      "chunks": [
+        {
+          "text": "Los adverbios de frecuencia dicen qué tan seguido",
+          "from": 0,
+          "to": 69
+        },
+        {
+          "text": "hacemos algo y van antes del verbo:",
+          "from": 69,
+          "to": 118
+        },
+        {
+          "text": "I always study English, she usually",
+          "from": 127,
+          "to": 189
+        },
+        {
+          "text": "wakes up early, they sometimes play",
+          "from": 189,
+          "to": 250
+        },
+        {
+          "text": "football, he never drinks coffee.",
+          "from": 250,
+          "to": 308
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "adverbios",
+          "f": 8
+        },
+        {
+          "w": "de",
+          "f": 22
+        },
+        {
+          "w": "frecuencia",
+          "f": 24
+        },
+        {
+          "w": "dicen",
+          "f": 40
+        },
+        {
+          "w": "qué",
+          "f": 47
+        },
+        {
+          "w": "tan",
+          "f": 50
+        },
+        {
+          "w": "seguido",
+          "f": 56
+        },
+        {
+          "w": "hacemos",
+          "f": 65
+        },
+        {
+          "w": "algo",
+          "f": 77
+        },
+        {
+          "w": "y",
+          "f": 84
+        },
+        {
+          "w": "van",
+          "f": 86
+        },
+        {
+          "w": "antes",
+          "f": 90
+        },
+        {
+          "w": "del",
+          "f": 98
+        },
+        {
+          "w": "verbo",
+          "f": 103
+        },
+        {
+          "w": "i",
+          "f": 127
+        },
+        {
+          "w": "always",
+          "f": 134
+        },
+        {
+          "w": "study",
+          "f": 145
+        },
+        {
+          "w": "english",
+          "f": 159
+        },
+        {
+          "w": "she",
+          "f": 173
+        },
+        {
+          "w": "usually",
+          "f": 179
+        },
+        {
+          "w": "wakes",
+          "f": 189
+        },
+        {
+          "w": "up",
+          "f": 198
+        },
+        {
+          "w": "early",
+          "f": 204
+        },
+        {
+          "w": "they",
+          "f": 226
+        },
+        {
+          "w": "sometimes",
+          "f": 231
+        },
+        {
+          "w": "play",
+          "f": 243
+        },
+        {
+          "w": "football",
+          "f": 250
+        },
+        {
+          "w": "he",
+          "f": 266
+        },
+        {
+          "w": "never",
+          "f": 271
+        },
+        {
+          "w": "drinks",
+          "f": 279
+        },
+        {
+          "w": "coffee",
+          "f": 289
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el presente simple. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el presente simple. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/present-simple/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 137,
+      "frames": 297,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 19
+        },
+        {
+          "text": "Repasaste el presente simple.",
+          "from": 21,
+          "to": 62
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 65,
+          "to": 132
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 21
+        },
+        {
+          "w": "el",
+          "f": 35
+        },
+        {
+          "w": "presente",
+          "f": 38
+        },
+        {
+          "w": "simple",
+          "f": 51
+        },
+        {
+          "w": "sigue",
+          "f": 65
+        },
+        {
+          "w": "con",
+          "f": 74
+        },
+        {
+          "w": "el",
+          "f": 79
+        },
+        {
+          "w": "siguiente",
+          "f": 81
+        },
+        {
+          "w": "tema",
+          "f": 94
+        },
+        {
+          "w": "de",
+          "f": 102
+        },
+        {
+          "w": "tu",
+          "f": 106
+        },
+        {
+          "w": "ruta",
+          "f": 110
+        }
+      ]
+    }
+  ]
+}

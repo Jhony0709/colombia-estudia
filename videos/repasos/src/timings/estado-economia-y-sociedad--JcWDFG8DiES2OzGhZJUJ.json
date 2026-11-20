@@ -1,0 +1,1317 @@
+{
+  "tema": "estado-economia-y-sociedad",
+  "componente": "Proyección",
+  "area": "Economía y ciencias políticas",
+  "titulo": "El Estado, la economía y la organización de la sociedad",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el Estado, la economía y la organización de la sociedad.",
+      "voz": "Repaso del tema: el Estado, la economía y la organización de la sociedad.",
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 127,
+      "frames": 155,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "el Estado, la economía y",
+          "from": 33,
+          "to": 72
+        },
+        {
+          "text": "la organización de la sociedad.",
+          "from": 72,
+          "to": 123
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "el",
+          "f": 33
+        },
+        {
+          "w": "estado",
+          "f": 40
+        },
+        {
+          "w": "la",
+          "f": 52
+        },
+        {
+          "w": "economía",
+          "f": 54
+        },
+        {
+          "w": "y",
+          "f": 69
+        },
+        {
+          "w": "la",
+          "f": 72
+        },
+        {
+          "w": "organización",
+          "f": 74
+        },
+        {
+          "w": "de",
+          "f": 92
+        },
+        {
+          "w": "la",
+          "f": 94
+        },
+        {
+          "w": "sociedad",
+          "f": 98
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La economía y sus agentes",
+      "texto": "La economía estudia cómo usamos recursos escasos para satisfacer necesidades. En ella participan tres agentes: las familias, que consumen y trabajan; las empresas, que producen; y el Estado, que regula, cobra impuestos y financia servicios públicos.",
+      "voz": "La economía estudia cómo usamos recursos escasos para satisfacer necesidades. En ella participan tres agentes: las familias, que consumen y trabajan; las empresas, que producen; y el Estado, que regula, cobra impuestos y financia servicios públicos.",
+      "items": [
+        {
+          "titulo": "Escasez",
+          "texto": "Recursos limitados",
+          "palabra": "escasos"
+        },
+        {
+          "titulo": "Familias",
+          "texto": "Consumen y trabajan",
+          "palabra": "familias"
+        },
+        {
+          "titulo": "Empresas",
+          "texto": "Producen",
+          "palabra": "empresas"
+        },
+        {
+          "titulo": "Estado",
+          "texto": "Regula y cobra impuestos",
+          "palabra": "estado"
+        }
+      ],
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 438,
+      "frames": 466,
+      "chunks": [
+        {
+          "text": "La economía estudia cómo usamos",
+          "from": 0,
+          "to": 49
+        },
+        {
+          "text": "recursos escasos para satisfacer necesidades.",
+          "from": 49,
+          "to": 120
+        },
+        {
+          "text": "En ella participan tres agentes:",
+          "from": 130,
+          "to": 181
+        },
+        {
+          "text": "las familias, que consumen y trabajan;",
+          "from": 193,
+          "to": 259
+        },
+        {
+          "text": "las empresas, que producen;",
+          "from": 269,
+          "to": 313
+        },
+        {
+          "text": "y el Estado, que regula, cobra",
+          "from": 323,
+          "to": 370
+        },
+        {
+          "text": "impuestos y financia servicios públicos.",
+          "from": 370,
+          "to": 433
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "economía",
+          "f": 5
+        },
+        {
+          "w": "estudia",
+          "f": 19
+        },
+        {
+          "w": "cómo",
+          "f": 30
+        },
+        {
+          "w": "usamos",
+          "f": 37
+        },
+        {
+          "w": "recursos",
+          "f": 46
+        },
+        {
+          "w": "escasos",
+          "f": 60
+        },
+        {
+          "w": "para",
+          "f": 73
+        },
+        {
+          "w": "satisfacer",
+          "f": 79
+        },
+        {
+          "w": "necesidades",
+          "f": 97
+        },
+        {
+          "w": "en",
+          "f": 130
+        },
+        {
+          "w": "ella",
+          "f": 136
+        },
+        {
+          "w": "participan",
+          "f": 143
+        },
+        {
+          "w": "tres",
+          "f": 160
+        },
+        {
+          "w": "agentes",
+          "f": 167
+        },
+        {
+          "w": "las",
+          "f": 193
+        },
+        {
+          "w": "familias",
+          "f": 199
+        },
+        {
+          "w": "que",
+          "f": 218
+        },
+        {
+          "w": "consumen",
+          "f": 223
+        },
+        {
+          "w": "y",
+          "f": 236
+        },
+        {
+          "w": "trabajan",
+          "f": 238
+        },
+        {
+          "w": "las",
+          "f": 269
+        },
+        {
+          "w": "empresas",
+          "f": 274
+        },
+        {
+          "w": "que",
+          "f": 290
+        },
+        {
+          "w": "producen",
+          "f": 294
+        },
+        {
+          "w": "y",
+          "f": 323
+        },
+        {
+          "w": "el",
+          "f": 326
+        },
+        {
+          "w": "estado",
+          "f": 330
+        },
+        {
+          "w": "que",
+          "f": 341
+        },
+        {
+          "w": "regula",
+          "f": 346
+        },
+        {
+          "w": "cobra",
+          "f": 358
+        },
+        {
+          "w": "impuestos",
+          "f": 365
+        },
+        {
+          "w": "y",
+          "f": 379
+        },
+        {
+          "w": "financia",
+          "f": 381
+        },
+        {
+          "w": "servicios",
+          "f": 393
+        },
+        {
+          "w": "públicos",
+          "f": 407
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Oferta y demanda",
+      "texto": "En el mercado se encuentran la oferta, lo que los productores quieren vender, y la demanda, lo que los consumidores quieren comprar. Por lo general, si el precio sube, los productores ofrecen más y los consumidores compran menos.",
+      "voz": "En el mercado se encuentran la oferta, lo que los productores quieren vender, y la demanda, lo que los consumidores quieren comprar. Por lo general, si el precio sube, los productores ofrecen más y los consumidores compran menos.",
+      "columnas": [
+        {
+          "titulo": "Oferta",
+          "palabra": "oferta",
+          "puntos": [
+            {
+              "texto": "Lo que se quiere vender",
+              "palabra": "vender"
+            },
+            {
+              "texto": "Si el precio sube, se ofrece más",
+              "palabra": "ofrecen"
+            }
+          ]
+        },
+        {
+          "titulo": "Demanda",
+          "palabra": "demanda",
+          "puntos": [
+            {
+              "texto": "Lo que se quiere comprar",
+              "palabra": "comprar"
+            },
+            {
+              "texto": "Si el precio sube, se compra menos",
+              "palabra": "menos"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 354,
+      "frames": 382,
+      "chunks": [
+        {
+          "text": "En el mercado se encuentran la oferta, lo",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "que los productores quieren vender, y la demanda,",
+          "from": 62,
+          "to": 136
+        },
+        {
+          "text": "lo que los consumidores quieren comprar.",
+          "from": 136,
+          "to": 196
+        },
+        {
+          "text": "Por lo general, si el precio sube, los",
+          "from": 203,
+          "to": 262
+        },
+        {
+          "text": "productores ofrecen más y los consumidores compran menos.",
+          "from": 262,
+          "to": 350
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "el",
+          "f": 6
+        },
+        {
+          "w": "mercado",
+          "f": 9
+        },
+        {
+          "w": "se",
+          "f": 19
+        },
+        {
+          "w": "encuentran",
+          "f": 21
+        },
+        {
+          "w": "la",
+          "f": 35
+        },
+        {
+          "w": "oferta",
+          "f": 37
+        },
+        {
+          "w": "lo",
+          "f": 63
+        },
+        {
+          "w": "que",
+          "f": 68
+        },
+        {
+          "w": "los",
+          "f": 71
+        },
+        {
+          "w": "productores",
+          "f": 77
+        },
+        {
+          "w": "quieren",
+          "f": 93
+        },
+        {
+          "w": "vender",
+          "f": 102
+        },
+        {
+          "w": "y",
+          "f": 116
+        },
+        {
+          "w": "la",
+          "f": 121
+        },
+        {
+          "w": "demanda",
+          "f": 124
+        },
+        {
+          "w": "lo",
+          "f": 139
+        },
+        {
+          "w": "que",
+          "f": 143
+        },
+        {
+          "w": "los",
+          "f": 146
+        },
+        {
+          "w": "consumidores",
+          "f": 151
+        },
+        {
+          "w": "quieren",
+          "f": 170
+        },
+        {
+          "w": "comprar",
+          "f": 178
+        },
+        {
+          "w": "por",
+          "f": 203
+        },
+        {
+          "w": "lo",
+          "f": 209
+        },
+        {
+          "w": "general",
+          "f": 213
+        },
+        {
+          "w": "si",
+          "f": 225
+        },
+        {
+          "w": "el",
+          "f": 228
+        },
+        {
+          "w": "precio",
+          "f": 232
+        },
+        {
+          "w": "sube",
+          "f": 241
+        },
+        {
+          "w": "los",
+          "f": 252
+        },
+        {
+          "w": "productores",
+          "f": 257
+        },
+        {
+          "w": "ofrecen",
+          "f": 272
+        },
+        {
+          "w": "más",
+          "f": 284
+        },
+        {
+          "w": "y",
+          "f": 292
+        },
+        {
+          "w": "los",
+          "f": 294
+        },
+        {
+          "w": "consumidores",
+          "f": 299
+        },
+        {
+          "w": "compran",
+          "f": 317
+        },
+        {
+          "w": "menos",
+          "f": 328
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Ahorro, inversión e inflación",
+      "texto": "Ahorrar es guardar parte de los ingresos para el futuro; invertir, usar recursos para obtener beneficios más adelante. Y la inflación es el aumento generalizado y sostenido de los precios: con el mismo dinero se compra menos.",
+      "voz": "Ahorrar es guardar parte de los ingresos para el futuro; invertir, usar recursos para obtener beneficios más adelante. Y la inflación es el aumento generalizado y sostenido de los precios: con el mismo dinero se compra menos.",
+      "items": [
+        {
+          "titulo": "Ahorro",
+          "texto": "Guardar para el futuro",
+          "palabra": "ahorrar"
+        },
+        {
+          "titulo": "Inversión",
+          "texto": "Buscar beneficios futuros",
+          "palabra": "invertir"
+        },
+        {
+          "titulo": "Inflación",
+          "texto": "Suben los precios",
+          "palabra": "inflación"
+        }
+      ],
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 382,
+      "frames": 410,
+      "chunks": [
+        {
+          "text": "Ahorrar es guardar parte de",
+          "from": 0,
+          "to": 42
+        },
+        {
+          "text": "los ingresos para el futuro;",
+          "from": 42,
+          "to": 85
+        },
+        {
+          "text": "invertir, usar recursos para",
+          "from": 97,
+          "to": 143
+        },
+        {
+          "text": "obtener beneficios más adelante.",
+          "from": 143,
+          "to": 196
+        },
+        {
+          "text": "Y la inflación es el aumento",
+          "from": 212,
+          "to": 251
+        },
+        {
+          "text": "generalizado y sostenido de los precios:",
+          "from": 251,
+          "to": 307
+        },
+        {
+          "text": "con el mismo dinero se compra menos.",
+          "from": 317,
+          "to": 378
+        }
+      ],
+      "words": [
+        {
+          "w": "ahorrar",
+          "f": 0
+        },
+        {
+          "w": "es",
+          "f": 16
+        },
+        {
+          "w": "guardar",
+          "f": 21
+        },
+        {
+          "w": "parte",
+          "f": 31
+        },
+        {
+          "w": "de",
+          "f": 40
+        },
+        {
+          "w": "los",
+          "f": 43
+        },
+        {
+          "w": "ingresos",
+          "f": 48
+        },
+        {
+          "w": "para",
+          "f": 60
+        },
+        {
+          "w": "el",
+          "f": 65
+        },
+        {
+          "w": "futuro",
+          "f": 68
+        },
+        {
+          "w": "invertir",
+          "f": 97
+        },
+        {
+          "w": "usar",
+          "f": 118
+        },
+        {
+          "w": "recursos",
+          "f": 128
+        },
+        {
+          "w": "para",
+          "f": 142
+        },
+        {
+          "w": "obtener",
+          "f": 147
+        },
+        {
+          "w": "beneficios",
+          "f": 159
+        },
+        {
+          "w": "más",
+          "f": 176
+        },
+        {
+          "w": "adelante",
+          "f": 181
+        },
+        {
+          "w": "y",
+          "f": 212
+        },
+        {
+          "w": "la",
+          "f": 217
+        },
+        {
+          "w": "inflación",
+          "f": 219
+        },
+        {
+          "w": "es",
+          "f": 233
+        },
+        {
+          "w": "el",
+          "f": 236
+        },
+        {
+          "w": "aumento",
+          "f": 239
+        },
+        {
+          "w": "generalizado",
+          "f": 250
+        },
+        {
+          "w": "y",
+          "f": 268
+        },
+        {
+          "w": "sostenido",
+          "f": 270
+        },
+        {
+          "w": "de",
+          "f": 284
+        },
+        {
+          "w": "los",
+          "f": 286
+        },
+        {
+          "w": "precios",
+          "f": 292
+        },
+        {
+          "w": "con",
+          "f": 317
+        },
+        {
+          "w": "el",
+          "f": 323
+        },
+        {
+          "w": "mismo",
+          "f": 325
+        },
+        {
+          "w": "dinero",
+          "f": 334
+        },
+        {
+          "w": "se",
+          "f": 344
+        },
+        {
+          "w": "compra",
+          "f": 348
+        },
+        {
+          "w": "menos",
+          "f": 358
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El Estado y la democracia",
+      "texto": "El Estado tiene territorio, población, gobierno y soberanía. En una democracia, la ciudadanía participa en las decisiones, directamente o por medio de representantes; en Colombia, por ejemplo, con el voto, el plebiscito, el referendo o la consulta popular.",
+      "voz": "El Estado tiene territorio, población, gobierno y soberanía. En una democracia, la ciudadanía participa en las decisiones, directamente o por medio de representantes; en Colombia, por ejemplo, con el voto, el plebiscito, el referendo o la consulta popular.",
+      "items": [
+        {
+          "titulo": "Elementos del Estado",
+          "texto": "Territorio, población, gobierno, soberanía",
+          "palabra": "territorio"
+        },
+        {
+          "titulo": "Democracia",
+          "texto": "La ciudadanía decide",
+          "palabra": "democracia"
+        },
+        {
+          "titulo": "Participación",
+          "texto": "Voto, plebiscito, referendo…",
+          "palabra": "voto"
+        }
+      ],
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 445,
+      "frames": 473,
+      "chunks": [
+        {
+          "text": "El Estado tiene territorio,",
+          "from": 0,
+          "to": 46
+        },
+        {
+          "text": "población, gobierno y soberanía.",
+          "from": 46,
+          "to": 101
+        },
+        {
+          "text": "En una democracia, la ciudadanía",
+          "from": 111,
+          "to": 161
+        },
+        {
+          "text": "participa en las decisiones, directamente",
+          "from": 161,
+          "to": 226
+        },
+        {
+          "text": "o por medio de representantes;",
+          "from": 226,
+          "to": 273
+        },
+        {
+          "text": "en Colombia, por ejemplo, con el voto, el",
+          "from": 283,
+          "to": 356
+        },
+        {
+          "text": "plebiscito, el referendo o la consulta popular.",
+          "from": 356,
+          "to": 440
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "estado",
+          "f": 7
+        },
+        {
+          "w": "tiene",
+          "f": 16
+        },
+        {
+          "w": "territorio",
+          "f": 23
+        },
+        {
+          "w": "población",
+          "f": 44
+        },
+        {
+          "w": "gobierno",
+          "f": 62
+        },
+        {
+          "w": "y",
+          "f": 77
+        },
+        {
+          "w": "soberanía",
+          "f": 78
+        },
+        {
+          "w": "en",
+          "f": 111
+        },
+        {
+          "w": "una",
+          "f": 116
+        },
+        {
+          "w": "democracia",
+          "f": 121
+        },
+        {
+          "w": "la",
+          "f": 140
+        },
+        {
+          "w": "ciudadanía",
+          "f": 143
+        },
+        {
+          "w": "participa",
+          "f": 163
+        },
+        {
+          "w": "en",
+          "f": 178
+        },
+        {
+          "w": "las",
+          "f": 180
+        },
+        {
+          "w": "decisiones",
+          "f": 184
+        },
+        {
+          "w": "directamente",
+          "f": 202
+        },
+        {
+          "w": "o",
+          "f": 225
+        },
+        {
+          "w": "por",
+          "f": 228
+        },
+        {
+          "w": "medio",
+          "f": 233
+        },
+        {
+          "w": "de",
+          "f": 241
+        },
+        {
+          "w": "representantes",
+          "f": 244
+        },
+        {
+          "w": "en",
+          "f": 283
+        },
+        {
+          "w": "colombia",
+          "f": 289
+        },
+        {
+          "w": "por",
+          "f": 303
+        },
+        {
+          "w": "ejemplo",
+          "f": 308
+        },
+        {
+          "w": "con",
+          "f": 321
+        },
+        {
+          "w": "el",
+          "f": 326
+        },
+        {
+          "w": "voto",
+          "f": 330
+        },
+        {
+          "w": "el",
+          "f": 343
+        },
+        {
+          "w": "plebiscito",
+          "f": 348
+        },
+        {
+          "w": "el",
+          "f": 368
+        },
+        {
+          "w": "referendo",
+          "f": 373
+        },
+        {
+          "w": "o",
+          "f": 391
+        },
+        {
+          "w": "la",
+          "f": 394
+        },
+        {
+          "w": "consulta",
+          "f": 397
+        },
+        {
+          "w": "popular",
+          "f": 411
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Las ramas del poder público",
+      "texto": "La Constitución de 1991 separa el poder público en tres ramas: la ejecutiva, que administra el Estado y ejecuta las leyes; la legislativa, el Congreso, que hace las leyes; y la judicial, que administra justicia. Así se evita que el poder se concentre.",
+      "voz": "La Constitución de mil novecientos noventa y uno separa el poder público en tres ramas: la ejecutiva, que administra el Estado y ejecuta las leyes; la legislativa, el Congreso, que hace las leyes; y la judicial, que administra justicia. Así se evita que el poder se concentre.",
+      "items": [
+        {
+          "titulo": "Ejecutiva",
+          "texto": "Presidente, gobernadores, alcaldes",
+          "palabra": "ejecutiva"
+        },
+        {
+          "titulo": "Legislativa",
+          "texto": "El Congreso hace las leyes",
+          "palabra": "legislativa"
+        },
+        {
+          "titulo": "Judicial",
+          "texto": "Jueces y cortes",
+          "palabra": "judicial"
+        }
+      ],
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 468,
+      "frames": 496,
+      "chunks": [
+        {
+          "text": "La Constitución de 1991 separa el",
+          "from": 0,
+          "to": 71
+        },
+        {
+          "text": "poder público en tres ramas:",
+          "from": 71,
+          "to": 131
+        },
+        {
+          "text": "la ejecutiva, que administra el",
+          "from": 141,
+          "to": 191
+        },
+        {
+          "text": "Estado y ejecuta las leyes;",
+          "from": 191,
+          "to": 235
+        },
+        {
+          "text": "la legislativa, el Congreso, que hace las leyes;",
+          "from": 245,
+          "to": 326
+        },
+        {
+          "text": "y la judicial, que administra justicia.",
+          "from": 331,
+          "to": 394
+        },
+        {
+          "text": "Así se evita que el poder se concentre.",
+          "from": 402,
+          "to": 464
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "constitución",
+          "f": 6
+        },
+        {
+          "w": "de",
+          "f": 24
+        },
+        {
+          "w": "mil",
+          "f": 28
+        },
+        {
+          "w": "novecientos",
+          "f": 33
+        },
+        {
+          "w": "noventa",
+          "f": 48
+        },
+        {
+          "w": "y",
+          "f": 60
+        },
+        {
+          "w": "uno",
+          "f": 62
+        },
+        {
+          "w": "separa",
+          "f": 68
+        },
+        {
+          "w": "el",
+          "f": 78
+        },
+        {
+          "w": "poder",
+          "f": 81
+        },
+        {
+          "w": "público",
+          "f": 90
+        },
+        {
+          "w": "en",
+          "f": 102
+        },
+        {
+          "w": "tres",
+          "f": 105
+        },
+        {
+          "w": "ramas",
+          "f": 114
+        },
+        {
+          "w": "la",
+          "f": 141
+        },
+        {
+          "w": "ejecutiva",
+          "f": 144
+        },
+        {
+          "w": "que",
+          "f": 165
+        },
+        {
+          "w": "administra",
+          "f": 169
+        },
+        {
+          "w": "el",
+          "f": 184
+        },
+        {
+          "w": "estado",
+          "f": 187
+        },
+        {
+          "w": "y",
+          "f": 199
+        },
+        {
+          "w": "ejecuta",
+          "f": 201
+        },
+        {
+          "w": "las",
+          "f": 215
+        },
+        {
+          "w": "leyes",
+          "f": 220
+        },
+        {
+          "w": "la",
+          "f": 245
+        },
+        {
+          "w": "legislativa",
+          "f": 250
+        },
+        {
+          "w": "el",
+          "f": 277
+        },
+        {
+          "w": "congreso",
+          "f": 281
+        },
+        {
+          "w": "que",
+          "f": 296
+        },
+        {
+          "w": "hace",
+          "f": 300
+        },
+        {
+          "w": "las",
+          "f": 306
+        },
+        {
+          "w": "leyes",
+          "f": 311
+        },
+        {
+          "w": "y",
+          "f": 331
+        },
+        {
+          "w": "la",
+          "f": 336
+        },
+        {
+          "w": "judicial",
+          "f": 340
+        },
+        {
+          "w": "que",
+          "f": 357
+        },
+        {
+          "w": "administra",
+          "f": 361
+        },
+        {
+          "w": "justicia",
+          "f": 376
+        },
+        {
+          "w": "así",
+          "f": 402
+        },
+        {
+          "w": "se",
+          "f": 410
+        },
+        {
+          "w": "evita",
+          "f": 413
+        },
+        {
+          "w": "que",
+          "f": 423
+        },
+        {
+          "w": "el",
+          "f": 426
+        },
+        {
+          "w": "poder",
+          "f": 429
+        },
+        {
+          "w": "se",
+          "f": 437
+        },
+        {
+          "w": "concentre",
+          "f": 441
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el Estado, la economía y la sociedad. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el Estado, la economía y la sociedad. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/estado-economia-y-sociedad/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 181,
+      "frames": 341,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 25
+        },
+        {
+          "text": "Repasaste el Estado, la economía y la sociedad.",
+          "from": 33,
+          "to": 104
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 116,
+          "to": 177
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 6
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "el",
+          "f": 48
+        },
+        {
+          "w": "estado",
+          "f": 52
+        },
+        {
+          "w": "la",
+          "f": 64
+        },
+        {
+          "w": "economía",
+          "f": 67
+        },
+        {
+          "w": "y",
+          "f": 83
+        },
+        {
+          "w": "la",
+          "f": 86
+        },
+        {
+          "w": "sociedad",
+          "f": 89
+        },
+        {
+          "w": "sigue",
+          "f": 116
+        },
+        {
+          "w": "con",
+          "f": 125
+        },
+        {
+          "w": "el",
+          "f": 130
+        },
+        {
+          "w": "siguiente",
+          "f": 132
+        },
+        {
+          "w": "tema",
+          "f": 144
+        },
+        {
+          "w": "de",
+          "f": 152
+        },
+        {
+          "w": "tu",
+          "f": 155
+        },
+        {
+          "w": "ruta",
+          "f": 160
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "tema": "literatura-latinoamericana",
+  "componente": "Expansión",
+  "area": "Lengua castellana",
+  "titulo": "Literatura latinoamericana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la literatura latinoamericana, la identidad y la expansión cultural.",
+      "voz": "Repaso del tema: la literatura latinoamericana, la identidad y la expansión cultural."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es?",
+      "texto": "La literatura latinoamericana reúne mitos, leyendas, crónicas, poemas, cuentos y novelas de América Latina. Nace del encuentro, y muchas veces del conflicto, entre tradiciones indígenas, africanas y europeas.",
+      "voz": "La literatura latinoamericana reúne mitos, leyendas, crónicas, poemas, cuentos y novelas de América Latina. Nace del encuentro, y muchas veces del conflicto, entre tradiciones indígenas, africanas y europeas.",
+      "items": [
+        {
+          "titulo": "Tradiciones indígenas",
+          "palabra": "indígenas"
+        },
+        {
+          "titulo": "Aportes africanos",
+          "palabra": "africanas"
+        },
+        {
+          "titulo": "Influencia europea",
+          "palabra": "europeas"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Mito y leyenda",
+      "texto": "Antes de la conquista, los pueblos originarios transmitían su saber por tradición oral, de generación en generación. Un mito explica el origen del mundo, de los seres o de la naturaleza; una leyenda cuenta hechos de personajes o lugares que la comunidad recuerda, y mezcla historia y fantasía.",
+      "voz": "Antes de la conquista, los pueblos originarios transmitían su saber por tradición oral, de generación en generación. Un mito explica el origen del mundo, de los seres o de la naturaleza; una leyenda cuenta hechos de personajes o lugares que la comunidad recuerda, y mezcla historia y fantasía.",
+      "columnas": [
+        {
+          "titulo": "Mito",
+          "palabra": "mito",
+          "puntos": [
+            {
+              "texto": "Explica orígenes",
+              "palabra": "origen"
+            },
+            {
+              "texto": "El mundo, los seres, la naturaleza",
+              "palabra": "naturaleza"
+            }
+          ]
+        },
+        {
+          "titulo": "Leyenda",
+          "palabra": "leyenda",
+          "puntos": [
+            {
+              "texto": "Personajes y lugares",
+              "palabra": "personajes"
+            },
+            {
+              "texto": "Historia y fantasía",
+              "palabra": "fantasía"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las crónicas de Indias",
+      "texto": "Con la conquista llegaron las crónicas de Indias, textos que describían América desde la mirada europea. Hay que leerlas con sentido crítico: quién escribe, desde qué punto de vista y qué voces faltan.",
+      "voz": "Con la conquista llegaron las crónicas de Indias, textos que describían América desde la mirada europea. Hay que leerlas con sentido crítico: quién escribe, desde qué punto de vista y qué voces faltan.",
+      "items": [
+        {
+          "titulo": "Quién escribe",
+          "palabra": "quién"
+        },
+        {
+          "titulo": "Desde qué punto de vista",
+          "palabra": "punto"
+        },
+        {
+          "titulo": "Qué voces faltan",
+          "palabra": "voces"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Autores y obras",
+      "texto": "Algunos nombres clave: Gabriel García Márquez, con Cien años de soledad; José María Arguedas y las culturas andinas; Sor Juana Inés de la Cruz, escritora del siglo XVII; y el Popol Vuh, de la tradición maya k’iche’.",
+      "voz": "Algunos nombres clave: Gabriel García Márquez, con Cien años de soledad; José María Arguedas y las culturas andinas; Sor Juana Inés de la Cruz, escritora del siglo diecisiete; y el Popol Vuh, de la tradición maya quiché.",
+      "items": [
+        {
+          "titulo": "García Márquez",
+          "texto": "Cien años de soledad",
+          "palabra": "gabriel"
+        },
+        {
+          "titulo": "Arguedas",
+          "texto": "Culturas andinas",
+          "palabra": "arguedas"
+        },
+        {
+          "titulo": "Sor Juana",
+          "texto": "Siglo XVII",
+          "palabra": "juana"
+        },
+        {
+          "titulo": "Popol Vuh",
+          "texto": "Tradición maya k’iche’",
+          "palabra": "popol"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Narrador y punto de vista",
+      "texto": "El narrador es la voz que cuenta la historia, y no es lo mismo que el autor. En primera persona participa y dice yo; en tercera, cuenta lo que les pasa a otros. Y el punto de vista cambia cómo se presentan los hechos.",
+      "voz": "El narrador es la voz que cuenta la historia, y no es lo mismo que el autor. En primera persona participa y dice yo; en tercera, cuenta lo que les pasa a otros. Y el punto de vista cambia cómo se presentan los hechos.",
+      "items": [
+        {
+          "titulo": "Primera persona",
+          "texto": "«Caminé por el sendero…»",
+          "palabra": "primera"
+        },
+        {
+          "titulo": "Tercera persona",
+          "texto": "«Mariana llegó al río…»",
+          "palabra": "tercera"
+        },
+        {
+          "titulo": "Punto de vista",
+          "texto": "La perspectiva de quien narra",
+          "palabra": "punto"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la literatura latinoamericana. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la literatura latinoamericana. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

@@ -1,0 +1,1492 @@
+{
+  "tema": "el-siglo-xx-y-el-mundo-actual",
+  "componente": "Preparación",
+  "area": "Ciencias sociales",
+  "titulo": "El siglo XX y la configuración del mundo actual",
+  "siguiente": "English basic grammar",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el siglo XX y la configuración del mundo actual.",
+      "voz": "Repaso del tema: el siglo veinte y la configuración del mundo actual.",
+      "audio": "voz/el-siglo-xx-y-el-mundo-actual/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 131,
+      "frames": 159,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 33
+        },
+        {
+          "text": "el siglo XX y la configuración del mundo actual.",
+          "from": 39,
+          "to": 127
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "el",
+          "f": 39
+        },
+        {
+          "w": "siglo",
+          "f": 44
+        },
+        {
+          "w": "veinte",
+          "f": 53
+        },
+        {
+          "w": "y",
+          "f": 65
+        },
+        {
+          "w": "la",
+          "f": 69
+        },
+        {
+          "w": "configuración",
+          "f": 72
+        },
+        {
+          "w": "del",
+          "f": 91
+        },
+        {
+          "w": "mundo",
+          "f": 95
+        },
+        {
+          "w": "actual",
+          "f": 102
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "linea",
+      "titulo": "De las guerras mundiales a la ONU",
+      "texto": "El siglo XX comenzó con la Primera Guerra Mundial, en 1914. En 1917, la Revolución rusa abrió el camino a la Unión Soviética. En 1929 llegó la Gran Depresión. La Segunda Guerra Mundial comenzó en 1939, y al terminar, en 1945, se creó la ONU.",
+      "voz": "El siglo veinte comenzó con la Primera Guerra Mundial, en mil novecientos catorce. En mil novecientos diecisiete, la Revolución rusa abrió el camino a la Unión Soviética. En mil novecientos veintinueve llegó la Gran Depresión. La Segunda Guerra Mundial comenzó en mil novecientos treinta y nueve, y al terminar, en mil novecientos cuarenta y cinco, se creó la ONU.",
+      "items": [
+        {
+          "etiqueta": "1914",
+          "titulo": "Primera Guerra Mundial",
+          "texto": "1914-1918",
+          "palabra": "primera"
+        },
+        {
+          "etiqueta": "1917",
+          "titulo": "Revolución rusa",
+          "texto": "Camino a la URSS",
+          "palabra": "revolución"
+        },
+        {
+          "etiqueta": "1929",
+          "titulo": "Gran Depresión",
+          "texto": "Crisis económica",
+          "palabra": "depresión"
+        },
+        {
+          "etiqueta": "1939",
+          "titulo": "Segunda Guerra Mundial",
+          "texto": "1939-1945",
+          "palabra": "segunda"
+        },
+        {
+          "etiqueta": "1945",
+          "titulo": "ONU",
+          "texto": "Paz y derechos humanos",
+          "palabra": "onu"
+        }
+      ],
+      "audio": "voz/el-siglo-xx-y-el-mundo-actual/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 587,
+      "frames": 615,
+      "chunks": [
+        {
+          "text": "El siglo XX comenzó con la",
+          "from": 0,
+          "to": 53
+        },
+        {
+          "text": "Primera Guerra Mundial, en 1914.",
+          "from": 53,
+          "to": 118
+        },
+        {
+          "text": "En 1917, la Revolución rusa abrió",
+          "from": 128,
+          "to": 197
+        },
+        {
+          "text": "el camino a la Unión Soviética.",
+          "from": 197,
+          "to": 261
+        },
+        {
+          "text": "En 1929 llegó la Gran Depresión.",
+          "from": 271,
+          "to": 356
+        },
+        {
+          "text": "La Segunda Guerra Mundial comenzó en 1939, y",
+          "from": 364,
+          "to": 483
+        },
+        {
+          "text": "al terminar, en 1945, se creó la ONU.",
+          "from": 483,
+          "to": 582
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "siglo",
+          "f": 5
+        },
+        {
+          "w": "veinte",
+          "f": 14
+        },
+        {
+          "w": "comenzó",
+          "f": 23
+        },
+        {
+          "w": "con",
+          "f": 34
+        },
+        {
+          "w": "la",
+          "f": 39
+        },
+        {
+          "w": "primera",
+          "f": 42
+        },
+        {
+          "w": "guerra",
+          "f": 53
+        },
+        {
+          "w": "mundial",
+          "f": 60
+        },
+        {
+          "w": "en",
+          "f": 75
+        },
+        {
+          "w": "mil",
+          "f": 79
+        },
+        {
+          "w": "novecientos",
+          "f": 85
+        },
+        {
+          "w": "catorce",
+          "f": 101
+        },
+        {
+          "w": "en",
+          "f": 128
+        },
+        {
+          "w": "mil",
+          "f": 133
+        },
+        {
+          "w": "novecientos",
+          "f": 138
+        },
+        {
+          "w": "diecisiete",
+          "f": 154
+        },
+        {
+          "w": "la",
+          "f": 177
+        },
+        {
+          "w": "revolución",
+          "f": 181
+        },
+        {
+          "w": "rusa",
+          "f": 196
+        },
+        {
+          "w": "abrió",
+          "f": 206
+        },
+        {
+          "w": "el",
+          "f": 214
+        },
+        {
+          "w": "camino",
+          "f": 217
+        },
+        {
+          "w": "a",
+          "f": 227
+        },
+        {
+          "w": "la",
+          "f": 229
+        },
+        {
+          "w": "unión",
+          "f": 232
+        },
+        {
+          "w": "soviética",
+          "f": 239
+        },
+        {
+          "w": "en",
+          "f": 271
+        },
+        {
+          "w": "mil",
+          "f": 276
+        },
+        {
+          "w": "novecientos",
+          "f": 281
+        },
+        {
+          "w": "veintinueve",
+          "f": 299
+        },
+        {
+          "w": "llegó",
+          "f": 319
+        },
+        {
+          "w": "la",
+          "f": 328
+        },
+        {
+          "w": "gran",
+          "f": 331
+        },
+        {
+          "w": "depresión",
+          "f": 338
+        },
+        {
+          "w": "la",
+          "f": 364
+        },
+        {
+          "w": "segunda",
+          "f": 369
+        },
+        {
+          "w": "guerra",
+          "f": 380
+        },
+        {
+          "w": "mundial",
+          "f": 387
+        },
+        {
+          "w": "comenzó",
+          "f": 397
+        },
+        {
+          "w": "en",
+          "f": 409
+        },
+        {
+          "w": "mil",
+          "f": 412
+        },
+        {
+          "w": "novecientos",
+          "f": 417
+        },
+        {
+          "w": "treinta",
+          "f": 433
+        },
+        {
+          "w": "y",
+          "f": 442
+        },
+        {
+          "w": "nueve",
+          "f": 444
+        },
+        {
+          "w": "y",
+          "f": 461
+        },
+        {
+          "w": "al",
+          "f": 465
+        },
+        {
+          "w": "terminar",
+          "f": 468
+        },
+        {
+          "w": "en",
+          "f": 487
+        },
+        {
+          "w": "mil",
+          "f": 492
+        },
+        {
+          "w": "novecientos",
+          "f": 497
+        },
+        {
+          "w": "cuarenta",
+          "f": 513
+        },
+        {
+          "w": "y",
+          "f": 524
+        },
+        {
+          "w": "cinco",
+          "f": 525
+        },
+        {
+          "w": "se",
+          "f": 547
+        },
+        {
+          "w": "creó",
+          "f": 552
+        },
+        {
+          "w": "la",
+          "f": 561
+        },
+        {
+          "w": "onu",
+          "f": 565
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "La Guerra Fría (1947-1991)",
+      "texto": "De 1947 a 1991, la Guerra Fría dividió el mundo en dos bloques que nunca se enfrentaron en una guerra total. El capitalista, liderado por Estados Unidos, defendía la propiedad privada y los mercados; el socialista, liderado por la Unión Soviética, la propiedad estatal y la planificación. Compitieron en armas nucleares y en el espacio, hasta que la Unión Soviética se disolvió en 1991.",
+      "voz": "De mil novecientos cuarenta y siete a mil novecientos noventa y uno, la Guerra Fría dividió el mundo en dos bloques que nunca se enfrentaron en una guerra total. El capitalista, liderado por Estados Unidos, defendía la propiedad privada y los mercados; el socialista, liderado por la Unión Soviética, la propiedad estatal y la planificación. Compitieron en armas nucleares y en el espacio, hasta que la Unión Soviética se disolvió en mil novecientos noventa y uno.",
+      "columnas": [
+        {
+          "titulo": "Bloque capitalista",
+          "palabra": "capitalista",
+          "puntos": [
+            {
+              "texto": "Liderado por Estados Unidos",
+              "palabra": "estados"
+            },
+            {
+              "texto": "Propiedad privada y mercados",
+              "palabra": "privada"
+            }
+          ]
+        },
+        {
+          "titulo": "Bloque socialista",
+          "palabra": "socialista",
+          "puntos": [
+            {
+              "texto": "Liderado por la Unión Soviética",
+              "palabra": "unión"
+            },
+            {
+              "texto": "Propiedad estatal y planificación",
+              "palabra": "estatal"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/el-siglo-xx-y-el-mundo-actual/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 690,
+      "frames": 718,
+      "chunks": [
+        {
+          "text": "De 1947 a 1991, la Guerra Fría",
+          "from": 0,
+          "to": 63
+        },
+        {
+          "text": "dividió el mundo en dos bloques que",
+          "from": 63,
+          "to": 137
+        },
+        {
+          "text": "nunca se enfrentaron en una guerra total.",
+          "from": 137,
+          "to": 224
+        },
+        {
+          "text": "El capitalista, liderado por Estados Unidos, defendía",
+          "from": 237,
+          "to": 313
+        },
+        {
+          "text": "la propiedad privada y los mercados;",
+          "from": 313,
+          "to": 365
+        },
+        {
+          "text": "el socialista, liderado por la Unión Soviética,",
+          "from": 373,
+          "to": 440
+        },
+        {
+          "text": "la propiedad estatal y la planificación.",
+          "from": 440,
+          "to": 497
+        },
+        {
+          "text": "Compitieron en armas nucleares y en el espacio, hasta",
+          "from": 507,
+          "to": 606
+        },
+        {
+          "text": "que la Unión Soviética se disolvió en 1991.",
+          "from": 606,
+          "to": 685
+        }
+      ],
+      "words": [
+        {
+          "w": "de",
+          "f": 0
+        },
+        {
+          "w": "mil",
+          "f": 6
+        },
+        {
+          "w": "novecientos",
+          "f": 11
+        },
+        {
+          "w": "cuarenta",
+          "f": 26
+        },
+        {
+          "w": "y",
+          "f": 37
+        },
+        {
+          "w": "siete",
+          "f": 38
+        },
+        {
+          "w": "a",
+          "f": 50
+        },
+        {
+          "w": "mil",
+          "f": 54
+        },
+        {
+          "w": "novecientos",
+          "f": 58
+        },
+        {
+          "w": "noventa",
+          "f": 72
+        },
+        {
+          "w": "y",
+          "f": 85
+        },
+        {
+          "w": "uno",
+          "f": 87
+        },
+        {
+          "w": "la",
+          "f": 105
+        },
+        {
+          "w": "guerra",
+          "f": 109
+        },
+        {
+          "w": "fría",
+          "f": 116
+        },
+        {
+          "w": "dividió",
+          "f": 124
+        },
+        {
+          "w": "el",
+          "f": 133
+        },
+        {
+          "w": "mundo",
+          "f": 137
+        },
+        {
+          "w": "en",
+          "f": 143
+        },
+        {
+          "w": "dos",
+          "f": 146
+        },
+        {
+          "w": "bloques",
+          "f": 151
+        },
+        {
+          "w": "que",
+          "f": 161
+        },
+        {
+          "w": "nunca",
+          "f": 164
+        },
+        {
+          "w": "se",
+          "f": 172
+        },
+        {
+          "w": "enfrentaron",
+          "f": 174
+        },
+        {
+          "w": "en",
+          "f": 191
+        },
+        {
+          "w": "una",
+          "f": 194
+        },
+        {
+          "w": "guerra",
+          "f": 200
+        },
+        {
+          "w": "total",
+          "f": 208
+        },
+        {
+          "w": "el",
+          "f": 237
+        },
+        {
+          "w": "capitalista",
+          "f": 242
+        },
+        {
+          "w": "liderado",
+          "f": 263
+        },
+        {
+          "w": "por",
+          "f": 275
+        },
+        {
+          "w": "estados",
+          "f": 279
+        },
+        {
+          "w": "unidos",
+          "f": 289
+        },
+        {
+          "w": "defendía",
+          "f": 299
+        },
+        {
+          "w": "la",
+          "f": 313
+        },
+        {
+          "w": "propiedad",
+          "f": 316
+        },
+        {
+          "w": "privada",
+          "f": 328
+        },
+        {
+          "w": "y",
+          "f": 340
+        },
+        {
+          "w": "los",
+          "f": 342
+        },
+        {
+          "w": "mercados",
+          "f": 348
+        },
+        {
+          "w": "el",
+          "f": 373
+        },
+        {
+          "w": "socialista",
+          "f": 377
+        },
+        {
+          "w": "liderado",
+          "f": 396
+        },
+        {
+          "w": "por",
+          "f": 407
+        },
+        {
+          "w": "la",
+          "f": 411
+        },
+        {
+          "w": "unión",
+          "f": 414
+        },
+        {
+          "w": "soviética",
+          "f": 420
+        },
+        {
+          "w": "la",
+          "f": 438
+        },
+        {
+          "w": "propiedad",
+          "f": 441
+        },
+        {
+          "w": "estatal",
+          "f": 454
+        },
+        {
+          "w": "y",
+          "f": 466
+        },
+        {
+          "w": "la",
+          "f": 468
+        },
+        {
+          "w": "planificación",
+          "f": 471
+        },
+        {
+          "w": "compitieron",
+          "f": 507
+        },
+        {
+          "w": "en",
+          "f": 526
+        },
+        {
+          "w": "armas",
+          "f": 529
+        },
+        {
+          "w": "nucleares",
+          "f": 537
+        },
+        {
+          "w": "y",
+          "f": 552
+        },
+        {
+          "w": "en",
+          "f": 554
+        },
+        {
+          "w": "el",
+          "f": 557
+        },
+        {
+          "w": "espacio",
+          "f": 561
+        },
+        {
+          "w": "hasta",
+          "f": 580
+        },
+        {
+          "w": "que",
+          "f": 589
+        },
+        {
+          "w": "la",
+          "f": 592
+        },
+        {
+          "w": "unión",
+          "f": 594
+        },
+        {
+          "w": "soviética",
+          "f": 600
+        },
+        {
+          "w": "se",
+          "f": 616
+        },
+        {
+          "w": "disolvió",
+          "f": 619
+        },
+        {
+          "w": "en",
+          "f": 632
+        },
+        {
+          "w": "mil",
+          "f": 635
+        },
+        {
+          "w": "novecientos",
+          "f": 640
+        },
+        {
+          "w": "noventa",
+          "f": 656
+        },
+        {
+          "w": "y",
+          "f": 668
+        },
+        {
+          "w": "uno",
+          "f": 670
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "linea",
+      "titulo": "Colombia en el siglo XX",
+      "texto": "En Colombia, entre los años cuarenta y cincuenta se vivió La Violencia entre liberales y conservadores, y el 9 de abril de 1948 fue asesinado Jorge Eliécer Gaitán. En 1958 comenzó el Frente Nacional. En la segunda mitad del siglo surgió el conflicto armado, que tuvo múltiples causas. Y en 1991, una nueva Constitución amplió los derechos y la participación ciudadana.",
+      "voz": "En Colombia, entre los años cuarenta y cincuenta se vivió La Violencia entre liberales y conservadores, y el nueve de abril de mil novecientos cuarenta y ocho fue asesinado Jorge Eliécer Gaitán. En mil novecientos cincuenta y ocho comenzó el Frente Nacional. En la segunda mitad del siglo surgió el conflicto armado, que tuvo múltiples causas. Y en mil novecientos noventa y uno, una nueva Constitución amplió los derechos y la participación ciudadana.",
+      "items": [
+        {
+          "etiqueta": "Años 40 y 50",
+          "titulo": "La Violencia",
+          "texto": "Liberales y conservadores",
+          "palabra": "violencia"
+        },
+        {
+          "etiqueta": "1948",
+          "titulo": "Asesinato de Gaitán",
+          "texto": "El Bogotazo",
+          "palabra": "gaitán"
+        },
+        {
+          "etiqueta": "1958",
+          "titulo": "Frente Nacional",
+          "texto": "Alternancia en el poder",
+          "palabra": "frente"
+        },
+        {
+          "etiqueta": "Desde 1950",
+          "titulo": "Conflicto armado",
+          "texto": "Múltiples causas",
+          "palabra": "conflicto"
+        },
+        {
+          "etiqueta": "1991",
+          "titulo": "Constitución",
+          "texto": "Derechos y participación",
+          "palabra": "constitución"
+        }
+      ],
+      "audio": "voz/el-siglo-xx-y-el-mundo-actual/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 679,
+      "frames": 707,
+      "chunks": [
+        {
+          "text": "En Colombia, entre los años cuarenta y",
+          "from": 0,
+          "to": 67
+        },
+        {
+          "text": "cincuenta se vivió La Violencia entre liberales",
+          "from": 67,
+          "to": 150
+        },
+        {
+          "text": "y conservadores, y el 9 de abril",
+          "from": 150,
+          "to": 206
+        },
+        {
+          "text": "de 1948 fue asesinado Jorge Eliécer Gaitán.",
+          "from": 206,
+          "to": 282
+        },
+        {
+          "text": "En 1958 comenzó el Frente Nacional.",
+          "from": 294,
+          "to": 377
+        },
+        {
+          "text": "En la segunda mitad del siglo surgió",
+          "from": 387,
+          "to": 441
+        },
+        {
+          "text": "el conflicto armado, que tuvo múltiples causas.",
+          "from": 441,
+          "to": 512
+        },
+        {
+          "text": "Y en 1991, una nueva Constitución amplió",
+          "from": 521,
+          "to": 596
+        },
+        {
+          "text": "los derechos y la participación ciudadana.",
+          "from": 596,
+          "to": 674
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "colombia",
+          "f": 7
+        },
+        {
+          "w": "entre",
+          "f": 20
+        },
+        {
+          "w": "los",
+          "f": 28
+        },
+        {
+          "w": "años",
+          "f": 32
+        },
+        {
+          "w": "cuarenta",
+          "f": 40
+        },
+        {
+          "w": "y",
+          "f": 50
+        },
+        {
+          "w": "cincuenta",
+          "f": 52
+        },
+        {
+          "w": "se",
+          "f": 66
+        },
+        {
+          "w": "vivió",
+          "f": 70
+        },
+        {
+          "w": "la",
+          "f": 79
+        },
+        {
+          "w": "violencia",
+          "f": 83
+        },
+        {
+          "w": "entre",
+          "f": 95
+        },
+        {
+          "w": "liberales",
+          "f": 103
+        },
+        {
+          "w": "y",
+          "f": 117
+        },
+        {
+          "w": "conservadores",
+          "f": 119
+        },
+        {
+          "w": "y",
+          "f": 151
+        },
+        {
+          "w": "el",
+          "f": 155
+        },
+        {
+          "w": "nueve",
+          "f": 158
+        },
+        {
+          "w": "de",
+          "f": 167
+        },
+        {
+          "w": "abril",
+          "f": 170
+        },
+        {
+          "w": "de",
+          "f": 178
+        },
+        {
+          "w": "mil",
+          "f": 181
+        },
+        {
+          "w": "novecientos",
+          "f": 186
+        },
+        {
+          "w": "cuarenta",
+          "f": 201
+        },
+        {
+          "w": "y",
+          "f": 213
+        },
+        {
+          "w": "ocho",
+          "f": 215
+        },
+        {
+          "w": "fue",
+          "f": 222
+        },
+        {
+          "w": "asesinado",
+          "f": 226
+        },
+        {
+          "w": "jorge",
+          "f": 243
+        },
+        {
+          "w": "eliécer",
+          "f": 253
+        },
+        {
+          "w": "gaitán",
+          "f": 266
+        },
+        {
+          "w": "en",
+          "f": 294
+        },
+        {
+          "w": "mil",
+          "f": 299
+        },
+        {
+          "w": "novecientos",
+          "f": 304
+        },
+        {
+          "w": "cincuenta",
+          "f": 318
+        },
+        {
+          "w": "y",
+          "f": 330
+        },
+        {
+          "w": "ocho",
+          "f": 332
+        },
+        {
+          "w": "comenzó",
+          "f": 338
+        },
+        {
+          "w": "el",
+          "f": 348
+        },
+        {
+          "w": "frente",
+          "f": 351
+        },
+        {
+          "w": "nacional",
+          "f": 360
+        },
+        {
+          "w": "en",
+          "f": 387
+        },
+        {
+          "w": "la",
+          "f": 392
+        },
+        {
+          "w": "segunda",
+          "f": 396
+        },
+        {
+          "w": "mitad",
+          "f": 406
+        },
+        {
+          "w": "del",
+          "f": 415
+        },
+        {
+          "w": "siglo",
+          "f": 421
+        },
+        {
+          "w": "surgió",
+          "f": 432
+        },
+        {
+          "w": "el",
+          "f": 440
+        },
+        {
+          "w": "conflicto",
+          "f": 443
+        },
+        {
+          "w": "armado",
+          "f": 457
+        },
+        {
+          "w": "que",
+          "f": 470
+        },
+        {
+          "w": "tuvo",
+          "f": 475
+        },
+        {
+          "w": "múltiples",
+          "f": 482
+        },
+        {
+          "w": "causas",
+          "f": 498
+        },
+        {
+          "w": "y",
+          "f": 521
+        },
+        {
+          "w": "en",
+          "f": 525
+        },
+        {
+          "w": "mil",
+          "f": 528
+        },
+        {
+          "w": "novecientos",
+          "f": 532
+        },
+        {
+          "w": "noventa",
+          "f": 546
+        },
+        {
+          "w": "y",
+          "f": 558
+        },
+        {
+          "w": "uno",
+          "f": 560
+        },
+        {
+          "w": "una",
+          "f": 570
+        },
+        {
+          "w": "nueva",
+          "f": 577
+        },
+        {
+          "w": "constitución",
+          "f": 583
+        },
+        {
+          "w": "amplió",
+          "f": 601
+        },
+        {
+          "w": "los",
+          "f": 609
+        },
+        {
+          "w": "derechos",
+          "f": 614
+        },
+        {
+          "w": "y",
+          "f": 627
+        },
+        {
+          "w": "la",
+          "f": 629
+        },
+        {
+          "w": "participación",
+          "f": 633
+        },
+        {
+          "w": "ciudadana",
+          "f": 653
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "América Latina",
+      "texto": "En América Latina, la Revolución cubana triunfó en 1959, y países como Chile, Argentina, Brasil y Uruguay vivieron dictaduras militares que violaron los derechos humanos. También crecieron los movimientos obreros, campesinos, estudiantiles e indígenas.",
+      "voz": "En América Latina, la Revolución cubana triunfó en mil novecientos cincuenta y nueve, y países como Chile, Argentina, Brasil y Uruguay vivieron dictaduras militares que violaron los derechos humanos. También crecieron los movimientos obreros, campesinos, estudiantiles e indígenas.",
+      "items": [
+        {
+          "titulo": "Revolución cubana",
+          "texto": "1959",
+          "palabra": "cubana"
+        },
+        {
+          "titulo": "Dictaduras militares",
+          "texto": "Chile, Argentina, Brasil, Uruguay",
+          "palabra": "dictaduras"
+        },
+        {
+          "titulo": "Movimientos sociales",
+          "texto": "Obreros, campesinos, estudiantes…",
+          "palabra": "movimientos"
+        }
+      ],
+      "audio": "voz/el-siglo-xx-y-el-mundo-actual/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 455,
+      "frames": 483,
+      "chunks": [
+        {
+          "text": "En América Latina, la Revolución cubana triunfó",
+          "from": 0,
+          "to": 88
+        },
+        {
+          "text": "en 1959, y países como Chile, Argentina,",
+          "from": 88,
+          "to": 163
+        },
+        {
+          "text": "Brasil y Uruguay vivieron dictaduras militares que",
+          "from": 163,
+          "to": 257
+        },
+        {
+          "text": "violaron los derechos humanos.",
+          "from": 257,
+          "to": 313
+        },
+        {
+          "text": "También crecieron los movimientos obreros,",
+          "from": 323,
+          "to": 389
+        },
+        {
+          "text": "campesinos, estudiantiles e indígenas.",
+          "from": 389,
+          "to": 450
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "américa",
+          "f": 6
+        },
+        {
+          "w": "latina",
+          "f": 17
+        },
+        {
+          "w": "la",
+          "f": 31
+        },
+        {
+          "w": "revolución",
+          "f": 35
+        },
+        {
+          "w": "cubana",
+          "f": 49
+        },
+        {
+          "w": "triunfó",
+          "f": 61
+        },
+        {
+          "w": "en",
+          "f": 71
+        },
+        {
+          "w": "mil",
+          "f": 75
+        },
+        {
+          "w": "novecientos",
+          "f": 79
+        },
+        {
+          "w": "cincuenta",
+          "f": 95
+        },
+        {
+          "w": "y",
+          "f": 108
+        },
+        {
+          "w": "nueve",
+          "f": 110
+        },
+        {
+          "w": "y",
+          "f": 130
+        },
+        {
+          "w": "países",
+          "f": 135
+        },
+        {
+          "w": "como",
+          "f": 147
+        },
+        {
+          "w": "chile",
+          "f": 155
+        },
+        {
+          "w": "argentina",
+          "f": 164
+        },
+        {
+          "w": "brasil",
+          "f": 180
+        },
+        {
+          "w": "y",
+          "f": 191
+        },
+        {
+          "w": "uruguay",
+          "f": 193
+        },
+        {
+          "w": "vivieron",
+          "f": 218
+        },
+        {
+          "w": "dictaduras",
+          "f": 232
+        },
+        {
+          "w": "militares",
+          "f": 250
+        },
+        {
+          "w": "que",
+          "f": 265
+        },
+        {
+          "w": "violaron",
+          "f": 269
+        },
+        {
+          "w": "los",
+          "f": 280
+        },
+        {
+          "w": "derechos",
+          "f": 284
+        },
+        {
+          "w": "humanos",
+          "f": 296
+        },
+        {
+          "w": "también",
+          "f": 323
+        },
+        {
+          "w": "crecieron",
+          "f": 333
+        },
+        {
+          "w": "los",
+          "f": 344
+        },
+        {
+          "w": "movimientos",
+          "f": 348
+        },
+        {
+          "w": "obreros",
+          "f": 365
+        },
+        {
+          "w": "campesinos",
+          "f": 378
+        },
+        {
+          "w": "estudiantiles",
+          "f": 399
+        },
+        {
+          "w": "e",
+          "f": 421
+        },
+        {
+          "w": "indígenas",
+          "f": 422
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el siglo XX y el mundo actual. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el siglo veinte y el mundo actual. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/el-siglo-xx-y-el-mundo-actual/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 179,
+      "frames": 339,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 25
+        },
+        {
+          "text": "Repasaste el siglo XX y el mundo actual.",
+          "from": 37,
+          "to": 100
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 107,
+          "to": 174
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 14
+        },
+        {
+          "w": "repasaste",
+          "f": 37
+        },
+        {
+          "w": "el",
+          "f": 52
+        },
+        {
+          "w": "siglo",
+          "f": 55
+        },
+        {
+          "w": "veinte",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 74
+        },
+        {
+          "w": "el",
+          "f": 75
+        },
+        {
+          "w": "mundo",
+          "f": 78
+        },
+        {
+          "w": "actual",
+          "f": 85
+        },
+        {
+          "w": "sigue",
+          "f": 107
+        },
+        {
+          "w": "con",
+          "f": 116
+        },
+        {
+          "w": "el",
+          "f": 121
+        },
+        {
+          "w": "siguiente",
+          "f": 123
+        },
+        {
+          "w": "tema",
+          "f": 135
+        },
+        {
+          "w": "de",
+          "f": 143
+        },
+        {
+          "w": "tu",
+          "f": 146
+        },
+        {
+          "w": "ruta",
+          "f": 150
+        }
+      ]
+    }
+  ]
+}

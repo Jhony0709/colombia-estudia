@@ -1,0 +1,183 @@
+{
+  "tema": "energia-trabajo-y-potencia",
+  "componente": "Transición",
+  "area": "Física",
+  "titulo": "Energía, trabajo, potencia y conservación de la energía",
+  "siguiente": "El ser humano, la libertad y la existencia",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la energía, el trabajo, la potencia y la conservación de la energía.",
+      "voz": "Repaso del tema: la energía, el trabajo, la potencia y la conservación de la energía."
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "El trabajo mecánico",
+      "texto": "La energía permite producir cambios y se mide en julios. Hay trabajo mecánico cuando una fuerza produce un desplazamiento en su misma dirección: W = F · d. Si empujas una caja con 20 N a lo largo de 5 m, haces 100 J de trabajo.",
+      "voz": "La energía permite producir cambios y se mide en julios. Hay trabajo mecánico cuando una fuerza produce un desplazamiento en su misma dirección: el trabajo es igual a la fuerza por el desplazamiento. Si empujas una caja con veinte newtons a lo largo de cinco metros, haces cien julios de trabajo.",
+      "imagenes": [
+        {
+          "src": "transicion/trabajo-mecanico.webp",
+          "focos": [
+            {
+              "palabra": "fuerza",
+              "x": 0.45,
+              "y": 0.6,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "desplazamiento",
+              "x": 0.6,
+              "y": 0.85,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "igual",
+              "x": 0.75,
+              "y": 0.2,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "caja",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La energía cinética",
+      "texto": "La energía cinética es la que tiene un cuerpo por moverse: depende de su masa y de su velocidad, que va elevada al cuadrado. Se calcula como Ec = m · v² / 2.",
+      "voz": "La energía cinética es la que tiene un cuerpo por moverse: depende de su masa y de su velocidad, que va elevada al cuadrado. Se calcula como la masa por la velocidad al cuadrado, dividido entre dos.",
+      "items": [
+        {
+          "titulo": "Masa",
+          "texto": "m, en kilogramos",
+          "palabra": "masa"
+        },
+        {
+          "titulo": "Velocidad",
+          "texto": "v, al cuadrado",
+          "palabra": "velocidad"
+        },
+        {
+          "titulo": "Fórmula",
+          "texto": "Ec = m · v² / 2",
+          "palabra": "calcula"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "La energía potencial",
+      "texto": "La energía potencial gravitacional depende de la altura: a más altura, más energía, como una maceta en una repisa. Y la potencial elástica se guarda al estirar o comprimir un resorte.",
+      "voz": "La energía potencial gravitacional depende de la altura: a más altura, más energía, como una maceta en una repisa. Y la potencial elástica se guarda al estirar o comprimir un resorte.",
+      "imagenes": [
+        {
+          "src": "transicion/energia-potencial-gravitacional.webp",
+          "focos": [
+            {
+              "palabra": "altura",
+              "x": 0.3,
+              "y": 0.6,
+              "zoom": 1.4
+            },
+            {
+              "palabra": "maceta",
+              "x": 0.4,
+              "y": 0.2,
+              "zoom": 1.3
+            }
+          ]
+        },
+        {
+          "src": "transicion/resorte.webp",
+          "palabra": "elástica",
+          "focos": [
+            {
+              "palabra": "comprimir",
+              "x": 0.6,
+              "y": 0.72,
+              "zoom": 1.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Energía mecánica y potencia",
+      "texto": "La energía mecánica es la suma de la cinética y la potencial. Y la potencia indica qué tan rápido se hace un trabajo: es el trabajo dividido entre el tiempo, y se mide en vatios.",
+      "voz": "La energía mecánica es la suma de la cinética y la potencial. Y la potencia indica qué tan rápido se hace un trabajo: es el trabajo dividido entre el tiempo, y se mide en vatios.",
+      "items": [
+        {
+          "titulo": "Energía mecánica",
+          "texto": "Em = Ec + Ep",
+          "palabra": "suma"
+        },
+        {
+          "titulo": "Potencia",
+          "texto": "P = W / t",
+          "palabra": "potencia"
+        },
+        {
+          "titulo": "Vatios",
+          "texto": "Su unidad",
+          "palabra": "vatios"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "imagen",
+      "titulo": "La conservación de la energía",
+      "texto": "La energía no se crea ni se destruye: se transforma. En una montaña rusa, arriba el carro tiene mucha energía potencial; al bajar, la potencial disminuye y la cinética aumenta. Y con el rozamiento, parte se convierte en calor y sonido.",
+      "voz": "La energía no se crea ni se destruye: se transforma. En una montaña rusa, arriba el carro tiene mucha energía potencial; al bajar, la potencial disminuye y la cinética aumenta. Y con el rozamiento, parte se convierte en calor y sonido.",
+      "imagenes": [
+        {
+          "src": "transicion/montana-rusa.webp",
+          "focos": [
+            {
+              "palabra": "arriba",
+              "x": 0.2,
+              "y": 0.2,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "bajar",
+              "x": 0.65,
+              "y": 0.35,
+              "zoom": 1.4
+            },
+            {
+              "palabra": "cinética",
+              "x": 0.55,
+              "y": 0.85,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "rozamiento",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la energía, el trabajo y la potencia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la energía, el trabajo y la potencia. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

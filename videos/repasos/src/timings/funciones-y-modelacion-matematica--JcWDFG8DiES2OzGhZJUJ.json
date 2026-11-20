@@ -1,0 +1,1448 @@
+{
+  "tema": "funciones-y-modelacion-matematica",
+  "componente": "Proyección",
+  "area": "Matemáticas",
+  "titulo": "Funciones y modelación matemática",
+  "siguiente": "Introducción al pensamiento filosófico",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las funciones y la modelación matemática.",
+      "voz": "Repaso del tema: las funciones y la modelación matemática.",
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 113,
+      "frames": 141,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 31
+        },
+        {
+          "text": "las funciones y la modelación matemática.",
+          "from": 41,
+          "to": 109
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "las",
+          "f": 41
+        },
+        {
+          "w": "funciones",
+          "f": 46
+        },
+        {
+          "w": "y",
+          "f": 60
+        },
+        {
+          "w": "la",
+          "f": 62
+        },
+        {
+          "w": "modelación",
+          "f": 65
+        },
+        {
+          "w": "matemática",
+          "f": 79
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Cuatro formas de representar",
+      "texto": "Una función muestra cómo cambia una cantidad cuando cambia otra: a cada entrada le corresponde una sola salida. Se puede representar con palabras, con una expresión algebraica, con una tabla o con una gráfica.",
+      "voz": "Una función muestra cómo cambia una cantidad cuando cambia otra: a cada entrada le corresponde una sola salida. Se puede representar con palabras, con una expresión algebraica, con una tabla o con una gráfica.",
+      "items": [
+        {
+          "titulo": "Verbal",
+          "texto": "Ahorro $10.000 por semana",
+          "palabra": "palabras"
+        },
+        {
+          "titulo": "Algebraica",
+          "texto": "f(x) = 10.000x",
+          "palabra": "algebraica"
+        },
+        {
+          "titulo": "Tabla",
+          "texto": "1 → $10.000 · 2 → $20.000",
+          "palabra": "tabla"
+        },
+        {
+          "titulo": "Gráfica",
+          "texto": "Puntos en el plano cartesiano",
+          "palabra": "gráfica"
+        }
+      ],
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 342,
+      "frames": 370,
+      "chunks": [
+        {
+          "text": "Una función muestra cómo cambia",
+          "from": 0,
+          "to": 46
+        },
+        {
+          "text": "una cantidad cuando cambia otra:",
+          "from": 46,
+          "to": 93
+        },
+        {
+          "text": "a cada entrada le corresponde una sola salida.",
+          "from": 103,
+          "to": 171
+        },
+        {
+          "text": "Se puede representar con palabras, con una expresión",
+          "from": 175,
+          "to": 263
+        },
+        {
+          "text": "algebraica, con una tabla o con una gráfica.",
+          "from": 263,
+          "to": 337
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "función",
+          "f": 9
+        },
+        {
+          "w": "muestra",
+          "f": 18
+        },
+        {
+          "w": "cómo",
+          "f": 29
+        },
+        {
+          "w": "cambia",
+          "f": 36
+        },
+        {
+          "w": "una",
+          "f": 43
+        },
+        {
+          "w": "cantidad",
+          "f": 48
+        },
+        {
+          "w": "cuando",
+          "f": 61
+        },
+        {
+          "w": "cambia",
+          "f": 70
+        },
+        {
+          "w": "otra",
+          "f": 80
+        },
+        {
+          "w": "a",
+          "f": 103
+        },
+        {
+          "w": "cada",
+          "f": 107
+        },
+        {
+          "w": "entrada",
+          "f": 112
+        },
+        {
+          "w": "le",
+          "f": 124
+        },
+        {
+          "w": "corresponde",
+          "f": 127
+        },
+        {
+          "w": "una",
+          "f": 143
+        },
+        {
+          "w": "sola",
+          "f": 149
+        },
+        {
+          "w": "salida",
+          "f": 156
+        },
+        {
+          "w": "se",
+          "f": 175
+        },
+        {
+          "w": "puede",
+          "f": 180
+        },
+        {
+          "w": "representar",
+          "f": 187
+        },
+        {
+          "w": "con",
+          "f": 204
+        },
+        {
+          "w": "palabras",
+          "f": 210
+        },
+        {
+          "w": "con",
+          "f": 227
+        },
+        {
+          "w": "una",
+          "f": 233
+        },
+        {
+          "w": "expresión",
+          "f": 237
+        },
+        {
+          "w": "algebraica",
+          "f": 253
+        },
+        {
+          "w": "con",
+          "f": 271
+        },
+        {
+          "w": "una",
+          "f": 277
+        },
+        {
+          "w": "tabla",
+          "f": 283
+        },
+        {
+          "w": "o",
+          "f": 294
+        },
+        {
+          "w": "con",
+          "f": 298
+        },
+        {
+          "w": "una",
+          "f": 303
+        },
+        {
+          "w": "gráfica",
+          "f": 309
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Dominio y rango",
+      "texto": "El dominio son los valores que puede tomar x, y el rango, los resultados de la función. Si una máquina hace 4 botellas por minuto durante máximo 5 minutos, el dominio va de 0 a 5 minutos y el rango, de 0 a 20 botellas.",
+      "voz": "El dominio son los valores que puede tomar equis, y el rango, los resultados de la función. Si una máquina hace cuatro botellas por minuto durante máximo cinco minutos, el dominio va de cero a cinco minutos y el rango, de cero a veinte botellas.",
+      "items": [
+        {
+          "titulo": "Dominio",
+          "texto": "De 0 a 5 minutos",
+          "palabra": "dominio"
+        },
+        {
+          "titulo": "Rango",
+          "texto": "De 0 a 20 botellas",
+          "palabra": "rango"
+        },
+        {
+          "titulo": "La función",
+          "texto": "f(x) = 4x",
+          "palabra": "máquina"
+        }
+      ],
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 392,
+      "frames": 420,
+      "chunks": [
+        {
+          "text": "El dominio son los valores que puede tomar x,",
+          "from": 0,
+          "to": 69
+        },
+        {
+          "text": "y el rango, los resultados de la función.",
+          "from": 69,
+          "to": 132
+        },
+        {
+          "text": "Si una máquina hace 4 botellas por minuto durante máximo",
+          "from": 141,
+          "to": 249
+        },
+        {
+          "text": "5 minutos, el dominio va de 0 a 5 minutos",
+          "from": 249,
+          "to": 328
+        },
+        {
+          "text": "y el rango, de 0 a 20 botellas.",
+          "from": 328,
+          "to": 387
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "dominio",
+          "f": 7
+        },
+        {
+          "w": "son",
+          "f": 18
+        },
+        {
+          "w": "los",
+          "f": 22
+        },
+        {
+          "w": "valores",
+          "f": 26
+        },
+        {
+          "w": "que",
+          "f": 37
+        },
+        {
+          "w": "puede",
+          "f": 41
+        },
+        {
+          "w": "tomar",
+          "f": 48
+        },
+        {
+          "w": "equis",
+          "f": 59
+        },
+        {
+          "w": "y",
+          "f": 70
+        },
+        {
+          "w": "el",
+          "f": 73
+        },
+        {
+          "w": "rango",
+          "f": 77
+        },
+        {
+          "w": "los",
+          "f": 88
+        },
+        {
+          "w": "resultados",
+          "f": 93
+        },
+        {
+          "w": "de",
+          "f": 108
+        },
+        {
+          "w": "la",
+          "f": 111
+        },
+        {
+          "w": "función",
+          "f": 115
+        },
+        {
+          "w": "si",
+          "f": 141
+        },
+        {
+          "w": "una",
+          "f": 147
+        },
+        {
+          "w": "máquina",
+          "f": 152
+        },
+        {
+          "w": "hace",
+          "f": 162
+        },
+        {
+          "w": "cuatro",
+          "f": 168
+        },
+        {
+          "w": "botellas",
+          "f": 178
+        },
+        {
+          "w": "por",
+          "f": 192
+        },
+        {
+          "w": "minuto",
+          "f": 197
+        },
+        {
+          "w": "durante",
+          "f": 209
+        },
+        {
+          "w": "máximo",
+          "f": 220
+        },
+        {
+          "w": "cinco",
+          "f": 231
+        },
+        {
+          "w": "minutos",
+          "f": 240
+        },
+        {
+          "w": "el",
+          "f": 263
+        },
+        {
+          "w": "dominio",
+          "f": 268
+        },
+        {
+          "w": "va",
+          "f": 279
+        },
+        {
+          "w": "de",
+          "f": 282
+        },
+        {
+          "w": "cero",
+          "f": 285
+        },
+        {
+          "w": "a",
+          "f": 295
+        },
+        {
+          "w": "cinco",
+          "f": 297
+        },
+        {
+          "w": "minutos",
+          "f": 306
+        },
+        {
+          "w": "y",
+          "f": 322
+        },
+        {
+          "w": "el",
+          "f": 326
+        },
+        {
+          "w": "rango",
+          "f": 330
+        },
+        {
+          "w": "de",
+          "f": 344
+        },
+        {
+          "w": "cero",
+          "f": 348
+        },
+        {
+          "w": "a",
+          "f": 355
+        },
+        {
+          "w": "veinte",
+          "f": 357
+        },
+        {
+          "w": "botellas",
+          "f": 365
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Función lineal y función afín",
+      "texto": "La función lineal, f(x) = mx, es una recta que pasa por el origen. La afín, f(x) = mx + b, corta el eje y en b: como un taxi que cobra $4.500 al iniciar y $2.000 por kilómetro. La pendiente, m, dice si la función crece, decrece o es constante.",
+      "voz": "La función lineal, efe de equis igual a eme equis, es una recta que pasa por el origen. La afín, efe de equis igual a eme equis más be, corta el eje ye en be: como un taxi que cobra cuatro mil quinientos pesos al iniciar y dos mil por kilómetro. La pendiente, eme, dice si la función crece, decrece o es constante.",
+      "columnas": [
+        {
+          "titulo": "Lineal",
+          "palabra": "lineal",
+          "puntos": [
+            {
+              "texto": "f(x) = mx",
+              "palabra": "eme"
+            },
+            {
+              "texto": "Pasa por el origen",
+              "palabra": "origen"
+            }
+          ]
+        },
+        {
+          "titulo": "Afín",
+          "palabra": "afín",
+          "puntos": [
+            {
+              "texto": "f(x) = mx + b",
+              "palabra": "be"
+            },
+            {
+              "texto": "Taxi: f(x) = 4.500 + 2.000x",
+              "palabra": "taxi"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 533,
+      "frames": 561,
+      "chunks": [
+        {
+          "text": "La función lineal, f(x) = mx, es",
+          "from": 0,
+          "to": 69
+        },
+        {
+          "text": "una recta que pasa por el origen.",
+          "from": 69,
+          "to": 140
+        },
+        {
+          "text": "La afín, f(x) = mx + b, corta el eje y en b:",
+          "from": 150,
+          "to": 273
+        },
+        {
+          "text": "como un taxi que cobra $4.500",
+          "from": 275,
+          "to": 331
+        },
+        {
+          "text": "al iniciar y $2.000 por kilómetro.",
+          "from": 331,
+          "to": 397
+        },
+        {
+          "text": "La pendiente, m, dice si la",
+          "from": 407,
+          "to": 457
+        },
+        {
+          "text": "función crece, decrece o es constante.",
+          "from": 457,
+          "to": 528
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "función",
+          "f": 6
+        },
+        {
+          "w": "lineal",
+          "f": 16
+        },
+        {
+          "w": "efe",
+          "f": 29
+        },
+        {
+          "w": "de",
+          "f": 38
+        },
+        {
+          "w": "equis",
+          "f": 41
+        },
+        {
+          "w": "igual",
+          "f": 51
+        },
+        {
+          "w": "a",
+          "f": 59
+        },
+        {
+          "w": "eme",
+          "f": 62
+        },
+        {
+          "w": "equis",
+          "f": 70
+        },
+        {
+          "w": "es",
+          "f": 84
+        },
+        {
+          "w": "una",
+          "f": 90
+        },
+        {
+          "w": "recta",
+          "f": 96
+        },
+        {
+          "w": "que",
+          "f": 105
+        },
+        {
+          "w": "pasa",
+          "f": 109
+        },
+        {
+          "w": "por",
+          "f": 117
+        },
+        {
+          "w": "el",
+          "f": 122
+        },
+        {
+          "w": "origen",
+          "f": 125
+        },
+        {
+          "w": "la",
+          "f": 150
+        },
+        {
+          "w": "afín",
+          "f": 156
+        },
+        {
+          "w": "efe",
+          "f": 168
+        },
+        {
+          "w": "de",
+          "f": 176
+        },
+        {
+          "w": "equis",
+          "f": 180
+        },
+        {
+          "w": "igual",
+          "f": 189
+        },
+        {
+          "w": "a",
+          "f": 199
+        },
+        {
+          "w": "eme",
+          "f": 202
+        },
+        {
+          "w": "equis",
+          "f": 210
+        },
+        {
+          "w": "más",
+          "f": 220
+        },
+        {
+          "w": "be",
+          "f": 227
+        },
+        {
+          "w": "corta",
+          "f": 242
+        },
+        {
+          "w": "el",
+          "f": 251
+        },
+        {
+          "w": "eje",
+          "f": 255
+        },
+        {
+          "w": "ye",
+          "f": 260
+        },
+        {
+          "w": "en",
+          "f": 264
+        },
+        {
+          "w": "be",
+          "f": 268
+        },
+        {
+          "w": "como",
+          "f": 275
+        },
+        {
+          "w": "un",
+          "f": 282
+        },
+        {
+          "w": "taxi",
+          "f": 286
+        },
+        {
+          "w": "que",
+          "f": 295
+        },
+        {
+          "w": "cobra",
+          "f": 298
+        },
+        {
+          "w": "cuatro",
+          "f": 306
+        },
+        {
+          "w": "mil",
+          "f": 315
+        },
+        {
+          "w": "quinientos",
+          "f": 319
+        },
+        {
+          "w": "pesos",
+          "f": 331
+        },
+        {
+          "w": "al",
+          "f": 340
+        },
+        {
+          "w": "iniciar",
+          "f": 344
+        },
+        {
+          "w": "y",
+          "f": 359
+        },
+        {
+          "w": "dos",
+          "f": 363
+        },
+        {
+          "w": "mil",
+          "f": 368
+        },
+        {
+          "w": "por",
+          "f": 373
+        },
+        {
+          "w": "kilómetro",
+          "f": 378
+        },
+        {
+          "w": "la",
+          "f": 407
+        },
+        {
+          "w": "pendiente",
+          "f": 412
+        },
+        {
+          "w": "eme",
+          "f": 430
+        },
+        {
+          "w": "dice",
+          "f": 442
+        },
+        {
+          "w": "si",
+          "f": 449
+        },
+        {
+          "w": "la",
+          "f": 453
+        },
+        {
+          "w": "función",
+          "f": 456
+        },
+        {
+          "w": "crece",
+          "f": 468
+        },
+        {
+          "w": "decrece",
+          "f": 481
+        },
+        {
+          "w": "o",
+          "f": 496
+        },
+        {
+          "w": "es",
+          "f": 499
+        },
+        {
+          "w": "constante",
+          "f": 502
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La función cuadrática",
+      "texto": "La función cuadrática, f(x) = ax² + bx + c, tiene forma de parábola: abre hacia arriba si a es positiva y hacia abajo si es negativa. Describe, por ejemplo, la trayectoria de una pelota lanzada al aire, y su punto máximo o mínimo se llama vértice.",
+      "voz": "La función cuadrática tiene forma de parábola: abre hacia arriba si a es positiva y hacia abajo si es negativa. Describe, por ejemplo, la trayectoria de una pelota lanzada al aire, y su punto máximo o mínimo se llama vértice.",
+      "items": [
+        {
+          "titulo": "Parábola",
+          "texto": "f(x) = ax² + bx + c",
+          "palabra": "parábola"
+        },
+        {
+          "titulo": "Hacia arriba o abajo",
+          "texto": "Según el signo de a",
+          "palabra": "arriba"
+        },
+        {
+          "titulo": "Una pelota lanzada",
+          "texto": "Ejemplo de uso",
+          "palabra": "pelota"
+        },
+        {
+          "titulo": "Vértice",
+          "texto": "Máximo o mínimo",
+          "palabra": "vértice"
+        }
+      ],
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 385,
+      "frames": 413,
+      "chunks": [
+        {
+          "text": "La función cuadrática, f(x) = ax² +",
+          "from": 0,
+          "to": 37
+        },
+        {
+          "text": "bx + c, tiene forma de parábola:",
+          "from": 37,
+          "to": 72
+        },
+        {
+          "text": "abre hacia arriba si a es positiva",
+          "from": 83,
+          "to": 134
+        },
+        {
+          "text": "y hacia abajo si es negativa.",
+          "from": 134,
+          "to": 177
+        },
+        {
+          "text": "Describe, por ejemplo, la trayectoria de una",
+          "from": 186,
+          "to": 263
+        },
+        {
+          "text": "pelota lanzada al aire, y su punto",
+          "from": 263,
+          "to": 323
+        },
+        {
+          "text": "máximo o mínimo se llama vértice.",
+          "from": 323,
+          "to": 380
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "función",
+          "f": 6
+        },
+        {
+          "w": "cuadrática",
+          "f": 15
+        },
+        {
+          "w": "tiene",
+          "f": 33
+        },
+        {
+          "w": "forma",
+          "f": 40
+        },
+        {
+          "w": "de",
+          "f": 48
+        },
+        {
+          "w": "parábola",
+          "f": 52
+        },
+        {
+          "w": "abre",
+          "f": 83
+        },
+        {
+          "w": "hacia",
+          "f": 92
+        },
+        {
+          "w": "arriba",
+          "f": 98
+        },
+        {
+          "w": "si",
+          "f": 108
+        },
+        {
+          "w": "a",
+          "f": 112
+        },
+        {
+          "w": "es",
+          "f": 116
+        },
+        {
+          "w": "positiva",
+          "f": 118
+        },
+        {
+          "w": "y",
+          "f": 136
+        },
+        {
+          "w": "hacia",
+          "f": 138
+        },
+        {
+          "w": "abajo",
+          "f": 143
+        },
+        {
+          "w": "si",
+          "f": 152
+        },
+        {
+          "w": "es",
+          "f": 155
+        },
+        {
+          "w": "negativa",
+          "f": 158
+        },
+        {
+          "w": "describe",
+          "f": 186
+        },
+        {
+          "w": "por",
+          "f": 202
+        },
+        {
+          "w": "ejemplo",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 217
+        },
+        {
+          "w": "trayectoria",
+          "f": 220
+        },
+        {
+          "w": "de",
+          "f": 239
+        },
+        {
+          "w": "una",
+          "f": 241
+        },
+        {
+          "w": "pelota",
+          "f": 246
+        },
+        {
+          "w": "lanzada",
+          "f": 257
+        },
+        {
+          "w": "al",
+          "f": 268
+        },
+        {
+          "w": "aire",
+          "f": 272
+        },
+        {
+          "w": "y",
+          "f": 291
+        },
+        {
+          "w": "su",
+          "f": 295
+        },
+        {
+          "w": "punto",
+          "f": 300
+        },
+        {
+          "w": "máximo",
+          "f": 309
+        },
+        {
+          "w": "o",
+          "f": 324
+        },
+        {
+          "w": "mínimo",
+          "f": 327
+        },
+        {
+          "w": "se",
+          "f": 341
+        },
+        {
+          "w": "llama",
+          "f": 344
+        },
+        {
+          "w": "vértice",
+          "f": 354
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "pasos",
+      "titulo": "Modelar una situación",
+      "texto": "Para modelar una situación real, se identifica el problema, se reconocen las variables, se plantea la función y se calcula e interpreta el resultado. Si vendes camisetas a $30.000 e invertiste $100.000, la ganancia es G(x) = 30.000x − 100.000; con 10 camisetas, ganas $200.000.",
+      "voz": "Para modelar una situación real, se identifica el problema, se reconocen las variables, se plantea la función y se calcula e interpreta el resultado. Si vendes camisetas a treinta mil pesos e invertiste cien mil, la ganancia es ge de equis igual a treinta mil equis menos cien mil; con diez camisetas, ganas doscientos mil.",
+      "items": [
+        {
+          "titulo": "Identificar",
+          "palabra": "identifica"
+        },
+        {
+          "titulo": "Variables",
+          "palabra": "variables"
+        },
+        {
+          "titulo": "Función",
+          "palabra": "plantea"
+        },
+        {
+          "titulo": "Interpretar",
+          "palabra": "interpreta"
+        }
+      ],
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 552,
+      "frames": 580,
+      "chunks": [
+        {
+          "text": "Para modelar una situación real, se identifica el",
+          "from": 0,
+          "to": 84
+        },
+        {
+          "text": "problema, se reconocen las variables, se plantea la",
+          "from": 84,
+          "to": 171
+        },
+        {
+          "text": "función y se calcula e interpreta el resultado.",
+          "from": 171,
+          "to": 251
+        },
+        {
+          "text": "Si vendes camisetas a $30.000 e invertiste $100.000,",
+          "from": 263,
+          "to": 376
+        },
+        {
+          "text": "la ganancia es G(x) = 30.000x − 100.000;",
+          "from": 376,
+          "to": 463
+        },
+        {
+          "text": "con 10 camisetas, ganas $200.000.",
+          "from": 474,
+          "to": 548
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "modelar",
+          "f": 9
+        },
+        {
+          "w": "una",
+          "f": 20
+        },
+        {
+          "w": "situación",
+          "f": 24
+        },
+        {
+          "w": "real",
+          "f": 38
+        },
+        {
+          "w": "se",
+          "f": 47
+        },
+        {
+          "w": "identifica",
+          "f": 50
+        },
+        {
+          "w": "el",
+          "f": 66
+        },
+        {
+          "w": "problema",
+          "f": 69
+        },
+        {
+          "w": "se",
+          "f": 94
+        },
+        {
+          "w": "reconocen",
+          "f": 99
+        },
+        {
+          "w": "las",
+          "f": 113
+        },
+        {
+          "w": "variables",
+          "f": 118
+        },
+        {
+          "w": "se",
+          "f": 146
+        },
+        {
+          "w": "plantea",
+          "f": 150
+        },
+        {
+          "w": "la",
+          "f": 162
+        },
+        {
+          "w": "función",
+          "f": 165
+        },
+        {
+          "w": "y",
+          "f": 179
+        },
+        {
+          "w": "se",
+          "f": 183
+        },
+        {
+          "w": "calcula",
+          "f": 186
+        },
+        {
+          "w": "e",
+          "f": 203
+        },
+        {
+          "w": "interpreta",
+          "f": 205
+        },
+        {
+          "w": "el",
+          "f": 224
+        },
+        {
+          "w": "resultado",
+          "f": 227
+        },
+        {
+          "w": "si",
+          "f": 263
+        },
+        {
+          "w": "vendes",
+          "f": 268
+        },
+        {
+          "w": "camisetas",
+          "f": 278
+        },
+        {
+          "w": "a",
+          "f": 294
+        },
+        {
+          "w": "treinta",
+          "f": 296
+        },
+        {
+          "w": "mil",
+          "f": 305
+        },
+        {
+          "w": "pesos",
+          "f": 311
+        },
+        {
+          "w": "e",
+          "f": 323
+        },
+        {
+          "w": "invertiste",
+          "f": 325
+        },
+        {
+          "w": "cien",
+          "f": 342
+        },
+        {
+          "w": "mil",
+          "f": 349
+        },
+        {
+          "w": "la",
+          "f": 359
+        },
+        {
+          "w": "ganancia",
+          "f": 364
+        },
+        {
+          "w": "es",
+          "f": 375
+        },
+        {
+          "w": "ge",
+          "f": 379
+        },
+        {
+          "w": "de",
+          "f": 388
+        },
+        {
+          "w": "equis",
+          "f": 393
+        },
+        {
+          "w": "igual",
+          "f": 405
+        },
+        {
+          "w": "a",
+          "f": 414
+        },
+        {
+          "w": "treinta",
+          "f": 417
+        },
+        {
+          "w": "mil",
+          "f": 426
+        },
+        {
+          "w": "equis",
+          "f": 432
+        },
+        {
+          "w": "menos",
+          "f": 441
+        },
+        {
+          "w": "cien",
+          "f": 449
+        },
+        {
+          "w": "mil",
+          "f": 455
+        },
+        {
+          "w": "con",
+          "f": 474
+        },
+        {
+          "w": "diez",
+          "f": 480
+        },
+        {
+          "w": "camisetas",
+          "f": 486
+        },
+        {
+          "w": "ganas",
+          "f": 506
+        },
+        {
+          "w": "doscientos",
+          "f": 515
+        },
+        {
+          "w": "mil",
+          "f": 530
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las funciones y la modelación matemática. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las funciones y la modelación matemática. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/funciones-y-modelacion-matematica/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 179,
+      "frames": 339,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 28
+        },
+        {
+          "text": "Repasaste las funciones y la modelación matemática.",
+          "from": 37,
+          "to": 110
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 113,
+          "to": 174
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 7
+        },
+        {
+          "w": "bien",
+          "f": 15
+        },
+        {
+          "w": "repasaste",
+          "f": 37
+        },
+        {
+          "w": "las",
+          "f": 53
+        },
+        {
+          "w": "funciones",
+          "f": 56
+        },
+        {
+          "w": "y",
+          "f": 70
+        },
+        {
+          "w": "la",
+          "f": 72
+        },
+        {
+          "w": "modelación",
+          "f": 75
+        },
+        {
+          "w": "matemática",
+          "f": 89
+        },
+        {
+          "w": "sigue",
+          "f": 113
+        },
+        {
+          "w": "con",
+          "f": 122
+        },
+        {
+          "w": "el",
+          "f": 127
+        },
+        {
+          "w": "siguiente",
+          "f": 129
+        },
+        {
+          "w": "tema",
+          "f": 141
+        },
+        {
+          "w": "de",
+          "f": 148
+        },
+        {
+          "w": "tu",
+          "f": 152
+        },
+        {
+          "w": "ruta",
+          "f": 156
+        }
+      ]
+    }
+  ]
+}

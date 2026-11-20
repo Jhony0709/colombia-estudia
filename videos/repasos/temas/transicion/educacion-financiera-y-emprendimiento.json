@@ -1,0 +1,161 @@
+{
+  "tema": "educacion-financiera-y-emprendimiento",
+  "componente": "Transición",
+  "area": "Economía y ciencias políticas",
+  "titulo": "Educación financiera, emprendimiento y economía cotidiana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la educación financiera, el emprendimiento y la economía cotidiana.",
+      "voz": "Repaso del tema: la educación financiera, el emprendimiento y la economía cotidiana."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Ingresos y gastos",
+      "texto": "Los ingresos son el dinero que recibimos, y los gastos, lo que pagamos. Los gastos pueden ser fijos, como el arriendo; variables, como la comida; o extraordinarios, como una reparación imprevista.",
+      "voz": "Los ingresos son el dinero que recibimos, y los gastos, lo que pagamos. Los gastos pueden ser fijos, como el arriendo; variables, como la comida; o extraordinarios, como una reparación imprevista.",
+      "items": [
+        {
+          "titulo": "Ingresos",
+          "texto": "Lo que recibimos",
+          "palabra": "ingresos"
+        },
+        {
+          "titulo": "Gastos fijos",
+          "texto": "El arriendo",
+          "palabra": "fijos"
+        },
+        {
+          "titulo": "Gastos variables",
+          "texto": "La comida",
+          "palabra": "variables"
+        },
+        {
+          "titulo": "Extraordinarios",
+          "texto": "Una reparación",
+          "palabra": "extraordinarios"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "pasos",
+      "titulo": "El presupuesto",
+      "texto": "Para hacer un presupuesto, identifica tus ingresos, registra tus gastos, clasifícalos, compara los ingresos con los gastos y establece prioridades.",
+      "voz": "Para hacer un presupuesto, identifica tus ingresos, registra tus gastos, clasifícalos, compara los ingresos con los gastos y establece prioridades.",
+      "items": [
+        {
+          "titulo": "Ingresos",
+          "palabra": "identifica"
+        },
+        {
+          "titulo": "Gastos",
+          "palabra": "registra"
+        },
+        {
+          "titulo": "Clasificar",
+          "palabra": "clasifícalos"
+        },
+        {
+          "titulo": "Comparar",
+          "palabra": "compara"
+        },
+        {
+          "titulo": "Prioridades",
+          "palabra": "prioridades"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Ahorro y crédito",
+      "texto": "Ahorrar es reservar dinero para emergencias o metas. Un crédito, en cambio, es dinero prestado que se devuelve en cuotas, durante un plazo y con intereses: el interés es el costo de usar dinero prestado.",
+      "voz": "Ahorrar es reservar dinero para emergencias o metas. Un crédito, en cambio, es dinero prestado que se devuelve en cuotas, durante un plazo y con intereses: el interés es el costo de usar dinero prestado.",
+      "items": [
+        {
+          "titulo": "Ahorro",
+          "texto": "Emergencias y metas",
+          "palabra": "ahorrar"
+        },
+        {
+          "titulo": "Crédito",
+          "texto": "Dinero prestado",
+          "palabra": "crédito"
+        },
+        {
+          "titulo": "Cuotas y plazo",
+          "texto": "Cómo se devuelve",
+          "palabra": "cuotas"
+        },
+        {
+          "titulo": "Interés",
+          "texto": "El costo del préstamo",
+          "palabra": "interés"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El trabajo",
+      "texto": "En un empleo formal hay contrato de trabajo, salario, prestaciones sociales y seguridad social en salud, pensión y riesgos laborales. La prestación de servicios es distinta: es un contrato civil o comercial, con autonomía.",
+      "voz": "En un empleo formal hay contrato de trabajo, salario, prestaciones sociales y seguridad social en salud, pensión y riesgos laborales. La prestación de servicios es distinta: es un contrato civil o comercial, con autonomía.",
+      "items": [
+        {
+          "titulo": "Contrato de trabajo",
+          "palabra": "contrato"
+        },
+        {
+          "titulo": "Salario y prestaciones",
+          "palabra": "salario"
+        },
+        {
+          "titulo": "Seguridad social",
+          "texto": "Salud, pensión, riesgos",
+          "palabra": "seguridad"
+        },
+        {
+          "titulo": "Prestación de servicios",
+          "texto": "Contrato civil o comercial",
+          "palabra": "prestación"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Emprender",
+      "texto": "Un emprendimiento parte de una idea de negocio que responde a una necesidad del mercado. La ganancia es lo que queda de los ingresos por ventas después de descontar los costos.",
+      "voz": "Un emprendimiento parte de una idea de negocio que responde a una necesidad del mercado. La ganancia es lo que queda de los ingresos por ventas después de descontar los costos.",
+      "items": [
+        {
+          "titulo": "Idea de negocio",
+          "palabra": "idea"
+        },
+        {
+          "titulo": "Necesidad del mercado",
+          "palabra": "necesidad"
+        },
+        {
+          "titulo": "Ganancia",
+          "texto": "Ventas menos costos",
+          "palabra": "ganancia"
+        },
+        {
+          "titulo": "Costos",
+          "texto": "Lo que cuesta producir",
+          "palabra": "costos"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la educación financiera y el emprendimiento. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la educación financiera y el emprendimiento. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

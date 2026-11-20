@@ -1,0 +1,7 @@
+node_modules/
+out/
+stills/
+tools/kokoro-multi-lang-v1_0/
+public/voz/*/borrador-*/
+src/timings/*--borrador-*.json
+public/imagenes/

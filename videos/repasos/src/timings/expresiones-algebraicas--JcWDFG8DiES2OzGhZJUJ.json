@@ -1,0 +1,1277 @@
+{
+  "tema": "expresiones-algebraicas",
+  "componente": "Profundización",
+  "area": "Matemáticas",
+  "titulo": "Las expresiones algebraicas y el lenguaje algebraico",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las expresiones algebraicas y el lenguaje algebraico.",
+      "voz": "Repaso del tema: las expresiones algebraicas y el lenguaje algebraico.",
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 142,
+      "frames": 170,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 33
+        },
+        {
+          "text": "las expresiones algebraicas y",
+          "from": 40,
+          "to": 95
+        },
+        {
+          "text": "el lenguaje algebraico.",
+          "from": 95,
+          "to": 138
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "las",
+          "f": 40
+        },
+        {
+          "w": "expresiones",
+          "f": 46
+        },
+        {
+          "w": "algebraicas",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 87
+        },
+        {
+          "w": "el",
+          "f": 90
+        },
+        {
+          "w": "lenguaje",
+          "f": 93
+        },
+        {
+          "w": "algebraico",
+          "f": 105
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es una variable?",
+      "texto": "El álgebra usa números, letras y signos. En aritmética, 5 + 3 = 8; en álgebra, x + 3 = 8, y la letra representa un número que no conocemos: aquí, 5. Esa letra se llama variable.",
+      "voz": "El álgebra usa números, letras y signos. En aritmética, cinco más tres es ocho; en álgebra, equis más tres es ocho, y la letra representa un número que no conocemos: aquí, cinco. Esa letra se llama variable.",
+      "items": [
+        {
+          "titulo": "Aritmética",
+          "texto": "5 + 3 = 8",
+          "palabra": "aritmética"
+        },
+        {
+          "titulo": "Álgebra",
+          "texto": "x + 3 = 8",
+          "palabra": "álgebra",
+          "vez": 1
+        },
+        {
+          "titulo": "Variable",
+          "texto": "x = 5",
+          "palabra": "variable"
+        }
+      ],
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 409,
+      "frames": 437,
+      "chunks": [
+        {
+          "text": "El álgebra usa números, letras y signos.",
+          "from": 0,
+          "to": 74
+        },
+        {
+          "text": "En aritmética, 5 + 3 = 8;",
+          "from": 84,
+          "to": 154
+        },
+        {
+          "text": "en álgebra, x + 3 = 8, y",
+          "from": 164,
+          "to": 209
+        },
+        {
+          "text": "la letra representa un número que no conocemos:",
+          "from": 209,
+          "to": 296
+        },
+        {
+          "text": "aquí, 5.",
+          "from": 307,
+          "to": 339
+        },
+        {
+          "text": "Esa letra se llama variable.",
+          "from": 348,
+          "to": 404
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "álgebra",
+          "f": 8
+        },
+        {
+          "w": "usa",
+          "f": 21
+        },
+        {
+          "w": "números",
+          "f": 27
+        },
+        {
+          "w": "letras",
+          "f": 42
+        },
+        {
+          "w": "y",
+          "f": 55
+        },
+        {
+          "w": "signos",
+          "f": 58
+        },
+        {
+          "w": "en",
+          "f": 84
+        },
+        {
+          "w": "aritmética",
+          "f": 90
+        },
+        {
+          "w": "cinco",
+          "f": 114
+        },
+        {
+          "w": "más",
+          "f": 124
+        },
+        {
+          "w": "tres",
+          "f": 129
+        },
+        {
+          "w": "es",
+          "f": 137
+        },
+        {
+          "w": "ocho",
+          "f": 141
+        },
+        {
+          "w": "en",
+          "f": 164
+        },
+        {
+          "w": "álgebra",
+          "f": 170
+        },
+        {
+          "w": "equis",
+          "f": 185
+        },
+        {
+          "w": "más",
+          "f": 195
+        },
+        {
+          "w": "tres",
+          "f": 200
+        },
+        {
+          "w": "es",
+          "f": 208
+        },
+        {
+          "w": "ocho",
+          "f": 212
+        },
+        {
+          "w": "y",
+          "f": 222
+        },
+        {
+          "w": "la",
+          "f": 226
+        },
+        {
+          "w": "letra",
+          "f": 230
+        },
+        {
+          "w": "representa",
+          "f": 238
+        },
+        {
+          "w": "un",
+          "f": 253
+        },
+        {
+          "w": "número",
+          "f": 256
+        },
+        {
+          "w": "que",
+          "f": 266
+        },
+        {
+          "w": "no",
+          "f": 270
+        },
+        {
+          "w": "conocemos",
+          "f": 274
+        },
+        {
+          "w": "aquí",
+          "f": 307
+        },
+        {
+          "w": "cinco",
+          "f": 321
+        },
+        {
+          "w": "esa",
+          "f": 348
+        },
+        {
+          "w": "letra",
+          "f": 357
+        },
+        {
+          "w": "se",
+          "f": 365
+        },
+        {
+          "w": "llama",
+          "f": 368
+        },
+        {
+          "w": "variable",
+          "f": 377
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Elementos de una expresión",
+      "texto": "Una expresión algebraica combina números, letras y operaciones, como 5x² + 3x − 7. El coeficiente multiplica a la variable, el exponente dice cuántas veces se repite como factor, la constante es el número sin letra, y cada parte separada por + o − es un término.",
+      "voz": "Una expresión algebraica combina números, letras y operaciones, como cinco equis al cuadrado más tres equis menos siete. El coeficiente multiplica a la variable, el exponente dice cuántas veces se repite como factor, la constante es el número sin letra, y cada parte separada por más o menos es un término.",
+      "items": [
+        {
+          "titulo": "Coeficiente",
+          "texto": "5 y 3",
+          "palabra": "coeficiente"
+        },
+        {
+          "titulo": "Exponente",
+          "texto": "2, en x²",
+          "palabra": "exponente"
+        },
+        {
+          "titulo": "Constante",
+          "texto": "−7",
+          "palabra": "constante"
+        },
+        {
+          "titulo": "Términos",
+          "texto": "5x², 3x y −7",
+          "palabra": "término"
+        }
+      ],
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 502,
+      "frames": 530,
+      "chunks": [
+        {
+          "text": "Una expresión algebraica combina números, letras y",
+          "from": 0,
+          "to": 114
+        },
+        {
+          "text": "operaciones, como 5x² + 3x − 7.",
+          "from": 114,
+          "to": 185
+        },
+        {
+          "text": "El coeficiente multiplica a la variable, el exponente dice",
+          "from": 198,
+          "to": 297
+        },
+        {
+          "text": "cuántas veces se repite como factor, la constante es",
+          "from": 297,
+          "to": 385
+        },
+        {
+          "text": "el número sin letra, y cada parte separada por",
+          "from": 385,
+          "to": 463
+        },
+        {
+          "text": "+ o − es un término.",
+          "from": 463,
+          "to": 497
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "expresión",
+          "f": 7
+        },
+        {
+          "w": "algebraica",
+          "f": 19
+        },
+        {
+          "w": "combina",
+          "f": 37
+        },
+        {
+          "w": "números",
+          "f": 50
+        },
+        {
+          "w": "letras",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 78
+        },
+        {
+          "w": "operaciones",
+          "f": 81
+        },
+        {
+          "w": "como",
+          "f": 100
+        },
+        {
+          "w": "cinco",
+          "f": 107
+        },
+        {
+          "w": "equis",
+          "f": 116
+        },
+        {
+          "w": "al",
+          "f": 124
+        },
+        {
+          "w": "cuadrado",
+          "f": 127
+        },
+        {
+          "w": "más",
+          "f": 142
+        },
+        {
+          "w": "tres",
+          "f": 148
+        },
+        {
+          "w": "equis",
+          "f": 155
+        },
+        {
+          "w": "menos",
+          "f": 164
+        },
+        {
+          "w": "siete",
+          "f": 172
+        },
+        {
+          "w": "el",
+          "f": 198
+        },
+        {
+          "w": "coeficiente",
+          "f": 203
+        },
+        {
+          "w": "multiplica",
+          "f": 219
+        },
+        {
+          "w": "a",
+          "f": 234
+        },
+        {
+          "w": "la",
+          "f": 236
+        },
+        {
+          "w": "variable",
+          "f": 240
+        },
+        {
+          "w": "el",
+          "f": 259
+        },
+        {
+          "w": "exponente",
+          "f": 265
+        },
+        {
+          "w": "dice",
+          "f": 285
+        },
+        {
+          "w": "cuántas",
+          "f": 293
+        },
+        {
+          "w": "veces",
+          "f": 303
+        },
+        {
+          "w": "se",
+          "f": 311
+        },
+        {
+          "w": "repite",
+          "f": 315
+        },
+        {
+          "w": "como",
+          "f": 328
+        },
+        {
+          "w": "factor",
+          "f": 336
+        },
+        {
+          "w": "la",
+          "f": 351
+        },
+        {
+          "w": "constante",
+          "f": 355
+        },
+        {
+          "w": "es",
+          "f": 369
+        },
+        {
+          "w": "el",
+          "f": 373
+        },
+        {
+          "w": "número",
+          "f": 375
+        },
+        {
+          "w": "sin",
+          "f": 385
+        },
+        {
+          "w": "letra",
+          "f": 392
+        },
+        {
+          "w": "y",
+          "f": 405
+        },
+        {
+          "w": "cada",
+          "f": 410
+        },
+        {
+          "w": "parte",
+          "f": 418
+        },
+        {
+          "w": "separada",
+          "f": 428
+        },
+        {
+          "w": "por",
+          "f": 443
+        },
+        {
+          "w": "más",
+          "f": 448
+        },
+        {
+          "w": "o",
+          "f": 453
+        },
+        {
+          "w": "menos",
+          "f": 456
+        },
+        {
+          "w": "es",
+          "f": 464
+        },
+        {
+          "w": "un",
+          "f": 468
+        },
+        {
+          "w": "término",
+          "f": 472
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Del lenguaje cotidiano al algebraico",
+      "texto": "Para traducir una frase, el número desconocido es x. El doble de un número es 2x; un número aumentado en 7, x + 7; y la mitad de un número, x/2.",
+      "voz": "Para traducir una frase, el número desconocido es equis. El doble de un número es dos equis; un número aumentado en siete, equis más siete; y la mitad de un número, equis sobre dos.",
+      "items": [
+        {
+          "titulo": "El doble",
+          "texto": "2x",
+          "palabra": "doble"
+        },
+        {
+          "titulo": "Aumentado en 7",
+          "texto": "x + 7",
+          "palabra": "aumentado"
+        },
+        {
+          "titulo": "La mitad",
+          "texto": "x/2",
+          "palabra": "mitad"
+        }
+      ],
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 329,
+      "frames": 357,
+      "chunks": [
+        {
+          "text": "Para traducir una frase, el número desconocido es x.",
+          "from": 0,
+          "to": 83
+        },
+        {
+          "text": "El doble de un número es 2x;",
+          "from": 91,
+          "to": 152
+        },
+        {
+          "text": "un número aumentado en 7, x + 7;",
+          "from": 162,
+          "to": 237
+        },
+        {
+          "text": "y la mitad de un número, x/2.",
+          "from": 247,
+          "to": 325
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "traducir",
+          "f": 8
+        },
+        {
+          "w": "una",
+          "f": 20
+        },
+        {
+          "w": "frase",
+          "f": 25
+        },
+        {
+          "w": "el",
+          "f": 36
+        },
+        {
+          "w": "número",
+          "f": 39
+        },
+        {
+          "w": "desconocido",
+          "f": 47
+        },
+        {
+          "w": "es",
+          "f": 64
+        },
+        {
+          "w": "equis",
+          "f": 69
+        },
+        {
+          "w": "el",
+          "f": 91
+        },
+        {
+          "w": "doble",
+          "f": 98
+        },
+        {
+          "w": "de",
+          "f": 107
+        },
+        {
+          "w": "un",
+          "f": 110
+        },
+        {
+          "w": "número",
+          "f": 114
+        },
+        {
+          "w": "es",
+          "f": 126
+        },
+        {
+          "w": "dos",
+          "f": 131
+        },
+        {
+          "w": "equis",
+          "f": 138
+        },
+        {
+          "w": "un",
+          "f": 162
+        },
+        {
+          "w": "número",
+          "f": 166
+        },
+        {
+          "w": "aumentado",
+          "f": 175
+        },
+        {
+          "w": "en",
+          "f": 189
+        },
+        {
+          "w": "siete",
+          "f": 192
+        },
+        {
+          "w": "equis",
+          "f": 206
+        },
+        {
+          "w": "más",
+          "f": 216
+        },
+        {
+          "w": "siete",
+          "f": 222
+        },
+        {
+          "w": "y",
+          "f": 247
+        },
+        {
+          "w": "la",
+          "f": 251
+        },
+        {
+          "w": "mitad",
+          "f": 255
+        },
+        {
+          "w": "de",
+          "f": 266
+        },
+        {
+          "w": "un",
+          "f": 269
+        },
+        {
+          "w": "número",
+          "f": 273
+        },
+        {
+          "w": "equis",
+          "f": 286
+        },
+        {
+          "w": "sobre",
+          "f": 296
+        },
+        {
+          "w": "dos",
+          "f": 305
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El valor numérico",
+      "texto": "El valor numérico se obtiene al reemplazar la variable por un número. Para 2x + 3, con x = 4: reemplazamos, 2(4) + 3; multiplicamos, 8 + 3; y sumamos: 11.",
+      "voz": "El valor numérico se obtiene al reemplazar la variable por un número. Para dos equis más tres, con equis igual a cuatro: reemplazamos, dos por cuatro más tres; multiplicamos, ocho más tres; y sumamos: once.",
+      "items": [
+        {
+          "titulo": "Reemplazar",
+          "texto": "2(4) + 3",
+          "palabra": "reemplazamos"
+        },
+        {
+          "titulo": "Multiplicar",
+          "texto": "8 + 3",
+          "palabra": "multiplicamos"
+        },
+        {
+          "titulo": "Sumar",
+          "texto": "11",
+          "palabra": "sumamos"
+        }
+      ],
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 358,
+      "frames": 386,
+      "chunks": [
+        {
+          "text": "El valor numérico se obtiene al",
+          "from": 0,
+          "to": 46
+        },
+        {
+          "text": "reemplazar la variable por un número.",
+          "from": 46,
+          "to": 101
+        },
+        {
+          "text": "Para 2x + 3, con x = 4:",
+          "from": 111,
+          "to": 186
+        },
+        {
+          "text": "reemplazamos, 2(4) + 3;",
+          "from": 196,
+          "to": 254
+        },
+        {
+          "text": "multiplicamos, 8 + 3;",
+          "from": 259,
+          "to": 310
+        },
+        {
+          "text": "y sumamos:",
+          "from": 312,
+          "to": 331
+        },
+        {
+          "text": "11.",
+          "from": 332,
+          "to": 354
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "valor",
+          "f": 7
+        },
+        {
+          "w": "numérico",
+          "f": 15
+        },
+        {
+          "w": "se",
+          "f": 28
+        },
+        {
+          "w": "obtiene",
+          "f": 31
+        },
+        {
+          "w": "al",
+          "f": 45
+        },
+        {
+          "w": "reemplazar",
+          "f": 50
+        },
+        {
+          "w": "la",
+          "f": 64
+        },
+        {
+          "w": "variable",
+          "f": 67
+        },
+        {
+          "w": "por",
+          "f": 79
+        },
+        {
+          "w": "un",
+          "f": 85
+        },
+        {
+          "w": "número",
+          "f": 87
+        },
+        {
+          "w": "para",
+          "f": 111
+        },
+        {
+          "w": "dos",
+          "f": 119
+        },
+        {
+          "w": "equis",
+          "f": 125
+        },
+        {
+          "w": "más",
+          "f": 134
+        },
+        {
+          "w": "tres",
+          "f": 140
+        },
+        {
+          "w": "con",
+          "f": 148
+        },
+        {
+          "w": "equis",
+          "f": 154
+        },
+        {
+          "w": "igual",
+          "f": 161
+        },
+        {
+          "w": "a",
+          "f": 169
+        },
+        {
+          "w": "cuatro",
+          "f": 171
+        },
+        {
+          "w": "reemplazamos",
+          "f": 196
+        },
+        {
+          "w": "dos",
+          "f": 217
+        },
+        {
+          "w": "por",
+          "f": 223
+        },
+        {
+          "w": "cuatro",
+          "f": 229
+        },
+        {
+          "w": "más",
+          "f": 239
+        },
+        {
+          "w": "tres",
+          "f": 244
+        },
+        {
+          "w": "multiplicamos",
+          "f": 259
+        },
+        {
+          "w": "ocho",
+          "f": 286
+        },
+        {
+          "w": "más",
+          "f": 295
+        },
+        {
+          "w": "tres",
+          "f": 301
+        },
+        {
+          "w": "y",
+          "f": 312
+        },
+        {
+          "w": "sumamos",
+          "f": 317
+        },
+        {
+          "w": "once",
+          "f": 332
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "¿Para qué sirven?",
+      "texto": "Las expresiones algebraicas representan situaciones cotidianas. Si un cuaderno cuesta 4.000 pesos, x cuadernos cuestan 4.000x; una persona de x años tendrá x + 5 dentro de 5 años; y el perímetro de un cuadrado de lado x es 4x.",
+      "voz": "Las expresiones algebraicas representan situaciones cotidianas. Si un cuaderno cuesta cuatro mil pesos, equis cuadernos cuestan cuatro mil equis; una persona de equis años tendrá equis más cinco dentro de cinco años; y el perímetro de un cuadrado de lado equis es cuatro equis.",
+      "items": [
+        {
+          "titulo": "Cuadernos",
+          "texto": "4.000x pesos",
+          "palabra": "cuaderno"
+        },
+        {
+          "titulo": "Edad",
+          "texto": "x + 5",
+          "palabra": "persona"
+        },
+        {
+          "titulo": "Perímetro",
+          "texto": "4x",
+          "palabra": "perímetro"
+        }
+      ],
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 470,
+      "frames": 498,
+      "chunks": [
+        {
+          "text": "Las expresiones algebraicas",
+          "from": 0,
+          "to": 43
+        },
+        {
+          "text": "representan situaciones cotidianas.",
+          "from": 43,
+          "to": 99
+        },
+        {
+          "text": "Si un cuaderno cuesta 4.000",
+          "from": 109,
+          "to": 163
+        },
+        {
+          "text": "pesos, x cuadernos cuestan 4.000x;",
+          "from": 163,
+          "to": 231
+        },
+        {
+          "text": "una persona de x años tendrá x + 5 dentro de 5 años;",
+          "from": 239,
+          "to": 356
+        },
+        {
+          "text": "y el perímetro de un cuadrado de lado x es 4x.",
+          "from": 365,
+          "to": 465
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "expresiones",
+          "f": 8
+        },
+        {
+          "w": "algebraicas",
+          "f": 25
+        },
+        {
+          "w": "representan",
+          "f": 43
+        },
+        {
+          "w": "situaciones",
+          "f": 61
+        },
+        {
+          "w": "cotidianas",
+          "f": 77
+        },
+        {
+          "w": "si",
+          "f": 109
+        },
+        {
+          "w": "un",
+          "f": 114
+        },
+        {
+          "w": "cuaderno",
+          "f": 117
+        },
+        {
+          "w": "cuesta",
+          "f": 130
+        },
+        {
+          "w": "cuatro",
+          "f": 139
+        },
+        {
+          "w": "mil",
+          "f": 147
+        },
+        {
+          "w": "pesos",
+          "f": 153
+        },
+        {
+          "w": "equis",
+          "f": 165
+        },
+        {
+          "w": "cuadernos",
+          "f": 175
+        },
+        {
+          "w": "cuestan",
+          "f": 192
+        },
+        {
+          "w": "cuatro",
+          "f": 202
+        },
+        {
+          "w": "mil",
+          "f": 211
+        },
+        {
+          "w": "equis",
+          "f": 217
+        },
+        {
+          "w": "una",
+          "f": 239
+        },
+        {
+          "w": "persona",
+          "f": 246
+        },
+        {
+          "w": "de",
+          "f": 257
+        },
+        {
+          "w": "equis",
+          "f": 259
+        },
+        {
+          "w": "años",
+          "f": 268
+        },
+        {
+          "w": "tendrá",
+          "f": 280
+        },
+        {
+          "w": "equis",
+          "f": 291
+        },
+        {
+          "w": "más",
+          "f": 300
+        },
+        {
+          "w": "cinco",
+          "f": 305
+        },
+        {
+          "w": "dentro",
+          "f": 320
+        },
+        {
+          "w": "de",
+          "f": 331
+        },
+        {
+          "w": "cinco",
+          "f": 333
+        },
+        {
+          "w": "años",
+          "f": 344
+        },
+        {
+          "w": "y",
+          "f": 365
+        },
+        {
+          "w": "el",
+          "f": 369
+        },
+        {
+          "w": "perímetro",
+          "f": 373
+        },
+        {
+          "w": "de",
+          "f": 389
+        },
+        {
+          "w": "un",
+          "f": 393
+        },
+        {
+          "w": "cuadrado",
+          "f": 396
+        },
+        {
+          "w": "de",
+          "f": 411
+        },
+        {
+          "w": "lado",
+          "f": 414
+        },
+        {
+          "w": "equis",
+          "f": 422
+        },
+        {
+          "w": "es",
+          "f": 432
+        },
+        {
+          "w": "cuatro",
+          "f": 435
+        },
+        {
+          "w": "equis",
+          "f": 446
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las expresiones algebraicas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las expresiones algebraicas. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/expresiones-algebraicas/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 161,
+      "frames": 321,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste las expresiones algebraicas.",
+          "from": 23,
+          "to": 81
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 82,
+          "to": 156
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 14
+        },
+        {
+          "w": "repasaste",
+          "f": 23
+        },
+        {
+          "w": "las",
+          "f": 39
+        },
+        {
+          "w": "expresiones",
+          "f": 44
+        },
+        {
+          "w": "algebraicas",
+          "f": 60
+        },
+        {
+          "w": "sigue",
+          "f": 82
+        },
+        {
+          "w": "con",
+          "f": 93
+        },
+        {
+          "w": "el",
+          "f": 99
+        },
+        {
+          "w": "siguiente",
+          "f": 101
+        },
+        {
+          "w": "tema",
+          "f": 116
+        },
+        {
+          "w": "de",
+          "f": 126
+        },
+        {
+          "w": "tu",
+          "f": 130
+        },
+        {
+          "w": "ruta",
+          "f": 135
+        }
+      ]
+    }
+  ]
+}

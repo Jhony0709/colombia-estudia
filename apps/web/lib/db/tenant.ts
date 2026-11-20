@@ -66,6 +66,8 @@ export const TENANT_SCOPED_MODELS = [
   // 5/11: la bandeja de mensajes.
   'Conversation',
   'ConversationMessage',
+  // 19/11: los links de pago de Bold.
+  'PaymentLink',
 ] as const;
 
 type TenantScopedModel = (typeof TENANT_SCOPED_MODELS)[number];

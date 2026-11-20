@@ -1,0 +1,1260 @@
+{
+  "tema": "biotecnologia-genetica-y-futuro",
+  "componente": "Proyección",
+  "area": "Biología",
+  "titulo": "Biotecnología, genética y futuro de la humanidad",
+  "siguiente": "Comunicación, pensamiento crítico y textos argumentativos",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la biotecnología, la genética y el futuro de la humanidad.",
+      "voz": "Repaso del tema: la biotecnología, la genética y el futuro de la humanidad.",
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 144,
+      "frames": 172,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 33
+        },
+        {
+          "text": "la biotecnología, la genética y",
+          "from": 37,
+          "to": 92
+        },
+        {
+          "text": "el futuro de la humanidad.",
+          "from": 92,
+          "to": 139
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 16
+        },
+        {
+          "w": "tema",
+          "f": 21
+        },
+        {
+          "w": "la",
+          "f": 37
+        },
+        {
+          "w": "biotecnología",
+          "f": 40
+        },
+        {
+          "w": "la",
+          "f": 67
+        },
+        {
+          "w": "genética",
+          "f": 71
+        },
+        {
+          "w": "y",
+          "f": 88
+        },
+        {
+          "w": "el",
+          "f": 90
+        },
+        {
+          "w": "futuro",
+          "f": 93
+        },
+        {
+          "w": "de",
+          "f": 104
+        },
+        {
+          "w": "la",
+          "f": 107
+        },
+        {
+          "w": "humanidad",
+          "f": 109
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "La genética",
+      "texto": "La información hereditaria está en el ADN, una doble hélice parecida a una escalera retorcida, con dos cadenas unidas por pares de bases. Sus segmentos con información funcional son los genes, y el ADN se organiza en cromosomas. Un cambio en su secuencia se llama mutación.",
+      "voz": "La información hereditaria está en el ADN, una doble hélice parecida a una escalera retorcida, con dos cadenas unidas por pares de bases. Sus segmentos con información funcional son los genes, y el ADN se organiza en cromosomas. Un cambio en su secuencia se llama mutación.",
+      "imagenes": [
+        {
+          "src": "proyeccion/doble-helice.webp",
+          "focos": [
+            {
+              "palabra": "hélice",
+              "x": 0.35,
+              "y": 0.3,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "bases",
+              "x": 0.4,
+              "y": 0.55,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "genes",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 460,
+      "frames": 488,
+      "chunks": [
+        {
+          "text": "La información hereditaria está en el ADN, una",
+          "from": 0,
+          "to": 74
+        },
+        {
+          "text": "doble hélice parecida a una escalera retorcida, con",
+          "from": 74,
+          "to": 156
+        },
+        {
+          "text": "dos cadenas unidas por pares de bases.",
+          "from": 156,
+          "to": 217
+        },
+        {
+          "text": "Sus segmentos con información funcional son los genes,",
+          "from": 225,
+          "to": 317
+        },
+        {
+          "text": "y el ADN se organiza en cromosomas.",
+          "from": 317,
+          "to": 376
+        },
+        {
+          "text": "Un cambio en su secuencia se llama mutación.",
+          "from": 385,
+          "to": 456
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "información",
+          "f": 3
+        },
+        {
+          "w": "hereditaria",
+          "f": 18
+        },
+        {
+          "w": "está",
+          "f": 37
+        },
+        {
+          "w": "en",
+          "f": 43
+        },
+        {
+          "w": "el",
+          "f": 46
+        },
+        {
+          "w": "adn",
+          "f": 50
+        },
+        {
+          "w": "una",
+          "f": 67
+        },
+        {
+          "w": "doble",
+          "f": 74
+        },
+        {
+          "w": "hélice",
+          "f": 82
+        },
+        {
+          "w": "parecida",
+          "f": 93
+        },
+        {
+          "w": "a",
+          "f": 104
+        },
+        {
+          "w": "una",
+          "f": 106
+        },
+        {
+          "w": "escalera",
+          "f": 111
+        },
+        {
+          "w": "retorcida",
+          "f": 125
+        },
+        {
+          "w": "con",
+          "f": 154
+        },
+        {
+          "w": "dos",
+          "f": 159
+        },
+        {
+          "w": "cadenas",
+          "f": 165
+        },
+        {
+          "w": "unidas",
+          "f": 177
+        },
+        {
+          "w": "por",
+          "f": 187
+        },
+        {
+          "w": "pares",
+          "f": 192
+        },
+        {
+          "w": "de",
+          "f": 200
+        },
+        {
+          "w": "bases",
+          "f": 202
+        },
+        {
+          "w": "sus",
+          "f": 225
+        },
+        {
+          "w": "segmentos",
+          "f": 232
+        },
+        {
+          "w": "con",
+          "f": 247
+        },
+        {
+          "w": "información",
+          "f": 251
+        },
+        {
+          "w": "funcional",
+          "f": 267
+        },
+        {
+          "w": "son",
+          "f": 282
+        },
+        {
+          "w": "los",
+          "f": 287
+        },
+        {
+          "w": "genes",
+          "f": 292
+        },
+        {
+          "w": "y",
+          "f": 315
+        },
+        {
+          "w": "el",
+          "f": 318
+        },
+        {
+          "w": "adn",
+          "f": 323
+        },
+        {
+          "w": "se",
+          "f": 336
+        },
+        {
+          "w": "organiza",
+          "f": 339
+        },
+        {
+          "w": "en",
+          "f": 351
+        },
+        {
+          "w": "cromosomas",
+          "f": 353
+        },
+        {
+          "w": "un",
+          "f": 385
+        },
+        {
+          "w": "cambio",
+          "f": 390
+        },
+        {
+          "w": "en",
+          "f": 398
+        },
+        {
+          "w": "su",
+          "f": 401
+        },
+        {
+          "w": "secuencia",
+          "f": 404
+        },
+        {
+          "w": "se",
+          "f": 419
+        },
+        {
+          "w": "llama",
+          "f": 422
+        },
+        {
+          "w": "mutación",
+          "f": 431
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La biotecnología",
+      "texto": "La biotecnología usa organismos vivos para crear productos y soluciones. Es muy antigua: el pan, el queso y el yogur se hacen con microorganismos. Hoy también produce insulina, vacunas y cultivos resistentes a plagas.",
+      "voz": "La biotecnología usa organismos vivos para crear productos y soluciones. Es muy antigua: el pan, el queso y el yogur se hacen con microorganismos. Hoy también produce insulina, vacunas y cultivos resistentes a plagas.",
+      "items": [
+        {
+          "titulo": "Desde hace siglos",
+          "texto": "Pan, queso y yogur",
+          "palabra": "pan"
+        },
+        {
+          "titulo": "Medicina",
+          "texto": "Insulina y vacunas",
+          "palabra": "insulina"
+        },
+        {
+          "titulo": "Agricultura",
+          "texto": "Cultivos resistentes a plagas",
+          "palabra": "cultivos"
+        }
+      ],
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 429,
+      "frames": 457,
+      "chunks": [
+        {
+          "text": "La biotecnología usa organismos vivos",
+          "from": 0,
+          "to": 64
+        },
+        {
+          "text": "para crear productos y soluciones.",
+          "from": 64,
+          "to": 122
+        },
+        {
+          "text": "Es muy antigua:",
+          "from": 132,
+          "to": 167
+        },
+        {
+          "text": "el pan, el queso y el",
+          "from": 176,
+          "to": 215
+        },
+        {
+          "text": "yogur se hacen con microorganismos.",
+          "from": 215,
+          "to": 278
+        },
+        {
+          "text": "Hoy también produce insulina, vacunas",
+          "from": 288,
+          "to": 361
+        },
+        {
+          "text": "y cultivos resistentes a plagas.",
+          "from": 361,
+          "to": 425
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "biotecnología",
+          "f": 5
+        },
+        {
+          "w": "usa",
+          "f": 32
+        },
+        {
+          "w": "organismos",
+          "f": 40
+        },
+        {
+          "w": "vivos",
+          "f": 57
+        },
+        {
+          "w": "para",
+          "f": 67
+        },
+        {
+          "w": "crear",
+          "f": 72
+        },
+        {
+          "w": "productos",
+          "f": 81
+        },
+        {
+          "w": "y",
+          "f": 96
+        },
+        {
+          "w": "soluciones",
+          "f": 99
+        },
+        {
+          "w": "es",
+          "f": 132
+        },
+        {
+          "w": "muy",
+          "f": 139
+        },
+        {
+          "w": "antigua",
+          "f": 146
+        },
+        {
+          "w": "el",
+          "f": 176
+        },
+        {
+          "w": "pan",
+          "f": 183
+        },
+        {
+          "w": "el",
+          "f": 192
+        },
+        {
+          "w": "queso",
+          "f": 198
+        },
+        {
+          "w": "y",
+          "f": 208
+        },
+        {
+          "w": "el",
+          "f": 209
+        },
+        {
+          "w": "yogur",
+          "f": 212
+        },
+        {
+          "w": "se",
+          "f": 226
+        },
+        {
+          "w": "hacen",
+          "f": 231
+        },
+        {
+          "w": "con",
+          "f": 239
+        },
+        {
+          "w": "microorganismos",
+          "f": 246
+        },
+        {
+          "w": "hoy",
+          "f": 288
+        },
+        {
+          "w": "también",
+          "f": 295
+        },
+        {
+          "w": "produce",
+          "f": 304
+        },
+        {
+          "w": "insulina",
+          "f": 316
+        },
+        {
+          "w": "vacunas",
+          "f": 346
+        },
+        {
+          "w": "y",
+          "f": 363
+        },
+        {
+          "w": "cultivos",
+          "f": 366
+        },
+        {
+          "w": "resistentes",
+          "f": 379
+        },
+        {
+          "w": "a",
+          "f": 397
+        },
+        {
+          "w": "plagas",
+          "f": 400
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Modificar y copiar la vida",
+      "texto": "La ingeniería genética modifica directamente el ADN de un organismo. Con la herramienta CRISPR se puede localizar una región del ADN y cortarla para modificarla. Y la clonación produce copias genéticas, como la oveja Dolly, el primer mamífero clonado a partir de una célula adulta.",
+      "voz": "La ingeniería genética modifica directamente el ADN de un organismo. Con la herramienta crisper se puede localizar una región del ADN y cortarla para modificarla. Y la clonación produce copias genéticas, como la oveja Dolly, el primer mamífero clonado a partir de una célula adulta.",
+      "items": [
+        {
+          "titulo": "Ingeniería genética",
+          "texto": "Modificar el ADN",
+          "palabra": "ingeniería"
+        },
+        {
+          "titulo": "CRISPR",
+          "texto": "Localizar y cortar",
+          "palabra": "crisper"
+        },
+        {
+          "titulo": "Clonación",
+          "texto": "La oveja Dolly",
+          "palabra": "clonación"
+        }
+      ],
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 491,
+      "frames": 519,
+      "chunks": [
+        {
+          "text": "La ingeniería genética modifica directamente",
+          "from": 0,
+          "to": 77
+        },
+        {
+          "text": "el ADN de un organismo.",
+          "from": 77,
+          "to": 117
+        },
+        {
+          "text": "Con la herramienta CRISPR se puede localizar una",
+          "from": 125,
+          "to": 203
+        },
+        {
+          "text": "región del ADN y cortarla para modificarla.",
+          "from": 203,
+          "to": 273
+        },
+        {
+          "text": "Y la clonación produce copias genéticas, como",
+          "from": 281,
+          "to": 360
+        },
+        {
+          "text": "la oveja Dolly, el primer mamífero clonado",
+          "from": 360,
+          "to": 434
+        },
+        {
+          "text": "a partir de una célula adulta.",
+          "from": 434,
+          "to": 486
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "ingeniería",
+          "f": 5
+        },
+        {
+          "w": "genética",
+          "f": 21
+        },
+        {
+          "w": "modifica",
+          "f": 37
+        },
+        {
+          "w": "directamente",
+          "f": 52
+        },
+        {
+          "w": "el",
+          "f": 70
+        },
+        {
+          "w": "adn",
+          "f": 75
+        },
+        {
+          "w": "de",
+          "f": 87
+        },
+        {
+          "w": "un",
+          "f": 90
+        },
+        {
+          "w": "organismo",
+          "f": 93
+        },
+        {
+          "w": "con",
+          "f": 125
+        },
+        {
+          "w": "la",
+          "f": 131
+        },
+        {
+          "w": "herramienta",
+          "f": 133
+        },
+        {
+          "w": "crisper",
+          "f": 149
+        },
+        {
+          "w": "se",
+          "f": 164
+        },
+        {
+          "w": "puede",
+          "f": 169
+        },
+        {
+          "w": "localizar",
+          "f": 175
+        },
+        {
+          "w": "una",
+          "f": 190
+        },
+        {
+          "w": "región",
+          "f": 195
+        },
+        {
+          "w": "del",
+          "f": 204
+        },
+        {
+          "w": "adn",
+          "f": 209
+        },
+        {
+          "w": "y",
+          "f": 222
+        },
+        {
+          "w": "cortarla",
+          "f": 226
+        },
+        {
+          "w": "para",
+          "f": 241
+        },
+        {
+          "w": "modificarla",
+          "f": 247
+        },
+        {
+          "w": "y",
+          "f": 281
+        },
+        {
+          "w": "la",
+          "f": 286
+        },
+        {
+          "w": "clonación",
+          "f": 290
+        },
+        {
+          "w": "produce",
+          "f": 307
+        },
+        {
+          "w": "copias",
+          "f": 321
+        },
+        {
+          "w": "genéticas",
+          "f": 332
+        },
+        {
+          "w": "como",
+          "f": 361
+        },
+        {
+          "w": "la",
+          "f": 369
+        },
+        {
+          "w": "oveja",
+          "f": 373
+        },
+        {
+          "w": "dolly",
+          "f": 382
+        },
+        {
+          "w": "el",
+          "f": 393
+        },
+        {
+          "w": "primer",
+          "f": 397
+        },
+        {
+          "w": "mamífero",
+          "f": 406
+        },
+        {
+          "w": "clonado",
+          "f": 420
+        },
+        {
+          "w": "a",
+          "f": 432
+        },
+        {
+          "w": "partir",
+          "f": 434
+        },
+        {
+          "w": "de",
+          "f": 444
+        },
+        {
+          "w": "una",
+          "f": 446
+        },
+        {
+          "w": "célula",
+          "f": 451
+        },
+        {
+          "w": "adulta",
+          "f": 461
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Aplicaciones",
+      "texto": "En medicina permite la medicina personalizada, la terapia génica y el diagnóstico genético. Y en el ambiente, la biorremediación usa bacterias, hongos o plantas para reducir contaminantes.",
+      "voz": "En medicina permite la medicina personalizada, la terapia génica y el diagnóstico genético. Y en el ambiente, la biorremediación usa bacterias, hongos o plantas para reducir contaminantes.",
+      "items": [
+        {
+          "titulo": "Medicina personalizada",
+          "palabra": "personalizada"
+        },
+        {
+          "titulo": "Terapia génica",
+          "palabra": "terapia"
+        },
+        {
+          "titulo": "Diagnóstico genético",
+          "palabra": "diagnóstico"
+        },
+        {
+          "titulo": "Biorremediación",
+          "texto": "Organismos que limpian",
+          "palabra": "biorremediación"
+        }
+      ],
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 331,
+      "frames": 359,
+      "chunks": [
+        {
+          "text": "En medicina permite la medicina personalizada, la",
+          "from": 0,
+          "to": 85
+        },
+        {
+          "text": "terapia génica y el diagnóstico genético.",
+          "from": 85,
+          "to": 156
+        },
+        {
+          "text": "Y en el ambiente, la biorremediación usa",
+          "from": 166,
+          "to": 233
+        },
+        {
+          "text": "bacterias, hongos o plantas para reducir contaminantes.",
+          "from": 233,
+          "to": 326
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "medicina",
+          "f": 6
+        },
+        {
+          "w": "permite",
+          "f": 19
+        },
+        {
+          "w": "la",
+          "f": 30
+        },
+        {
+          "w": "medicina",
+          "f": 34
+        },
+        {
+          "w": "personalizada",
+          "f": 46
+        },
+        {
+          "w": "la",
+          "f": 81
+        },
+        {
+          "w": "terapia",
+          "f": 85
+        },
+        {
+          "w": "génica",
+          "f": 97
+        },
+        {
+          "w": "y",
+          "f": 112
+        },
+        {
+          "w": "el",
+          "f": 115
+        },
+        {
+          "w": "diagnóstico",
+          "f": 117
+        },
+        {
+          "w": "genético",
+          "f": 136
+        },
+        {
+          "w": "y",
+          "f": 166
+        },
+        {
+          "w": "en",
+          "f": 171
+        },
+        {
+          "w": "el",
+          "f": 173
+        },
+        {
+          "w": "ambiente",
+          "f": 177
+        },
+        {
+          "w": "la",
+          "f": 190
+        },
+        {
+          "w": "biorremediación",
+          "f": 193
+        },
+        {
+          "w": "usa",
+          "f": 216
+        },
+        {
+          "w": "bacterias",
+          "f": 222
+        },
+        {
+          "w": "hongos",
+          "f": 241
+        },
+        {
+          "w": "o",
+          "f": 252
+        },
+        {
+          "w": "plantas",
+          "f": 254
+        },
+        {
+          "w": "para",
+          "f": 268
+        },
+        {
+          "w": "reducir",
+          "f": 275
+        },
+        {
+          "w": "contaminantes",
+          "f": 287
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "La bioética",
+      "texto": "Pero no todo lo que la ciencia puede hacer debería hacerse. La bioética se pregunta, por ejemplo, si es correcto modificar embriones humanos, quién debe acceder a estos tratamientos y cómo proteger la información genética de las personas.",
+      "voz": "Pero no todo lo que la ciencia puede hacer debería hacerse. La bioética se pregunta, por ejemplo, si es correcto modificar embriones humanos, quién debe acceder a estos tratamientos y cómo proteger la información genética de las personas.",
+      "items": [
+        {
+          "titulo": "¿Modificar embriones?",
+          "palabra": "embriones"
+        },
+        {
+          "titulo": "¿Quién accede?",
+          "palabra": "acceder"
+        },
+        {
+          "titulo": "¿Cómo proteger los datos?",
+          "palabra": "proteger"
+        }
+      ],
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 372,
+      "frames": 400,
+      "chunks": [
+        {
+          "text": "Pero no todo lo que la",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "ciencia puede hacer debería hacerse.",
+          "from": 30,
+          "to": 78
+        },
+        {
+          "text": "La bioética se pregunta, por ejemplo, si",
+          "from": 94,
+          "to": 156
+        },
+        {
+          "text": "es correcto modificar embriones humanos, quién debe",
+          "from": 156,
+          "to": 236
+        },
+        {
+          "text": "acceder a estos tratamientos y cómo proteger",
+          "from": 236,
+          "to": 305
+        },
+        {
+          "text": "la información genética de las personas.",
+          "from": 305,
+          "to": 368
+        }
+      ],
+      "words": [
+        {
+          "w": "pero",
+          "f": 0
+        },
+        {
+          "w": "no",
+          "f": 9
+        },
+        {
+          "w": "todo",
+          "f": 14
+        },
+        {
+          "w": "lo",
+          "f": 20
+        },
+        {
+          "w": "que",
+          "f": 23
+        },
+        {
+          "w": "la",
+          "f": 26
+        },
+        {
+          "w": "ciencia",
+          "f": 30
+        },
+        {
+          "w": "puede",
+          "f": 39
+        },
+        {
+          "w": "hacer",
+          "f": 45
+        },
+        {
+          "w": "debería",
+          "f": 54
+        },
+        {
+          "w": "hacerse",
+          "f": 64
+        },
+        {
+          "w": "la",
+          "f": 94
+        },
+        {
+          "w": "bioética",
+          "f": 98
+        },
+        {
+          "w": "se",
+          "f": 112
+        },
+        {
+          "w": "pregunta",
+          "f": 115
+        },
+        {
+          "w": "por",
+          "f": 131
+        },
+        {
+          "w": "ejemplo",
+          "f": 135
+        },
+        {
+          "w": "si",
+          "f": 148
+        },
+        {
+          "w": "es",
+          "f": 150
+        },
+        {
+          "w": "correcto",
+          "f": 154
+        },
+        {
+          "w": "modificar",
+          "f": 167
+        },
+        {
+          "w": "embriones",
+          "f": 182
+        },
+        {
+          "w": "humanos",
+          "f": 194
+        },
+        {
+          "w": "quién",
+          "f": 223
+        },
+        {
+          "w": "debe",
+          "f": 230
+        },
+        {
+          "w": "acceder",
+          "f": 236
+        },
+        {
+          "w": "a",
+          "f": 249
+        },
+        {
+          "w": "estos",
+          "f": 250
+        },
+        {
+          "w": "tratamientos",
+          "f": 258
+        },
+        {
+          "w": "y",
+          "f": 280
+        },
+        {
+          "w": "cómo",
+          "f": 284
+        },
+        {
+          "w": "proteger",
+          "f": 291
+        },
+        {
+          "w": "la",
+          "f": 303
+        },
+        {
+          "w": "información",
+          "f": 305
+        },
+        {
+          "w": "genética",
+          "f": 320
+        },
+        {
+          "w": "de",
+          "f": 335
+        },
+        {
+          "w": "las",
+          "f": 337
+        },
+        {
+          "w": "personas",
+          "f": 342
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la biotecnología y la genética. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la biotecnología y la genética. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/biotecnologia-genetica-y-futuro/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 177,
+      "frames": 337,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 25
+        },
+        {
+          "text": "Repasaste la biotecnología y la genética.",
+          "from": 34,
+          "to": 99
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 104,
+          "to": 173
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 14
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "biotecnología",
+          "f": 54
+        },
+        {
+          "w": "y",
+          "f": 74
+        },
+        {
+          "w": "la",
+          "f": 76
+        },
+        {
+          "w": "genética",
+          "f": 80
+        },
+        {
+          "w": "sigue",
+          "f": 104
+        },
+        {
+          "w": "con",
+          "f": 113
+        },
+        {
+          "w": "el",
+          "f": 118
+        },
+        {
+          "w": "siguiente",
+          "f": 121
+        },
+        {
+          "w": "tema",
+          "f": 134
+        },
+        {
+          "w": "de",
+          "f": 144
+        },
+        {
+          "w": "tu",
+          "f": 147
+        },
+        {
+          "w": "ruta",
+          "f": 152
+        }
+      ]
+    }
+  ]
+}

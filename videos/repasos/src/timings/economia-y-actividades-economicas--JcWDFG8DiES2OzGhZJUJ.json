@@ -1,0 +1,1249 @@
+{
+  "tema": "economia-y-actividades-economicas",
+  "componente": "Profundización",
+  "area": "Ciencias sociales",
+  "titulo": "La economía, los recursos naturales y las actividades económicas",
+  "siguiente": "Las expresiones algebraicas y el lenguaje algebraico",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la economía, los recursos naturales y las actividades económicas.",
+      "voz": "Repaso del tema: la economía, los recursos naturales y las actividades económicas.",
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 151,
+      "frames": 179,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 28
+        },
+        {
+          "text": "la economía, los recursos naturales",
+          "from": 30,
+          "to": 94
+        },
+        {
+          "text": "y las actividades económicas.",
+          "from": 94,
+          "to": 146
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 17
+        },
+        {
+          "w": "la",
+          "f": 30
+        },
+        {
+          "w": "economía",
+          "f": 33
+        },
+        {
+          "w": "los",
+          "f": 53
+        },
+        {
+          "w": "recursos",
+          "f": 59
+        },
+        {
+          "w": "naturales",
+          "f": 71
+        },
+        {
+          "w": "y",
+          "f": 88
+        },
+        {
+          "w": "las",
+          "f": 92
+        },
+        {
+          "w": "actividades",
+          "f": 96
+        },
+        {
+          "w": "económicas",
+          "f": 113
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La economía",
+      "texto": "La economía estudia cómo las personas y las sociedades usan los recursos para satisfacer sus necesidades. Las actividades económicas producen bienes, como alimentos y ropa, y servicios, como la educación y la salud.",
+      "voz": "La economía estudia cómo las personas y las sociedades usan los recursos para satisfacer sus necesidades. Las actividades económicas producen bienes, como alimentos y ropa, y servicios, como la educación y la salud.",
+      "items": [
+        {
+          "titulo": "Necesidades",
+          "texto": "Alimentación, vivienda, salud…",
+          "palabra": "necesidades"
+        },
+        {
+          "titulo": "Bienes",
+          "texto": "Productos: alimentos, ropa",
+          "palabra": "bienes"
+        },
+        {
+          "titulo": "Servicios",
+          "texto": "Actividades: educación, salud",
+          "palabra": "servicios"
+        }
+      ],
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 357,
+      "frames": 385,
+      "chunks": [
+        {
+          "text": "La economía estudia cómo las personas",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "y las sociedades usan los recursos",
+          "from": 56,
+          "to": 108
+        },
+        {
+          "text": "para satisfacer sus necesidades.",
+          "from": 108,
+          "to": 156
+        },
+        {
+          "text": "Las actividades económicas producen bienes, como",
+          "from": 166,
+          "to": 250
+        },
+        {
+          "text": "alimentos y ropa, y servicios, como",
+          "from": 250,
+          "to": 311
+        },
+        {
+          "text": "la educación y la salud.",
+          "from": 311,
+          "to": 352
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "economía",
+          "f": 4
+        },
+        {
+          "w": "estudia",
+          "f": 18
+        },
+        {
+          "w": "cómo",
+          "f": 29
+        },
+        {
+          "w": "las",
+          "f": 35
+        },
+        {
+          "w": "personas",
+          "f": 39
+        },
+        {
+          "w": "y",
+          "f": 52
+        },
+        {
+          "w": "las",
+          "f": 54
+        },
+        {
+          "w": "sociedades",
+          "f": 58
+        },
+        {
+          "w": "usan",
+          "f": 75
+        },
+        {
+          "w": "los",
+          "f": 83
+        },
+        {
+          "w": "recursos",
+          "f": 87
+        },
+        {
+          "w": "para",
+          "f": 101
+        },
+        {
+          "w": "satisfacer",
+          "f": 107
+        },
+        {
+          "w": "sus",
+          "f": 125
+        },
+        {
+          "w": "necesidades",
+          "f": 131
+        },
+        {
+          "w": "las",
+          "f": 166
+        },
+        {
+          "w": "actividades",
+          "f": 172
+        },
+        {
+          "w": "económicas",
+          "f": 188
+        },
+        {
+          "w": "producen",
+          "f": 207
+        },
+        {
+          "w": "bienes",
+          "f": 220
+        },
+        {
+          "w": "como",
+          "f": 245
+        },
+        {
+          "w": "alimentos",
+          "f": 251
+        },
+        {
+          "w": "y",
+          "f": 267
+        },
+        {
+          "w": "ropa",
+          "f": 270
+        },
+        {
+          "w": "y",
+          "f": 281
+        },
+        {
+          "w": "servicios",
+          "f": 285
+        },
+        {
+          "w": "como",
+          "f": 301
+        },
+        {
+          "w": "la",
+          "f": 308
+        },
+        {
+          "w": "educación",
+          "f": 310
+        },
+        {
+          "w": "y",
+          "f": 325
+        },
+        {
+          "w": "la",
+          "f": 327
+        },
+        {
+          "w": "salud",
+          "f": 331
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Los recursos naturales",
+      "texto": "Los recursos naturales pueden ser renovables o no renovables. Los renovables, como el agua, los bosques y la energía solar, se regeneran si se usan con responsabilidad. Los no renovables, como el petróleo, el carbón y el oro, tardan millones de años en formarse.",
+      "voz": "Los recursos naturales pueden ser renovables o no renovables. Los renovables, como el agua, los bosques y la energía solar, se regeneran si se usan con responsabilidad. Los no renovables, como el petróleo, el carbón y el oro, tardan millones de años en formarse.",
+      "columnas": [
+        {
+          "titulo": "Renovables",
+          "palabra": "renovables",
+          "vez": 2,
+          "puntos": [
+            {
+              "texto": "Agua, bosques, energía solar",
+              "palabra": "agua"
+            },
+            {
+              "texto": "Se regeneran si se cuidan",
+              "palabra": "regeneran"
+            }
+          ]
+        },
+        {
+          "titulo": "No renovables",
+          "palabra": "renovables",
+          "vez": 3,
+          "puntos": [
+            {
+              "texto": "Petróleo, carbón, oro",
+              "palabra": "petróleo"
+            },
+            {
+              "texto": "Tardan millones de años",
+              "palabra": "millones"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 464,
+      "frames": 492,
+      "chunks": [
+        {
+          "text": "Los recursos naturales pueden ser",
+          "from": 0,
+          "to": 53
+        },
+        {
+          "text": "renovables o no renovables.",
+          "from": 53,
+          "to": 97
+        },
+        {
+          "text": "Los renovables, como el agua, los",
+          "from": 107,
+          "to": 163
+        },
+        {
+          "text": "bosques y la energía solar, se",
+          "from": 163,
+          "to": 214
+        },
+        {
+          "text": "regeneran si se usan con responsabilidad.",
+          "from": 214,
+          "to": 283
+        },
+        {
+          "text": "Los no renovables, como el petróleo, el carbón y",
+          "from": 295,
+          "to": 381
+        },
+        {
+          "text": "el oro, tardan millones de años en formarse.",
+          "from": 381,
+          "to": 460
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "recursos",
+          "f": 7
+        },
+        {
+          "w": "naturales",
+          "f": 19
+        },
+        {
+          "w": "pueden",
+          "f": 35
+        },
+        {
+          "w": "ser",
+          "f": 43
+        },
+        {
+          "w": "renovables",
+          "f": 47
+        },
+        {
+          "w": "o",
+          "f": 68
+        },
+        {
+          "w": "no",
+          "f": 71
+        },
+        {
+          "w": "renovables",
+          "f": 76
+        },
+        {
+          "w": "los",
+          "f": 107
+        },
+        {
+          "w": "renovables",
+          "f": 113
+        },
+        {
+          "w": "como",
+          "f": 134
+        },
+        {
+          "w": "el",
+          "f": 141
+        },
+        {
+          "w": "agua",
+          "f": 145
+        },
+        {
+          "w": "los",
+          "f": 154
+        },
+        {
+          "w": "bosques",
+          "f": 161
+        },
+        {
+          "w": "y",
+          "f": 174
+        },
+        {
+          "w": "la",
+          "f": 176
+        },
+        {
+          "w": "energía",
+          "f": 179
+        },
+        {
+          "w": "solar",
+          "f": 192
+        },
+        {
+          "w": "se",
+          "f": 214
+        },
+        {
+          "w": "regeneran",
+          "f": 219
+        },
+        {
+          "w": "si",
+          "f": 234
+        },
+        {
+          "w": "se",
+          "f": 238
+        },
+        {
+          "w": "usan",
+          "f": 241
+        },
+        {
+          "w": "con",
+          "f": 249
+        },
+        {
+          "w": "responsabilidad",
+          "f": 254
+        },
+        {
+          "w": "los",
+          "f": 295
+        },
+        {
+          "w": "no",
+          "f": 302
+        },
+        {
+          "w": "renovables",
+          "f": 307
+        },
+        {
+          "w": "como",
+          "f": 327
+        },
+        {
+          "w": "el",
+          "f": 333
+        },
+        {
+          "w": "petróleo",
+          "f": 336
+        },
+        {
+          "w": "el",
+          "f": 356
+        },
+        {
+          "w": "carbón",
+          "f": 361
+        },
+        {
+          "w": "y",
+          "f": 373
+        },
+        {
+          "w": "el",
+          "f": 376
+        },
+        {
+          "w": "oro",
+          "f": 381
+        },
+        {
+          "w": "tardan",
+          "f": 395
+        },
+        {
+          "w": "millones",
+          "f": 406
+        },
+        {
+          "w": "de",
+          "f": 418
+        },
+        {
+          "w": "años",
+          "f": 420
+        },
+        {
+          "w": "en",
+          "f": 428
+        },
+        {
+          "w": "formarse",
+          "f": 432
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Los sectores económicos",
+      "texto": "Las actividades económicas se agrupan en tres sectores. El primario obtiene materias primas de la naturaleza, como el agricultor que cosecha papa. El secundario las transforma en productos, como el carpintero que hace una silla. Y el terciario presta servicios y comercia, como una tienda.",
+      "voz": "Las actividades económicas se agrupan en tres sectores. El primario obtiene materias primas de la naturaleza, como el agricultor que cosecha papa. El secundario las transforma en productos, como el carpintero que hace una silla. Y el terciario presta servicios y comercia, como una tienda.",
+      "imagenes": [
+        {
+          "src": "profundizacion/sectores-economicos.webp",
+          "focos": [
+            {
+              "palabra": "primario",
+              "x": 0.17,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "secundario",
+              "x": 0.5,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "terciario",
+              "x": 0.83,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 484,
+      "frames": 512,
+      "chunks": [
+        {
+          "text": "Las actividades económicas se",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "agrupan en tres sectores.",
+          "from": 47,
+          "to": 87
+        },
+        {
+          "text": "El primario obtiene materias primas de la",
+          "from": 95,
+          "to": 164
+        },
+        {
+          "text": "naturaleza, como el agricultor que cosecha papa.",
+          "from": 164,
+          "to": 245
+        },
+        {
+          "text": "El secundario las transforma en productos, como",
+          "from": 253,
+          "to": 320
+        },
+        {
+          "text": "el carpintero que hace una silla.",
+          "from": 320,
+          "to": 367
+        },
+        {
+          "text": "Y el terciario presta servicios",
+          "from": 377,
+          "to": 431
+        },
+        {
+          "text": "y comercia, como una tienda.",
+          "from": 431,
+          "to": 479
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "actividades",
+          "f": 8
+        },
+        {
+          "w": "económicas",
+          "f": 28
+        },
+        {
+          "w": "se",
+          "f": 45
+        },
+        {
+          "w": "agrupan",
+          "f": 47
+        },
+        {
+          "w": "en",
+          "f": 59
+        },
+        {
+          "w": "tres",
+          "f": 62
+        },
+        {
+          "w": "sectores",
+          "f": 68
+        },
+        {
+          "w": "el",
+          "f": 95
+        },
+        {
+          "w": "primario",
+          "f": 101
+        },
+        {
+          "w": "obtiene",
+          "f": 114
+        },
+        {
+          "w": "materias",
+          "f": 125
+        },
+        {
+          "w": "primas",
+          "f": 138
+        },
+        {
+          "w": "de",
+          "f": 147
+        },
+        {
+          "w": "la",
+          "f": 150
+        },
+        {
+          "w": "naturaleza",
+          "f": 153
+        },
+        {
+          "w": "como",
+          "f": 184
+        },
+        {
+          "w": "el",
+          "f": 191
+        },
+        {
+          "w": "agricultor",
+          "f": 193
+        },
+        {
+          "w": "que",
+          "f": 211
+        },
+        {
+          "w": "cosecha",
+          "f": 216
+        },
+        {
+          "w": "papa",
+          "f": 230
+        },
+        {
+          "w": "el",
+          "f": 253
+        },
+        {
+          "w": "secundario",
+          "f": 258
+        },
+        {
+          "w": "las",
+          "f": 274
+        },
+        {
+          "w": "transforma",
+          "f": 278
+        },
+        {
+          "w": "en",
+          "f": 292
+        },
+        {
+          "w": "productos",
+          "f": 294
+        },
+        {
+          "w": "como",
+          "f": 312
+        },
+        {
+          "w": "el",
+          "f": 318
+        },
+        {
+          "w": "carpintero",
+          "f": 321
+        },
+        {
+          "w": "que",
+          "f": 341
+        },
+        {
+          "w": "hace",
+          "f": 344
+        },
+        {
+          "w": "una",
+          "f": 349
+        },
+        {
+          "w": "silla",
+          "f": 355
+        },
+        {
+          "w": "y",
+          "f": 377
+        },
+        {
+          "w": "el",
+          "f": 381
+        },
+        {
+          "w": "terciario",
+          "f": 385
+        },
+        {
+          "w": "presta",
+          "f": 398
+        },
+        {
+          "w": "servicios",
+          "f": 408
+        },
+        {
+          "w": "y",
+          "f": 422
+        },
+        {
+          "w": "comercia",
+          "f": 424
+        },
+        {
+          "w": "como",
+          "f": 440
+        },
+        {
+          "w": "una",
+          "f": 447
+        },
+        {
+          "w": "tienda",
+          "f": 453
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Del trigo al pan",
+      "texto": "Muchos productos pasan por los tres sectores. Un agricultor cultiva el trigo, una empresa lo convierte en harina, una panadería hace el pan y una tienda lo vende a las familias.",
+      "voz": "Muchos productos pasan por los tres sectores. Un agricultor cultiva el trigo, una empresa lo convierte en harina, una panadería hace el pan y una tienda lo vende a las familias.",
+      "items": [
+        {
+          "titulo": "Primario",
+          "texto": "Se cultiva el trigo",
+          "palabra": "trigo"
+        },
+        {
+          "titulo": "Secundario",
+          "texto": "Se hacen la harina y el pan",
+          "palabra": "harina"
+        },
+        {
+          "titulo": "Terciario",
+          "texto": "Una tienda lo vende",
+          "palabra": "tienda"
+        }
+      ],
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 287,
+      "frames": 315,
+      "chunks": [
+        {
+          "text": "Muchos productos pasan por los tres sectores.",
+          "from": 0,
+          "to": 66
+        },
+        {
+          "text": "Un agricultor cultiva el trigo, una empresa lo",
+          "from": 74,
+          "to": 148
+        },
+        {
+          "text": "convierte en harina, una panadería hace el pan",
+          "from": 148,
+          "to": 223
+        },
+        {
+          "text": "y una tienda lo vende a las familias.",
+          "from": 223,
+          "to": 283
+        }
+      ],
+      "words": [
+        {
+          "w": "muchos",
+          "f": 0
+        },
+        {
+          "w": "productos",
+          "f": 12
+        },
+        {
+          "w": "pasan",
+          "f": 26
+        },
+        {
+          "w": "por",
+          "f": 34
+        },
+        {
+          "w": "los",
+          "f": 38
+        },
+        {
+          "w": "tres",
+          "f": 42
+        },
+        {
+          "w": "sectores",
+          "f": 48
+        },
+        {
+          "w": "un",
+          "f": 74
+        },
+        {
+          "w": "agricultor",
+          "f": 79
+        },
+        {
+          "w": "cultiva",
+          "f": 98
+        },
+        {
+          "w": "el",
+          "f": 110
+        },
+        {
+          "w": "trigo",
+          "f": 114
+        },
+        {
+          "w": "una",
+          "f": 128
+        },
+        {
+          "w": "empresa",
+          "f": 133
+        },
+        {
+          "w": "lo",
+          "f": 144
+        },
+        {
+          "w": "convierte",
+          "f": 148
+        },
+        {
+          "w": "en",
+          "f": 160
+        },
+        {
+          "w": "harina",
+          "f": 163
+        },
+        {
+          "w": "una",
+          "f": 177
+        },
+        {
+          "w": "panadería",
+          "f": 184
+        },
+        {
+          "w": "hace",
+          "f": 202
+        },
+        {
+          "w": "el",
+          "f": 207
+        },
+        {
+          "w": "pan",
+          "f": 211
+        },
+        {
+          "w": "y",
+          "f": 220
+        },
+        {
+          "w": "una",
+          "f": 224
+        },
+        {
+          "w": "tienda",
+          "f": 229
+        },
+        {
+          "w": "lo",
+          "f": 238
+        },
+        {
+          "w": "vende",
+          "f": 241
+        },
+        {
+          "w": "a",
+          "f": 248
+        },
+        {
+          "w": "las",
+          "f": 249
+        },
+        {
+          "w": "familias",
+          "f": 255
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El consumo responsable",
+      "texto": "Consumir con responsabilidad es comprar lo que necesitamos, no desperdiciar alimentos, ahorrar agua y energía, y reutilizar y reciclar. No es dejar de comprar, sino usar los recursos con conciencia.",
+      "voz": "Consumir con responsabilidad es comprar lo que necesitamos, no desperdiciar alimentos, ahorrar agua y energía, y reutilizar y reciclar. No es dejar de comprar, sino usar los recursos con conciencia.",
+      "items": [
+        {
+          "titulo": "Comprar lo necesario",
+          "palabra": "comprar"
+        },
+        {
+          "titulo": "No desperdiciar",
+          "palabra": "desperdiciar"
+        },
+        {
+          "titulo": "Ahorrar agua y energía",
+          "palabra": "ahorrar"
+        },
+        {
+          "titulo": "Reutilizar y reciclar",
+          "palabra": "reutilizar"
+        }
+      ],
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 337,
+      "frames": 365,
+      "chunks": [
+        {
+          "text": "Consumir con responsabilidad es comprar lo que",
+          "from": 0,
+          "to": 78
+        },
+        {
+          "text": "necesitamos, no desperdiciar alimentos, ahorrar agua y",
+          "from": 78,
+          "to": 169
+        },
+        {
+          "text": "energía, y reutilizar y reciclar.",
+          "from": 169,
+          "to": 225
+        },
+        {
+          "text": "No es dejar de comprar, sino",
+          "from": 234,
+          "to": 279
+        },
+        {
+          "text": "usar los recursos con conciencia.",
+          "from": 279,
+          "to": 333
+        }
+      ],
+      "words": [
+        {
+          "w": "consumir",
+          "f": 0
+        },
+        {
+          "w": "con",
+          "f": 16
+        },
+        {
+          "w": "responsabilidad",
+          "f": 20
+        },
+        {
+          "w": "es",
+          "f": 40
+        },
+        {
+          "w": "comprar",
+          "f": 44
+        },
+        {
+          "w": "lo",
+          "f": 54
+        },
+        {
+          "w": "que",
+          "f": 58
+        },
+        {
+          "w": "necesitamos",
+          "f": 61
+        },
+        {
+          "w": "no",
+          "f": 95
+        },
+        {
+          "w": "desperdiciar",
+          "f": 99
+        },
+        {
+          "w": "alimentos",
+          "f": 116
+        },
+        {
+          "w": "ahorrar",
+          "f": 134
+        },
+        {
+          "w": "agua",
+          "f": 146
+        },
+        {
+          "w": "y",
+          "f": 153
+        },
+        {
+          "w": "energía",
+          "f": 155
+        },
+        {
+          "w": "y",
+          "f": 178
+        },
+        {
+          "w": "reutilizar",
+          "f": 184
+        },
+        {
+          "w": "y",
+          "f": 202
+        },
+        {
+          "w": "reciclar",
+          "f": 206
+        },
+        {
+          "w": "no",
+          "f": 234
+        },
+        {
+          "w": "es",
+          "f": 238
+        },
+        {
+          "w": "dejar",
+          "f": 241
+        },
+        {
+          "w": "de",
+          "f": 249
+        },
+        {
+          "w": "comprar",
+          "f": 252
+        },
+        {
+          "w": "sino",
+          "f": 265
+        },
+        {
+          "w": "usar",
+          "f": 273
+        },
+        {
+          "w": "los",
+          "f": 281
+        },
+        {
+          "w": "recursos",
+          "f": 285
+        },
+        {
+          "w": "con",
+          "f": 299
+        },
+        {
+          "w": "conciencia",
+          "f": 304
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la economía y las actividades económicas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la economía y las actividades económicas. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/economia-y-actividades-economicas/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 198,
+      "frames": 358,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 25
+        },
+        {
+          "text": "Repasaste la economía y las actividades económicas.",
+          "from": 37,
+          "to": 116
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 126,
+          "to": 194
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 37
+        },
+        {
+          "w": "la",
+          "f": 53
+        },
+        {
+          "w": "economía",
+          "f": 55
+        },
+        {
+          "w": "y",
+          "f": 71
+        },
+        {
+          "w": "las",
+          "f": 74
+        },
+        {
+          "w": "actividades",
+          "f": 79
+        },
+        {
+          "w": "económicas",
+          "f": 94
+        },
+        {
+          "w": "sigue",
+          "f": 126
+        },
+        {
+          "w": "con",
+          "f": 136
+        },
+        {
+          "w": "el",
+          "f": 141
+        },
+        {
+          "w": "siguiente",
+          "f": 144
+        },
+        {
+          "w": "tema",
+          "f": 157
+        },
+        {
+          "w": "de",
+          "f": 166
+        },
+        {
+          "w": "tu",
+          "f": 170
+        },
+        {
+          "w": "ruta",
+          "f": 174
+        }
+      ]
+    }
+  ]
+}

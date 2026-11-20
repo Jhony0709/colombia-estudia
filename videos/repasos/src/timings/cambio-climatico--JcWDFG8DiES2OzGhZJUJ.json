@@ -1,0 +1,1260 @@
+{
+  "tema": "cambio-climatico",
+  "componente": "Dominio",
+  "area": "Ciencias naturales",
+  "titulo": "Cambio climático e impacto humano en los ecosistemas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el cambio climático y el impacto humano en los ecosistemas.",
+      "voz": "Repaso del tema: el cambio climático y el impacto humano en los ecosistemas.",
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 145,
+      "frames": 173,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "el cambio climático y el",
+          "from": 39,
+          "to": 81
+        },
+        {
+          "text": "impacto humano en los ecosistemas.",
+          "from": 81,
+          "to": 141
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "el",
+          "f": 39
+        },
+        {
+          "w": "cambio",
+          "f": 44
+        },
+        {
+          "w": "climático",
+          "f": 53
+        },
+        {
+          "w": "y",
+          "f": 72
+        },
+        {
+          "w": "el",
+          "f": 74
+        },
+        {
+          "w": "impacto",
+          "f": 77
+        },
+        {
+          "w": "humano",
+          "f": 89
+        },
+        {
+          "w": "en",
+          "f": 98
+        },
+        {
+          "w": "los",
+          "f": 100
+        },
+        {
+          "w": "ecosistemas",
+          "f": 105
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Tiempo, clima y cambio climático",
+      "texto": "El tiempo atmosférico es el estado de la atmósfera en un lugar y un momento. El clima es su comportamiento habitual durante muchos años. Y el cambio climático es una transformación duradera del clima, que incluye el calentamiento global.",
+      "voz": "El tiempo atmosférico es el estado de la atmósfera en un lugar y un momento. El clima es su comportamiento habitual durante muchos años. Y el cambio climático es una transformación duradera del clima, que incluye el calentamiento global.",
+      "items": [
+        {
+          "titulo": "Tiempo atmosférico",
+          "texto": "Lo que pasa hoy",
+          "palabra": "tiempo"
+        },
+        {
+          "titulo": "Clima",
+          "texto": "Lo habitual durante años",
+          "palabra": "clima"
+        },
+        {
+          "titulo": "Cambio climático",
+          "texto": "Cambio duradero del clima",
+          "palabra": "cambio"
+        }
+      ],
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 396,
+      "frames": 424,
+      "chunks": [
+        {
+          "text": "El tiempo atmosférico es el estado de la",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "atmósfera en un lugar y un momento.",
+          "from": 62,
+          "to": 116
+        },
+        {
+          "text": "El clima es su comportamiento",
+          "from": 125,
+          "to": 170
+        },
+        {
+          "text": "habitual durante muchos años.",
+          "from": 170,
+          "to": 215
+        },
+        {
+          "text": "Y el cambio climático es una transformación duradera",
+          "from": 224,
+          "to": 312
+        },
+        {
+          "text": "del clima, que incluye el calentamiento global.",
+          "from": 312,
+          "to": 391
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "tiempo",
+          "f": 7
+        },
+        {
+          "w": "atmosférico",
+          "f": 14
+        },
+        {
+          "w": "es",
+          "f": 36
+        },
+        {
+          "w": "el",
+          "f": 40
+        },
+        {
+          "w": "estado",
+          "f": 43
+        },
+        {
+          "w": "de",
+          "f": 52
+        },
+        {
+          "w": "la",
+          "f": 55
+        },
+        {
+          "w": "atmósfera",
+          "f": 58
+        },
+        {
+          "w": "en",
+          "f": 76
+        },
+        {
+          "w": "un",
+          "f": 81
+        },
+        {
+          "w": "lugar",
+          "f": 84
+        },
+        {
+          "w": "y",
+          "f": 94
+        },
+        {
+          "w": "un",
+          "f": 97
+        },
+        {
+          "w": "momento",
+          "f": 100
+        },
+        {
+          "w": "el",
+          "f": 125
+        },
+        {
+          "w": "clima",
+          "f": 131
+        },
+        {
+          "w": "es",
+          "f": 139
+        },
+        {
+          "w": "su",
+          "f": 142
+        },
+        {
+          "w": "comportamiento",
+          "f": 148
+        },
+        {
+          "w": "habitual",
+          "f": 168
+        },
+        {
+          "w": "durante",
+          "f": 181
+        },
+        {
+          "w": "muchos",
+          "f": 193
+        },
+        {
+          "w": "años",
+          "f": 203
+        },
+        {
+          "w": "y",
+          "f": 224
+        },
+        {
+          "w": "el",
+          "f": 228
+        },
+        {
+          "w": "cambio",
+          "f": 231
+        },
+        {
+          "w": "climático",
+          "f": 239
+        },
+        {
+          "w": "es",
+          "f": 260
+        },
+        {
+          "w": "una",
+          "f": 264
+        },
+        {
+          "w": "transformación",
+          "f": 269
+        },
+        {
+          "w": "duradera",
+          "f": 288
+        },
+        {
+          "w": "del",
+          "f": 301
+        },
+        {
+          "w": "clima",
+          "f": 306
+        },
+        {
+          "w": "que",
+          "f": 326
+        },
+        {
+          "w": "incluye",
+          "f": 330
+        },
+        {
+          "w": "el",
+          "f": 344
+        },
+        {
+          "w": "calentamiento",
+          "f": 348
+        },
+        {
+          "w": "global",
+          "f": 368
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "El efecto invernadero",
+      "texto": "El efecto invernadero es natural y mantiene la Tierra habitable. Llega la energía del Sol, y una parte se refleja al espacio. La Tierra libera energía como radiación infrarroja, y algunos gases de la atmósfera retienen parte de ese calor.",
+      "voz": "El efecto invernadero es natural y mantiene la Tierra habitable. Llega la energía del Sol, y una parte se refleja al espacio. La Tierra libera energía como radiación infrarroja, y algunos gases de la atmósfera retienen parte de ese calor.",
+      "imagenes": [
+        {
+          "src": "dominio/efecto-invernadero.webp",
+          "focos": [
+            {
+              "palabra": "sol",
+              "x": 0.3,
+              "y": 0.4,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "refleja",
+              "x": 0.55,
+              "y": 0.25,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "infrarroja",
+              "x": 0.3,
+              "y": 0.8,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "gases",
+              "x": 0.62,
+              "y": 0.75,
+              "zoom": 1.4
+            }
+          ]
+        }
+      ],
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 397,
+      "frames": 425,
+      "chunks": [
+        {
+          "text": "El efecto invernadero es natural",
+          "from": 0,
+          "to": 51
+        },
+        {
+          "text": "y mantiene la Tierra habitable.",
+          "from": 51,
+          "to": 100
+        },
+        {
+          "text": "Llega la energía del Sol, y",
+          "from": 107,
+          "to": 150
+        },
+        {
+          "text": "una parte se refleja al espacio.",
+          "from": 150,
+          "to": 201
+        },
+        {
+          "text": "La Tierra libera energía como radiación",
+          "from": 212,
+          "to": 276
+        },
+        {
+          "text": "infrarroja, y algunos gases de la",
+          "from": 276,
+          "to": 331
+        },
+        {
+          "text": "atmósfera retienen parte de ese calor.",
+          "from": 331,
+          "to": 393
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "efecto",
+          "f": 7
+        },
+        {
+          "w": "invernadero",
+          "f": 16
+        },
+        {
+          "w": "es",
+          "f": 34
+        },
+        {
+          "w": "natural",
+          "f": 37
+        },
+        {
+          "w": "y",
+          "f": 52
+        },
+        {
+          "w": "mantiene",
+          "f": 56
+        },
+        {
+          "w": "la",
+          "f": 69
+        },
+        {
+          "w": "tierra",
+          "f": 72
+        },
+        {
+          "w": "habitable",
+          "f": 80
+        },
+        {
+          "w": "llega",
+          "f": 107
+        },
+        {
+          "w": "la",
+          "f": 116
+        },
+        {
+          "w": "energía",
+          "f": 118
+        },
+        {
+          "w": "del",
+          "f": 133
+        },
+        {
+          "w": "sol",
+          "f": 138
+        },
+        {
+          "w": "y",
+          "f": 148
+        },
+        {
+          "w": "una",
+          "f": 152
+        },
+        {
+          "w": "parte",
+          "f": 157
+        },
+        {
+          "w": "se",
+          "f": 166
+        },
+        {
+          "w": "refleja",
+          "f": 170
+        },
+        {
+          "w": "al",
+          "f": 181
+        },
+        {
+          "w": "espacio",
+          "f": 185
+        },
+        {
+          "w": "la",
+          "f": 212
+        },
+        {
+          "w": "tierra",
+          "f": 218
+        },
+        {
+          "w": "libera",
+          "f": 227
+        },
+        {
+          "w": "energía",
+          "f": 235
+        },
+        {
+          "w": "como",
+          "f": 250
+        },
+        {
+          "w": "radiación",
+          "f": 257
+        },
+        {
+          "w": "infrarroja",
+          "f": 271
+        },
+        {
+          "w": "y",
+          "f": 300
+        },
+        {
+          "w": "algunos",
+          "f": 303
+        },
+        {
+          "w": "gases",
+          "f": 314
+        },
+        {
+          "w": "de",
+          "f": 322
+        },
+        {
+          "w": "la",
+          "f": 325
+        },
+        {
+          "w": "atmósfera",
+          "f": 327
+        },
+        {
+          "w": "retienen",
+          "f": 344
+        },
+        {
+          "w": "parte",
+          "f": 357
+        },
+        {
+          "w": "de",
+          "f": 366
+        },
+        {
+          "w": "ese",
+          "f": 369
+        },
+        {
+          "w": "calor",
+          "f": 374
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las causas del cambio actual",
+      "texto": "El problema es que las actividades humanas aumentan esos gases y el planeta retiene más calor. Las causas principales son la quema de combustibles fósiles, la deforestación, algunas actividades agropecuarias y la industria.",
+      "voz": "El problema es que las actividades humanas aumentan esos gases y el planeta retiene más calor. Las causas principales son la quema de combustibles fósiles, la deforestación, algunas actividades agropecuarias y la industria.",
+      "items": [
+        {
+          "titulo": "Combustibles fósiles",
+          "texto": "Carbón, petróleo y gas",
+          "palabra": "combustibles"
+        },
+        {
+          "titulo": "Deforestación",
+          "texto": "Menos árboles que absorben CO₂",
+          "palabra": "deforestación"
+        },
+        {
+          "titulo": "Actividades agropecuarias",
+          "texto": "Ganadería y fertilizantes",
+          "palabra": "agropecuarias"
+        },
+        {
+          "titulo": "Industria",
+          "texto": "Cemento y otros procesos",
+          "palabra": "industria"
+        }
+      ],
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 360,
+      "frames": 388,
+      "chunks": [
+        {
+          "text": "El problema es que las actividades humanas aumentan",
+          "from": 0,
+          "to": 80
+        },
+        {
+          "text": "esos gases y el planeta retiene más calor.",
+          "from": 80,
+          "to": 145
+        },
+        {
+          "text": "Las causas principales son la quema",
+          "from": 154,
+          "to": 210
+        },
+        {
+          "text": "de combustibles fósiles, la deforestación, algunas",
+          "from": 210,
+          "to": 290
+        },
+        {
+          "text": "actividades agropecuarias y la industria.",
+          "from": 290,
+          "to": 355
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "problema",
+          "f": 7
+        },
+        {
+          "w": "es",
+          "f": 19
+        },
+        {
+          "w": "que",
+          "f": 22
+        },
+        {
+          "w": "las",
+          "f": 25
+        },
+        {
+          "w": "actividades",
+          "f": 30
+        },
+        {
+          "w": "humanas",
+          "f": 47
+        },
+        {
+          "w": "aumentan",
+          "f": 60
+        },
+        {
+          "w": "esos",
+          "f": 75
+        },
+        {
+          "w": "gases",
+          "f": 82
+        },
+        {
+          "w": "y",
+          "f": 93
+        },
+        {
+          "w": "el",
+          "f": 96
+        },
+        {
+          "w": "planeta",
+          "f": 100
+        },
+        {
+          "w": "retiene",
+          "f": 113
+        },
+        {
+          "w": "más",
+          "f": 124
+        },
+        {
+          "w": "calor",
+          "f": 130
+        },
+        {
+          "w": "las",
+          "f": 154
+        },
+        {
+          "w": "causas",
+          "f": 160
+        },
+        {
+          "w": "principales",
+          "f": 170
+        },
+        {
+          "w": "son",
+          "f": 189
+        },
+        {
+          "w": "la",
+          "f": 195
+        },
+        {
+          "w": "quema",
+          "f": 199
+        },
+        {
+          "w": "de",
+          "f": 206
+        },
+        {
+          "w": "combustibles",
+          "f": 209
+        },
+        {
+          "w": "fósiles",
+          "f": 226
+        },
+        {
+          "w": "la",
+          "f": 242
+        },
+        {
+          "w": "deforestación",
+          "f": 245
+        },
+        {
+          "w": "algunas",
+          "f": 279
+        },
+        {
+          "w": "actividades",
+          "f": 292
+        },
+        {
+          "w": "agropecuarias",
+          "f": 308
+        },
+        {
+          "w": "y",
+          "f": 331
+        },
+        {
+          "w": "la",
+          "f": 334
+        },
+        {
+          "w": "industria",
+          "f": 336
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Las consecuencias",
+      "texto": "Sus consecuencias incluyen más calor extremo, sequías en unas zonas e inundaciones en otras, el deshielo de los glaciares y la subida del nivel del mar. También se alteran los ecosistemas, los cultivos y la salud.",
+      "voz": "Sus consecuencias incluyen más calor extremo, sequías en unas zonas e inundaciones en otras, el deshielo de los glaciares y la subida del nivel del mar. También se alteran los ecosistemas, los cultivos y la salud.",
+      "items": [
+        {
+          "titulo": "Calor extremo",
+          "palabra": "calor"
+        },
+        {
+          "titulo": "Sequías e inundaciones",
+          "palabra": "sequías"
+        },
+        {
+          "titulo": "Glaciares y nivel del mar",
+          "palabra": "glaciares"
+        },
+        {
+          "titulo": "Ecosistemas, cultivos y salud",
+          "palabra": "ecosistemas"
+        }
+      ],
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 360,
+      "frames": 388,
+      "chunks": [
+        {
+          "text": "Sus consecuencias incluyen más calor extremo, sequías en unas",
+          "from": 0,
+          "to": 98
+        },
+        {
+          "text": "zonas e inundaciones en otras, el deshielo de los",
+          "from": 98,
+          "to": 178
+        },
+        {
+          "text": "glaciares y la subida del nivel del mar.",
+          "from": 178,
+          "to": 242
+        },
+        {
+          "text": "También se alteran los ecosistemas,",
+          "from": 252,
+          "to": 313
+        },
+        {
+          "text": "los cultivos y la salud.",
+          "from": 313,
+          "to": 355
+        }
+      ],
+      "words": [
+        {
+          "w": "sus",
+          "f": 0
+        },
+        {
+          "w": "consecuencias",
+          "f": 9
+        },
+        {
+          "w": "incluyen",
+          "f": 27
+        },
+        {
+          "w": "más",
+          "f": 40
+        },
+        {
+          "w": "calor",
+          "f": 45
+        },
+        {
+          "w": "extremo",
+          "f": 54
+        },
+        {
+          "w": "sequías",
+          "f": 71
+        },
+        {
+          "w": "en",
+          "f": 86
+        },
+        {
+          "w": "unas",
+          "f": 89
+        },
+        {
+          "w": "zonas",
+          "f": 95
+        },
+        {
+          "w": "e",
+          "f": 106
+        },
+        {
+          "w": "inundaciones",
+          "f": 108
+        },
+        {
+          "w": "en",
+          "f": 128
+        },
+        {
+          "w": "otras",
+          "f": 133
+        },
+        {
+          "w": "el",
+          "f": 154
+        },
+        {
+          "w": "deshielo",
+          "f": 161
+        },
+        {
+          "w": "de",
+          "f": 173
+        },
+        {
+          "w": "los",
+          "f": 176
+        },
+        {
+          "w": "glaciares",
+          "f": 180
+        },
+        {
+          "w": "y",
+          "f": 197
+        },
+        {
+          "w": "la",
+          "f": 200
+        },
+        {
+          "w": "subida",
+          "f": 204
+        },
+        {
+          "w": "del",
+          "f": 212
+        },
+        {
+          "w": "nivel",
+          "f": 217
+        },
+        {
+          "w": "del",
+          "f": 225
+        },
+        {
+          "w": "mar",
+          "f": 231
+        },
+        {
+          "w": "también",
+          "f": 252
+        },
+        {
+          "w": "se",
+          "f": 262
+        },
+        {
+          "w": "alteran",
+          "f": 264
+        },
+        {
+          "w": "los",
+          "f": 274
+        },
+        {
+          "w": "ecosistemas",
+          "f": 279
+        },
+        {
+          "w": "los",
+          "f": 302
+        },
+        {
+          "w": "cultivos",
+          "f": 308
+        },
+        {
+          "w": "y",
+          "f": 324
+        },
+        {
+          "w": "la",
+          "f": 327
+        },
+        {
+          "w": "salud",
+          "f": 331
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Mitigación y adaptación",
+      "texto": "Hay dos tipos de acciones. La mitigación reduce las emisiones o aumenta la absorción de carbono, como proteger los bosques o ahorrar energía. La adaptación nos prepara para los efectos, como cuidar el agua o tener planes ante inundaciones.",
+      "voz": "Hay dos tipos de acciones. La mitigación reduce las emisiones o aumenta la absorción de carbono, como proteger los bosques o ahorrar energía. La adaptación nos prepara para los efectos, como cuidar el agua o tener planes ante inundaciones.",
+      "columnas": [
+        {
+          "titulo": "Mitigación",
+          "palabra": "mitigación",
+          "puntos": [
+            {
+              "texto": "Reduce las emisiones",
+              "palabra": "reduce"
+            },
+            {
+              "texto": "Proteger bosques, ahorrar energía",
+              "palabra": "bosques"
+            }
+          ]
+        },
+        {
+          "titulo": "Adaptación",
+          "palabra": "adaptación",
+          "puntos": [
+            {
+              "texto": "Prepararse para los efectos",
+              "palabra": "prepara"
+            },
+            {
+              "texto": "Cuidar el agua, planes ante inundaciones",
+              "palabra": "inundaciones"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 403,
+      "frames": 431,
+      "chunks": [
+        {
+          "text": "Hay dos tipos de acciones.",
+          "from": 0,
+          "to": 38
+        },
+        {
+          "text": "La mitigación reduce las emisiones o",
+          "from": 40,
+          "to": 100
+        },
+        {
+          "text": "aumenta la absorción de carbono, como",
+          "from": 100,
+          "to": 161
+        },
+        {
+          "text": "proteger los bosques o ahorrar energía.",
+          "from": 161,
+          "to": 226
+        },
+        {
+          "text": "La adaptación nos prepara para los efectos, como",
+          "from": 236,
+          "to": 317
+        },
+        {
+          "text": "cuidar el agua o tener planes ante inundaciones.",
+          "from": 317,
+          "to": 398
+        }
+      ],
+      "words": [
+        {
+          "w": "hay",
+          "f": 0
+        },
+        {
+          "w": "dos",
+          "f": 8
+        },
+        {
+          "w": "tipos",
+          "f": 13
+        },
+        {
+          "w": "de",
+          "f": 22
+        },
+        {
+          "w": "acciones",
+          "f": 24
+        },
+        {
+          "w": "la",
+          "f": 40
+        },
+        {
+          "w": "mitigación",
+          "f": 45
+        },
+        {
+          "w": "reduce",
+          "f": 62
+        },
+        {
+          "w": "las",
+          "f": 72
+        },
+        {
+          "w": "emisiones",
+          "f": 77
+        },
+        {
+          "w": "o",
+          "f": 93
+        },
+        {
+          "w": "aumenta",
+          "f": 95
+        },
+        {
+          "w": "la",
+          "f": 107
+        },
+        {
+          "w": "absorción",
+          "f": 110
+        },
+        {
+          "w": "de",
+          "f": 124
+        },
+        {
+          "w": "carbono",
+          "f": 128
+        },
+        {
+          "w": "como",
+          "f": 153
+        },
+        {
+          "w": "proteger",
+          "f": 161
+        },
+        {
+          "w": "los",
+          "f": 174
+        },
+        {
+          "w": "bosques",
+          "f": 179
+        },
+        {
+          "w": "o",
+          "f": 194
+        },
+        {
+          "w": "ahorrar",
+          "f": 196
+        },
+        {
+          "w": "energía",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 236
+        },
+        {
+          "w": "adaptación",
+          "f": 241
+        },
+        {
+          "w": "nos",
+          "f": 258
+        },
+        {
+          "w": "prepara",
+          "f": 263
+        },
+        {
+          "w": "para",
+          "f": 274
+        },
+        {
+          "w": "los",
+          "f": 280
+        },
+        {
+          "w": "efectos",
+          "f": 285
+        },
+        {
+          "w": "como",
+          "f": 312
+        },
+        {
+          "w": "cuidar",
+          "f": 320
+        },
+        {
+          "w": "el",
+          "f": 329
+        },
+        {
+          "w": "agua",
+          "f": 333
+        },
+        {
+          "w": "o",
+          "f": 341
+        },
+        {
+          "w": "tener",
+          "f": 344
+        },
+        {
+          "w": "planes",
+          "f": 352
+        },
+        {
+          "w": "ante",
+          "f": 362
+        },
+        {
+          "w": "inundaciones",
+          "f": 367
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el cambio climático. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el cambio climático. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/cambio-climatico/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 158,
+      "frames": 318,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste el cambio climático.",
+          "from": 34,
+          "to": 84
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 86,
+          "to": 153
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "el",
+          "f": 50
+        },
+        {
+          "w": "cambio",
+          "f": 54
+        },
+        {
+          "w": "climático",
+          "f": 63
+        },
+        {
+          "w": "sigue",
+          "f": 86
+        },
+        {
+          "w": "con",
+          "f": 94
+        },
+        {
+          "w": "el",
+          "f": 99
+        },
+        {
+          "w": "siguiente",
+          "f": 102
+        },
+        {
+          "w": "tema",
+          "f": 115
+        },
+        {
+          "w": "de",
+          "f": 124
+        },
+        {
+          "w": "tu",
+          "f": 126
+        },
+        {
+          "w": "ruta",
+          "f": 131
+        }
+      ]
+    }
+  ]
+}

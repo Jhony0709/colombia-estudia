@@ -1,0 +1,1578 @@
+{
+  "tema": "genetica-y-herencia-biologica",
+  "componente": "Expansión",
+  "area": "Ciencias naturales",
+  "titulo": "Genética y herencia biológica",
+  "siguiente": "Porcentajes, descuentos, aumentos, presupuestos y educación financiera",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la genética y la herencia biológica.",
+      "voz": "Repaso del tema: la genética y la herencia biológica.",
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 117,
+      "frames": 145,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 36
+        },
+        {
+          "text": "la genética y la herencia biológica.",
+          "from": 39,
+          "to": 113
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 18
+        },
+        {
+          "w": "tema",
+          "f": 23
+        },
+        {
+          "w": "la",
+          "f": 39
+        },
+        {
+          "w": "genética",
+          "f": 44
+        },
+        {
+          "w": "y",
+          "f": 61
+        },
+        {
+          "w": "la",
+          "f": 64
+        },
+        {
+          "w": "herencia",
+          "f": 66
+        },
+        {
+          "w": "biológica",
+          "f": 79
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "De la célula al gen",
+      "texto": "La información genética está en la célula, dentro de su núcleo. Allí, el ADN se organiza con proteínas en cromosomas. El ADN es una doble hélice con cuatro bases: A, T, C y G. Y un gen es un segmento de ADN con información funcional.",
+      "voz": "La información genética está en la célula, dentro de su núcleo. Allí, el ADN se organiza con proteínas en cromosomas. El ADN es una doble hélice con cuatro bases: a, te, ce y ge. Y un gen es un segmento de ADN con información funcional.",
+      "imagenes": [
+        {
+          "src": "expansion/de-la-celula-al-gen.webp",
+          "focos": [
+            {
+              "palabra": "célula",
+              "x": 0.12,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "núcleo",
+              "x": 0.37,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "cromosomas",
+              "x": 0.62,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "hélice",
+              "x": 0.87,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "gen",
+              "x": 0.85,
+              "y": 0.3,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 445,
+      "frames": 473,
+      "chunks": [
+        {
+          "text": "La información genética está en la",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "célula, dentro de su núcleo.",
+          "from": 47,
+          "to": 86
+        },
+        {
+          "text": "Allí, el ADN se organiza",
+          "from": 95,
+          "to": 137
+        },
+        {
+          "text": "con proteínas en cromosomas.",
+          "from": 137,
+          "to": 185
+        },
+        {
+          "text": "El ADN es una doble hélice con cuatro bases:",
+          "from": 192,
+          "to": 270
+        },
+        {
+          "text": "A, T, C y G.",
+          "from": 277,
+          "to": 329
+        },
+        {
+          "text": "Y un gen es un segmento",
+          "from": 339,
+          "to": 380
+        },
+        {
+          "text": "de ADN con información funcional.",
+          "from": 380,
+          "to": 440
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "información",
+          "f": 4
+        },
+        {
+          "w": "genética",
+          "f": 18
+        },
+        {
+          "w": "está",
+          "f": 32
+        },
+        {
+          "w": "en",
+          "f": 37
+        },
+        {
+          "w": "la",
+          "f": 40
+        },
+        {
+          "w": "célula",
+          "f": 43
+        },
+        {
+          "w": "dentro",
+          "f": 55
+        },
+        {
+          "w": "de",
+          "f": 64
+        },
+        {
+          "w": "su",
+          "f": 67
+        },
+        {
+          "w": "núcleo",
+          "f": 71
+        },
+        {
+          "w": "allí",
+          "f": 95
+        },
+        {
+          "w": "el",
+          "f": 106
+        },
+        {
+          "w": "adn",
+          "f": 112
+        },
+        {
+          "w": "se",
+          "f": 123
+        },
+        {
+          "w": "organiza",
+          "f": 125
+        },
+        {
+          "w": "con",
+          "f": 138
+        },
+        {
+          "w": "proteínas",
+          "f": 142
+        },
+        {
+          "w": "en",
+          "f": 159
+        },
+        {
+          "w": "cromosomas",
+          "f": 162
+        },
+        {
+          "w": "el",
+          "f": 192
+        },
+        {
+          "w": "adn",
+          "f": 199
+        },
+        {
+          "w": "es",
+          "f": 210
+        },
+        {
+          "w": "una",
+          "f": 214
+        },
+        {
+          "w": "doble",
+          "f": 219
+        },
+        {
+          "w": "hélice",
+          "f": 227
+        },
+        {
+          "w": "con",
+          "f": 239
+        },
+        {
+          "w": "cuatro",
+          "f": 244
+        },
+        {
+          "w": "bases",
+          "f": 254
+        },
+        {
+          "w": "a",
+          "f": 277
+        },
+        {
+          "w": "te",
+          "f": 288
+        },
+        {
+          "w": "ce",
+          "f": 297
+        },
+        {
+          "w": "y",
+          "f": 310
+        },
+        {
+          "w": "ge",
+          "f": 316
+        },
+        {
+          "w": "y",
+          "f": 339
+        },
+        {
+          "w": "un",
+          "f": 342
+        },
+        {
+          "w": "gen",
+          "f": 346
+        },
+        {
+          "w": "es",
+          "f": 354
+        },
+        {
+          "w": "un",
+          "f": 359
+        },
+        {
+          "w": "segmento",
+          "f": 362
+        },
+        {
+          "w": "de",
+          "f": 375
+        },
+        {
+          "w": "adn",
+          "f": 378
+        },
+        {
+          "w": "con",
+          "f": 391
+        },
+        {
+          "w": "información",
+          "f": 396
+        },
+        {
+          "w": "funcional",
+          "f": 411
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La herencia biológica",
+      "texto": "La herencia biológica es la transmisión de información genética de una generación a otra. La mayoría de nuestras células tienen 46 cromosomas, en 23 pares: en general, uno de cada par viene de la madre y el otro, del padre. Algunas características son heredadas, como el grupo sanguíneo; otras son adquiridas, como una cicatriz.",
+      "voz": "La herencia biológica es la transmisión de información genética de una generación a otra. La mayoría de nuestras células tienen cuarenta y seis cromosomas, en veintitrés pares: en general, uno de cada par viene de la madre y el otro, del padre. Algunas características son heredadas, como el grupo sanguíneo; otras son adquiridas, como una cicatriz.",
+      "items": [
+        {
+          "titulo": "46 cromosomas",
+          "texto": "23 pares",
+          "palabra": "cuarenta"
+        },
+        {
+          "titulo": "Heredada",
+          "texto": "El grupo sanguíneo",
+          "palabra": "heredadas"
+        },
+        {
+          "titulo": "Adquirida",
+          "texto": "Una cicatriz",
+          "palabra": "adquiridas"
+        }
+      ],
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 573,
+      "frames": 601,
+      "chunks": [
+        {
+          "text": "La herencia biológica es la transmisión de",
+          "from": 0,
+          "to": 60
+        },
+        {
+          "text": "información genética de una generación a otra.",
+          "from": 60,
+          "to": 126
+        },
+        {
+          "text": "La mayoría de nuestras células tienen",
+          "from": 139,
+          "to": 215
+        },
+        {
+          "text": "46 cromosomas, en 23 pares:",
+          "from": 215,
+          "to": 271
+        },
+        {
+          "text": "en general, uno de cada par viene de",
+          "from": 281,
+          "to": 337
+        },
+        {
+          "text": "la madre y el otro, del padre.",
+          "from": 337,
+          "to": 384
+        },
+        {
+          "text": "Algunas características son heredadas,",
+          "from": 394,
+          "to": 452
+        },
+        {
+          "text": "como el grupo sanguíneo;",
+          "from": 452,
+          "to": 488
+        },
+        {
+          "text": "otras son adquiridas, como una cicatriz.",
+          "from": 498,
+          "to": 568
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "herencia",
+          "f": 4
+        },
+        {
+          "w": "biológica",
+          "f": 15
+        },
+        {
+          "w": "es",
+          "f": 30
+        },
+        {
+          "w": "la",
+          "f": 33
+        },
+        {
+          "w": "transmisión",
+          "f": 37
+        },
+        {
+          "w": "de",
+          "f": 53
+        },
+        {
+          "w": "información",
+          "f": 55
+        },
+        {
+          "w": "genética",
+          "f": 70
+        },
+        {
+          "w": "de",
+          "f": 86
+        },
+        {
+          "w": "una",
+          "f": 90
+        },
+        {
+          "w": "generación",
+          "f": 95
+        },
+        {
+          "w": "a",
+          "f": 111
+        },
+        {
+          "w": "otra",
+          "f": 115
+        },
+        {
+          "w": "la",
+          "f": 139
+        },
+        {
+          "w": "mayoría",
+          "f": 143
+        },
+        {
+          "w": "de",
+          "f": 156
+        },
+        {
+          "w": "nuestras",
+          "f": 159
+        },
+        {
+          "w": "células",
+          "f": 169
+        },
+        {
+          "w": "tienen",
+          "f": 183
+        },
+        {
+          "w": "cuarenta",
+          "f": 192
+        },
+        {
+          "w": "y",
+          "f": 203
+        },
+        {
+          "w": "seis",
+          "f": 204
+        },
+        {
+          "w": "cromosomas",
+          "f": 211
+        },
+        {
+          "w": "en",
+          "f": 234
+        },
+        {
+          "w": "veintitrés",
+          "f": 239
+        },
+        {
+          "w": "pares",
+          "f": 258
+        },
+        {
+          "w": "en",
+          "f": 281
+        },
+        {
+          "w": "general",
+          "f": 286
+        },
+        {
+          "w": "uno",
+          "f": 301
+        },
+        {
+          "w": "de",
+          "f": 307
+        },
+        {
+          "w": "cada",
+          "f": 310
+        },
+        {
+          "w": "par",
+          "f": 317
+        },
+        {
+          "w": "viene",
+          "f": 324
+        },
+        {
+          "w": "de",
+          "f": 331
+        },
+        {
+          "w": "la",
+          "f": 334
+        },
+        {
+          "w": "madre",
+          "f": 338
+        },
+        {
+          "w": "y",
+          "f": 349
+        },
+        {
+          "w": "el",
+          "f": 352
+        },
+        {
+          "w": "otro",
+          "f": 357
+        },
+        {
+          "w": "del",
+          "f": 365
+        },
+        {
+          "w": "padre",
+          "f": 371
+        },
+        {
+          "w": "algunas",
+          "f": 394
+        },
+        {
+          "w": "características",
+          "f": 406
+        },
+        {
+          "w": "son",
+          "f": 429
+        },
+        {
+          "w": "heredadas",
+          "f": 434
+        },
+        {
+          "w": "como",
+          "f": 452
+        },
+        {
+          "w": "el",
+          "f": 459
+        },
+        {
+          "w": "grupo",
+          "f": 461
+        },
+        {
+          "w": "sanguíneo",
+          "f": 470
+        },
+        {
+          "w": "otras",
+          "f": 498
+        },
+        {
+          "w": "son",
+          "f": 508
+        },
+        {
+          "w": "adquiridas",
+          "f": 513
+        },
+        {
+          "w": "como",
+          "f": 531
+        },
+        {
+          "w": "una",
+          "f": 537
+        },
+        {
+          "w": "cicatriz",
+          "f": 541
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Genotipo y fenotipo",
+      "texto": "Los alelos son versiones de un mismo gen. El genotipo es la combinación de alelos de un organismo, y el fenotipo, lo que se observa, como el color de una flor. En el modelo más sencillo, un alelo dominante se manifiesta con una sola copia y uno recesivo necesita dos. Dominante no significa mejor ni más fuerte.",
+      "voz": "Los alelos son versiones de un mismo gen. El genotipo es la combinación de alelos de un organismo, y el fenotipo, lo que se observa, como el color de una flor. En el modelo más sencillo, un alelo dominante se manifiesta con una sola copia y uno recesivo necesita dos. Dominante no significa mejor ni más fuerte.",
+      "items": [
+        {
+          "titulo": "Alelos",
+          "texto": "Versiones de un gen",
+          "palabra": "alelos"
+        },
+        {
+          "titulo": "Genotipo",
+          "texto": "AA, Aa o aa",
+          "palabra": "genotipo"
+        },
+        {
+          "titulo": "Fenotipo",
+          "texto": "Lo que se observa",
+          "palabra": "fenotipo"
+        },
+        {
+          "titulo": "Dominante y recesivo",
+          "texto": "A domina sobre a",
+          "palabra": "dominante"
+        }
+      ],
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 546,
+      "frames": 574,
+      "chunks": [
+        {
+          "text": "Los alelos son versiones de un mismo gen.",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "El genotipo es la combinación de alelos de",
+          "from": 70,
+          "to": 135
+        },
+        {
+          "text": "un organismo, y el fenotipo, lo que se",
+          "from": 135,
+          "to": 194
+        },
+        {
+          "text": "observa, como el color de una flor.",
+          "from": 194,
+          "to": 249
+        },
+        {
+          "text": "En el modelo más sencillo, un alelo",
+          "from": 262,
+          "to": 326
+        },
+        {
+          "text": "dominante se manifiesta con una sola copia",
+          "from": 326,
+          "to": 403
+        },
+        {
+          "text": "y uno recesivo necesita dos.",
+          "from": 403,
+          "to": 454
+        },
+        {
+          "text": "Dominante no significa mejor ni más fuerte.",
+          "from": 464,
+          "to": 542
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "alelos",
+          "f": 8
+        },
+        {
+          "w": "son",
+          "f": 19
+        },
+        {
+          "w": "versiones",
+          "f": 24
+        },
+        {
+          "w": "de",
+          "f": 36
+        },
+        {
+          "w": "un",
+          "f": 39
+        },
+        {
+          "w": "mismo",
+          "f": 41
+        },
+        {
+          "w": "gen",
+          "f": 51
+        },
+        {
+          "w": "el",
+          "f": 70
+        },
+        {
+          "w": "genotipo",
+          "f": 75
+        },
+        {
+          "w": "es",
+          "f": 91
+        },
+        {
+          "w": "la",
+          "f": 93
+        },
+        {
+          "w": "combinación",
+          "f": 97
+        },
+        {
+          "w": "de",
+          "f": 113
+        },
+        {
+          "w": "alelos",
+          "f": 115
+        },
+        {
+          "w": "de",
+          "f": 126
+        },
+        {
+          "w": "un",
+          "f": 129
+        },
+        {
+          "w": "organismo",
+          "f": 132
+        },
+        {
+          "w": "y",
+          "f": 160
+        },
+        {
+          "w": "el",
+          "f": 163
+        },
+        {
+          "w": "fenotipo",
+          "f": 167
+        },
+        {
+          "w": "lo",
+          "f": 186
+        },
+        {
+          "w": "que",
+          "f": 190
+        },
+        {
+          "w": "se",
+          "f": 193
+        },
+        {
+          "w": "observa",
+          "f": 196
+        },
+        {
+          "w": "como",
+          "f": 211
+        },
+        {
+          "w": "el",
+          "f": 217
+        },
+        {
+          "w": "color",
+          "f": 220
+        },
+        {
+          "w": "de",
+          "f": 229
+        },
+        {
+          "w": "una",
+          "f": 232
+        },
+        {
+          "w": "flor",
+          "f": 237
+        },
+        {
+          "w": "en",
+          "f": 262
+        },
+        {
+          "w": "el",
+          "f": 268
+        },
+        {
+          "w": "modelo",
+          "f": 270
+        },
+        {
+          "w": "más",
+          "f": 281
+        },
+        {
+          "w": "sencillo",
+          "f": 285
+        },
+        {
+          "w": "un",
+          "f": 313
+        },
+        {
+          "w": "alelo",
+          "f": 318
+        },
+        {
+          "w": "dominante",
+          "f": 328
+        },
+        {
+          "w": "se",
+          "f": 346
+        },
+        {
+          "w": "manifiesta",
+          "f": 350
+        },
+        {
+          "w": "con",
+          "f": 366
+        },
+        {
+          "w": "una",
+          "f": 371
+        },
+        {
+          "w": "sola",
+          "f": 376
+        },
+        {
+          "w": "copia",
+          "f": 384
+        },
+        {
+          "w": "y",
+          "f": 403
+        },
+        {
+          "w": "uno",
+          "f": 407
+        },
+        {
+          "w": "recesivo",
+          "f": 413
+        },
+        {
+          "w": "necesita",
+          "f": 427
+        },
+        {
+          "w": "dos",
+          "f": 445
+        },
+        {
+          "w": "dominante",
+          "f": 464
+        },
+        {
+          "w": "no",
+          "f": 480
+        },
+        {
+          "w": "significa",
+          "f": 483
+        },
+        {
+          "w": "mejor",
+          "f": 497
+        },
+        {
+          "w": "ni",
+          "f": 506
+        },
+        {
+          "w": "más",
+          "f": 510
+        },
+        {
+          "w": "fuerte",
+          "f": 515
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Mendel y el cuadro de Punnett",
+      "texto": "Gregor Mendel, en el siglo XIX, descubrió patrones de la herencia al cruzar plantas. Con un cuadro de Punnett se calculan probabilidades: si se cruzan dos plantas de flores moradas que llevan, cada una, un alelo para el color blanco, se espera que tres de cada cuatro descendientes tengan flores moradas y uno, flores blancas. Son probabilidades, no certezas.",
+      "voz": "Gregor Mendel, en el siglo diecinueve, descubrió patrones de la herencia al cruzar plantas. Con un cuadro de Punnett se calculan probabilidades: si se cruzan dos plantas de flores moradas que llevan, cada una, un alelo para el color blanco, se espera que tres de cada cuatro descendientes tengan flores moradas y uno, flores blancas. Son probabilidades, no certezas.",
+      "items": [
+        {
+          "titulo": "Mendel",
+          "texto": "Siglo XIX: cruces de plantas",
+          "palabra": "mendel"
+        },
+        {
+          "titulo": "Cuadro de Punnett",
+          "texto": "Aa × Aa",
+          "palabra": "punnett"
+        },
+        {
+          "titulo": "3 de cada 4",
+          "texto": "Moradas; 1 de cada 4, blancas",
+          "palabra": "blancas"
+        }
+      ],
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 606,
+      "frames": 634,
+      "chunks": [
+        {
+          "text": "Gregor Mendel, en el siglo XIX, descubrió",
+          "from": 0,
+          "to": 70
+        },
+        {
+          "text": "patrones de la herencia al cruzar plantas.",
+          "from": 70,
+          "to": 141
+        },
+        {
+          "text": "Con un cuadro de Punnett se calculan probabilidades:",
+          "from": 148,
+          "to": 234
+        },
+        {
+          "text": "si se cruzan dos plantas de flores moradas que",
+          "from": 238,
+          "to": 311
+        },
+        {
+          "text": "llevan, cada una, un alelo para el color blanco,",
+          "from": 311,
+          "to": 387
+        },
+        {
+          "text": "se espera que tres de cada cuatro descendientes tengan",
+          "from": 387,
+          "to": 472
+        },
+        {
+          "text": "flores moradas y uno, flores blancas.",
+          "from": 472,
+          "to": 530
+        },
+        {
+          "text": "Son probabilidades, no certezas.",
+          "from": 537,
+          "to": 602
+        }
+      ],
+      "words": [
+        {
+          "w": "gregor",
+          "f": 0
+        },
+        {
+          "w": "mendel",
+          "f": 12
+        },
+        {
+          "w": "en",
+          "f": 25
+        },
+        {
+          "w": "el",
+          "f": 29
+        },
+        {
+          "w": "siglo",
+          "f": 32
+        },
+        {
+          "w": "diecinueve",
+          "f": 41
+        },
+        {
+          "w": "descubrió",
+          "f": 62
+        },
+        {
+          "w": "patrones",
+          "f": 77
+        },
+        {
+          "w": "de",
+          "f": 91
+        },
+        {
+          "w": "la",
+          "f": 94
+        },
+        {
+          "w": "herencia",
+          "f": 97
+        },
+        {
+          "w": "al",
+          "f": 109
+        },
+        {
+          "w": "cruzar",
+          "f": 112
+        },
+        {
+          "w": "plantas",
+          "f": 123
+        },
+        {
+          "w": "con",
+          "f": 148
+        },
+        {
+          "w": "un",
+          "f": 155
+        },
+        {
+          "w": "cuadro",
+          "f": 158
+        },
+        {
+          "w": "de",
+          "f": 168
+        },
+        {
+          "w": "punnett",
+          "f": 172
+        },
+        {
+          "w": "se",
+          "f": 186
+        },
+        {
+          "w": "calculan",
+          "f": 192
+        },
+        {
+          "w": "probabilidades",
+          "f": 205
+        },
+        {
+          "w": "si",
+          "f": 238
+        },
+        {
+          "w": "se",
+          "f": 243
+        },
+        {
+          "w": "cruzan",
+          "f": 247
+        },
+        {
+          "w": "dos",
+          "f": 257
+        },
+        {
+          "w": "plantas",
+          "f": 261
+        },
+        {
+          "w": "de",
+          "f": 272
+        },
+        {
+          "w": "flores",
+          "f": 275
+        },
+        {
+          "w": "moradas",
+          "f": 285
+        },
+        {
+          "w": "que",
+          "f": 297
+        },
+        {
+          "w": "llevan",
+          "f": 300
+        },
+        {
+          "w": "cada",
+          "f": 310
+        },
+        {
+          "w": "una",
+          "f": 320
+        },
+        {
+          "w": "un",
+          "f": 331
+        },
+        {
+          "w": "alelo",
+          "f": 336
+        },
+        {
+          "w": "para",
+          "f": 347
+        },
+        {
+          "w": "el",
+          "f": 353
+        },
+        {
+          "w": "color",
+          "f": 356
+        },
+        {
+          "w": "blanco",
+          "f": 364
+        },
+        {
+          "w": "se",
+          "f": 386
+        },
+        {
+          "w": "espera",
+          "f": 389
+        },
+        {
+          "w": "que",
+          "f": 401
+        },
+        {
+          "w": "tres",
+          "f": 405
+        },
+        {
+          "w": "de",
+          "f": 411
+        },
+        {
+          "w": "cada",
+          "f": 414
+        },
+        {
+          "w": "cuatro",
+          "f": 422
+        },
+        {
+          "w": "descendientes",
+          "f": 432
+        },
+        {
+          "w": "tengan",
+          "f": 449
+        },
+        {
+          "w": "flores",
+          "f": 457
+        },
+        {
+          "w": "moradas",
+          "f": 466
+        },
+        {
+          "w": "y",
+          "f": 490
+        },
+        {
+          "w": "uno",
+          "f": 495
+        },
+        {
+          "w": "flores",
+          "f": 503
+        },
+        {
+          "w": "blancas",
+          "f": 513
+        },
+        {
+          "w": "son",
+          "f": 537
+        },
+        {
+          "w": "probabilidades",
+          "f": 545
+        },
+        {
+          "w": "no",
+          "f": 569
+        },
+        {
+          "w": "certezas",
+          "f": 573
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Mitosis y meiosis",
+      "texto": "La mitosis forma dos células hijas con el mismo número de cromosomas, para crecer y reparar tejidos. La meiosis forma células reproductoras con la mitad de los cromosomas; en la fecundación, 23 y 23 vuelven a ser 46.",
+      "voz": "La mitosis forma dos células hijas con el mismo número de cromosomas, para crecer y reparar tejidos. La meiosis forma células reproductoras con la mitad de los cromosomas; en la fecundación, veintitrés y veintitrés vuelven a ser cuarenta y seis.",
+      "columnas": [
+        {
+          "titulo": "Mitosis",
+          "palabra": "mitosis",
+          "puntos": [
+            {
+              "texto": "2 células, los mismos cromosomas",
+              "palabra": "dos"
+            },
+            {
+              "texto": "Crecer y reparar tejidos",
+              "palabra": "crecer"
+            }
+          ]
+        },
+        {
+          "titulo": "Meiosis",
+          "palabra": "meiosis",
+          "puntos": [
+            {
+              "texto": "Células reproductoras con la mitad",
+              "palabra": "mitad"
+            },
+            {
+              "texto": "23 + 23 = 46 en la fecundación",
+              "palabra": "fecundación"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 417,
+      "frames": 445,
+      "chunks": [
+        {
+          "text": "La mitosis forma dos células hijas con el mismo",
+          "from": 0,
+          "to": 76
+        },
+        {
+          "text": "número de cromosomas, para crecer y reparar tejidos.",
+          "from": 76,
+          "to": 160
+        },
+        {
+          "text": "La meiosis forma células reproductoras con",
+          "from": 169,
+          "to": 236
+        },
+        {
+          "text": "la mitad de los cromosomas;",
+          "from": 236,
+          "to": 280
+        },
+        {
+          "text": "en la fecundación, 23 y 23 vuelven a ser 46.",
+          "from": 289,
+          "to": 412
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "mitosis",
+          "f": 5
+        },
+        {
+          "w": "forma",
+          "f": 17
+        },
+        {
+          "w": "dos",
+          "f": 26
+        },
+        {
+          "w": "células",
+          "f": 29
+        },
+        {
+          "w": "hijas",
+          "f": 43
+        },
+        {
+          "w": "con",
+          "f": 52
+        },
+        {
+          "w": "el",
+          "f": 56
+        },
+        {
+          "w": "mismo",
+          "f": 59
+        },
+        {
+          "w": "número",
+          "f": 66
+        },
+        {
+          "w": "de",
+          "f": 75
+        },
+        {
+          "w": "cromosomas",
+          "f": 78
+        },
+        {
+          "w": "para",
+          "f": 109
+        },
+        {
+          "w": "crecer",
+          "f": 116
+        },
+        {
+          "w": "y",
+          "f": 127
+        },
+        {
+          "w": "reparar",
+          "f": 130
+        },
+        {
+          "w": "tejidos",
+          "f": 143
+        },
+        {
+          "w": "la",
+          "f": 169
+        },
+        {
+          "w": "meiosis",
+          "f": 174
+        },
+        {
+          "w": "forma",
+          "f": 188
+        },
+        {
+          "w": "células",
+          "f": 197
+        },
+        {
+          "w": "reproductoras",
+          "f": 209
+        },
+        {
+          "w": "con",
+          "f": 232
+        },
+        {
+          "w": "la",
+          "f": 236
+        },
+        {
+          "w": "mitad",
+          "f": 240
+        },
+        {
+          "w": "de",
+          "f": 250
+        },
+        {
+          "w": "los",
+          "f": 253
+        },
+        {
+          "w": "cromosomas",
+          "f": 258
+        },
+        {
+          "w": "en",
+          "f": 289
+        },
+        {
+          "w": "la",
+          "f": 294
+        },
+        {
+          "w": "fecundación",
+          "f": 297
+        },
+        {
+          "w": "veintitrés",
+          "f": 320
+        },
+        {
+          "w": "y",
+          "f": 339
+        },
+        {
+          "w": "veintitrés",
+          "f": 342
+        },
+        {
+          "w": "vuelven",
+          "f": 361
+        },
+        {
+          "w": "a",
+          "f": 372
+        },
+        {
+          "w": "ser",
+          "f": 374
+        },
+        {
+          "w": "cuarenta",
+          "f": 380
+        },
+        {
+          "w": "y",
+          "f": 391
+        },
+        {
+          "w": "seis",
+          "f": 393
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la genética y la herencia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la genética y la herencia. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/genetica-y-herencia-biologica/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 167,
+      "frames": 327,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste la genética y la herencia.",
+          "from": 33,
+          "to": 88
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 98,
+          "to": 163
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "genética",
+          "f": 54
+        },
+        {
+          "w": "y",
+          "f": 68
+        },
+        {
+          "w": "la",
+          "f": 70
+        },
+        {
+          "w": "herencia",
+          "f": 72
+        },
+        {
+          "w": "sigue",
+          "f": 98
+        },
+        {
+          "w": "con",
+          "f": 107
+        },
+        {
+          "w": "el",
+          "f": 112
+        },
+        {
+          "w": "siguiente",
+          "f": 114
+        },
+        {
+          "w": "tema",
+          "f": 128
+        },
+        {
+          "w": "de",
+          "f": 136
+        },
+        {
+          "w": "tu",
+          "f": 140
+        },
+        {
+          "w": "ruta",
+          "f": 144
+        }
+      ]
+    }
+  ]
+}

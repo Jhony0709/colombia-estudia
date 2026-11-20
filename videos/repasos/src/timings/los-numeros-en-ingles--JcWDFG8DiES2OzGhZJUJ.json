@@ -1,0 +1,1142 @@
+{
+  "tema": "los-numeros-en-ingles",
+  "componente": "Bachillerato",
+  "area": "Inglés",
+  "titulo": "Numbers, dates, time and everyday expressions",
+  "siguiente": "Proyecto de vida",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los números, las fechas y la hora en inglés.",
+      "voz": "Repaso del tema: los números, las fechas y la hora en inglés.",
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 116,
+      "frames": 144,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 36
+        },
+        {
+          "text": "los números, las fechas y la hora en inglés.",
+          "from": 38,
+          "to": 111
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 18
+        },
+        {
+          "w": "tema",
+          "f": 24
+        },
+        {
+          "w": "los",
+          "f": 38
+        },
+        {
+          "w": "números",
+          "f": 45
+        },
+        {
+          "w": "las",
+          "f": 58
+        },
+        {
+          "w": "fechas",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 75
+        },
+        {
+          "w": "la",
+          "f": 78
+        },
+        {
+          "w": "hora",
+          "f": 80
+        },
+        {
+          "w": "en",
+          "f": 86
+        },
+        {
+          "w": "inglés",
+          "f": 90
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Cardinal numbers",
+      "texto": "Los números cardinales sirven para contar: thirty-five, one hundred twenty-five, two thousand five hundred. Ojo: en inglés los miles se separan con coma, y no con punto como en español.",
+      "voz": "Los números cardinales sirven para contar: thirty-five, one hundred twenty-five, two thousand five hundred. Ojo: en inglés los miles se separan con coma, y no con punto como en español.",
+      "items": [
+        {
+          "titulo": "35",
+          "texto": "Thirty-five",
+          "palabra": "thirty"
+        },
+        {
+          "titulo": "125",
+          "texto": "One hundred twenty-five",
+          "palabra": "hundred"
+        },
+        {
+          "titulo": "2,500",
+          "texto": "Two thousand five hundred",
+          "palabra": "thousand"
+        },
+        {
+          "titulo": "Miles con coma",
+          "texto": "1,250 = mil doscientos cincuenta",
+          "palabra": "coma"
+        }
+      ],
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 354,
+      "frames": 382,
+      "chunks": [
+        {
+          "text": "Los números cardinales sirven para contar:",
+          "from": 0,
+          "to": 67
+        },
+        {
+          "text": "thirty-five, one hundred twenty-five,",
+          "from": 78,
+          "to": 151
+        },
+        {
+          "text": "two thousand five hundred.",
+          "from": 151,
+          "to": 203
+        },
+        {
+          "text": "Ojo:",
+          "from": 216,
+          "to": 226
+        },
+        {
+          "text": "en inglés los miles se separan con coma,",
+          "from": 229,
+          "to": 297
+        },
+        {
+          "text": "y no con punto como en español.",
+          "from": 297,
+          "to": 350
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "números",
+          "f": 7
+        },
+        {
+          "w": "cardinales",
+          "f": 17
+        },
+        {
+          "w": "sirven",
+          "f": 32
+        },
+        {
+          "w": "para",
+          "f": 42
+        },
+        {
+          "w": "contar",
+          "f": 49
+        },
+        {
+          "w": "thirty",
+          "f": 78
+        },
+        {
+          "w": "five",
+          "f": 90
+        },
+        {
+          "w": "one",
+          "f": 109
+        },
+        {
+          "w": "hundred",
+          "f": 116
+        },
+        {
+          "w": "twenty",
+          "f": 127
+        },
+        {
+          "w": "five",
+          "f": 137
+        },
+        {
+          "w": "two",
+          "f": 160
+        },
+        {
+          "w": "thousand",
+          "f": 167
+        },
+        {
+          "w": "five",
+          "f": 180
+        },
+        {
+          "w": "hundred",
+          "f": 189
+        },
+        {
+          "w": "ojo",
+          "f": 216
+        },
+        {
+          "w": "en",
+          "f": 229
+        },
+        {
+          "w": "inglés",
+          "f": 236
+        },
+        {
+          "w": "los",
+          "f": 245
+        },
+        {
+          "w": "miles",
+          "f": 250
+        },
+        {
+          "w": "se",
+          "f": 258
+        },
+        {
+          "w": "separan",
+          "f": 262
+        },
+        {
+          "w": "con",
+          "f": 273
+        },
+        {
+          "w": "coma",
+          "f": 279
+        },
+        {
+          "w": "y",
+          "f": 291
+        },
+        {
+          "w": "no",
+          "f": 295
+        },
+        {
+          "w": "con",
+          "f": 299
+        },
+        {
+          "w": "punto",
+          "f": 304
+        },
+        {
+          "w": "como",
+          "f": 313
+        },
+        {
+          "w": "en",
+          "f": 319
+        },
+        {
+          "w": "español",
+          "f": 323
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Ordinal numbers",
+      "texto": "Los ordinales indican orden. Los tres primeros son irregulares, first, second y third, y la mayoría termina en th, como fourth o sixth. Se usan en las fechas: the first of January.",
+      "voz": "Los ordinales indican orden. Los tres primeros son irregulares, first, second y third, y la mayoría termina en th, como fourth o sixth. Se usan en las fechas: the first of January.",
+      "items": [
+        {
+          "titulo": "First, second, third",
+          "texto": "Irregulares",
+          "palabra": "first"
+        },
+        {
+          "titulo": "-th",
+          "texto": "Fourth, sixth, seventh",
+          "palabra": "fourth"
+        },
+        {
+          "titulo": "Dates",
+          "texto": "The first of January",
+          "palabra": "january"
+        }
+      ],
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 346,
+      "frames": 374,
+      "chunks": [
+        {
+          "text": "Los ordinales indican orden.",
+          "from": 0,
+          "to": 48
+        },
+        {
+          "text": "Los tres primeros son irregulares, first, second",
+          "from": 51,
+          "to": 145
+        },
+        {
+          "text": "y third, y la mayoría termina en",
+          "from": 145,
+          "to": 207
+        },
+        {
+          "text": "th, como fourth o sixth.",
+          "from": 207,
+          "to": 254
+        },
+        {
+          "text": "Se usan en las fechas:",
+          "from": 265,
+          "to": 298
+        },
+        {
+          "text": "the first of January.",
+          "from": 299,
+          "to": 341
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "ordinales",
+          "f": 8
+        },
+        {
+          "w": "indican",
+          "f": 24
+        },
+        {
+          "w": "orden",
+          "f": 38
+        },
+        {
+          "w": "los",
+          "f": 51
+        },
+        {
+          "w": "tres",
+          "f": 56
+        },
+        {
+          "w": "primeros",
+          "f": 63
+        },
+        {
+          "w": "son",
+          "f": 75
+        },
+        {
+          "w": "irregulares",
+          "f": 80
+        },
+        {
+          "w": "first",
+          "f": 111
+        },
+        {
+          "w": "second",
+          "f": 124
+        },
+        {
+          "w": "y",
+          "f": 139
+        },
+        {
+          "w": "third",
+          "f": 143
+        },
+        {
+          "w": "y",
+          "f": 162
+        },
+        {
+          "w": "la",
+          "f": 167
+        },
+        {
+          "w": "mayoría",
+          "f": 171
+        },
+        {
+          "w": "termina",
+          "f": 184
+        },
+        {
+          "w": "en",
+          "f": 194
+        },
+        {
+          "w": "th",
+          "f": 198
+        },
+        {
+          "w": "como",
+          "f": 215
+        },
+        {
+          "w": "fourth",
+          "f": 224
+        },
+        {
+          "w": "o",
+          "f": 235
+        },
+        {
+          "w": "sixth",
+          "f": 241
+        },
+        {
+          "w": "se",
+          "f": 265
+        },
+        {
+          "w": "usan",
+          "f": 271
+        },
+        {
+          "w": "en",
+          "f": 279
+        },
+        {
+          "w": "las",
+          "f": 281
+        },
+        {
+          "w": "fechas",
+          "f": 287
+        },
+        {
+          "w": "the",
+          "f": 299
+        },
+        {
+          "w": "first",
+          "f": 302
+        },
+        {
+          "w": "of",
+          "f": 310
+        },
+        {
+          "w": "january",
+          "f": 314
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "The time",
+      "texto": "Para la hora: it is three o’clock son las tres en punto; a quarter past four, las cuatro y cuarto; half past six, las seis y media; y a quarter to nine, un cuarto para las nueve.",
+      "voz": "Para la hora: it is three o’clock son las tres en punto; a quarter past four, las cuatro y cuarto; half past six, las seis y media; y a quarter to nine, un cuarto para las nueve.",
+      "items": [
+        {
+          "titulo": "o’clock",
+          "texto": "3:00",
+          "palabra": "clock"
+        },
+        {
+          "titulo": "a quarter past",
+          "texto": "4:15",
+          "palabra": "past"
+        },
+        {
+          "titulo": "half past",
+          "texto": "6:30",
+          "palabra": "half"
+        },
+        {
+          "titulo": "a quarter to",
+          "texto": "8:45 · un cuarto para las nueve",
+          "palabra": "to"
+        }
+      ],
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 325,
+      "frames": 353,
+      "chunks": [
+        {
+          "text": "Para la hora:",
+          "from": 0,
+          "to": 21
+        },
+        {
+          "text": "it is three o’clock son las tres en punto;",
+          "from": 22,
+          "to": 84
+        },
+        {
+          "text": "a quarter past four, las cuatro y cuarto;",
+          "from": 92,
+          "to": 162
+        },
+        {
+          "text": "half past six, las seis y media;",
+          "from": 171,
+          "to": 230
+        },
+        {
+          "text": "y a quarter to nine, un cuarto para las nueve.",
+          "from": 238,
+          "to": 320
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "la",
+          "f": 8
+        },
+        {
+          "w": "hora",
+          "f": 12
+        },
+        {
+          "w": "it",
+          "f": 22
+        },
+        {
+          "w": "is",
+          "f": 27
+        },
+        {
+          "w": "three",
+          "f": 30
+        },
+        {
+          "w": "o",
+          "f": 38
+        },
+        {
+          "w": "clock",
+          "f": 40
+        },
+        {
+          "w": "son",
+          "f": 49
+        },
+        {
+          "w": "las",
+          "f": 54
+        },
+        {
+          "w": "tres",
+          "f": 59
+        },
+        {
+          "w": "en",
+          "f": 66
+        },
+        {
+          "w": "punto",
+          "f": 69
+        },
+        {
+          "w": "a",
+          "f": 92
+        },
+        {
+          "w": "quarter",
+          "f": 97
+        },
+        {
+          "w": "past",
+          "f": 109
+        },
+        {
+          "w": "four",
+          "f": 118
+        },
+        {
+          "w": "las",
+          "f": 128
+        },
+        {
+          "w": "cuatro",
+          "f": 134
+        },
+        {
+          "w": "y",
+          "f": 143
+        },
+        {
+          "w": "cuarto",
+          "f": 146
+        },
+        {
+          "w": "half",
+          "f": 171
+        },
+        {
+          "w": "past",
+          "f": 180
+        },
+        {
+          "w": "six",
+          "f": 187
+        },
+        {
+          "w": "las",
+          "f": 200
+        },
+        {
+          "w": "seis",
+          "f": 206
+        },
+        {
+          "w": "y",
+          "f": 213
+        },
+        {
+          "w": "media",
+          "f": 216
+        },
+        {
+          "w": "y",
+          "f": 238
+        },
+        {
+          "w": "a",
+          "f": 241
+        },
+        {
+          "w": "quarter",
+          "f": 244
+        },
+        {
+          "w": "to",
+          "f": 256
+        },
+        {
+          "w": "nine",
+          "f": 261
+        },
+        {
+          "w": "un",
+          "f": 272
+        },
+        {
+          "w": "cuarto",
+          "f": 277
+        },
+        {
+          "w": "para",
+          "f": 287
+        },
+        {
+          "w": "las",
+          "f": 293
+        },
+        {
+          "w": "nueve",
+          "f": 298
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Prices and money",
+      "texto": "Para preguntar el precio: how much is it?, o how much are they? Y se responde: it costs thirty thousand pesos.",
+      "voz": "Para preguntar el precio: how much is it?, o how much are they? Y se responde: it costs thirty thousand pesos.",
+      "items": [
+        {
+          "titulo": "How much is it?",
+          "texto": "¿Cuánto cuesta?",
+          "palabra": "much"
+        },
+        {
+          "titulo": "How much are they?",
+          "texto": "¿Cuánto cuestan?",
+          "palabra": "much",
+          "vez": 1
+        },
+        {
+          "titulo": "It costs…",
+          "texto": "Thirty thousand pesos",
+          "palabra": "costs"
+        }
+      ],
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 198,
+      "frames": 226,
+      "chunks": [
+        {
+          "text": "Para preguntar el precio:",
+          "from": 0,
+          "to": 34
+        },
+        {
+          "text": "how much is it?, o how much are they?",
+          "from": 35,
+          "to": 92
+        },
+        {
+          "text": "Y se responde:",
+          "from": 100,
+          "to": 127
+        },
+        {
+          "text": "it costs thirty thousand pesos.",
+          "from": 128,
+          "to": 194
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "preguntar",
+          "f": 8
+        },
+        {
+          "w": "el",
+          "f": 21
+        },
+        {
+          "w": "precio",
+          "f": 24
+        },
+        {
+          "w": "how",
+          "f": 35
+        },
+        {
+          "w": "much",
+          "f": 40
+        },
+        {
+          "w": "is",
+          "f": 47
+        },
+        {
+          "w": "it",
+          "f": 54
+        },
+        {
+          "w": "o",
+          "f": 62
+        },
+        {
+          "w": "how",
+          "f": 66
+        },
+        {
+          "w": "much",
+          "f": 71
+        },
+        {
+          "w": "are",
+          "f": 77
+        },
+        {
+          "w": "they",
+          "f": 81
+        },
+        {
+          "w": "y",
+          "f": 100
+        },
+        {
+          "w": "se",
+          "f": 105
+        },
+        {
+          "w": "responde",
+          "f": 110
+        },
+        {
+          "w": "it",
+          "f": 128
+        },
+        {
+          "w": "costs",
+          "f": 133
+        },
+        {
+          "w": "thirty",
+          "f": 148
+        },
+        {
+          "w": "thousand",
+          "f": 160
+        },
+        {
+          "w": "pesos",
+          "f": 171
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Age and phone numbers",
+      "texto": "La edad se dice con el verbo to be: I am 30 years old, y se pregunta con How old are you? Los números de teléfono se leen dígito por dígito, y el cero puede decirse zero u oh.",
+      "voz": "La edad se dice con el verbo to be: I am thirty years old, y se pregunta con how old are you? Los números de teléfono se leen dígito por dígito, y el cero puede decirse zero u oh.",
+      "items": [
+        {
+          "titulo": "I am 30 years old.",
+          "palabra": "years"
+        },
+        {
+          "titulo": "How old are you?",
+          "palabra": "how"
+        },
+        {
+          "titulo": "Phone numbers",
+          "texto": "Dígito por dígito: zero u oh",
+          "palabra": "dígito"
+        }
+      ],
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 294,
+      "frames": 322,
+      "chunks": [
+        {
+          "text": "La edad se dice con el verbo to be:",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "I am 30 years old, y se",
+          "from": 48,
+          "to": 88
+        },
+        {
+          "text": "pregunta con How old are you?",
+          "from": 88,
+          "to": 138
+        },
+        {
+          "text": "Los números de teléfono se leen dígito por dígito,",
+          "from": 144,
+          "to": 231
+        },
+        {
+          "text": "y el cero puede decirse zero u oh.",
+          "from": 231,
+          "to": 290
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "edad",
+          "f": 6
+        },
+        {
+          "w": "se",
+          "f": 11
+        },
+        {
+          "w": "dice",
+          "f": 15
+        },
+        {
+          "w": "con",
+          "f": 22
+        },
+        {
+          "w": "el",
+          "f": 26
+        },
+        {
+          "w": "verbo",
+          "f": 29
+        },
+        {
+          "w": "to",
+          "f": 38
+        },
+        {
+          "w": "be",
+          "f": 42
+        },
+        {
+          "w": "i",
+          "f": 48
+        },
+        {
+          "w": "am",
+          "f": 53
+        },
+        {
+          "w": "thirty",
+          "f": 57
+        },
+        {
+          "w": "years",
+          "f": 68
+        },
+        {
+          "w": "old",
+          "f": 76
+        },
+        {
+          "w": "y",
+          "f": 85
+        },
+        {
+          "w": "se",
+          "f": 89
+        },
+        {
+          "w": "pregunta",
+          "f": 93
+        },
+        {
+          "w": "con",
+          "f": 107
+        },
+        {
+          "w": "how",
+          "f": 113
+        },
+        {
+          "w": "old",
+          "f": 118
+        },
+        {
+          "w": "are",
+          "f": 125
+        },
+        {
+          "w": "you",
+          "f": 130
+        },
+        {
+          "w": "los",
+          "f": 144
+        },
+        {
+          "w": "números",
+          "f": 150
+        },
+        {
+          "w": "de",
+          "f": 160
+        },
+        {
+          "w": "teléfono",
+          "f": 163
+        },
+        {
+          "w": "se",
+          "f": 177
+        },
+        {
+          "w": "leen",
+          "f": 180
+        },
+        {
+          "w": "dígito",
+          "f": 186
+        },
+        {
+          "w": "por",
+          "f": 197
+        },
+        {
+          "w": "dígito",
+          "f": 203
+        },
+        {
+          "w": "y",
+          "f": 219
+        },
+        {
+          "w": "el",
+          "f": 222
+        },
+        {
+          "w": "cero",
+          "f": 225
+        },
+        {
+          "w": "puede",
+          "f": 233
+        },
+        {
+          "w": "decirse",
+          "f": 240
+        },
+        {
+          "w": "zero",
+          "f": 254
+        },
+        {
+          "w": "u",
+          "f": 266
+        },
+        {
+          "w": "oh",
+          "f": 274
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los números, las fechas y la hora en inglés. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los números, las fechas y la hora en inglés. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/los-numeros-en-ingles/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 187,
+      "frames": 347,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste los números, las fechas",
+          "from": 33,
+          "to": 80
+        },
+        {
+          "text": "y la hora en inglés.",
+          "from": 80,
+          "to": 108
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 118,
+          "to": 183
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "los",
+          "f": 49
+        },
+        {
+          "w": "números",
+          "f": 53
+        },
+        {
+          "w": "las",
+          "f": 64
+        },
+        {
+          "w": "fechas",
+          "f": 69
+        },
+        {
+          "w": "y",
+          "f": 80
+        },
+        {
+          "w": "la",
+          "f": 84
+        },
+        {
+          "w": "hora",
+          "f": 87
+        },
+        {
+          "w": "en",
+          "f": 92
+        },
+        {
+          "w": "inglés",
+          "f": 95
+        },
+        {
+          "w": "sigue",
+          "f": 118
+        },
+        {
+          "w": "con",
+          "f": 127
+        },
+        {
+          "w": "el",
+          "f": 132
+        },
+        {
+          "w": "siguiente",
+          "f": 134
+        },
+        {
+          "w": "tema",
+          "f": 147
+        },
+        {
+          "w": "de",
+          "f": 154
+        },
+        {
+          "w": "tu",
+          "f": 157
+        },
+        {
+          "w": "ruta",
+          "f": 162
+        }
+      ]
+    }
+  ]
+}

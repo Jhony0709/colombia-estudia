@@ -1,0 +1,750 @@
+{
+  "tema": "estructura-de-la-oracion",
+  "componente": "Desarrollo",
+  "area": "Lengua castellana",
+  "titulo": "La estructura de la oración y sus elementos gramaticales",
+  "siguiente": "La energía, sus formas y sus transformaciones",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la estructura de la oración y sus elementos gramaticales.",
+      "voz": "Repaso del tema: la estructura de la oración y sus elementos gramaticales.",
+      "audio": "voz/estructura-de-la-oracion/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 142,
+      "frames": 170,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "la estructura de la oración",
+          "from": 39,
+          "to": 87
+        },
+        {
+          "text": "y sus elementos gramaticales.",
+          "from": 87,
+          "to": 138
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 39
+        },
+        {
+          "w": "estructura",
+          "f": 42
+        },
+        {
+          "w": "de",
+          "f": 57
+        },
+        {
+          "w": "la",
+          "f": 60
+        },
+        {
+          "w": "oración",
+          "f": 62
+        },
+        {
+          "w": "y",
+          "f": 77
+        },
+        {
+          "w": "sus",
+          "f": 80
+        },
+        {
+          "w": "elementos",
+          "f": 86
+        },
+        {
+          "w": "gramaticales",
+          "f": 100
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "comparar",
+      "titulo": "Sujeto y predicado",
+      "texto": "La oración expresa una idea completa y tiene dos partes. El sujeto es de quién se habla, y su núcleo suele ser un sustantivo o un pronombre. El predicado es lo que se dice del sujeto, y su núcleo es el verbo.",
+      "voz": "La oración expresa una idea completa y tiene dos partes. El sujeto es de quién se habla, y su núcleo suele ser un sustantivo o un pronombre. El predicado es lo que se dice del sujeto, y su núcleo es el verbo.",
+      "columnas": [
+        {
+          "titulo": "Sujeto",
+          "palabra": "sujeto",
+          "puntos": [
+            {
+              "texto": "De quién se habla",
+              "palabra": "quién"
+            },
+            {
+              "texto": "Núcleo: un sustantivo o un pronombre",
+              "palabra": "sustantivo"
+            }
+          ]
+        },
+        {
+          "titulo": "Predicado",
+          "palabra": "predicado",
+          "puntos": [
+            {
+              "texto": "Lo que se dice del sujeto",
+              "palabra": "dice"
+            },
+            {
+              "texto": "Núcleo: el verbo",
+              "palabra": "verbo"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/estructura-de-la-oracion/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 353,
+      "frames": 381,
+      "chunks": [
+        {
+          "text": "La oración expresa una idea",
+          "from": 0,
+          "to": 42
+        },
+        {
+          "text": "completa y tiene dos partes.",
+          "from": 42,
+          "to": 86
+        },
+        {
+          "text": "El sujeto es de quién se habla, y su",
+          "from": 94,
+          "to": 153
+        },
+        {
+          "text": "núcleo suele ser un sustantivo o un pronombre.",
+          "from": 153,
+          "to": 228
+        },
+        {
+          "text": "El predicado es lo que se dice del",
+          "from": 238,
+          "to": 295
+        },
+        {
+          "text": "sujeto, y su núcleo es el verbo.",
+          "from": 295,
+          "to": 348
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "oración",
+          "f": 4
+        },
+        {
+          "w": "expresa",
+          "f": 16
+        },
+        {
+          "w": "una",
+          "f": 26
+        },
+        {
+          "w": "idea",
+          "f": 30
+        },
+        {
+          "w": "completa",
+          "f": 38
+        },
+        {
+          "w": "y",
+          "f": 52
+        },
+        {
+          "w": "tiene",
+          "f": 54
+        },
+        {
+          "w": "dos",
+          "f": 62
+        },
+        {
+          "w": "partes",
+          "f": 68
+        },
+        {
+          "w": "el",
+          "f": 94
+        },
+        {
+          "w": "sujeto",
+          "f": 99
+        },
+        {
+          "w": "es",
+          "f": 115
+        },
+        {
+          "w": "de",
+          "f": 118
+        },
+        {
+          "w": "quién",
+          "f": 121
+        },
+        {
+          "w": "se",
+          "f": 127
+        },
+        {
+          "w": "habla",
+          "f": 131
+        },
+        {
+          "w": "y",
+          "f": 149
+        },
+        {
+          "w": "su",
+          "f": 153
+        },
+        {
+          "w": "núcleo",
+          "f": 157
+        },
+        {
+          "w": "suele",
+          "f": 166
+        },
+        {
+          "w": "ser",
+          "f": 172
+        },
+        {
+          "w": "un",
+          "f": 177
+        },
+        {
+          "w": "sustantivo",
+          "f": 179
+        },
+        {
+          "w": "o",
+          "f": 200
+        },
+        {
+          "w": "un",
+          "f": 203
+        },
+        {
+          "w": "pronombre",
+          "f": 207
+        },
+        {
+          "w": "el",
+          "f": 238
+        },
+        {
+          "w": "predicado",
+          "f": 243
+        },
+        {
+          "w": "es",
+          "f": 257
+        },
+        {
+          "w": "lo",
+          "f": 260
+        },
+        {
+          "w": "que",
+          "f": 264
+        },
+        {
+          "w": "se",
+          "f": 267
+        },
+        {
+          "w": "dice",
+          "f": 271
+        },
+        {
+          "w": "del",
+          "f": 277
+        },
+        {
+          "w": "sujeto",
+          "f": 280
+        },
+        {
+          "w": "y",
+          "f": 297
+        },
+        {
+          "w": "su",
+          "f": 301
+        },
+        {
+          "w": "núcleo",
+          "f": 305
+        },
+        {
+          "w": "es",
+          "f": 316
+        },
+        {
+          "w": "el",
+          "f": 319
+        },
+        {
+          "w": "verbo",
+          "f": 323
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Los complementos del verbo",
+      "texto": "Los complementos agregan información al verbo. El directo dice qué recibe la acción; el indirecto, a quién o para quién se destina; y el circunstancial, dónde, cuándo, cómo o por qué ocurre.",
+      "voz": "Los complementos agregan información al verbo. El directo dice qué recibe la acción; el indirecto, a quién o para quién se destina; y el circunstancial, dónde, cuándo, cómo o por qué ocurre.",
+      "items": [
+        {
+          "titulo": "Directo",
+          "texto": "¿Qué recibe la acción? Ana compró un cuaderno",
+          "palabra": "directo"
+        },
+        {
+          "titulo": "Indirecto",
+          "texto": "¿Para quién? Ana entregó un regalo a su amiga",
+          "palabra": "indirecto"
+        },
+        {
+          "titulo": "Circunstancial",
+          "texto": "¿Dónde, cuándo, cómo? Ana estudia en su habitación",
+          "palabra": "circunstancial"
+        }
+      ],
+      "audio": "voz/estructura-de-la-oracion/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 354,
+      "frames": 382,
+      "chunks": [
+        {
+          "text": "Los complementos agregan información al verbo.",
+          "from": 0,
+          "to": 69
+        },
+        {
+          "text": "El directo dice qué recibe la acción;",
+          "from": 76,
+          "to": 138
+        },
+        {
+          "text": "el indirecto, a quién o para quién se destina;",
+          "from": 149,
+          "to": 222
+        },
+        {
+          "text": "y el circunstancial, dónde, cuándo,",
+          "from": 232,
+          "to": 304
+        },
+        {
+          "text": "cómo o por qué ocurre.",
+          "from": 304,
+          "to": 350
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "complementos",
+          "f": 7
+        },
+        {
+          "w": "agregan",
+          "f": 24
+        },
+        {
+          "w": "información",
+          "f": 34
+        },
+        {
+          "w": "al",
+          "f": 50
+        },
+        {
+          "w": "verbo",
+          "f": 54
+        },
+        {
+          "w": "el",
+          "f": 76
+        },
+        {
+          "w": "directo",
+          "f": 83
+        },
+        {
+          "w": "dice",
+          "f": 97
+        },
+        {
+          "w": "qué",
+          "f": 104
+        },
+        {
+          "w": "recibe",
+          "f": 109
+        },
+        {
+          "w": "la",
+          "f": 119
+        },
+        {
+          "w": "acción",
+          "f": 122
+        },
+        {
+          "w": "el",
+          "f": 149
+        },
+        {
+          "w": "indirecto",
+          "f": 155
+        },
+        {
+          "w": "a",
+          "f": 175
+        },
+        {
+          "w": "quién",
+          "f": 179
+        },
+        {
+          "w": "o",
+          "f": 187
+        },
+        {
+          "w": "para",
+          "f": 191
+        },
+        {
+          "w": "quién",
+          "f": 197
+        },
+        {
+          "w": "se",
+          "f": 202
+        },
+        {
+          "w": "destina",
+          "f": 206
+        },
+        {
+          "w": "y",
+          "f": 232
+        },
+        {
+          "w": "el",
+          "f": 235
+        },
+        {
+          "w": "circunstancial",
+          "f": 238
+        },
+        {
+          "w": "dónde",
+          "f": 270
+        },
+        {
+          "w": "cuándo",
+          "f": 283
+        },
+        {
+          "w": "cómo",
+          "f": 297
+        },
+        {
+          "w": "o",
+          "f": 311
+        },
+        {
+          "w": "por",
+          "f": 315
+        },
+        {
+          "w": "qué",
+          "f": 319
+        },
+        {
+          "w": "ocurre",
+          "f": 323
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "La concordancia",
+      "texto": "El sujeto y el verbo deben concordar en número y persona. Decimos «el niño juega» y «los niños juegan», pero no «los niños juega».",
+      "voz": "El sujeto y el verbo deben concordar en número y persona. Decimos «el niño juega» y «los niños juegan», pero no «los niños juega».",
+      "items": [
+        {
+          "titulo": "Correcto",
+          "texto": "El niño juega. Los niños juegan.",
+          "palabra": "decimos"
+        },
+        {
+          "titulo": "Incorrecto",
+          "texto": "Los niños juega → Los niños juegan",
+          "palabra": "pero"
+        }
+      ],
+      "audio": "voz/estructura-de-la-oracion/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 233,
+      "frames": 261,
+      "chunks": [
+        {
+          "text": "El sujeto y el verbo deben",
+          "from": 0,
+          "to": 40
+        },
+        {
+          "text": "concordar en número y persona.",
+          "from": 40,
+          "to": 87
+        },
+        {
+          "text": "Decimos «el niño juega» y «los niños",
+          "from": 99,
+          "to": 164
+        },
+        {
+          "text": "juegan», pero no «los niños juega».",
+          "from": 164,
+          "to": 228
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "sujeto",
+          "f": 7
+        },
+        {
+          "w": "y",
+          "f": 20
+        },
+        {
+          "w": "el",
+          "f": 22
+        },
+        {
+          "w": "verbo",
+          "f": 25
+        },
+        {
+          "w": "deben",
+          "f": 33
+        },
+        {
+          "w": "concordar",
+          "f": 41
+        },
+        {
+          "w": "en",
+          "f": 56
+        },
+        {
+          "w": "número",
+          "f": 59
+        },
+        {
+          "w": "y",
+          "f": 69
+        },
+        {
+          "w": "persona",
+          "f": 71
+        },
+        {
+          "w": "decimos",
+          "f": 99
+        },
+        {
+          "w": "el",
+          "f": 116
+        },
+        {
+          "w": "niño",
+          "f": 122
+        },
+        {
+          "w": "juega",
+          "f": 130
+        },
+        {
+          "w": "y",
+          "f": 144
+        },
+        {
+          "w": "los",
+          "f": 148
+        },
+        {
+          "w": "niños",
+          "f": 153
+        },
+        {
+          "w": "juegan",
+          "f": 162
+        },
+        {
+          "w": "pero",
+          "f": 178
+        },
+        {
+          "w": "no",
+          "f": 186
+        },
+        {
+          "w": "los",
+          "f": 191
+        },
+        {
+          "w": "niños",
+          "f": 195
+        },
+        {
+          "w": "juega",
+          "f": 204
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la estructura de la oración. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la estructura de la oración. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/estructura-de-la-oracion/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 165,
+      "frames": 325,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste la estructura de la oración.",
+          "from": 31,
+          "to": 87
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 97,
+          "to": 160
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 3
+        },
+        {
+          "w": "bien",
+          "f": 10
+        },
+        {
+          "w": "repasaste",
+          "f": 31
+        },
+        {
+          "w": "la",
+          "f": 47
+        },
+        {
+          "w": "estructura",
+          "f": 49
+        },
+        {
+          "w": "de",
+          "f": 65
+        },
+        {
+          "w": "la",
+          "f": 68
+        },
+        {
+          "w": "oración",
+          "f": 71
+        },
+        {
+          "w": "sigue",
+          "f": 97
+        },
+        {
+          "w": "con",
+          "f": 106
+        },
+        {
+          "w": "el",
+          "f": 111
+        },
+        {
+          "w": "siguiente",
+          "f": 113
+        },
+        {
+          "w": "tema",
+          "f": 125
+        },
+        {
+          "w": "de",
+          "f": 133
+        },
+        {
+          "w": "tu",
+          "f": 137
+        },
+        {
+          "w": "ruta",
+          "f": 141
+        }
+      ]
+    }
+  ]
+}

@@ -1236,6 +1236,25 @@ export const conversationMessageFactory = {
     }),
 };
 
+/** Link de pago de Bold para una cuota (19/11). */
+export const paymentLinkFactory = {
+  create: async (prisma: PrismaClientType, institutionId: string, installmentId: string) => {
+    const id = cuid();
+    return prisma.paymentLink.create({
+      data: {
+        id,
+        institutionId,
+        installmentId,
+        reference: `ce-${id}`,
+        providerId: `LNK_${id}`,
+        url: `https://checkout.bold.co/LNK_${id}`,
+        amount: 90000,
+        expiresAt: new Date(Date.now() + 86_400_000),
+      },
+    });
+  },
+};
+
 /**
  * All factories grouped for easy access
  */
@@ -1283,4 +1302,5 @@ export const factories = {
   moduleFeedback: moduleFeedbackFactory,
   conversation: conversationFactory,
   conversationMessage: conversationMessageFactory,
+  paymentLink: paymentLinkFactory,
 };

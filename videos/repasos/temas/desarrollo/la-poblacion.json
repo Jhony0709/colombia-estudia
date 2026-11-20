@@ -1,0 +1,147 @@
+{
+  "tema": "la-poblacion",
+  "componente": "Desarrollo",
+  "area": "Ciencias sociales",
+  "titulo": "La población, las migraciones y la diversidad cultural del mundo",
+  "siguiente": "La potenciación y la radicación de números naturales y enteros",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la población, las migraciones y la diversidad cultural.",
+      "voz": "Repaso del tema: la población, las migraciones y la diversidad cultural."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Por qué cambia la población",
+      "texto": "La población es el conjunto de personas que habitan un territorio. Cambia por tres factores: la natalidad, las personas que nacen; la mortalidad, las que mueren; y la migración, las que se desplazan de un lugar a otro.",
+      "voz": "La población es el conjunto de personas que habitan un territorio. Cambia por tres factores: la natalidad, las personas que nacen; la mortalidad, las que mueren; y la migración, las que se desplazan de un lugar a otro.",
+      "items": [
+        {
+          "titulo": "Natalidad",
+          "texto": "Las personas que nacen",
+          "palabra": "natalidad"
+        },
+        {
+          "titulo": "Mortalidad",
+          "texto": "Las personas que mueren",
+          "palabra": "mortalidad"
+        },
+        {
+          "titulo": "Migración",
+          "texto": "Las que se desplazan",
+          "palabra": "migración"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Las migraciones",
+      "texto": "Las personas migran por razones económicas, familiares, educativas, sociales o ambientales. La migración interna ocurre dentro de un mismo país, como de Boyacá a Bogotá. La internacional, de un país a otro, como de Colombia a España.",
+      "voz": "Las personas migran por razones económicas, familiares, educativas, sociales o ambientales. La migración interna ocurre dentro de un mismo país, como de Boyacá a Bogotá. La internacional, de un país a otro, como de Colombia a España.",
+      "columnas": [
+        {
+          "titulo": "Migración interna",
+          "palabra": "interna",
+          "puntos": [
+            {
+              "texto": "Dentro del mismo país",
+              "palabra": "dentro"
+            },
+            {
+              "texto": "De Boyacá a Bogotá",
+              "palabra": "boyacá"
+            }
+          ]
+        },
+        {
+          "titulo": "Migración internacional",
+          "palabra": "internacional",
+          "puntos": [
+            {
+              "texto": "De un país a otro",
+              "palabra": "país",
+              "vez": 1
+            },
+            {
+              "texto": "De Colombia a España",
+              "palabra": "españa"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Espacio urbano y espacio rural",
+      "texto": "El espacio urbano reúne ciudades y pueblos con muchos habitantes, comercios y servicios. El espacio rural es el campo, donde se practican la agricultura, la ganadería y la pesca. Los dos están conectados.",
+      "voz": "El espacio urbano reúne ciudades y pueblos con muchos habitantes, comercios y servicios. El espacio rural es el campo, donde se practican la agricultura, la ganadería y la pesca. Los dos están conectados.",
+      "columnas": [
+        {
+          "titulo": "Urbano",
+          "palabra": "urbano",
+          "puntos": [
+            {
+              "texto": "Ciudades y pueblos",
+              "palabra": "ciudades"
+            },
+            {
+              "texto": "Muchos habitantes y servicios",
+              "palabra": "servicios"
+            }
+          ]
+        },
+        {
+          "titulo": "Rural",
+          "palabra": "rural",
+          "puntos": [
+            {
+              "texto": "El campo",
+              "palabra": "campo"
+            },
+            {
+              "texto": "Agricultura, ganadería y pesca",
+              "palabra": "agricultura"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La diversidad cultural",
+      "texto": "La diversidad cultural es la variedad de lenguas, creencias, tradiciones, comidas y formas de vida. Colombia tiene comunidades indígenas, afrocolombianas, raizales, palenqueras y campesinas, entre otras. Respetarla es reconocer esas diferencias, sin discriminar.",
+      "voz": "La diversidad cultural es la variedad de lenguas, creencias, tradiciones, comidas y formas de vida. Colombia tiene comunidades indígenas, afrocolombianas, raizales, palenqueras y campesinas, entre otras. Respetarla es reconocer esas diferencias, sin discriminar.",
+      "items": [
+        {
+          "titulo": "Lenguas y creencias",
+          "palabra": "lenguas"
+        },
+        {
+          "titulo": "Tradiciones y comidas",
+          "palabra": "tradiciones"
+        },
+        {
+          "titulo": "Comunidades",
+          "texto": "Indígenas, afrocolombianas, raizales, palenqueras, campesinas…",
+          "palabra": "comunidades"
+        },
+        {
+          "titulo": "Respeto",
+          "texto": "Reconocer las diferencias sin discriminar",
+          "palabra": "respetarla"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la población y la diversidad cultural. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la población y la diversidad cultural. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

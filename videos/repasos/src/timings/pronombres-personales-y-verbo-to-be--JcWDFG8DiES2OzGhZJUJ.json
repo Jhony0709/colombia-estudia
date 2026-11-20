@@ -1,0 +1,1255 @@
+{
+  "tema": "pronombres-personales-y-verbo-to-be",
+  "componente": "Preparación",
+  "area": "Inglés",
+  "titulo": "English basic grammar: personal pronouns and the verb to be",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los pronombres personales, el verbo to be y la información personal en inglés.",
+      "voz": "Repaso del tema: los pronombres personales, el verbo to be y la información personal en inglés.",
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 173,
+      "frames": 201,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "los pronombres personales, el verbo to be",
+          "from": 41,
+          "to": 109
+        },
+        {
+          "text": "y la información personal en inglés.",
+          "from": 109,
+          "to": 169
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "los",
+          "f": 41
+        },
+        {
+          "w": "pronombres",
+          "f": 47
+        },
+        {
+          "w": "personales",
+          "f": 62
+        },
+        {
+          "w": "el",
+          "f": 81
+        },
+        {
+          "w": "verbo",
+          "f": 86
+        },
+        {
+          "w": "to",
+          "f": 95
+        },
+        {
+          "w": "be",
+          "f": 100
+        },
+        {
+          "w": "y",
+          "f": 105
+        },
+        {
+          "w": "la",
+          "f": 110
+        },
+        {
+          "w": "información",
+          "f": 112
+        },
+        {
+          "w": "personal",
+          "f": 127
+        },
+        {
+          "w": "en",
+          "f": 140
+        },
+        {
+          "w": "inglés",
+          "f": 144
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Personal pronouns",
+      "texto": "Los pronombres personales reemplazan a los nombres. En inglés son: I, yo; you, tú o usted; he, él; she, ella; it, para cosas y animales; we, nosotros; y they, ellos.",
+      "voz": "Los pronombres personales reemplazan a los nombres. En inglés son: I, yo; you, tú o usted; he, él; she, ella; it, para cosas y animales; we, nosotros; y they, ellos.",
+      "items": [
+        {
+          "titulo": "I, you",
+          "texto": "Yo; tú o usted",
+          "palabra": "i"
+        },
+        {
+          "titulo": "He, she, it",
+          "texto": "Él, ella, eso",
+          "palabra": "he"
+        },
+        {
+          "titulo": "We",
+          "texto": "Nosotros",
+          "palabra": "we"
+        },
+        {
+          "titulo": "They",
+          "texto": "Ellos, ellas",
+          "palabra": "they"
+        }
+      ],
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 370,
+      "frames": 398,
+      "chunks": [
+        {
+          "text": "Los pronombres personales reemplazan a los nombres.",
+          "from": 0,
+          "to": 73
+        },
+        {
+          "text": "En inglés son:",
+          "from": 81,
+          "to": 103
+        },
+        {
+          "text": "I, yo;",
+          "from": 105,
+          "to": 124
+        },
+        {
+          "text": "you, tú o usted;",
+          "from": 126,
+          "to": 168
+        },
+        {
+          "text": "he, él;",
+          "from": 178,
+          "to": 197
+        },
+        {
+          "text": "she, ella;",
+          "from": 198,
+          "to": 223
+        },
+        {
+          "text": "it, para cosas y animales;",
+          "from": 233,
+          "to": 286
+        },
+        {
+          "text": "we, nosotros;",
+          "from": 289,
+          "to": 318
+        },
+        {
+          "text": "y they, ellos.",
+          "from": 325,
+          "to": 365
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "pronombres",
+          "f": 8
+        },
+        {
+          "w": "personales",
+          "f": 21
+        },
+        {
+          "w": "reemplazan",
+          "f": 38
+        },
+        {
+          "w": "a",
+          "f": 53
+        },
+        {
+          "w": "los",
+          "f": 55
+        },
+        {
+          "w": "nombres",
+          "f": 60
+        },
+        {
+          "w": "en",
+          "f": 81
+        },
+        {
+          "w": "inglés",
+          "f": 87
+        },
+        {
+          "w": "son",
+          "f": 95
+        },
+        {
+          "w": "i",
+          "f": 105
+        },
+        {
+          "w": "yo",
+          "f": 115
+        },
+        {
+          "w": "you",
+          "f": 126
+        },
+        {
+          "w": "tú",
+          "f": 135
+        },
+        {
+          "w": "o",
+          "f": 148
+        },
+        {
+          "w": "usted",
+          "f": 152
+        },
+        {
+          "w": "he",
+          "f": 178
+        },
+        {
+          "w": "él",
+          "f": 187
+        },
+        {
+          "w": "she",
+          "f": 198
+        },
+        {
+          "w": "ella",
+          "f": 210
+        },
+        {
+          "w": "it",
+          "f": 233
+        },
+        {
+          "w": "para",
+          "f": 246
+        },
+        {
+          "w": "cosas",
+          "f": 254
+        },
+        {
+          "w": "y",
+          "f": 265
+        },
+        {
+          "w": "animales",
+          "f": 266
+        },
+        {
+          "w": "we",
+          "f": 289
+        },
+        {
+          "w": "nosotros",
+          "f": 298
+        },
+        {
+          "w": "y",
+          "f": 325
+        },
+        {
+          "w": "they",
+          "f": 331
+        },
+        {
+          "w": "ellos",
+          "f": 341
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "The verb to be",
+      "texto": "El verbo to be significa ser o estar, y en presente tiene tres formas: am, con I; is, con he, she e it; y are, con you, we y they. Por ejemplo: I am happy, she is a doctor, they are friends.",
+      "voz": "El verbo to be significa ser o estar, y en presente tiene tres formas: am, con I; is, con he, she e it; y are, con you, we y they. Por ejemplo: I am happy, she is a doctor, they are friends.",
+      "items": [
+        {
+          "titulo": "am",
+          "texto": "I am happy.",
+          "palabra": "am"
+        },
+        {
+          "titulo": "is",
+          "texto": "She is a doctor.",
+          "palabra": "is"
+        },
+        {
+          "titulo": "are",
+          "texto": "They are friends.",
+          "palabra": "are"
+        }
+      ],
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 403,
+      "frames": 431,
+      "chunks": [
+        {
+          "text": "El verbo to be significa ser o",
+          "from": 0,
+          "to": 49
+        },
+        {
+          "text": "estar, y en presente tiene tres formas:",
+          "from": 49,
+          "to": 113
+        },
+        {
+          "text": "am, con I;",
+          "from": 126,
+          "to": 150
+        },
+        {
+          "text": "is, con he, she e it;",
+          "from": 155,
+          "to": 222
+        },
+        {
+          "text": "y are, con you, we y they.",
+          "from": 232,
+          "to": 294
+        },
+        {
+          "text": "Por ejemplo:",
+          "from": 300,
+          "to": 316
+        },
+        {
+          "text": "I am happy, she is a doctor, they are friends.",
+          "from": 317,
+          "to": 398
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "verbo",
+          "f": 6
+        },
+        {
+          "w": "to",
+          "f": 14
+        },
+        {
+          "w": "be",
+          "f": 18
+        },
+        {
+          "w": "significa",
+          "f": 22
+        },
+        {
+          "w": "ser",
+          "f": 38
+        },
+        {
+          "w": "o",
+          "f": 46
+        },
+        {
+          "w": "estar",
+          "f": 50
+        },
+        {
+          "w": "y",
+          "f": 64
+        },
+        {
+          "w": "en",
+          "f": 68
+        },
+        {
+          "w": "presente",
+          "f": 71
+        },
+        {
+          "w": "tiene",
+          "f": 84
+        },
+        {
+          "w": "tres",
+          "f": 91
+        },
+        {
+          "w": "formas",
+          "f": 98
+        },
+        {
+          "w": "am",
+          "f": 126
+        },
+        {
+          "w": "con",
+          "f": 134
+        },
+        {
+          "w": "i",
+          "f": 142
+        },
+        {
+          "w": "is",
+          "f": 155
+        },
+        {
+          "w": "con",
+          "f": 164
+        },
+        {
+          "w": "he",
+          "f": 173
+        },
+        {
+          "w": "she",
+          "f": 184
+        },
+        {
+          "w": "e",
+          "f": 198
+        },
+        {
+          "w": "it",
+          "f": 209
+        },
+        {
+          "w": "y",
+          "f": 232
+        },
+        {
+          "w": "are",
+          "f": 238
+        },
+        {
+          "w": "con",
+          "f": 248
+        },
+        {
+          "w": "you",
+          "f": 255
+        },
+        {
+          "w": "we",
+          "f": 265
+        },
+        {
+          "w": "y",
+          "f": 275
+        },
+        {
+          "w": "they",
+          "f": 282
+        },
+        {
+          "w": "por",
+          "f": 300
+        },
+        {
+          "w": "ejemplo",
+          "f": 305
+        },
+        {
+          "w": "i",
+          "f": 317
+        },
+        {
+          "w": "am",
+          "f": 321
+        },
+        {
+          "w": "happy",
+          "f": 326
+        },
+        {
+          "w": "she",
+          "f": 337
+        },
+        {
+          "w": "is",
+          "f": 343
+        },
+        {
+          "w": "a",
+          "f": 347
+        },
+        {
+          "w": "doctor",
+          "f": 350
+        },
+        {
+          "w": "they",
+          "f": 364
+        },
+        {
+          "w": "are",
+          "f": 369
+        },
+        {
+          "w": "friends",
+          "f": 374
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Negatives and questions",
+      "texto": "Para negar, se agrega not después del verbo: He is not at home. Para preguntar, el verbo va primero: Is she a teacher? Y se responde en corto: Yes, she is, o No, she isn’t.",
+      "voz": "Para negar, se agrega not después del verbo: he is not at home. Para preguntar, el verbo va primero: is she a teacher? Y se responde en corto: yes, she is, o no, she isn’t.",
+      "items": [
+        {
+          "titulo": "Negative",
+          "texto": "He is not at home.",
+          "palabra": "not"
+        },
+        {
+          "titulo": "Question",
+          "texto": "Is she a teacher?",
+          "palabra": "preguntar"
+        },
+        {
+          "titulo": "Short answers",
+          "texto": "Yes, she is. / No, she isn’t.",
+          "palabra": "yes"
+        }
+      ],
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 307,
+      "frames": 335,
+      "chunks": [
+        {
+          "text": "Para negar, se agrega not después del verbo:",
+          "from": 0,
+          "to": 63
+        },
+        {
+          "text": "He is not at home.",
+          "from": 65,
+          "to": 92
+        },
+        {
+          "text": "Para preguntar, el verbo va primero:",
+          "from": 100,
+          "to": 161
+        },
+        {
+          "text": "Is she a teacher?",
+          "from": 170,
+          "to": 202
+        },
+        {
+          "text": "Y se responde en corto:",
+          "from": 208,
+          "to": 242
+        },
+        {
+          "text": "Yes, she is, o No, she isn’t.",
+          "from": 243,
+          "to": 302
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "negar",
+          "f": 9
+        },
+        {
+          "w": "se",
+          "f": 18
+        },
+        {
+          "w": "agrega",
+          "f": 22
+        },
+        {
+          "w": "not",
+          "f": 32
+        },
+        {
+          "w": "después",
+          "f": 38
+        },
+        {
+          "w": "del",
+          "f": 48
+        },
+        {
+          "w": "verbo",
+          "f": 53
+        },
+        {
+          "w": "he",
+          "f": 65
+        },
+        {
+          "w": "is",
+          "f": 69
+        },
+        {
+          "w": "not",
+          "f": 73
+        },
+        {
+          "w": "at",
+          "f": 78
+        },
+        {
+          "w": "home",
+          "f": 82
+        },
+        {
+          "w": "para",
+          "f": 100
+        },
+        {
+          "w": "preguntar",
+          "f": 108
+        },
+        {
+          "w": "el",
+          "f": 126
+        },
+        {
+          "w": "verbo",
+          "f": 131
+        },
+        {
+          "w": "va",
+          "f": 139
+        },
+        {
+          "w": "primero",
+          "f": 142
+        },
+        {
+          "w": "is",
+          "f": 170
+        },
+        {
+          "w": "she",
+          "f": 176
+        },
+        {
+          "w": "a",
+          "f": 183
+        },
+        {
+          "w": "teacher",
+          "f": 186
+        },
+        {
+          "w": "y",
+          "f": 208
+        },
+        {
+          "w": "se",
+          "f": 213
+        },
+        {
+          "w": "responde",
+          "f": 217
+        },
+        {
+          "w": "en",
+          "f": 229
+        },
+        {
+          "w": "corto",
+          "f": 232
+        },
+        {
+          "w": "yes",
+          "f": 243
+        },
+        {
+          "w": "she",
+          "f": 251
+        },
+        {
+          "w": "is",
+          "f": 257
+        },
+        {
+          "w": "o",
+          "f": 266
+        },
+        {
+          "w": "no",
+          "f": 271
+        },
+        {
+          "w": "she",
+          "f": 278
+        },
+        {
+          "w": "isn",
+          "f": 283
+        },
+        {
+          "w": "t",
+          "f": 291
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Personal information",
+      "texto": "Para presentarte también usas to be: My name is Laura. I am Colombian. I am a teacher. Y para preguntar: What is your name?, Where are you from?, How old are you?",
+      "voz": "Para presentarte también usas to be: My name is Laura. I am Colombian. I am a teacher. Y para preguntar: What is your name?, Where are you from?, How old are you?",
+      "items": [
+        {
+          "titulo": "My name is…",
+          "texto": "My name is Laura.",
+          "palabra": "name"
+        },
+        {
+          "titulo": "I am…",
+          "texto": "I am Colombian.",
+          "palabra": "colombian"
+        },
+        {
+          "titulo": "Questions",
+          "texto": "What is your name?",
+          "palabra": "what"
+        }
+      ],
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 250,
+      "frames": 278,
+      "chunks": [
+        {
+          "text": "Para presentarte también usas to be:",
+          "from": 0,
+          "to": 51
+        },
+        {
+          "text": "My name is Laura.",
+          "from": 52,
+          "to": 77
+        },
+        {
+          "text": "I am Colombian.",
+          "from": 78,
+          "to": 101
+        },
+        {
+          "text": "I am a teacher.",
+          "from": 103,
+          "to": 125
+        },
+        {
+          "text": "Y para preguntar:",
+          "from": 126,
+          "to": 159
+        },
+        {
+          "text": "What is your name?, Where are",
+          "from": 163,
+          "to": 206
+        },
+        {
+          "text": "you from?, How old are you?",
+          "from": 206,
+          "to": 245
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "presentarte",
+          "f": 9
+        },
+        {
+          "w": "también",
+          "f": 25
+        },
+        {
+          "w": "usas",
+          "f": 34
+        },
+        {
+          "w": "to",
+          "f": 41
+        },
+        {
+          "w": "be",
+          "f": 46
+        },
+        {
+          "w": "my",
+          "f": 52
+        },
+        {
+          "w": "name",
+          "f": 57
+        },
+        {
+          "w": "is",
+          "f": 63
+        },
+        {
+          "w": "laura",
+          "f": 67
+        },
+        {
+          "w": "i",
+          "f": 78
+        },
+        {
+          "w": "am",
+          "f": 82
+        },
+        {
+          "w": "colombian",
+          "f": 87
+        },
+        {
+          "w": "i",
+          "f": 103
+        },
+        {
+          "w": "am",
+          "f": 106
+        },
+        {
+          "w": "a",
+          "f": 111
+        },
+        {
+          "w": "teacher",
+          "f": 113
+        },
+        {
+          "w": "y",
+          "f": 126
+        },
+        {
+          "w": "para",
+          "f": 132
+        },
+        {
+          "w": "preguntar",
+          "f": 138
+        },
+        {
+          "w": "what",
+          "f": 163
+        },
+        {
+          "w": "is",
+          "f": 170
+        },
+        {
+          "w": "your",
+          "f": 173
+        },
+        {
+          "w": "name",
+          "f": 179
+        },
+        {
+          "w": "where",
+          "f": 192
+        },
+        {
+          "w": "are",
+          "f": 199
+        },
+        {
+          "w": "you",
+          "f": 203
+        },
+        {
+          "w": "from",
+          "f": 207
+        },
+        {
+          "w": "how",
+          "f": 218
+        },
+        {
+          "w": "old",
+          "f": 225
+        },
+        {
+          "w": "are",
+          "f": 231
+        },
+        {
+          "w": "you",
+          "f": 236
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "imagen",
+      "titulo": "Family members",
+      "texto": "Y para hablar de la familia: grandmother y grandfather son los abuelos; mother y father, los padres; uncle y aunt, los tíos; y son, daughter y cousin son hijo, hija y primo.",
+      "voz": "Y para hablar de la familia: grandmother y grandfather son los abuelos; mother y father, los padres; uncle y aunt, los tíos; y son, daughter y cousin son hijo, hija y primo.",
+      "imagenes": [
+        {
+          "src": "preparacion/familia.webp",
+          "focos": [
+            {
+              "palabra": "grandmother",
+              "x": 0.15,
+              "y": 0.4,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "grandfather",
+              "x": 0.85,
+              "y": 0.4,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "mother",
+              "x": 0.65,
+              "y": 0.35,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "uncle",
+              "x": 0.35,
+              "y": 0.35,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "son",
+              "x": 0.5,
+              "y": 0.75,
+              "zoom": 1.4,
+              "vez": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 310,
+      "frames": 338,
+      "chunks": [
+        {
+          "text": "Y para hablar de la familia:",
+          "from": 0,
+          "to": 42
+        },
+        {
+          "text": "grandmother y grandfather son los abuelos;",
+          "from": 46,
+          "to": 105
+        },
+        {
+          "text": "mother y father, los padres;",
+          "from": 112,
+          "to": 157
+        },
+        {
+          "text": "uncle y aunt, los tíos;",
+          "from": 165,
+          "to": 209
+        },
+        {
+          "text": "y son, daughter y cousin son hijo, hija y primo.",
+          "from": 217,
+          "to": 305
+        }
+      ],
+      "words": [
+        {
+          "w": "y",
+          "f": 0
+        },
+        {
+          "w": "para",
+          "f": 7
+        },
+        {
+          "w": "hablar",
+          "f": 12
+        },
+        {
+          "w": "de",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 23
+        },
+        {
+          "w": "familia",
+          "f": 26
+        },
+        {
+          "w": "grandmother",
+          "f": 46
+        },
+        {
+          "w": "y",
+          "f": 63
+        },
+        {
+          "w": "grandfather",
+          "f": 65
+        },
+        {
+          "w": "son",
+          "f": 80
+        },
+        {
+          "w": "los",
+          "f": 85
+        },
+        {
+          "w": "abuelos",
+          "f": 90
+        },
+        {
+          "w": "mother",
+          "f": 112
+        },
+        {
+          "w": "y",
+          "f": 123
+        },
+        {
+          "w": "father",
+          "f": 125
+        },
+        {
+          "w": "los",
+          "f": 136
+        },
+        {
+          "w": "padres",
+          "f": 143
+        },
+        {
+          "w": "uncle",
+          "f": 165
+        },
+        {
+          "w": "y",
+          "f": 177
+        },
+        {
+          "w": "aunt",
+          "f": 180
+        },
+        {
+          "w": "los",
+          "f": 189
+        },
+        {
+          "w": "tíos",
+          "f": 197
+        },
+        {
+          "w": "y",
+          "f": 217
+        },
+        {
+          "w": "son",
+          "f": 222
+        },
+        {
+          "w": "daughter",
+          "f": 230
+        },
+        {
+          "w": "y",
+          "f": 240
+        },
+        {
+          "w": "cousin",
+          "f": 242
+        },
+        {
+          "w": "son",
+          "f": 258
+        },
+        {
+          "w": "hijo",
+          "f": 266
+        },
+        {
+          "w": "hija",
+          "f": 277
+        },
+        {
+          "w": "y",
+          "f": 285
+        },
+        {
+          "w": "primo",
+          "f": 288
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los pronombres personales y el verbo to be. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los pronombres personales y el verbo to be. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/pronombres-personales-y-verbo-to-be/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 187,
+      "frames": 347,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste los pronombres personales y",
+          "from": 34,
+          "to": 90
+        },
+        {
+          "text": "el verbo to be.",
+          "from": 90,
+          "to": 112
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 120,
+          "to": 183
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 6
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "los",
+          "f": 50
+        },
+        {
+          "w": "pronombres",
+          "f": 55
+        },
+        {
+          "w": "personales",
+          "f": 69
+        },
+        {
+          "w": "y",
+          "f": 85
+        },
+        {
+          "w": "el",
+          "f": 86
+        },
+        {
+          "w": "verbo",
+          "f": 90
+        },
+        {
+          "w": "to",
+          "f": 100
+        },
+        {
+          "w": "be",
+          "f": 104
+        },
+        {
+          "w": "sigue",
+          "f": 120
+        },
+        {
+          "w": "con",
+          "f": 130
+        },
+        {
+          "w": "el",
+          "f": 135
+        },
+        {
+          "w": "siguiente",
+          "f": 137
+        },
+        {
+          "w": "tema",
+          "f": 149
+        },
+        {
+          "w": "de",
+          "f": 157
+        },
+        {
+          "w": "tu",
+          "f": 160
+        },
+        {
+          "w": "ruta",
+          "f": 164
+        }
+      ]
+    }
+  ]
+}

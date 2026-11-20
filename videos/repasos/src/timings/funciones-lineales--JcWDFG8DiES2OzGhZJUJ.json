@@ -1,0 +1,1323 @@
+{
+  "tema": "funciones-lineales",
+  "componente": "Dominio",
+  "area": "Matemáticas",
+  "titulo": "Las funciones lineales y su aplicación en situaciones cotidianas",
+  "siguiente": "Cambio climático e impacto humano en los ecosistemas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las funciones lineales y su aplicación en la vida cotidiana.",
+      "voz": "Repaso del tema: las funciones lineales y su aplicación en la vida cotidiana.",
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 141,
+      "frames": 169,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 34
+        },
+        {
+          "text": "las funciones lineales y su",
+          "from": 37,
+          "to": 83
+        },
+        {
+          "text": "aplicación en la vida cotidiana.",
+          "from": 83,
+          "to": 137
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 18
+        },
+        {
+          "w": "tema",
+          "f": 23
+        },
+        {
+          "w": "las",
+          "f": 37
+        },
+        {
+          "w": "funciones",
+          "f": 42
+        },
+        {
+          "w": "lineales",
+          "f": 55
+        },
+        {
+          "w": "y",
+          "f": 71
+        },
+        {
+          "w": "su",
+          "f": 73
+        },
+        {
+          "w": "aplicación",
+          "f": 76
+        },
+        {
+          "w": "en",
+          "f": 92
+        },
+        {
+          "w": "la",
+          "f": 95
+        },
+        {
+          "w": "vida",
+          "f": 98
+        },
+        {
+          "w": "cotidiana",
+          "f": 105
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es una función?",
+      "texto": "Una función relaciona dos cantidades: a cada valor de entrada le corresponde un único valor de salida. Si ganas $20.000 por día, lo que recibes depende de los días que trabajes. Los días son la variable independiente, x, y el dinero, la dependiente, y.",
+      "voz": "Una función relaciona dos cantidades: a cada valor de entrada le corresponde un único valor de salida. Si ganas veinte mil pesos por día, lo que recibes depende de los días que trabajes. Los días son la variable independiente, equis, y el dinero, la dependiente, ye.",
+      "items": [
+        {
+          "titulo": "Un único valor",
+          "texto": "Cada entrada, una salida",
+          "palabra": "único"
+        },
+        {
+          "titulo": "Independiente",
+          "texto": "x: los días",
+          "palabra": "independiente"
+        },
+        {
+          "titulo": "Dependiente",
+          "texto": "y: el dinero",
+          "palabra": "dependiente"
+        }
+      ],
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 464,
+      "frames": 492,
+      "chunks": [
+        {
+          "text": "Una función relaciona dos cantidades:",
+          "from": 0,
+          "to": 60
+        },
+        {
+          "text": "a cada valor de entrada le",
+          "from": 68,
+          "to": 108
+        },
+        {
+          "text": "corresponde un único valor de salida.",
+          "from": 108,
+          "to": 163
+        },
+        {
+          "text": "Si ganas $20.000 por día, lo que",
+          "from": 173,
+          "to": 233
+        },
+        {
+          "text": "recibes depende de los días que trabajes.",
+          "from": 233,
+          "to": 309
+        },
+        {
+          "text": "Los días son la variable independiente, x,",
+          "from": 319,
+          "to": 400
+        },
+        {
+          "text": "y el dinero, la dependiente, y.",
+          "from": 400,
+          "to": 460
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "función",
+          "f": 9
+        },
+        {
+          "w": "relaciona",
+          "f": 19
+        },
+        {
+          "w": "dos",
+          "f": 33
+        },
+        {
+          "w": "cantidades",
+          "f": 38
+        },
+        {
+          "w": "a",
+          "f": 68
+        },
+        {
+          "w": "cada",
+          "f": 72
+        },
+        {
+          "w": "valor",
+          "f": 80
+        },
+        {
+          "w": "de",
+          "f": 90
+        },
+        {
+          "w": "entrada",
+          "f": 92
+        },
+        {
+          "w": "le",
+          "f": 105
+        },
+        {
+          "w": "corresponde",
+          "f": 109
+        },
+        {
+          "w": "un",
+          "f": 124
+        },
+        {
+          "w": "único",
+          "f": 127
+        },
+        {
+          "w": "valor",
+          "f": 137
+        },
+        {
+          "w": "de",
+          "f": 145
+        },
+        {
+          "w": "salida",
+          "f": 148
+        },
+        {
+          "w": "si",
+          "f": 173
+        },
+        {
+          "w": "ganas",
+          "f": 179
+        },
+        {
+          "w": "veinte",
+          "f": 189
+        },
+        {
+          "w": "mil",
+          "f": 198
+        },
+        {
+          "w": "pesos",
+          "f": 204
+        },
+        {
+          "w": "por",
+          "f": 213
+        },
+        {
+          "w": "día",
+          "f": 219
+        },
+        {
+          "w": "lo",
+          "f": 239
+        },
+        {
+          "w": "que",
+          "f": 243
+        },
+        {
+          "w": "recibes",
+          "f": 248
+        },
+        {
+          "w": "depende",
+          "f": 261
+        },
+        {
+          "w": "de",
+          "f": 272
+        },
+        {
+          "w": "los",
+          "f": 274
+        },
+        {
+          "w": "días",
+          "f": 279
+        },
+        {
+          "w": "que",
+          "f": 286
+        },
+        {
+          "w": "trabajes",
+          "f": 289
+        },
+        {
+          "w": "los",
+          "f": 319
+        },
+        {
+          "w": "días",
+          "f": 325
+        },
+        {
+          "w": "son",
+          "f": 332
+        },
+        {
+          "w": "la",
+          "f": 338
+        },
+        {
+          "w": "variable",
+          "f": 341
+        },
+        {
+          "w": "independiente",
+          "f": 352
+        },
+        {
+          "w": "equis",
+          "f": 386
+        },
+        {
+          "w": "y",
+          "f": 400
+        },
+        {
+          "w": "el",
+          "f": 403
+        },
+        {
+          "w": "dinero",
+          "f": 407
+        },
+        {
+          "w": "la",
+          "f": 419
+        },
+        {
+          "w": "dependiente",
+          "f": 421
+        },
+        {
+          "w": "ye",
+          "f": 441
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La función lineal: y = mx + b",
+      "texto": "Una función lineal tiene la forma y = mx + b, y su gráfica es una recta. La pendiente, m, dice cuánto cambia y cuando x aumenta 1; y b es el valor inicial, cuando x es 0.",
+      "voz": "Una función lineal tiene la forma ye igual a eme equis más be, y su gráfica es una recta. La pendiente, eme, dice cuánto cambia ye cuando equis aumenta uno; y be es el valor inicial, cuando equis es cero.",
+      "items": [
+        {
+          "titulo": "Una recta",
+          "texto": "Su gráfica",
+          "palabra": "recta"
+        },
+        {
+          "titulo": "Pendiente: m",
+          "texto": "Cuánto cambia y",
+          "palabra": "pendiente"
+        },
+        {
+          "titulo": "Valor inicial: b",
+          "texto": "y cuando x = 0",
+          "palabra": "inicial"
+        }
+      ],
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 372,
+      "frames": 400,
+      "chunks": [
+        {
+          "text": "Una función lineal tiene la forma y = mx",
+          "from": 0,
+          "to": 87
+        },
+        {
+          "text": "+ b, y su gráfica es una recta.",
+          "from": 87,
+          "to": 154
+        },
+        {
+          "text": "La pendiente, m, dice cuánto cambia",
+          "from": 165,
+          "to": 233
+        },
+        {
+          "text": "y cuando x aumenta 1;",
+          "from": 233,
+          "to": 273
+        },
+        {
+          "text": "y b es el valor inicial, cuando x es 0.",
+          "from": 283,
+          "to": 368
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "función",
+          "f": 9
+        },
+        {
+          "w": "lineal",
+          "f": 20
+        },
+        {
+          "w": "tiene",
+          "f": 31
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "forma",
+          "f": 42
+        },
+        {
+          "w": "ye",
+          "f": 51
+        },
+        {
+          "w": "igual",
+          "f": 54
+        },
+        {
+          "w": "a",
+          "f": 65
+        },
+        {
+          "w": "eme",
+          "f": 69
+        },
+        {
+          "w": "equis",
+          "f": 77
+        },
+        {
+          "w": "más",
+          "f": 86
+        },
+        {
+          "w": "be",
+          "f": 92
+        },
+        {
+          "w": "y",
+          "f": 109
+        },
+        {
+          "w": "su",
+          "f": 114
+        },
+        {
+          "w": "gráfica",
+          "f": 118
+        },
+        {
+          "w": "es",
+          "f": 130
+        },
+        {
+          "w": "una",
+          "f": 133
+        },
+        {
+          "w": "recta",
+          "f": 140
+        },
+        {
+          "w": "la",
+          "f": 165
+        },
+        {
+          "w": "pendiente",
+          "f": 171
+        },
+        {
+          "w": "eme",
+          "f": 191
+        },
+        {
+          "w": "dice",
+          "f": 201
+        },
+        {
+          "w": "cuánto",
+          "f": 209
+        },
+        {
+          "w": "cambia",
+          "f": 219
+        },
+        {
+          "w": "ye",
+          "f": 228
+        },
+        {
+          "w": "cuando",
+          "f": 233
+        },
+        {
+          "w": "equis",
+          "f": 242
+        },
+        {
+          "w": "aumenta",
+          "f": 250
+        },
+        {
+          "w": "uno",
+          "f": 264
+        },
+        {
+          "w": "y",
+          "f": 283
+        },
+        {
+          "w": "be",
+          "f": 287
+        },
+        {
+          "w": "es",
+          "f": 292
+        },
+        {
+          "w": "el",
+          "f": 296
+        },
+        {
+          "w": "valor",
+          "f": 299
+        },
+        {
+          "w": "inicial",
+          "f": 308
+        },
+        {
+          "w": "cuando",
+          "f": 323
+        },
+        {
+          "w": "equis",
+          "f": 333
+        },
+        {
+          "w": "es",
+          "f": 341
+        },
+        {
+          "w": "cero",
+          "f": 344
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Un ejemplo: el ahorro",
+      "texto": "Si tienes $15.000 y ahorras $5.000 cada semana, la función es y = 5.000x + 15.000. Después de 4 semanas: 5.000 × 4 = 20.000, más 15.000, da $35.000.",
+      "voz": "Si tienes quince mil pesos y ahorras cinco mil cada semana, la función es ye igual a cinco mil equis más quince mil. Después de cuatro semanas: cinco mil por cuatro, veinte mil, más quince mil, da treinta y cinco mil pesos.",
+      "items": [
+        {
+          "titulo": "Valor inicial",
+          "texto": "$15.000",
+          "palabra": "quince"
+        },
+        {
+          "titulo": "Pendiente",
+          "texto": "$5.000 por semana",
+          "palabra": "semana"
+        },
+        {
+          "titulo": "4 semanas",
+          "texto": "$35.000",
+          "palabra": "treinta"
+        }
+      ],
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 363,
+      "frames": 391,
+      "chunks": [
+        {
+          "text": "Si tienes $15.000 y ahorras $5.000 cada semana,",
+          "from": 0,
+          "to": 99
+        },
+        {
+          "text": "la función es y = 5.000x + 15.000.",
+          "from": 99,
+          "to": 171
+        },
+        {
+          "text": "Después de 4 semanas:",
+          "from": 183,
+          "to": 220
+        },
+        {
+          "text": "5.000 × 4 = 20.000, más 15.000, da $35.000.",
+          "from": 220,
+          "to": 358
+        }
+      ],
+      "words": [
+        {
+          "w": "si",
+          "f": 0
+        },
+        {
+          "w": "tienes",
+          "f": 7
+        },
+        {
+          "w": "quince",
+          "f": 15
+        },
+        {
+          "w": "mil",
+          "f": 23
+        },
+        {
+          "w": "pesos",
+          "f": 29
+        },
+        {
+          "w": "y",
+          "f": 39
+        },
+        {
+          "w": "ahorras",
+          "f": 40
+        },
+        {
+          "w": "cinco",
+          "f": 50
+        },
+        {
+          "w": "mil",
+          "f": 61
+        },
+        {
+          "w": "cada",
+          "f": 66
+        },
+        {
+          "w": "semana",
+          "f": 74
+        },
+        {
+          "w": "la",
+          "f": 91
+        },
+        {
+          "w": "función",
+          "f": 96
+        },
+        {
+          "w": "es",
+          "f": 107
+        },
+        {
+          "w": "ye",
+          "f": 110
+        },
+        {
+          "w": "igual",
+          "f": 114
+        },
+        {
+          "w": "a",
+          "f": 124
+        },
+        {
+          "w": "cinco",
+          "f": 127
+        },
+        {
+          "w": "mil",
+          "f": 135
+        },
+        {
+          "w": "equis",
+          "f": 141
+        },
+        {
+          "w": "más",
+          "f": 149
+        },
+        {
+          "w": "quince",
+          "f": 154
+        },
+        {
+          "w": "mil",
+          "f": 163
+        },
+        {
+          "w": "después",
+          "f": 183
+        },
+        {
+          "w": "de",
+          "f": 194
+        },
+        {
+          "w": "cuatro",
+          "f": 197
+        },
+        {
+          "w": "semanas",
+          "f": 206
+        },
+        {
+          "w": "cinco",
+          "f": 220
+        },
+        {
+          "w": "mil",
+          "f": 232
+        },
+        {
+          "w": "por",
+          "f": 238
+        },
+        {
+          "w": "cuatro",
+          "f": 244
+        },
+        {
+          "w": "veinte",
+          "f": 258
+        },
+        {
+          "w": "mil",
+          "f": 269
+        },
+        {
+          "w": "más",
+          "f": 278
+        },
+        {
+          "w": "quince",
+          "f": 284
+        },
+        {
+          "w": "mil",
+          "f": 294
+        },
+        {
+          "w": "da",
+          "f": 305
+        },
+        {
+          "w": "treinta",
+          "f": 311
+        },
+        {
+          "w": "y",
+          "f": 320
+        },
+        {
+          "w": "cinco",
+          "f": 321
+        },
+        {
+          "w": "mil",
+          "f": 331
+        },
+        {
+          "w": "pesos",
+          "f": 337
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El signo de la pendiente",
+      "texto": "Si la pendiente es positiva, la cantidad aumenta, como un ahorro. Si es negativa, disminuye, como una deuda que se va pagando. Y si es cero, se mantiene constante.",
+      "voz": "Si la pendiente es positiva, la cantidad aumenta, como un ahorro. Si es negativa, disminuye, como una deuda que se va pagando. Y si es cero, se mantiene constante.",
+      "items": [
+        {
+          "titulo": "Positiva",
+          "texto": "y = 3x + 10: aumenta",
+          "palabra": "positiva"
+        },
+        {
+          "titulo": "Negativa",
+          "texto": "y = −2x + 20: disminuye",
+          "palabra": "negativa"
+        },
+        {
+          "titulo": "Cero",
+          "texto": "y = 0x + 8: constante",
+          "palabra": "cero"
+        }
+      ],
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 273,
+      "frames": 301,
+      "chunks": [
+        {
+          "text": "Si la pendiente es positiva, la",
+          "from": 0,
+          "to": 45
+        },
+        {
+          "text": "cantidad aumenta, como un ahorro.",
+          "from": 45,
+          "to": 94
+        },
+        {
+          "text": "Si es negativa, disminuye, como una",
+          "from": 101,
+          "to": 155
+        },
+        {
+          "text": "deuda que se va pagando.",
+          "from": 155,
+          "to": 192
+        },
+        {
+          "text": "Y si es cero, se mantiene constante.",
+          "from": 201,
+          "to": 269
+        }
+      ],
+      "words": [
+        {
+          "w": "si",
+          "f": 0
+        },
+        {
+          "w": "la",
+          "f": 6
+        },
+        {
+          "w": "pendiente",
+          "f": 9
+        },
+        {
+          "w": "es",
+          "f": 20
+        },
+        {
+          "w": "positiva",
+          "f": 23
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "cantidad",
+          "f": 42
+        },
+        {
+          "w": "aumenta",
+          "f": 55
+        },
+        {
+          "w": "como",
+          "f": 69
+        },
+        {
+          "w": "un",
+          "f": 77
+        },
+        {
+          "w": "ahorro",
+          "f": 80
+        },
+        {
+          "w": "si",
+          "f": 101
+        },
+        {
+          "w": "es",
+          "f": 106
+        },
+        {
+          "w": "negativa",
+          "f": 109
+        },
+        {
+          "w": "disminuye",
+          "f": 126
+        },
+        {
+          "w": "como",
+          "f": 145
+        },
+        {
+          "w": "una",
+          "f": 152
+        },
+        {
+          "w": "deuda",
+          "f": 158
+        },
+        {
+          "w": "que",
+          "f": 167
+        },
+        {
+          "w": "se",
+          "f": 170
+        },
+        {
+          "w": "va",
+          "f": 172
+        },
+        {
+          "w": "pagando",
+          "f": 176
+        },
+        {
+          "w": "y",
+          "f": 201
+        },
+        {
+          "w": "si",
+          "f": 206
+        },
+        {
+          "w": "es",
+          "f": 210
+        },
+        {
+          "w": "cero",
+          "f": 213
+        },
+        {
+          "w": "se",
+          "f": 224
+        },
+        {
+          "w": "mantiene",
+          "f": 227
+        },
+        {
+          "w": "constante",
+          "f": 239
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "¿Qué servicio conviene?",
+      "texto": "Para comparar, el servicio A cobra $4.000 iniciales y $2.000 por kilómetro; el B, $7.000 iniciales y $1.000 por kilómetro. Para 2 kilómetros, A cuesta $8.000 y B, $9.000. Para 5, A cuesta $14.000 y B, $12.000. La opción más barata cambia según la distancia.",
+      "voz": "Para comparar, el servicio A cobra cuatro mil pesos iniciales y dos mil por kilómetro; el B, siete mil iniciales y mil por kilómetro. Para dos kilómetros, A cuesta ocho mil y B, nueve mil. Para cinco, A cuesta catorce mil y B, doce mil. La opción más barata cambia según la distancia.",
+      "columnas": [
+        {
+          "titulo": "Servicio A",
+          "palabra": "servicio",
+          "puntos": [
+            {
+              "texto": "y = 2.000x + 4.000",
+              "palabra": "cuatro"
+            },
+            {
+              "texto": "2 km: $8.000 · 5 km: $14.000",
+              "palabra": "ocho"
+            }
+          ]
+        },
+        {
+          "titulo": "Servicio B",
+          "palabra": "b",
+          "puntos": [
+            {
+              "texto": "y = 1.000x + 7.000",
+              "palabra": "siete"
+            },
+            {
+              "texto": "2 km: $9.000 · 5 km: $12.000",
+              "palabra": "nueve"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 478,
+      "frames": 506,
+      "chunks": [
+        {
+          "text": "Para comparar, el servicio A cobra",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "$4.000 iniciales y $2.000 por kilómetro;",
+          "from": 59,
+          "to": 129
+        },
+        {
+          "text": "el B, $7.000 iniciales y $1.000 por kilómetro.",
+          "from": 135,
+          "to": 211
+        },
+        {
+          "text": "Para 2 kilómetros, A cuesta $8.000 y B, $9.000.",
+          "from": 221,
+          "to": 302
+        },
+        {
+          "text": "Para 5, A cuesta $14.000 y B, $12.000.",
+          "from": 312,
+          "to": 393
+        },
+        {
+          "text": "La opción más barata cambia según la distancia.",
+          "from": 402,
+          "to": 474
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "comparar",
+          "f": 10
+        },
+        {
+          "w": "el",
+          "f": 25
+        },
+        {
+          "w": "servicio",
+          "f": 29
+        },
+        {
+          "w": "a",
+          "f": 43
+        },
+        {
+          "w": "cobra",
+          "f": 46
+        },
+        {
+          "w": "cuatro",
+          "f": 55
+        },
+        {
+          "w": "mil",
+          "f": 63
+        },
+        {
+          "w": "pesos",
+          "f": 68
+        },
+        {
+          "w": "iniciales",
+          "f": 77
+        },
+        {
+          "w": "y",
+          "f": 93
+        },
+        {
+          "w": "dos",
+          "f": 94
+        },
+        {
+          "w": "mil",
+          "f": 98
+        },
+        {
+          "w": "por",
+          "f": 103
+        },
+        {
+          "w": "kilómetro",
+          "f": 108
+        },
+        {
+          "w": "el",
+          "f": 135
+        },
+        {
+          "w": "b",
+          "f": 141
+        },
+        {
+          "w": "siete",
+          "f": 148
+        },
+        {
+          "w": "mil",
+          "f": 156
+        },
+        {
+          "w": "iniciales",
+          "f": 161
+        },
+        {
+          "w": "y",
+          "f": 177
+        },
+        {
+          "w": "mil",
+          "f": 179
+        },
+        {
+          "w": "por",
+          "f": 184
+        },
+        {
+          "w": "kilómetro",
+          "f": 189
+        },
+        {
+          "w": "para",
+          "f": 221
+        },
+        {
+          "w": "dos",
+          "f": 228
+        },
+        {
+          "w": "kilómetros",
+          "f": 233
+        },
+        {
+          "w": "a",
+          "f": 251
+        },
+        {
+          "w": "cuesta",
+          "f": 255
+        },
+        {
+          "w": "ocho",
+          "f": 263
+        },
+        {
+          "w": "mil",
+          "f": 269
+        },
+        {
+          "w": "y",
+          "f": 274
+        },
+        {
+          "w": "b",
+          "f": 277
+        },
+        {
+          "w": "nueve",
+          "f": 283
+        },
+        {
+          "w": "mil",
+          "f": 293
+        },
+        {
+          "w": "para",
+          "f": 312
+        },
+        {
+          "w": "cinco",
+          "f": 320
+        },
+        {
+          "w": "a",
+          "f": 334
+        },
+        {
+          "w": "cuesta",
+          "f": 337
+        },
+        {
+          "w": "catorce",
+          "f": 346
+        },
+        {
+          "w": "mil",
+          "f": 359
+        },
+        {
+          "w": "y",
+          "f": 365
+        },
+        {
+          "w": "b",
+          "f": 367
+        },
+        {
+          "w": "doce",
+          "f": 375
+        },
+        {
+          "w": "mil",
+          "f": 384
+        },
+        {
+          "w": "la",
+          "f": 402
+        },
+        {
+          "w": "opción",
+          "f": 406
+        },
+        {
+          "w": "más",
+          "f": 415
+        },
+        {
+          "w": "barata",
+          "f": 420
+        },
+        {
+          "w": "cambia",
+          "f": 431
+        },
+        {
+          "w": "según",
+          "f": 440
+        },
+        {
+          "w": "la",
+          "f": 448
+        },
+        {
+          "w": "distancia",
+          "f": 451
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las funciones lineales. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las funciones lineales. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/funciones-lineales/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 144,
+      "frames": 304,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 17
+        },
+        {
+          "text": "Repasaste las funciones lineales.",
+          "from": 18,
+          "to": 69
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 76,
+          "to": 139
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 10
+        },
+        {
+          "w": "repasaste",
+          "f": 18
+        },
+        {
+          "w": "las",
+          "f": 33
+        },
+        {
+          "w": "funciones",
+          "f": 37
+        },
+        {
+          "w": "lineales",
+          "f": 50
+        },
+        {
+          "w": "sigue",
+          "f": 76
+        },
+        {
+          "w": "con",
+          "f": 85
+        },
+        {
+          "w": "el",
+          "f": 90
+        },
+        {
+          "w": "siguiente",
+          "f": 92
+        },
+        {
+          "w": "tema",
+          "f": 104
+        },
+        {
+          "w": "de",
+          "f": 112
+        },
+        {
+          "w": "tu",
+          "f": 115
+        },
+        {
+          "w": "ruta",
+          "f": 119
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "tema": "literatura-latinoamericana-movimientos",
+  "componente": "Preparación",
+  "area": "Lengua castellana",
+  "titulo": "Literatura latinoamericana: movimientos, autores y obras representativas",
+  "siguiente": "Evolución biológica y selección natural",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la literatura latinoamericana, sus movimientos, autores y obras.",
+      "voz": "Repaso del tema: la literatura latinoamericana, sus movimientos, autores y obras."
+    },
+    {
+      "id": "s1",
+      "tipo": "linea",
+      "titulo": "Un recorrido por la literatura",
+      "texto": "La literatura latinoamericana ha pasado por varios períodos: la precolombina, la de la Conquista y la Colonia, el Romanticismo y el Realismo del siglo XIX, el Modernismo y el Boom.",
+      "voz": "La literatura latinoamericana ha pasado por varios períodos: la precolombina, la de la Conquista y la Colonia, el Romanticismo y el Realismo del siglo diecinueve, el Modernismo y el Boom.",
+      "items": [
+        {
+          "etiqueta": "Antes de 1492",
+          "titulo": "Precolombina",
+          "texto": "Tradición oral",
+          "palabra": "precolombina"
+        },
+        {
+          "etiqueta": "Desde 1492",
+          "titulo": "Conquista y Colonia",
+          "texto": "Crónicas y cartas",
+          "palabra": "colonia"
+        },
+        {
+          "etiqueta": "Siglo XIX",
+          "titulo": "Romanticismo y Realismo",
+          "texto": "Después de la independencia",
+          "palabra": "romanticismo"
+        },
+        {
+          "etiqueta": "Fines del XIX",
+          "titulo": "Modernismo",
+          "texto": "Rubén Darío",
+          "palabra": "modernismo"
+        },
+        {
+          "etiqueta": "1960-1970",
+          "titulo": "Boom",
+          "texto": "Fama internacional",
+          "palabra": "boom"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Los orígenes",
+      "texto": "La literatura precolombina se transmitía de forma oral, con mitos, leyendas y cantos, como el Popol Vuh de los mayas. Con la conquista llegaron las crónicas, los diarios y las cartas, como los de Cristóbal Colón; y Bartolomé de las Casas denunció los abusos contra los indígenas.",
+      "voz": "La literatura precolombina se transmitía de forma oral, con mitos, leyendas y cantos, como el Popol Vuh de los mayas. Con la conquista llegaron las crónicas, los diarios y las cartas, como los de Cristóbal Colón; y Bartolomé de las Casas denunció los abusos contra los indígenas.",
+      "items": [
+        {
+          "titulo": "Tradición oral",
+          "texto": "Mitos, leyendas y cantos",
+          "palabra": "oral"
+        },
+        {
+          "titulo": "Popol Vuh",
+          "texto": "Tradición maya quiché",
+          "palabra": "popol"
+        },
+        {
+          "titulo": "Crónicas y cartas",
+          "texto": "Cristóbal Colón",
+          "palabra": "crónicas"
+        },
+        {
+          "titulo": "Bartolomé de las Casas",
+          "texto": "Denunció los abusos",
+          "palabra": "bartolomé"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Romanticismo y Realismo",
+      "texto": "En el siglo XIX, el Romanticismo exaltó los sentimientos, la libertad y la naturaleza, como en María, del colombiano Jorge Isaacs. El Realismo, en cambio, retrató la sociedad y sus problemas, como en Martín Rivas, del chileno Alberto Blest Gana.",
+      "voz": "En el siglo diecinueve, el Romanticismo exaltó los sentimientos, la libertad y la naturaleza, como en María, del colombiano Jorge Isaacs. El Realismo, en cambio, retrató la sociedad y sus problemas, como en Martín Rivas, del chileno Alberto Blest Gana.",
+      "columnas": [
+        {
+          "titulo": "Romanticismo",
+          "palabra": "romanticismo",
+          "puntos": [
+            {
+              "texto": "Sentimientos y naturaleza",
+              "palabra": "sentimientos"
+            },
+            {
+              "texto": "María, de Jorge Isaacs",
+              "palabra": "isaacs"
+            }
+          ]
+        },
+        {
+          "titulo": "Realismo",
+          "palabra": "realismo",
+          "puntos": [
+            {
+              "texto": "La sociedad y sus problemas",
+              "palabra": "sociedad"
+            },
+            {
+              "texto": "Martín Rivas, de Blest Gana",
+              "palabra": "blest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Modernismo y Boom",
+      "texto": "El Modernismo buscó un lenguaje elegante y musical; su gran figura fue el nicaragüense Rubén Darío. En los años sesenta y setenta, el Boom llevó al mundo novelas como Cien años de soledad, Rayuela y La ciudad y los perros.",
+      "voz": "El Modernismo buscó un lenguaje elegante y musical; su gran figura fue el nicaragüense Rubén Darío. En los años sesenta y setenta, el Boom llevó al mundo novelas como Cien años de soledad, Rayuela y La ciudad y los perros.",
+      "items": [
+        {
+          "titulo": "Modernismo",
+          "texto": "Rubén Darío, Azul…",
+          "palabra": "modernismo"
+        },
+        {
+          "titulo": "Boom",
+          "texto": "Reconocimiento internacional",
+          "palabra": "boom"
+        },
+        {
+          "titulo": "Obras",
+          "texto": "Cien años de soledad, Rayuela…",
+          "palabra": "cien"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El realismo mágico",
+      "texto": "El realismo mágico presenta hechos extraordinarios en ambientes cotidianos, y los personajes los aceptan como normales: personas que levitan o lluvias que duran años. Su gran referente es Cien años de soledad, de Gabriel García Márquez, Premio Nobel de Literatura en 1982.",
+      "voz": "El realismo mágico presenta hechos extraordinarios en ambientes cotidianos, y los personajes los aceptan como normales: personas que levitan o lluvias que duran años. Su gran referente es Cien años de soledad, de Gabriel García Márquez, Premio Nobel de Literatura en mil novecientos ochenta y dos.",
+      "items": [
+        {
+          "titulo": "Lo extraordinario",
+          "texto": "Personas que levitan",
+          "palabra": "extraordinarios"
+        },
+        {
+          "titulo": "Lo cotidiano",
+          "texto": "Los personajes lo aceptan",
+          "palabra": "cotidianos"
+        },
+        {
+          "titulo": "García Márquez",
+          "texto": "Premio Nobel en 1982",
+          "palabra": "gabriel"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los movimientos de la literatura latinoamericana. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los movimientos de la literatura latinoamericana. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

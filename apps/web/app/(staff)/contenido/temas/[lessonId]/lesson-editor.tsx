@@ -32,6 +32,8 @@
  * previa que renderizara por su cuenta sería la vista previa de algo que no existe.
  */
 
+import { Escenas } from '@/components/organisms/escenas';
+import { VisorImagen } from '@/components/organisms/visor-imagen';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert } from '@/components/atoms/alert';
@@ -785,6 +787,8 @@ export function LessonEditor({
               lang={preview.language}
               dangerouslySetInnerHTML={{ __html: preview.html }}
             />
+            <Escenas watch={preview.html} />
+            <VisorImagen watch={preview.html} />
           </>
         )}
       </Sheet>

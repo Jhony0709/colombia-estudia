@@ -1,0 +1,1322 @@
+{
+  "tema": "porcentajes-y-educacion-financiera",
+  "componente": "Expansión",
+  "area": "Matemáticas",
+  "titulo": "Porcentajes, descuentos, aumentos, presupuestos y educación financiera",
+  "siguiente": "Expansión europea, conquista y colonización de América",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los porcentajes, el presupuesto y la educación financiera.",
+      "voz": "Repaso del tema: los porcentajes, el presupuesto y la educación financiera.",
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 134,
+      "frames": 162,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "los porcentajes, el presupuesto",
+          "from": 33,
+          "to": 86
+        },
+        {
+          "text": "y la educación financiera.",
+          "from": 86,
+          "to": 130
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "los",
+          "f": 33
+        },
+        {
+          "w": "porcentajes",
+          "f": 39
+        },
+        {
+          "w": "el",
+          "f": 58
+        },
+        {
+          "w": "presupuesto",
+          "f": 61
+        },
+        {
+          "w": "y",
+          "f": 79
+        },
+        {
+          "w": "la",
+          "f": 81
+        },
+        {
+          "w": "educación",
+          "f": 83
+        },
+        {
+          "w": "financiera",
+          "f": 98
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es un porcentaje?",
+      "texto": "Un porcentaje expresa una cantidad por cada cien. Para calcularlo, se multiplica la cantidad por el porcentaje y se divide entre 100: el 25 % de $100.000 es $25.000.",
+      "voz": "Un porcentaje expresa una cantidad por cada cien. Para calcularlo, se multiplica la cantidad por el porcentaje y se divide entre cien: el veinticinco por ciento de cien mil pesos es veinticinco mil.",
+      "items": [
+        {
+          "titulo": "Por cada cien",
+          "texto": "25 % = 25 de cada 100",
+          "palabra": "cien"
+        },
+        {
+          "titulo": "La fórmula",
+          "texto": "Cantidad × % ÷ 100",
+          "palabra": "multiplica"
+        },
+        {
+          "titulo": "Ejemplo",
+          "texto": "25 % de $100.000 = $25.000",
+          "palabra": "veinticinco"
+        }
+      ],
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 344,
+      "frames": 372,
+      "chunks": [
+        {
+          "text": "Un porcentaje expresa una cantidad por cada cien.",
+          "from": 0,
+          "to": 77
+        },
+        {
+          "text": "Para calcularlo, se multiplica la cantidad por",
+          "from": 86,
+          "to": 164
+        },
+        {
+          "text": "el porcentaje y se divide entre 100:",
+          "from": 164,
+          "to": 224
+        },
+        {
+          "text": "el 25 % de $100.000 es $25.000.",
+          "from": 234,
+          "to": 340
+        }
+      ],
+      "words": [
+        {
+          "w": "un",
+          "f": 0
+        },
+        {
+          "w": "porcentaje",
+          "f": 6
+        },
+        {
+          "w": "expresa",
+          "f": 23
+        },
+        {
+          "w": "una",
+          "f": 34
+        },
+        {
+          "w": "cantidad",
+          "f": 39
+        },
+        {
+          "w": "por",
+          "f": 52
+        },
+        {
+          "w": "cada",
+          "f": 57
+        },
+        {
+          "w": "cien",
+          "f": 64
+        },
+        {
+          "w": "para",
+          "f": 86
+        },
+        {
+          "w": "calcularlo",
+          "f": 93
+        },
+        {
+          "w": "se",
+          "f": 116
+        },
+        {
+          "w": "multiplica",
+          "f": 119
+        },
+        {
+          "w": "la",
+          "f": 137
+        },
+        {
+          "w": "cantidad",
+          "f": 140
+        },
+        {
+          "w": "por",
+          "f": 153
+        },
+        {
+          "w": "el",
+          "f": 158
+        },
+        {
+          "w": "porcentaje",
+          "f": 161
+        },
+        {
+          "w": "y",
+          "f": 182
+        },
+        {
+          "w": "se",
+          "f": 187
+        },
+        {
+          "w": "divide",
+          "f": 191
+        },
+        {
+          "w": "entre",
+          "f": 202
+        },
+        {
+          "w": "cien",
+          "f": 211
+        },
+        {
+          "w": "el",
+          "f": 234
+        },
+        {
+          "w": "veinticinco",
+          "f": 239
+        },
+        {
+          "w": "por",
+          "f": 255
+        },
+        {
+          "w": "ciento",
+          "f": 259
+        },
+        {
+          "w": "de",
+          "f": 269
+        },
+        {
+          "w": "cien",
+          "f": 271
+        },
+        {
+          "w": "mil",
+          "f": 277
+        },
+        {
+          "w": "pesos",
+          "f": 283
+        },
+        {
+          "w": "es",
+          "f": 297
+        },
+        {
+          "w": "veinticinco",
+          "f": 302
+        },
+        {
+          "w": "mil",
+          "f": 320
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Descuento y aumento",
+      "texto": "En un descuento, el valor calculado se resta; en un aumento, se suma. Si un producto cuesta $100.000, con un descuento del 20 % queda en $80.000, y con un aumento del 20 %, en $120.000.",
+      "voz": "En un descuento, el valor calculado se resta; en un aumento, se suma. Si un producto cuesta cien mil pesos, con un descuento del veinte por ciento queda en ochenta mil, y con un aumento del veinte por ciento, en ciento veinte mil.",
+      "columnas": [
+        {
+          "titulo": "Descuento",
+          "palabra": "descuento",
+          "puntos": [
+            {
+              "texto": "Se resta",
+              "palabra": "resta"
+            },
+            {
+              "texto": "$100.000 − 20 % = $80.000",
+              "palabra": "ochenta"
+            }
+          ]
+        },
+        {
+          "titulo": "Aumento",
+          "palabra": "aumento",
+          "puntos": [
+            {
+              "texto": "Se suma",
+              "palabra": "suma"
+            },
+            {
+              "texto": "$100.000 + 20 % = $120.000",
+              "palabra": "ciento",
+              "vez": 2
+            }
+          ]
+        }
+      ],
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 370,
+      "frames": 398,
+      "chunks": [
+        {
+          "text": "En un descuento, el valor calculado se resta;",
+          "from": 0,
+          "to": 71
+        },
+        {
+          "text": "en un aumento, se suma.",
+          "from": 81,
+          "to": 119
+        },
+        {
+          "text": "Si un producto cuesta $100.000, con un descuento",
+          "from": 129,
+          "to": 229
+        },
+        {
+          "text": "del 20 % queda en $80.000, y con",
+          "from": 229,
+          "to": 296
+        },
+        {
+          "text": "un aumento del 20 %, en $120.000.",
+          "from": 296,
+          "to": 365
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "un",
+          "f": 7
+        },
+        {
+          "w": "descuento",
+          "f": 10
+        },
+        {
+          "w": "el",
+          "f": 26
+        },
+        {
+          "w": "valor",
+          "f": 29
+        },
+        {
+          "w": "calculado",
+          "f": 37
+        },
+        {
+          "w": "se",
+          "f": 52
+        },
+        {
+          "w": "resta",
+          "f": 56
+        },
+        {
+          "w": "en",
+          "f": 81
+        },
+        {
+          "w": "un",
+          "f": 86
+        },
+        {
+          "w": "aumento",
+          "f": 90
+        },
+        {
+          "w": "se",
+          "f": 103
+        },
+        {
+          "w": "suma",
+          "f": 107
+        },
+        {
+          "w": "si",
+          "f": 129
+        },
+        {
+          "w": "un",
+          "f": 132
+        },
+        {
+          "w": "producto",
+          "f": 135
+        },
+        {
+          "w": "cuesta",
+          "f": 148
+        },
+        {
+          "w": "cien",
+          "f": 156
+        },
+        {
+          "w": "mil",
+          "f": 162
+        },
+        {
+          "w": "pesos",
+          "f": 167
+        },
+        {
+          "w": "con",
+          "f": 177
+        },
+        {
+          "w": "un",
+          "f": 182
+        },
+        {
+          "w": "descuento",
+          "f": 185
+        },
+        {
+          "w": "del",
+          "f": 199
+        },
+        {
+          "w": "veinte",
+          "f": 203
+        },
+        {
+          "w": "por",
+          "f": 211
+        },
+        {
+          "w": "ciento",
+          "f": 216
+        },
+        {
+          "w": "queda",
+          "f": 226
+        },
+        {
+          "w": "en",
+          "f": 231
+        },
+        {
+          "w": "ochenta",
+          "f": 234
+        },
+        {
+          "w": "mil",
+          "f": 248
+        },
+        {
+          "w": "y",
+          "f": 268
+        },
+        {
+          "w": "con",
+          "f": 273
+        },
+        {
+          "w": "un",
+          "f": 278
+        },
+        {
+          "w": "aumento",
+          "f": 282
+        },
+        {
+          "w": "del",
+          "f": 294
+        },
+        {
+          "w": "veinte",
+          "f": 298
+        },
+        {
+          "w": "por",
+          "f": 306
+        },
+        {
+          "w": "ciento",
+          "f": 311
+        },
+        {
+          "w": "en",
+          "f": 323
+        },
+        {
+          "w": "ciento",
+          "f": 327
+        },
+        {
+          "w": "veinte",
+          "f": 337
+        },
+        {
+          "w": "mil",
+          "f": 345
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Subir y bajar no es volver",
+      "texto": "Ojo: los porcentajes sucesivos se calculan sobre el precio de cada momento. Si $100.000 suben un 10 %, quedan en $110.000; si luego bajan un 10 %, quedan en $99.000, no en $100.000.",
+      "voz": "Ojo: los porcentajes sucesivos se calculan sobre el precio de cada momento. Si cien mil pesos suben un diez por ciento, quedan en ciento diez mil; si luego bajan un diez por ciento, quedan en noventa y nueve mil, no en cien mil.",
+      "items": [
+        {
+          "titulo": "Sube 10 %",
+          "texto": "$110.000",
+          "palabra": "suben"
+        },
+        {
+          "titulo": "Baja 10 %",
+          "texto": "$99.000",
+          "palabra": "bajan"
+        },
+        {
+          "titulo": "No vuelve",
+          "texto": "No queda en $100.000",
+          "palabra": "noventa"
+        }
+      ],
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 363,
+      "frames": 391,
+      "chunks": [
+        {
+          "text": "Ojo:",
+          "from": 0,
+          "to": 8
+        },
+        {
+          "text": "los porcentajes sucesivos se calculan sobre",
+          "from": 9,
+          "to": 73
+        },
+        {
+          "text": "el precio de cada momento.",
+          "from": 73,
+          "to": 112
+        },
+        {
+          "text": "Si $100.000 suben un 10 %, quedan en $110.000;",
+          "from": 122,
+          "to": 226
+        },
+        {
+          "text": "si luego bajan un 10 %,",
+          "from": 238,
+          "to": 286
+        },
+        {
+          "text": "quedan en $99.000, no en $100.000.",
+          "from": 286,
+          "to": 358
+        }
+      ],
+      "words": [
+        {
+          "w": "ojo",
+          "f": 0
+        },
+        {
+          "w": "los",
+          "f": 9
+        },
+        {
+          "w": "porcentajes",
+          "f": 14
+        },
+        {
+          "w": "sucesivos",
+          "f": 30
+        },
+        {
+          "w": "se",
+          "f": 44
+        },
+        {
+          "w": "calculan",
+          "f": 48
+        },
+        {
+          "w": "sobre",
+          "f": 62
+        },
+        {
+          "w": "el",
+          "f": 69
+        },
+        {
+          "w": "precio",
+          "f": 72
+        },
+        {
+          "w": "de",
+          "f": 83
+        },
+        {
+          "w": "cada",
+          "f": 86
+        },
+        {
+          "w": "momento",
+          "f": 93
+        },
+        {
+          "w": "si",
+          "f": 122
+        },
+        {
+          "w": "cien",
+          "f": 128
+        },
+        {
+          "w": "mil",
+          "f": 134
+        },
+        {
+          "w": "pesos",
+          "f": 140
+        },
+        {
+          "w": "suben",
+          "f": 148
+        },
+        {
+          "w": "un",
+          "f": 160
+        },
+        {
+          "w": "diez",
+          "f": 163
+        },
+        {
+          "w": "por",
+          "f": 170
+        },
+        {
+          "w": "ciento",
+          "f": 175
+        },
+        {
+          "w": "quedan",
+          "f": 189
+        },
+        {
+          "w": "en",
+          "f": 199
+        },
+        {
+          "w": "ciento",
+          "f": 202
+        },
+        {
+          "w": "diez",
+          "f": 212
+        },
+        {
+          "w": "mil",
+          "f": 218
+        },
+        {
+          "w": "si",
+          "f": 238
+        },
+        {
+          "w": "luego",
+          "f": 243
+        },
+        {
+          "w": "bajan",
+          "f": 250
+        },
+        {
+          "w": "un",
+          "f": 259
+        },
+        {
+          "w": "diez",
+          "f": 261
+        },
+        {
+          "w": "por",
+          "f": 266
+        },
+        {
+          "w": "ciento",
+          "f": 271
+        },
+        {
+          "w": "quedan",
+          "f": 281
+        },
+        {
+          "w": "en",
+          "f": 289
+        },
+        {
+          "w": "noventa",
+          "f": 292
+        },
+        {
+          "w": "y",
+          "f": 303
+        },
+        {
+          "w": "nueve",
+          "f": 305
+        },
+        {
+          "w": "mil",
+          "f": 314
+        },
+        {
+          "w": "no",
+          "f": 328
+        },
+        {
+          "w": "en",
+          "f": 333
+        },
+        {
+          "w": "cien",
+          "f": 335
+        },
+        {
+          "w": "mil",
+          "f": 343
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El presupuesto",
+      "texto": "Un presupuesto organiza los ingresos y los gastos de un periodo. El dinero disponible es igual a los ingresos menos los gastos: con $100.000 y $80.000 de gastos, quedan $20.000 para ahorrar. Si el resultado es negativo, hay que revisar el presupuesto.",
+      "voz": "Un presupuesto organiza los ingresos y los gastos de un periodo. El dinero disponible es igual a los ingresos menos los gastos: con cien mil pesos y ochenta mil de gastos, quedan veinte mil para ahorrar. Si el resultado es negativo, hay que revisar el presupuesto.",
+      "items": [
+        {
+          "titulo": "Ingresos",
+          "texto": "$100.000",
+          "palabra": "ingresos"
+        },
+        {
+          "titulo": "Gastos",
+          "texto": "$80.000",
+          "palabra": "gastos"
+        },
+        {
+          "titulo": "Ahorro",
+          "texto": "$20.000",
+          "palabra": "ahorrar"
+        }
+      ],
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 402,
+      "frames": 430,
+      "chunks": [
+        {
+          "text": "Un presupuesto organiza los ingresos y",
+          "from": 0,
+          "to": 53
+        },
+        {
+          "text": "los gastos de un periodo.",
+          "from": 53,
+          "to": 87
+        },
+        {
+          "text": "El dinero disponible es igual a",
+          "from": 93,
+          "to": 137
+        },
+        {
+          "text": "los ingresos menos los gastos:",
+          "from": 137,
+          "to": 180
+        },
+        {
+          "text": "con $100.000 y $80.000 de",
+          "from": 187,
+          "to": 230
+        },
+        {
+          "text": "gastos, quedan $20.000 para ahorrar.",
+          "from": 230,
+          "to": 292
+        },
+        {
+          "text": "Si el resultado es negativo,",
+          "from": 302,
+          "to": 347
+        },
+        {
+          "text": "hay que revisar el presupuesto.",
+          "from": 347,
+          "to": 397
+        }
+      ],
+      "words": [
+        {
+          "w": "un",
+          "f": 0
+        },
+        {
+          "w": "presupuesto",
+          "f": 6
+        },
+        {
+          "w": "organiza",
+          "f": 22
+        },
+        {
+          "w": "los",
+          "f": 33
+        },
+        {
+          "w": "ingresos",
+          "f": 38
+        },
+        {
+          "w": "y",
+          "f": 49
+        },
+        {
+          "w": "los",
+          "f": 52
+        },
+        {
+          "w": "gastos",
+          "f": 56
+        },
+        {
+          "w": "de",
+          "f": 67
+        },
+        {
+          "w": "un",
+          "f": 69
+        },
+        {
+          "w": "periodo",
+          "f": 72
+        },
+        {
+          "w": "el",
+          "f": 93
+        },
+        {
+          "w": "dinero",
+          "f": 98
+        },
+        {
+          "w": "disponible",
+          "f": 108
+        },
+        {
+          "w": "es",
+          "f": 125
+        },
+        {
+          "w": "igual",
+          "f": 129
+        },
+        {
+          "w": "a",
+          "f": 135
+        },
+        {
+          "w": "los",
+          "f": 137
+        },
+        {
+          "w": "ingresos",
+          "f": 142
+        },
+        {
+          "w": "menos",
+          "f": 154
+        },
+        {
+          "w": "los",
+          "f": 161
+        },
+        {
+          "w": "gastos",
+          "f": 165
+        },
+        {
+          "w": "con",
+          "f": 187
+        },
+        {
+          "w": "cien",
+          "f": 192
+        },
+        {
+          "w": "mil",
+          "f": 198
+        },
+        {
+          "w": "pesos",
+          "f": 204
+        },
+        {
+          "w": "y",
+          "f": 215
+        },
+        {
+          "w": "ochenta",
+          "f": 218
+        },
+        {
+          "w": "mil",
+          "f": 230
+        },
+        {
+          "w": "de",
+          "f": 235
+        },
+        {
+          "w": "gastos",
+          "f": 238
+        },
+        {
+          "w": "quedan",
+          "f": 249
+        },
+        {
+          "w": "veinte",
+          "f": 257
+        },
+        {
+          "w": "mil",
+          "f": 265
+        },
+        {
+          "w": "para",
+          "f": 271
+        },
+        {
+          "w": "ahorrar",
+          "f": 276
+        },
+        {
+          "w": "si",
+          "f": 302
+        },
+        {
+          "w": "el",
+          "f": 306
+        },
+        {
+          "w": "resultado",
+          "f": 309
+        },
+        {
+          "w": "es",
+          "f": 323
+        },
+        {
+          "w": "negativo",
+          "f": 325
+        },
+        {
+          "w": "hay",
+          "f": 346
+        },
+        {
+          "w": "que",
+          "f": 350
+        },
+        {
+          "w": "revisar",
+          "f": 354
+        },
+        {
+          "w": "el",
+          "f": 364
+        },
+        {
+          "w": "presupuesto",
+          "f": 367
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El interés simple",
+      "texto": "En el interés simple, el interés se calcula siempre sobre el capital inicial. Con $200.000 al 2 % mensual durante 3 meses: $4.000 por mes, $12.000 en total, y un monto final de $212.000.",
+      "voz": "En el interés simple, el interés se calcula siempre sobre el capital inicial. Con doscientos mil pesos al dos por ciento mensual durante tres meses: cuatro mil por mes, doce mil en total, y un monto final de doscientos doce mil.",
+      "items": [
+        {
+          "titulo": "Capital",
+          "texto": "$200.000",
+          "palabra": "capital"
+        },
+        {
+          "titulo": "Tasa",
+          "texto": "2 % mensual",
+          "palabra": "mensual"
+        },
+        {
+          "titulo": "Interés",
+          "texto": "$4.000 × 3 = $12.000",
+          "palabra": "doce"
+        },
+        {
+          "titulo": "Monto final",
+          "texto": "$212.000",
+          "palabra": "monto"
+        }
+      ],
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 374,
+      "frames": 402,
+      "chunks": [
+        {
+          "text": "En el interés simple, el interés se",
+          "from": 0,
+          "to": 52
+        },
+        {
+          "text": "calcula siempre sobre el capital inicial.",
+          "from": 52,
+          "to": 113
+        },
+        {
+          "text": "Con $200.000 al 2 % mensual durante 3 meses:",
+          "from": 121,
+          "to": 220
+        },
+        {
+          "text": "$4.000 por mes, $12.000 en total,",
+          "from": 228,
+          "to": 303
+        },
+        {
+          "text": "y un monto final de $212.000.",
+          "from": 303,
+          "to": 369
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "el",
+          "f": 7
+        },
+        {
+          "w": "interés",
+          "f": 10
+        },
+        {
+          "w": "simple",
+          "f": 21
+        },
+        {
+          "w": "el",
+          "f": 33
+        },
+        {
+          "w": "interés",
+          "f": 37
+        },
+        {
+          "w": "se",
+          "f": 47
+        },
+        {
+          "w": "calcula",
+          "f": 50
+        },
+        {
+          "w": "siempre",
+          "f": 62
+        },
+        {
+          "w": "sobre",
+          "f": 72
+        },
+        {
+          "w": "el",
+          "f": 79
+        },
+        {
+          "w": "capital",
+          "f": 82
+        },
+        {
+          "w": "inicial",
+          "f": 96
+        },
+        {
+          "w": "con",
+          "f": 121
+        },
+        {
+          "w": "doscientos",
+          "f": 127
+        },
+        {
+          "w": "mil",
+          "f": 139
+        },
+        {
+          "w": "pesos",
+          "f": 143
+        },
+        {
+          "w": "al",
+          "f": 153
+        },
+        {
+          "w": "dos",
+          "f": 156
+        },
+        {
+          "w": "por",
+          "f": 162
+        },
+        {
+          "w": "ciento",
+          "f": 167
+        },
+        {
+          "w": "mensual",
+          "f": 176
+        },
+        {
+          "w": "durante",
+          "f": 187
+        },
+        {
+          "w": "tres",
+          "f": 199
+        },
+        {
+          "w": "meses",
+          "f": 206
+        },
+        {
+          "w": "cuatro",
+          "f": 228
+        },
+        {
+          "w": "mil",
+          "f": 241
+        },
+        {
+          "w": "por",
+          "f": 247
+        },
+        {
+          "w": "mes",
+          "f": 253
+        },
+        {
+          "w": "doce",
+          "f": 267
+        },
+        {
+          "w": "mil",
+          "f": 276
+        },
+        {
+          "w": "en",
+          "f": 282
+        },
+        {
+          "w": "total",
+          "f": 285
+        },
+        {
+          "w": "y",
+          "f": 308
+        },
+        {
+          "w": "un",
+          "f": 312
+        },
+        {
+          "w": "monto",
+          "f": 314
+        },
+        {
+          "w": "final",
+          "f": 324
+        },
+        {
+          "w": "de",
+          "f": 334
+        },
+        {
+          "w": "doscientos",
+          "f": 338
+        },
+        {
+          "w": "doce",
+          "f": 352
+        },
+        {
+          "w": "mil",
+          "f": 360
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los porcentajes y la educación financiera. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los porcentajes y la educación financiera. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/porcentajes-y-educacion-financiera/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 194,
+      "frames": 354,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste los porcentajes y la educación financiera.",
+          "from": 34,
+          "to": 111
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 122,
+          "to": 189
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "los",
+          "f": 49
+        },
+        {
+          "w": "porcentajes",
+          "f": 54
+        },
+        {
+          "w": "y",
+          "f": 72
+        },
+        {
+          "w": "la",
+          "f": 74
+        },
+        {
+          "w": "educación",
+          "f": 76
+        },
+        {
+          "w": "financiera",
+          "f": 91
+        },
+        {
+          "w": "sigue",
+          "f": 122
+        },
+        {
+          "w": "con",
+          "f": 132
+        },
+        {
+          "w": "el",
+          "f": 137
+        },
+        {
+          "w": "siguiente",
+          "f": 139
+        },
+        {
+          "w": "tema",
+          "f": 152
+        },
+        {
+          "w": "de",
+          "f": 160
+        },
+        {
+          "w": "tu",
+          "f": 163
+        },
+        {
+          "w": "ruta",
+          "f": 168
+        }
+      ]
+    }
+  ]
+}

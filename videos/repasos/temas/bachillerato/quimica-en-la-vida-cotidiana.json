@@ -1,0 +1,198 @@
+{
+  "tema": "quimica-en-la-vida-cotidiana",
+  "componente": "Bachillerato",
+  "area": "Química",
+  "titulo": "Química en la vida cotidiana",
+  "siguiente": "Numbers, dates and time",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la química en la vida cotidiana.",
+      "voz": "Repaso del tema: la química en la vida cotidiana."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Sustancias puras y mezclas",
+      "texto": "Las sustancias puras tienen una composición definida: pueden ser elementos, de un solo tipo de átomo, o compuestos, de varios elementos unidos. Las mezclas combinan sustancias que conservan su identidad: son homogéneas si no se distinguen sus partes, y heterogéneas si se distinguen.",
+      "voz": "Las sustancias puras tienen una composición definida: pueden ser elementos, de un solo tipo de átomo, o compuestos, de varios elementos unidos. Las mezclas combinan sustancias que conservan su identidad: son homogéneas si no se distinguen sus partes, y heterogéneas si se distinguen.",
+      "items": [
+        {
+          "titulo": "Elementos",
+          "texto": "Un solo tipo de átomo",
+          "palabra": "elementos"
+        },
+        {
+          "titulo": "Compuestos",
+          "texto": "Varios elementos unidos",
+          "palabra": "compuestos"
+        },
+        {
+          "titulo": "Homogéneas",
+          "texto": "No se distinguen sus partes",
+          "palabra": "homogéneas"
+        },
+        {
+          "titulo": "Heterogéneas",
+          "texto": "Sí se distinguen",
+          "palabra": "heterogéneas"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Separar mezclas",
+      "texto": "Las mezclas se separan por métodos físicos. La filtración retiene un sólido, como la arena; la decantación separa líquidos de distinta densidad, como el aceite y el agua; y la destilación evapora y luego condensa. También están la evaporación, el tamizado y la imantación, que atrae el hierro.",
+      "voz": "Las mezclas se separan por métodos físicos. La filtración retiene un sólido, como la arena; la decantación separa líquidos de distinta densidad, como el aceite y el agua; y la destilación evapora y luego condensa. También están la evaporación, el tamizado y la imantación, que atrae el hierro.",
+      "imagenes": [
+        {
+          "src": "bachillerato/separacion-de-mezclas-1.webp",
+          "focos": [
+            {
+              "palabra": "filtración",
+              "x": 0.15,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "decantación",
+              "x": 0.42,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "destilación",
+              "x": 0.75,
+              "y": 0.4,
+              "zoom": 1.5
+            }
+          ]
+        },
+        {
+          "src": "bachillerato/separacion-de-mezclas-2.webp",
+          "palabra": "evaporación",
+          "focos": [
+            {
+              "palabra": "tamizado",
+              "x": 0.5,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "imantación",
+              "x": 0.85,
+              "y": 0.4,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las soluciones",
+      "texto": "Una solución tiene un soluto, que se disuelve, y un solvente, que lo disuelve, como la sal en el agua. Se disuelve más rápido al agitar, con partículas pequeñas y, en muchos sólidos, con calor. Y puede ser diluida, concentrada o saturada.",
+      "voz": "Una solución tiene un soluto, que se disuelve, y un solvente, que lo disuelve, como la sal en el agua. Se disuelve más rápido al agitar, con partículas pequeñas y, en muchos sólidos, con calor. Y puede ser diluida, concentrada o saturada.",
+      "items": [
+        {
+          "titulo": "Soluto",
+          "texto": "Lo que se disuelve: la sal",
+          "palabra": "soluto"
+        },
+        {
+          "titulo": "Solvente",
+          "texto": "Lo que disuelve: el agua",
+          "palabra": "solvente"
+        },
+        {
+          "titulo": "Más rápido",
+          "texto": "Agitar, partículas pequeñas, calor",
+          "palabra": "agitar"
+        },
+        {
+          "titulo": "Concentración",
+          "texto": "Diluida, concentrada, saturada",
+          "palabra": "diluida"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "Ácidos, bases y pH",
+      "texto": "La escala de pH va de cero a catorce. Por debajo de siete, la solución es ácida, como el jugo de limón o el vinagre; en siete es neutra, como el agua pura; y por encima de siete es básica, como el bicarbonato o el jabón.",
+      "voz": "La escala de pH va de cero a catorce. Por debajo de siete, la solución es ácida, como el jugo de limón o el vinagre; en siete es neutra, como el agua pura; y por encima de siete es básica, como el bicarbonato o el jabón.",
+      "imagenes": [
+        {
+          "src": "bachillerato/escala-de-ph.webp",
+          "focos": [
+            {
+              "palabra": "ácida",
+              "x": 0.18,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "neutra",
+              "x": 0.55,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "básica",
+              "x": 0.82,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Transformaciones físicas y químicas",
+      "texto": "En una transformación física cambia la forma o el estado, pero no la sustancia, como el hielo que se derrite. En una química se forman sustancias nuevas, como la manzana que se oxida, la combustión o la fermentación del pan.",
+      "voz": "En una transformación física cambia la forma o el estado, pero no la sustancia, como el hielo que se derrite. En una química se forman sustancias nuevas, como la manzana que se oxida, la combustión o la fermentación del pan.",
+      "columnas": [
+        {
+          "titulo": "Física",
+          "palabra": "física",
+          "puntos": [
+            {
+              "texto": "Cambia la forma o el estado",
+              "palabra": "forma"
+            },
+            {
+              "texto": "El hielo que se derrite",
+              "palabra": "hielo"
+            }
+          ]
+        },
+        {
+          "titulo": "Química",
+          "palabra": "química",
+          "puntos": [
+            {
+              "texto": "Se forman sustancias nuevas",
+              "palabra": "nuevas"
+            },
+            {
+              "texto": "Oxidación, combustión, fermentación",
+              "palabra": "oxida"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la química en la vida cotidiana. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la química en la vida cotidiana. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

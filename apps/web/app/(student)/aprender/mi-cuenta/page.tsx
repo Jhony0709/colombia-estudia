@@ -4,23 +4,22 @@
  *
  * Solo con `billing.read.own`: el estudiante adulto que paga, o el acudiente. Un plan que
  * paga un aliado no llega aquí (decisión 8). Un menor tampoco: la cartera es del acudiente.
- * `?pago=<ref>` es la vuelta del checkout: se dice que el pago está en proceso hasta que
- * el webhook lo confirme.
+ * `?pago=<ref>` es la vuelta del link de Bold: se consulta el link y se dice cómo quedó.
  */
 
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
-import { listOwnAccounts } from '@/features/billing/server/account.service';
-import { isWompiConfigured } from '@/lib/billing/wompi';
+import { checkReturnedPayment, listOwnAccounts } from '@/features/billing/server/account.service';
+import { PaymentReturn } from '@/features/billing/components/payment-return';
+import { isBoldConfigured } from '@/lib/billing/bold';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { DataTable } from '@/components/molecules/data-table';
 import { Badge } from '@/components/atoms/badge';
 import { AccountSummary } from '@/features/billing/components/account-summary';
 import { getPolicy } from '@/features/admin/server/policies.service';
-import { Alert } from '@/components/atoms/alert';
 import { PayButton } from './pay-button';
 
 export const metadata: Metadata = { title: 'Mi cuenta' };
@@ -36,7 +35,15 @@ export default async function MyAccountPage({
   const t = await getTranslations('learn.account');
   const format = await getFormatter();
   const sp = await searchParams;
-  const returned = typeof sp.pago === 'string' ? sp.pago : null;
+  // Antes de leer la cuenta: si el pago ya está en Bold, la cuota sale pagada en esta misma carga.
+  const returned =
+    typeof sp.pago === 'string'
+      ? await checkReturnedPayment({
+          institutionId: ctx.institution.id,
+          reference: sp.pago,
+          scopes,
+        })
+      : null;
 
   const [accounts, policy] = await Promise.all([
     listOwnAccounts({ institutionId: ctx.institution.id, scopes }),
@@ -53,13 +60,13 @@ export default async function MyAccountPage({
       year: 'numeric',
       timeZone: 'UTC',
     });
-  const online = isWompiConfigured();
+  const online = isBoldConfigured();
 
   return (
     <Page enter>
       <PageHeader title={t('title')} description={t('description')} />
 
-      {returned && <Alert severity="info">{t('returned')}</Alert>}
+      <PaymentReturn outcome={returned} />
 
       {accounts.length === 0 ? (
         <EmptyState

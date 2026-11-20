@@ -23,6 +23,8 @@ import { RequestAttempt } from './request-attempt';
 import { businessPhone } from '@/lib/whatsapp/cloud-api';
 import { RouteRail, WithRouteRail } from '../../route-rail';
 import { PreviewStrip } from '../../../preview-strip';
+import { StepLink } from '../../step-link';
+import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
 import {
   CalendarClock,
   CircleCheck,
@@ -286,6 +288,24 @@ export default async function AssessmentPage({
           )}
 
           <BackLink label={t('lesson.backToOutline')} enrollmentId={a.enrollmentId} />
+
+          {/* Vista de estudiante (19/11): el administrador sigue sin presentar el examen. */}
+          {a.preview && (view.navigation.previous || view.navigation.next) && (
+            <StickyActionBar
+              label={ta('navLabel')}
+              status={ta('previewSkip')}
+              secondary={
+                view.navigation.previous ? (
+                  <StepLink item={view.navigation.previous} direction="previous" />
+                ) : null
+              }
+              action={
+                view.navigation.next ? (
+                  <StepLink item={view.navigation.next} direction="next" currentTitle={a.title} />
+                ) : null
+              }
+            />
+          )}
         </WithRouteRail>
       </Page>
     </>

@@ -1,0 +1,921 @@
+{
+  "tema": "la-vida-y-los-ecosistemas",
+  "componente": "Fundamentos",
+  "area": "Ciencias naturales",
+  "titulo": "La vida y los ecosistemas",
+  "siguiente": "Teoría del universo, el sistema solar y la Tierra",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la vida y los ecosistemas.",
+      "voz": "Repaso del tema: la vida y los ecosistemas.",
+      "audio": "voz/la-vida-y-los-ecosistemas/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 88,
+      "frames": 116,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "la vida y los ecosistemas.",
+          "from": 33,
+          "to": 84
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 33
+        },
+        {
+          "w": "vida",
+          "f": 38
+        },
+        {
+          "w": "y",
+          "f": 44
+        },
+        {
+          "w": "los",
+          "f": 46
+        },
+        {
+          "w": "ecosistemas",
+          "f": 51
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "comparar",
+      "titulo": "Los componentes de un ecosistema",
+      "texto": "Un ecosistema reúne a los seres vivos de un lugar, los elementos físicos que los rodean y sus relaciones. Los factores bióticos son los seres vivos. Los abióticos son los elementos sin vida, como el agua, el aire, la luz, la temperatura y el suelo.",
+      "voz": "Un ecosistema reúne a los seres vivos de un lugar, los elementos físicos que los rodean y sus relaciones. Los factores bióticos son los seres vivos. Los abióticos son los elementos sin vida, como el agua, el aire, la luz, la temperatura y el suelo.",
+      "columnas": [
+        {
+          "titulo": "Factores bióticos",
+          "palabra": "bióticos",
+          "puntos": [
+            {
+              "texto": "Los seres vivos",
+              "palabra": "seres",
+              "vez": 1
+            },
+            {
+              "texto": "Animales, plantas, hongos y bacterias",
+              "palabra": "vivos",
+              "vez": 1
+            }
+          ]
+        },
+        {
+          "titulo": "Factores abióticos",
+          "palabra": "abióticos",
+          "puntos": [
+            {
+              "texto": "Los elementos sin vida",
+              "palabra": "elementos"
+            },
+            {
+              "texto": "Agua, aire, luz, temperatura y suelo",
+              "palabra": "agua"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-vida-y-los-ecosistemas/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 445,
+      "frames": 473,
+      "chunks": [
+        {
+          "text": "Un ecosistema reúne a los seres vivos",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "de un lugar, los elementos físicos que",
+          "from": 62,
+          "to": 125
+        },
+        {
+          "text": "los rodean y sus relaciones.",
+          "from": 125,
+          "to": 171
+        },
+        {
+          "text": "Los factores bióticos son los seres vivos.",
+          "from": 179,
+          "to": 249
+        },
+        {
+          "text": "Los abióticos son los elementos sin vida, como el agua,",
+          "from": 255,
+          "to": 359
+        },
+        {
+          "text": "el aire, la luz, la temperatura y el suelo.",
+          "from": 359,
+          "to": 440
+        }
+      ],
+      "words": [
+        {
+          "w": "un",
+          "f": 0
+        },
+        {
+          "w": "ecosistema",
+          "f": 6
+        },
+        {
+          "w": "reúne",
+          "f": 24
+        },
+        {
+          "w": "a",
+          "f": 33
+        },
+        {
+          "w": "los",
+          "f": 36
+        },
+        {
+          "w": "seres",
+          "f": 40
+        },
+        {
+          "w": "vivos",
+          "f": 47
+        },
+        {
+          "w": "de",
+          "f": 55
+        },
+        {
+          "w": "un",
+          "f": 58
+        },
+        {
+          "w": "lugar",
+          "f": 61
+        },
+        {
+          "w": "los",
+          "f": 84
+        },
+        {
+          "w": "elementos",
+          "f": 90
+        },
+        {
+          "w": "físicos",
+          "f": 104
+        },
+        {
+          "w": "que",
+          "f": 118
+        },
+        {
+          "w": "los",
+          "f": 122
+        },
+        {
+          "w": "rodean",
+          "f": 126
+        },
+        {
+          "w": "y",
+          "f": 139
+        },
+        {
+          "w": "sus",
+          "f": 143
+        },
+        {
+          "w": "relaciones",
+          "f": 147
+        },
+        {
+          "w": "los",
+          "f": 179
+        },
+        {
+          "w": "factores",
+          "f": 185
+        },
+        {
+          "w": "bióticos",
+          "f": 201
+        },
+        {
+          "w": "son",
+          "f": 215
+        },
+        {
+          "w": "los",
+          "f": 222
+        },
+        {
+          "w": "seres",
+          "f": 227
+        },
+        {
+          "w": "vivos",
+          "f": 236
+        },
+        {
+          "w": "los",
+          "f": 255
+        },
+        {
+          "w": "abióticos",
+          "f": 262
+        },
+        {
+          "w": "son",
+          "f": 281
+        },
+        {
+          "w": "los",
+          "f": 287
+        },
+        {
+          "w": "elementos",
+          "f": 292
+        },
+        {
+          "w": "sin",
+          "f": 306
+        },
+        {
+          "w": "vida",
+          "f": 312
+        },
+        {
+          "w": "como",
+          "f": 332
+        },
+        {
+          "w": "el",
+          "f": 341
+        },
+        {
+          "w": "agua",
+          "f": 346
+        },
+        {
+          "w": "el",
+          "f": 357
+        },
+        {
+          "w": "aire",
+          "f": 363
+        },
+        {
+          "w": "la",
+          "f": 373
+        },
+        {
+          "w": "luz",
+          "f": 378
+        },
+        {
+          "w": "la",
+          "f": 389
+        },
+        {
+          "w": "temperatura",
+          "f": 393
+        },
+        {
+          "w": "y",
+          "f": 413
+        },
+        {
+          "w": "el",
+          "f": 415
+        },
+        {
+          "w": "suelo",
+          "f": 418
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "pasos",
+      "titulo": "Niveles de organización",
+      "texto": "Los seres vivos se organizan en niveles: individuo, población, comunidad, ecosistema y biosfera.",
+      "voz": "Los seres vivos se organizan en niveles: individuo, población, comunidad, ecosistema y biosfera.",
+      "items": [
+        {
+          "titulo": "Individuo",
+          "palabra": "individuo"
+        },
+        {
+          "titulo": "Población",
+          "palabra": "población"
+        },
+        {
+          "titulo": "Comunidad",
+          "palabra": "comunidad"
+        },
+        {
+          "titulo": "Ecosistema",
+          "palabra": "ecosistema"
+        },
+        {
+          "titulo": "Biosfera",
+          "palabra": "biosfera"
+        }
+      ],
+      "audio": "voz/la-vida-y-los-ecosistemas/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 179,
+      "frames": 207,
+      "chunks": [
+        {
+          "text": "Los seres vivos se organizan en niveles:",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "individuo, población, comunidad,",
+          "from": 65,
+          "to": 130
+        },
+        {
+          "text": "ecosistema y biosfera.",
+          "from": 130,
+          "to": 174
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "seres",
+          "f": 6
+        },
+        {
+          "w": "vivos",
+          "f": 14
+        },
+        {
+          "w": "se",
+          "f": 22
+        },
+        {
+          "w": "organizan",
+          "f": 24
+        },
+        {
+          "w": "en",
+          "f": 38
+        },
+        {
+          "w": "niveles",
+          "f": 41
+        },
+        {
+          "w": "individuo",
+          "f": 65
+        },
+        {
+          "w": "población",
+          "f": 84
+        },
+        {
+          "w": "comunidad",
+          "f": 101
+        },
+        {
+          "w": "ecosistema",
+          "f": 118
+        },
+        {
+          "w": "y",
+          "f": 140
+        },
+        {
+          "w": "biosfera",
+          "f": 144
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Una cadena alimentaria",
+      "texto": "En una cadena alimentaria, la energía pasa del que sirve de alimento al que lo consume: de la hierba al saltamontes, a la rana y a la serpiente. Los descomponedores devuelven los nutrientes al ambiente.",
+      "voz": "En una cadena alimentaria, la energía pasa del que sirve de alimento al que lo consume: de la hierba al saltamontes, a la rana y a la serpiente. Los descomponedores devuelven los nutrientes al ambiente.",
+      "imagenes": [
+        {
+          "src": "fundamentos/cadena-alimentaria.webp",
+          "focos": [
+            {
+              "palabra": "hierba",
+              "x": 0.2,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "saltamontes",
+              "x": 0.4,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "rana",
+              "x": 0.6,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "serpiente",
+              "x": 0.85,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "descomponedores",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-vida-y-los-ecosistemas/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 344,
+      "frames": 372,
+      "chunks": [
+        {
+          "text": "En una cadena alimentaria, la energía pasa del",
+          "from": 0,
+          "to": 70
+        },
+        {
+          "text": "que sirve de alimento al que lo consume:",
+          "from": 70,
+          "to": 132
+        },
+        {
+          "text": "de la hierba al saltamontes, a",
+          "from": 138,
+          "to": 190
+        },
+        {
+          "text": "la rana y a la serpiente.",
+          "from": 190,
+          "to": 234
+        },
+        {
+          "text": "Los descomponedores devuelven los",
+          "from": 242,
+          "to": 300
+        },
+        {
+          "text": "nutrientes al ambiente.",
+          "from": 300,
+          "to": 340
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "una",
+          "f": 6
+        },
+        {
+          "w": "cadena",
+          "f": 11
+        },
+        {
+          "w": "alimentaria",
+          "f": 22
+        },
+        {
+          "w": "la",
+          "f": 42
+        },
+        {
+          "w": "energía",
+          "f": 45
+        },
+        {
+          "w": "pasa",
+          "f": 59
+        },
+        {
+          "w": "del",
+          "f": 66
+        },
+        {
+          "w": "que",
+          "f": 71
+        },
+        {
+          "w": "sirve",
+          "f": 75
+        },
+        {
+          "w": "de",
+          "f": 83
+        },
+        {
+          "w": "alimento",
+          "f": 85
+        },
+        {
+          "w": "al",
+          "f": 101
+        },
+        {
+          "w": "que",
+          "f": 104
+        },
+        {
+          "w": "lo",
+          "f": 108
+        },
+        {
+          "w": "consume",
+          "f": 112
+        },
+        {
+          "w": "de",
+          "f": 138
+        },
+        {
+          "w": "la",
+          "f": 142
+        },
+        {
+          "w": "hierba",
+          "f": 146
+        },
+        {
+          "w": "al",
+          "f": 157
+        },
+        {
+          "w": "saltamontes",
+          "f": 162
+        },
+        {
+          "w": "a",
+          "f": 186
+        },
+        {
+          "w": "la",
+          "f": 190
+        },
+        {
+          "w": "rana",
+          "f": 195
+        },
+        {
+          "w": "y",
+          "f": 205
+        },
+        {
+          "w": "a",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 209
+        },
+        {
+          "w": "serpiente",
+          "f": 212
+        },
+        {
+          "w": "los",
+          "f": 242
+        },
+        {
+          "w": "descomponedores",
+          "f": 249
+        },
+        {
+          "w": "devuelven",
+          "f": 274
+        },
+        {
+          "w": "los",
+          "f": 287
+        },
+        {
+          "w": "nutrientes",
+          "f": 292
+        },
+        {
+          "w": "al",
+          "f": 308
+        },
+        {
+          "w": "ambiente",
+          "f": 312
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "La fotosíntesis",
+      "texto": "En la fotosíntesis, la planta usa la luz solar, el agua y el dióxido de carbono. Produce glucosa, que le da energía, y libera oxígeno al ambiente.",
+      "voz": "En la fotosíntesis, la planta usa la luz solar, el agua y el dióxido de carbono. Produce glucosa, que le da energía, y libera oxígeno al ambiente.",
+      "imagenes": [
+        {
+          "src": "fundamentos/fotosintesis.webp",
+          "focos": [
+            {
+              "palabra": "luz",
+              "x": 0.2,
+              "y": 0.3,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "agua",
+              "x": 0.6,
+              "y": 0.8,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "dióxido",
+              "x": 0.2,
+              "y": 0.6,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "glucosa",
+              "x": 0.8,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "oxígeno",
+              "x": 0.8,
+              "y": 0.35,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-vida-y-los-ecosistemas/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 252,
+      "frames": 280,
+      "chunks": [
+        {
+          "text": "En la fotosíntesis, la planta usa la luz",
+          "from": 0,
+          "to": 68
+        },
+        {
+          "text": "solar, el agua y el dióxido de carbono.",
+          "from": 68,
+          "to": 133
+        },
+        {
+          "text": "Produce glucosa, que le da energía,",
+          "from": 140,
+          "to": 199
+        },
+        {
+          "text": "y libera oxígeno al ambiente.",
+          "from": 199,
+          "to": 248
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "la",
+          "f": 6
+        },
+        {
+          "w": "fotosíntesis",
+          "f": 9
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "planta",
+          "f": 38
+        },
+        {
+          "w": "usa",
+          "f": 48
+        },
+        {
+          "w": "la",
+          "f": 54
+        },
+        {
+          "w": "luz",
+          "f": 58
+        },
+        {
+          "w": "solar",
+          "f": 63
+        },
+        {
+          "w": "el",
+          "f": 79
+        },
+        {
+          "w": "agua",
+          "f": 86
+        },
+        {
+          "w": "y",
+          "f": 93
+        },
+        {
+          "w": "el",
+          "f": 95
+        },
+        {
+          "w": "dióxido",
+          "f": 98
+        },
+        {
+          "w": "de",
+          "f": 109
+        },
+        {
+          "w": "carbono",
+          "f": 113
+        },
+        {
+          "w": "produce",
+          "f": 140
+        },
+        {
+          "w": "glucosa",
+          "f": 154
+        },
+        {
+          "w": "que",
+          "f": 171
+        },
+        {
+          "w": "le",
+          "f": 175
+        },
+        {
+          "w": "da",
+          "f": 178
+        },
+        {
+          "w": "energía",
+          "f": 180
+        },
+        {
+          "w": "y",
+          "f": 198
+        },
+        {
+          "w": "libera",
+          "f": 202
+        },
+        {
+          "w": "oxígeno",
+          "f": 211
+        },
+        {
+          "w": "al",
+          "f": 224
+        },
+        {
+          "w": "ambiente",
+          "f": 226
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la vida y los ecosistemas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la vida y los ecosistemas. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/la-vida-y-los-ecosistemas/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 156,
+      "frames": 316,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste la vida y los ecosistemas.",
+          "from": 26,
+          "to": 84
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 89,
+          "to": 152
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 26
+        },
+        {
+          "w": "la",
+          "f": 42
+        },
+        {
+          "w": "vida",
+          "f": 46
+        },
+        {
+          "w": "y",
+          "f": 51
+        },
+        {
+          "w": "los",
+          "f": 54
+        },
+        {
+          "w": "ecosistemas",
+          "f": 59
+        },
+        {
+          "w": "sigue",
+          "f": 89
+        },
+        {
+          "w": "con",
+          "f": 98
+        },
+        {
+          "w": "el",
+          "f": 103
+        },
+        {
+          "w": "siguiente",
+          "f": 105
+        },
+        {
+          "w": "tema",
+          "f": 118
+        },
+        {
+          "w": "de",
+          "f": 126
+        },
+        {
+          "w": "tu",
+          "f": 129
+        },
+        {
+          "w": "ruta",
+          "f": 133
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,649 @@
+{
+  "tema": "organizadores-graficos",
+  "componente": "Fundamentos",
+  "area": "Lengua castellana",
+  "titulo": "Organizadores gráficos",
+  "siguiente": "La célula y la organización de los seres vivos",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los organizadores gráficos.",
+      "voz": "Repaso del tema: los organizadores gráficos.",
+      "audio": "voz/organizadores-graficos/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 80,
+      "frames": 108,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 31
+        },
+        {
+          "text": "los organizadores gráficos.",
+          "from": 33,
+          "to": 75
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "los",
+          "f": 33
+        },
+        {
+          "w": "organizadores",
+          "f": 39
+        },
+        {
+          "w": "gráficos",
+          "f": 59
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Qué hace un buen organizador",
+      "texto": "Los organizadores gráficos presentan conceptos de forma visual. Un buen organizador explica la idea general rápido, es claro y preciso, muestra cómo se relacionan los conceptos y los ordena por jerarquía.",
+      "voz": "Los organizadores gráficos presentan conceptos de forma visual. Un buen organizador explica la idea general rápido, es claro y preciso, muestra cómo se relacionan los conceptos y los ordena por jerarquía.",
+      "items": [
+        {
+          "titulo": "Rápido",
+          "texto": "Explica la idea general de un vistazo",
+          "palabra": "rápido"
+        },
+        {
+          "titulo": "Claro y preciso",
+          "texto": "Solo la información necesaria",
+          "palabra": "claro"
+        },
+        {
+          "titulo": "Relaciona",
+          "texto": "Une los conceptos con conectores",
+          "palabra": "relacionan"
+        },
+        {
+          "titulo": "Jerarquía",
+          "texto": "Ordena las ideas de mayor a menor",
+          "palabra": "jerarquía"
+        }
+      ],
+      "audio": "voz/organizadores-graficos/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 346,
+      "frames": 374,
+      "chunks": [
+        {
+          "text": "Los organizadores gráficos presentan",
+          "from": 0,
+          "to": 58
+        },
+        {
+          "text": "conceptos de forma visual.",
+          "from": 58,
+          "to": 100
+        },
+        {
+          "text": "Un buen organizador explica la idea general rápido,",
+          "from": 110,
+          "to": 195
+        },
+        {
+          "text": "es claro y preciso, muestra cómo se relacionan",
+          "from": 195,
+          "to": 273
+        },
+        {
+          "text": "los conceptos y los ordena por jerarquía.",
+          "from": 273,
+          "to": 341
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "organizadores",
+          "f": 8
+        },
+        {
+          "w": "gráficos",
+          "f": 27
+        },
+        {
+          "w": "presentan",
+          "f": 43
+        },
+        {
+          "w": "conceptos",
+          "f": 56
+        },
+        {
+          "w": "de",
+          "f": 72
+        },
+        {
+          "w": "forma",
+          "f": 75
+        },
+        {
+          "w": "visual",
+          "f": 85
+        },
+        {
+          "w": "un",
+          "f": 110
+        },
+        {
+          "w": "buen",
+          "f": 114
+        },
+        {
+          "w": "organizador",
+          "f": 120
+        },
+        {
+          "w": "explica",
+          "f": 137
+        },
+        {
+          "w": "la",
+          "f": 148
+        },
+        {
+          "w": "idea",
+          "f": 150
+        },
+        {
+          "w": "general",
+          "f": 158
+        },
+        {
+          "w": "rápido",
+          "f": 171
+        },
+        {
+          "w": "es",
+          "f": 186
+        },
+        {
+          "w": "claro",
+          "f": 191
+        },
+        {
+          "w": "y",
+          "f": 199
+        },
+        {
+          "w": "preciso",
+          "f": 202
+        },
+        {
+          "w": "muestra",
+          "f": 227
+        },
+        {
+          "w": "cómo",
+          "f": 238
+        },
+        {
+          "w": "se",
+          "f": 245
+        },
+        {
+          "w": "relacionan",
+          "f": 248
+        },
+        {
+          "w": "los",
+          "f": 262
+        },
+        {
+          "w": "conceptos",
+          "f": 267
+        },
+        {
+          "w": "y",
+          "f": 285
+        },
+        {
+          "w": "los",
+          "f": 288
+        },
+        {
+          "w": "ordena",
+          "f": 293
+        },
+        {
+          "w": "por",
+          "f": 303
+        },
+        {
+          "w": "jerarquía",
+          "f": 309
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Tipos de organizadores gráficos",
+      "texto": "Hay varios tipos. La cadena de secuencias ordena los hechos en el tiempo. El mapa conceptual une conceptos con conectores. El esquema va de las ideas principales a las secundarias. El mapa de carácter describe a un personaje. El mapa mental da una visión global de un tema. Y el cuadro comparativo muestra diferencias y semejanzas.",
+      "voz": "Hay varios tipos. La cadena de secuencias ordena los hechos en el tiempo. El mapa conceptual une conceptos con conectores. El esquema va de las ideas principales a las secundarias. El mapa de carácter describe a un personaje. El mapa mental da una visión global de un tema. Y el cuadro comparativo muestra diferencias y semejanzas.",
+      "items": [
+        {
+          "titulo": "Cadena de secuencias",
+          "texto": "Hechos en orden en el tiempo",
+          "palabra": "cadena"
+        },
+        {
+          "titulo": "Mapa conceptual",
+          "texto": "Conceptos unidos por conectores",
+          "palabra": "conceptual"
+        },
+        {
+          "titulo": "Esquema",
+          "texto": "De lo principal a lo secundario",
+          "palabra": "esquema"
+        },
+        {
+          "titulo": "Mapa de carácter",
+          "texto": "Un personaje y sus rasgos",
+          "palabra": "carácter"
+        },
+        {
+          "titulo": "Mapa mental",
+          "texto": "Una visión global de un tema",
+          "palabra": "mental"
+        },
+        {
+          "titulo": "Cuadro comparativo",
+          "texto": "Diferencias y semejanzas",
+          "palabra": "comparativo"
+        }
+      ],
+      "audio": "voz/organizadores-graficos/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 544,
+      "frames": 572,
+      "chunks": [
+        {
+          "text": "Hay varios tipos.",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "La cadena de secuencias ordena",
+          "from": 32,
+          "to": 76
+        },
+        {
+          "text": "los hechos en el tiempo.",
+          "from": 76,
+          "to": 111
+        },
+        {
+          "text": "El mapa conceptual une conceptos con conectores.",
+          "from": 116,
+          "to": 194
+        },
+        {
+          "text": "El esquema va de las",
+          "from": 201,
+          "to": 231
+        },
+        {
+          "text": "ideas principales a las secundarias.",
+          "from": 231,
+          "to": 284
+        },
+        {
+          "text": "El mapa de carácter describe a un personaje.",
+          "from": 291,
+          "to": 362
+        },
+        {
+          "text": "El mapa mental da una visión global de un tema.",
+          "from": 370,
+          "to": 437
+        },
+        {
+          "text": "Y el cuadro comparativo",
+          "from": 444,
+          "to": 483
+        },
+        {
+          "text": "muestra diferencias y semejanzas.",
+          "from": 483,
+          "to": 539
+        }
+      ],
+      "words": [
+        {
+          "w": "hay",
+          "f": 0
+        },
+        {
+          "w": "varios",
+          "f": 7
+        },
+        {
+          "w": "tipos",
+          "f": 17
+        },
+        {
+          "w": "la",
+          "f": 32
+        },
+        {
+          "w": "cadena",
+          "f": 37
+        },
+        {
+          "w": "de",
+          "f": 46
+        },
+        {
+          "w": "secuencias",
+          "f": 48
+        },
+        {
+          "w": "ordena",
+          "f": 63
+        },
+        {
+          "w": "los",
+          "f": 73
+        },
+        {
+          "w": "hechos",
+          "f": 77
+        },
+        {
+          "w": "en",
+          "f": 86
+        },
+        {
+          "w": "el",
+          "f": 90
+        },
+        {
+          "w": "tiempo",
+          "f": 94
+        },
+        {
+          "w": "el",
+          "f": 116
+        },
+        {
+          "w": "mapa",
+          "f": 122
+        },
+        {
+          "w": "conceptual",
+          "f": 129
+        },
+        {
+          "w": "une",
+          "f": 145
+        },
+        {
+          "w": "conceptos",
+          "f": 151
+        },
+        {
+          "w": "con",
+          "f": 167
+        },
+        {
+          "w": "conectores",
+          "f": 171
+        },
+        {
+          "w": "el",
+          "f": 201
+        },
+        {
+          "w": "esquema",
+          "f": 207
+        },
+        {
+          "w": "va",
+          "f": 218
+        },
+        {
+          "w": "de",
+          "f": 222
+        },
+        {
+          "w": "las",
+          "f": 224
+        },
+        {
+          "w": "ideas",
+          "f": 229
+        },
+        {
+          "w": "principales",
+          "f": 237
+        },
+        {
+          "w": "a",
+          "f": 254
+        },
+        {
+          "w": "las",
+          "f": 255
+        },
+        {
+          "w": "secundarias",
+          "f": 259
+        },
+        {
+          "w": "el",
+          "f": 291
+        },
+        {
+          "w": "mapa",
+          "f": 297
+        },
+        {
+          "w": "de",
+          "f": 304
+        },
+        {
+          "w": "carácter",
+          "f": 307
+        },
+        {
+          "w": "describe",
+          "f": 323
+        },
+        {
+          "w": "a",
+          "f": 335
+        },
+        {
+          "w": "un",
+          "f": 338
+        },
+        {
+          "w": "personaje",
+          "f": 341
+        },
+        {
+          "w": "el",
+          "f": 370
+        },
+        {
+          "w": "mapa",
+          "f": 375
+        },
+        {
+          "w": "mental",
+          "f": 383
+        },
+        {
+          "w": "da",
+          "f": 393
+        },
+        {
+          "w": "una",
+          "f": 397
+        },
+        {
+          "w": "visión",
+          "f": 402
+        },
+        {
+          "w": "global",
+          "f": 410
+        },
+        {
+          "w": "de",
+          "f": 420
+        },
+        {
+          "w": "un",
+          "f": 423
+        },
+        {
+          "w": "tema",
+          "f": 426
+        },
+        {
+          "w": "y",
+          "f": 444
+        },
+        {
+          "w": "el",
+          "f": 448
+        },
+        {
+          "w": "cuadro",
+          "f": 452
+        },
+        {
+          "w": "comparativo",
+          "f": 460
+        },
+        {
+          "w": "muestra",
+          "f": 481
+        },
+        {
+          "w": "diferencias",
+          "f": 490
+        },
+        {
+          "w": "y",
+          "f": 506
+        },
+        {
+          "w": "semejanzas",
+          "f": 509
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los organizadores gráficos. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los organizadores gráficos. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/organizadores-graficos/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 161,
+      "frames": 321,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 21
+        },
+        {
+          "text": "Repasaste los organizadores gráficos.",
+          "from": 23,
+          "to": 82
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 88,
+          "to": 156
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 23
+        },
+        {
+          "w": "los",
+          "f": 40
+        },
+        {
+          "w": "organizadores",
+          "f": 45
+        },
+        {
+          "w": "gráficos",
+          "f": 64
+        },
+        {
+          "w": "sigue",
+          "f": 88
+        },
+        {
+          "w": "con",
+          "f": 98
+        },
+        {
+          "w": "el",
+          "f": 103
+        },
+        {
+          "w": "siguiente",
+          "f": 105
+        },
+        {
+          "w": "tema",
+          "f": 118
+        },
+        {
+          "w": "de",
+          "f": 126
+        },
+        {
+          "w": "tu",
+          "f": 130
+        },
+        {
+          "w": "ruta",
+          "f": 134
+        }
+      ]
+    }
+  ]
+}

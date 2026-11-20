@@ -1,0 +1,148 @@
+{
+  "tema": "biotecnologia-genetica-y-futuro",
+  "componente": "Proyección",
+  "area": "Biología",
+  "titulo": "Biotecnología, genética y futuro de la humanidad",
+  "siguiente": "Comunicación, pensamiento crítico y textos argumentativos",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la biotecnología, la genética y el futuro de la humanidad.",
+      "voz": "Repaso del tema: la biotecnología, la genética y el futuro de la humanidad."
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "La genética",
+      "texto": "La información hereditaria está en el ADN, una doble hélice parecida a una escalera retorcida, con dos cadenas unidas por pares de bases. Sus segmentos con información funcional son los genes, y el ADN se organiza en cromosomas. Un cambio en su secuencia se llama mutación.",
+      "voz": "La información hereditaria está en el ADN, una doble hélice parecida a una escalera retorcida, con dos cadenas unidas por pares de bases. Sus segmentos con información funcional son los genes, y el ADN se organiza en cromosomas. Un cambio en su secuencia se llama mutación.",
+      "imagenes": [
+        {
+          "src": "proyeccion/doble-helice.webp",
+          "focos": [
+            {
+              "palabra": "hélice",
+              "x": 0.35,
+              "y": 0.3,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "bases",
+              "x": 0.4,
+              "y": 0.55,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "genes",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La biotecnología",
+      "texto": "La biotecnología usa organismos vivos para crear productos y soluciones. Es muy antigua: el pan, el queso y el yogur se hacen con microorganismos. Hoy también produce insulina, vacunas y cultivos resistentes a plagas.",
+      "voz": "La biotecnología usa organismos vivos para crear productos y soluciones. Es muy antigua: el pan, el queso y el yogur se hacen con microorganismos. Hoy también produce insulina, vacunas y cultivos resistentes a plagas.",
+      "items": [
+        {
+          "titulo": "Desde hace siglos",
+          "texto": "Pan, queso y yogur",
+          "palabra": "pan"
+        },
+        {
+          "titulo": "Medicina",
+          "texto": "Insulina y vacunas",
+          "palabra": "insulina"
+        },
+        {
+          "titulo": "Agricultura",
+          "texto": "Cultivos resistentes a plagas",
+          "palabra": "cultivos"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Modificar y copiar la vida",
+      "texto": "La ingeniería genética modifica directamente el ADN de un organismo. Con la herramienta CRISPR se puede localizar una región del ADN y cortarla para modificarla. Y la clonación produce copias genéticas, como la oveja Dolly, el primer mamífero clonado a partir de una célula adulta.",
+      "voz": "La ingeniería genética modifica directamente el ADN de un organismo. Con la herramienta crisper se puede localizar una región del ADN y cortarla para modificarla. Y la clonación produce copias genéticas, como la oveja Dolly, el primer mamífero clonado a partir de una célula adulta.",
+      "items": [
+        {
+          "titulo": "Ingeniería genética",
+          "texto": "Modificar el ADN",
+          "palabra": "ingeniería"
+        },
+        {
+          "titulo": "CRISPR",
+          "texto": "Localizar y cortar",
+          "palabra": "crisper"
+        },
+        {
+          "titulo": "Clonación",
+          "texto": "La oveja Dolly",
+          "palabra": "clonación"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Aplicaciones",
+      "texto": "En medicina permite la medicina personalizada, la terapia génica y el diagnóstico genético. Y en el ambiente, la biorremediación usa bacterias, hongos o plantas para reducir contaminantes.",
+      "voz": "En medicina permite la medicina personalizada, la terapia génica y el diagnóstico genético. Y en el ambiente, la biorremediación usa bacterias, hongos o plantas para reducir contaminantes.",
+      "items": [
+        {
+          "titulo": "Medicina personalizada",
+          "palabra": "personalizada"
+        },
+        {
+          "titulo": "Terapia génica",
+          "palabra": "terapia"
+        },
+        {
+          "titulo": "Diagnóstico genético",
+          "palabra": "diagnóstico"
+        },
+        {
+          "titulo": "Biorremediación",
+          "texto": "Organismos que limpian",
+          "palabra": "biorremediación"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "La bioética",
+      "texto": "Pero no todo lo que la ciencia puede hacer debería hacerse. La bioética se pregunta, por ejemplo, si es correcto modificar embriones humanos, quién debe acceder a estos tratamientos y cómo proteger la información genética de las personas.",
+      "voz": "Pero no todo lo que la ciencia puede hacer debería hacerse. La bioética se pregunta, por ejemplo, si es correcto modificar embriones humanos, quién debe acceder a estos tratamientos y cómo proteger la información genética de las personas.",
+      "items": [
+        {
+          "titulo": "¿Modificar embriones?",
+          "palabra": "embriones"
+        },
+        {
+          "titulo": "¿Quién accede?",
+          "palabra": "acceder"
+        },
+        {
+          "titulo": "¿Cómo proteger los datos?",
+          "palabra": "proteger"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la biotecnología y la genética. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la biotecnología y la genética. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

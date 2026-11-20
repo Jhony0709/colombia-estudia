@@ -14,7 +14,7 @@ Institution ─┬─ Person ─┬─ Membership (rol)
              │           │          └─ Assessment ─ AssessmentVersion (content + answerKey)
              │           └─ Cohort ─┬─ LessonAssignment (cohorte, tema) ─ LessonProgress
              │                      ├─ AssessmentAssignment (cohorte, evaluación) ─ Attempt
-             │                      └─ Enrollment ─┬─ PaymentPlan ─ Installment ─ Payment
+             │                      └─ Enrollment ─┬─ PaymentPlan ─ Installment ─ Payment (+ PaymentLink)
              │                                     ├─ PaymentAgreement ─ Installment
              │                                     ├─ Accommodation (PIAR ejecutable)
              │                                     └─ Score (por asignatura)
@@ -125,8 +125,9 @@ con `dryRun` y resumen. La segunda ejecución actualiza, no duplica. Solo conten
 
 **`Submission`, `LiveSession`, `Certificate`** entraron por paridad con la propuesta
 competidora. `Certificate.code` es público y único; se emite solo (job diario) y se revoca
-con motivo; nunca depende de la cartera. `Payment.gatewayRef` único hace idempotente el
-webhook de Wompi.
+con motivo; nunca depende de la cartera. `PaymentLink` (19/11) guarda cada link de pago de Bold de
+una cuota; su paso a `PAID` hace que el pago en línea se registre una sola vez, y
+`Payment.gatewayRef` (único) lleva el id de la transacción en Bold.
 
 **`RestrictionPolicy` no tiene flags académicos** ni flags sin efecto. Ver `acceso-y-cartera.md`.
 

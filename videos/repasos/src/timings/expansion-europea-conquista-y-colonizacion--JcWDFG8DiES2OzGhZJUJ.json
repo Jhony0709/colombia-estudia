@@ -1,0 +1,1291 @@
+{
+  "tema": "expansion-europea-conquista-y-colonizacion",
+  "componente": "Expansión",
+  "area": "Ciencias sociales",
+  "titulo": "Expansión europea, conquista y colonización de América",
+  "siguiente": "Literatura latinoamericana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la expansión europea, la conquista y la colonización de América.",
+      "voz": "Repaso del tema: la expansión europea, la conquista y la colonización de América.",
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 156,
+      "frames": 184,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 33
+        },
+        {
+          "text": "la expansión europea, la conquista",
+          "from": 35,
+          "to": 98
+        },
+        {
+          "text": "y la colonización de América.",
+          "from": 98,
+          "to": 152
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 35
+        },
+        {
+          "w": "expansión",
+          "f": 38
+        },
+        {
+          "w": "europea",
+          "f": 53
+        },
+        {
+          "w": "la",
+          "f": 72
+        },
+        {
+          "w": "conquista",
+          "f": 77
+        },
+        {
+          "w": "y",
+          "f": 90
+        },
+        {
+          "w": "la",
+          "f": 92
+        },
+        {
+          "w": "colonización",
+          "f": 96
+        },
+        {
+          "w": "de",
+          "f": 116
+        },
+        {
+          "w": "américa",
+          "f": 118
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Por qué se expandió Europa?",
+      "texto": "En los siglos XV y XVI, varios reinos europeos impulsaron viajes por mar. Los movían intereses económicos, políticos, tecnológicos y religiosos, relacionados entre sí.",
+      "voz": "En los siglos quince y dieciséis, varios reinos europeos impulsaron viajes por mar. Los movían intereses económicos, políticos, tecnológicos y religiosos, relacionados entre sí.",
+      "items": [
+        {
+          "titulo": "Económicos",
+          "texto": "Comercio y riquezas",
+          "palabra": "económicos"
+        },
+        {
+          "titulo": "Políticos",
+          "texto": "Territorio y poder",
+          "palabra": "políticos"
+        },
+        {
+          "titulo": "Tecnológicos",
+          "texto": "Barcos e instrumentos",
+          "palabra": "tecnológicos"
+        },
+        {
+          "titulo": "Religiosos",
+          "texto": "Evangelización",
+          "palabra": "religiosos"
+        }
+      ],
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 318,
+      "frames": 346,
+      "chunks": [
+        {
+          "text": "En los siglos XV y XVI, varios",
+          "from": 0,
+          "to": 52
+        },
+        {
+          "text": "reinos europeos impulsaron viajes por mar.",
+          "from": 52,
+          "to": 124
+        },
+        {
+          "text": "Los movían intereses económicos, políticos, tecnológicos",
+          "from": 134,
+          "to": 243
+        },
+        {
+          "text": "y religiosos, relacionados entre sí.",
+          "from": 243,
+          "to": 313
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "los",
+          "f": 7
+        },
+        {
+          "w": "siglos",
+          "f": 11
+        },
+        {
+          "w": "quince",
+          "f": 21
+        },
+        {
+          "w": "y",
+          "f": 30
+        },
+        {
+          "w": "dieciséis",
+          "f": 32
+        },
+        {
+          "w": "varios",
+          "f": 49
+        },
+        {
+          "w": "reinos",
+          "f": 59
+        },
+        {
+          "w": "europeos",
+          "f": 68
+        },
+        {
+          "w": "impulsaron",
+          "f": 82
+        },
+        {
+          "w": "viajes",
+          "f": 98
+        },
+        {
+          "w": "por",
+          "f": 107
+        },
+        {
+          "w": "mar",
+          "f": 113
+        },
+        {
+          "w": "los",
+          "f": 134
+        },
+        {
+          "w": "movían",
+          "f": 140
+        },
+        {
+          "w": "intereses",
+          "f": 152
+        },
+        {
+          "w": "económicos",
+          "f": 167
+        },
+        {
+          "w": "políticos",
+          "f": 189
+        },
+        {
+          "w": "tecnológicos",
+          "f": 209
+        },
+        {
+          "w": "y",
+          "f": 232
+        },
+        {
+          "w": "religiosos",
+          "f": 234
+        },
+        {
+          "w": "relacionados",
+          "f": 265
+        },
+        {
+          "w": "entre",
+          "f": 285
+        },
+        {
+          "w": "sí",
+          "f": 293
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "linea",
+      "titulo": "De la llegada a la independencia",
+      "texto": "En 1492, una expedición dirigida por Cristóbal Colón llegó al Caribe. América no era un continente vacío: la habitaban muchos pueblos con sus lenguas, gobiernos y culturas. Desde el siglo XVI, España conquistó territorios como el de la actual Colombia, y en el siglo XIX las independencias pusieron fin a su dominio.",
+      "voz": "En mil cuatrocientos noventa y dos, una expedición dirigida por Cristóbal Colón llegó al Caribe. América no era un continente vacío: la habitaban muchos pueblos con sus lenguas, gobiernos y culturas. Desde el siglo dieciséis, España conquistó territorios como el de la actual Colombia, y en el siglo diecinueve las independencias pusieron fin a su dominio.",
+      "items": [
+        {
+          "etiqueta": "1492",
+          "titulo": "Llegada al Caribe",
+          "texto": "Expedición de Colón",
+          "palabra": "colón"
+        },
+        {
+          "etiqueta": "Siglo XVI",
+          "titulo": "Conquista",
+          "texto": "Territorio de la actual Colombia",
+          "palabra": "dieciséis"
+        },
+        {
+          "etiqueta": "Siglo XIX",
+          "titulo": "Independencias",
+          "texto": "Fin del dominio español",
+          "palabra": "diecinueve"
+        }
+      ],
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 587,
+      "frames": 615,
+      "chunks": [
+        {
+          "text": "En 1492, una expedición dirigida por",
+          "from": 0,
+          "to": 70
+        },
+        {
+          "text": "Cristóbal Colón llegó al Caribe.",
+          "from": 70,
+          "to": 132
+        },
+        {
+          "text": "América no era un continente vacío:",
+          "from": 142,
+          "to": 199
+        },
+        {
+          "text": "la habitaban muchos pueblos con",
+          "from": 209,
+          "to": 257
+        },
+        {
+          "text": "sus lenguas, gobiernos y culturas.",
+          "from": 257,
+          "to": 309
+        },
+        {
+          "text": "Desde el siglo XVI, España conquistó territorios como el",
+          "from": 322,
+          "to": 426
+        },
+        {
+          "text": "de la actual Colombia, y en el siglo XIX",
+          "from": 426,
+          "to": 499
+        },
+        {
+          "text": "las independencias pusieron fin a su dominio.",
+          "from": 499,
+          "to": 582
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "mil",
+          "f": 6
+        },
+        {
+          "w": "cuatrocientos",
+          "f": 10
+        },
+        {
+          "w": "noventa",
+          "f": 29
+        },
+        {
+          "w": "y",
+          "f": 38
+        },
+        {
+          "w": "dos",
+          "f": 40
+        },
+        {
+          "w": "una",
+          "f": 48
+        },
+        {
+          "w": "expedición",
+          "f": 53
+        },
+        {
+          "w": "dirigida",
+          "f": 68
+        },
+        {
+          "w": "por",
+          "f": 80
+        },
+        {
+          "w": "cristóbal",
+          "f": 85
+        },
+        {
+          "w": "colón",
+          "f": 99
+        },
+        {
+          "w": "llegó",
+          "f": 107
+        },
+        {
+          "w": "al",
+          "f": 115
+        },
+        {
+          "w": "caribe",
+          "f": 118
+        },
+        {
+          "w": "américa",
+          "f": 142
+        },
+        {
+          "w": "no",
+          "f": 157
+        },
+        {
+          "w": "era",
+          "f": 160
+        },
+        {
+          "w": "un",
+          "f": 163
+        },
+        {
+          "w": "continente",
+          "f": 166
+        },
+        {
+          "w": "vacío",
+          "f": 183
+        },
+        {
+          "w": "la",
+          "f": 209
+        },
+        {
+          "w": "habitaban",
+          "f": 212
+        },
+        {
+          "w": "muchos",
+          "f": 225
+        },
+        {
+          "w": "pueblos",
+          "f": 235
+        },
+        {
+          "w": "con",
+          "f": 245
+        },
+        {
+          "w": "sus",
+          "f": 250
+        },
+        {
+          "w": "lenguas",
+          "f": 256
+        },
+        {
+          "w": "gobiernos",
+          "f": 269
+        },
+        {
+          "w": "y",
+          "f": 286
+        },
+        {
+          "w": "culturas",
+          "f": 288
+        },
+        {
+          "w": "desde",
+          "f": 322
+        },
+        {
+          "w": "el",
+          "f": 332
+        },
+        {
+          "w": "siglo",
+          "f": 335
+        },
+        {
+          "w": "dieciséis",
+          "f": 346
+        },
+        {
+          "w": "españa",
+          "f": 373
+        },
+        {
+          "w": "conquistó",
+          "f": 388
+        },
+        {
+          "w": "territorios",
+          "f": 402
+        },
+        {
+          "w": "como",
+          "f": 419
+        },
+        {
+          "w": "el",
+          "f": 426
+        },
+        {
+          "w": "de",
+          "f": 429
+        },
+        {
+          "w": "la",
+          "f": 432
+        },
+        {
+          "w": "actual",
+          "f": 435
+        },
+        {
+          "w": "colombia",
+          "f": 445
+        },
+        {
+          "w": "y",
+          "f": 471
+        },
+        {
+          "w": "en",
+          "f": 474
+        },
+        {
+          "w": "el",
+          "f": 476
+        },
+        {
+          "w": "siglo",
+          "f": 479
+        },
+        {
+          "w": "diecinueve",
+          "f": 489
+        },
+        {
+          "w": "las",
+          "f": 506
+        },
+        {
+          "w": "independencias",
+          "f": 512
+        },
+        {
+          "w": "pusieron",
+          "f": 532
+        },
+        {
+          "w": "fin",
+          "f": 544
+        },
+        {
+          "w": "a",
+          "f": 549
+        },
+        {
+          "w": "su",
+          "f": 551
+        },
+        {
+          "w": "dominio",
+          "f": 556
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Conquista y resistencia",
+      "texto": "La conquista se apoyó en armas, caballos y alianzas, y de manera decisiva en epidemias para las que los pueblos indígenas no tenían defensas. Pero esos pueblos resistieron: defendieron sus territorios y conservaron sus lenguas y tradiciones.",
+      "voz": "La conquista se apoyó en armas, caballos y alianzas, y de manera decisiva en epidemias para las que los pueblos indígenas no tenían defensas. Pero esos pueblos resistieron: defendieron sus territorios y conservaron sus lenguas y tradiciones.",
+      "items": [
+        {
+          "titulo": "Armas y alianzas",
+          "palabra": "armas"
+        },
+        {
+          "titulo": "Epidemias",
+          "texto": "Enfermedades nuevas",
+          "palabra": "epidemias"
+        },
+        {
+          "titulo": "Resistencia indígena",
+          "texto": "Territorio, lengua y tradiciones",
+          "palabra": "resistieron"
+        }
+      ],
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 411,
+      "frames": 439,
+      "chunks": [
+        {
+          "text": "La conquista se apoyó en armas, caballos y",
+          "from": 0,
+          "to": 69
+        },
+        {
+          "text": "alianzas, y de manera decisiva en epidemias para",
+          "from": 69,
+          "to": 148
+        },
+        {
+          "text": "las que los pueblos indígenas no tenían defensas.",
+          "from": 148,
+          "to": 229
+        },
+        {
+          "text": "Pero esos pueblos resistieron:",
+          "from": 239,
+          "to": 286
+        },
+        {
+          "text": "defendieron sus territorios y conservaron",
+          "from": 292,
+          "to": 362
+        },
+        {
+          "text": "sus lenguas y tradiciones.",
+          "from": 362,
+          "to": 407
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "conquista",
+          "f": 6
+        },
+        {
+          "w": "se",
+          "f": 20
+        },
+        {
+          "w": "apoyó",
+          "f": 23
+        },
+        {
+          "w": "en",
+          "f": 36
+        },
+        {
+          "w": "armas",
+          "f": 39
+        },
+        {
+          "w": "caballos",
+          "f": 50
+        },
+        {
+          "w": "y",
+          "f": 65
+        },
+        {
+          "w": "alianzas",
+          "f": 67
+        },
+        {
+          "w": "y",
+          "f": 91
+        },
+        {
+          "w": "de",
+          "f": 94
+        },
+        {
+          "w": "manera",
+          "f": 98
+        },
+        {
+          "w": "decisiva",
+          "f": 108
+        },
+        {
+          "w": "en",
+          "f": 126
+        },
+        {
+          "w": "epidemias",
+          "f": 131
+        },
+        {
+          "w": "para",
+          "f": 149
+        },
+        {
+          "w": "las",
+          "f": 155
+        },
+        {
+          "w": "que",
+          "f": 159
+        },
+        {
+          "w": "los",
+          "f": 163
+        },
+        {
+          "w": "pueblos",
+          "f": 168
+        },
+        {
+          "w": "indígenas",
+          "f": 178
+        },
+        {
+          "w": "no",
+          "f": 194
+        },
+        {
+          "w": "tenían",
+          "f": 198
+        },
+        {
+          "w": "defensas",
+          "f": 209
+        },
+        {
+          "w": "pero",
+          "f": 239
+        },
+        {
+          "w": "esos",
+          "f": 245
+        },
+        {
+          "w": "pueblos",
+          "f": 252
+        },
+        {
+          "w": "resistieron",
+          "f": 262
+        },
+        {
+          "w": "defendieron",
+          "f": 292
+        },
+        {
+          "w": "sus",
+          "f": 307
+        },
+        {
+          "w": "territorios",
+          "f": 312
+        },
+        {
+          "w": "y",
+          "f": 332
+        },
+        {
+          "w": "conservaron",
+          "f": 335
+        },
+        {
+          "w": "sus",
+          "f": 351
+        },
+        {
+          "w": "lenguas",
+          "f": 357
+        },
+        {
+          "w": "y",
+          "f": 367
+        },
+        {
+          "w": "tradiciones",
+          "f": 370
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La colonización",
+      "texto": "La colonización impuso nuevas autoridades, el idioma español y el cristianismo, y organizó la economía para extraer recursos como el oro. Millones de africanos fueron traídos a la fuerza y esclavizados. Resistieron con fugas, rebeliones y comunidades libres, como San Basilio de Palenque.",
+      "voz": "La colonización impuso nuevas autoridades, el idioma español y el cristianismo, y organizó la economía para extraer recursos como el oro. Millones de africanos fueron traídos a la fuerza y esclavizados. Resistieron con fugas, rebeliones y comunidades libres, como San Basilio de Palenque.",
+      "items": [
+        {
+          "titulo": "Nuevas autoridades",
+          "texto": "Español y cristianismo",
+          "palabra": "autoridades"
+        },
+        {
+          "titulo": "Extracción de recursos",
+          "texto": "Minería del oro",
+          "palabra": "oro"
+        },
+        {
+          "titulo": "Esclavitud",
+          "texto": "Africanos traídos a la fuerza",
+          "palabra": "esclavizados"
+        },
+        {
+          "titulo": "San Basilio de Palenque",
+          "texto": "Resistencia y libertad",
+          "palabra": "palenque"
+        }
+      ],
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 521,
+      "frames": 549,
+      "chunks": [
+        {
+          "text": "La colonización impuso nuevas autoridades, el idioma",
+          "from": 0,
+          "to": 89
+        },
+        {
+          "text": "español y el cristianismo, y organizó la",
+          "from": 89,
+          "to": 157
+        },
+        {
+          "text": "economía para extraer recursos como el oro.",
+          "from": 157,
+          "to": 231
+        },
+        {
+          "text": "Millones de africanos fueron traídos",
+          "from": 244,
+          "to": 299
+        },
+        {
+          "text": "a la fuerza y esclavizados.",
+          "from": 299,
+          "to": 340
+        },
+        {
+          "text": "Resistieron con fugas, rebeliones y comunidades",
+          "from": 351,
+          "to": 444
+        },
+        {
+          "text": "libres, como San Basilio de Palenque.",
+          "from": 444,
+          "to": 517
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "colonización",
+          "f": 6
+        },
+        {
+          "w": "impuso",
+          "f": 27
+        },
+        {
+          "w": "nuevas",
+          "f": 38
+        },
+        {
+          "w": "autoridades",
+          "f": 47
+        },
+        {
+          "w": "el",
+          "f": 78
+        },
+        {
+          "w": "idioma",
+          "f": 83
+        },
+        {
+          "w": "español",
+          "f": 91
+        },
+        {
+          "w": "y",
+          "f": 107
+        },
+        {
+          "w": "el",
+          "f": 109
+        },
+        {
+          "w": "cristianismo",
+          "f": 113
+        },
+        {
+          "w": "y",
+          "f": 145
+        },
+        {
+          "w": "organizó",
+          "f": 148
+        },
+        {
+          "w": "la",
+          "f": 161
+        },
+        {
+          "w": "economía",
+          "f": 163
+        },
+        {
+          "w": "para",
+          "f": 178
+        },
+        {
+          "w": "extraer",
+          "f": 183
+        },
+        {
+          "w": "recursos",
+          "f": 195
+        },
+        {
+          "w": "como",
+          "f": 210
+        },
+        {
+          "w": "el",
+          "f": 217
+        },
+        {
+          "w": "oro",
+          "f": 221
+        },
+        {
+          "w": "millones",
+          "f": 244
+        },
+        {
+          "w": "de",
+          "f": 257
+        },
+        {
+          "w": "africanos",
+          "f": 259
+        },
+        {
+          "w": "fueron",
+          "f": 275
+        },
+        {
+          "w": "traídos",
+          "f": 282
+        },
+        {
+          "w": "a",
+          "f": 294
+        },
+        {
+          "w": "la",
+          "f": 295
+        },
+        {
+          "w": "fuerza",
+          "f": 299
+        },
+        {
+          "w": "y",
+          "f": 311
+        },
+        {
+          "w": "esclavizados",
+          "f": 313
+        },
+        {
+          "w": "resistieron",
+          "f": 351
+        },
+        {
+          "w": "con",
+          "f": 371
+        },
+        {
+          "w": "fugas",
+          "f": 377
+        },
+        {
+          "w": "rebeliones",
+          "f": 391
+        },
+        {
+          "w": "y",
+          "f": 413
+        },
+        {
+          "w": "comunidades",
+          "f": 417
+        },
+        {
+          "w": "libres",
+          "f": 437
+        },
+        {
+          "w": "como",
+          "f": 459
+        },
+        {
+          "w": "san",
+          "f": 467
+        },
+        {
+          "w": "basilio",
+          "f": 472
+        },
+        {
+          "w": "de",
+          "f": 484
+        },
+        {
+          "w": "palenque",
+          "f": 487
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Una herencia diversa y desigual",
+      "texto": "De ese proceso surgió una sociedad diversa, con herencias indígenas, africanas y europeas, pero también profundamente desigual. Estudiarlo ayuda a entender algunas desigualdades de hoy en el acceso a la tierra y a los derechos.",
+      "voz": "De ese proceso surgió una sociedad diversa, con herencias indígenas, africanas y europeas, pero también profundamente desigual. Estudiarlo ayuda a entender algunas desigualdades de hoy en el acceso a la tierra y a los derechos.",
+      "items": [
+        {
+          "titulo": "Indígena",
+          "palabra": "indígenas"
+        },
+        {
+          "titulo": "Africana",
+          "palabra": "africanas"
+        },
+        {
+          "titulo": "Europea",
+          "palabra": "europeas"
+        },
+        {
+          "titulo": "Desigualdad",
+          "texto": "Tierra y derechos",
+          "palabra": "desigual"
+        }
+      ],
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 360,
+      "frames": 388,
+      "chunks": [
+        {
+          "text": "De ese proceso surgió una sociedad",
+          "from": 0,
+          "to": 55
+        },
+        {
+          "text": "diversa, con herencias indígenas, africanas y",
+          "from": 55,
+          "to": 128
+        },
+        {
+          "text": "europeas, pero también profundamente desigual.",
+          "from": 128,
+          "to": 203
+        },
+        {
+          "text": "Estudiarlo ayuda a entender algunas desigualdades de hoy en",
+          "from": 212,
+          "to": 298
+        },
+        {
+          "text": "el acceso a la tierra y a los derechos.",
+          "from": 298,
+          "to": 355
+        }
+      ],
+      "words": [
+        {
+          "w": "de",
+          "f": 0
+        },
+        {
+          "w": "ese",
+          "f": 5
+        },
+        {
+          "w": "proceso",
+          "f": 10
+        },
+        {
+          "w": "surgió",
+          "f": 22
+        },
+        {
+          "w": "una",
+          "f": 31
+        },
+        {
+          "w": "sociedad",
+          "f": 36
+        },
+        {
+          "w": "diversa",
+          "f": 48
+        },
+        {
+          "w": "con",
+          "f": 64
+        },
+        {
+          "w": "herencias",
+          "f": 70
+        },
+        {
+          "w": "indígenas",
+          "f": 83
+        },
+        {
+          "w": "africanas",
+          "f": 99
+        },
+        {
+          "w": "y",
+          "f": 117
+        },
+        {
+          "w": "europeas",
+          "f": 119
+        },
+        {
+          "w": "pero",
+          "f": 149
+        },
+        {
+          "w": "también",
+          "f": 155
+        },
+        {
+          "w": "profundamente",
+          "f": 164
+        },
+        {
+          "w": "desigual",
+          "f": 185
+        },
+        {
+          "w": "estudiarlo",
+          "f": 212
+        },
+        {
+          "w": "ayuda",
+          "f": 232
+        },
+        {
+          "w": "a",
+          "f": 238
+        },
+        {
+          "w": "entender",
+          "f": 243
+        },
+        {
+          "w": "algunas",
+          "f": 256
+        },
+        {
+          "w": "desigualdades",
+          "f": 265
+        },
+        {
+          "w": "de",
+          "f": 286
+        },
+        {
+          "w": "hoy",
+          "f": 289
+        },
+        {
+          "w": "en",
+          "f": 297
+        },
+        {
+          "w": "el",
+          "f": 301
+        },
+        {
+          "w": "acceso",
+          "f": 305
+        },
+        {
+          "w": "a",
+          "f": 314
+        },
+        {
+          "w": "la",
+          "f": 316
+        },
+        {
+          "w": "tierra",
+          "f": 320
+        },
+        {
+          "w": "y",
+          "f": 331
+        },
+        {
+          "w": "a",
+          "f": 333
+        },
+        {
+          "w": "los",
+          "f": 335
+        },
+        {
+          "w": "derechos",
+          "f": 340
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la expansión europea y la colonización. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la expansión europea y la colonización. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/expansion-europea-conquista-y-colonizacion/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 188,
+      "frames": 348,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste la expansión europea y la colonización.",
+          "from": 30,
+          "to": 108
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 118,
+          "to": 184
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 3
+        },
+        {
+          "w": "bien",
+          "f": 10
+        },
+        {
+          "w": "repasaste",
+          "f": 30
+        },
+        {
+          "w": "la",
+          "f": 46
+        },
+        {
+          "w": "expansión",
+          "f": 49
+        },
+        {
+          "w": "europea",
+          "f": 61
+        },
+        {
+          "w": "y",
+          "f": 78
+        },
+        {
+          "w": "la",
+          "f": 81
+        },
+        {
+          "w": "colonización",
+          "f": 85
+        },
+        {
+          "w": "sigue",
+          "f": 118
+        },
+        {
+          "w": "con",
+          "f": 127
+        },
+        {
+          "w": "el",
+          "f": 132
+        },
+        {
+          "w": "siguiente",
+          "f": 134
+        },
+        {
+          "w": "tema",
+          "f": 147
+        },
+        {
+          "w": "de",
+          "f": 156
+        },
+        {
+          "w": "tu",
+          "f": 160
+        },
+        {
+          "w": "ruta",
+          "f": 165
+        }
+      ]
+    }
+  ]
+}

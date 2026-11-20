@@ -11,15 +11,25 @@ import { notFound } from 'next/navigation';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { requireCapability } from '@/lib/authz/with-capability';
 import { getRequestContext } from '@/lib/authz/request-context';
-import { getConversation } from '@/features/messaging/server/conversations.service';
+import {
+  conversationsPulse,
+  getConversation,
+} from '@/features/messaging/server/conversations.service';
 import { Page, PageHeader } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
+import { Card } from '@/components/atoms/card';
 import { cn } from '@/lib/utils';
 import { AutoRefresh } from '../auto-refresh';
 import { STATUS_VARIANT } from '../status';
-import { CloseAction, ReplyForm, TakeAction } from '../conversation-actions';
+import {
+  CloseAction,
+  CreatePersonAction,
+  PaymentLinkAction,
+  ReplyForm,
+  TakeAction,
+} from '../conversation-actions';
 import { ScrollToLatest } from '../scroll-to-latest';
 import { ThreadItem, ThreadList } from '../thread-motion';
 
@@ -34,6 +44,7 @@ export default async function ConversationPage({
   const ctx = await getRequestContext();
   if (!ctx.person) notFound();
   const { conversationId } = await params;
+  const stamp = await conversationsPulse({ institutionId: ctx.institution.id, conversationId });
   const [conversation, t, format] = await Promise.all([
     getConversation({ institutionId: ctx.institution.id, conversationId }),
     getTranslations('messaging'),
@@ -44,10 +55,12 @@ export default async function ConversationPage({
   const name = conversation.contactName ?? `+${conversation.contact}`;
   const mine = conversation.status === 'OPEN' && conversation.assignedToId === ctx.person.id;
   const takenByOther = conversation.status === 'OPEN' && !mine;
+  const canCreatePerson = (ctx.capabilities.get('people.manage')?.length ?? 0) > 0;
+  const canCharge = (ctx.capabilities.get('billing.manage')?.length ?? 0) > 0;
 
   return (
     <Page wide>
-      <AutoRefresh seconds={6} />
+      <AutoRefresh stamp={stamp} conversationId={conversation.id} seconds={5} />
       <PageHeader
         back={
           <Breadcrumb
@@ -78,6 +91,71 @@ export default async function ConversationPage({
       />
 
       <div className="max-w-measure space-y-6">
+        {conversation.intake && (
+          <Card
+            title={t(`intake.${conversation.intake.kind}`)}
+            description={conversation.intake.complete ? undefined : t('intake.incomplete')}
+            action={
+              conversation.intake.kind === 'ENROLL' &&
+              conversation.intake.complete &&
+              !conversation.personCode &&
+              canCreatePerson ? (
+                <CreatePersonAction conversationId={conversation.id} />
+              ) : undefined
+            }
+          >
+            <dl className="grid gap-4 sm:grid-cols-2">
+              {conversation.intake.fields.map((f) => (
+                <div key={f.label}>
+                  <dt className="type-overline text-text-muted uppercase">{f.label}</dt>
+                  <dd className="type-body text-text break-words">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+            {conversation.intake.consentAt && (
+              <p className="type-caption text-text-muted mt-4">
+                {t('intake.consent', {
+                  at: format.dateTime(new Date(conversation.intake.consentAt), {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                  }),
+                })}
+              </p>
+            )}
+          </Card>
+        )}
+        {conversation.charge && canCharge && (
+          <Card
+            title={t('charge.title')}
+            description={mine ? t('charge.hint') : t('charge.takeFirst')}
+            action={
+              mine ? (
+                <PaymentLinkAction
+                  conversationId={conversation.id}
+                  hasEmail={conversation.charge.hasEmail}
+                  canChat={conversation.canReply}
+                />
+              ) : undefined
+            }
+          >
+            <p className="type-body text-text m-0">
+              {t('charge.next', {
+                position: conversation.charge.position,
+                amount: format.number(conversation.charge.amount, {
+                  style: 'currency',
+                  currency: 'COP',
+                  maximumFractionDigits: 0,
+                }),
+                date: format.dateTime(new Date(`${conversation.charge.dueOn}T00:00:00Z`), {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+                  timeZone: 'UTC',
+                }),
+              })}
+            </p>
+          </Card>
+        )}
         <section aria-label={t('thread.label', { name })}>
           {conversation.messages.length === 0 ? (
             <p className="type-body text-text-muted">{t('thread.empty')}</p>

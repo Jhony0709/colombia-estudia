@@ -1,0 +1,1090 @@
+{
+  "tema": "comunicacion-y-textos-argumentativos",
+  "componente": "Proyección",
+  "area": "Lengua castellana",
+  "titulo": "Comunicación, pensamiento crítico y textos argumentativos",
+  "siguiente": "Present Simple",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la comunicación, el pensamiento crítico y los textos argumentativos.",
+      "voz": "Repaso del tema: la comunicación, el pensamiento crítico y los textos argumentativos.",
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 163,
+      "frames": 191,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "la comunicación, el pensamiento crítico",
+          "from": 38,
+          "to": 108
+        },
+        {
+          "text": "y los textos argumentativos.",
+          "from": 108,
+          "to": 159
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "comunicación",
+          "f": 41
+        },
+        {
+          "w": "el",
+          "f": 65
+        },
+        {
+          "w": "pensamiento",
+          "f": 70
+        },
+        {
+          "w": "crítico",
+          "f": 86
+        },
+        {
+          "w": "y",
+          "f": 101
+        },
+        {
+          "w": "los",
+          "f": 104
+        },
+        {
+          "w": "textos",
+          "f": 109
+        },
+        {
+          "w": "argumentativos",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Tres niveles de lectura",
+      "texto": "Leer bien tiene tres niveles. El literal identifica lo que el texto dice; el inferencial deduce lo que no dice directamente; y el crítico evalúa la intención del autor y la validez de sus argumentos.",
+      "voz": "Leer bien tiene tres niveles. El literal identifica lo que el texto dice; el inferencial deduce lo que no dice directamente; y el crítico evalúa la intención del autor y la validez de sus argumentos.",
+      "items": [
+        {
+          "titulo": "Literal",
+          "texto": "Lo que dice el texto",
+          "palabra": "literal"
+        },
+        {
+          "titulo": "Inferencial",
+          "texto": "Lo que se deduce",
+          "palabra": "inferencial"
+        },
+        {
+          "titulo": "Crítico",
+          "texto": "Evaluar la intención",
+          "palabra": "crítico"
+        }
+      ],
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 358,
+      "frames": 386,
+      "chunks": [
+        {
+          "text": "Leer bien tiene tres niveles.",
+          "from": 0,
+          "to": 49
+        },
+        {
+          "text": "El literal identifica lo que el texto dice;",
+          "from": 56,
+          "to": 126
+        },
+        {
+          "text": "el inferencial deduce lo que no dice directamente;",
+          "from": 135,
+          "to": 214
+        },
+        {
+          "text": "y el crítico evalúa la intención del",
+          "from": 222,
+          "to": 287
+        },
+        {
+          "text": "autor y la validez de sus argumentos.",
+          "from": 287,
+          "to": 354
+        }
+      ],
+      "words": [
+        {
+          "w": "leer",
+          "f": 0
+        },
+        {
+          "w": "bien",
+          "f": 10
+        },
+        {
+          "w": "tiene",
+          "f": 18
+        },
+        {
+          "w": "tres",
+          "f": 26
+        },
+        {
+          "w": "niveles",
+          "f": 33
+        },
+        {
+          "w": "el",
+          "f": 56
+        },
+        {
+          "w": "literal",
+          "f": 61
+        },
+        {
+          "w": "identifica",
+          "f": 74
+        },
+        {
+          "w": "lo",
+          "f": 91
+        },
+        {
+          "w": "que",
+          "f": 95
+        },
+        {
+          "w": "el",
+          "f": 98
+        },
+        {
+          "w": "texto",
+          "f": 101
+        },
+        {
+          "w": "dice",
+          "f": 113
+        },
+        {
+          "w": "el",
+          "f": 135
+        },
+        {
+          "w": "inferencial",
+          "f": 140
+        },
+        {
+          "w": "deduce",
+          "f": 158
+        },
+        {
+          "w": "lo",
+          "f": 170
+        },
+        {
+          "w": "que",
+          "f": 174
+        },
+        {
+          "w": "no",
+          "f": 177
+        },
+        {
+          "w": "dice",
+          "f": 181
+        },
+        {
+          "w": "directamente",
+          "f": 187
+        },
+        {
+          "w": "y",
+          "f": 222
+        },
+        {
+          "w": "el",
+          "f": 225
+        },
+        {
+          "w": "crítico",
+          "f": 229
+        },
+        {
+          "w": "evalúa",
+          "f": 242
+        },
+        {
+          "w": "la",
+          "f": 257
+        },
+        {
+          "w": "intención",
+          "f": 259
+        },
+        {
+          "w": "del",
+          "f": 274
+        },
+        {
+          "w": "autor",
+          "f": 279
+        },
+        {
+          "w": "y",
+          "f": 292
+        },
+        {
+          "w": "la",
+          "f": 295
+        },
+        {
+          "w": "validez",
+          "f": 299
+        },
+        {
+          "w": "de",
+          "f": 310
+        },
+        {
+          "w": "sus",
+          "f": 313
+        },
+        {
+          "w": "argumentos",
+          "f": 319
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las partes de la argumentación",
+      "texto": "Argumentar es defender una postura con razones. Un texto argumentativo tiene una tesis, argumentos, evidencias que los respaldan, contraargumentos con su refutación y una conclusión.",
+      "voz": "Argumentar es defender una postura con razones. Un texto argumentativo tiene una tesis, argumentos, evidencias que los respaldan, contraargumentos con su refutación y una conclusión.",
+      "items": [
+        {
+          "titulo": "Tesis",
+          "palabra": "tesis"
+        },
+        {
+          "titulo": "Argumentos",
+          "palabra": "argumentos"
+        },
+        {
+          "titulo": "Evidencias",
+          "palabra": "evidencias"
+        },
+        {
+          "titulo": "Contraargumento y refutación",
+          "palabra": "contraargumentos"
+        },
+        {
+          "titulo": "Conclusión",
+          "palabra": "conclusión"
+        }
+      ],
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 328,
+      "frames": 356,
+      "chunks": [
+        {
+          "text": "Argumentar es defender una postura con razones.",
+          "from": 0,
+          "to": 73
+        },
+        {
+          "text": "Un texto argumentativo tiene una tesis,",
+          "from": 79,
+          "to": 151
+        },
+        {
+          "text": "argumentos, evidencias que los respaldan, contraargumentos",
+          "from": 151,
+          "to": 258
+        },
+        {
+          "text": "con su refutación y una conclusión.",
+          "from": 258,
+          "to": 323
+        }
+      ],
+      "words": [
+        {
+          "w": "argumentar",
+          "f": 0
+        },
+        {
+          "w": "es",
+          "f": 18
+        },
+        {
+          "w": "defender",
+          "f": 21
+        },
+        {
+          "w": "una",
+          "f": 33
+        },
+        {
+          "w": "postura",
+          "f": 38
+        },
+        {
+          "w": "con",
+          "f": 50
+        },
+        {
+          "w": "razones",
+          "f": 55
+        },
+        {
+          "w": "un",
+          "f": 79
+        },
+        {
+          "w": "texto",
+          "f": 85
+        },
+        {
+          "w": "argumentativo",
+          "f": 93
+        },
+        {
+          "w": "tiene",
+          "f": 116
+        },
+        {
+          "w": "una",
+          "f": 122
+        },
+        {
+          "w": "tesis",
+          "f": 128
+        },
+        {
+          "w": "argumentos",
+          "f": 143
+        },
+        {
+          "w": "evidencias",
+          "f": 167
+        },
+        {
+          "w": "que",
+          "f": 185
+        },
+        {
+          "w": "los",
+          "f": 188
+        },
+        {
+          "w": "respaldan",
+          "f": 193
+        },
+        {
+          "w": "contraargumentos",
+          "f": 220
+        },
+        {
+          "w": "con",
+          "f": 248
+        },
+        {
+          "w": "su",
+          "f": 253
+        },
+        {
+          "w": "refutación",
+          "f": 257
+        },
+        {
+          "w": "y",
+          "f": 279
+        },
+        {
+          "w": "una",
+          "f": 283
+        },
+        {
+          "w": "conclusión",
+          "f": 289
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "Cómo se escribe",
+      "texto": "Se organiza en tres partes: la introducción presenta el tema y la tesis; el desarrollo, los argumentos y las evidencias; y la conclusión retoma la postura.",
+      "voz": "Se organiza en tres partes: la introducción presenta el tema y la tesis; el desarrollo, los argumentos y las evidencias; y la conclusión retoma la postura.",
+      "items": [
+        {
+          "titulo": "Introducción",
+          "palabra": "introducción"
+        },
+        {
+          "titulo": "Desarrollo",
+          "palabra": "desarrollo"
+        },
+        {
+          "titulo": "Conclusión",
+          "palabra": "conclusión"
+        }
+      ],
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 292,
+      "frames": 320,
+      "chunks": [
+        {
+          "text": "Se organiza en tres partes:",
+          "from": 0,
+          "to": 42
+        },
+        {
+          "text": "la introducción presenta el tema y la tesis;",
+          "from": 49,
+          "to": 123
+        },
+        {
+          "text": "el desarrollo, los argumentos y las evidencias;",
+          "from": 133,
+          "to": 210
+        },
+        {
+          "text": "y la conclusión retoma la postura.",
+          "from": 217,
+          "to": 287
+        }
+      ],
+      "words": [
+        {
+          "w": "se",
+          "f": 0
+        },
+        {
+          "w": "organiza",
+          "f": 5
+        },
+        {
+          "w": "en",
+          "f": 16
+        },
+        {
+          "w": "tres",
+          "f": 20
+        },
+        {
+          "w": "partes",
+          "f": 27
+        },
+        {
+          "w": "la",
+          "f": 49
+        },
+        {
+          "w": "introducción",
+          "f": 52
+        },
+        {
+          "w": "presenta",
+          "f": 71
+        },
+        {
+          "w": "el",
+          "f": 84
+        },
+        {
+          "w": "tema",
+          "f": 87
+        },
+        {
+          "w": "y",
+          "f": 99
+        },
+        {
+          "w": "la",
+          "f": 103
+        },
+        {
+          "w": "tesis",
+          "f": 108
+        },
+        {
+          "w": "el",
+          "f": 133
+        },
+        {
+          "w": "desarrollo",
+          "f": 138
+        },
+        {
+          "w": "los",
+          "f": 160
+        },
+        {
+          "w": "argumentos",
+          "f": 165
+        },
+        {
+          "w": "y",
+          "f": 184
+        },
+        {
+          "w": "las",
+          "f": 186
+        },
+        {
+          "w": "evidencias",
+          "f": 191
+        },
+        {
+          "w": "y",
+          "f": 217
+        },
+        {
+          "w": "la",
+          "f": 222
+        },
+        {
+          "w": "conclusión",
+          "f": 225
+        },
+        {
+          "w": "retoma",
+          "f": 241
+        },
+        {
+          "w": "la",
+          "f": 252
+        },
+        {
+          "w": "postura",
+          "f": 256
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Errores de razonamiento",
+      "texto": "El pensamiento crítico detecta errores de razonamiento: la generalización apresurada, el ataque a la persona en lugar de a sus argumentos, la falsa causa y el falso dilema, que presenta solo dos opciones.",
+      "voz": "El pensamiento crítico detecta errores de razonamiento: la generalización apresurada, el ataque a la persona en lugar de a sus argumentos, la falsa causa y el falso dilema, que presenta solo dos opciones.",
+      "items": [
+        {
+          "titulo": "Generalización apresurada",
+          "texto": "Concluir con pocos casos",
+          "palabra": "generalización"
+        },
+        {
+          "titulo": "Ataque personal",
+          "texto": "Atacar a la persona",
+          "palabra": "ataque"
+        },
+        {
+          "titulo": "Falsa causa",
+          "texto": "Causa sin pruebas",
+          "palabra": "causa"
+        },
+        {
+          "titulo": "Falso dilema",
+          "texto": "Solo dos opciones",
+          "palabra": "dilema"
+        }
+      ],
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 370,
+      "frames": 398,
+      "chunks": [
+        {
+          "text": "El pensamiento crítico detecta",
+          "from": 0,
+          "to": 51
+        },
+        {
+          "text": "errores de razonamiento:",
+          "from": 51,
+          "to": 92
+        },
+        {
+          "text": "la generalización apresurada, el ataque a la persona en",
+          "from": 100,
+          "to": 200
+        },
+        {
+          "text": "lugar de a sus argumentos, la falsa causa y",
+          "from": 200,
+          "to": 278
+        },
+        {
+          "text": "el falso dilema, que presenta solo dos opciones.",
+          "from": 278,
+          "to": 365
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "pensamiento",
+          "f": 6
+        },
+        {
+          "w": "crítico",
+          "f": 22
+        },
+        {
+          "w": "detecta",
+          "f": 37
+        },
+        {
+          "w": "errores",
+          "f": 49
+        },
+        {
+          "w": "de",
+          "f": 60
+        },
+        {
+          "w": "razonamiento",
+          "f": 63
+        },
+        {
+          "w": "la",
+          "f": 100
+        },
+        {
+          "w": "generalización",
+          "f": 104
+        },
+        {
+          "w": "apresurada",
+          "f": 128
+        },
+        {
+          "w": "el",
+          "f": 152
+        },
+        {
+          "w": "ataque",
+          "f": 158
+        },
+        {
+          "w": "a",
+          "f": 167
+        },
+        {
+          "w": "la",
+          "f": 169
+        },
+        {
+          "w": "persona",
+          "f": 172
+        },
+        {
+          "w": "en",
+          "f": 184
+        },
+        {
+          "w": "lugar",
+          "f": 186
+        },
+        {
+          "w": "de",
+          "f": 195
+        },
+        {
+          "w": "a",
+          "f": 197
+        },
+        {
+          "w": "sus",
+          "f": 199
+        },
+        {
+          "w": "argumentos",
+          "f": 205
+        },
+        {
+          "w": "la",
+          "f": 238
+        },
+        {
+          "w": "falsa",
+          "f": 242
+        },
+        {
+          "w": "causa",
+          "f": 253
+        },
+        {
+          "w": "y",
+          "f": 264
+        },
+        {
+          "w": "el",
+          "f": 266
+        },
+        {
+          "w": "falso",
+          "f": 269
+        },
+        {
+          "w": "dilema",
+          "f": 279
+        },
+        {
+          "w": "que",
+          "f": 302
+        },
+        {
+          "w": "presenta",
+          "f": 307
+        },
+        {
+          "w": "solo",
+          "f": 320
+        },
+        {
+          "w": "dos",
+          "f": 328
+        },
+        {
+          "w": "opciones",
+          "f": 334
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Hechos, opiniones y fuentes",
+      "texto": "Ante la información digital, distingue los hechos, que se comprueban con evidencias, de las opiniones, que expresan una valoración personal. Y antes de compartir, revisa quién publicó, la fuente original y si otros medios lo confirman.",
+      "voz": "Ante la información digital, distingue los hechos, que se comprueban con evidencias, de las opiniones, que expresan una valoración personal. Y antes de compartir, revisa quién publicó, la fuente original y si otros medios lo confirman.",
+      "items": [
+        {
+          "titulo": "Hecho",
+          "texto": "Se comprueba con evidencias",
+          "palabra": "hechos"
+        },
+        {
+          "titulo": "Opinión",
+          "texto": "Valoración personal",
+          "palabra": "opiniones"
+        },
+        {
+          "titulo": "Revisar la fuente",
+          "texto": "¿Quién lo publicó?",
+          "palabra": "publicó"
+        }
+      ],
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 389,
+      "frames": 417,
+      "chunks": [
+        {
+          "text": "Ante la información digital, distingue los hechos,",
+          "from": 0,
+          "to": 77
+        },
+        {
+          "text": "que se comprueban con evidencias, de las",
+          "from": 77,
+          "to": 138
+        },
+        {
+          "text": "opiniones, que expresan una valoración personal.",
+          "from": 138,
+          "to": 212
+        },
+        {
+          "text": "Y antes de compartir, revisa quién publicó, la",
+          "from": 222,
+          "to": 302
+        },
+        {
+          "text": "fuente original y si otros medios lo confirman.",
+          "from": 302,
+          "to": 385
+        }
+      ],
+      "words": [
+        {
+          "w": "ante",
+          "f": 0
+        },
+        {
+          "w": "la",
+          "f": 10
+        },
+        {
+          "w": "información",
+          "f": 13
+        },
+        {
+          "w": "digital",
+          "f": 28
+        },
+        {
+          "w": "distingue",
+          "f": 44
+        },
+        {
+          "w": "los",
+          "f": 57
+        },
+        {
+          "w": "hechos",
+          "f": 63
+        },
+        {
+          "w": "que",
+          "f": 74
+        },
+        {
+          "w": "se",
+          "f": 77
+        },
+        {
+          "w": "comprueban",
+          "f": 81
+        },
+        {
+          "w": "con",
+          "f": 95
+        },
+        {
+          "w": "evidencias",
+          "f": 100
+        },
+        {
+          "w": "de",
+          "f": 117
+        },
+        {
+          "w": "las",
+          "f": 121
+        },
+        {
+          "w": "opiniones",
+          "f": 126
+        },
+        {
+          "w": "que",
+          "f": 154
+        },
+        {
+          "w": "expresan",
+          "f": 158
+        },
+        {
+          "w": "una",
+          "f": 172
+        },
+        {
+          "w": "valoración",
+          "f": 177
+        },
+        {
+          "w": "personal",
+          "f": 193
+        },
+        {
+          "w": "y",
+          "f": 222
+        },
+        {
+          "w": "antes",
+          "f": 226
+        },
+        {
+          "w": "de",
+          "f": 235
+        },
+        {
+          "w": "compartir",
+          "f": 238
+        },
+        {
+          "w": "revisa",
+          "f": 261
+        },
+        {
+          "w": "quién",
+          "f": 273
+        },
+        {
+          "w": "publicó",
+          "f": 279
+        },
+        {
+          "w": "la",
+          "f": 307
+        },
+        {
+          "w": "fuente",
+          "f": 311
+        },
+        {
+          "w": "original",
+          "f": 319
+        },
+        {
+          "w": "y",
+          "f": 334
+        },
+        {
+          "w": "si",
+          "f": 338
+        },
+        {
+          "w": "otros",
+          "f": 341
+        },
+        {
+          "w": "medios",
+          "f": 349
+        },
+        {
+          "w": "lo",
+          "f": 357
+        },
+        {
+          "w": "confirman",
+          "f": 360
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la comunicación y los textos argumentativos. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la comunicación y los textos argumentativos. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/comunicacion-y-textos-argumentativos/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 198,
+      "frames": 358,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste la comunicación y",
+          "from": 33,
+          "to": 76
+        },
+        {
+          "text": "los textos argumentativos.",
+          "from": 76,
+          "to": 117
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 128,
+          "to": 194
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "la",
+          "f": 49
+        },
+        {
+          "w": "comunicación",
+          "f": 52
+        },
+        {
+          "w": "y",
+          "f": 72
+        },
+        {
+          "w": "los",
+          "f": 74
+        },
+        {
+          "w": "textos",
+          "f": 78
+        },
+        {
+          "w": "argumentativos",
+          "f": 88
+        },
+        {
+          "w": "sigue",
+          "f": 128
+        },
+        {
+          "w": "con",
+          "f": 137
+        },
+        {
+          "w": "el",
+          "f": 142
+        },
+        {
+          "w": "siguiente",
+          "f": 144
+        },
+        {
+          "w": "tema",
+          "f": 155
+        },
+        {
+          "w": "de",
+          "f": 164
+        },
+        {
+          "w": "tu",
+          "f": 167
+        },
+        {
+          "w": "ruta",
+          "f": 171
+        }
+      ]
+    }
+  ]
+}

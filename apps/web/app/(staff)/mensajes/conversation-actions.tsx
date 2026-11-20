@@ -22,7 +22,11 @@ function usePost(conversationId: string) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const post = async (action: 'take' | 'messages' | 'close', ok: string, body?: unknown) => {
+  const post = async (
+    action: 'take' | 'messages' | 'close' | 'person' | 'payment-link',
+    ok: string,
+    body?: unknown
+  ): Promise<unknown> => {
     setBusy(true);
     setError(null);
     try {
@@ -38,7 +42,7 @@ function usePost(conversationId: string) {
       }
       announce(ok);
       router.refresh();
-      return true;
+      return payload?.data ?? true;
     } catch {
       setError(t('error'));
       return false;
@@ -152,5 +156,65 @@ export function CloseAction({ conversationId }: { conversationId: string }) {
       </Button>
       <ErrorText error={error} />
     </span>
+  );
+}
+
+/** «Crear persona» con los datos de inscripción del chat: lleva a su ficha para invitarla. */
+export function CreatePersonAction({ conversationId }: { conversationId: string }) {
+  const t = useTranslations('messaging.actions');
+  const router = useRouter();
+  const { busy, error, post } = usePost(conversationId);
+  const onClick = async () => {
+    const result = await post('person', t('personCreated'));
+    const code = typeof result === 'object' ? (result as { personCode?: string }).personCode : null;
+    if (code) router.push(`/personas/${code}`);
+  };
+  return (
+    <div className="space-y-2">
+      <Button type="button" variant="secondary" loading={busy} onClick={() => void onClick()}>
+        {t('createPerson')}
+      </Button>
+      <ErrorText error={error} />
+    </div>
+  );
+}
+
+/** «Link de pago» de la próxima cuota: Bold lo envía al correo o queda en el chat (19/11). */
+export function PaymentLinkAction({
+  conversationId,
+  hasEmail,
+  canChat,
+}: {
+  conversationId: string;
+  hasEmail: boolean;
+  /** Dentro de las 24 h de WhatsApp. */
+  canChat: boolean;
+}) {
+  const t = useTranslations('messaging.actions');
+  const { busy, error, post } = usePost(conversationId);
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={busy || !canChat}
+          onClick={() => void post('payment-link', t('linkInChat'), { delivery: 'chat' })}
+        >
+          {t('linkToChat')}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={busy || !hasEmail}
+          onClick={() => void post('payment-link', t('linkEmailed'), { delivery: 'email' })}
+        >
+          {t('linkByEmail')}
+        </Button>
+      </div>
+      {!canChat && <p className="type-caption text-text-muted m-0">{t('linkNoWindow')}</p>}
+      {!hasEmail && <p className="type-caption text-text-muted m-0">{t('linkNoEmail')}</p>}
+      <ErrorText error={error} />
+    </div>
   );
 }

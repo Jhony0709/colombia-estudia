@@ -1,0 +1,179 @@
+{
+  "tema": "genetica-y-herencia-biologica",
+  "componente": "Expansión",
+  "area": "Ciencias naturales",
+  "titulo": "Genética y herencia biológica",
+  "siguiente": "Porcentajes, descuentos, aumentos, presupuestos y educación financiera",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la genética y la herencia biológica.",
+      "voz": "Repaso del tema: la genética y la herencia biológica."
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "De la célula al gen",
+      "texto": "La información genética está en la célula, dentro de su núcleo. Allí, el ADN se organiza con proteínas en cromosomas. El ADN es una doble hélice con cuatro bases: A, T, C y G. Y un gen es un segmento de ADN con información funcional.",
+      "voz": "La información genética está en la célula, dentro de su núcleo. Allí, el ADN se organiza con proteínas en cromosomas. El ADN es una doble hélice con cuatro bases: a, te, ce y ge. Y un gen es un segmento de ADN con información funcional.",
+      "imagenes": [
+        {
+          "src": "expansion/de-la-celula-al-gen.webp",
+          "focos": [
+            {
+              "palabra": "célula",
+              "x": 0.12,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "núcleo",
+              "x": 0.37,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "cromosomas",
+              "x": 0.62,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "hélice",
+              "x": 0.87,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "gen",
+              "x": 0.85,
+              "y": 0.3,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La herencia biológica",
+      "texto": "La herencia biológica es la transmisión de información genética de una generación a otra. La mayoría de nuestras células tienen 46 cromosomas, en 23 pares: en general, uno de cada par viene de la madre y el otro, del padre. Algunas características son heredadas, como el grupo sanguíneo; otras son adquiridas, como una cicatriz.",
+      "voz": "La herencia biológica es la transmisión de información genética de una generación a otra. La mayoría de nuestras células tienen cuarenta y seis cromosomas, en veintitrés pares: en general, uno de cada par viene de la madre y el otro, del padre. Algunas características son heredadas, como el grupo sanguíneo; otras son adquiridas, como una cicatriz.",
+      "items": [
+        {
+          "titulo": "46 cromosomas",
+          "texto": "23 pares",
+          "palabra": "cuarenta"
+        },
+        {
+          "titulo": "Heredada",
+          "texto": "El grupo sanguíneo",
+          "palabra": "heredadas"
+        },
+        {
+          "titulo": "Adquirida",
+          "texto": "Una cicatriz",
+          "palabra": "adquiridas"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Genotipo y fenotipo",
+      "texto": "Los alelos son versiones de un mismo gen. El genotipo es la combinación de alelos de un organismo, y el fenotipo, lo que se observa, como el color de una flor. En el modelo más sencillo, un alelo dominante se manifiesta con una sola copia y uno recesivo necesita dos. Dominante no significa mejor ni más fuerte.",
+      "voz": "Los alelos son versiones de un mismo gen. El genotipo es la combinación de alelos de un organismo, y el fenotipo, lo que se observa, como el color de una flor. En el modelo más sencillo, un alelo dominante se manifiesta con una sola copia y uno recesivo necesita dos. Dominante no significa mejor ni más fuerte.",
+      "items": [
+        {
+          "titulo": "Alelos",
+          "texto": "Versiones de un gen",
+          "palabra": "alelos"
+        },
+        {
+          "titulo": "Genotipo",
+          "texto": "AA, Aa o aa",
+          "palabra": "genotipo"
+        },
+        {
+          "titulo": "Fenotipo",
+          "texto": "Lo que se observa",
+          "palabra": "fenotipo"
+        },
+        {
+          "titulo": "Dominante y recesivo",
+          "texto": "A domina sobre a",
+          "palabra": "dominante"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Mendel y el cuadro de Punnett",
+      "texto": "Gregor Mendel, en el siglo XIX, descubrió patrones de la herencia al cruzar plantas. Con un cuadro de Punnett se calculan probabilidades: si se cruzan dos plantas de flores moradas que llevan, cada una, un alelo para el color blanco, se espera que tres de cada cuatro descendientes tengan flores moradas y uno, flores blancas. Son probabilidades, no certezas.",
+      "voz": "Gregor Mendel, en el siglo diecinueve, descubrió patrones de la herencia al cruzar plantas. Con un cuadro de Punnett se calculan probabilidades: si se cruzan dos plantas de flores moradas que llevan, cada una, un alelo para el color blanco, se espera que tres de cada cuatro descendientes tengan flores moradas y uno, flores blancas. Son probabilidades, no certezas.",
+      "items": [
+        {
+          "titulo": "Mendel",
+          "texto": "Siglo XIX: cruces de plantas",
+          "palabra": "mendel"
+        },
+        {
+          "titulo": "Cuadro de Punnett",
+          "texto": "Aa × Aa",
+          "palabra": "punnett"
+        },
+        {
+          "titulo": "3 de cada 4",
+          "texto": "Moradas; 1 de cada 4, blancas",
+          "palabra": "blancas"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Mitosis y meiosis",
+      "texto": "La mitosis forma dos células hijas con el mismo número de cromosomas, para crecer y reparar tejidos. La meiosis forma células reproductoras con la mitad de los cromosomas; en la fecundación, 23 y 23 vuelven a ser 46.",
+      "voz": "La mitosis forma dos células hijas con el mismo número de cromosomas, para crecer y reparar tejidos. La meiosis forma células reproductoras con la mitad de los cromosomas; en la fecundación, veintitrés y veintitrés vuelven a ser cuarenta y seis.",
+      "columnas": [
+        {
+          "titulo": "Mitosis",
+          "palabra": "mitosis",
+          "puntos": [
+            {
+              "texto": "2 células, los mismos cromosomas",
+              "palabra": "dos"
+            },
+            {
+              "texto": "Crecer y reparar tejidos",
+              "palabra": "crecer"
+            }
+          ]
+        },
+        {
+          "titulo": "Meiosis",
+          "palabra": "meiosis",
+          "puntos": [
+            {
+              "texto": "Células reproductoras con la mitad",
+              "palabra": "mitad"
+            },
+            {
+              "texto": "23 + 23 = 46 en la fecundación",
+              "palabra": "fecundación"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la genética y la herencia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la genética y la herencia. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

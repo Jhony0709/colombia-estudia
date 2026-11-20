@@ -33,6 +33,7 @@ import type { Node, Parent } from 'unist';
 
 import type { LessonAssetInfo } from './content';
 import { CALLOUT_TITLES, isCalloutKind } from './callouts';
+import { ESCENA_TITULOS, isEscenaTipo } from './escenas';
 
 /** Lo que el render necesita saber de cada asset para poder pintarlo. */
 export interface RenderAsset {
@@ -133,6 +134,24 @@ function directivesToHtml(assets: Map<string, RenderAsset>) {
         (directive as unknown as { children: unknown[] }).children.unshift({
           type: 'paragraph',
           data: { hProperties: { className: ['callout-title'] } },
+          children: [{ type: 'text', value: title }],
+        });
+        return;
+      }
+
+      // Una escena (14/11): `<figure class="escena escena-<tipo>">` con su título y la lista.
+      // La animación la pone el player (`components/organisms/escenas`); aquí solo marcado.
+      if (name === 'escena' && node.type === 'containerDirective') {
+        const tipo = directive.attributes?.tipo ?? 'pasos';
+        const safeTipo = isEscenaTipo(tipo) ? tipo : 'pasos';
+        const title = directive.attributes?.titulo?.trim() || ESCENA_TITULOS[safeTipo];
+        directive.data = {
+          hName: 'figure',
+          hProperties: { className: ['escena', `escena-${safeTipo}`] },
+        };
+        (directive as unknown as { children: unknown[] }).children.unshift({
+          type: 'paragraph',
+          data: { hName: 'figcaption' },
           children: [{ type: 'text', value: title }],
         });
         return;

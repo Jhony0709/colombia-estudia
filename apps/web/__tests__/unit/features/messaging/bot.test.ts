@@ -1,23 +1,28 @@
 /** @jest-environment node */
 /**
- * El bot de WhatsApp (5/11): el menú cabe en los límites de WhatsApp y cada opción tiene su
- * respuesta. SSOT: features/messaging/bot.ts.
+ * El bot de WhatsApp (5/11, 14/11): el menú cabe en los límites de WhatsApp, cada opción tiene su
+ * respuesta y las preguntas escritas a mano llegan a la opción correcta. SSOT: features/messaging/bot.ts.
  */
 
-import { answerFor, asksForMenu, CHOICES, menu } from '@/features/messaging/bot';
+import { answerFor, asksForMenu, CHOICES, intentFor, menu } from '@/features/messaging/bot';
+import { DEFAULT_FACTS as FACTS } from '@/features/messaging/facts';
+
+const SITE = 'https://alba.test';
+const CTX = {
+  siteUrl: SITE,
+  policyUrl: `${SITE}/politica-de-datos`,
+  facts: FACTS,
+  introOpen: true,
+};
 
 describe('menu', () => {
-  it('cuatro opciones dentro de los límites de una lista de WhatsApp', () => {
+  it('todas las opciones, dentro de los límites de una lista de WhatsApp', () => {
     const list = menu('ALBA Futuro Educativo');
-    expect(list.options.map((o) => o.id)).toEqual([
-      'programas',
-      'inscribirme',
-      'soporte',
-      'asesor',
-    ]);
+    expect(list.options.map((o) => o.id)).toEqual(Object.values(CHOICES));
+    expect(list.options.length).toBeLessThanOrEqual(10);
     for (const option of list.options) {
       expect(option.title.length).toBeLessThanOrEqual(24);
-      expect((option.description ?? '').length).toBeLessThanOrEqual(72);
+      expect(option.description.length).toBeLessThanOrEqual(72);
     }
     expect(list.button.length).toBeLessThanOrEqual(20);
     expect(list.body).toContain('ALBA Futuro Educativo');
@@ -25,29 +30,103 @@ describe('menu', () => {
 });
 
 describe('answerFor', () => {
-  it('cada opción responde con su enlace', () => {
-    expect(answerFor(CHOICES.programs, 'https://alba.test')).toContain(
-      'https://alba.test/#programas'
+  it('cada opción del menú tiene respuesta dentro de los límites', () => {
+    for (const id of Object.values(CHOICES)) {
+      const reply = answerFor(id, CTX)!;
+      expect(reply.text.length).toBeGreaterThan(0);
+      // Un mensaje con botones admite 1024 caracteres de cuerpo.
+      if (reply.buttons) {
+        expect(reply.text.length).toBeLessThanOrEqual(1024);
+        expect(reply.buttons.length).toBeLessThanOrEqual(3);
+        for (const b of reply.buttons) expect(b.title.length).toBeLessThanOrEqual(20);
+      }
+    }
+  });
+
+  it('el precio sale de los datos: con los de la plataforma cambia el total', () => {
+    const facts = { ...FACTS, modules: 10, modulePrice: 95_000 };
+    const { text } = answerFor(CHOICES.programs, { ...CTX, facts })!;
+    expect(text).toContain('10 módulos');
+    expect(text).toContain('$1.300.000');
+  });
+
+  it('el precio sale de FACTS: módulos, grado y total', () => {
+    const { text } = answerFor(CHOICES.programs, CTX)!;
+    const total = FACTS.modules * FACTS.modulePrice + FACTS.graduationFee;
+    expect(text).toContain(`$${(FACTS.modules * FACTS.modulePrice).toLocaleString('es-CO')}`);
+    expect(text).toContain(`$${FACTS.graduationFee.toLocaleString('es-CO')}`);
+    expect(text).toContain(`$${total.toLocaleString('es-CO')}`);
+  });
+
+  it('enlaces: registro y recuperación', () => {
+    expect(answerFor(CHOICES.trial, CTX)!.text).toContain(`${SITE}/registro`);
+    expect(answerFor(CHOICES.trial, CTX)!.text).toContain('por definir');
+    expect(answerFor(CHOICES.trial, { ...CTX, introOpen: false })!.text).toContain(
+      'un asesor te habilita'
     );
-    expect(answerFor(CHOICES.enroll, 'https://alba.test')).toContain('https://alba.test/registro');
-    expect(answerFor(CHOICES.support, 'https://alba.test')).toContain(
-      'https://alba.test/auth/recuperar'
-    );
-    expect(answerFor(CHOICES.advisor, 'https://alba.test')).toMatch(/asesor/);
+    expect(answerFor(CHOICES.support, CTX)!.text).toContain(`${SITE}/auth/recuperar`);
+  });
+
+  it('solo «asesor» pasa a la bandeja; inscribirme y certificados piden datos primero', () => {
+    const handoff = Object.values(CHOICES).filter((id) => answerFor(id, CTX)!.handoff);
+    expect(handoff).toEqual([CHOICES.advisor]);
+    expect(answerFor(CHOICES.enroll, CTX)!.intake).toBe('ENROLL');
+    expect(answerFor(CHOICES.certificates, CTX)!.intake).toBe('CERTIFICATE');
+    // Antes de pedir datos, la autorización con la política (Ley 1581).
+    expect(answerFor(CHOICES.enroll, CTX)!.text).toContain(`${SITE}/politica-de-datos`);
+    expect(answerFor(CHOICES.enroll, CTX)!.buttons?.map((b) => b.id)).toEqual([
+      'intake_yes',
+      'intake_no',
+    ]);
   });
 
   it('lo que no es una opción no tiene respuesta: vuelve el menú', () => {
-    expect(answerFor(null, 'https://alba.test')).toBeNull();
-    expect(answerFor('otra', 'https://alba.test')).toBeNull();
+    expect(answerFor(null, CTX)).toBeNull();
+    expect(answerFor('otra', CTX)).toBeNull();
   });
 });
 
 describe('asksForMenu', () => {
-  it.each(['menú', 'Menu', 'hola!', ' inicio ', 'opciones'])('«%s» pide el menú', (text) => {
-    expect(asksForMenu(text)).toBe(true);
-  });
+  it.each(['menú', 'Menu', 'hola!', ' inicio ', 'opciones', '/menu'])(
+    '«%s» pide el menú',
+    (text) => {
+      expect(asksForMenu(text)).toBe(true);
+    }
+  );
 
   it('una pregunta cualquiera no', () => {
     expect(asksForMenu('hola, quiero saber el precio')).toBe(false);
+  });
+});
+
+describe('intentFor', () => {
+  it.each([
+    ['Hola, quiero saber el precio', CHOICES.programs],
+    ['¿Cuánto cuesta validar el bachillerato?', CHOICES.programs],
+    ['Necesito un certificado de estudios', CHOICES.certificates],
+    ['¿Qué requisitos piden?', CHOICES.requirements],
+    ['¿Es válido el título? ¿Tienen resolución?', CHOICES.legal],
+    ['¿Dónde quedan? ¿Tienen sede?', CHOICES.campus],
+    ['Quiero matricularme', CHOICES.enroll],
+    ['Quiero hablar con un asesor', CHOICES.advisor],
+    ['¿Puedo crear mi usuario para probar?', CHOICES.trial],
+    ['Ya me registré pero no puedo entrar', CHOICES.support],
+    ['Olvidé mi contraseña', CHOICES.support],
+    // Los ice breakers configurados en Meta (14/11) llegan como texto.
+    ['¿Cuánto cuesta el bachillerato?', CHOICES.programs],
+    ['Quiero probar gratis', CHOICES.trial],
+    ['Necesito un certificado', CHOICES.certificates],
+    // Los comandos de Meta (14/11) también llegan como texto.
+    ['/precios', CHOICES.programs],
+    ['/requisitos', CHOICES.requirements],
+    ['/certificado', CHOICES.certificates],
+    ['/asesor', CHOICES.advisor],
+    ['Mi dirección de correo cambió, ¿cuánto cuesta?', CHOICES.programs],
+  ])('«%s» → %s', (text, expected) => {
+    expect(intentFor(text)).toBe(expected);
+  });
+
+  it('lo que no reconoce devuelve null', () => {
+    expect(intentFor('gracias')).toBeNull();
   });
 });

@@ -1,0 +1,180 @@
+{
+  "tema": "introduccion-al-pensamiento-filosofico",
+  "componente": "Proyección",
+  "area": "Filosofía",
+  "titulo": "Introducción al pensamiento filosófico",
+  "siguiente": "Biotecnología, genética y futuro de la humanidad",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la introducción al pensamiento filosófico.",
+      "voz": "Repaso del tema: la introducción al pensamiento filosófico."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es la filosofía?",
+      "texto": "La palabra filosofía viene del griego: philo, amor, y sophia, sabiduría. Su propósito es aprender a pensar: cuestionar lo que parece evidente y construir argumentos.",
+      "voz": "La palabra filosofía viene del griego: philo, amor, y sophia, sabiduría. Su propósito es aprender a pensar: cuestionar lo que parece evidente y construir argumentos.",
+      "items": [
+        {
+          "titulo": "Philo",
+          "texto": "Amor",
+          "palabra": "philo"
+        },
+        {
+          "titulo": "Sophia",
+          "texto": "Sabiduría",
+          "palabra": "sophia"
+        },
+        {
+          "titulo": "Aprender a pensar",
+          "texto": "Cuestionar y argumentar",
+          "palabra": "pensar"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Del mito al logos",
+      "texto": "La filosofía nació en Grecia hacia el siglo VI antes de Cristo, con el paso del mito al logos. El mito explica el mundo con dioses y héroes, como Zeus, que lanza los rayos. El logos busca razones: estudia las condiciones atmosféricas que producen los rayos y la lluvia.",
+      "voz": "La filosofía nació en Grecia hacia el siglo sexto antes de Cristo, con el paso del mito al logos. El mito explica el mundo con dioses y héroes, como Zeus, que lanza los rayos. El logos busca razones: estudia las condiciones atmosféricas que producen los rayos y la lluvia.",
+      "columnas": [
+        {
+          "titulo": "Mito",
+          "palabra": "mito",
+          "vez": 1,
+          "puntos": [
+            {
+              "texto": "Dioses y héroes",
+              "palabra": "dioses"
+            },
+            {
+              "texto": "Zeus lanza los rayos",
+              "palabra": "zeus"
+            }
+          ]
+        },
+        {
+          "titulo": "Logos",
+          "palabra": "logos",
+          "vez": 1,
+          "puntos": [
+            {
+              "texto": "Explicación racional",
+              "palabra": "razones"
+            },
+            {
+              "texto": "Condiciones atmosféricas",
+              "palabra": "atmosféricas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las grandes preguntas",
+      "texto": "Sus grandes preguntas forman ramas. La metafísica pregunta qué es la realidad; la epistemología, cómo conocemos; la ética, qué está bien y qué está mal; la filosofía política, cómo vivir en sociedad; y la estética, qué es la belleza y el arte.",
+      "voz": "Sus grandes preguntas forman ramas. La metafísica pregunta qué es la realidad; la epistemología, cómo conocemos; la ética, qué está bien y qué está mal; la filosofía política, cómo vivir en sociedad; y la estética, qué es la belleza y el arte.",
+      "items": [
+        {
+          "titulo": "Metafísica",
+          "texto": "¿Qué es la realidad?",
+          "palabra": "metafísica"
+        },
+        {
+          "titulo": "Epistemología",
+          "texto": "¿Cómo conocemos?",
+          "palabra": "epistemología"
+        },
+        {
+          "titulo": "Ética",
+          "texto": "¿Qué está bien?",
+          "palabra": "ética"
+        },
+        {
+          "titulo": "Filosofía política",
+          "texto": "¿Cómo vivir en sociedad?",
+          "palabra": "política"
+        },
+        {
+          "titulo": "Estética",
+          "texto": "¿Qué es el arte?",
+          "palabra": "estética"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Los primeros filósofos",
+      "texto": "Entre los primeros filósofos están Tales de Mileto, que vio en el agua el principio de todo; Heráclito, para quien todo cambia; Parménides, que preguntó si confiar en los sentidos o en la razón; Sócrates, que enseñaba con preguntas; y Platón, autor de la alegoría de la caverna.",
+      "voz": "Entre los primeros filósofos están Tales de Mileto, que vio en el agua el principio de todo; Heráclito, para quien todo cambia; Parménides, que preguntó si confiar en los sentidos o en la razón; Sócrates, que enseñaba con preguntas; y Platón, autor de la alegoría de la caverna.",
+      "items": [
+        {
+          "titulo": "Tales",
+          "texto": "El agua, principio de todo",
+          "palabra": "tales"
+        },
+        {
+          "titulo": "Heráclito",
+          "texto": "Todo cambia",
+          "palabra": "heráclito"
+        },
+        {
+          "titulo": "Parménides",
+          "texto": "¿Sentidos o razón?",
+          "palabra": "parménides"
+        },
+        {
+          "titulo": "Sócrates",
+          "texto": "Diálogo y preguntas",
+          "palabra": "sócrates"
+        },
+        {
+          "titulo": "Platón",
+          "texto": "La alegoría de la caverna",
+          "palabra": "platón"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Pensamiento crítico y argumentos",
+      "texto": "El pensamiento crítico no acepta todo de forma automática: busca razones, diferencia los hechos de las opiniones y compara fuentes. Y un argumento tiene una tesis, unas razones que la respaldan y una conclusión.",
+      "voz": "El pensamiento crítico no acepta todo de forma automática: busca razones, diferencia los hechos de las opiniones y compara fuentes. Y un argumento tiene una tesis, unas razones que la respaldan y una conclusión.",
+      "items": [
+        {
+          "titulo": "Hechos y opiniones",
+          "palabra": "hechos"
+        },
+        {
+          "titulo": "Tesis",
+          "texto": "La idea que se defiende",
+          "palabra": "tesis"
+        },
+        {
+          "titulo": "Razones",
+          "texto": "Lo que la respalda",
+          "palabra": "razones",
+          "vez": 1
+        },
+        {
+          "titulo": "Conclusión",
+          "palabra": "conclusión"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la introducción a la filosofía. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la introducción a la filosofía. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

@@ -1,0 +1,1419 @@
+{
+  "tema": "quimica-en-la-vida-cotidiana",
+  "componente": "Bachillerato",
+  "area": "Química",
+  "titulo": "Química en la vida cotidiana",
+  "siguiente": "Numbers, dates and time",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la química en la vida cotidiana.",
+      "voz": "Repaso del tema: la química en la vida cotidiana.",
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 110,
+      "frames": 138,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 34
+        },
+        {
+          "text": "la química en la vida cotidiana.",
+          "from": 44,
+          "to": 106
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 44
+        },
+        {
+          "w": "química",
+          "f": 49
+        },
+        {
+          "w": "en",
+          "f": 61
+        },
+        {
+          "w": "la",
+          "f": 63
+        },
+        {
+          "w": "vida",
+          "f": 67
+        },
+        {
+          "w": "cotidiana",
+          "f": 74
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Sustancias puras y mezclas",
+      "texto": "Las sustancias puras tienen una composición definida: pueden ser elementos, de un solo tipo de átomo, o compuestos, de varios elementos unidos. Las mezclas combinan sustancias que conservan su identidad: son homogéneas si no se distinguen sus partes, y heterogéneas si se distinguen.",
+      "voz": "Las sustancias puras tienen una composición definida: pueden ser elementos, de un solo tipo de átomo, o compuestos, de varios elementos unidos. Las mezclas combinan sustancias que conservan su identidad: son homogéneas si no se distinguen sus partes, y heterogéneas si se distinguen.",
+      "items": [
+        {
+          "titulo": "Elementos",
+          "texto": "Un solo tipo de átomo",
+          "palabra": "elementos"
+        },
+        {
+          "titulo": "Compuestos",
+          "texto": "Varios elementos unidos",
+          "palabra": "compuestos"
+        },
+        {
+          "titulo": "Homogéneas",
+          "texto": "No se distinguen sus partes",
+          "palabra": "homogéneas"
+        },
+        {
+          "titulo": "Heterogéneas",
+          "texto": "Sí se distinguen",
+          "palabra": "heterogéneas"
+        }
+      ],
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 470,
+      "frames": 498,
+      "chunks": [
+        {
+          "text": "Las sustancias puras tienen",
+          "from": 0,
+          "to": 42
+        },
+        {
+          "text": "una composición definida:",
+          "from": 42,
+          "to": 80
+        },
+        {
+          "text": "pueden ser elementos, de un solo tipo de",
+          "from": 92,
+          "to": 156
+        },
+        {
+          "text": "átomo, o compuestos, de varios elementos unidos.",
+          "from": 156,
+          "to": 232
+        },
+        {
+          "text": "Las mezclas combinan sustancias",
+          "from": 242,
+          "to": 287
+        },
+        {
+          "text": "que conservan su identidad:",
+          "from": 287,
+          "to": 327
+        },
+        {
+          "text": "son homogéneas si no se distinguen sus",
+          "from": 340,
+          "to": 401
+        },
+        {
+          "text": "partes, y heterogéneas si se distinguen.",
+          "from": 401,
+          "to": 465
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "sustancias",
+          "f": 6
+        },
+        {
+          "w": "puras",
+          "f": 20
+        },
+        {
+          "w": "tienen",
+          "f": 29
+        },
+        {
+          "w": "una",
+          "f": 38
+        },
+        {
+          "w": "composición",
+          "f": 43
+        },
+        {
+          "w": "definida",
+          "f": 61
+        },
+        {
+          "w": "pueden",
+          "f": 92
+        },
+        {
+          "w": "ser",
+          "f": 100
+        },
+        {
+          "w": "elementos",
+          "f": 105
+        },
+        {
+          "w": "de",
+          "f": 123
+        },
+        {
+          "w": "un",
+          "f": 127
+        },
+        {
+          "w": "solo",
+          "f": 131
+        },
+        {
+          "w": "tipo",
+          "f": 139
+        },
+        {
+          "w": "de",
+          "f": 148
+        },
+        {
+          "w": "átomo",
+          "f": 151
+        },
+        {
+          "w": "o",
+          "f": 167
+        },
+        {
+          "w": "compuestos",
+          "f": 171
+        },
+        {
+          "w": "de",
+          "f": 191
+        },
+        {
+          "w": "varios",
+          "f": 194
+        },
+        {
+          "w": "elementos",
+          "f": 203
+        },
+        {
+          "w": "unidos",
+          "f": 218
+        },
+        {
+          "w": "las",
+          "f": 242
+        },
+        {
+          "w": "mezclas",
+          "f": 248
+        },
+        {
+          "w": "combinan",
+          "f": 261
+        },
+        {
+          "w": "sustancias",
+          "f": 272
+        },
+        {
+          "w": "que",
+          "f": 286
+        },
+        {
+          "w": "conservan",
+          "f": 290
+        },
+        {
+          "w": "su",
+          "f": 304
+        },
+        {
+          "w": "identidad",
+          "f": 307
+        },
+        {
+          "w": "son",
+          "f": 340
+        },
+        {
+          "w": "homogéneas",
+          "f": 346
+        },
+        {
+          "w": "si",
+          "f": 363
+        },
+        {
+          "w": "no",
+          "f": 369
+        },
+        {
+          "w": "se",
+          "f": 373
+        },
+        {
+          "w": "distinguen",
+          "f": 375
+        },
+        {
+          "w": "sus",
+          "f": 387
+        },
+        {
+          "w": "partes",
+          "f": 393
+        },
+        {
+          "w": "y",
+          "f": 406
+        },
+        {
+          "w": "heterogéneas",
+          "f": 409
+        },
+        {
+          "w": "si",
+          "f": 430
+        },
+        {
+          "w": "se",
+          "f": 435
+        },
+        {
+          "w": "distinguen",
+          "f": 439
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Separar mezclas",
+      "texto": "Las mezclas se separan por métodos físicos. La filtración retiene un sólido, como la arena; la decantación separa líquidos de distinta densidad, como el aceite y el agua; y la destilación evapora y luego condensa. También están la evaporación, el tamizado y la imantación, que atrae el hierro.",
+      "voz": "Las mezclas se separan por métodos físicos. La filtración retiene un sólido, como la arena; la decantación separa líquidos de distinta densidad, como el aceite y el agua; y la destilación evapora y luego condensa. También están la evaporación, el tamizado y la imantación, que atrae el hierro.",
+      "imagenes": [
+        {
+          "src": "bachillerato/separacion-de-mezclas-1.webp",
+          "focos": [
+            {
+              "palabra": "filtración",
+              "x": 0.15,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "decantación",
+              "x": 0.42,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "destilación",
+              "x": 0.75,
+              "y": 0.4,
+              "zoom": 1.5
+            }
+          ]
+        },
+        {
+          "src": "bachillerato/separacion-de-mezclas-2.webp",
+          "palabra": "evaporación",
+          "focos": [
+            {
+              "palabra": "tamizado",
+              "x": 0.5,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "imantación",
+              "x": 0.85,
+              "y": 0.4,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 505,
+      "frames": 533,
+      "chunks": [
+        {
+          "text": "Las mezclas se separan por métodos físicos.",
+          "from": 0,
+          "to": 70
+        },
+        {
+          "text": "La filtración retiene un sólido, como la arena;",
+          "from": 76,
+          "to": 148
+        },
+        {
+          "text": "la decantación separa líquidos de distinta densidad,",
+          "from": 158,
+          "to": 234
+        },
+        {
+          "text": "como el aceite y el agua;",
+          "from": 234,
+          "to": 271
+        },
+        {
+          "text": "y la destilación evapora y luego condensa.",
+          "from": 277,
+          "to": 349
+        },
+        {
+          "text": "También están la evaporación, el tamizado y",
+          "from": 358,
+          "to": 437
+        },
+        {
+          "text": "la imantación, que atrae el hierro.",
+          "from": 437,
+          "to": 500
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "mezclas",
+          "f": 8
+        },
+        {
+          "w": "se",
+          "f": 20
+        },
+        {
+          "w": "separan",
+          "f": 23
+        },
+        {
+          "w": "por",
+          "f": 35
+        },
+        {
+          "w": "métodos",
+          "f": 40
+        },
+        {
+          "w": "físicos",
+          "f": 52
+        },
+        {
+          "w": "la",
+          "f": 76
+        },
+        {
+          "w": "filtración",
+          "f": 81
+        },
+        {
+          "w": "retiene",
+          "f": 96
+        },
+        {
+          "w": "un",
+          "f": 107
+        },
+        {
+          "w": "sólido",
+          "f": 110
+        },
+        {
+          "w": "como",
+          "f": 123
+        },
+        {
+          "w": "la",
+          "f": 131
+        },
+        {
+          "w": "arena",
+          "f": 133
+        },
+        {
+          "w": "la",
+          "f": 158
+        },
+        {
+          "w": "decantación",
+          "f": 161
+        },
+        {
+          "w": "separa",
+          "f": 179
+        },
+        {
+          "w": "líquidos",
+          "f": 190
+        },
+        {
+          "w": "de",
+          "f": 202
+        },
+        {
+          "w": "distinta",
+          "f": 204
+        },
+        {
+          "w": "densidad",
+          "f": 217
+        },
+        {
+          "w": "como",
+          "f": 231
+        },
+        {
+          "w": "el",
+          "f": 238
+        },
+        {
+          "w": "aceite",
+          "f": 240
+        },
+        {
+          "w": "y",
+          "f": 253
+        },
+        {
+          "w": "el",
+          "f": 255
+        },
+        {
+          "w": "agua",
+          "f": 259
+        },
+        {
+          "w": "y",
+          "f": 277
+        },
+        {
+          "w": "la",
+          "f": 282
+        },
+        {
+          "w": "destilación",
+          "f": 285
+        },
+        {
+          "w": "evapora",
+          "f": 301
+        },
+        {
+          "w": "y",
+          "f": 318
+        },
+        {
+          "w": "luego",
+          "f": 321
+        },
+        {
+          "w": "condensa",
+          "f": 330
+        },
+        {
+          "w": "también",
+          "f": 358
+        },
+        {
+          "w": "están",
+          "f": 368
+        },
+        {
+          "w": "la",
+          "f": 376
+        },
+        {
+          "w": "evaporación",
+          "f": 378
+        },
+        {
+          "w": "el",
+          "f": 401
+        },
+        {
+          "w": "tamizado",
+          "f": 406
+        },
+        {
+          "w": "y",
+          "f": 426
+        },
+        {
+          "w": "la",
+          "f": 429
+        },
+        {
+          "w": "imantación",
+          "f": 432
+        },
+        {
+          "w": "que",
+          "f": 454
+        },
+        {
+          "w": "atrae",
+          "f": 458
+        },
+        {
+          "w": "el",
+          "f": 467
+        },
+        {
+          "w": "hierro",
+          "f": 472
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las soluciones",
+      "texto": "Una solución tiene un soluto, que se disuelve, y un solvente, que lo disuelve, como la sal en el agua. Se disuelve más rápido al agitar, con partículas pequeñas y, en muchos sólidos, con calor. Y puede ser diluida, concentrada o saturada.",
+      "voz": "Una solución tiene un soluto, que se disuelve, y un solvente, que lo disuelve, como la sal en el agua. Se disuelve más rápido al agitar, con partículas pequeñas y, en muchos sólidos, con calor. Y puede ser diluida, concentrada o saturada.",
+      "items": [
+        {
+          "titulo": "Soluto",
+          "texto": "Lo que se disuelve: la sal",
+          "palabra": "soluto"
+        },
+        {
+          "titulo": "Solvente",
+          "texto": "Lo que disuelve: el agua",
+          "palabra": "solvente"
+        },
+        {
+          "titulo": "Más rápido",
+          "texto": "Agitar, partículas pequeñas, calor",
+          "palabra": "agitar"
+        },
+        {
+          "titulo": "Concentración",
+          "texto": "Diluida, concentrada, saturada",
+          "palabra": "diluida"
+        }
+      ],
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 404,
+      "frames": 432,
+      "chunks": [
+        {
+          "text": "Una solución tiene un soluto, que se disuelve, y un",
+          "from": 0,
+          "to": 80
+        },
+        {
+          "text": "solvente, que lo disuelve, como la sal en el agua.",
+          "from": 80,
+          "to": 158
+        },
+        {
+          "text": "Se disuelve más rápido al agitar, con partículas",
+          "from": 170,
+          "to": 242
+        },
+        {
+          "text": "pequeñas y, en muchos sólidos, con calor.",
+          "from": 242,
+          "to": 304
+        },
+        {
+          "text": "Y puede ser diluida, concentrada o saturada.",
+          "from": 311,
+          "to": 400
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "solución",
+          "f": 8
+        },
+        {
+          "w": "tiene",
+          "f": 22
+        },
+        {
+          "w": "un",
+          "f": 29
+        },
+        {
+          "w": "soluto",
+          "f": 31
+        },
+        {
+          "w": "que",
+          "f": 48
+        },
+        {
+          "w": "se",
+          "f": 53
+        },
+        {
+          "w": "disuelve",
+          "f": 56
+        },
+        {
+          "w": "y",
+          "f": 80
+        },
+        {
+          "w": "un",
+          "f": 84
+        },
+        {
+          "w": "solvente",
+          "f": 87
+        },
+        {
+          "w": "que",
+          "f": 104
+        },
+        {
+          "w": "lo",
+          "f": 108
+        },
+        {
+          "w": "disuelve",
+          "f": 111
+        },
+        {
+          "w": "como",
+          "f": 125
+        },
+        {
+          "w": "la",
+          "f": 132
+        },
+        {
+          "w": "sal",
+          "f": 135
+        },
+        {
+          "w": "en",
+          "f": 142
+        },
+        {
+          "w": "el",
+          "f": 146
+        },
+        {
+          "w": "agua",
+          "f": 150
+        },
+        {
+          "w": "se",
+          "f": 170
+        },
+        {
+          "w": "disuelve",
+          "f": 175
+        },
+        {
+          "w": "más",
+          "f": 186
+        },
+        {
+          "w": "rápido",
+          "f": 191
+        },
+        {
+          "w": "al",
+          "f": 202
+        },
+        {
+          "w": "agitar",
+          "f": 205
+        },
+        {
+          "w": "con",
+          "f": 219
+        },
+        {
+          "w": "partículas",
+          "f": 225
+        },
+        {
+          "w": "pequeñas",
+          "f": 242
+        },
+        {
+          "w": "y",
+          "f": 259
+        },
+        {
+          "w": "en",
+          "f": 262
+        },
+        {
+          "w": "muchos",
+          "f": 265
+        },
+        {
+          "w": "sólidos",
+          "f": 274
+        },
+        {
+          "w": "con",
+          "f": 287
+        },
+        {
+          "w": "calor",
+          "f": 292
+        },
+        {
+          "w": "y",
+          "f": 311
+        },
+        {
+          "w": "puede",
+          "f": 316
+        },
+        {
+          "w": "ser",
+          "f": 324
+        },
+        {
+          "w": "diluida",
+          "f": 330
+        },
+        {
+          "w": "concentrada",
+          "f": 347
+        },
+        {
+          "w": "o",
+          "f": 368
+        },
+        {
+          "w": "saturada",
+          "f": 371
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "Ácidos, bases y pH",
+      "texto": "La escala de pH va de cero a catorce. Por debajo de siete, la solución es ácida, como el jugo de limón o el vinagre; en siete es neutra, como el agua pura; y por encima de siete es básica, como el bicarbonato o el jabón.",
+      "voz": "La escala de pH va de cero a catorce. Por debajo de siete, la solución es ácida, como el jugo de limón o el vinagre; en siete es neutra, como el agua pura; y por encima de siete es básica, como el bicarbonato o el jabón.",
+      "imagenes": [
+        {
+          "src": "bachillerato/escala-de-ph.webp",
+          "focos": [
+            {
+              "palabra": "ácida",
+              "x": 0.18,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "neutra",
+              "x": 0.55,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "básica",
+              "x": 0.82,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 378,
+      "frames": 406,
+      "chunks": [
+        {
+          "text": "La escala de pH va de cero a catorce.",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "Por debajo de siete, la solución es ácida,",
+          "from": 74,
+          "to": 135
+        },
+        {
+          "text": "como el jugo de limón o el vinagre;",
+          "from": 135,
+          "to": 187
+        },
+        {
+          "text": "en siete es neutra, como el agua pura;",
+          "from": 194,
+          "to": 254
+        },
+        {
+          "text": "y por encima de siete es básica,",
+          "from": 261,
+          "to": 318
+        },
+        {
+          "text": "como el bicarbonato o el jabón.",
+          "from": 318,
+          "to": 373
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "escala",
+          "f": 5
+        },
+        {
+          "w": "de",
+          "f": 15
+        },
+        {
+          "w": "ph",
+          "f": 18
+        },
+        {
+          "w": "va",
+          "f": 30
+        },
+        {
+          "w": "de",
+          "f": 35
+        },
+        {
+          "w": "cero",
+          "f": 37
+        },
+        {
+          "w": "a",
+          "f": 44
+        },
+        {
+          "w": "catorce",
+          "f": 46
+        },
+        {
+          "w": "por",
+          "f": 74
+        },
+        {
+          "w": "debajo",
+          "f": 80
+        },
+        {
+          "w": "de",
+          "f": 91
+        },
+        {
+          "w": "siete",
+          "f": 93
+        },
+        {
+          "w": "la",
+          "f": 104
+        },
+        {
+          "w": "solución",
+          "f": 107
+        },
+        {
+          "w": "es",
+          "f": 119
+        },
+        {
+          "w": "ácida",
+          "f": 123
+        },
+        {
+          "w": "como",
+          "f": 134
+        },
+        {
+          "w": "el",
+          "f": 140
+        },
+        {
+          "w": "jugo",
+          "f": 142
+        },
+        {
+          "w": "de",
+          "f": 150
+        },
+        {
+          "w": "limón",
+          "f": 153
+        },
+        {
+          "w": "o",
+          "f": 164
+        },
+        {
+          "w": "el",
+          "f": 167
+        },
+        {
+          "w": "vinagre",
+          "f": 170
+        },
+        {
+          "w": "en",
+          "f": 194
+        },
+        {
+          "w": "siete",
+          "f": 199
+        },
+        {
+          "w": "es",
+          "f": 208
+        },
+        {
+          "w": "neutra",
+          "f": 211
+        },
+        {
+          "w": "como",
+          "f": 224
+        },
+        {
+          "w": "el",
+          "f": 230
+        },
+        {
+          "w": "agua",
+          "f": 233
+        },
+        {
+          "w": "pura",
+          "f": 241
+        },
+        {
+          "w": "y",
+          "f": 261
+        },
+        {
+          "w": "por",
+          "f": 266
+        },
+        {
+          "w": "encima",
+          "f": 271
+        },
+        {
+          "w": "de",
+          "f": 281
+        },
+        {
+          "w": "siete",
+          "f": 284
+        },
+        {
+          "w": "es",
+          "f": 293
+        },
+        {
+          "w": "básica",
+          "f": 296
+        },
+        {
+          "w": "como",
+          "f": 310
+        },
+        {
+          "w": "el",
+          "f": 317
+        },
+        {
+          "w": "bicarbonato",
+          "f": 319
+        },
+        {
+          "w": "o",
+          "f": 344
+        },
+        {
+          "w": "el",
+          "f": 348
+        },
+        {
+          "w": "jabón",
+          "f": 351
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Transformaciones físicas y químicas",
+      "texto": "En una transformación física cambia la forma o el estado, pero no la sustancia, como el hielo que se derrite. En una química se forman sustancias nuevas, como la manzana que se oxida, la combustión o la fermentación del pan.",
+      "voz": "En una transformación física cambia la forma o el estado, pero no la sustancia, como el hielo que se derrite. En una química se forman sustancias nuevas, como la manzana que se oxida, la combustión o la fermentación del pan.",
+      "columnas": [
+        {
+          "titulo": "Física",
+          "palabra": "física",
+          "puntos": [
+            {
+              "texto": "Cambia la forma o el estado",
+              "palabra": "forma"
+            },
+            {
+              "texto": "El hielo que se derrite",
+              "palabra": "hielo"
+            }
+          ]
+        },
+        {
+          "titulo": "Química",
+          "palabra": "química",
+          "puntos": [
+            {
+              "texto": "Se forman sustancias nuevas",
+              "palabra": "nuevas"
+            },
+            {
+              "texto": "Oxidación, combustión, fermentación",
+              "palabra": "oxida"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 364,
+      "frames": 392,
+      "chunks": [
+        {
+          "text": "En una transformación física cambia la forma",
+          "from": 0,
+          "to": 71
+        },
+        {
+          "text": "o el estado, pero no la sustancia,",
+          "from": 71,
+          "to": 125
+        },
+        {
+          "text": "como el hielo que se derrite.",
+          "from": 125,
+          "to": 172
+        },
+        {
+          "text": "En una química se forman sustancias nuevas,",
+          "from": 183,
+          "to": 251
+        },
+        {
+          "text": "como la manzana que se oxida, la",
+          "from": 251,
+          "to": 301
+        },
+        {
+          "text": "combustión o la fermentación del pan.",
+          "from": 301,
+          "to": 359
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "una",
+          "f": 7
+        },
+        {
+          "w": "transformación",
+          "f": 12
+        },
+        {
+          "w": "física",
+          "f": 30
+        },
+        {
+          "w": "cambia",
+          "f": 42
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "forma",
+          "f": 54
+        },
+        {
+          "w": "o",
+          "f": 68
+        },
+        {
+          "w": "el",
+          "f": 71
+        },
+        {
+          "w": "estado",
+          "f": 75
+        },
+        {
+          "w": "pero",
+          "f": 88
+        },
+        {
+          "w": "no",
+          "f": 95
+        },
+        {
+          "w": "la",
+          "f": 99
+        },
+        {
+          "w": "sustancia",
+          "f": 102
+        },
+        {
+          "w": "como",
+          "f": 129
+        },
+        {
+          "w": "el",
+          "f": 136
+        },
+        {
+          "w": "hielo",
+          "f": 140
+        },
+        {
+          "w": "que",
+          "f": 147
+        },
+        {
+          "w": "se",
+          "f": 151
+        },
+        {
+          "w": "derrite",
+          "f": 155
+        },
+        {
+          "w": "en",
+          "f": 183
+        },
+        {
+          "w": "una",
+          "f": 189
+        },
+        {
+          "w": "química",
+          "f": 195
+        },
+        {
+          "w": "se",
+          "f": 208
+        },
+        {
+          "w": "forman",
+          "f": 211
+        },
+        {
+          "w": "sustancias",
+          "f": 220
+        },
+        {
+          "w": "nuevas",
+          "f": 235
+        },
+        {
+          "w": "como",
+          "f": 247
+        },
+        {
+          "w": "la",
+          "f": 254
+        },
+        {
+          "w": "manzana",
+          "f": 257
+        },
+        {
+          "w": "que",
+          "f": 268
+        },
+        {
+          "w": "se",
+          "f": 272
+        },
+        {
+          "w": "oxida",
+          "f": 275
+        },
+        {
+          "w": "la",
+          "f": 289
+        },
+        {
+          "w": "combustión",
+          "f": 294
+        },
+        {
+          "w": "o",
+          "f": 314
+        },
+        {
+          "w": "la",
+          "f": 317
+        },
+        {
+          "w": "fermentación",
+          "f": 321
+        },
+        {
+          "w": "del",
+          "f": 339
+        },
+        {
+          "w": "pan",
+          "f": 344
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la química en la vida cotidiana. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la química en la vida cotidiana. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/quimica-en-la-vida-cotidiana/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 172,
+      "frames": 332,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste la química en la vida cotidiana.",
+          "from": 34,
+          "to": 95
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 105,
+          "to": 167
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "química",
+          "f": 53
+        },
+        {
+          "w": "en",
+          "f": 63
+        },
+        {
+          "w": "la",
+          "f": 66
+        },
+        {
+          "w": "vida",
+          "f": 69
+        },
+        {
+          "w": "cotidiana",
+          "f": 76
+        },
+        {
+          "w": "sigue",
+          "f": 105
+        },
+        {
+          "w": "con",
+          "f": 114
+        },
+        {
+          "w": "el",
+          "f": 118
+        },
+        {
+          "w": "siguiente",
+          "f": 121
+        },
+        {
+          "w": "tema",
+          "f": 133
+        },
+        {
+          "w": "de",
+          "f": 140
+        },
+        {
+          "w": "tu",
+          "f": 143
+        },
+        {
+          "w": "ruta",
+          "f": 148
+        }
+      ]
+    }
+  ]
+}

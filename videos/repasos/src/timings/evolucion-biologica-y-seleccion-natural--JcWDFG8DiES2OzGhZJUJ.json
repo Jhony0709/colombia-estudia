@@ -1,0 +1,1332 @@
+{
+  "tema": "evolucion-biologica-y-seleccion-natural",
+  "componente": "Preparación",
+  "area": "Ciencias naturales",
+  "titulo": "Evolución biológica y selección natural",
+  "siguiente": "El siglo XX y la configuración del mundo actual",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la evolución biológica y la selección natural.",
+      "voz": "Repaso del tema: la evolución biológica y la selección natural.",
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 117,
+      "frames": 145,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "la evolución biológica y la selección natural.",
+          "from": 38,
+          "to": 113
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "evolución",
+          "f": 40
+        },
+        {
+          "w": "biológica",
+          "f": 53
+        },
+        {
+          "w": "y",
+          "f": 68
+        },
+        {
+          "w": "la",
+          "f": 69
+        },
+        {
+          "w": "selección",
+          "f": 73
+        },
+        {
+          "w": "natural",
+          "f": 86
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es la evolución?",
+      "texto": "La evolución biológica es el cambio de las características hereditarias de las poblaciones a través de muchas generaciones. No evolucionan los individuos durante su vida: evolucionan las poblaciones.",
+      "voz": "La evolución biológica es el cambio de las características hereditarias de las poblaciones a través de muchas generaciones. No evolucionan los individuos durante su vida: evolucionan las poblaciones.",
+      "items": [
+        {
+          "titulo": "Características hereditarias",
+          "palabra": "hereditarias"
+        },
+        {
+          "titulo": "Muchas generaciones",
+          "palabra": "generaciones"
+        },
+        {
+          "titulo": "Poblaciones, no individuos",
+          "palabra": "individuos"
+        }
+      ],
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 318,
+      "frames": 346,
+      "chunks": [
+        {
+          "text": "La evolución biológica es el cambio",
+          "from": 0,
+          "to": 50
+        },
+        {
+          "text": "de las características hereditarias de las",
+          "from": 50,
+          "to": 110
+        },
+        {
+          "text": "poblaciones a través de muchas generaciones.",
+          "from": 110,
+          "to": 173
+        },
+        {
+          "text": "No evolucionan los individuos durante su vida:",
+          "from": 183,
+          "to": 250
+        },
+        {
+          "text": "evolucionan las poblaciones.",
+          "from": 257,
+          "to": 313
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "evolución",
+          "f": 5
+        },
+        {
+          "w": "biológica",
+          "f": 18
+        },
+        {
+          "w": "es",
+          "f": 33
+        },
+        {
+          "w": "el",
+          "f": 37
+        },
+        {
+          "w": "cambio",
+          "f": 40
+        },
+        {
+          "w": "de",
+          "f": 48
+        },
+        {
+          "w": "las",
+          "f": 51
+        },
+        {
+          "w": "características",
+          "f": 56
+        },
+        {
+          "w": "hereditarias",
+          "f": 80
+        },
+        {
+          "w": "de",
+          "f": 100
+        },
+        {
+          "w": "las",
+          "f": 103
+        },
+        {
+          "w": "poblaciones",
+          "f": 108
+        },
+        {
+          "w": "a",
+          "f": 126
+        },
+        {
+          "w": "través",
+          "f": 129
+        },
+        {
+          "w": "de",
+          "f": 136
+        },
+        {
+          "w": "muchas",
+          "f": 139
+        },
+        {
+          "w": "generaciones",
+          "f": 148
+        },
+        {
+          "w": "no",
+          "f": 183
+        },
+        {
+          "w": "evolucionan",
+          "f": 188
+        },
+        {
+          "w": "los",
+          "f": 204
+        },
+        {
+          "w": "individuos",
+          "f": 209
+        },
+        {
+          "w": "durante",
+          "f": 223
+        },
+        {
+          "w": "su",
+          "f": 234
+        },
+        {
+          "w": "vida",
+          "f": 239
+        },
+        {
+          "w": "evolucionan",
+          "f": 257
+        },
+        {
+          "w": "las",
+          "f": 274
+        },
+        {
+          "w": "poblaciones",
+          "f": 279
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Lamarck y Darwin",
+      "texto": "Lamarck propuso que los órganos se desarrollan con el uso y que lo adquirido en vida se hereda; hoy esa idea no se acepta como explicación general. Darwin, tras estudiar los pinzones de las islas Galápagos, propuso la selección natural en El origen de las especies, de 1859.",
+      "voz": "Lamarck propuso que los órganos se desarrollan con el uso y que lo adquirido en vida se hereda; hoy esa idea no se acepta como explicación general. Darwin, tras estudiar los pinzones de las islas Galápagos, propuso la selección natural en El origen de las especies, de mil ochocientos cincuenta y nueve.",
+      "items": [
+        {
+          "titulo": "Lamarck",
+          "texto": "Uso y herencia de lo adquirido",
+          "palabra": "lamarck"
+        },
+        {
+          "titulo": "Darwin",
+          "texto": "Pinzones de Galápagos",
+          "palabra": "darwin"
+        },
+        {
+          "titulo": "Selección natural",
+          "texto": "El origen de las especies, 1859",
+          "palabra": "selección"
+        }
+      ],
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 500,
+      "frames": 528,
+      "chunks": [
+        {
+          "text": "Lamarck propuso que los órganos se desarrollan con el",
+          "from": 0,
+          "to": 79
+        },
+        {
+          "text": "uso y que lo adquirido en vida se hereda;",
+          "from": 79,
+          "to": 140
+        },
+        {
+          "text": "hoy esa idea no se acepta como explicación general.",
+          "from": 150,
+          "to": 228
+        },
+        {
+          "text": "Darwin, tras estudiar los pinzones de las",
+          "from": 244,
+          "to": 327
+        },
+        {
+          "text": "islas Galápagos, propuso la selección natural en",
+          "from": 327,
+          "to": 425
+        },
+        {
+          "text": "El origen de las especies, de 1859.",
+          "from": 425,
+          "to": 496
+        }
+      ],
+      "words": [
+        {
+          "w": "lamarck",
+          "f": 0
+        },
+        {
+          "w": "propuso",
+          "f": 16
+        },
+        {
+          "w": "que",
+          "f": 30
+        },
+        {
+          "w": "los",
+          "f": 33
+        },
+        {
+          "w": "órganos",
+          "f": 38
+        },
+        {
+          "w": "se",
+          "f": 48
+        },
+        {
+          "w": "desarrollan",
+          "f": 51
+        },
+        {
+          "w": "con",
+          "f": 68
+        },
+        {
+          "w": "el",
+          "f": 73
+        },
+        {
+          "w": "uso",
+          "f": 77
+        },
+        {
+          "w": "y",
+          "f": 86
+        },
+        {
+          "w": "que",
+          "f": 89
+        },
+        {
+          "w": "lo",
+          "f": 93
+        },
+        {
+          "w": "adquirido",
+          "f": 96
+        },
+        {
+          "w": "en",
+          "f": 111
+        },
+        {
+          "w": "vida",
+          "f": 114
+        },
+        {
+          "w": "se",
+          "f": 122
+        },
+        {
+          "w": "hereda",
+          "f": 125
+        },
+        {
+          "w": "hoy",
+          "f": 150
+        },
+        {
+          "w": "esa",
+          "f": 157
+        },
+        {
+          "w": "idea",
+          "f": 162
+        },
+        {
+          "w": "no",
+          "f": 171
+        },
+        {
+          "w": "se",
+          "f": 175
+        },
+        {
+          "w": "acepta",
+          "f": 177
+        },
+        {
+          "w": "como",
+          "f": 186
+        },
+        {
+          "w": "explicación",
+          "f": 192
+        },
+        {
+          "w": "general",
+          "f": 211
+        },
+        {
+          "w": "darwin",
+          "f": 244
+        },
+        {
+          "w": "tras",
+          "f": 258
+        },
+        {
+          "w": "estudiar",
+          "f": 266
+        },
+        {
+          "w": "los",
+          "f": 277
+        },
+        {
+          "w": "pinzones",
+          "f": 282
+        },
+        {
+          "w": "de",
+          "f": 296
+        },
+        {
+          "w": "las",
+          "f": 299
+        },
+        {
+          "w": "islas",
+          "f": 305
+        },
+        {
+          "w": "galápagos",
+          "f": 314
+        },
+        {
+          "w": "propuso",
+          "f": 344
+        },
+        {
+          "w": "la",
+          "f": 357
+        },
+        {
+          "w": "selección",
+          "f": 360
+        },
+        {
+          "w": "natural",
+          "f": 375
+        },
+        {
+          "w": "en",
+          "f": 390
+        },
+        {
+          "w": "el",
+          "f": 396
+        },
+        {
+          "w": "origen",
+          "f": 399
+        },
+        {
+          "w": "de",
+          "f": 410
+        },
+        {
+          "w": "las",
+          "f": 412
+        },
+        {
+          "w": "especies",
+          "f": 418
+        },
+        {
+          "w": "de",
+          "f": 434
+        },
+        {
+          "w": "mil",
+          "f": 437
+        },
+        {
+          "w": "ochocientos",
+          "f": 443
+        },
+        {
+          "w": "cincuenta",
+          "f": 458
+        },
+        {
+          "w": "y",
+          "f": 471
+        },
+        {
+          "w": "nueve",
+          "f": 473
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "La selección natural",
+      "texto": "La selección natural se explica con cuatro elementos: la variación entre individuos, la herencia de esas diferencias, la presión del ambiente y la reproducción diferencial. Por ejemplo, con un insecticida sobreviven más los insectos que ya eran resistentes, y sus descendientes heredan esa resistencia.",
+      "voz": "La selección natural se explica con cuatro elementos: la variación entre individuos, la herencia de esas diferencias, la presión del ambiente y la reproducción diferencial. Por ejemplo, con un insecticida sobreviven más los insectos que ya eran resistentes, y sus descendientes heredan esa resistencia.",
+      "items": [
+        {
+          "titulo": "Variación",
+          "palabra": "variación"
+        },
+        {
+          "titulo": "Herencia",
+          "palabra": "herencia"
+        },
+        {
+          "titulo": "Presión ambiental",
+          "palabra": "presión"
+        },
+        {
+          "titulo": "Reproducción diferencial",
+          "palabra": "reproducción"
+        }
+      ],
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 494,
+      "frames": 522,
+      "chunks": [
+        {
+          "text": "La selección natural se",
+          "from": 0,
+          "to": 35
+        },
+        {
+          "text": "explica con cuatro elementos:",
+          "from": 35,
+          "to": 80
+        },
+        {
+          "text": "la variación entre individuos, la herencia",
+          "from": 88,
+          "to": 153
+        },
+        {
+          "text": "de esas diferencias, la presión del",
+          "from": 153,
+          "to": 206
+        },
+        {
+          "text": "ambiente y la reproducción diferencial.",
+          "from": 206,
+          "to": 266
+        },
+        {
+          "text": "Por ejemplo, con un insecticida sobreviven más",
+          "from": 276,
+          "to": 353
+        },
+        {
+          "text": "los insectos que ya eran resistentes, y",
+          "from": 353,
+          "to": 419
+        },
+        {
+          "text": "sus descendientes heredan esa resistencia.",
+          "from": 419,
+          "to": 489
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "selección",
+          "f": 6
+        },
+        {
+          "w": "natural",
+          "f": 18
+        },
+        {
+          "w": "se",
+          "f": 31
+        },
+        {
+          "w": "explica",
+          "f": 33
+        },
+        {
+          "w": "con",
+          "f": 45
+        },
+        {
+          "w": "cuatro",
+          "f": 50
+        },
+        {
+          "w": "elementos",
+          "f": 59
+        },
+        {
+          "w": "la",
+          "f": 88
+        },
+        {
+          "w": "variación",
+          "f": 92
+        },
+        {
+          "w": "entre",
+          "f": 105
+        },
+        {
+          "w": "individuos",
+          "f": 111
+        },
+        {
+          "w": "la",
+          "f": 130
+        },
+        {
+          "w": "herencia",
+          "f": 133
+        },
+        {
+          "w": "de",
+          "f": 146
+        },
+        {
+          "w": "esas",
+          "f": 148
+        },
+        {
+          "w": "diferencias",
+          "f": 154
+        },
+        {
+          "w": "la",
+          "f": 186
+        },
+        {
+          "w": "presión",
+          "f": 191
+        },
+        {
+          "w": "del",
+          "f": 201
+        },
+        {
+          "w": "ambiente",
+          "f": 206
+        },
+        {
+          "w": "y",
+          "f": 217
+        },
+        {
+          "w": "la",
+          "f": 219
+        },
+        {
+          "w": "reproducción",
+          "f": 223
+        },
+        {
+          "w": "diferencial",
+          "f": 243
+        },
+        {
+          "w": "por",
+          "f": 276
+        },
+        {
+          "w": "ejemplo",
+          "f": 283
+        },
+        {
+          "w": "con",
+          "f": 295
+        },
+        {
+          "w": "un",
+          "f": 300
+        },
+        {
+          "w": "insecticida",
+          "f": 304
+        },
+        {
+          "w": "sobreviven",
+          "f": 322
+        },
+        {
+          "w": "más",
+          "f": 340
+        },
+        {
+          "w": "los",
+          "f": 345
+        },
+        {
+          "w": "insectos",
+          "f": 351
+        },
+        {
+          "w": "que",
+          "f": 365
+        },
+        {
+          "w": "ya",
+          "f": 370
+        },
+        {
+          "w": "eran",
+          "f": 373
+        },
+        {
+          "w": "resistentes",
+          "f": 380
+        },
+        {
+          "w": "y",
+          "f": 411
+        },
+        {
+          "w": "sus",
+          "f": 416
+        },
+        {
+          "w": "descendientes",
+          "f": 421
+        },
+        {
+          "w": "heredan",
+          "f": 440
+        },
+        {
+          "w": "esa",
+          "f": 449
+        },
+        {
+          "w": "resistencia",
+          "f": 455
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "Evidencias de la evolución",
+      "texto": "Hay varias evidencias de la evolución: los fósiles, la embriología, el ADN y la anatomía comparada. Por ejemplo, el brazo humano, el ala del murciélago y la aleta de la ballena tienen huesos organizados de forma semejante: son estructuras homólogas, porque vienen de antepasados comunes.",
+      "voz": "Hay varias evidencias de la evolución: los fósiles, la embriología, el ADN y la anatomía comparada. Por ejemplo, el brazo humano, el ala del murciélago y la aleta de la ballena tienen huesos organizados de forma semejante: son estructuras homólogas, porque vienen de antepasados comunes.",
+      "imagenes": [
+        {
+          "src": "preparacion/estructuras-homologas.webp",
+          "focos": [
+            {
+              "palabra": "brazo",
+              "x": 0.13,
+              "y": 0.45,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "ala",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "aleta",
+              "x": 0.78,
+              "y": 0.45,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "homólogas",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 495,
+      "frames": 523,
+      "chunks": [
+        {
+          "text": "Hay varias evidencias de la evolución:",
+          "from": 0,
+          "to": 55
+        },
+        {
+          "text": "los fósiles, la embriología, el",
+          "from": 59,
+          "to": 122
+        },
+        {
+          "text": "ADN y la anatomía comparada.",
+          "from": 122,
+          "to": 179
+        },
+        {
+          "text": "Por ejemplo, el brazo humano, el ala",
+          "from": 188,
+          "to": 246
+        },
+        {
+          "text": "del murciélago y la aleta de la",
+          "from": 246,
+          "to": 296
+        },
+        {
+          "text": "ballena tienen huesos organizados de forma semejante:",
+          "from": 296,
+          "to": 381
+        },
+        {
+          "text": "son estructuras homólogas, porque",
+          "from": 388,
+          "to": 442
+        },
+        {
+          "text": "vienen de antepasados comunes.",
+          "from": 442,
+          "to": 490
+        }
+      ],
+      "words": [
+        {
+          "w": "hay",
+          "f": 0
+        },
+        {
+          "w": "varias",
+          "f": 7
+        },
+        {
+          "w": "evidencias",
+          "f": 16
+        },
+        {
+          "w": "de",
+          "f": 30
+        },
+        {
+          "w": "la",
+          "f": 33
+        },
+        {
+          "w": "evolución",
+          "f": 36
+        },
+        {
+          "w": "los",
+          "f": 59
+        },
+        {
+          "w": "fósiles",
+          "f": 65
+        },
+        {
+          "w": "la",
+          "f": 84
+        },
+        {
+          "w": "embriología",
+          "f": 87
+        },
+        {
+          "w": "el",
+          "f": 111
+        },
+        {
+          "w": "adn",
+          "f": 118
+        },
+        {
+          "w": "y",
+          "f": 132
+        },
+        {
+          "w": "la",
+          "f": 137
+        },
+        {
+          "w": "anatomía",
+          "f": 139
+        },
+        {
+          "w": "comparada",
+          "f": 156
+        },
+        {
+          "w": "por",
+          "f": 188
+        },
+        {
+          "w": "ejemplo",
+          "f": 195
+        },
+        {
+          "w": "el",
+          "f": 212
+        },
+        {
+          "w": "brazo",
+          "f": 217
+        },
+        {
+          "w": "humano",
+          "f": 224
+        },
+        {
+          "w": "el",
+          "f": 246
+        },
+        {
+          "w": "ala",
+          "f": 253
+        },
+        {
+          "w": "del",
+          "f": 257
+        },
+        {
+          "w": "murciélago",
+          "f": 262
+        },
+        {
+          "w": "y",
+          "f": 280
+        },
+        {
+          "w": "la",
+          "f": 283
+        },
+        {
+          "w": "aleta",
+          "f": 286
+        },
+        {
+          "w": "de",
+          "f": 296
+        },
+        {
+          "w": "la",
+          "f": 299
+        },
+        {
+          "w": "ballena",
+          "f": 302
+        },
+        {
+          "w": "tienen",
+          "f": 315
+        },
+        {
+          "w": "huesos",
+          "f": 323
+        },
+        {
+          "w": "organizados",
+          "f": 331
+        },
+        {
+          "w": "de",
+          "f": 349
+        },
+        {
+          "w": "forma",
+          "f": 352
+        },
+        {
+          "w": "semejante",
+          "f": 360
+        },
+        {
+          "w": "son",
+          "f": 388
+        },
+        {
+          "w": "estructuras",
+          "f": 395
+        },
+        {
+          "w": "homólogas",
+          "f": 412
+        },
+        {
+          "w": "porque",
+          "f": 428
+        },
+        {
+          "w": "vienen",
+          "f": 436
+        },
+        {
+          "w": "de",
+          "f": 444
+        },
+        {
+          "w": "antepasados",
+          "f": 447
+        },
+        {
+          "w": "comunes",
+          "f": 465
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Nuevas especies y evolución humana",
+      "texto": "Cuando una población queda separada por montañas o ríos durante muchas generaciones, puede formar una nueva especie: es la especiación. Y los seres humanos no descendemos de los monos actuales: compartimos antepasados comunes con otros primates.",
+      "voz": "Cuando una población queda separada por montañas o ríos durante muchas generaciones, puede formar una nueva especie: es la especiación. Y los seres humanos no descendemos de los monos actuales: compartimos antepasados comunes con otros primates.",
+      "items": [
+        {
+          "titulo": "Barreras geográficas",
+          "texto": "Montañas, ríos, océanos",
+          "palabra": "montañas"
+        },
+        {
+          "titulo": "Especiación",
+          "texto": "Nace una nueva especie",
+          "palabra": "especiación"
+        },
+        {
+          "titulo": "Antepasados comunes",
+          "texto": "Humanos y otros primates",
+          "palabra": "antepasados"
+        }
+      ],
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 402,
+      "frames": 430,
+      "chunks": [
+        {
+          "text": "Cuando una población queda separada por",
+          "from": 0,
+          "to": 60
+        },
+        {
+          "text": "montañas o ríos durante muchas generaciones,",
+          "from": 60,
+          "to": 128
+        },
+        {
+          "text": "puede formar una nueva especie:",
+          "from": 128,
+          "to": 176
+        },
+        {
+          "text": "es la especiación.",
+          "from": 181,
+          "to": 213
+        },
+        {
+          "text": "Y los seres humanos no",
+          "from": 221,
+          "to": 253
+        },
+        {
+          "text": "descendemos de los monos actuales:",
+          "from": 253,
+          "to": 303
+        },
+        {
+          "text": "compartimos antepasados comunes con otros primates.",
+          "from": 311,
+          "to": 397
+        }
+      ],
+      "words": [
+        {
+          "w": "cuando",
+          "f": 0
+        },
+        {
+          "w": "una",
+          "f": 12
+        },
+        {
+          "w": "población",
+          "f": 17
+        },
+        {
+          "w": "queda",
+          "f": 31
+        },
+        {
+          "w": "separada",
+          "f": 37
+        },
+        {
+          "w": "por",
+          "f": 49
+        },
+        {
+          "w": "montañas",
+          "f": 55
+        },
+        {
+          "w": "o",
+          "f": 72
+        },
+        {
+          "w": "ríos",
+          "f": 75
+        },
+        {
+          "w": "durante",
+          "f": 83
+        },
+        {
+          "w": "muchas",
+          "f": 94
+        },
+        {
+          "w": "generaciones",
+          "f": 103
+        },
+        {
+          "w": "puede",
+          "f": 133
+        },
+        {
+          "w": "formar",
+          "f": 140
+        },
+        {
+          "w": "una",
+          "f": 150
+        },
+        {
+          "w": "nueva",
+          "f": 155
+        },
+        {
+          "w": "especie",
+          "f": 161
+        },
+        {
+          "w": "es",
+          "f": 181
+        },
+        {
+          "w": "la",
+          "f": 187
+        },
+        {
+          "w": "especiación",
+          "f": 189
+        },
+        {
+          "w": "y",
+          "f": 221
+        },
+        {
+          "w": "los",
+          "f": 226
+        },
+        {
+          "w": "seres",
+          "f": 230
+        },
+        {
+          "w": "humanos",
+          "f": 237
+        },
+        {
+          "w": "no",
+          "f": 249
+        },
+        {
+          "w": "descendemos",
+          "f": 253
+        },
+        {
+          "w": "de",
+          "f": 267
+        },
+        {
+          "w": "los",
+          "f": 270
+        },
+        {
+          "w": "monos",
+          "f": 275
+        },
+        {
+          "w": "actuales",
+          "f": 283
+        },
+        {
+          "w": "compartimos",
+          "f": 311
+        },
+        {
+          "w": "antepasados",
+          "f": 331
+        },
+        {
+          "w": "comunes",
+          "f": 350
+        },
+        {
+          "w": "con",
+          "f": 363
+        },
+        {
+          "w": "otros",
+          "f": 368
+        },
+        {
+          "w": "primates",
+          "f": 375
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la evolución y la selección natural. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la evolución y la selección natural. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/evolucion-biologica-y-seleccion-natural/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 166,
+      "frames": 326,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 19
+        },
+        {
+          "text": "Repasaste la evolución y la selección natural.",
+          "from": 20,
+          "to": 86
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 93,
+          "to": 162
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 36
+        },
+        {
+          "w": "evolución",
+          "f": 38
+        },
+        {
+          "w": "y",
+          "f": 50
+        },
+        {
+          "w": "la",
+          "f": 53
+        },
+        {
+          "w": "selección",
+          "f": 56
+        },
+        {
+          "w": "natural",
+          "f": 69
+        },
+        {
+          "w": "sigue",
+          "f": 93
+        },
+        {
+          "w": "con",
+          "f": 103
+        },
+        {
+          "w": "el",
+          "f": 108
+        },
+        {
+          "w": "siguiente",
+          "f": 110
+        },
+        {
+          "w": "tema",
+          "f": 123
+        },
+        {
+          "w": "de",
+          "f": 132
+        },
+        {
+          "w": "tu",
+          "f": 135
+        },
+        {
+          "w": "ruta",
+          "f": 139
+        }
+      ]
+    }
+  ]
+}

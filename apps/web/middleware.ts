@@ -40,7 +40,7 @@ function buildCsp(nonce: string): string {
     `style-src 'self' 'nonce-${nonce}' 'unsafe-hashes' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='`,
     "img-src 'self' data: blob: https://*.supabase.co https://i.vimeocdn.com",
     "media-src 'self' https://*.supabase.co",
-    'frame-src https://player.vimeo.com https://checkout.wompi.co',
+    'frame-src https://player.vimeo.com',
     "connect-src 'self' https://*.supabase.co https://*.sentry.io",
     "font-src 'self'",
     "frame-ancestors 'none'",

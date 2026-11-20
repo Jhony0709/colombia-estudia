@@ -5,7 +5,13 @@
  */
 
 const prisma = {
-  conversation: { findFirst: jest.fn(), updateMany: jest.fn(), update: jest.fn() },
+  conversation: {
+    findFirst: jest.fn(),
+    updateMany: jest.fn(),
+    update: jest.fn(),
+    aggregate: jest.fn(),
+    groupBy: jest.fn(),
+  },
   conversationMessage: { create: jest.fn() },
   institution: { findUnique: jest.fn() },
   person: { findFirst: jest.fn() },
@@ -13,12 +19,27 @@ const prisma = {
   $transaction: jest.fn(async (ops: unknown[]) => ops),
 };
 const mockSendText = jest.fn();
+const tenantTx = {
+  person: { findFirst: jest.fn(), findUniqueOrThrow: jest.fn(), create: jest.fn() },
+  membership: { create: jest.fn() },
+  auditLog: { create: jest.fn() },
+};
+const tenantDb = {
+  ...tenantTx,
+  $transaction: jest.fn(async (fn: (tx: typeof tenantTx) => unknown) => fn(tenantTx)),
+};
 
 jest.mock('server-only', () => ({}));
 jest.mock('@/lib/db/tenant', () => ({
   get prisma() {
     return prisma;
   },
+  createTenantClient: () => tenantDb,
+}));
+const mockStaffLink = jest.fn();
+jest.mock('@/features/billing/server/account.service', () => ({
+  createStaffLink: (...args: unknown[]) => mockStaffLink(...args),
+  nextChargeOf: jest.fn(),
 }));
 jest.mock('@/lib/whatsapp/cloud-api', () => ({
   SERVICE_WINDOW_MS: 24 * 60 * 60 * 1000,
@@ -27,7 +48,10 @@ jest.mock('@/lib/whatsapp/cloud-api', () => ({
 
 import {
   closeConversation,
+  conversationsPulse,
+  createPersonFromIntake,
   replyToConversation,
+  sendPaymentLink,
   takeConversation,
 } from '@/features/messaging/server/conversations.service';
 
@@ -153,5 +177,149 @@ describe('closeConversation', () => {
       row({ status: 'OPEN', assignedToId: 'staff-2' })
     );
     await expect(closeConversation(BASE)).rejects.toMatchObject({ code: 'CONFLICT' });
+  });
+});
+
+describe('createPersonFromIntake', () => {
+  const intake = {
+    personId: null,
+    intakeKind: 'ENROLL',
+    intakeStep: null,
+    intake: { fullName: 'Laura María Gómez', phone: '+573001112233', email: 'Laura@Correo.co' },
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    tenantDb.person.findFirst.mockResolvedValue(null);
+    tenantDb.person.create.mockResolvedValue({ id: 'p-9', code: 'PER-0009' });
+  });
+
+  it('crea la persona con su rol de estudiante y enlaza la conversación', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(intake);
+    expect(await createPersonFromIntake(BASE)).toEqual({ personCode: 'PER-0009', created: true });
+    expect(tenantDb.person.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        givenName: 'Laura',
+        familyName: 'María Gómez',
+        email: 'laura@correo.co',
+        phone: '+573001112233',
+      }),
+      select: { id: true, code: true },
+    });
+    expect(tenantDb.membership.create).toHaveBeenCalledWith({
+      data: { institutionId: 'inst-1', personId: 'p-9', role: 'STUDENT' },
+    });
+    expect(prisma.conversation.update).toHaveBeenCalledWith({
+      where: { id: 'conv-1' },
+      data: { personId: 'p-9' },
+    });
+  });
+
+  it('si ya hay una persona con ese correo, solo la enlaza', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(intake);
+    tenantDb.person.findFirst.mockResolvedValue({ id: 'p-1', code: 'PER-0001' });
+    expect(await createPersonFromIntake(BASE)).toEqual({ personCode: 'PER-0001', created: false });
+    expect(tenantDb.person.create).not.toHaveBeenCalled();
+  });
+
+  it('sin datos de inscripción completos no crea nada', async () => {
+    prisma.conversation.findFirst.mockResolvedValue({ ...intake, intakeStep: 2 });
+    await expect(createPersonFromIntake(BASE)).rejects.toMatchObject({ code: 'CONFLICT' });
+  });
+});
+
+describe('sendPaymentLink', () => {
+  const mine = (overrides: Record<string, unknown> = {}) =>
+    row({
+      status: 'OPEN',
+      assignedToId: 'staff-1',
+      person: { id: 'per-1', email: 'a@b.co' },
+      ...overrides,
+    });
+  const send = (delivery: 'email' | 'chat') =>
+    sendPaymentLink({ ...BASE, delivery, origin: 'https://alba.test' });
+
+  beforeEach(() => {
+    prisma.institution.findUnique.mockResolvedValue({ whatsappPhoneNumberId: 'pn-1' });
+    mockSendText.mockResolvedValue({ sent: true, id: 'wamid.link' });
+    mockStaffLink.mockResolvedValue({
+      installmentId: 'i2',
+      position: 2,
+      amount: 90_000,
+      dueOn: '2026-12-05',
+      url: 'https://checkout.bold.co/LNK_9',
+      reference: 'ce-i2-abc',
+    });
+  });
+
+  it('al chat: deja el link en WhatsApp como mensaje del asesor y lo audita', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(mine());
+    await expect(send('chat')).resolves.toEqual({ delivery: 'chat', amount: 90_000 });
+    expect(mockStaffLink).toHaveBeenCalledWith(
+      expect.objectContaining({ personId: 'per-1', delivery: 'chat', payerEmail: 'a@b.co' })
+    );
+    const [to, body] = mockSendText.mock.calls[0];
+    expect(to).toBe('573001112233');
+    expect(body).toContain('https://checkout.bold.co/LNK_9');
+    expect(body).toContain('cuota 2');
+    expect(prisma.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        action: 'payment_link_sent',
+        after: { delivery: 'chat', reference: 'ce-i2-abc', installmentId: 'i2' },
+      }),
+    });
+  });
+
+  it('al correo: lo envía Bold y no se escribe nada en el chat', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(mine());
+    await expect(send('email')).resolves.toEqual({ delivery: 'email', amount: 90_000 });
+    expect(mockSendText).not.toHaveBeenCalled();
+  });
+
+  it('fuera de las 24 h no crea el link para el chat; por correo sí', async () => {
+    const old = mine({ lastInboundAt: new Date(NOW.getTime() - 25 * 3600_000) });
+    prisma.conversation.findFirst.mockResolvedValue(old);
+    await expect(send('chat')).rejects.toMatchObject({ code: 'CONFLICT' });
+    expect(mockStaffLink).not.toHaveBeenCalled();
+    await expect(send('email')).resolves.toMatchObject({ delivery: 'email' });
+  });
+
+  it('solo quien tomó el chat, y con una persona enlazada', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(mine({ assignedToId: 'otro' }));
+    await expect(send('chat')).rejects.toMatchObject({ code: 'CONFLICT' });
+    prisma.conversation.findFirst.mockResolvedValue(mine({ person: null }));
+    await expect(send('chat')).rejects.toMatchObject({ code: 'CONFLICT' });
+    prisma.conversation.findFirst.mockResolvedValue(null);
+    await expect(send('chat')).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    expect(mockStaffLink).not.toHaveBeenCalled();
+  });
+});
+
+describe('conversationsPulse', () => {
+  it('la huella de un chat cambia con un mensaje, con quién lo atiende o con su estado', async () => {
+    const base = { status: 'OPEN', assignedToId: 'staff-1', personId: null, lastMessageAt: NOW };
+    prisma.conversation.findFirst.mockResolvedValue(base);
+    const first = await conversationsPulse({ institutionId: 'inst-1', conversationId: 'conv-1' });
+    prisma.conversation.findFirst.mockResolvedValue({
+      ...base,
+      lastMessageAt: new Date(NOW.getTime() + 1000),
+    });
+    const second = await conversationsPulse({ institutionId: 'inst-1', conversationId: 'conv-1' });
+    expect(second).not.toBe(first);
+    prisma.conversation.findFirst.mockResolvedValue(null);
+    await expect(
+      conversationsPulse({ institutionId: 'inst-1', conversationId: 'otra' })
+    ).resolves.toBe('');
+  });
+
+  it('la de la bandeja junta el último movimiento y cuántos hay en cada estado', async () => {
+    prisma.conversation.aggregate.mockResolvedValue({ _max: { lastMessageAt: NOW } });
+    prisma.conversation.groupBy.mockResolvedValue([
+      { status: 'WAITING', _count: 2 },
+      { status: 'BOT', _count: 5 },
+    ]);
+    await expect(conversationsPulse({ institutionId: 'inst-1' })).resolves.toBe(
+      `${NOW.getTime()}|BOT:5|WAITING:2`
+    );
   });
 });

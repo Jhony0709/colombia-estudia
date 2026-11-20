@@ -1,0 +1,158 @@
+{
+  "tema": "estado-economia-y-sociedad",
+  "componente": "Proyección",
+  "area": "Economía y ciencias políticas",
+  "titulo": "El Estado, la economía y la organización de la sociedad",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el Estado, la economía y la organización de la sociedad.",
+      "voz": "Repaso del tema: el Estado, la economía y la organización de la sociedad."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La economía y sus agentes",
+      "texto": "La economía estudia cómo usamos recursos escasos para satisfacer necesidades. En ella participan tres agentes: las familias, que consumen y trabajan; las empresas, que producen; y el Estado, que regula, cobra impuestos y financia servicios públicos.",
+      "voz": "La economía estudia cómo usamos recursos escasos para satisfacer necesidades. En ella participan tres agentes: las familias, que consumen y trabajan; las empresas, que producen; y el Estado, que regula, cobra impuestos y financia servicios públicos.",
+      "items": [
+        {
+          "titulo": "Escasez",
+          "texto": "Recursos limitados",
+          "palabra": "escasos"
+        },
+        {
+          "titulo": "Familias",
+          "texto": "Consumen y trabajan",
+          "palabra": "familias"
+        },
+        {
+          "titulo": "Empresas",
+          "texto": "Producen",
+          "palabra": "empresas"
+        },
+        {
+          "titulo": "Estado",
+          "texto": "Regula y cobra impuestos",
+          "palabra": "estado"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Oferta y demanda",
+      "texto": "En el mercado se encuentran la oferta, lo que los productores quieren vender, y la demanda, lo que los consumidores quieren comprar. Por lo general, si el precio sube, los productores ofrecen más y los consumidores compran menos.",
+      "voz": "En el mercado se encuentran la oferta, lo que los productores quieren vender, y la demanda, lo que los consumidores quieren comprar. Por lo general, si el precio sube, los productores ofrecen más y los consumidores compran menos.",
+      "columnas": [
+        {
+          "titulo": "Oferta",
+          "palabra": "oferta",
+          "puntos": [
+            {
+              "texto": "Lo que se quiere vender",
+              "palabra": "vender"
+            },
+            {
+              "texto": "Si el precio sube, se ofrece más",
+              "palabra": "ofrecen"
+            }
+          ]
+        },
+        {
+          "titulo": "Demanda",
+          "palabra": "demanda",
+          "puntos": [
+            {
+              "texto": "Lo que se quiere comprar",
+              "palabra": "comprar"
+            },
+            {
+              "texto": "Si el precio sube, se compra menos",
+              "palabra": "menos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Ahorro, inversión e inflación",
+      "texto": "Ahorrar es guardar parte de los ingresos para el futuro; invertir, usar recursos para obtener beneficios más adelante. Y la inflación es el aumento generalizado y sostenido de los precios: con el mismo dinero se compra menos.",
+      "voz": "Ahorrar es guardar parte de los ingresos para el futuro; invertir, usar recursos para obtener beneficios más adelante. Y la inflación es el aumento generalizado y sostenido de los precios: con el mismo dinero se compra menos.",
+      "items": [
+        {
+          "titulo": "Ahorro",
+          "texto": "Guardar para el futuro",
+          "palabra": "ahorrar"
+        },
+        {
+          "titulo": "Inversión",
+          "texto": "Buscar beneficios futuros",
+          "palabra": "invertir"
+        },
+        {
+          "titulo": "Inflación",
+          "texto": "Suben los precios",
+          "palabra": "inflación"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El Estado y la democracia",
+      "texto": "El Estado tiene territorio, población, gobierno y soberanía. En una democracia, la ciudadanía participa en las decisiones, directamente o por medio de representantes; en Colombia, por ejemplo, con el voto, el plebiscito, el referendo o la consulta popular.",
+      "voz": "El Estado tiene territorio, población, gobierno y soberanía. En una democracia, la ciudadanía participa en las decisiones, directamente o por medio de representantes; en Colombia, por ejemplo, con el voto, el plebiscito, el referendo o la consulta popular.",
+      "items": [
+        {
+          "titulo": "Elementos del Estado",
+          "texto": "Territorio, población, gobierno, soberanía",
+          "palabra": "territorio"
+        },
+        {
+          "titulo": "Democracia",
+          "texto": "La ciudadanía decide",
+          "palabra": "democracia"
+        },
+        {
+          "titulo": "Participación",
+          "texto": "Voto, plebiscito, referendo…",
+          "palabra": "voto"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Las ramas del poder público",
+      "texto": "La Constitución de 1991 separa el poder público en tres ramas: la ejecutiva, que administra el Estado y ejecuta las leyes; la legislativa, el Congreso, que hace las leyes; y la judicial, que administra justicia. Así se evita que el poder se concentre.",
+      "voz": "La Constitución de mil novecientos noventa y uno separa el poder público en tres ramas: la ejecutiva, que administra el Estado y ejecuta las leyes; la legislativa, el Congreso, que hace las leyes; y la judicial, que administra justicia. Así se evita que el poder se concentre.",
+      "items": [
+        {
+          "titulo": "Ejecutiva",
+          "texto": "Presidente, gobernadores, alcaldes",
+          "palabra": "ejecutiva"
+        },
+        {
+          "titulo": "Legislativa",
+          "texto": "El Congreso hace las leyes",
+          "palabra": "legislativa"
+        },
+        {
+          "titulo": "Judicial",
+          "texto": "Jueces y cortes",
+          "palabra": "judicial"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el Estado, la economía y la sociedad. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el Estado, la economía y la sociedad. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

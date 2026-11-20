@@ -1,0 +1,153 @@
+{
+  "tema": "estadistica-y-probabilidad",
+  "componente": "Bachillerato",
+  "area": "Matemáticas",
+  "titulo": "Estadística, probabilidad y análisis de datos",
+  "siguiente": "Química en la vida cotidiana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la estadística, la probabilidad y el análisis de datos.",
+      "voz": "Repaso del tema: la estadística, la probabilidad y el análisis de datos."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Población, muestra y variables",
+      "texto": "La población es el conjunto total que se quiere estudiar, y la muestra, una parte de ella. Las variables pueden ser cualitativas, como el color favorito, o cuantitativas, como la estatura o el número de hermanos.",
+      "voz": "La población es el conjunto total que se quiere estudiar, y la muestra, una parte de ella. Las variables pueden ser cualitativas, como el color favorito, o cuantitativas, como la estatura o el número de hermanos.",
+      "items": [
+        {
+          "titulo": "Población",
+          "texto": "El conjunto total",
+          "palabra": "población"
+        },
+        {
+          "titulo": "Muestra",
+          "texto": "Una parte",
+          "palabra": "muestra"
+        },
+        {
+          "titulo": "Cualitativas",
+          "texto": "Categorías: color favorito",
+          "palabra": "cualitativas"
+        },
+        {
+          "titulo": "Cuantitativas",
+          "texto": "Números: estatura, hermanos",
+          "palabra": "cuantitativas"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Media, mediana y moda",
+      "texto": "La media se obtiene sumando los datos y dividiendo entre cuántos son: 3, 4, 5, 3 y 5 suman 20, y entre 5 da 4. La mediana es el valor central de los datos ordenados, y la moda, el que más se repite.",
+      "voz": "La media se obtiene sumando los datos y dividiendo entre cuántos son: tres, cuatro, cinco, tres y cinco suman veinte, y entre cinco da cuatro. La mediana es el valor central de los datos ordenados, y la moda, el que más se repite.",
+      "items": [
+        {
+          "titulo": "Media",
+          "texto": "20 ÷ 5 = 4",
+          "palabra": "media"
+        },
+        {
+          "titulo": "Mediana",
+          "texto": "El valor central",
+          "palabra": "mediana"
+        },
+        {
+          "titulo": "Moda",
+          "texto": "El que más se repite",
+          "palabra": "moda"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "La dispersión",
+      "texto": "El rango es la diferencia entre el valor máximo y el mínimo. La varianza y la desviación estándar miden qué tan alejados están los datos de la media; la desviación estándar es la raíz cuadrada de la varianza.",
+      "voz": "El rango es la diferencia entre el valor máximo y el mínimo. La varianza y la desviación estándar miden qué tan alejados están los datos de la media; la desviación estándar es la raíz cuadrada de la varianza.",
+      "items": [
+        {
+          "titulo": "Rango",
+          "texto": "Máximo − mínimo",
+          "palabra": "rango"
+        },
+        {
+          "titulo": "Varianza",
+          "texto": "Qué tan alejados",
+          "palabra": "varianza"
+        },
+        {
+          "titulo": "Desviación estándar",
+          "texto": "Raíz de la varianza",
+          "palabra": "desviación"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La probabilidad",
+      "texto": "La probabilidad mide qué tan posible es un evento, de 0, imposible, a 1, seguro. Se calcula dividiendo los casos favorables entre los posibles: al lanzar un dado, la probabilidad de sacar un número par es 3 de 6, es decir, el 50 %.",
+      "voz": "La probabilidad mide qué tan posible es un evento, de cero, imposible, a uno, seguro. Se calcula dividiendo los casos favorables entre los posibles: al lanzar un dado, la probabilidad de sacar un número par es tres de seis, es decir, el cincuenta por ciento.",
+      "items": [
+        {
+          "titulo": "Imposible",
+          "texto": "P = 0",
+          "palabra": "imposible"
+        },
+        {
+          "titulo": "Seguro",
+          "texto": "P = 1",
+          "palabra": "seguro"
+        },
+        {
+          "titulo": "Fórmula",
+          "texto": "Favorables ÷ posibles",
+          "palabra": "favorables"
+        },
+        {
+          "titulo": "Un dado",
+          "texto": "Par: 3/6 = 50 %",
+          "palabra": "dado"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Leer los datos con sentido crítico",
+      "texto": "Ante una estadística, pregunta quién hizo el estudio, cuántas personas participaron y cómo las eligieron. Y desconfía de un gráfico con la escala recortada: puede exagerar las diferencias.",
+      "voz": "Ante una estadística, pregunta quién hizo el estudio, cuántas personas participaron y cómo las eligieron. Y desconfía de un gráfico con la escala recortada: puede exagerar las diferencias.",
+      "items": [
+        {
+          "titulo": "¿Quién lo hizo?",
+          "palabra": "quién"
+        },
+        {
+          "titulo": "¿Cuántas personas?",
+          "palabra": "cuántas"
+        },
+        {
+          "titulo": "¿Cómo las eligieron?",
+          "palabra": "eligieron"
+        },
+        {
+          "titulo": "Escala recortada",
+          "texto": "Exagera las diferencias",
+          "palabra": "escala"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la estadística y la probabilidad. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la estadística y la probabilidad. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

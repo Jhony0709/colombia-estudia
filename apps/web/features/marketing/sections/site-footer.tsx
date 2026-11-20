@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { SITE_PAGES } from '@/lib/seo/pages';
 import { SiteContainer } from '../site-container';
 import { AlbaLogo } from '../brand/alba-logo';
 import { whatsappUrl } from '../contact-links';
@@ -18,6 +19,7 @@ export async function SiteFooter({
   signedIn: boolean;
 }) {
   const t = await getTranslations('landing');
+  const pages = await getTranslations('sitePages');
   const wa = whatsappUrl(institution.supportPhone);
   const year = new Date().getFullYear();
   const link =
@@ -39,9 +41,11 @@ export async function SiteFooter({
           <Link href="/#historias" className={link}>
             {t('nav.stories')}
           </Link>
-          <Link href="/#preguntas" className={link}>
-            {t('nav.faq')}
-          </Link>
+          {SITE_PAGES.map((page) => (
+            <Link key={page.key} href={page.path} className={link}>
+              {pages(`${page.key}.nav`)}
+            </Link>
+          ))}
         </FooterColumn>
         <FooterColumn title={t('footer.support')}>
           {wa && (

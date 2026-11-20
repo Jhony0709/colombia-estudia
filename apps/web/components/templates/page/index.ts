@@ -6,3 +6,4 @@ export {
   type PageHeaderProps,
   type PageSectionProps,
 } from './Page';
+export { PageLoading } from './PageLoading';

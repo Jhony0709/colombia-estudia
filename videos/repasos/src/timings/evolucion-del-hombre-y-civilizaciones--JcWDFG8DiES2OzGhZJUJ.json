@@ -1,0 +1,865 @@
+{
+  "tema": "evolucion-del-hombre-y-civilizaciones",
+  "componente": "Fundamentos",
+  "area": "Ciencias sociales",
+  "titulo": "Evolución del hombre y civilizaciones antiguas",
+  "siguiente": "Los números naturales y las operaciones básicas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la evolución del hombre y las civilizaciones antiguas.",
+      "voz": "Repaso del tema: la evolución del hombre y las civilizaciones antiguas.",
+      "audio": "voz/evolucion-del-hombre-y-civilizaciones/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 122,
+      "frames": 150,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "la evolución del hombre",
+          "from": 34,
+          "to": 70
+        },
+        {
+          "text": "y las civilizaciones antiguas.",
+          "from": 70,
+          "to": 117
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "evolución",
+          "f": 37
+        },
+        {
+          "w": "del",
+          "f": 50
+        },
+        {
+          "w": "hombre",
+          "f": 55
+        },
+        {
+          "w": "y",
+          "f": 62
+        },
+        {
+          "w": "las",
+          "f": 64
+        },
+        {
+          "w": "civilizaciones",
+          "f": 68
+        },
+        {
+          "w": "antiguas",
+          "f": 90
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La hominización",
+      "texto": "La hominización es el proceso evolutivo que dio origen al ser humano moderno. Sus hitos más importantes fueron la bipedestación, el aumento del volumen cerebral, la organización social y la conciencia simbólica.",
+      "voz": "La hominización es el proceso evolutivo que dio origen al ser humano moderno. Sus hitos más importantes fueron la bipedestación, el aumento del volumen cerebral, la organización social y la conciencia simbólica.",
+      "items": [
+        {
+          "titulo": "Bipedestación",
+          "texto": "Caminar en dos pies",
+          "palabra": "bipedestación"
+        },
+        {
+          "titulo": "Más volumen cerebral",
+          "texto": "Un cerebro más grande",
+          "palabra": "cerebral"
+        },
+        {
+          "titulo": "Organización social",
+          "texto": "Vivir y trabajar en grupo",
+          "palabra": "social"
+        },
+        {
+          "titulo": "Conciencia simbólica",
+          "texto": "Pensar con símbolos",
+          "palabra": "simbólica"
+        }
+      ],
+      "audio": "voz/evolucion-del-hombre-y-civilizaciones/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 371,
+      "frames": 399,
+      "chunks": [
+        {
+          "text": "La hominización es el proceso evolutivo que",
+          "from": 0,
+          "to": 64
+        },
+        {
+          "text": "dio origen al ser humano moderno.",
+          "from": 64,
+          "to": 114
+        },
+        {
+          "text": "Sus hitos más importantes fueron la bipedestación,",
+          "from": 125,
+          "to": 217
+        },
+        {
+          "text": "el aumento del volumen cerebral, la organización",
+          "from": 217,
+          "to": 306
+        },
+        {
+          "text": "social y la conciencia simbólica.",
+          "from": 306,
+          "to": 366
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "hominización",
+          "f": 5
+        },
+        {
+          "w": "es",
+          "f": 27
+        },
+        {
+          "w": "el",
+          "f": 31
+        },
+        {
+          "w": "proceso",
+          "f": 34
+        },
+        {
+          "w": "evolutivo",
+          "f": 45
+        },
+        {
+          "w": "que",
+          "f": 62
+        },
+        {
+          "w": "dio",
+          "f": 66
+        },
+        {
+          "w": "origen",
+          "f": 70
+        },
+        {
+          "w": "al",
+          "f": 82
+        },
+        {
+          "w": "ser",
+          "f": 85
+        },
+        {
+          "w": "humano",
+          "f": 89
+        },
+        {
+          "w": "moderno",
+          "f": 98
+        },
+        {
+          "w": "sus",
+          "f": 125
+        },
+        {
+          "w": "hitos",
+          "f": 133
+        },
+        {
+          "w": "más",
+          "f": 141
+        },
+        {
+          "w": "importantes",
+          "f": 146
+        },
+        {
+          "w": "fueron",
+          "f": 164
+        },
+        {
+          "w": "la",
+          "f": 172
+        },
+        {
+          "w": "bipedestación",
+          "f": 176
+        },
+        {
+          "w": "el",
+          "f": 217
+        },
+        {
+          "w": "aumento",
+          "f": 222
+        },
+        {
+          "w": "del",
+          "f": 233
+        },
+        {
+          "w": "volumen",
+          "f": 237
+        },
+        {
+          "w": "cerebral",
+          "f": 247
+        },
+        {
+          "w": "la",
+          "f": 275
+        },
+        {
+          "w": "organización",
+          "f": 278
+        },
+        {
+          "w": "social",
+          "f": 296
+        },
+        {
+          "w": "y",
+          "f": 310
+        },
+        {
+          "w": "la",
+          "f": 313
+        },
+        {
+          "w": "conciencia",
+          "f": 317
+        },
+        {
+          "w": "simbólica",
+          "f": 331
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Del nomadismo al sedentarismo",
+      "texto": "Primero, los grupos humanos eran nómadas: se desplazaban en busca de alimento, agua y refugio, sin asentamientos permanentes. Después se volvieron sedentarios: se establecieron en un territorio, desarrollaron la agricultura y la ganadería, y construyeron aldeas.",
+      "voz": "Primero, los grupos humanos eran nómadas: se desplazaban en busca de alimento, agua y refugio, sin asentamientos permanentes. Después se volvieron sedentarios: se establecieron en un territorio, desarrollaron la agricultura y la ganadería, y construyeron aldeas.",
+      "columnas": [
+        {
+          "titulo": "Nomadismo",
+          "palabra": "nómadas",
+          "puntos": [
+            {
+              "texto": "Se desplazaban buscando recursos",
+              "palabra": "desplazaban"
+            },
+            {
+              "texto": "Sin asentamientos permanentes",
+              "palabra": "asentamientos"
+            }
+          ]
+        },
+        {
+          "titulo": "Sedentarismo",
+          "palabra": "sedentarios",
+          "puntos": [
+            {
+              "texto": "Se establecen en un territorio",
+              "palabra": "establecieron"
+            },
+            {
+              "texto": "Agricultura y ganadería",
+              "palabra": "agricultura"
+            },
+            {
+              "texto": "Las primeras aldeas",
+              "palabra": "aldeas"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/evolucion-del-hombre-y-civilizaciones/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 475,
+      "frames": 503,
+      "chunks": [
+        {
+          "text": "Primero, los grupos humanos eran nómadas:",
+          "from": 0,
+          "to": 71
+        },
+        {
+          "text": "se desplazaban en busca de alimento,",
+          "from": 80,
+          "to": 139
+        },
+        {
+          "text": "agua y refugio, sin asentamientos permanentes.",
+          "from": 139,
+          "to": 214
+        },
+        {
+          "text": "Después se volvieron sedentarios:",
+          "from": 224,
+          "to": 285
+        },
+        {
+          "text": "se establecieron en un territorio, desarrollaron la",
+          "from": 293,
+          "to": 383
+        },
+        {
+          "text": "agricultura y la ganadería, y construyeron aldeas.",
+          "from": 383,
+          "to": 471
+        }
+      ],
+      "words": [
+        {
+          "w": "primero",
+          "f": 0
+        },
+        {
+          "w": "los",
+          "f": 18
+        },
+        {
+          "w": "grupos",
+          "f": 23
+        },
+        {
+          "w": "humanos",
+          "f": 33
+        },
+        {
+          "w": "eran",
+          "f": 44
+        },
+        {
+          "w": "nómadas",
+          "f": 51
+        },
+        {
+          "w": "se",
+          "f": 80
+        },
+        {
+          "w": "desplazaban",
+          "f": 84
+        },
+        {
+          "w": "en",
+          "f": 100
+        },
+        {
+          "w": "busca",
+          "f": 102
+        },
+        {
+          "w": "de",
+          "f": 111
+        },
+        {
+          "w": "alimento",
+          "f": 113
+        },
+        {
+          "w": "agua",
+          "f": 132
+        },
+        {
+          "w": "y",
+          "f": 140
+        },
+        {
+          "w": "refugio",
+          "f": 144
+        },
+        {
+          "w": "sin",
+          "f": 164
+        },
+        {
+          "w": "asentamientos",
+          "f": 171
+        },
+        {
+          "w": "permanentes",
+          "f": 190
+        },
+        {
+          "w": "después",
+          "f": 224
+        },
+        {
+          "w": "se",
+          "f": 243
+        },
+        {
+          "w": "volvieron",
+          "f": 248
+        },
+        {
+          "w": "sedentarios",
+          "f": 259
+        },
+        {
+          "w": "se",
+          "f": 293
+        },
+        {
+          "w": "establecieron",
+          "f": 296
+        },
+        {
+          "w": "en",
+          "f": 316
+        },
+        {
+          "w": "un",
+          "f": 320
+        },
+        {
+          "w": "territorio",
+          "f": 323
+        },
+        {
+          "w": "desarrollaron",
+          "f": 354
+        },
+        {
+          "w": "la",
+          "f": 373
+        },
+        {
+          "w": "agricultura",
+          "f": 375
+        },
+        {
+          "w": "y",
+          "f": 395
+        },
+        {
+          "w": "la",
+          "f": 397
+        },
+        {
+          "w": "ganadería",
+          "f": 400
+        },
+        {
+          "w": "y",
+          "f": 421
+        },
+        {
+          "w": "construyeron",
+          "f": 426
+        },
+        {
+          "w": "aldeas",
+          "f": 446
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "linea",
+      "titulo": "Las civilizaciones antiguas (antes de Cristo)",
+      "texto": "Así surgieron las primeras civilizaciones: Mesopotamia, con la escritura cuneiforme; Egipto, con sus pirámides; India, en el valle del Indo; China, con el papel y la pólvora; Creta, con la navegación y el comercio; y Grecia, cuna de la democracia y la filosofía.",
+      "voz": "Así surgieron las primeras civilizaciones: Mesopotamia, con la escritura cuneiforme; Egipto, con sus pirámides; India, en el valle del Indo; China, con el papel y la pólvora; Creta, con la navegación y el comercio; y Grecia, cuna de la democracia y la filosofía.",
+      "items": [
+        {
+          "etiqueta": "3500",
+          "titulo": "Mesopotamia",
+          "texto": "Escritura cuneiforme",
+          "palabra": "mesopotamia"
+        },
+        {
+          "etiqueta": "3100",
+          "titulo": "Egipto",
+          "texto": "Pirámides",
+          "palabra": "egipto"
+        },
+        {
+          "etiqueta": "2500",
+          "titulo": "India",
+          "texto": "Valle del Indo",
+          "palabra": "india"
+        },
+        {
+          "etiqueta": "2000",
+          "titulo": "China",
+          "texto": "Papel y pólvora",
+          "palabra": "china"
+        },
+        {
+          "etiqueta": "2000",
+          "titulo": "Creta",
+          "texto": "Navegación y comercio",
+          "palabra": "creta"
+        },
+        {
+          "etiqueta": "1200",
+          "titulo": "Grecia",
+          "texto": "Democracia y filosofía",
+          "palabra": "grecia"
+        }
+      ],
+      "audio": "voz/evolucion-del-hombre-y-civilizaciones/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 487,
+      "frames": 515,
+      "chunks": [
+        {
+          "text": "Así surgieron las primeras civilizaciones:",
+          "from": 0,
+          "to": 65
+        },
+        {
+          "text": "Mesopotamia, con la escritura cuneiforme;",
+          "from": 72,
+          "to": 146
+        },
+        {
+          "text": "Egipto, con sus pirámides;",
+          "from": 153,
+          "to": 203
+        },
+        {
+          "text": "India, en el valle del Indo;",
+          "from": 211,
+          "to": 258
+        },
+        {
+          "text": "China, con el papel y la pólvora;",
+          "from": 265,
+          "to": 318
+        },
+        {
+          "text": "Creta, con la navegación y el comercio;",
+          "from": 325,
+          "to": 390
+        },
+        {
+          "text": "y Grecia, cuna de la democracia y la filosofía.",
+          "from": 397,
+          "to": 482
+        }
+      ],
+      "words": [
+        {
+          "w": "así",
+          "f": 0
+        },
+        {
+          "w": "surgieron",
+          "f": 9
+        },
+        {
+          "w": "las",
+          "f": 22
+        },
+        {
+          "w": "primeras",
+          "f": 26
+        },
+        {
+          "w": "civilizaciones",
+          "f": 37
+        },
+        {
+          "w": "mesopotamia",
+          "f": 72
+        },
+        {
+          "w": "con",
+          "f": 98
+        },
+        {
+          "w": "la",
+          "f": 103
+        },
+        {
+          "w": "escritura",
+          "f": 105
+        },
+        {
+          "w": "cuneiforme",
+          "f": 121
+        },
+        {
+          "w": "egipto",
+          "f": 153
+        },
+        {
+          "w": "con",
+          "f": 170
+        },
+        {
+          "w": "sus",
+          "f": 175
+        },
+        {
+          "w": "pirámides",
+          "f": 181
+        },
+        {
+          "w": "india",
+          "f": 211
+        },
+        {
+          "w": "en",
+          "f": 224
+        },
+        {
+          "w": "el",
+          "f": 228
+        },
+        {
+          "w": "valle",
+          "f": 232
+        },
+        {
+          "w": "del",
+          "f": 239
+        },
+        {
+          "w": "indo",
+          "f": 246
+        },
+        {
+          "w": "china",
+          "f": 265
+        },
+        {
+          "w": "con",
+          "f": 277
+        },
+        {
+          "w": "el",
+          "f": 282
+        },
+        {
+          "w": "papel",
+          "f": 285
+        },
+        {
+          "w": "y",
+          "f": 294
+        },
+        {
+          "w": "la",
+          "f": 296
+        },
+        {
+          "w": "pólvora",
+          "f": 301
+        },
+        {
+          "w": "creta",
+          "f": 325
+        },
+        {
+          "w": "con",
+          "f": 338
+        },
+        {
+          "w": "la",
+          "f": 343
+        },
+        {
+          "w": "navegación",
+          "f": 347
+        },
+        {
+          "w": "y",
+          "f": 366
+        },
+        {
+          "w": "el",
+          "f": 367
+        },
+        {
+          "w": "comercio",
+          "f": 371
+        },
+        {
+          "w": "y",
+          "f": 397
+        },
+        {
+          "w": "grecia",
+          "f": 402
+        },
+        {
+          "w": "cuna",
+          "f": 416
+        },
+        {
+          "w": "de",
+          "f": 425
+        },
+        {
+          "w": "la",
+          "f": 428
+        },
+        {
+          "w": "democracia",
+          "f": 431
+        },
+        {
+          "w": "y",
+          "f": 447
+        },
+        {
+          "w": "la",
+          "f": 449
+        },
+        {
+          "w": "filosofía",
+          "f": 452
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la evolución del hombre y las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la evolución del hombre y las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/evolucion-del-hombre-y-civilizaciones/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 198,
+      "frames": 358,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste la evolución del hombre",
+          "from": 32,
+          "to": 79
+        },
+        {
+          "text": "y las civilizaciones antiguas.",
+          "from": 79,
+          "to": 123
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 129,
+          "to": 194
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 32
+        },
+        {
+          "w": "la",
+          "f": 49
+        },
+        {
+          "w": "evolución",
+          "f": 51
+        },
+        {
+          "w": "del",
+          "f": 64
+        },
+        {
+          "w": "hombre",
+          "f": 69
+        },
+        {
+          "w": "y",
+          "f": 76
+        },
+        {
+          "w": "las",
+          "f": 78
+        },
+        {
+          "w": "civilizaciones",
+          "f": 82
+        },
+        {
+          "w": "antiguas",
+          "f": 105
+        },
+        {
+          "w": "sigue",
+          "f": 129
+        },
+        {
+          "w": "con",
+          "f": 138
+        },
+        {
+          "w": "el",
+          "f": 143
+        },
+        {
+          "w": "siguiente",
+          "f": 146
+        },
+        {
+          "w": "tema",
+          "f": 159
+        },
+        {
+          "w": "de",
+          "f": 167
+        },
+        {
+          "w": "tu",
+          "f": 170
+        },
+        {
+          "w": "ruta",
+          "f": 175
+        }
+      ]
+    }
+  ]
+}

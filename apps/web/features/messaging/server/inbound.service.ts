@@ -9,11 +9,12 @@ import 'server-only';
  * - si espera o la atiende alguien, solo se guarda: se responde desde `/mensajes`.
  */
 
+import { JSON_NULL } from '@/lib/db/prisma';
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { logger } from '@/lib/observability/logger';
-import { siteUrl } from '@/lib/seo/site-url';
 import {
+  sendButtons,
   sendList,
   sendTemplate,
   sendText,
@@ -23,12 +24,30 @@ import {
 import { notifyMany, staffPersonIds } from '@/features/notifications/server/notifications.service';
 import { handleInboundMessage } from '@/features/requests/server/whatsapp.service';
 import { whatsappIdOf } from '@/features/requests/server/requests.service';
-import { answerFor, asksForMenu, CHOICES, menu } from '../bot';
+import { answerFor, asksForMenu, intentFor, menu } from '../bot';
+import { botContext } from './facts.service';
+import {
+  cancelsIntake,
+  intakeAnswer,
+  isIntakeChoice,
+  type IntakeData,
+  type IntakeKind,
+  type IntakeReply,
+} from '../intake';
 
 export type InboundOutcome =
-  'unknown_number' | 'duplicate' | 'attempt_request' | 'menu' | 'answered' | 'waiting' | 'stored';
+  | 'unknown_number'
+  | 'duplicate'
+  | 'attempt_request'
+  | 'menu'
+  | 'answered'
+  | 'intake'
+  | 'waiting'
+  | 'stored';
 
 type Conversation = { id: string; institutionId: string; status: string; contact: string };
+
+const NO_INTAKE = { intakeKind: null, intakeStep: null, intake: JSON_NULL };
 
 /** Envía y lo deja en la conversación como del bot. */
 async function botSays(
@@ -64,6 +83,35 @@ async function botSays(
   });
 }
 
+/** Lo que dice el bot: texto, con botones o con lista; en el hilo queda con sus opciones. */
+function say(
+  conversation: Conversation,
+  to: string,
+  reply: IntakeReply,
+  phoneNumberId: string,
+  now: Date
+) {
+  const { text, buttons, list } = reply;
+  const send = () =>
+    list
+      ? sendList(to, { body: text, ...list }, phoneNumberId)
+      : buttons
+        ? sendButtons(to, text, buttons, phoneNumberId)
+        : sendText(to, text, phoneNumberId);
+  const options = list?.options ?? buttons;
+  const body = options ? `${text} [${options.map((o) => o.title).join(' · ')}]` : text;
+  return botSays(conversation, send, body, now);
+}
+
+/** Pasa a esperar asesor: los recordatorios (`waiting.service.ts`) cuentan desde aquí. */
+const waiting = (now: Date) => ({
+  status: 'WAITING' as const,
+  waitingSince: now,
+  waitingReminders: 0,
+  assignedToId: null,
+  assignedAt: null,
+});
+
 /** La persona de la plataforma con ese WhatsApp, si hay una sola. */
 async function personFor(institutionId: string, waId: string): Promise<string | null> {
   const db = createTenantClient(institutionId);
@@ -81,7 +129,8 @@ async function callAdvisors(
   institution: { id: string; whatsappAgentPhones: string[] },
   phoneNumberId: string,
   conversation: Conversation & { contactName: string | null },
-  waitingSince: Date
+  waitingSince: Date,
+  intake: IntakeKind | null = null
 ) {
   const who = conversation.contactName ?? `+${conversation.contact}`;
   const template = process.env.WHATSAPP_TEMPLATE_NEW_CHAT;
@@ -104,7 +153,12 @@ async function callAdvisors(
   await notifyMany(institution.id, staff, {
     type: 'conversation_waiting',
     title: 'Chat esperando asesor',
-    body: `${who} pidió hablar con un asesor por WhatsApp.`,
+    body:
+      intake === 'ENROLL'
+        ? `${who} dejó sus datos de inscripción por WhatsApp.`
+        : intake === 'CERTIFICATE'
+          ? `${who} pidió un certificado por WhatsApp.`
+          : `${who} pidió hablar con un asesor por WhatsApp.`,
     href: `/mensajes/${conversation.id}`,
     dedupeKey: `conversation_waiting:${conversation.id}:${waitingSince.getTime()}`,
   });
@@ -139,6 +193,9 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
     contact: true,
     contactName: true,
     assignedToId: true,
+    intakeKind: true,
+    intakeStep: true,
+    intake: true,
   } as const;
   const touch = {
     ...(message.name ? { contactName: message.name } : {}),
@@ -206,32 +263,100 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
   if (conversation.status === 'CLOSED') {
     await prisma.conversation.update({
       where: { id: conversation.id },
-      data: { status: 'BOT', assignedToId: null, assignedAt: null },
+      data: {
+        ...NO_INTAKE,
+        status: 'BOT',
+        assignedToId: null,
+        assignedAt: null,
+        waitingSince: null,
+      },
     });
   }
 
-  if (message.choiceId === CHOICES.advisor) {
-    await prisma.conversation.update({
-      where: { id: conversation.id },
-      data: { status: 'WAITING', waitingSince: now, assignedToId: null, assignedAt: null },
-    });
-    const text = answerFor(CHOICES.advisor, siteUrl())!;
-    await botSays(conversation, () => sendText(message.from, text, phoneNumberId), text, now);
+  const ctx = await botContext(institution.id);
+
+  // En medio de un formulario: lo que escribe responde la pregunta en curso. Sus botones también;
+  // otra opción del menú, «cancelar» o «menú» lo sacan.
+  const { intakeKind, intakeStep } = conversation;
+  if (intakeKind && intakeStep !== null && conversation.status !== 'CLOSED') {
+    const leaves =
+      (message.choiceId && !isIntakeChoice(message.choiceId)) ||
+      cancelsIntake(message.text) ||
+      asksForMenu(message.text);
+    if (leaves) {
+      await prisma.conversation.update({ where: { id: conversation.id }, data: NO_INTAKE });
+    } else {
+      const data = (conversation.intake ?? {}) as IntakeData;
+      const step = intakeAnswer(
+        intakeKind,
+        intakeStep,
+        data,
+        { text: message.text, choiceId: message.choiceId },
+        { waId: message.from, now, policyUrl: ctx.policyUrl }
+      );
+      if (step.status === 'retry') {
+        await say(conversation, message.from, step.reply, phoneNumberId, now);
+        return 'intake';
+      }
+      if (step.status === 'cancel') {
+        await prisma.conversation.update({ where: { id: conversation.id }, data: NO_INTAKE });
+        await say(conversation, message.from, step.reply, phoneNumberId, now);
+        return 'answered';
+      }
+      if (step.status === 'next') {
+        await prisma.conversation.update({
+          where: { id: conversation.id },
+          data: { intake: step.data, intakeStep: step.step },
+        });
+        await say(conversation, message.from, step.reply, phoneNumberId, now);
+        return 'intake';
+      }
+      await prisma.conversation.update({
+        where: { id: conversation.id },
+        data: { intake: step.data, intakeStep: null, ...waiting(now) },
+      });
+      await say(conversation, message.from, step.reply, phoneNumberId, now);
+      await callAdvisors(institution, phoneNumberId, conversation, now, intakeKind);
+      return 'waiting';
+    }
+  }
+
+  const choice = asksForMenu(message.text) ? null : (message.choiceId ?? intentFor(message.text));
+  logger.info({
+    event: 'whatsapp-intent',
+    conversationId: conversation.id,
+    source: message.choiceId ? 'choice' : 'text',
+    choice: choice ?? 'none',
+  });
+  const reply = answerFor(choice, ctx);
+
+  if (reply?.handoff) {
+    await prisma.conversation.update({ where: { id: conversation.id }, data: waiting(now) });
+    await say(conversation, message.from, reply, phoneNumberId, now);
     await callAdvisors(institution, phoneNumberId, conversation, now);
     return 'waiting';
   }
 
-  const answer = asksForMenu(message.text) ? null : answerFor(message.choiceId, siteUrl());
-  if (answer) {
-    await botSays(conversation, () => sendText(message.from, answer, phoneNumberId), answer, now);
+  if (reply?.intake) {
+    await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: { intakeKind: reply.intake, intakeStep: 0, intake: {} },
+    });
+    await say(conversation, message.from, reply, phoneNumberId, now);
+    return 'intake';
+  }
+
+  if (reply) {
+    await say(conversation, message.from, reply, phoneNumberId, now);
     return 'answered';
   }
 
   const greeting = menu(institution.name);
-  await botSays(
+  await say(
     conversation,
-    () => sendList(message.from, greeting, phoneNumberId),
-    `${greeting.body} [menú]`,
+    message.from,
+    { text: greeting.body, list: { button: greeting.button, options: greeting.options } },
+    phoneNumberId,
     now
   );
   return 'menu';

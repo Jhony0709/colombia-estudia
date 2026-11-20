@@ -43,7 +43,7 @@ import type { JsonObject } from '@/lib/db/prisma';
 import { notify } from '@/features/notifications/server/notifications.service';
 import { getCohortOutline, listMyEnrollments, type OutlineModule } from './cohort.service';
 import type { LessonGate } from './lesson.service';
-import { assessmentStatus } from './outline';
+import { assessmentStatus, neighbours, neighbourView, type StepNeighbour } from './outline';
 
 export type ReviewPolicy =
   'NONE' | 'SCORE_ONLY' | 'FULL_AFTER_GRADED' | 'FULL_AFTER_DUE' | 'FULL_AFTER_LAST_ATTEMPT';
@@ -113,6 +113,8 @@ export interface AssessmentForStudent {
   attemptRequest: { id: string; at: string } | null;
   /** La ruta del programa, para la barra lateral (21/9). Vacía si no se abre. */
   route: OutlineModule[];
+  /** Pasos vecinos: en la vista de estudiante se puede seguir sin presentarlo (19/11). */
+  navigation: { previous: StepNeighbour | null; next: StepNeighbour | null };
 }
 
 export interface AttemptQuestionView {
@@ -184,7 +186,16 @@ const blocked = (gate: LessonGate): AssessmentForStudent => ({
   blocked: false,
   attemptRequest: null,
   route: [],
+  navigation: { previous: null, next: null },
 });
+
+function stepsAround(modules: OutlineModule[], assignmentId: string) {
+  const { previous, next } = neighbours(
+    modules.flatMap((m) => m.items),
+    assignmentId
+  );
+  return { previous: neighbourView(previous), next: neighbourView(next) };
+}
 
 const num = (d: { toNumber(): number } | number | null): number | null =>
   d === null ? null : typeof d === 'number' ? d : d.toNumber();
@@ -721,6 +732,7 @@ async function resolveAssessment({
     blocked: !preview && cannotStart === 'NO_ATTEMPTS_LEFT' && !passed,
     attemptRequest: requested ? { id: requested.id, at: requested.createdAt.toISOString() } : null,
     route: outline.modules,
+    navigation: stepsAround(outline.modules, assignmentId),
   };
   return { view, enrollmentId, cohortId: outline.cohort.id };
 }

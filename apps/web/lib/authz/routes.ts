@@ -5,6 +5,8 @@
  * Pure functions with tests. No side effects.
  */
 
+import { SITE_PAGE_PATHS } from '@/lib/seo/pages';
+
 // ─────────────────────────── Public Route Prefixes ───────────────────────────
 
 /**
@@ -53,6 +55,10 @@ const PUBLIC_EXACT = [
 export function isProtected(pathname: string): boolean {
   // Exact matches first
   if ((PUBLIC_EXACT as readonly string[]).includes(pathname)) {
+    return false;
+  }
+  // Páginas de contenido (19/11): salen del registro, igual que el sitemap.
+  if (SITE_PAGE_PATHS.includes(pathname)) {
     return false;
   }
 

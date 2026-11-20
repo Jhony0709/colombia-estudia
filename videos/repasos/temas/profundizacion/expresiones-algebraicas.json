@@ -1,0 +1,146 @@
+{
+  "tema": "expresiones-algebraicas",
+  "componente": "Profundización",
+  "area": "Matemáticas",
+  "titulo": "Las expresiones algebraicas y el lenguaje algebraico",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las expresiones algebraicas y el lenguaje algebraico.",
+      "voz": "Repaso del tema: las expresiones algebraicas y el lenguaje algebraico."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es una variable?",
+      "texto": "El álgebra usa números, letras y signos. En aritmética, 5 + 3 = 8; en álgebra, x + 3 = 8, y la letra representa un número que no conocemos: aquí, 5. Esa letra se llama variable.",
+      "voz": "El álgebra usa números, letras y signos. En aritmética, cinco más tres es ocho; en álgebra, equis más tres es ocho, y la letra representa un número que no conocemos: aquí, cinco. Esa letra se llama variable.",
+      "items": [
+        {
+          "titulo": "Aritmética",
+          "texto": "5 + 3 = 8",
+          "palabra": "aritmética"
+        },
+        {
+          "titulo": "Álgebra",
+          "texto": "x + 3 = 8",
+          "palabra": "álgebra",
+          "vez": 1
+        },
+        {
+          "titulo": "Variable",
+          "texto": "x = 5",
+          "palabra": "variable"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Elementos de una expresión",
+      "texto": "Una expresión algebraica combina números, letras y operaciones, como 5x² + 3x − 7. El coeficiente multiplica a la variable, el exponente dice cuántas veces se repite como factor, la constante es el número sin letra, y cada parte separada por + o − es un término.",
+      "voz": "Una expresión algebraica combina números, letras y operaciones, como cinco equis al cuadrado más tres equis menos siete. El coeficiente multiplica a la variable, el exponente dice cuántas veces se repite como factor, la constante es el número sin letra, y cada parte separada por más o menos es un término.",
+      "items": [
+        {
+          "titulo": "Coeficiente",
+          "texto": "5 y 3",
+          "palabra": "coeficiente"
+        },
+        {
+          "titulo": "Exponente",
+          "texto": "2, en x²",
+          "palabra": "exponente"
+        },
+        {
+          "titulo": "Constante",
+          "texto": "−7",
+          "palabra": "constante"
+        },
+        {
+          "titulo": "Términos",
+          "texto": "5x², 3x y −7",
+          "palabra": "término"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Del lenguaje cotidiano al algebraico",
+      "texto": "Para traducir una frase, el número desconocido es x. El doble de un número es 2x; un número aumentado en 7, x + 7; y la mitad de un número, x/2.",
+      "voz": "Para traducir una frase, el número desconocido es equis. El doble de un número es dos equis; un número aumentado en siete, equis más siete; y la mitad de un número, equis sobre dos.",
+      "items": [
+        {
+          "titulo": "El doble",
+          "texto": "2x",
+          "palabra": "doble"
+        },
+        {
+          "titulo": "Aumentado en 7",
+          "texto": "x + 7",
+          "palabra": "aumentado"
+        },
+        {
+          "titulo": "La mitad",
+          "texto": "x/2",
+          "palabra": "mitad"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El valor numérico",
+      "texto": "El valor numérico se obtiene al reemplazar la variable por un número. Para 2x + 3, con x = 4: reemplazamos, 2(4) + 3; multiplicamos, 8 + 3; y sumamos: 11.",
+      "voz": "El valor numérico se obtiene al reemplazar la variable por un número. Para dos equis más tres, con equis igual a cuatro: reemplazamos, dos por cuatro más tres; multiplicamos, ocho más tres; y sumamos: once.",
+      "items": [
+        {
+          "titulo": "Reemplazar",
+          "texto": "2(4) + 3",
+          "palabra": "reemplazamos"
+        },
+        {
+          "titulo": "Multiplicar",
+          "texto": "8 + 3",
+          "palabra": "multiplicamos"
+        },
+        {
+          "titulo": "Sumar",
+          "texto": "11",
+          "palabra": "sumamos"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "¿Para qué sirven?",
+      "texto": "Las expresiones algebraicas representan situaciones cotidianas. Si un cuaderno cuesta 4.000 pesos, x cuadernos cuestan 4.000x; una persona de x años tendrá x + 5 dentro de 5 años; y el perímetro de un cuadrado de lado x es 4x.",
+      "voz": "Las expresiones algebraicas representan situaciones cotidianas. Si un cuaderno cuesta cuatro mil pesos, equis cuadernos cuestan cuatro mil equis; una persona de equis años tendrá equis más cinco dentro de cinco años; y el perímetro de un cuadrado de lado equis es cuatro equis.",
+      "items": [
+        {
+          "titulo": "Cuadernos",
+          "texto": "4.000x pesos",
+          "palabra": "cuaderno"
+        },
+        {
+          "titulo": "Edad",
+          "texto": "x + 5",
+          "palabra": "persona"
+        },
+        {
+          "titulo": "Perímetro",
+          "texto": "4x",
+          "palabra": "perímetro"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las expresiones algebraicas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las expresiones algebraicas. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

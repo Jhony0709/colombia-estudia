@@ -1,0 +1,156 @@
+{
+  "tema": "ser-humano-libertad-y-existencia",
+  "componente": "Transición",
+  "area": "Filosofía",
+  "titulo": "El ser humano, la libertad y la existencia",
+  "siguiente": "Educación financiera, emprendimiento y economía cotidiana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el ser humano, la libertad y la existencia.",
+      "voz": "Repaso del tema: el ser humano, la libertad y la existencia."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué significa ser humano?",
+      "texto": "El ser humano es biológico, porque tiene un cuerpo; racional, porque piensa; social, porque necesita a los demás; y cultural, porque crea costumbres y símbolos. Además, puede preguntarse por su propia existencia.",
+      "voz": "El ser humano es biológico, porque tiene un cuerpo; racional, porque piensa; social, porque necesita a los demás; y cultural, porque crea costumbres y símbolos. Además, puede preguntarse por su propia existencia.",
+      "items": [
+        {
+          "titulo": "Biológico",
+          "texto": "Tiene un cuerpo",
+          "palabra": "biológico"
+        },
+        {
+          "titulo": "Racional",
+          "texto": "Piensa",
+          "palabra": "racional"
+        },
+        {
+          "titulo": "Social",
+          "texto": "Necesita a los demás",
+          "palabra": "social"
+        },
+        {
+          "titulo": "Cultural",
+          "texto": "Crea costumbres",
+          "palabra": "cultural"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La identidad",
+      "texto": "Nuestra identidad tiene varias dimensiones: la personal, lo que nos distingue; la cultural, lo que compartimos con una comunidad; la social, los grupos de los que hacemos parte; y la digital, la imagen que construimos en internet.",
+      "voz": "Nuestra identidad tiene varias dimensiones: la personal, lo que nos distingue; la cultural, lo que compartimos con una comunidad; la social, los grupos de los que hacemos parte; y la digital, la imagen que construimos en internet.",
+      "items": [
+        {
+          "titulo": "Personal",
+          "texto": "Lo que nos distingue",
+          "palabra": "personal"
+        },
+        {
+          "titulo": "Cultural",
+          "texto": "Lo que compartimos",
+          "palabra": "cultural"
+        },
+        {
+          "titulo": "Social",
+          "texto": "Nuestros grupos",
+          "palabra": "social"
+        },
+        {
+          "titulo": "Digital",
+          "texto": "Nuestra imagen en internet",
+          "palabra": "digital"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "¿Somos libres?",
+      "texto": "La libertad es decidir sobre la propia vida, respetando los derechos de los demás, y la autonomía, pensar con criterio propio. Pero también hay condicionamientos sociales, y el determinismo sostiene que nuestras acciones dependen de causas anteriores.",
+      "voz": "La libertad es decidir sobre la propia vida, respetando los derechos de los demás, y la autonomía, pensar con criterio propio. Pero también hay condicionamientos sociales, y el determinismo sostiene que nuestras acciones dependen de causas anteriores.",
+      "items": [
+        {
+          "titulo": "Libertad",
+          "texto": "Decidir sobre la propia vida",
+          "palabra": "libertad"
+        },
+        {
+          "titulo": "Autonomía",
+          "texto": "Criterio propio",
+          "palabra": "autonomía"
+        },
+        {
+          "titulo": "Presión social",
+          "texto": "Familia, cultura, medios…",
+          "palabra": "condicionamientos"
+        },
+        {
+          "titulo": "Determinismo",
+          "texto": "Causas anteriores",
+          "palabra": "determinismo"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El existencialismo",
+      "texto": "Para Jean-Paul Sartre, la existencia precede a la esencia: primero existimos y, con nuestras decisiones, construimos lo que somos. Por eso la libertad implica responsabilidad y, a veces, angustia.",
+      "voz": "Para Jean-Paul Sartre, la existencia precede a la esencia: primero existimos y, con nuestras decisiones, construimos lo que somos. Por eso la libertad implica responsabilidad y, a veces, angustia.",
+      "items": [
+        {
+          "titulo": "Sartre",
+          "texto": "La existencia precede a la esencia",
+          "palabra": "sartre"
+        },
+        {
+          "titulo": "Responsabilidad",
+          "texto": "Asumir nuestras decisiones",
+          "palabra": "responsabilidad"
+        },
+        {
+          "titulo": "Angustia",
+          "texto": "No hay garantías",
+          "palabra": "angustia"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El sentido de la vida",
+      "texto": "Sobre el sentido de la vida no hay una única respuesta. Nietzsche invitó a cuestionar los valores impuestos; Camus habló del absurdo, de buscar sentido en un mundo que no siempre responde; y Hannah Arendt destacó la acción, participar con los demás en la vida colectiva.",
+      "voz": "Sobre el sentido de la vida no hay una única respuesta. Nietzsche invitó a cuestionar los valores impuestos; Camus habló del absurdo, de buscar sentido en un mundo que no siempre responde; y Hannah Arendt destacó la acción, participar con los demás en la vida colectiva.",
+      "items": [
+        {
+          "titulo": "Nietzsche",
+          "texto": "Cuestionar los valores",
+          "palabra": "nietzsche"
+        },
+        {
+          "titulo": "Camus",
+          "texto": "El absurdo",
+          "palabra": "camus"
+        },
+        {
+          "titulo": "Arendt",
+          "texto": "La acción con los demás",
+          "palabra": "arendt"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el ser humano, la libertad y la existencia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el ser humano, la libertad y la existencia. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

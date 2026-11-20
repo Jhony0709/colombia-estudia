@@ -1,0 +1,169 @@
+{
+  "tema": "lenguaje-comunicacion-y-realidad-social",
+  "componente": "Transición",
+  "area": "Lengua castellana",
+  "titulo": "El lenguaje, la comunicación y la realidad social",
+  "siguiente": "Energía, trabajo, potencia y conservación de la energía",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el lenguaje, la comunicación y la construcción de la realidad social.",
+      "voz": "Repaso del tema: el lenguaje, la comunicación y la construcción de la realidad social."
+    },
+    {
+      "id": "s1",
+      "tipo": "pasos",
+      "titulo": "Cómo ha cambiado la comunicación",
+      "texto": "La comunicación ha cambiado con el tiempo. Primero fue oral; luego llegaron la escritura, la imprenta, los medios masivos como la radio y la televisión, la comunicación digital y, hoy, la inteligencia artificial.",
+      "voz": "La comunicación ha cambiado con el tiempo. Primero fue oral; luego llegaron la escritura, la imprenta, los medios masivos como la radio y la televisión, la comunicación digital y, hoy, la inteligencia artificial.",
+      "items": [
+        {
+          "titulo": "Oral",
+          "palabra": "oral"
+        },
+        {
+          "titulo": "Escritura",
+          "palabra": "escritura"
+        },
+        {
+          "titulo": "Imprenta",
+          "palabra": "imprenta"
+        },
+        {
+          "titulo": "Medios masivos",
+          "palabra": "masivos"
+        },
+        {
+          "titulo": "Digital",
+          "palabra": "digital"
+        },
+        {
+          "titulo": "IA",
+          "palabra": "inteligencia"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Verbal y no verbal",
+      "texto": "La comunicación verbal usa palabras, orales o escritas. La no verbal comunica con gestos, postura, mirada, distancia y tono de voz: alguien puede decir que está tranquilo, pero su rostro muestra preocupación.",
+      "voz": "La comunicación verbal usa palabras, orales o escritas. La no verbal comunica con gestos, postura, mirada, distancia y tono de voz: alguien puede decir que está tranquilo, pero su rostro muestra preocupación.",
+      "columnas": [
+        {
+          "titulo": "Verbal",
+          "palabra": "verbal",
+          "puntos": [
+            {
+              "texto": "Palabras orales",
+              "palabra": "orales"
+            },
+            {
+              "texto": "Palabras escritas",
+              "palabra": "escritas"
+            }
+          ]
+        },
+        {
+          "titulo": "No verbal",
+          "palabra": "verbal",
+          "vez": 1,
+          "puntos": [
+            {
+              "texto": "Gestos, postura y mirada",
+              "palabra": "gestos"
+            },
+            {
+              "texto": "Tono de voz",
+              "palabra": "tono"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las variedades de la lengua",
+      "texto": "No todos hablamos igual. El dialecto es la variedad de una región, como el español del Caribe; la jerga, el vocabulario de un oficio o un grupo; el sociolecto, el de un grupo social; y el registro, formal o informal, cambia según la situación. Ninguna variedad es inferior.",
+      "voz": "No todos hablamos igual. El dialecto es la variedad de una región, como el español del Caribe; la jerga, el vocabulario de un oficio o un grupo; el sociolecto, el de un grupo social; y el registro, formal o informal, cambia según la situación. Ninguna variedad es inferior.",
+      "items": [
+        {
+          "titulo": "Dialecto",
+          "texto": "De una región",
+          "palabra": "dialecto"
+        },
+        {
+          "titulo": "Jerga",
+          "texto": "De un oficio o grupo",
+          "palabra": "jerga"
+        },
+        {
+          "titulo": "Sociolecto",
+          "texto": "De un grupo social",
+          "palabra": "sociolecto"
+        },
+        {
+          "titulo": "Registro",
+          "texto": "Formal o informal",
+          "palabra": "registro"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Signos y significados",
+      "texto": "La semiótica estudia los signos. Todo signo tiene un significante, su forma, y un significado, la idea que le asociamos: una paloma blanca puede significar la paz. Y un mismo símbolo puede significar cosas distintas según la cultura.",
+      "voz": "La semiótica estudia los signos. Todo signo tiene un significante, su forma, y un significado, la idea que le asociamos: una paloma blanca puede significar la paz. Y un mismo símbolo puede significar cosas distintas según la cultura.",
+      "items": [
+        {
+          "titulo": "Significante",
+          "texto": "La forma: una paloma blanca",
+          "palabra": "significante"
+        },
+        {
+          "titulo": "Significado",
+          "texto": "La idea: la paz",
+          "palabra": "significado"
+        },
+        {
+          "titulo": "Según la cultura",
+          "texto": "No siempre es universal",
+          "palabra": "cultura"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Persuadir no es manipular",
+      "texto": "El lenguaje también influye en las personas. Persuadir es convencer con razones o emociones; manipular es engañar, ocultar información o distorsionar los hechos. Ante un mensaje, pregúntate quién lo produce, qué omite y si puedes verificarlo.",
+      "voz": "El lenguaje también influye en las personas. Persuadir es convencer con razones o emociones; manipular es engañar, ocultar información o distorsionar los hechos. Ante un mensaje, pregúntate quién lo produce, qué omite y si puedes verificarlo.",
+      "items": [
+        {
+          "titulo": "Persuadir",
+          "texto": "Razones y emociones",
+          "palabra": "persuadir"
+        },
+        {
+          "titulo": "Manipular",
+          "texto": "Engaño y ocultamiento",
+          "palabra": "manipular"
+        },
+        {
+          "titulo": "Analizar el mensaje",
+          "texto": "¿Quién? ¿Qué omite? ¿Se verifica?",
+          "palabra": "produce"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el lenguaje y la comunicación. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el lenguaje y la comunicación. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

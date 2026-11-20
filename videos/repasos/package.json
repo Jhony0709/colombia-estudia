@@ -1,0 +1,21 @@
+{
+  "name": "alba-video-repasos",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "voces": "node tools/elevenlabs.mjs && node tools/timings.mjs",
+    "tiempos": "node tools/timings.mjs",
+    "imagenes": "node tools/imagenes.mjs",
+    "studio": "node tools/imagenes.mjs && remotion studio src/index.ts",
+    "render": "node tools/imagenes.mjs && remotion render src/index.ts"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.542",
+    "@remotion/renderer": "^4.0.542",
+    "@types/react": "^18.3.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.542",
+    "typescript": "^5.9.3"
+  }
+}

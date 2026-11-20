@@ -1,0 +1,1156 @@
+{
+  "tema": "colombia-organizacion-territorial",
+  "componente": "Consolidación",
+  "area": "Ciencias sociales",
+  "titulo": "Colombia: organización territorial, política y ciudadana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la organización territorial, política y ciudadana de Colombia.",
+      "voz": "Repaso del tema: la organización territorial, política y ciudadana de Colombia.",
+      "audio": "voz/colombia-organizacion-territorial/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 140,
+      "frames": 168,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 29
+        },
+        {
+          "text": "la organización territorial, política",
+          "from": 31,
+          "to": 94
+        },
+        {
+          "text": "y ciudadana de Colombia.",
+          "from": 94,
+          "to": 135
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 17
+        },
+        {
+          "w": "la",
+          "f": 31
+        },
+        {
+          "w": "organización",
+          "f": 34
+        },
+        {
+          "w": "territorial",
+          "f": 52
+        },
+        {
+          "w": "política",
+          "f": 72
+        },
+        {
+          "w": "y",
+          "f": 88
+        },
+        {
+          "w": "ciudadana",
+          "f": 89
+        },
+        {
+          "w": "de",
+          "f": 104
+        },
+        {
+          "w": "colombia",
+          "f": 108
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La organización territorial",
+      "texto": "Colombia tiene 32 departamentos y el Distrito Capital de Bogotá. Los departamentos los administran gobernadores y asambleas, y se forman por municipios, con sus autoridades locales. Los distritos tienen un régimen especial. Y las regiones naturales, como la Andina o la Caribe, se definen por su geografía.",
+      "voz": "Colombia tiene treinta y dos departamentos y el Distrito Capital de Bogotá. Los departamentos los administran gobernadores y asambleas, y se forman por municipios, con sus autoridades locales. Los distritos tienen un régimen especial. Y las regiones naturales, como la Andina o la Caribe, se definen por su geografía.",
+      "items": [
+        {
+          "titulo": "Departamentos",
+          "texto": "32, con gobernador y asamblea",
+          "palabra": "departamentos"
+        },
+        {
+          "titulo": "Municipios",
+          "texto": "Con autoridades locales",
+          "palabra": "municipios"
+        },
+        {
+          "titulo": "Distritos",
+          "texto": "Régimen especial, como Bogotá",
+          "palabra": "distritos"
+        },
+        {
+          "titulo": "Regiones naturales",
+          "texto": "Andina, Caribe, Pacífica, Amazónica, Orinoquía e Insular",
+          "palabra": "regiones"
+        }
+      ],
+      "audio": "voz/colombia-organizacion-territorial/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 533,
+      "frames": 561,
+      "chunks": [
+        {
+          "text": "Colombia tiene 32 departamentos y",
+          "from": 0,
+          "to": 57
+        },
+        {
+          "text": "el Distrito Capital de Bogotá.",
+          "from": 57,
+          "to": 110
+        },
+        {
+          "text": "Los departamentos los administran gobernadores y",
+          "from": 117,
+          "to": 193
+        },
+        {
+          "text": "asambleas, y se forman por municipios,",
+          "from": 193,
+          "to": 254
+        },
+        {
+          "text": "con sus autoridades locales.",
+          "from": 254,
+          "to": 298
+        },
+        {
+          "text": "Los distritos tienen un régimen especial.",
+          "from": 311,
+          "to": 380
+        },
+        {
+          "text": "Y las regiones naturales, como la Andina o",
+          "from": 390,
+          "to": 462
+        },
+        {
+          "text": "la Caribe, se definen por su geografía.",
+          "from": 462,
+          "to": 528
+        }
+      ],
+      "words": [
+        {
+          "w": "colombia",
+          "f": 0
+        },
+        {
+          "w": "tiene",
+          "f": 15
+        },
+        {
+          "w": "treinta",
+          "f": 22
+        },
+        {
+          "w": "y",
+          "f": 30
+        },
+        {
+          "w": "dos",
+          "f": 32
+        },
+        {
+          "w": "departamentos",
+          "f": 37
+        },
+        {
+          "w": "y",
+          "f": 60
+        },
+        {
+          "w": "el",
+          "f": 61
+        },
+        {
+          "w": "distrito",
+          "f": 64
+        },
+        {
+          "w": "capital",
+          "f": 76
+        },
+        {
+          "w": "de",
+          "f": 89
+        },
+        {
+          "w": "bogotá",
+          "f": 92
+        },
+        {
+          "w": "los",
+          "f": 117
+        },
+        {
+          "w": "departamentos",
+          "f": 122
+        },
+        {
+          "w": "los",
+          "f": 142
+        },
+        {
+          "w": "administran",
+          "f": 147
+        },
+        {
+          "w": "gobernadores",
+          "f": 163
+        },
+        {
+          "w": "y",
+          "f": 183
+        },
+        {
+          "w": "asambleas",
+          "f": 185
+        },
+        {
+          "w": "y",
+          "f": 210
+        },
+        {
+          "w": "se",
+          "f": 215
+        },
+        {
+          "w": "forman",
+          "f": 219
+        },
+        {
+          "w": "por",
+          "f": 228
+        },
+        {
+          "w": "municipios",
+          "f": 233
+        },
+        {
+          "w": "con",
+          "f": 252
+        },
+        {
+          "w": "sus",
+          "f": 257
+        },
+        {
+          "w": "autoridades",
+          "f": 262
+        },
+        {
+          "w": "locales",
+          "f": 280
+        },
+        {
+          "w": "los",
+          "f": 311
+        },
+        {
+          "w": "distritos",
+          "f": 317
+        },
+        {
+          "w": "tienen",
+          "f": 333
+        },
+        {
+          "w": "un",
+          "f": 343
+        },
+        {
+          "w": "régimen",
+          "f": 347
+        },
+        {
+          "w": "especial",
+          "f": 360
+        },
+        {
+          "w": "y",
+          "f": 390
+        },
+        {
+          "w": "las",
+          "f": 395
+        },
+        {
+          "w": "regiones",
+          "f": 399
+        },
+        {
+          "w": "naturales",
+          "f": 411
+        },
+        {
+          "w": "como",
+          "f": 427
+        },
+        {
+          "w": "la",
+          "f": 434
+        },
+        {
+          "w": "andina",
+          "f": 436
+        },
+        {
+          "w": "o",
+          "f": 447
+        },
+        {
+          "w": "la",
+          "f": 449
+        },
+        {
+          "w": "caribe",
+          "f": 453
+        },
+        {
+          "w": "se",
+          "f": 466
+        },
+        {
+          "w": "definen",
+          "f": 470
+        },
+        {
+          "w": "por",
+          "f": 481
+        },
+        {
+          "w": "su",
+          "f": 486
+        },
+        {
+          "w": "geografía",
+          "f": 491
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las tres ramas del poder público",
+      "texto": "Según la Constitución de 1991, el poder público se divide en tres ramas. La legislativa hace las leyes, en el Congreso. La ejecutiva gobierna y la encabeza el presidente. Y la judicial administra justicia con jueces, tribunales y altas cortes.",
+      "voz": "Según la Constitución de mil novecientos noventa y uno, el poder público se divide en tres ramas. La legislativa hace las leyes, en el Congreso. La ejecutiva gobierna y la encabeza el presidente. Y la judicial administra justicia con jueces, tribunales y altas cortes.",
+      "items": [
+        {
+          "titulo": "Legislativa",
+          "texto": "Hace las leyes: el Congreso",
+          "palabra": "legislativa"
+        },
+        {
+          "titulo": "Ejecutiva",
+          "texto": "Gobierna: presidente, gobernadores y alcaldes",
+          "palabra": "ejecutiva"
+        },
+        {
+          "titulo": "Judicial",
+          "texto": "Administra justicia: jueces, tribunales y altas cortes",
+          "palabra": "judicial"
+        }
+      ],
+      "audio": "voz/colombia-organizacion-territorial/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 446,
+      "frames": 474,
+      "chunks": [
+        {
+          "text": "Según la Constitución de 1991, el poder",
+          "from": 0,
+          "to": 78
+        },
+        {
+          "text": "público se divide en tres ramas.",
+          "from": 78,
+          "to": 142
+        },
+        {
+          "text": "La legislativa hace las leyes, en el Congreso.",
+          "from": 149,
+          "to": 227
+        },
+        {
+          "text": "La ejecutiva gobierna y la encabeza el presidente.",
+          "from": 235,
+          "to": 309
+        },
+        {
+          "text": "Y la judicial administra justicia con",
+          "from": 319,
+          "to": 383
+        },
+        {
+          "text": "jueces, tribunales y altas cortes.",
+          "from": 383,
+          "to": 442
+        }
+      ],
+      "words": [
+        {
+          "w": "según",
+          "f": 0
+        },
+        {
+          "w": "la",
+          "f": 11
+        },
+        {
+          "w": "constitución",
+          "f": 14
+        },
+        {
+          "w": "de",
+          "f": 31
+        },
+        {
+          "w": "mil",
+          "f": 34
+        },
+        {
+          "w": "novecientos",
+          "f": 38
+        },
+        {
+          "w": "noventa",
+          "f": 53
+        },
+        {
+          "w": "y",
+          "f": 65
+        },
+        {
+          "w": "uno",
+          "f": 67
+        },
+        {
+          "w": "el",
+          "f": 80
+        },
+        {
+          "w": "poder",
+          "f": 84
+        },
+        {
+          "w": "público",
+          "f": 93
+        },
+        {
+          "w": "se",
+          "f": 105
+        },
+        {
+          "w": "divide",
+          "f": 109
+        },
+        {
+          "w": "en",
+          "f": 117
+        },
+        {
+          "w": "tres",
+          "f": 120
+        },
+        {
+          "w": "ramas",
+          "f": 129
+        },
+        {
+          "w": "la",
+          "f": 149
+        },
+        {
+          "w": "legislativa",
+          "f": 154
+        },
+        {
+          "w": "hace",
+          "f": 178
+        },
+        {
+          "w": "las",
+          "f": 185
+        },
+        {
+          "w": "leyes",
+          "f": 191
+        },
+        {
+          "w": "en",
+          "f": 202
+        },
+        {
+          "w": "el",
+          "f": 206
+        },
+        {
+          "w": "congreso",
+          "f": 210
+        },
+        {
+          "w": "la",
+          "f": 235
+        },
+        {
+          "w": "ejecutiva",
+          "f": 239
+        },
+        {
+          "w": "gobierna",
+          "f": 255
+        },
+        {
+          "w": "y",
+          "f": 270
+        },
+        {
+          "w": "la",
+          "f": 273
+        },
+        {
+          "w": "encabeza",
+          "f": 275
+        },
+        {
+          "w": "el",
+          "f": 287
+        },
+        {
+          "w": "presidente",
+          "f": 290
+        },
+        {
+          "w": "y",
+          "f": 319
+        },
+        {
+          "w": "la",
+          "f": 324
+        },
+        {
+          "w": "judicial",
+          "f": 327
+        },
+        {
+          "w": "administra",
+          "f": 343
+        },
+        {
+          "w": "justicia",
+          "f": 359
+        },
+        {
+          "w": "con",
+          "f": 371
+        },
+        {
+          "w": "jueces",
+          "f": 376
+        },
+        {
+          "w": "tribunales",
+          "f": 387
+        },
+        {
+          "w": "y",
+          "f": 407
+        },
+        {
+          "w": "altas",
+          "f": 410
+        },
+        {
+          "w": "cortes",
+          "f": 421
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Derechos y deberes",
+      "texto": "La Constitución reconoce derechos, como la vida, la igualdad, la educación y expresar opiniones libremente. Y nos pide deberes, como respetar los derechos de los demás, cumplir la Constitución y las leyes, y cuidar los bienes públicos y el medioambiente.",
+      "voz": "La Constitución reconoce derechos, como la vida, la igualdad, la educación y expresar opiniones libremente. Y nos pide deberes, como respetar los derechos de los demás, cumplir la Constitución y las leyes, y cuidar los bienes públicos y el medioambiente.",
+      "columnas": [
+        {
+          "titulo": "Derechos",
+          "palabra": "derechos",
+          "puntos": [
+            {
+              "texto": "La vida y la igualdad",
+              "palabra": "vida"
+            },
+            {
+              "texto": "La educación",
+              "palabra": "educación"
+            },
+            {
+              "texto": "Expresar opiniones",
+              "palabra": "opiniones"
+            }
+          ]
+        },
+        {
+          "titulo": "Deberes",
+          "palabra": "deberes",
+          "puntos": [
+            {
+              "texto": "Respetar a los demás",
+              "palabra": "respetar"
+            },
+            {
+              "texto": "Cumplir la Constitución y las leyes",
+              "palabra": "cumplir"
+            },
+            {
+              "texto": "Cuidar lo público y el medioambiente",
+              "palabra": "cuidar"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/colombia-organizacion-territorial/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 406,
+      "frames": 434,
+      "chunks": [
+        {
+          "text": "La Constitución reconoce derechos, como",
+          "from": 0,
+          "to": 60
+        },
+        {
+          "text": "la vida, la igualdad, la",
+          "from": 60,
+          "to": 98
+        },
+        {
+          "text": "educación y expresar opiniones libremente.",
+          "from": 98,
+          "to": 163
+        },
+        {
+          "text": "Y nos pide deberes, como respetar los derechos de",
+          "from": 176,
+          "to": 253
+        },
+        {
+          "text": "los demás, cumplir la Constitución y las leyes, y",
+          "from": 253,
+          "to": 329
+        },
+        {
+          "text": "cuidar los bienes públicos y el medioambiente.",
+          "from": 329,
+          "to": 401
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "constitución",
+          "f": 6
+        },
+        {
+          "w": "reconoce",
+          "f": 23
+        },
+        {
+          "w": "derechos",
+          "f": 36
+        },
+        {
+          "w": "como",
+          "f": 50
+        },
+        {
+          "w": "la",
+          "f": 57
+        },
+        {
+          "w": "vida",
+          "f": 61
+        },
+        {
+          "w": "la",
+          "f": 71
+        },
+        {
+          "w": "igualdad",
+          "f": 74
+        },
+        {
+          "w": "la",
+          "f": 90
+        },
+        {
+          "w": "educación",
+          "f": 93
+        },
+        {
+          "w": "y",
+          "f": 112
+        },
+        {
+          "w": "expresar",
+          "f": 116
+        },
+        {
+          "w": "opiniones",
+          "f": 130
+        },
+        {
+          "w": "libremente",
+          "f": 145
+        },
+        {
+          "w": "y",
+          "f": 176
+        },
+        {
+          "w": "nos",
+          "f": 181
+        },
+        {
+          "w": "pide",
+          "f": 186
+        },
+        {
+          "w": "deberes",
+          "f": 194
+        },
+        {
+          "w": "como",
+          "f": 208
+        },
+        {
+          "w": "respetar",
+          "f": 215
+        },
+        {
+          "w": "los",
+          "f": 228
+        },
+        {
+          "w": "derechos",
+          "f": 232
+        },
+        {
+          "w": "de",
+          "f": 243
+        },
+        {
+          "w": "los",
+          "f": 246
+        },
+        {
+          "w": "demás",
+          "f": 250
+        },
+        {
+          "w": "cumplir",
+          "f": 273
+        },
+        {
+          "w": "la",
+          "f": 283
+        },
+        {
+          "w": "constitución",
+          "f": 287
+        },
+        {
+          "w": "y",
+          "f": 305
+        },
+        {
+          "w": "las",
+          "f": 308
+        },
+        {
+          "w": "leyes",
+          "f": 314
+        },
+        {
+          "w": "y",
+          "f": 325
+        },
+        {
+          "w": "cuidar",
+          "f": 329
+        },
+        {
+          "w": "los",
+          "f": 336
+        },
+        {
+          "w": "bienes",
+          "f": 340
+        },
+        {
+          "w": "públicos",
+          "f": 348
+        },
+        {
+          "w": "y",
+          "f": 361
+        },
+        {
+          "w": "el",
+          "f": 363
+        },
+        {
+          "w": "medioambiente",
+          "f": 366
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La participación ciudadana",
+      "texto": "Participar es intervenir en las decisiones de la comunidad y del país. Podemos hacerlo con el voto, el referendo, la consulta popular, el cabildo abierto y la participación comunitaria. Participar no es solo votar: también es informarse, dialogar y proponer.",
+      "voz": "Participar es intervenir en las decisiones de la comunidad y del país. Podemos hacerlo con el voto, el referendo, la consulta popular, el cabildo abierto y la participación comunitaria. Participar no es solo votar: también es informarse, dialogar y proponer.",
+      "items": [
+        {
+          "titulo": "El voto",
+          "texto": "Elegir representantes",
+          "palabra": "voto"
+        },
+        {
+          "titulo": "El referendo",
+          "texto": "Aprobar o rechazar una norma",
+          "palabra": "referendo"
+        },
+        {
+          "titulo": "La consulta popular",
+          "texto": "Opinar sobre asuntos públicos",
+          "palabra": "consulta"
+        },
+        {
+          "titulo": "El cabildo abierto",
+          "texto": "Discutir asuntos de la comunidad",
+          "palabra": "cabildo"
+        }
+      ],
+      "audio": "voz/colombia-organizacion-territorial/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 477,
+      "frames": 505,
+      "chunks": [
+        {
+          "text": "Participar es intervenir en las decisiones",
+          "from": 0,
+          "to": 69
+        },
+        {
+          "text": "de la comunidad y del país.",
+          "from": 69,
+          "to": 113
+        },
+        {
+          "text": "Podemos hacerlo con el voto, el",
+          "from": 121,
+          "to": 175
+        },
+        {
+          "text": "referendo, la consulta popular, el cabildo",
+          "from": 175,
+          "to": 249
+        },
+        {
+          "text": "abierto y la participación comunitaria.",
+          "from": 249,
+          "to": 317
+        },
+        {
+          "text": "Participar no es solo votar:",
+          "from": 335,
+          "to": 383
+        },
+        {
+          "text": "también es informarse, dialogar y proponer.",
+          "from": 385,
+          "to": 472
+        }
+      ],
+      "words": [
+        {
+          "w": "participar",
+          "f": 0
+        },
+        {
+          "w": "es",
+          "f": 21
+        },
+        {
+          "w": "intervenir",
+          "f": 24
+        },
+        {
+          "w": "en",
+          "f": 42
+        },
+        {
+          "w": "las",
+          "f": 45
+        },
+        {
+          "w": "decisiones",
+          "f": 48
+        },
+        {
+          "w": "de",
+          "f": 62
+        },
+        {
+          "w": "la",
+          "f": 65
+        },
+        {
+          "w": "comunidad",
+          "f": 69
+        },
+        {
+          "w": "y",
+          "f": 87
+        },
+        {
+          "w": "del",
+          "f": 91
+        },
+        {
+          "w": "país",
+          "f": 97
+        },
+        {
+          "w": "podemos",
+          "f": 121
+        },
+        {
+          "w": "hacerlo",
+          "f": 133
+        },
+        {
+          "w": "con",
+          "f": 144
+        },
+        {
+          "w": "el",
+          "f": 149
+        },
+        {
+          "w": "voto",
+          "f": 152
+        },
+        {
+          "w": "el",
+          "f": 165
+        },
+        {
+          "w": "referendo",
+          "f": 170
+        },
+        {
+          "w": "la",
+          "f": 191
+        },
+        {
+          "w": "consulta",
+          "f": 196
+        },
+        {
+          "w": "popular",
+          "f": 210
+        },
+        {
+          "w": "el",
+          "f": 230
+        },
+        {
+          "w": "cabildo",
+          "f": 236
+        },
+        {
+          "w": "abierto",
+          "f": 248
+        },
+        {
+          "w": "y",
+          "f": 264
+        },
+        {
+          "w": "la",
+          "f": 267
+        },
+        {
+          "w": "participación",
+          "f": 271
+        },
+        {
+          "w": "comunitaria",
+          "f": 293
+        },
+        {
+          "w": "participar",
+          "f": 335
+        },
+        {
+          "w": "no",
+          "f": 356
+        },
+        {
+          "w": "es",
+          "f": 358
+        },
+        {
+          "w": "solo",
+          "f": 361
+        },
+        {
+          "w": "votar",
+          "f": 370
+        },
+        {
+          "w": "también",
+          "f": 385
+        },
+        {
+          "w": "es",
+          "f": 395
+        },
+        {
+          "w": "informarse",
+          "f": 398
+        },
+        {
+          "w": "dialogar",
+          "f": 421
+        },
+        {
+          "w": "y",
+          "f": 438
+        },
+        {
+          "w": "proponer",
+          "f": 442
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la organización de Colombia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la organización de Colombia. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/colombia-organizacion-territorial/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 169,
+      "frames": 329,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 24
+        },
+        {
+          "text": "Repasaste la organización de Colombia.",
+          "from": 33,
+          "to": 89
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 96,
+          "to": 164
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "la",
+          "f": 49
+        },
+        {
+          "w": "organización",
+          "f": 52
+        },
+        {
+          "w": "de",
+          "f": 70
+        },
+        {
+          "w": "colombia",
+          "f": 73
+        },
+        {
+          "w": "sigue",
+          "f": 96
+        },
+        {
+          "w": "con",
+          "f": 106
+        },
+        {
+          "w": "el",
+          "f": 110
+        },
+        {
+          "w": "siguiente",
+          "f": 113
+        },
+        {
+          "w": "tema",
+          "f": 126
+        },
+        {
+          "w": "de",
+          "f": 134
+        },
+        {
+          "w": "tu",
+          "f": 138
+        },
+        {
+          "w": "ruta",
+          "f": 142
+        }
+      ]
+    }
+  ]
+}

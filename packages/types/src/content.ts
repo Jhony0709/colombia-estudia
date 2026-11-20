@@ -12,6 +12,7 @@
 
 import { z } from 'zod';
 import { CALLOUT_KINDS, isCalloutKind } from './callouts';
+import { ESCENA_COLUMNAS_MAX, ESCENA_MAX, ESCENA_MIN, ESCENA_TIPOS, isEscenaTipo } from './escenas';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
@@ -422,6 +423,59 @@ export function parseLessonMarkdown(markdown: string): ParsedLesson {
           }
         }
       }
+      // Escena (14/11): a container whose body is one list of 2 to 8 items (some tipos, with sublists).
+      else if (name === 'escena') {
+        const tipo = directive.attributes?.tipo ?? 'pasos';
+        const children = (node as unknown as Parent).children ?? [];
+        const lists = children.filter((c) => c.type === 'list') as Parent[];
+        const items = lists[0]?.children.length ?? 0;
+        if (node.type !== 'containerDirective') {
+          issues.push({
+            rule: 'escena-needs-body',
+            severity: 'error',
+            message: 'Escena needs a body: write it as :::escena … :::',
+            line: pos?.start.line,
+            column: pos?.start.column,
+            fix: 'Use the container form: :::escena{tipo="pasos"} on its own line, a list, then ::: on its own line.',
+          });
+        } else if (!isEscenaTipo(tipo)) {
+          issues.push({
+            rule: 'escena-invalid-tipo',
+            severity: 'error',
+            message: `Unknown escena tipo: "${tipo}"`,
+            line: pos?.start.line,
+            column: pos?.start.column,
+            fix: `Use one of: ${ESCENA_TIPOS.join(', ')}.`,
+          });
+        } else if (lists.length !== 1 || items < ESCENA_MIN || items > ESCENA_MAX) {
+          issues.push({
+            rule: 'escena-needs-list',
+            severity: 'error',
+            message: `Escena needs exactly one list with ${ESCENA_MIN} to ${ESCENA_MAX} items`,
+            line: pos?.start.line,
+            column: pos?.start.column,
+            fix: 'Write one list (- or 1.) inside the escena, one item per step, moment or phase.',
+          });
+        } else if (tipo === 'comparar' || tipo === 'mapa') {
+          // Sublistas (19/11): `comparar` pide una por columna; `mapa`, al menos una rama.
+          const branches = lists[0]!.children.filter((item) =>
+            (item as Parent).children.some((c) => c.type === 'list')
+          ).length;
+          const columns = tipo === 'comparar';
+          if (columns ? branches < items || items > ESCENA_COLUMNAS_MAX : branches === 0) {
+            issues.push({
+              rule: 'escena-needs-sublists',
+              severity: 'error',
+              message: columns
+                ? `Escena "comparar" needs 2 to ${ESCENA_COLUMNAS_MAX} items, each with its own sublist`
+                : 'Escena "mapa" needs at least one item with a sublist',
+              line: pos?.start.line,
+              column: pos?.start.column,
+              fix: 'Indent a list under the item: the item is the column or branch, its sublist the points.',
+            });
+          }
+        }
+      }
       // Unknown directive
       else {
         issues.push({
@@ -430,7 +484,7 @@ export function parseLessonMarkdown(markdown: string): ParsedLesson {
           message: `Unknown directive: ::${name}`,
           line: pos?.start.line,
           column: pos?.start.column,
-          fix: `Use a supported directive: ::video, ::audio, ::pdf, :::callout, or :lang`,
+          fix: `Use a supported directive: ::video, ::audio, ::pdf, :::callout, :::escena, or :lang`,
         });
       }
     }

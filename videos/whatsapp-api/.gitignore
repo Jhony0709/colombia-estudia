@@ -1,0 +1,4 @@
+node_modules/
+out/
+stills/
+tools/kokoro-multi-lang-v1_0/

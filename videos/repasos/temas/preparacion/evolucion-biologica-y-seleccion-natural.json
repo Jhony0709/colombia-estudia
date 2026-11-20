@@ -1,0 +1,153 @@
+{
+  "tema": "evolucion-biologica-y-seleccion-natural",
+  "componente": "Preparación",
+  "area": "Ciencias naturales",
+  "titulo": "Evolución biológica y selección natural",
+  "siguiente": "El siglo XX y la configuración del mundo actual",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la evolución biológica y la selección natural.",
+      "voz": "Repaso del tema: la evolución biológica y la selección natural."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es la evolución?",
+      "texto": "La evolución biológica es el cambio de las características hereditarias de las poblaciones a través de muchas generaciones. No evolucionan los individuos durante su vida: evolucionan las poblaciones.",
+      "voz": "La evolución biológica es el cambio de las características hereditarias de las poblaciones a través de muchas generaciones. No evolucionan los individuos durante su vida: evolucionan las poblaciones.",
+      "items": [
+        {
+          "titulo": "Características hereditarias",
+          "palabra": "hereditarias"
+        },
+        {
+          "titulo": "Muchas generaciones",
+          "palabra": "generaciones"
+        },
+        {
+          "titulo": "Poblaciones, no individuos",
+          "palabra": "individuos"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Lamarck y Darwin",
+      "texto": "Lamarck propuso que los órganos se desarrollan con el uso y que lo adquirido en vida se hereda; hoy esa idea no se acepta como explicación general. Darwin, tras estudiar los pinzones de las islas Galápagos, propuso la selección natural en El origen de las especies, de 1859.",
+      "voz": "Lamarck propuso que los órganos se desarrollan con el uso y que lo adquirido en vida se hereda; hoy esa idea no se acepta como explicación general. Darwin, tras estudiar los pinzones de las islas Galápagos, propuso la selección natural en El origen de las especies, de mil ochocientos cincuenta y nueve.",
+      "items": [
+        {
+          "titulo": "Lamarck",
+          "texto": "Uso y herencia de lo adquirido",
+          "palabra": "lamarck"
+        },
+        {
+          "titulo": "Darwin",
+          "texto": "Pinzones de Galápagos",
+          "palabra": "darwin"
+        },
+        {
+          "titulo": "Selección natural",
+          "texto": "El origen de las especies, 1859",
+          "palabra": "selección"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "La selección natural",
+      "texto": "La selección natural se explica con cuatro elementos: la variación entre individuos, la herencia de esas diferencias, la presión del ambiente y la reproducción diferencial. Por ejemplo, con un insecticida sobreviven más los insectos que ya eran resistentes, y sus descendientes heredan esa resistencia.",
+      "voz": "La selección natural se explica con cuatro elementos: la variación entre individuos, la herencia de esas diferencias, la presión del ambiente y la reproducción diferencial. Por ejemplo, con un insecticida sobreviven más los insectos que ya eran resistentes, y sus descendientes heredan esa resistencia.",
+      "items": [
+        {
+          "titulo": "Variación",
+          "palabra": "variación"
+        },
+        {
+          "titulo": "Herencia",
+          "palabra": "herencia"
+        },
+        {
+          "titulo": "Presión ambiental",
+          "palabra": "presión"
+        },
+        {
+          "titulo": "Reproducción diferencial",
+          "palabra": "reproducción"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "Evidencias de la evolución",
+      "texto": "Hay varias evidencias de la evolución: los fósiles, la embriología, el ADN y la anatomía comparada. Por ejemplo, el brazo humano, el ala del murciélago y la aleta de la ballena tienen huesos organizados de forma semejante: son estructuras homólogas, porque vienen de antepasados comunes.",
+      "voz": "Hay varias evidencias de la evolución: los fósiles, la embriología, el ADN y la anatomía comparada. Por ejemplo, el brazo humano, el ala del murciélago y la aleta de la ballena tienen huesos organizados de forma semejante: son estructuras homólogas, porque vienen de antepasados comunes.",
+      "imagenes": [
+        {
+          "src": "preparacion/estructuras-homologas.webp",
+          "focos": [
+            {
+              "palabra": "brazo",
+              "x": 0.13,
+              "y": 0.45,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "ala",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "aleta",
+              "x": 0.78,
+              "y": 0.45,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "homólogas",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Nuevas especies y evolución humana",
+      "texto": "Cuando una población queda separada por montañas o ríos durante muchas generaciones, puede formar una nueva especie: es la especiación. Y los seres humanos no descendemos de los monos actuales: compartimos antepasados comunes con otros primates.",
+      "voz": "Cuando una población queda separada por montañas o ríos durante muchas generaciones, puede formar una nueva especie: es la especiación. Y los seres humanos no descendemos de los monos actuales: compartimos antepasados comunes con otros primates.",
+      "items": [
+        {
+          "titulo": "Barreras geográficas",
+          "texto": "Montañas, ríos, océanos",
+          "palabra": "montañas"
+        },
+        {
+          "titulo": "Especiación",
+          "texto": "Nace una nueva especie",
+          "palabra": "especiación"
+        },
+        {
+          "titulo": "Antepasados comunes",
+          "texto": "Humanos y otros primates",
+          "palabra": "antepasados"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la evolución y la selección natural. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la evolución y la selección natural. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

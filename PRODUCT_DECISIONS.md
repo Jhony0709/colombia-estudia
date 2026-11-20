@@ -1264,6 +1264,145 @@ y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de ap
 los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
 cada consulta lleva su `institutionId`.
 
+## 2026-11-19 — Imágenes en el contenido: dónde, quién las hace y el visor
+
+**Decisión** (Jhonny, 19/11: «verifica dónde podemos agregar imágenes… o si puedes hacer todo tú,
+mucho mejor. Las imágenes pueden estar en un componente viewer»):
+
+- Auditoría de los 50 temas: 71 lugares, 43 de prioridad alta, en
+  `packages/scripts/seed/contenido/IMAGENES.md`. Solo donde la imagen explica (una forma, un
+  lugar, un proceso, una gráfica); nada de adorno.
+- Mezcla (Jhonny, 19/11: «que sean más realistas, profesionales y con la marca»; aprobado tras
+  comparar el piloto): donde el realismo ayuda (29 lugares), la ilustración la genera OpenAI sin
+  ningún texto y con la paleta de la marca, y Claude pone los rótulos en SVG con Lexend. Gráficas,
+  mapas y esquemas abstractos (37) siguen en SVG propio. Todo se sube como WebP (la plataforma no
+  acepta SVG); fuentes en `contenido/imagenes/<componente>/`. Ni fotos ni retratos de personas
+  reales, ni imágenes de sitios web sin licencia.
+- La llave de OpenAI no entra en el repo ni en la app: Jhonny corre `generar.mjs` en su terminal
+  con la llave del llavero de su Mac.
+- Piloto: cinco imágenes de Fundamentos (célula, fotosíntesis, capas de la Tierra, proceso
+  comunicativo, 3/4). Entran por el editor de cada tema.
+- Visor: toda imagen del contenido se abre a pantalla completa con zoom (`VisorImagen`).
+
+## 2026-11-19 — Escenas en todos los temas: tres tipos nuevos y piloto en Fundamentos
+
+**Decisión** (Jhonny, 19/11): las explicaciones animadas van dentro del contenido, como escenas,
+y no como video ni GIF en cada tema; el video queda para el repaso al final del tema (18/11).
+Mermaid se descartó como motor: sus estilos en línea chocan con la CSP (`style-src` con nonce),
+no anima y en el teléfono encoge el texto.
+
+- Tres tipos nuevos sobre la misma lista en Markdown: `conceptos` (una tarjeta por idea),
+  `comparar` (2 o 3 columnas, cada punto con su sublista) y `mapa` (el título es la raíz, los
+  puntos las ramas, las sublistas las hojas). Con `pasos`, `ciclo` y `linea` son seis.
+- Piloto en los 8 temas de Fundamentos (18 escenas). Regla: una escena reorganiza texto que ya
+  está en el tema; no agrega afirmaciones. Lo que se tocó queda en
+  `seed/contenido/bachillerato/fundamentos/AUDITORIA.md` («Escenas (19/11)»).
+- El seed no reescribe temas ya cargados: en una base con Fundamentos, el Markdown nuevo entra
+  por el editor (versiona). Los otros componentes siguen cuando el piloto esté revisado.
+
+## 2026-11-19 — Auditoría antes del push: chats sin atender, estados de carga y base de SEO
+
+**Decisión** (Jhonny, 19/11, tras la auditoría general):
+
+- **Chats sin atender**: una conversación que espera asesor más de 24 horas desde su último
+  mensaje se cierra sola (ya no se le puede escribir por WhatsApp) y la bandeja la muestra como
+  «Sin atender» en Cerrados. Lo hace el job de cada minuto (`waiting.service.ts`).
+- **La bandeja se refresca solo cuando hay algo nuevo**: consulta una huella barata
+  (`/api/conversations/pulse`) en vez de pedir la página entera cada 6 segundos.
+- **Estados de carga**: `loading.tsx` en estudiante, gestión y familia.
+- **Seguridad en la base** (avisos de Supabase): `search_path` fijo en `reject_mutation`,
+  `next_code` y `assign_code`, y `rls_auto_enable` sin permiso de ejecución pública (migración
+  `20261119010000_function_hardening`).
+- **SEO**: registro de páginas, metadata, datos estructurados y los cinco pilares de la fase 1
+  (`plan/13-seo.md`, «Estado (19/11/2026)»). El copy espera la revisión de Kris.
+
+**No se hizo, a propósito**: validar la sesión una sola vez por página (cambiaría cuándo deja de
+valer una sesión cerrada desde otro dispositivo; se decide aparte) y volver estática la portada
+(incompatible con la política de contenido con nonce).
+
+## 2026-11-18 — Bold reemplaza a Wompi; un video de repaso al final de cada tema
+
+**Pagos** (Jhonny, 18/11): el pago en línea es con Bold, la cuenta «Colombia Estudia» del panel de
+Bold. «Pagar en línea» crea un link de pago por API por lo pendiente de la cuota (un solo pago,
+vence en 24 h) y lleva al estudiante o al acudiente a él. El webhook `/api/webhooks/bold`, firmado
+con `x-bold-signature`, registra el pago y lo confirma si el monto cuadra; uno distinto queda sin
+confirmar y avisa a operación, y una anulación de Bold también avisa (el pago se anula a mano en
+cartera). El job diario concilia con la consulta de notificaciones de Bold. Wompi se retira
+(`lib/billing/wompi.ts` y su webhook se borraron). Primera fase: cuotas del plan de pago y, después,
+certificados pedidos por WhatsApp (el asesor genera el link y el bot lo envía; Bold no manda
+WhatsApp).
+
+**19/11 — integración completa** (Jhonny): cada link queda en `PaymentLink` (migración
+`20261119000000_payment_link`) y un pago solo se registra cuando Bold dice que el link está
+pagado. Eso se le pregunta al volver del pago (la cuota sale pagada en esa misma carga, sin
+esperar el webhook, que puede tardar 10 minutos), al llegar el webhook —que ya no se cree, solo
+dispara la consulta— y en el job diario, que recupera un webhook perdido. El paso del link a
+`PAID` hace que se registre una sola vez. Un link vigente se reutiliza en vez de crear otro. El
+modo de pruebas (`BOLD_SANDBOX`) se ignora en producción, porque en pruebas Bold firma con llave
+vacía. Los casos, uno por uno, en `reference/06-external-integrations/README.md`.
+
+**Correo o chat** (mismo día): el link de «Pagar en línea» vence en 1 hora y Bold ya no manda
+correo por él; el que se pide por correo («Enviarme el link al correo» en la cuenta) o el que
+envía el asesor desde una conversación de WhatsApp («Enviar al correo» o «Dejar en el chat»,
+con `billing.manage` y solo quien tomó el chat) vence en 24 horas. Desde la conversación se
+cobra la próxima cuota de la persona enlazada; los certificados siguen sin cobro en línea. Bold
+no deja cancelar un link: por eso la vigencia corta. El webhook sigue respondiendo después de
+consultar a Bold, aunque pase de los 2 segundos que Bold pide: un reintento de más es preferible
+a perder el reintento cuando algo falla.
+
+**Falta para encenderlo**: poner `BOLD_API_KEY` y `BOLD_SECRET_KEY` de producción en Vercel,
+desplegar y registrar el webhook. La unidad de `expiration_date` (nanosegundos) quedó comprobada
+el 19/11 con `packages/scripts/bold/check.mjs` y la llave de pruebas.
+
+**Repasos** (mismo día): el video de repaso va como último paso de cada tema del taller, después
+de sus actividades: un tema «Repaso: <tema>» con el video, que se completa al verlo (90 %) o al
+leer la transcripción. Videos de ≈1 min con entrada y cierre de marca, hechos con plantillas por
+tipo de escena (`videos/repasos/`, un guion JSON por tema; voces de ElevenLabs). Piloto: La
+célula. Reemplaza el repaso por componente del 14/11. Voz (19/11): `JcWDFG8DiES2OzGhZJUJ` de ElevenLabs.
+Imágenes (20/11): donde la voz describe una ilustración del tema, la escena la muestra y se acerca
+a cada parte cuando la nombra (escena `imagen`), con la misma imagen que el estudiante ve en el tema.
+
+## 2026-11-14 — El bot de WhatsApp responde lo que hoy contesta el asesor
+
+**Decisión** (Jhonny, 14/11, con los mensajes de Kris del 13/11): el menú tiene nueve opciones
+—programa y precios, probar gratis, inscribirme, requisitos, certificados, validez del título,
+sede, soporte y asesor— y el bot reconoce las preguntas escritas a mano más comunes
+(`intentFor`). Cada intención que reconoce queda en el log (`whatsapp-intent`). Solo en el chat se
+permiten emojis.
+
+**Precios desde la plataforma**: el número de componentes y el precio por componente salen del
+Bachillerato pagado (`ProgramPrice` vigente, `PER_MODULE`), guardados 10 minutos
+(`features/messaging/server/facts.service.ts`). Derechos de grado ($350.000), certificado
+($11.000, 3 días hábiles), edad mínima (16 años) y duración (6 meses) siguen en `DEFAULT_FACTS`
+(`features/messaging/facts.ts`) porque la plataforma aún no los tiene; si la consulta falla, el bot
+responde con esos valores. La fecha de grado queda «por definir». «Probar gratis» dice si el módulo
+de introducción se abre solo o lo habilita un asesor, según exista la cohorte de introducción.
+
+**Datos por el chat** (auditoría del 14/11): «Inscribirme» y «Certificados» primero piden la
+autorización de tratamiento de datos (Ley 1581, con el enlace a la política de la institución); sin
+ella no se pide nada. Luego una pregunta a la vez con validación, un resumen para confirmar y
+«Corregir» para cambiar un campo (`features/messaging/intake.ts`; `cancelar` sale). El chat **no**
+pide número de documento: la política de WhatsApp Business no lo permite; el documento se pide en
+`/registro` (tipo y número; uno ya registrado no se registra otra vez). Al terminar, la
+conversación pasa a la bandeja con los datos y la fecha de la autorización, y quien tenga
+`people.manage` puede crear la persona desde ahí (o se enlaza la que ya tiene ese correo).
+
+**Espera de asesor**: si nadie toma el chat, el bot escribe cada 3 minutos, hasta 3 veces, y luego
+propone escribir al correo de soporte (`/api/jobs/waiting-chats`, cada minuto; requiere el plan Pro
+de Vercel). **Retención**: el job diario borra las conversaciones sin persona enlazada después de 12
+meses sin mensajes.
+
+**Contenido** (mismo día): las lecciones pueden llevar escenas animadas en lugar de listas largas,
+`:::escena{tipo="pasos|ciclo|linea" titulo="…"}` con una lista de 2 a 8 puntos; respetan
+«reducir movimiento». Piloto: la historia de la célula en Fundamentos. Los videos de repaso van
+por tema desde el 18/11 (ver esa entrada).
+
+**Schema**: `Conversation.intakeKind`, `intakeStep`, `intake`, `waitingReminders` (migración
+`20261114000000_conversation_intake`).
+
+**Pendiente**: derechos de grado, certificados y fecha de grado en la plataforma, y el cobro del
+certificado con Wompi.
+
 ## 2026-11-05 — Perder un examen con todos los intentos detiene la ruta; otra oportunidad por WhatsApp
 
 **Decisión** (Kris, 4/11; aprobada por Jhonny el 5/11): si el estudiante usa todos los intentos sin
@@ -1371,6 +1510,10 @@ reiniciar mientras se entrega un intento en otra pestaña puede fallar (la nota 
 intento) y se reintenta; el panel de actividad de `/aprender` conserva los días de la vista
 (`LearningEvent` es append-only) y los archivos de entregas borradas quedan para el barrido de
 medios.
+
+**19/11** (Jhonny): en la vista se sigue al paso siguiente sin presentar el examen ni enviar la
+actividad. La barra del pie del tema muestra siempre «Siguiente» (la actividad sigue en la
+página) y el examen lleva su propia barra con anterior y siguiente. El estudiante no cambia.
 
 ## 2026-10-11 — Una encuesta corta al terminar cada componente, recomendada y con nombre
 

@@ -1,0 +1,1052 @@
+{
+  "tema": "potenciacion-y-radicacion",
+  "componente": "Desarrollo",
+  "area": "Matemáticas",
+  "titulo": "La potenciación y la radicación de números naturales y enteros",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la potenciación y la radicación.",
+      "voz": "Repaso del tema: la potenciación y la radicación.",
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 98,
+      "frames": 126,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 29
+        },
+        {
+          "text": "la potenciación y la radicación.",
+          "from": 33,
+          "to": 93
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 33
+        },
+        {
+          "w": "potenciación",
+          "f": 37
+        },
+        {
+          "w": "y",
+          "f": 59
+        },
+        {
+          "w": "la",
+          "f": 61
+        },
+        {
+          "w": "radicación",
+          "f": 65
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La potenciación",
+      "texto": "La potenciación abrevia una multiplicación repetida: 2³ = 2 × 2 × 2 = 8. La base es el número que se multiplica, el exponente dice cuántas veces aparece y la potencia es el resultado.",
+      "voz": "La potenciación abrevia una multiplicación repetida: dos al cubo es dos por dos por dos, que da ocho. La base es el número que se multiplica, el exponente dice cuántas veces aparece y la potencia es el resultado.",
+      "items": [
+        {
+          "titulo": "Base",
+          "texto": "El número que se multiplica: 2",
+          "palabra": "base"
+        },
+        {
+          "titulo": "Exponente",
+          "texto": "Cuántas veces aparece: 3",
+          "palabra": "exponente"
+        },
+        {
+          "titulo": "Potencia",
+          "texto": "El resultado: 8",
+          "palabra": "potencia"
+        }
+      ],
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 371,
+      "frames": 399,
+      "chunks": [
+        {
+          "text": "La potenciación abrevia una multiplicación repetida:",
+          "from": 0,
+          "to": 84
+        },
+        {
+          "text": "2³ = 2 × 2 × 2 = 8.",
+          "from": 93,
+          "to": 170
+        },
+        {
+          "text": "La base es el número que se",
+          "from": 179,
+          "to": 226
+        },
+        {
+          "text": "multiplica, el exponente dice cuántas veces aparece",
+          "from": 226,
+          "to": 314
+        },
+        {
+          "text": "y la potencia es el resultado.",
+          "from": 314,
+          "to": 366
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "potenciación",
+          "f": 6
+        },
+        {
+          "w": "abrevia",
+          "f": 25
+        },
+        {
+          "w": "una",
+          "f": 38
+        },
+        {
+          "w": "multiplicación",
+          "f": 43
+        },
+        {
+          "w": "repetida",
+          "f": 64
+        },
+        {
+          "w": "dos",
+          "f": 93
+        },
+        {
+          "w": "al",
+          "f": 100
+        },
+        {
+          "w": "cubo",
+          "f": 104
+        },
+        {
+          "w": "es",
+          "f": 114
+        },
+        {
+          "w": "dos",
+          "f": 118
+        },
+        {
+          "w": "por",
+          "f": 125
+        },
+        {
+          "w": "dos",
+          "f": 131
+        },
+        {
+          "w": "por",
+          "f": 137
+        },
+        {
+          "w": "dos",
+          "f": 143
+        },
+        {
+          "w": "que",
+          "f": 150
+        },
+        {
+          "w": "da",
+          "f": 155
+        },
+        {
+          "w": "ocho",
+          "f": 160
+        },
+        {
+          "w": "la",
+          "f": 179
+        },
+        {
+          "w": "base",
+          "f": 184
+        },
+        {
+          "w": "es",
+          "f": 191
+        },
+        {
+          "w": "el",
+          "f": 195
+        },
+        {
+          "w": "número",
+          "f": 198
+        },
+        {
+          "w": "que",
+          "f": 208
+        },
+        {
+          "w": "se",
+          "f": 212
+        },
+        {
+          "w": "multiplica",
+          "f": 215
+        },
+        {
+          "w": "el",
+          "f": 244
+        },
+        {
+          "w": "exponente",
+          "f": 249
+        },
+        {
+          "w": "dice",
+          "f": 267
+        },
+        {
+          "w": "cuántas",
+          "f": 274
+        },
+        {
+          "w": "veces",
+          "f": 285
+        },
+        {
+          "w": "aparece",
+          "f": 293
+        },
+        {
+          "w": "y",
+          "f": 309
+        },
+        {
+          "w": "la",
+          "f": 313
+        },
+        {
+          "w": "potencia",
+          "f": 317
+        },
+        {
+          "w": "es",
+          "f": 330
+        },
+        {
+          "w": "el",
+          "f": 333
+        },
+        {
+          "w": "resultado",
+          "f": 336
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Casos especiales y signos",
+      "texto": "Todo número distinto de cero elevado a cero es 1. Con base negativa, si el exponente es par el resultado es positivo, y si es impar, es negativo.",
+      "voz": "Todo número distinto de cero elevado a cero es uno. Con base negativa, si el exponente es par el resultado es positivo, y si es impar, es negativo.",
+      "items": [
+        {
+          "titulo": "Exponente cero",
+          "texto": "7⁰ = 1",
+          "palabra": "cero"
+        },
+        {
+          "titulo": "Base negativa, exponente par",
+          "texto": "(−2)² = 4",
+          "palabra": "par"
+        },
+        {
+          "titulo": "Base negativa, exponente impar",
+          "texto": "(−2)³ = −8",
+          "palabra": "impar"
+        }
+      ],
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 257,
+      "frames": 285,
+      "chunks": [
+        {
+          "text": "Todo número distinto de cero elevado a cero es 1.",
+          "from": 0,
+          "to": 76
+        },
+        {
+          "text": "Con base negativa, si el exponente es par el",
+          "from": 84,
+          "to": 163
+        },
+        {
+          "text": "resultado es positivo, y si es impar, es negativo.",
+          "from": 163,
+          "to": 252
+        }
+      ],
+      "words": [
+        {
+          "w": "todo",
+          "f": 0
+        },
+        {
+          "w": "número",
+          "f": 9
+        },
+        {
+          "w": "distinto",
+          "f": 18
+        },
+        {
+          "w": "de",
+          "f": 31
+        },
+        {
+          "w": "cero",
+          "f": 34
+        },
+        {
+          "w": "elevado",
+          "f": 41
+        },
+        {
+          "w": "a",
+          "f": 53
+        },
+        {
+          "w": "cero",
+          "f": 54
+        },
+        {
+          "w": "es",
+          "f": 62
+        },
+        {
+          "w": "uno",
+          "f": 67
+        },
+        {
+          "w": "con",
+          "f": 84
+        },
+        {
+          "w": "base",
+          "f": 91
+        },
+        {
+          "w": "negativa",
+          "f": 98
+        },
+        {
+          "w": "si",
+          "f": 117
+        },
+        {
+          "w": "el",
+          "f": 121
+        },
+        {
+          "w": "exponente",
+          "f": 124
+        },
+        {
+          "w": "es",
+          "f": 138
+        },
+        {
+          "w": "par",
+          "f": 141
+        },
+        {
+          "w": "el",
+          "f": 147
+        },
+        {
+          "w": "resultado",
+          "f": 150
+        },
+        {
+          "w": "es",
+          "f": 167
+        },
+        {
+          "w": "positivo",
+          "f": 170
+        },
+        {
+          "w": "y",
+          "f": 191
+        },
+        {
+          "w": "si",
+          "f": 196
+        },
+        {
+          "w": "es",
+          "f": 200
+        },
+        {
+          "w": "impar",
+          "f": 203
+        },
+        {
+          "w": "es",
+          "f": 218
+        },
+        {
+          "w": "negativo",
+          "f": 223
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Propiedades de la potenciación",
+      "texto": "Con potencias de igual base, en el producto se suman los exponentes y en el cociente se restan. En la potencia de una potencia, se multiplican.",
+      "voz": "Con potencias de igual base, en el producto se suman los exponentes y en el cociente se restan. En la potencia de una potencia, se multiplican.",
+      "items": [
+        {
+          "titulo": "Producto",
+          "texto": "2³ × 2² = 2⁵: se suman",
+          "palabra": "producto"
+        },
+        {
+          "titulo": "Cociente",
+          "texto": "3⁴ ÷ 3² = 3²: se restan",
+          "palabra": "cociente"
+        },
+        {
+          "titulo": "Potencia de una potencia",
+          "texto": "(2³)² = 2⁶: se multiplican",
+          "palabra": "potencia"
+        }
+      ],
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 247,
+      "frames": 275,
+      "chunks": [
+        {
+          "text": "Con potencias de igual base, en el producto se",
+          "from": 0,
+          "to": 71
+        },
+        {
+          "text": "suman los exponentes y en el cociente se restan.",
+          "from": 71,
+          "to": 145
+        },
+        {
+          "text": "En la potencia de una potencia, se multiplican.",
+          "from": 157,
+          "to": 242
+        }
+      ],
+      "words": [
+        {
+          "w": "con",
+          "f": 0
+        },
+        {
+          "w": "potencias",
+          "f": 7
+        },
+        {
+          "w": "de",
+          "f": 23
+        },
+        {
+          "w": "igual",
+          "f": 25
+        },
+        {
+          "w": "base",
+          "f": 33
+        },
+        {
+          "w": "en",
+          "f": 45
+        },
+        {
+          "w": "el",
+          "f": 48
+        },
+        {
+          "w": "producto",
+          "f": 52
+        },
+        {
+          "w": "se",
+          "f": 64
+        },
+        {
+          "w": "suman",
+          "f": 67
+        },
+        {
+          "w": "los",
+          "f": 75
+        },
+        {
+          "w": "exponentes",
+          "f": 80
+        },
+        {
+          "w": "y",
+          "f": 102
+        },
+        {
+          "w": "en",
+          "f": 106
+        },
+        {
+          "w": "el",
+          "f": 109
+        },
+        {
+          "w": "cociente",
+          "f": 112
+        },
+        {
+          "w": "se",
+          "f": 126
+        },
+        {
+          "w": "restan",
+          "f": 131
+        },
+        {
+          "w": "en",
+          "f": 157
+        },
+        {
+          "w": "la",
+          "f": 162
+        },
+        {
+          "w": "potencia",
+          "f": 165
+        },
+        {
+          "w": "de",
+          "f": 180
+        },
+        {
+          "w": "una",
+          "f": 183
+        },
+        {
+          "w": "potencia",
+          "f": 188
+        },
+        {
+          "w": "se",
+          "f": 203
+        },
+        {
+          "w": "multiplican",
+          "f": 207
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La radicación",
+      "texto": "La radicación busca el número que, elevado a una potencia, da otro número: el radicando. La raíz cuadrada de 25 es 5, porque 5² = 25. Y la raíz cúbica de 8 es 2, porque 2³ = 8.",
+      "voz": "La radicación busca el número que, elevado a una potencia, da otro número: el radicando. La raíz cuadrada de veinticinco es cinco, porque cinco al cuadrado es veinticinco. Y la raíz cúbica de ocho es dos, porque dos al cubo es ocho.",
+      "items": [
+        {
+          "titulo": "Radicando",
+          "texto": "El número dentro de la raíz",
+          "palabra": "radicando"
+        },
+        {
+          "titulo": "Raíz cuadrada",
+          "texto": "√25 = 5, porque 5² = 25",
+          "palabra": "cuadrada"
+        },
+        {
+          "titulo": "Raíz cúbica",
+          "texto": "∛8 = 2, porque 2³ = 8",
+          "palabra": "cúbica"
+        }
+      ],
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 432,
+      "frames": 460,
+      "chunks": [
+        {
+          "text": "La radicación busca el número que, elevado",
+          "from": 0,
+          "to": 81
+        },
+        {
+          "text": "a una potencia, da otro número:",
+          "from": 81,
+          "to": 141
+        },
+        {
+          "text": "el radicando.",
+          "from": 151,
+          "to": 184
+        },
+        {
+          "text": "La raíz cuadrada de 25 es 5, porque 5² = 25.",
+          "from": 192,
+          "to": 307
+        },
+        {
+          "text": "Y la raíz cúbica de 8 es 2, porque 2³ = 8.",
+          "from": 315,
+          "to": 428
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "radicación",
+          "f": 6
+        },
+        {
+          "w": "busca",
+          "f": 24
+        },
+        {
+          "w": "el",
+          "f": 33
+        },
+        {
+          "w": "número",
+          "f": 36
+        },
+        {
+          "w": "que",
+          "f": 47
+        },
+        {
+          "w": "elevado",
+          "f": 56
+        },
+        {
+          "w": "a",
+          "f": 73
+        },
+        {
+          "w": "una",
+          "f": 75
+        },
+        {
+          "w": "potencia",
+          "f": 82
+        },
+        {
+          "w": "da",
+          "f": 110
+        },
+        {
+          "w": "otro",
+          "f": 117
+        },
+        {
+          "w": "número",
+          "f": 126
+        },
+        {
+          "w": "el",
+          "f": 151
+        },
+        {
+          "w": "radicando",
+          "f": 158
+        },
+        {
+          "w": "la",
+          "f": 192
+        },
+        {
+          "w": "raíz",
+          "f": 199
+        },
+        {
+          "w": "cuadrada",
+          "f": 206
+        },
+        {
+          "w": "de",
+          "f": 218
+        },
+        {
+          "w": "veinticinco",
+          "f": 221
+        },
+        {
+          "w": "es",
+          "f": 238
+        },
+        {
+          "w": "cinco",
+          "f": 240
+        },
+        {
+          "w": "porque",
+          "f": 253
+        },
+        {
+          "w": "cinco",
+          "f": 261
+        },
+        {
+          "w": "al",
+          "f": 268
+        },
+        {
+          "w": "cuadrado",
+          "f": 271
+        },
+        {
+          "w": "es",
+          "f": 282
+        },
+        {
+          "w": "veinticinco",
+          "f": 285
+        },
+        {
+          "w": "y",
+          "f": 315
+        },
+        {
+          "w": "la",
+          "f": 320
+        },
+        {
+          "w": "raíz",
+          "f": 324
+        },
+        {
+          "w": "cúbica",
+          "f": 332
+        },
+        {
+          "w": "de",
+          "f": 346
+        },
+        {
+          "w": "ocho",
+          "f": 349
+        },
+        {
+          "w": "es",
+          "f": 356
+        },
+        {
+          "w": "dos",
+          "f": 359
+        },
+        {
+          "w": "porque",
+          "f": 378
+        },
+        {
+          "w": "dos",
+          "f": 388
+        },
+        {
+          "w": "al",
+          "f": 393
+        },
+        {
+          "w": "cubo",
+          "f": 397
+        },
+        {
+          "w": "es",
+          "f": 405
+        },
+        {
+          "w": "ocho",
+          "f": 409
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "¿Para qué sirven?",
+      "texto": "Sirven, por ejemplo, para calcular el área de un cuadrado, el volumen de un cubo o el lado de un cuadrado a partir de su área.",
+      "voz": "Sirven, por ejemplo, para calcular el área de un cuadrado, el volumen de un cubo o el lado de un cuadrado a partir de su área.",
+      "items": [
+        {
+          "titulo": "Área de un cuadrado",
+          "texto": "Lado 4 cm: 4² = 16 cm²",
+          "palabra": "área"
+        },
+        {
+          "titulo": "Volumen de un cubo",
+          "texto": "Arista 3 cm: 3³ = 27 cm³",
+          "palabra": "volumen"
+        },
+        {
+          "titulo": "Lado de un cuadrado",
+          "texto": "Área 64 cm²: √64 = 8 cm",
+          "palabra": "lado"
+        }
+      ],
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 219,
+      "frames": 247,
+      "chunks": [
+        {
+          "text": "Sirven, por ejemplo, para calcular el área de un",
+          "from": 0,
+          "to": 83
+        },
+        {
+          "text": "cuadrado, el volumen de un cubo o el lado",
+          "from": 83,
+          "to": 154
+        },
+        {
+          "text": "de un cuadrado a partir de su área.",
+          "from": 154,
+          "to": 215
+        }
+      ],
+      "words": [
+        {
+          "w": "sirven",
+          "f": 0
+        },
+        {
+          "w": "por",
+          "f": 13
+        },
+        {
+          "w": "ejemplo",
+          "f": 17
+        },
+        {
+          "w": "para",
+          "f": 29
+        },
+        {
+          "w": "calcular",
+          "f": 34
+        },
+        {
+          "w": "el",
+          "f": 52
+        },
+        {
+          "w": "área",
+          "f": 58
+        },
+        {
+          "w": "de",
+          "f": 65
+        },
+        {
+          "w": "un",
+          "f": 68
+        },
+        {
+          "w": "cuadrado",
+          "f": 71
+        },
+        {
+          "w": "el",
+          "f": 103
+        },
+        {
+          "w": "volumen",
+          "f": 108
+        },
+        {
+          "w": "de",
+          "f": 119
+        },
+        {
+          "w": "un",
+          "f": 122
+        },
+        {
+          "w": "cubo",
+          "f": 125
+        },
+        {
+          "w": "o",
+          "f": 138
+        },
+        {
+          "w": "el",
+          "f": 141
+        },
+        {
+          "w": "lado",
+          "f": 145
+        },
+        {
+          "w": "de",
+          "f": 151
+        },
+        {
+          "w": "un",
+          "f": 154
+        },
+        {
+          "w": "cuadrado",
+          "f": 157
+        },
+        {
+          "w": "a",
+          "f": 171
+        },
+        {
+          "w": "partir",
+          "f": 173
+        },
+        {
+          "w": "de",
+          "f": 184
+        },
+        {
+          "w": "su",
+          "f": 188
+        },
+        {
+          "w": "área",
+          "f": 193
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la potenciación y la radicación. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la potenciación y la radicación. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/potenciacion-y-radicacion/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 181,
+      "frames": 341,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 24
+        },
+        {
+          "text": "Repasaste la potenciación y la radicación.",
+          "from": 29,
+          "to": 101
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 111,
+          "to": 177
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 7
+        },
+        {
+          "w": "bien",
+          "f": 16
+        },
+        {
+          "w": "repasaste",
+          "f": 29
+        },
+        {
+          "w": "la",
+          "f": 45
+        },
+        {
+          "w": "potenciación",
+          "f": 49
+        },
+        {
+          "w": "y",
+          "f": 71
+        },
+        {
+          "w": "la",
+          "f": 76
+        },
+        {
+          "w": "radicación",
+          "f": 80
+        },
+        {
+          "w": "sigue",
+          "f": 111
+        },
+        {
+          "w": "con",
+          "f": 121
+        },
+        {
+          "w": "el",
+          "f": 125
+        },
+        {
+          "w": "siguiente",
+          "f": 128
+        },
+        {
+          "w": "tema",
+          "f": 141
+        },
+        {
+          "w": "de",
+          "f": 149
+        },
+        {
+          "w": "tu",
+          "f": 153
+        },
+        {
+          "w": "ruta",
+          "f": 157
+        }
+      ]
+    }
+  ]
+}

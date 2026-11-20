@@ -14,7 +14,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useFormatter, useTranslations } from 'next-intl';
-import { FormField, FormInput } from '@/components/atoms/form-field';
+import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field';
 import { FormPasswordInput } from '@/components/atoms/password-input';
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
@@ -56,6 +56,8 @@ const STEP_OF_FIELD: Record<string, string> = {
   givenName: 'name',
   familyName: 'name',
   birthDate: 'birthDate',
+  documentType: 'document',
+  documentNumber: 'document',
   email: 'email',
   phone: 'phone',
   password: 'password',
@@ -72,7 +74,8 @@ function stepOfError(
 ): string | null {
   const field = Object.keys(error?.details ?? {}).find((k) => STEP_OF_FIELD[k]);
   if (field) return STEP_OF_FIELD[field]!;
-  if (error?.code === 'CONFLICT') return 'email';
+  if (error?.code === 'CONFLICT')
+    return /documento/i.test(error.message ?? '') ? 'document' : 'email';
   if (error?.code === 'CONSENT_REQUIRED') return 'policy';
   if (error?.code === 'VALIDATION_ERROR') {
     if (/contraseña/i.test(error.message ?? '')) return 'password';
@@ -82,6 +85,8 @@ function stepOfError(
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const DOCUMENT_TYPES = ['CC', 'TI', 'CE', 'PPT', 'PA'] as const;
+const DOCUMENT = /^[A-Za-z0-9]{4,20}$/;
 
 export default function RegistrationContent({
   institutionName,
@@ -98,6 +103,8 @@ export default function RegistrationContent({
     email: '',
     phone: '',
     birthDate: '',
+    documentType: 'CC',
+    documentNumber: '',
     password: '',
   });
   const [acceptsPolicy, setAcceptsPolicy] = useState(false);
@@ -239,6 +246,42 @@ export default function RegistrationContent({
             onChange={(e) => set('birthDate', e.target.value)}
           />
         </FormField>
+      ),
+    },
+    {
+      id: 'document',
+      section: sections.you,
+      prompt: t('convo.document'),
+      answer: `${values.documentType} ${values.documentNumber.trim()}`,
+      validate: () =>
+        DOCUMENT.test(values.documentNumber.replace(/[\s.-]/g, ''))
+          ? null
+          : t('convo.documentInvalid'),
+      field: () => (
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,14rem)_1fr]">
+          <FormField label={t('documentType')} name="documentType" required>
+            <FormSelect
+              name="documentType"
+              value={values.documentType}
+              onChange={(e) => set('documentType', e.target.value)}
+            >
+              {DOCUMENT_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {t(`documentTypes.${type}`)}
+                </option>
+              ))}
+            </FormSelect>
+          </FormField>
+          <FormField label={t('documentNumber')} name="documentNumber" required>
+            <FormInput
+              name="documentNumber"
+              inputMode={values.documentType === 'PA' ? 'text' : 'numeric'}
+              autoComplete="off"
+              value={values.documentNumber}
+              onChange={(e) => set('documentNumber', e.target.value)}
+            />
+          </FormField>
+        </div>
       ),
     },
     {

@@ -12,8 +12,8 @@
  *   con intención de cambiarlo. La mora no toca el acceso de un menor (ni de nadie, hasta
  *   la asesoría jurídica).
  *
- * Montos en pesos enteros: `Decimal(12,0)` en la base, `number` aquí, sin centavos. Wompi
- * pide centavos y `lib/billing/wompi.ts` multiplica por cien allí y solo allí.
+ * Montos en pesos enteros: `Decimal(12,0)` en la base, `number` aquí, sin centavos. Bold
+ * también cobra en pesos (`lib/billing/bold.ts`).
  */
 
 import 'server-only';

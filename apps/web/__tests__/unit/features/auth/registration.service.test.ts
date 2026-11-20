@@ -44,6 +44,8 @@ const BASE = {
   familyName: 'Pérez',
   email: 'Ana@Example.com',
   phone: null,
+  documentType: 'CC',
+  documentNumber: '1020304050',
   password: 'una-contraseña-larga',
   acceptsDataPolicy: true,
   now: NOW,
@@ -76,7 +78,12 @@ describe('registerPerson', () => {
     );
     expect(db.person.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ email: 'ana@example.com', authUserId: 'auth-1' }),
+        data: expect.objectContaining({
+          email: 'ana@example.com',
+          authUserId: 'auth-1',
+          documentType: 'CC',
+          documentNumber: '1020304050',
+        }),
       })
     );
     expect(db.membership.create).toHaveBeenCalledWith(
@@ -101,6 +108,20 @@ describe('registerPerson', () => {
     await expect(registerPerson({ ...BASE, birthDate: '1990-05-01' })).rejects.toMatchObject({
       code: 'CONFLICT',
     });
+    expect(admin.auth.admin.createUser).not.toHaveBeenCalled();
+  });
+
+  it('refuses a document already registered, before creating the account', async () => {
+    db.person.findFirst.mockResolvedValueOnce(null).mockResolvedValueOnce({ authUserId: 'auth-0' });
+    await expect(registerPerson({ ...BASE, birthDate: '1990-05-01' })).rejects.toMatchObject({
+      code: 'CONFLICT',
+      message: expect.stringContaining('documento'),
+    });
+    expect(db.person.findFirst).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ documentType: 'CC', documentNumber: '1020304050' }),
+      })
+    );
     expect(admin.auth.admin.createUser).not.toHaveBeenCalled();
   });
 

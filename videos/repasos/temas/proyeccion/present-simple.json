@@ -1,0 +1,153 @@
+{
+  "tema": "present-simple",
+  "componente": "Proyección",
+  "area": "Inglés",
+  "titulo": "Present Simple: daily routines and habits",
+  "siguiente": "El Estado, la economía y la organización de la sociedad",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el presente simple, las rutinas diarias y los hábitos.",
+      "voz": "Repaso del tema: el presente simple, las rutinas diarias y los hábitos."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "What is the Present Simple?",
+      "texto": "El presente simple sirve para hablar de rutinas, hábitos, hechos generales y gustos. Por ejemplo: I wake up at 6:00, he drinks coffee every morning, the sun rises in the east, I like music.",
+      "voz": "El presente simple sirve para hablar de rutinas, hábitos, hechos generales y gustos. Por ejemplo: I wake up at six, he drinks coffee every morning, the sun rises in the east, I like music.",
+      "items": [
+        {
+          "titulo": "Daily routines",
+          "texto": "I wake up at 6:00.",
+          "palabra": "rutinas"
+        },
+        {
+          "titulo": "Habits",
+          "texto": "He drinks coffee.",
+          "palabra": "hábitos"
+        },
+        {
+          "titulo": "General facts",
+          "texto": "The sun rises in the east.",
+          "palabra": "hechos"
+        },
+        {
+          "titulo": "Likes",
+          "texto": "I like music.",
+          "palabra": "gustos"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "He, she, it",
+      "texto": "Con he, she e it, el verbo cambia. La mayoría agrega -s: works. Otros agregan -es, como watches y goes. Y los que terminan en consonante + y cambian a -ies, como studies.",
+      "voz": "Con he, she e it, el verbo cambia. La mayoría agrega una ese: works. Otros agregan es, como watches y goes. Y los que terminan en consonante más ye cambian a ies, como studies.",
+      "items": [
+        {
+          "titulo": "-s",
+          "texto": "work → works",
+          "palabra": "works"
+        },
+        {
+          "titulo": "-es",
+          "texto": "watch → watches, go → goes",
+          "palabra": "watches"
+        },
+        {
+          "titulo": "-ies",
+          "texto": "study → studies",
+          "palabra": "studies"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Negative sentences",
+      "texto": "Para negar se usa don’t con I, you, we y they, y doesn’t con he, she e it. Con doesn’t, el verbo vuelve a su forma básica: she doesn’t study.",
+      "voz": "Para negar se usa don’t con I, you, we y they, y doesn’t con he, she e it. Con doesn’t, el verbo vuelve a su forma básica: she doesn’t study.",
+      "items": [
+        {
+          "titulo": "Don’t",
+          "texto": "I, you, we, they",
+          "palabra": "don"
+        },
+        {
+          "titulo": "Doesn’t",
+          "texto": "He, she, it",
+          "palabra": "doesn"
+        },
+        {
+          "titulo": "Forma básica",
+          "texto": "She doesn’t study.",
+          "palabra": "básica"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Questions",
+      "texto": "Para preguntar se usa do o does al inicio, y el verbo va en forma básica: Do you like music?, Does she work every day? Se responde en corto: Yes, I do, o No, she doesn’t.",
+      "voz": "Para preguntar se usa do o does al inicio, y el verbo va en forma básica: do you like music?, does she work every day? Se responde en corto: yes, I do, o no, she doesn’t.",
+      "items": [
+        {
+          "titulo": "Do",
+          "texto": "Do you like music?",
+          "palabra": "do",
+          "vez": 1
+        },
+        {
+          "titulo": "Does",
+          "texto": "Does she work every day?",
+          "palabra": "does",
+          "vez": 1
+        },
+        {
+          "titulo": "Short answers",
+          "texto": "Yes, I do. / No, she doesn’t.",
+          "palabra": "yes"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Adverbs of frequency",
+      "texto": "Los adverbios de frecuencia dicen qué tan seguido hacemos algo y van antes del verbo: I always study English, she usually wakes up early, they sometimes play football, he never drinks coffee.",
+      "voz": "Los adverbios de frecuencia dicen qué tan seguido hacemos algo y van antes del verbo: I always study English, she usually wakes up early, they sometimes play football, he never drinks coffee.",
+      "items": [
+        {
+          "titulo": "always",
+          "texto": "Siempre",
+          "palabra": "always"
+        },
+        {
+          "titulo": "usually",
+          "texto": "Usualmente",
+          "palabra": "usually"
+        },
+        {
+          "titulo": "sometimes",
+          "texto": "Algunas veces",
+          "palabra": "sometimes"
+        },
+        {
+          "titulo": "never",
+          "texto": "Nunca",
+          "palabra": "never"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el presente simple. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el presente simple. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

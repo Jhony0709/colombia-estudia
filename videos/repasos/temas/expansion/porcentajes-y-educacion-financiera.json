@@ -1,0 +1,160 @@
+{
+  "tema": "porcentajes-y-educacion-financiera",
+  "componente": "Expansión",
+  "area": "Matemáticas",
+  "titulo": "Porcentajes, descuentos, aumentos, presupuestos y educación financiera",
+  "siguiente": "Expansión europea, conquista y colonización de América",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los porcentajes, el presupuesto y la educación financiera.",
+      "voz": "Repaso del tema: los porcentajes, el presupuesto y la educación financiera."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es un porcentaje?",
+      "texto": "Un porcentaje expresa una cantidad por cada cien. Para calcularlo, se multiplica la cantidad por el porcentaje y se divide entre 100: el 25 % de $100.000 es $25.000.",
+      "voz": "Un porcentaje expresa una cantidad por cada cien. Para calcularlo, se multiplica la cantidad por el porcentaje y se divide entre cien: el veinticinco por ciento de cien mil pesos es veinticinco mil.",
+      "items": [
+        {
+          "titulo": "Por cada cien",
+          "texto": "25 % = 25 de cada 100",
+          "palabra": "cien"
+        },
+        {
+          "titulo": "La fórmula",
+          "texto": "Cantidad × % ÷ 100",
+          "palabra": "multiplica"
+        },
+        {
+          "titulo": "Ejemplo",
+          "texto": "25 % de $100.000 = $25.000",
+          "palabra": "veinticinco"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Descuento y aumento",
+      "texto": "En un descuento, el valor calculado se resta; en un aumento, se suma. Si un producto cuesta $100.000, con un descuento del 20 % queda en $80.000, y con un aumento del 20 %, en $120.000.",
+      "voz": "En un descuento, el valor calculado se resta; en un aumento, se suma. Si un producto cuesta cien mil pesos, con un descuento del veinte por ciento queda en ochenta mil, y con un aumento del veinte por ciento, en ciento veinte mil.",
+      "columnas": [
+        {
+          "titulo": "Descuento",
+          "palabra": "descuento",
+          "puntos": [
+            {
+              "texto": "Se resta",
+              "palabra": "resta"
+            },
+            {
+              "texto": "$100.000 − 20 % = $80.000",
+              "palabra": "ochenta"
+            }
+          ]
+        },
+        {
+          "titulo": "Aumento",
+          "palabra": "aumento",
+          "puntos": [
+            {
+              "texto": "Se suma",
+              "palabra": "suma"
+            },
+            {
+              "texto": "$100.000 + 20 % = $120.000",
+              "palabra": "ciento",
+              "vez": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Subir y bajar no es volver",
+      "texto": "Ojo: los porcentajes sucesivos se calculan sobre el precio de cada momento. Si $100.000 suben un 10 %, quedan en $110.000; si luego bajan un 10 %, quedan en $99.000, no en $100.000.",
+      "voz": "Ojo: los porcentajes sucesivos se calculan sobre el precio de cada momento. Si cien mil pesos suben un diez por ciento, quedan en ciento diez mil; si luego bajan un diez por ciento, quedan en noventa y nueve mil, no en cien mil.",
+      "items": [
+        {
+          "titulo": "Sube 10 %",
+          "texto": "$110.000",
+          "palabra": "suben"
+        },
+        {
+          "titulo": "Baja 10 %",
+          "texto": "$99.000",
+          "palabra": "bajan"
+        },
+        {
+          "titulo": "No vuelve",
+          "texto": "No queda en $100.000",
+          "palabra": "noventa"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El presupuesto",
+      "texto": "Un presupuesto organiza los ingresos y los gastos de un periodo. El dinero disponible es igual a los ingresos menos los gastos: con $100.000 y $80.000 de gastos, quedan $20.000 para ahorrar. Si el resultado es negativo, hay que revisar el presupuesto.",
+      "voz": "Un presupuesto organiza los ingresos y los gastos de un periodo. El dinero disponible es igual a los ingresos menos los gastos: con cien mil pesos y ochenta mil de gastos, quedan veinte mil para ahorrar. Si el resultado es negativo, hay que revisar el presupuesto.",
+      "items": [
+        {
+          "titulo": "Ingresos",
+          "texto": "$100.000",
+          "palabra": "ingresos"
+        },
+        {
+          "titulo": "Gastos",
+          "texto": "$80.000",
+          "palabra": "gastos"
+        },
+        {
+          "titulo": "Ahorro",
+          "texto": "$20.000",
+          "palabra": "ahorrar"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El interés simple",
+      "texto": "En el interés simple, el interés se calcula siempre sobre el capital inicial. Con $200.000 al 2 % mensual durante 3 meses: $4.000 por mes, $12.000 en total, y un monto final de $212.000.",
+      "voz": "En el interés simple, el interés se calcula siempre sobre el capital inicial. Con doscientos mil pesos al dos por ciento mensual durante tres meses: cuatro mil por mes, doce mil en total, y un monto final de doscientos doce mil.",
+      "items": [
+        {
+          "titulo": "Capital",
+          "texto": "$200.000",
+          "palabra": "capital"
+        },
+        {
+          "titulo": "Tasa",
+          "texto": "2 % mensual",
+          "palabra": "mensual"
+        },
+        {
+          "titulo": "Interés",
+          "texto": "$4.000 × 3 = $12.000",
+          "palabra": "doce"
+        },
+        {
+          "titulo": "Monto final",
+          "texto": "$212.000",
+          "palabra": "monto"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los porcentajes y la educación financiera. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los porcentajes y la educación financiera. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

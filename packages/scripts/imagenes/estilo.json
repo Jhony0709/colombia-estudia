@@ -1,0 +1,8 @@
+{
+  "$comentario": "Lo que comparten todas las bases: modelo, tamaño, calidad, estilo de la marca y la regla de no poner texto. Un encargo puede cambiar size o quality.",
+  "modelo": "gpt-image-2.6-sunburst",
+  "size": "1536x1024",
+  "quality": "high",
+  "estilo": "Professional educational illustration for an adult high-school course in Colombia. Clean, modern textbook style with soft semi-realistic 3D shading and gentle studio lighting, accurate scientific detail, calm and friendly. Plain, flat, very light gray-blue background (#F3F5F8) with no texture, no frame and no shadow on the edges. Brand palette, used as accents and kept harmonious: royal blue #0047BA, navy #0D2E6E, sunflower yellow #F5C400, leaf green #3FA65B; natural colors where realism needs them.",
+  "reglas": "Absolutely no text of any kind: no letters, words, numbers, labels, captions, arrows with text, logos or watermarks. Leave clear empty background where the composition asks for it, because labels will be added later. Keep every structure clearly separated and easy to point at."
+}

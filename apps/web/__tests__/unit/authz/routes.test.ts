@@ -20,7 +20,7 @@ describe('isProtected', () => {
       '/api/auth/callback',
       '/api/invitations/token123/accept',
       '/api/certificates/abc123',
-      '/api/webhooks/wompi',
+      '/api/webhooks/bold',
       '/api/jobs/daily',
       // La portada (19/9): pública sin sesión; con sesión redirige (app/page.tsx).
       '/',

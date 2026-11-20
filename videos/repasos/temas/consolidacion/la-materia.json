@@ -1,0 +1,184 @@
+{
+  "tema": "la-materia",
+  "componente": "Consolidación",
+  "area": "Ciencias naturales",
+  "titulo": "La materia y sus transformaciones",
+  "siguiente": "Operaciones con números enteros",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la materia y sus transformaciones.",
+      "voz": "Repaso del tema: la materia y sus transformaciones."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es la materia?",
+      "texto": "La materia es todo lo que tiene masa y ocupa un lugar en el espacio. La masa es la cantidad de materia de un cuerpo, y el volumen, el espacio que ocupa. Está formada por partículas muy pequeñas, como los átomos y las moléculas.",
+      "voz": "La materia es todo lo que tiene masa y ocupa un lugar en el espacio. La masa es la cantidad de materia de un cuerpo, y el volumen, el espacio que ocupa. Está formada por partículas muy pequeñas, como los átomos y las moléculas.",
+      "items": [
+        {
+          "titulo": "Masa",
+          "texto": "La cantidad de materia",
+          "palabra": "masa",
+          "vez": 1
+        },
+        {
+          "titulo": "Volumen",
+          "texto": "El espacio que ocupa",
+          "palabra": "volumen"
+        },
+        {
+          "titulo": "Partículas",
+          "texto": "Átomos y moléculas",
+          "palabra": "átomos"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Los estados de la materia",
+      "texto": "Los tres estados más comunes son el sólido, con forma y volumen definidos; el líquido, que adopta la forma del recipiente; y el gaseoso, sin forma ni volumen definidos.",
+      "voz": "Los tres estados más comunes son el sólido, con forma y volumen definidos; el líquido, que adopta la forma del recipiente; y el gaseoso, sin forma ni volumen definidos.",
+      "imagenes": [
+        {
+          "src": "consolidacion/estados-de-la-materia.webp",
+          "focos": [
+            {
+              "palabra": "sólido",
+              "x": 0.17,
+              "y": 0.45,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "líquido",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "gaseoso",
+              "x": 0.78,
+              "y": 0.45,
+              "zoom": 1.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Los cambios de estado",
+      "texto": "Al ganar o perder calor, la materia cambia de estado: fusión, de sólido a líquido; solidificación, de líquido a sólido; vaporización, de líquido a gas; condensación, de gas a líquido; sublimación, de sólido a gas; y deposición, de gas a sólido.",
+      "voz": "Al ganar o perder calor, la materia cambia de estado: fusión, de sólido a líquido; solidificación, de líquido a sólido; vaporización, de líquido a gas; condensación, de gas a líquido; sublimación, de sólido a gas; y deposición, de gas a sólido.",
+      "imagenes": [
+        {
+          "src": "consolidacion/cambios-de-estado.webp",
+          "focos": [
+            {
+              "palabra": "fusión",
+              "x": 0.3,
+              "y": 0.55,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "vaporización",
+              "x": 0.62,
+              "y": 0.55,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "sublimación",
+              "x": 0.5,
+              "y": 0.82,
+              "zoom": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "comparar",
+      "titulo": "Sustancias puras y mezclas",
+      "texto": "Las sustancias puras tienen una composición definida, y pueden ser elementos o compuestos. Las mezclas combinan dos o más sustancias: en las homogéneas no se distinguen sus componentes, como el agua con sal; en las heterogéneas sí, como el agua con aceite.",
+      "voz": "Las sustancias puras tienen una composición definida, y pueden ser elementos o compuestos. Las mezclas combinan dos o más sustancias: en las homogéneas no se distinguen sus componentes, como el agua con sal; en las heterogéneas sí, como el agua con aceite.",
+      "columnas": [
+        {
+          "titulo": "Sustancias puras",
+          "palabra": "puras",
+          "puntos": [
+            {
+              "texto": "Composición definida",
+              "palabra": "definida"
+            },
+            {
+              "texto": "Elementos o compuestos",
+              "palabra": "compuestos"
+            }
+          ]
+        },
+        {
+          "titulo": "Mezclas",
+          "palabra": "mezclas",
+          "puntos": [
+            {
+              "texto": "Homogéneas: no se distinguen sus partes",
+              "palabra": "homogéneas"
+            },
+            {
+              "texto": "Heterogéneas: sí se distinguen",
+              "palabra": "heterogéneas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Cambios físicos y químicos",
+      "texto": "En un cambio físico, la materia cambia su estado o su forma, pero conserva su composición, como al derretir hielo. En un cambio químico se forman sustancias nuevas, como en la oxidación de un clavo o la combustión de la madera.",
+      "voz": "En un cambio físico, la materia cambia su estado o su forma, pero conserva su composición, como al derretir hielo. En un cambio químico se forman sustancias nuevas, como en la oxidación de un clavo o la combustión de la madera.",
+      "columnas": [
+        {
+          "titulo": "Cambio físico",
+          "palabra": "físico",
+          "puntos": [
+            {
+              "texto": "Conserva su composición",
+              "palabra": "conserva"
+            },
+            {
+              "texto": "Derretir hielo",
+              "palabra": "derretir"
+            }
+          ]
+        },
+        {
+          "titulo": "Cambio químico",
+          "palabra": "químico",
+          "puntos": [
+            {
+              "texto": "Se forman sustancias nuevas",
+              "palabra": "nuevas"
+            },
+            {
+              "texto": "Oxidación y combustión",
+              "palabra": "oxidación"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la materia y sus transformaciones. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la materia y sus transformaciones. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

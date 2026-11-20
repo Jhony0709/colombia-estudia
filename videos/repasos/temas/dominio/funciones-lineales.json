@@ -1,0 +1,154 @@
+{
+  "tema": "funciones-lineales",
+  "componente": "Dominio",
+  "area": "Matemáticas",
+  "titulo": "Las funciones lineales y su aplicación en situaciones cotidianas",
+  "siguiente": "Cambio climático e impacto humano en los ecosistemas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las funciones lineales y su aplicación en la vida cotidiana.",
+      "voz": "Repaso del tema: las funciones lineales y su aplicación en la vida cotidiana."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es una función?",
+      "texto": "Una función relaciona dos cantidades: a cada valor de entrada le corresponde un único valor de salida. Si ganas $20.000 por día, lo que recibes depende de los días que trabajes. Los días son la variable independiente, x, y el dinero, la dependiente, y.",
+      "voz": "Una función relaciona dos cantidades: a cada valor de entrada le corresponde un único valor de salida. Si ganas veinte mil pesos por día, lo que recibes depende de los días que trabajes. Los días son la variable independiente, equis, y el dinero, la dependiente, ye.",
+      "items": [
+        {
+          "titulo": "Un único valor",
+          "texto": "Cada entrada, una salida",
+          "palabra": "único"
+        },
+        {
+          "titulo": "Independiente",
+          "texto": "x: los días",
+          "palabra": "independiente"
+        },
+        {
+          "titulo": "Dependiente",
+          "texto": "y: el dinero",
+          "palabra": "dependiente"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La función lineal: y = mx + b",
+      "texto": "Una función lineal tiene la forma y = mx + b, y su gráfica es una recta. La pendiente, m, dice cuánto cambia y cuando x aumenta 1; y b es el valor inicial, cuando x es 0.",
+      "voz": "Una función lineal tiene la forma ye igual a eme equis más be, y su gráfica es una recta. La pendiente, eme, dice cuánto cambia ye cuando equis aumenta uno; y be es el valor inicial, cuando equis es cero.",
+      "items": [
+        {
+          "titulo": "Una recta",
+          "texto": "Su gráfica",
+          "palabra": "recta"
+        },
+        {
+          "titulo": "Pendiente: m",
+          "texto": "Cuánto cambia y",
+          "palabra": "pendiente"
+        },
+        {
+          "titulo": "Valor inicial: b",
+          "texto": "y cuando x = 0",
+          "palabra": "inicial"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Un ejemplo: el ahorro",
+      "texto": "Si tienes $15.000 y ahorras $5.000 cada semana, la función es y = 5.000x + 15.000. Después de 4 semanas: 5.000 × 4 = 20.000, más 15.000, da $35.000.",
+      "voz": "Si tienes quince mil pesos y ahorras cinco mil cada semana, la función es ye igual a cinco mil equis más quince mil. Después de cuatro semanas: cinco mil por cuatro, veinte mil, más quince mil, da treinta y cinco mil pesos.",
+      "items": [
+        {
+          "titulo": "Valor inicial",
+          "texto": "$15.000",
+          "palabra": "quince"
+        },
+        {
+          "titulo": "Pendiente",
+          "texto": "$5.000 por semana",
+          "palabra": "semana"
+        },
+        {
+          "titulo": "4 semanas",
+          "texto": "$35.000",
+          "palabra": "treinta"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El signo de la pendiente",
+      "texto": "Si la pendiente es positiva, la cantidad aumenta, como un ahorro. Si es negativa, disminuye, como una deuda que se va pagando. Y si es cero, se mantiene constante.",
+      "voz": "Si la pendiente es positiva, la cantidad aumenta, como un ahorro. Si es negativa, disminuye, como una deuda que se va pagando. Y si es cero, se mantiene constante.",
+      "items": [
+        {
+          "titulo": "Positiva",
+          "texto": "y = 3x + 10: aumenta",
+          "palabra": "positiva"
+        },
+        {
+          "titulo": "Negativa",
+          "texto": "y = −2x + 20: disminuye",
+          "palabra": "negativa"
+        },
+        {
+          "titulo": "Cero",
+          "texto": "y = 0x + 8: constante",
+          "palabra": "cero"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "¿Qué servicio conviene?",
+      "texto": "Para comparar, el servicio A cobra $4.000 iniciales y $2.000 por kilómetro; el B, $7.000 iniciales y $1.000 por kilómetro. Para 2 kilómetros, A cuesta $8.000 y B, $9.000. Para 5, A cuesta $14.000 y B, $12.000. La opción más barata cambia según la distancia.",
+      "voz": "Para comparar, el servicio A cobra cuatro mil pesos iniciales y dos mil por kilómetro; el B, siete mil iniciales y mil por kilómetro. Para dos kilómetros, A cuesta ocho mil y B, nueve mil. Para cinco, A cuesta catorce mil y B, doce mil. La opción más barata cambia según la distancia.",
+      "columnas": [
+        {
+          "titulo": "Servicio A",
+          "palabra": "servicio",
+          "puntos": [
+            {
+              "texto": "y = 2.000x + 4.000",
+              "palabra": "cuatro"
+            },
+            {
+              "texto": "2 km: $8.000 · 5 km: $14.000",
+              "palabra": "ocho"
+            }
+          ]
+        },
+        {
+          "titulo": "Servicio B",
+          "palabra": "b",
+          "puntos": [
+            {
+              "texto": "y = 1.000x + 7.000",
+              "palabra": "siete"
+            },
+            {
+              "texto": "2 km: $9.000 · 5 km: $12.000",
+              "palabra": "nueve"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las funciones lineales. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las funciones lineales. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

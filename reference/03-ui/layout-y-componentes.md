@@ -201,6 +201,18 @@ diálogos del editor de bloques y la confirmación de entrega del examen. **No**
 (hoja lateral) ni el cajón de navegación del teléfono; esos dos comparten el fondo y salen
 con fade, pero entran deslizando desde su borde (`.sheet-panel`, `.drawer-panel`).
 
+### VisorImagen: las imágenes del contenido a pantalla completa (19/11)
+
+`organisms/visor-imagen`, montado junto a `Escenas` en el tema del estudiante y en la vista
+previa del editor (`watch` = el HTML de la vista previa). Envuelve cada `img` de `.contenido` en
+un botón con nombre («Ampliar imagen: …») y una lupa en la esquina; sin JS la imagen sigue ahí.
+Abre la misma imagen sobre fondo oscuro en los dos temas, con el pie como título y el texto
+alternativo debajo. Acercar hasta 500 %: botones, rueda, doble clic, pellizco o + y −; con zoom
+se arrastra o se mueve con las flechas; 0 ajusta. Radix debajo (foco dentro, Escape) y, como no
+hay `Trigger`, el foco vuelve a mano al botón de la imagen. **No** es `Dialog`: no tiene acciones
+ni panel. Los colores van en `globals.css` (`.visor-*`): el tema de tokens no trae `black` ni
+`white`.
+
 ### LogoutDialog: «Cerrar sesión» pregunta en el sitio (23/9)
 
 `components/organisms/logout-dialog`. La misma pieza de Radix que `Sheet`, centrada, con

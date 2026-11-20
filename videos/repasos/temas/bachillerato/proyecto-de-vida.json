@@ -1,0 +1,156 @@
+{
+  "tema": "proyecto-de-vida",
+  "componente": "Bachillerato",
+  "area": "Proyecto de vida",
+  "titulo": "Proyecto de vida",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el proyecto de vida, el autoconocimiento y la construcción del futuro.",
+      "voz": "Repaso del tema: el proyecto de vida, el autoconocimiento y la construcción del futuro."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es el proyecto de vida?",
+      "texto": "El proyecto de vida reúne tus sueños, intereses, valores, decisiones y acciones para orientar tu futuro. No hace falta tenerlo todo resuelto: se empieza por conocerse y explorar posibilidades.",
+      "voz": "El proyecto de vida reúne tus sueños, intereses, valores, decisiones y acciones para orientar tu futuro. No hace falta tenerlo todo resuelto: se empieza por conocerse y explorar posibilidades.",
+      "items": [
+        {
+          "titulo": "Sueños y decisiones",
+          "texto": "Orientan tu futuro",
+          "palabra": "sueños"
+        },
+        {
+          "titulo": "Conocerse",
+          "palabra": "conocerse"
+        },
+        {
+          "titulo": "Explorar",
+          "texto": "Las posibilidades",
+          "palabra": "explorar"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "El autoconocimiento",
+      "texto": "Conocerse es reconocer tus intereses, lo que te gusta; tus habilidades, lo que sabes hacer; tus valores, lo que consideras importante; y tus motivaciones, lo que te impulsa a avanzar.",
+      "voz": "Conocerse es reconocer tus intereses, lo que te gusta; tus habilidades, lo que sabes hacer; tus valores, lo que consideras importante; y tus motivaciones, lo que te impulsa a avanzar.",
+      "items": [
+        {
+          "titulo": "Intereses",
+          "texto": "Lo que te gusta",
+          "palabra": "intereses"
+        },
+        {
+          "titulo": "Habilidades",
+          "texto": "Lo que sabes hacer",
+          "palabra": "habilidades"
+        },
+        {
+          "titulo": "Valores",
+          "texto": "Lo que es importante",
+          "palabra": "valores"
+        },
+        {
+          "titulo": "Motivaciones",
+          "texto": "Lo que te impulsa",
+          "palabra": "motivaciones"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Vocación, profesión y trabajo",
+      "texto": "La vocación es una inclinación profunda hacia ciertas actividades; la profesión requiere formación especializada; y el trabajo produce bienes o servicios y puede generar ingresos. Después del bachillerato hay muchos caminos, y se pueden combinar.",
+      "voz": "La vocación es una inclinación profunda hacia ciertas actividades; la profesión requiere formación especializada; y el trabajo produce bienes o servicios y puede generar ingresos. Después del bachillerato hay muchos caminos, y se pueden combinar.",
+      "items": [
+        {
+          "titulo": "Vocación",
+          "texto": "Una inclinación profunda",
+          "palabra": "vocación"
+        },
+        {
+          "titulo": "Profesión",
+          "texto": "Formación especializada",
+          "palabra": "profesión"
+        },
+        {
+          "titulo": "Trabajo",
+          "texto": "Genera ingresos",
+          "palabra": "trabajo"
+        },
+        {
+          "titulo": "Muchos caminos",
+          "texto": "Estudiar, trabajar, emprender…",
+          "palabra": "caminos"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Metas que se cumplen",
+      "texto": "Para convertir un sueño en una meta, hazla específica, medible, alcanzable, relevante y con un plazo. Por ejemplo: en los próximos seis meses compararé tres programas de formación audiovisual.",
+      "voz": "Para convertir un sueño en una meta, hazla específica, medible, alcanzable, relevante y con un plazo. Por ejemplo: en los próximos seis meses compararé tres programas de formación audiovisual.",
+      "items": [
+        {
+          "titulo": "Específica",
+          "palabra": "específica"
+        },
+        {
+          "titulo": "Medible",
+          "palabra": "medible"
+        },
+        {
+          "titulo": "Alcanzable",
+          "palabra": "alcanzable"
+        },
+        {
+          "titulo": "Relevante",
+          "palabra": "relevante"
+        },
+        {
+          "titulo": "Con plazo",
+          "palabra": "plazo"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Habilidades para la vida",
+      "texto": "Para avanzar ayudan la disciplina, la responsabilidad, la resiliencia, que es aprender de las dificultades, y la gestión del tiempo. Y recuerda: el éxito no tiene una única definición.",
+      "voz": "Para avanzar ayudan la disciplina, la responsabilidad, la resiliencia, que es aprender de las dificultades, y la gestión del tiempo. Y recuerda: el éxito no tiene una única definición.",
+      "items": [
+        {
+          "titulo": "Disciplina",
+          "palabra": "disciplina"
+        },
+        {
+          "titulo": "Responsabilidad",
+          "palabra": "responsabilidad"
+        },
+        {
+          "titulo": "Resiliencia",
+          "texto": "Aprender de las dificultades",
+          "palabra": "resiliencia"
+        },
+        {
+          "titulo": "Gestión del tiempo",
+          "palabra": "gestión"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el proyecto de vida. Sigue construyendo tu camino.",
+      "voz": "¡Muy bien! Repasaste el proyecto de vida. Sigue construyendo tu camino."
+    }
+  ]
+}

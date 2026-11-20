@@ -1,0 +1,622 @@
+{
+  "tema": "operaciones-con-numeros-enteros",
+  "componente": "Consolidación",
+  "area": "Matemáticas",
+  "titulo": "Operaciones con números enteros",
+  "siguiente": "Colombia: organización territorial, política y ciudadana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las operaciones con números enteros.",
+      "voz": "Repaso del tema: las operaciones con números enteros.",
+      "audio": "voz/operaciones-con-numeros-enteros/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 101,
+      "frames": 129,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "las operaciones con números enteros.",
+          "from": 33,
+          "to": 96
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "las",
+          "f": 33
+        },
+        {
+          "w": "operaciones",
+          "f": 39
+        },
+        {
+          "w": "con",
+          "f": 55
+        },
+        {
+          "w": "números",
+          "f": 59
+        },
+        {
+          "w": "enteros",
+          "f": 70
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los números enteros",
+      "texto": "Los números enteros son los positivos, los negativos y el cero, que no es positivo ni negativo. Sirven para representar temperaturas, deudas, ganancias y pérdidas.",
+      "voz": "Los números enteros son los positivos, los negativos y el cero, que no es positivo ni negativo. Sirven para representar temperaturas, deudas, ganancias y pérdidas.",
+      "items": [
+        {
+          "titulo": "Positivos",
+          "texto": "+1, +2, +3…",
+          "palabra": "positivos"
+        },
+        {
+          "titulo": "Negativos",
+          "texto": "−1, −2, −3…",
+          "palabra": "negativos"
+        },
+        {
+          "titulo": "Cero",
+          "texto": "Ni positivo ni negativo",
+          "palabra": "cero"
+        }
+      ],
+      "audio": "voz/operaciones-con-numeros-enteros/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 294,
+      "frames": 322,
+      "chunks": [
+        {
+          "text": "Los números enteros son los positivos, los negativos y",
+          "from": 0,
+          "to": 89
+        },
+        {
+          "text": "el cero, que no es positivo ni negativo.",
+          "from": 89,
+          "to": 155
+        },
+        {
+          "text": "Sirven para representar temperaturas,",
+          "from": 165,
+          "to": 235
+        },
+        {
+          "text": "deudas, ganancias y pérdidas.",
+          "from": 235,
+          "to": 290
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "números",
+          "f": 7
+        },
+        {
+          "w": "enteros",
+          "f": 17
+        },
+        {
+          "w": "son",
+          "f": 28
+        },
+        {
+          "w": "los",
+          "f": 33
+        },
+        {
+          "w": "positivos",
+          "f": 39
+        },
+        {
+          "w": "los",
+          "f": 60
+        },
+        {
+          "w": "negativos",
+          "f": 65
+        },
+        {
+          "w": "y",
+          "f": 83
+        },
+        {
+          "w": "el",
+          "f": 85
+        },
+        {
+          "w": "cero",
+          "f": 88
+        },
+        {
+          "w": "que",
+          "f": 105
+        },
+        {
+          "w": "no",
+          "f": 110
+        },
+        {
+          "w": "es",
+          "f": 113
+        },
+        {
+          "w": "positivo",
+          "f": 116
+        },
+        {
+          "w": "ni",
+          "f": 132
+        },
+        {
+          "w": "negativo",
+          "f": 136
+        },
+        {
+          "w": "sirven",
+          "f": 165
+        },
+        {
+          "w": "para",
+          "f": 177
+        },
+        {
+          "w": "representar",
+          "f": 183
+        },
+        {
+          "w": "temperaturas",
+          "f": 200
+        },
+        {
+          "w": "deudas",
+          "f": 226
+        },
+        {
+          "w": "ganancias",
+          "f": 241
+        },
+        {
+          "w": "y",
+          "f": 257
+        },
+        {
+          "w": "pérdidas",
+          "f": 260
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las reglas de los signos",
+      "texto": "Para sumar con signos iguales, se suman y se conserva el signo; con signos diferentes, se restan y queda el signo del número con mayor valor absoluto. Para restar, se suma el opuesto: 5 − 8 = 5 + (−8) = −3. Y al multiplicar o dividir, signos iguales dan positivo y signos diferentes, negativo.",
+      "voz": "Para sumar con signos iguales, se suman y se conserva el signo; con signos diferentes, se restan y queda el signo del número con mayor valor absoluto. Para restar, se suma el opuesto: cinco menos ocho es igual a cinco más menos ocho, que da menos tres. Y al multiplicar o dividir, signos iguales dan positivo y signos diferentes, negativo.",
+      "items": [
+        {
+          "titulo": "Sumar",
+          "texto": "Iguales: se suman y se conserva el signo. Diferentes: se restan y queda el del mayor valor absoluto",
+          "palabra": "sumar"
+        },
+        {
+          "titulo": "Restar",
+          "texto": "Se suma el opuesto: 5 − 8 = 5 + (−8) = −3",
+          "palabra": "restar"
+        },
+        {
+          "titulo": "Multiplicar y dividir",
+          "texto": "Signos iguales: positivo. Diferentes: negativo",
+          "palabra": "multiplicar"
+        }
+      ],
+      "audio": "voz/operaciones-con-numeros-enteros/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 581,
+      "frames": 609,
+      "chunks": [
+        {
+          "text": "Para sumar con signos iguales, se",
+          "from": 0,
+          "to": 54
+        },
+        {
+          "text": "suman y se conserva el signo;",
+          "from": 54,
+          "to": 101
+        },
+        {
+          "text": "con signos diferentes, se restan y queda el",
+          "from": 108,
+          "to": 172
+        },
+        {
+          "text": "signo del número con mayor valor absoluto.",
+          "from": 172,
+          "to": 235
+        },
+        {
+          "text": "Para restar, se suma el opuesto:",
+          "from": 247,
+          "to": 303
+        },
+        {
+          "text": "5 − 8 = 5 + (−8) = −3.",
+          "from": 309,
+          "to": 420
+        },
+        {
+          "text": "Y al multiplicar o dividir, signos iguales",
+          "from": 427,
+          "to": 501
+        },
+        {
+          "text": "dan positivo y signos diferentes, negativo.",
+          "from": 501,
+          "to": 577
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "sumar",
+          "f": 8
+        },
+        {
+          "w": "con",
+          "f": 17
+        },
+        {
+          "w": "signos",
+          "f": 23
+        },
+        {
+          "w": "iguales",
+          "f": 33
+        },
+        {
+          "w": "se",
+          "f": 50
+        },
+        {
+          "w": "suman",
+          "f": 56
+        },
+        {
+          "w": "y",
+          "f": 64
+        },
+        {
+          "w": "se",
+          "f": 66
+        },
+        {
+          "w": "conserva",
+          "f": 70
+        },
+        {
+          "w": "el",
+          "f": 83
+        },
+        {
+          "w": "signo",
+          "f": 86
+        },
+        {
+          "w": "con",
+          "f": 108
+        },
+        {
+          "w": "signos",
+          "f": 114
+        },
+        {
+          "w": "diferentes",
+          "f": 123
+        },
+        {
+          "w": "se",
+          "f": 145
+        },
+        {
+          "w": "restan",
+          "f": 152
+        },
+        {
+          "w": "y",
+          "f": 163
+        },
+        {
+          "w": "queda",
+          "f": 165
+        },
+        {
+          "w": "el",
+          "f": 170
+        },
+        {
+          "w": "signo",
+          "f": 173
+        },
+        {
+          "w": "del",
+          "f": 181
+        },
+        {
+          "w": "número",
+          "f": 185
+        },
+        {
+          "w": "con",
+          "f": 195
+        },
+        {
+          "w": "mayor",
+          "f": 200
+        },
+        {
+          "w": "valor",
+          "f": 208
+        },
+        {
+          "w": "absoluto",
+          "f": 216
+        },
+        {
+          "w": "para",
+          "f": 247
+        },
+        {
+          "w": "restar",
+          "f": 255
+        },
+        {
+          "w": "se",
+          "f": 267
+        },
+        {
+          "w": "suma",
+          "f": 271
+        },
+        {
+          "w": "el",
+          "f": 279
+        },
+        {
+          "w": "opuesto",
+          "f": 282
+        },
+        {
+          "w": "cinco",
+          "f": 309
+        },
+        {
+          "w": "menos",
+          "f": 319
+        },
+        {
+          "w": "ocho",
+          "f": 328
+        },
+        {
+          "w": "es",
+          "f": 336
+        },
+        {
+          "w": "igual",
+          "f": 340
+        },
+        {
+          "w": "a",
+          "f": 350
+        },
+        {
+          "w": "cinco",
+          "f": 352
+        },
+        {
+          "w": "más",
+          "f": 362
+        },
+        {
+          "w": "menos",
+          "f": 367
+        },
+        {
+          "w": "ocho",
+          "f": 375
+        },
+        {
+          "w": "que",
+          "f": 390
+        },
+        {
+          "w": "da",
+          "f": 395
+        },
+        {
+          "w": "menos",
+          "f": 399
+        },
+        {
+          "w": "tres",
+          "f": 408
+        },
+        {
+          "w": "y",
+          "f": 427
+        },
+        {
+          "w": "al",
+          "f": 432
+        },
+        {
+          "w": "multiplicar",
+          "f": 435
+        },
+        {
+          "w": "o",
+          "f": 455
+        },
+        {
+          "w": "dividir",
+          "f": 457
+        },
+        {
+          "w": "signos",
+          "f": 472
+        },
+        {
+          "w": "iguales",
+          "f": 483
+        },
+        {
+          "w": "dan",
+          "f": 493
+        },
+        {
+          "w": "positivo",
+          "f": 497
+        },
+        {
+          "w": "y",
+          "f": 515
+        },
+        {
+          "w": "signos",
+          "f": 518
+        },
+        {
+          "w": "diferentes",
+          "f": 528
+        },
+        {
+          "w": "negativo",
+          "f": 547
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las operaciones con números enteros. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las operaciones con números enteros. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/operaciones-con-numeros-enteros/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 167,
+      "frames": 327,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste las operaciones con números enteros.",
+          "from": 24,
+          "to": 92
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 98,
+          "to": 163
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 24
+        },
+        {
+          "w": "las",
+          "f": 40
+        },
+        {
+          "w": "operaciones",
+          "f": 45
+        },
+        {
+          "w": "con",
+          "f": 60
+        },
+        {
+          "w": "números",
+          "f": 65
+        },
+        {
+          "w": "enteros",
+          "f": 76
+        },
+        {
+          "w": "sigue",
+          "f": 98
+        },
+        {
+          "w": "con",
+          "f": 107
+        },
+        {
+          "w": "el",
+          "f": 112
+        },
+        {
+          "w": "siguiente",
+          "f": 115
+        },
+        {
+          "w": "tema",
+          "f": 127
+        },
+        {
+          "w": "de",
+          "f": 135
+        },
+        {
+          "w": "tu",
+          "f": 138
+        },
+        {
+          "w": "ruta",
+          "f": 142
+        }
+      ]
+    }
+  ]
+}

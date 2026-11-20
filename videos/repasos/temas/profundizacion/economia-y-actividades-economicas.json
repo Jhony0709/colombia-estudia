@@ -1,0 +1,165 @@
+{
+  "tema": "economia-y-actividades-economicas",
+  "componente": "Profundización",
+  "area": "Ciencias sociales",
+  "titulo": "La economía, los recursos naturales y las actividades económicas",
+  "siguiente": "Las expresiones algebraicas y el lenguaje algebraico",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la economía, los recursos naturales y las actividades económicas.",
+      "voz": "Repaso del tema: la economía, los recursos naturales y las actividades económicas."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La economía",
+      "texto": "La economía estudia cómo las personas y las sociedades usan los recursos para satisfacer sus necesidades. Las actividades económicas producen bienes, como alimentos y ropa, y servicios, como la educación y la salud.",
+      "voz": "La economía estudia cómo las personas y las sociedades usan los recursos para satisfacer sus necesidades. Las actividades económicas producen bienes, como alimentos y ropa, y servicios, como la educación y la salud.",
+      "items": [
+        {
+          "titulo": "Necesidades",
+          "texto": "Alimentación, vivienda, salud…",
+          "palabra": "necesidades"
+        },
+        {
+          "titulo": "Bienes",
+          "texto": "Productos: alimentos, ropa",
+          "palabra": "bienes"
+        },
+        {
+          "titulo": "Servicios",
+          "texto": "Actividades: educación, salud",
+          "palabra": "servicios"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Los recursos naturales",
+      "texto": "Los recursos naturales pueden ser renovables o no renovables. Los renovables, como el agua, los bosques y la energía solar, se regeneran si se usan con responsabilidad. Los no renovables, como el petróleo, el carbón y el oro, tardan millones de años en formarse.",
+      "voz": "Los recursos naturales pueden ser renovables o no renovables. Los renovables, como el agua, los bosques y la energía solar, se regeneran si se usan con responsabilidad. Los no renovables, como el petróleo, el carbón y el oro, tardan millones de años en formarse.",
+      "columnas": [
+        {
+          "titulo": "Renovables",
+          "palabra": "renovables",
+          "vez": 2,
+          "puntos": [
+            {
+              "texto": "Agua, bosques, energía solar",
+              "palabra": "agua"
+            },
+            {
+              "texto": "Se regeneran si se cuidan",
+              "palabra": "regeneran"
+            }
+          ]
+        },
+        {
+          "titulo": "No renovables",
+          "palabra": "renovables",
+          "vez": 3,
+          "puntos": [
+            {
+              "texto": "Petróleo, carbón, oro",
+              "palabra": "petróleo"
+            },
+            {
+              "texto": "Tardan millones de años",
+              "palabra": "millones"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Los sectores económicos",
+      "texto": "Las actividades económicas se agrupan en tres sectores. El primario obtiene materias primas de la naturaleza, como el agricultor que cosecha papa. El secundario las transforma en productos, como el carpintero que hace una silla. Y el terciario presta servicios y comercia, como una tienda.",
+      "voz": "Las actividades económicas se agrupan en tres sectores. El primario obtiene materias primas de la naturaleza, como el agricultor que cosecha papa. El secundario las transforma en productos, como el carpintero que hace una silla. Y el terciario presta servicios y comercia, como una tienda.",
+      "imagenes": [
+        {
+          "src": "profundizacion/sectores-economicos.webp",
+          "focos": [
+            {
+              "palabra": "primario",
+              "x": 0.17,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "secundario",
+              "x": 0.5,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "terciario",
+              "x": 0.83,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Del trigo al pan",
+      "texto": "Muchos productos pasan por los tres sectores. Un agricultor cultiva el trigo, una empresa lo convierte en harina, una panadería hace el pan y una tienda lo vende a las familias.",
+      "voz": "Muchos productos pasan por los tres sectores. Un agricultor cultiva el trigo, una empresa lo convierte en harina, una panadería hace el pan y una tienda lo vende a las familias.",
+      "items": [
+        {
+          "titulo": "Primario",
+          "texto": "Se cultiva el trigo",
+          "palabra": "trigo"
+        },
+        {
+          "titulo": "Secundario",
+          "texto": "Se hacen la harina y el pan",
+          "palabra": "harina"
+        },
+        {
+          "titulo": "Terciario",
+          "texto": "Una tienda lo vende",
+          "palabra": "tienda"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El consumo responsable",
+      "texto": "Consumir con responsabilidad es comprar lo que necesitamos, no desperdiciar alimentos, ahorrar agua y energía, y reutilizar y reciclar. No es dejar de comprar, sino usar los recursos con conciencia.",
+      "voz": "Consumir con responsabilidad es comprar lo que necesitamos, no desperdiciar alimentos, ahorrar agua y energía, y reutilizar y reciclar. No es dejar de comprar, sino usar los recursos con conciencia.",
+      "items": [
+        {
+          "titulo": "Comprar lo necesario",
+          "palabra": "comprar"
+        },
+        {
+          "titulo": "No desperdiciar",
+          "palabra": "desperdiciar"
+        },
+        {
+          "titulo": "Ahorrar agua y energía",
+          "palabra": "ahorrar"
+        },
+        {
+          "titulo": "Reutilizar y reciclar",
+          "palabra": "reutilizar"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la economía y las actividades económicas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la economía y las actividades económicas. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

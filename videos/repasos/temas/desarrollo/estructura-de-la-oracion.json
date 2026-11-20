@@ -1,0 +1,101 @@
+{
+  "tema": "estructura-de-la-oracion",
+  "componente": "Desarrollo",
+  "area": "Lengua castellana",
+  "titulo": "La estructura de la oración y sus elementos gramaticales",
+  "siguiente": "La energía, sus formas y sus transformaciones",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la estructura de la oración y sus elementos gramaticales.",
+      "voz": "Repaso del tema: la estructura de la oración y sus elementos gramaticales."
+    },
+    {
+      "id": "s1",
+      "tipo": "comparar",
+      "titulo": "Sujeto y predicado",
+      "texto": "La oración expresa una idea completa y tiene dos partes. El sujeto es de quién se habla, y su núcleo suele ser un sustantivo o un pronombre. El predicado es lo que se dice del sujeto, y su núcleo es el verbo.",
+      "voz": "La oración expresa una idea completa y tiene dos partes. El sujeto es de quién se habla, y su núcleo suele ser un sustantivo o un pronombre. El predicado es lo que se dice del sujeto, y su núcleo es el verbo.",
+      "columnas": [
+        {
+          "titulo": "Sujeto",
+          "palabra": "sujeto",
+          "puntos": [
+            {
+              "texto": "De quién se habla",
+              "palabra": "quién"
+            },
+            {
+              "texto": "Núcleo: un sustantivo o un pronombre",
+              "palabra": "sustantivo"
+            }
+          ]
+        },
+        {
+          "titulo": "Predicado",
+          "palabra": "predicado",
+          "puntos": [
+            {
+              "texto": "Lo que se dice del sujeto",
+              "palabra": "dice"
+            },
+            {
+              "texto": "Núcleo: el verbo",
+              "palabra": "verbo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Los complementos del verbo",
+      "texto": "Los complementos agregan información al verbo. El directo dice qué recibe la acción; el indirecto, a quién o para quién se destina; y el circunstancial, dónde, cuándo, cómo o por qué ocurre.",
+      "voz": "Los complementos agregan información al verbo. El directo dice qué recibe la acción; el indirecto, a quién o para quién se destina; y el circunstancial, dónde, cuándo, cómo o por qué ocurre.",
+      "items": [
+        {
+          "titulo": "Directo",
+          "texto": "¿Qué recibe la acción? Ana compró un cuaderno",
+          "palabra": "directo"
+        },
+        {
+          "titulo": "Indirecto",
+          "texto": "¿Para quién? Ana entregó un regalo a su amiga",
+          "palabra": "indirecto"
+        },
+        {
+          "titulo": "Circunstancial",
+          "texto": "¿Dónde, cuándo, cómo? Ana estudia en su habitación",
+          "palabra": "circunstancial"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "La concordancia",
+      "texto": "El sujeto y el verbo deben concordar en número y persona. Decimos «el niño juega» y «los niños juegan», pero no «los niños juega».",
+      "voz": "El sujeto y el verbo deben concordar en número y persona. Decimos «el niño juega» y «los niños juegan», pero no «los niños juega».",
+      "items": [
+        {
+          "titulo": "Correcto",
+          "texto": "El niño juega. Los niños juegan.",
+          "palabra": "decimos"
+        },
+        {
+          "titulo": "Incorrecto",
+          "texto": "Los niños juega → Los niños juegan",
+          "palabra": "pero"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la estructura de la oración. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la estructura de la oración. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

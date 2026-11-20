@@ -1,0 +1,1235 @@
+{
+  "tema": "ser-humano-libertad-y-existencia",
+  "componente": "Transición",
+  "area": "Filosofía",
+  "titulo": "El ser humano, la libertad y la existencia",
+  "siguiente": "Educación financiera, emprendimiento y economía cotidiana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el ser humano, la libertad y la existencia.",
+      "voz": "Repaso del tema: el ser humano, la libertad y la existencia.",
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 122,
+      "frames": 150,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "el ser humano, la libertad y la existencia.",
+          "from": 40,
+          "to": 117
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "el",
+          "f": 40
+        },
+        {
+          "w": "ser",
+          "f": 45
+        },
+        {
+          "w": "humano",
+          "f": 50
+        },
+        {
+          "w": "la",
+          "f": 62
+        },
+        {
+          "w": "libertad",
+          "f": 65
+        },
+        {
+          "w": "y",
+          "f": 80
+        },
+        {
+          "w": "la",
+          "f": 84
+        },
+        {
+          "w": "existencia",
+          "f": 86
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué significa ser humano?",
+      "texto": "El ser humano es biológico, porque tiene un cuerpo; racional, porque piensa; social, porque necesita a los demás; y cultural, porque crea costumbres y símbolos. Además, puede preguntarse por su propia existencia.",
+      "voz": "El ser humano es biológico, porque tiene un cuerpo; racional, porque piensa; social, porque necesita a los demás; y cultural, porque crea costumbres y símbolos. Además, puede preguntarse por su propia existencia.",
+      "items": [
+        {
+          "titulo": "Biológico",
+          "texto": "Tiene un cuerpo",
+          "palabra": "biológico"
+        },
+        {
+          "titulo": "Racional",
+          "texto": "Piensa",
+          "palabra": "racional"
+        },
+        {
+          "titulo": "Social",
+          "texto": "Necesita a los demás",
+          "palabra": "social"
+        },
+        {
+          "titulo": "Cultural",
+          "texto": "Crea costumbres",
+          "palabra": "cultural"
+        }
+      ],
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 371,
+      "frames": 399,
+      "chunks": [
+        {
+          "text": "El ser humano es biológico, porque tiene un cuerpo;",
+          "from": 0,
+          "to": 74
+        },
+        {
+          "text": "racional, porque piensa;",
+          "from": 84,
+          "to": 125
+        },
+        {
+          "text": "social, porque necesita a los demás;",
+          "from": 127,
+          "to": 186
+        },
+        {
+          "text": "y cultural, porque crea costumbres y símbolos.",
+          "from": 192,
+          "to": 267
+        },
+        {
+          "text": "Además, puede preguntarse por su propia existencia.",
+          "from": 277,
+          "to": 366
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "ser",
+          "f": 6
+        },
+        {
+          "w": "humano",
+          "f": 11
+        },
+        {
+          "w": "es",
+          "f": 20
+        },
+        {
+          "w": "biológico",
+          "f": 22
+        },
+        {
+          "w": "porque",
+          "f": 39
+        },
+        {
+          "w": "tiene",
+          "f": 48
+        },
+        {
+          "w": "un",
+          "f": 54
+        },
+        {
+          "w": "cuerpo",
+          "f": 57
+        },
+        {
+          "w": "racional",
+          "f": 84
+        },
+        {
+          "w": "porque",
+          "f": 102
+        },
+        {
+          "w": "piensa",
+          "f": 112
+        },
+        {
+          "w": "social",
+          "f": 127
+        },
+        {
+          "w": "porque",
+          "f": 142
+        },
+        {
+          "w": "necesita",
+          "f": 150
+        },
+        {
+          "w": "a",
+          "f": 165
+        },
+        {
+          "w": "los",
+          "f": 167
+        },
+        {
+          "w": "demás",
+          "f": 172
+        },
+        {
+          "w": "y",
+          "f": 192
+        },
+        {
+          "w": "cultural",
+          "f": 196
+        },
+        {
+          "w": "porque",
+          "f": 213
+        },
+        {
+          "w": "crea",
+          "f": 222
+        },
+        {
+          "w": "costumbres",
+          "f": 229
+        },
+        {
+          "w": "y",
+          "f": 246
+        },
+        {
+          "w": "símbolos",
+          "f": 249
+        },
+        {
+          "w": "además",
+          "f": 277
+        },
+        {
+          "w": "puede",
+          "f": 291
+        },
+        {
+          "w": "preguntarse",
+          "f": 298
+        },
+        {
+          "w": "por",
+          "f": 315
+        },
+        {
+          "w": "su",
+          "f": 320
+        },
+        {
+          "w": "propia",
+          "f": 324
+        },
+        {
+          "w": "existencia",
+          "f": 333
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La identidad",
+      "texto": "Nuestra identidad tiene varias dimensiones: la personal, lo que nos distingue; la cultural, lo que compartimos con una comunidad; la social, los grupos de los que hacemos parte; y la digital, la imagen que construimos en internet.",
+      "voz": "Nuestra identidad tiene varias dimensiones: la personal, lo que nos distingue; la cultural, lo que compartimos con una comunidad; la social, los grupos de los que hacemos parte; y la digital, la imagen que construimos en internet.",
+      "items": [
+        {
+          "titulo": "Personal",
+          "texto": "Lo que nos distingue",
+          "palabra": "personal"
+        },
+        {
+          "titulo": "Cultural",
+          "texto": "Lo que compartimos",
+          "palabra": "cultural"
+        },
+        {
+          "titulo": "Social",
+          "texto": "Nuestros grupos",
+          "palabra": "social"
+        },
+        {
+          "titulo": "Digital",
+          "texto": "Nuestra imagen en internet",
+          "palabra": "digital"
+        }
+      ],
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 427,
+      "frames": 455,
+      "chunks": [
+        {
+          "text": "Nuestra identidad tiene varias dimensiones:",
+          "from": 0,
+          "to": 67
+        },
+        {
+          "text": "la personal, lo que nos distingue;",
+          "from": 76,
+          "to": 130
+        },
+        {
+          "text": "la cultural, lo que compartimos con una comunidad;",
+          "from": 134,
+          "to": 230
+        },
+        {
+          "text": "la social, los grupos de los que hacemos parte;",
+          "from": 241,
+          "to": 315
+        },
+        {
+          "text": "y la digital, la imagen que construimos en internet.",
+          "from": 322,
+          "to": 422
+        }
+      ],
+      "words": [
+        {
+          "w": "nuestra",
+          "f": 0
+        },
+        {
+          "w": "identidad",
+          "f": 13
+        },
+        {
+          "w": "tiene",
+          "f": 28
+        },
+        {
+          "w": "varias",
+          "f": 36
+        },
+        {
+          "w": "dimensiones",
+          "f": 43
+        },
+        {
+          "w": "la",
+          "f": 76
+        },
+        {
+          "w": "personal",
+          "f": 81
+        },
+        {
+          "w": "lo",
+          "f": 100
+        },
+        {
+          "w": "que",
+          "f": 105
+        },
+        {
+          "w": "nos",
+          "f": 108
+        },
+        {
+          "w": "distingue",
+          "f": 113
+        },
+        {
+          "w": "la",
+          "f": 134
+        },
+        {
+          "w": "cultural",
+          "f": 140
+        },
+        {
+          "w": "lo",
+          "f": 170
+        },
+        {
+          "w": "que",
+          "f": 175
+        },
+        {
+          "w": "compartimos",
+          "f": 179
+        },
+        {
+          "w": "con",
+          "f": 198
+        },
+        {
+          "w": "una",
+          "f": 203
+        },
+        {
+          "w": "comunidad",
+          "f": 209
+        },
+        {
+          "w": "la",
+          "f": 241
+        },
+        {
+          "w": "social",
+          "f": 245
+        },
+        {
+          "w": "los",
+          "f": 262
+        },
+        {
+          "w": "grupos",
+          "f": 267
+        },
+        {
+          "w": "de",
+          "f": 278
+        },
+        {
+          "w": "los",
+          "f": 280
+        },
+        {
+          "w": "que",
+          "f": 285
+        },
+        {
+          "w": "hacemos",
+          "f": 288
+        },
+        {
+          "w": "parte",
+          "f": 300
+        },
+        {
+          "w": "y",
+          "f": 322
+        },
+        {
+          "w": "la",
+          "f": 327
+        },
+        {
+          "w": "digital",
+          "f": 331
+        },
+        {
+          "w": "la",
+          "f": 359
+        },
+        {
+          "w": "imagen",
+          "f": 363
+        },
+        {
+          "w": "que",
+          "f": 373
+        },
+        {
+          "w": "construimos",
+          "f": 377
+        },
+        {
+          "w": "en",
+          "f": 394
+        },
+        {
+          "w": "internet",
+          "f": 398
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "¿Somos libres?",
+      "texto": "La libertad es decidir sobre la propia vida, respetando los derechos de los demás, y la autonomía, pensar con criterio propio. Pero también hay condicionamientos sociales, y el determinismo sostiene que nuestras acciones dependen de causas anteriores.",
+      "voz": "La libertad es decidir sobre la propia vida, respetando los derechos de los demás, y la autonomía, pensar con criterio propio. Pero también hay condicionamientos sociales, y el determinismo sostiene que nuestras acciones dependen de causas anteriores.",
+      "items": [
+        {
+          "titulo": "Libertad",
+          "texto": "Decidir sobre la propia vida",
+          "palabra": "libertad"
+        },
+        {
+          "titulo": "Autonomía",
+          "texto": "Criterio propio",
+          "palabra": "autonomía"
+        },
+        {
+          "titulo": "Presión social",
+          "texto": "Familia, cultura, medios…",
+          "palabra": "condicionamientos"
+        },
+        {
+          "titulo": "Determinismo",
+          "texto": "Causas anteriores",
+          "palabra": "determinismo"
+        }
+      ],
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 403,
+      "frames": 431,
+      "chunks": [
+        {
+          "text": "La libertad es decidir sobre la propia",
+          "from": 0,
+          "to": 63
+        },
+        {
+          "text": "vida, respetando los derechos de los demás,",
+          "from": 63,
+          "to": 134
+        },
+        {
+          "text": "y la autonomía, pensar con criterio propio.",
+          "from": 134,
+          "to": 206
+        },
+        {
+          "text": "Pero también hay condicionamientos sociales, y",
+          "from": 217,
+          "to": 286
+        },
+        {
+          "text": "el determinismo sostiene que nuestras acciones",
+          "from": 286,
+          "to": 354
+        },
+        {
+          "text": "dependen de causas anteriores.",
+          "from": 354,
+          "to": 398
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "libertad",
+          "f": 6
+        },
+        {
+          "w": "es",
+          "f": 21
+        },
+        {
+          "w": "decidir",
+          "f": 25
+        },
+        {
+          "w": "sobre",
+          "f": 38
+        },
+        {
+          "w": "la",
+          "f": 47
+        },
+        {
+          "w": "propia",
+          "f": 50
+        },
+        {
+          "w": "vida",
+          "f": 61
+        },
+        {
+          "w": "respetando",
+          "f": 74
+        },
+        {
+          "w": "los",
+          "f": 91
+        },
+        {
+          "w": "derechos",
+          "f": 95
+        },
+        {
+          "w": "de",
+          "f": 106
+        },
+        {
+          "w": "los",
+          "f": 108
+        },
+        {
+          "w": "demás",
+          "f": 113
+        },
+        {
+          "w": "y",
+          "f": 124
+        },
+        {
+          "w": "la",
+          "f": 128
+        },
+        {
+          "w": "autonomía",
+          "f": 130
+        },
+        {
+          "w": "pensar",
+          "f": 160
+        },
+        {
+          "w": "con",
+          "f": 171
+        },
+        {
+          "w": "criterio",
+          "f": 176
+        },
+        {
+          "w": "propio",
+          "f": 190
+        },
+        {
+          "w": "pero",
+          "f": 217
+        },
+        {
+          "w": "también",
+          "f": 225
+        },
+        {
+          "w": "hay",
+          "f": 233
+        },
+        {
+          "w": "condicionamientos",
+          "f": 236
+        },
+        {
+          "w": "sociales",
+          "f": 258
+        },
+        {
+          "w": "y",
+          "f": 274
+        },
+        {
+          "w": "el",
+          "f": 277
+        },
+        {
+          "w": "determinismo",
+          "f": 280
+        },
+        {
+          "w": "sostiene",
+          "f": 303
+        },
+        {
+          "w": "que",
+          "f": 315
+        },
+        {
+          "w": "nuestras",
+          "f": 319
+        },
+        {
+          "w": "acciones",
+          "f": 329
+        },
+        {
+          "w": "dependen",
+          "f": 342
+        },
+        {
+          "w": "de",
+          "f": 354
+        },
+        {
+          "w": "causas",
+          "f": 357
+        },
+        {
+          "w": "anteriores",
+          "f": 367
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El existencialismo",
+      "texto": "Para Jean-Paul Sartre, la existencia precede a la esencia: primero existimos y, con nuestras decisiones, construimos lo que somos. Por eso la libertad implica responsabilidad y, a veces, angustia.",
+      "voz": "Para Jean-Paul Sartre, la existencia precede a la esencia: primero existimos y, con nuestras decisiones, construimos lo que somos. Por eso la libertad implica responsabilidad y, a veces, angustia.",
+      "items": [
+        {
+          "titulo": "Sartre",
+          "texto": "La existencia precede a la esencia",
+          "palabra": "sartre"
+        },
+        {
+          "titulo": "Responsabilidad",
+          "texto": "Asumir nuestras decisiones",
+          "palabra": "responsabilidad"
+        },
+        {
+          "titulo": "Angustia",
+          "texto": "No hay garantías",
+          "palabra": "angustia"
+        }
+      ],
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 353,
+      "frames": 381,
+      "chunks": [
+        {
+          "text": "Para Jean-Paul Sartre, la existencia",
+          "from": 0,
+          "to": 57
+        },
+        {
+          "text": "precede a la esencia:",
+          "from": 57,
+          "to": 91
+        },
+        {
+          "text": "primero existimos y, con nuestras",
+          "from": 101,
+          "to": 153
+        },
+        {
+          "text": "decisiones, construimos lo que somos.",
+          "from": 153,
+          "to": 211
+        },
+        {
+          "text": "Por eso la libertad implica",
+          "from": 227,
+          "to": 278
+        },
+        {
+          "text": "responsabilidad y, a veces, angustia.",
+          "from": 278,
+          "to": 348
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "jean",
+          "f": 9
+        },
+        {
+          "w": "paul",
+          "f": 14
+        },
+        {
+          "w": "sartre",
+          "f": 21
+        },
+        {
+          "w": "la",
+          "f": 37
+        },
+        {
+          "w": "existencia",
+          "f": 40
+        },
+        {
+          "w": "precede",
+          "f": 57
+        },
+        {
+          "w": "a",
+          "f": 69
+        },
+        {
+          "w": "la",
+          "f": 72
+        },
+        {
+          "w": "esencia",
+          "f": 74
+        },
+        {
+          "w": "primero",
+          "f": 101
+        },
+        {
+          "w": "existimos",
+          "f": 111
+        },
+        {
+          "w": "y",
+          "f": 133
+        },
+        {
+          "w": "con",
+          "f": 137
+        },
+        {
+          "w": "nuestras",
+          "f": 141
+        },
+        {
+          "w": "decisiones",
+          "f": 152
+        },
+        {
+          "w": "construimos",
+          "f": 171
+        },
+        {
+          "w": "lo",
+          "f": 190
+        },
+        {
+          "w": "que",
+          "f": 194
+        },
+        {
+          "w": "somos",
+          "f": 198
+        },
+        {
+          "w": "por",
+          "f": 227
+        },
+        {
+          "w": "eso",
+          "f": 234
+        },
+        {
+          "w": "la",
+          "f": 239
+        },
+        {
+          "w": "libertad",
+          "f": 242
+        },
+        {
+          "w": "implica",
+          "f": 258
+        },
+        {
+          "w": "responsabilidad",
+          "f": 272
+        },
+        {
+          "w": "y",
+          "f": 301
+        },
+        {
+          "w": "a",
+          "f": 305
+        },
+        {
+          "w": "veces",
+          "f": 307
+        },
+        {
+          "w": "angustia",
+          "f": 316
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El sentido de la vida",
+      "texto": "Sobre el sentido de la vida no hay una única respuesta. Nietzsche invitó a cuestionar los valores impuestos; Camus habló del absurdo, de buscar sentido en un mundo que no siempre responde; y Hannah Arendt destacó la acción, participar con los demás en la vida colectiva.",
+      "voz": "Sobre el sentido de la vida no hay una única respuesta. Nietzsche invitó a cuestionar los valores impuestos; Camus habló del absurdo, de buscar sentido en un mundo que no siempre responde; y Hannah Arendt destacó la acción, participar con los demás en la vida colectiva.",
+      "items": [
+        {
+          "titulo": "Nietzsche",
+          "texto": "Cuestionar los valores",
+          "palabra": "nietzsche"
+        },
+        {
+          "titulo": "Camus",
+          "texto": "El absurdo",
+          "palabra": "camus"
+        },
+        {
+          "titulo": "Arendt",
+          "texto": "La acción con los demás",
+          "palabra": "arendt"
+        }
+      ],
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 463,
+      "frames": 491,
+      "chunks": [
+        {
+          "text": "Sobre el sentido de la vida",
+          "from": 0,
+          "to": 41
+        },
+        {
+          "text": "no hay una única respuesta.",
+          "from": 41,
+          "to": 83
+        },
+        {
+          "text": "Nietzsche invitó a cuestionar los valores impuestos;",
+          "from": 89,
+          "to": 166
+        },
+        {
+          "text": "Camus habló del absurdo, de buscar sentido",
+          "from": 176,
+          "to": 243
+        },
+        {
+          "text": "en un mundo que no siempre responde;",
+          "from": 243,
+          "to": 300
+        },
+        {
+          "text": "y Hannah Arendt destacó la acción, participar",
+          "from": 308,
+          "to": 392
+        },
+        {
+          "text": "con los demás en la vida colectiva.",
+          "from": 392,
+          "to": 458
+        }
+      ],
+      "words": [
+        {
+          "w": "sobre",
+          "f": 0
+        },
+        {
+          "w": "el",
+          "f": 8
+        },
+        {
+          "w": "sentido",
+          "f": 11
+        },
+        {
+          "w": "de",
+          "f": 22
+        },
+        {
+          "w": "la",
+          "f": 25
+        },
+        {
+          "w": "vida",
+          "f": 29
+        },
+        {
+          "w": "no",
+          "f": 38
+        },
+        {
+          "w": "hay",
+          "f": 42
+        },
+        {
+          "w": "una",
+          "f": 47
+        },
+        {
+          "w": "única",
+          "f": 51
+        },
+        {
+          "w": "respuesta",
+          "f": 61
+        },
+        {
+          "w": "nietzsche",
+          "f": 89
+        },
+        {
+          "w": "invitó",
+          "f": 103
+        },
+        {
+          "w": "a",
+          "f": 115
+        },
+        {
+          "w": "cuestionar",
+          "f": 116
+        },
+        {
+          "w": "los",
+          "f": 130
+        },
+        {
+          "w": "valores",
+          "f": 134
+        },
+        {
+          "w": "impuestos",
+          "f": 145
+        },
+        {
+          "w": "camus",
+          "f": 176
+        },
+        {
+          "w": "habló",
+          "f": 190
+        },
+        {
+          "w": "del",
+          "f": 200
+        },
+        {
+          "w": "absurdo",
+          "f": 204
+        },
+        {
+          "w": "de",
+          "f": 222
+        },
+        {
+          "w": "buscar",
+          "f": 226
+        },
+        {
+          "w": "sentido",
+          "f": 235
+        },
+        {
+          "w": "en",
+          "f": 247
+        },
+        {
+          "w": "un",
+          "f": 251
+        },
+        {
+          "w": "mundo",
+          "f": 253
+        },
+        {
+          "w": "que",
+          "f": 262
+        },
+        {
+          "w": "no",
+          "f": 266
+        },
+        {
+          "w": "siempre",
+          "f": 269
+        },
+        {
+          "w": "responde",
+          "f": 281
+        },
+        {
+          "w": "y",
+          "f": 308
+        },
+        {
+          "w": "hannah",
+          "f": 313
+        },
+        {
+          "w": "arendt",
+          "f": 322
+        },
+        {
+          "w": "destacó",
+          "f": 337
+        },
+        {
+          "w": "la",
+          "f": 351
+        },
+        {
+          "w": "acción",
+          "f": 354
+        },
+        {
+          "w": "participar",
+          "f": 377
+        },
+        {
+          "w": "con",
+          "f": 394
+        },
+        {
+          "w": "los",
+          "f": 398
+        },
+        {
+          "w": "demás",
+          "f": 402
+        },
+        {
+          "w": "en",
+          "f": 413
+        },
+        {
+          "w": "la",
+          "f": 416
+        },
+        {
+          "w": "vida",
+          "f": 419
+        },
+        {
+          "w": "colectiva",
+          "f": 426
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el ser humano, la libertad y la existencia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el ser humano, la libertad y la existencia. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/ser-humano-libertad-y-existencia/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 194,
+      "frames": 354,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste el ser humano, la",
+          "from": 34,
+          "to": 77
+        },
+        {
+          "text": "libertad y la existencia.",
+          "from": 77,
+          "to": 117
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 129,
+          "to": 189
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "el",
+          "f": 49
+        },
+        {
+          "w": "ser",
+          "f": 52
+        },
+        {
+          "w": "humano",
+          "f": 56
+        },
+        {
+          "w": "la",
+          "f": 69
+        },
+        {
+          "w": "libertad",
+          "f": 73
+        },
+        {
+          "w": "y",
+          "f": 88
+        },
+        {
+          "w": "la",
+          "f": 93
+        },
+        {
+          "w": "existencia",
+          "f": 95
+        },
+        {
+          "w": "sigue",
+          "f": 129
+        },
+        {
+          "w": "con",
+          "f": 138
+        },
+        {
+          "w": "el",
+          "f": 143
+        },
+        {
+          "w": "siguiente",
+          "f": 146
+        },
+        {
+          "w": "tema",
+          "f": 157
+        },
+        {
+          "w": "de",
+          "f": 165
+        },
+        {
+          "w": "tu",
+          "f": 168
+        },
+        {
+          "w": "ruta",
+          "f": 172
+        }
+      ]
+    }
+  ]
+}

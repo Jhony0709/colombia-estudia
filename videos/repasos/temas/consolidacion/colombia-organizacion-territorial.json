@@ -1,0 +1,147 @@
+{
+  "tema": "colombia-organizacion-territorial",
+  "componente": "Consolidación",
+  "area": "Ciencias sociales",
+  "titulo": "Colombia: organización territorial, política y ciudadana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la organización territorial, política y ciudadana de Colombia.",
+      "voz": "Repaso del tema: la organización territorial, política y ciudadana de Colombia."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La organización territorial",
+      "texto": "Colombia tiene 32 departamentos y el Distrito Capital de Bogotá. Los departamentos los administran gobernadores y asambleas, y se forman por municipios, con sus autoridades locales. Los distritos tienen un régimen especial. Y las regiones naturales, como la Andina o la Caribe, se definen por su geografía.",
+      "voz": "Colombia tiene treinta y dos departamentos y el Distrito Capital de Bogotá. Los departamentos los administran gobernadores y asambleas, y se forman por municipios, con sus autoridades locales. Los distritos tienen un régimen especial. Y las regiones naturales, como la Andina o la Caribe, se definen por su geografía.",
+      "items": [
+        {
+          "titulo": "Departamentos",
+          "texto": "32, con gobernador y asamblea",
+          "palabra": "departamentos"
+        },
+        {
+          "titulo": "Municipios",
+          "texto": "Con autoridades locales",
+          "palabra": "municipios"
+        },
+        {
+          "titulo": "Distritos",
+          "texto": "Régimen especial, como Bogotá",
+          "palabra": "distritos"
+        },
+        {
+          "titulo": "Regiones naturales",
+          "texto": "Andina, Caribe, Pacífica, Amazónica, Orinoquía e Insular",
+          "palabra": "regiones"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las tres ramas del poder público",
+      "texto": "Según la Constitución de 1991, el poder público se divide en tres ramas. La legislativa hace las leyes, en el Congreso. La ejecutiva gobierna y la encabeza el presidente. Y la judicial administra justicia con jueces, tribunales y altas cortes.",
+      "voz": "Según la Constitución de mil novecientos noventa y uno, el poder público se divide en tres ramas. La legislativa hace las leyes, en el Congreso. La ejecutiva gobierna y la encabeza el presidente. Y la judicial administra justicia con jueces, tribunales y altas cortes.",
+      "items": [
+        {
+          "titulo": "Legislativa",
+          "texto": "Hace las leyes: el Congreso",
+          "palabra": "legislativa"
+        },
+        {
+          "titulo": "Ejecutiva",
+          "texto": "Gobierna: presidente, gobernadores y alcaldes",
+          "palabra": "ejecutiva"
+        },
+        {
+          "titulo": "Judicial",
+          "texto": "Administra justicia: jueces, tribunales y altas cortes",
+          "palabra": "judicial"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Derechos y deberes",
+      "texto": "La Constitución reconoce derechos, como la vida, la igualdad, la educación y expresar opiniones libremente. Y nos pide deberes, como respetar los derechos de los demás, cumplir la Constitución y las leyes, y cuidar los bienes públicos y el medioambiente.",
+      "voz": "La Constitución reconoce derechos, como la vida, la igualdad, la educación y expresar opiniones libremente. Y nos pide deberes, como respetar los derechos de los demás, cumplir la Constitución y las leyes, y cuidar los bienes públicos y el medioambiente.",
+      "columnas": [
+        {
+          "titulo": "Derechos",
+          "palabra": "derechos",
+          "puntos": [
+            {
+              "texto": "La vida y la igualdad",
+              "palabra": "vida"
+            },
+            {
+              "texto": "La educación",
+              "palabra": "educación"
+            },
+            {
+              "texto": "Expresar opiniones",
+              "palabra": "opiniones"
+            }
+          ]
+        },
+        {
+          "titulo": "Deberes",
+          "palabra": "deberes",
+          "puntos": [
+            {
+              "texto": "Respetar a los demás",
+              "palabra": "respetar"
+            },
+            {
+              "texto": "Cumplir la Constitución y las leyes",
+              "palabra": "cumplir"
+            },
+            {
+              "texto": "Cuidar lo público y el medioambiente",
+              "palabra": "cuidar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La participación ciudadana",
+      "texto": "Participar es intervenir en las decisiones de la comunidad y del país. Podemos hacerlo con el voto, el referendo, la consulta popular, el cabildo abierto y la participación comunitaria. Participar no es solo votar: también es informarse, dialogar y proponer.",
+      "voz": "Participar es intervenir en las decisiones de la comunidad y del país. Podemos hacerlo con el voto, el referendo, la consulta popular, el cabildo abierto y la participación comunitaria. Participar no es solo votar: también es informarse, dialogar y proponer.",
+      "items": [
+        {
+          "titulo": "El voto",
+          "texto": "Elegir representantes",
+          "palabra": "voto"
+        },
+        {
+          "titulo": "El referendo",
+          "texto": "Aprobar o rechazar una norma",
+          "palabra": "referendo"
+        },
+        {
+          "titulo": "La consulta popular",
+          "texto": "Opinar sobre asuntos públicos",
+          "palabra": "consulta"
+        },
+        {
+          "titulo": "El cabildo abierto",
+          "texto": "Discutir asuntos de la comunidad",
+          "palabra": "cabildo"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la organización de Colombia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la organización de Colombia. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "tema": "cambio-climatico",
+  "componente": "Dominio",
+  "area": "Ciencias naturales",
+  "titulo": "Cambio climático e impacto humano en los ecosistemas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el cambio climático y el impacto humano en los ecosistemas.",
+      "voz": "Repaso del tema: el cambio climático y el impacto humano en los ecosistemas."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Tiempo, clima y cambio climático",
+      "texto": "El tiempo atmosférico es el estado de la atmósfera en un lugar y un momento. El clima es su comportamiento habitual durante muchos años. Y el cambio climático es una transformación duradera del clima, que incluye el calentamiento global.",
+      "voz": "El tiempo atmosférico es el estado de la atmósfera en un lugar y un momento. El clima es su comportamiento habitual durante muchos años. Y el cambio climático es una transformación duradera del clima, que incluye el calentamiento global.",
+      "items": [
+        {
+          "titulo": "Tiempo atmosférico",
+          "texto": "Lo que pasa hoy",
+          "palabra": "tiempo"
+        },
+        {
+          "titulo": "Clima",
+          "texto": "Lo habitual durante años",
+          "palabra": "clima"
+        },
+        {
+          "titulo": "Cambio climático",
+          "texto": "Cambio duradero del clima",
+          "palabra": "cambio"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "El efecto invernadero",
+      "texto": "El efecto invernadero es natural y mantiene la Tierra habitable. Llega la energía del Sol, y una parte se refleja al espacio. La Tierra libera energía como radiación infrarroja, y algunos gases de la atmósfera retienen parte de ese calor.",
+      "voz": "El efecto invernadero es natural y mantiene la Tierra habitable. Llega la energía del Sol, y una parte se refleja al espacio. La Tierra libera energía como radiación infrarroja, y algunos gases de la atmósfera retienen parte de ese calor.",
+      "imagenes": [
+        {
+          "src": "dominio/efecto-invernadero.webp",
+          "focos": [
+            {
+              "palabra": "sol",
+              "x": 0.3,
+              "y": 0.4,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "refleja",
+              "x": 0.55,
+              "y": 0.25,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "infrarroja",
+              "x": 0.3,
+              "y": 0.8,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "gases",
+              "x": 0.62,
+              "y": 0.75,
+              "zoom": 1.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las causas del cambio actual",
+      "texto": "El problema es que las actividades humanas aumentan esos gases y el planeta retiene más calor. Las causas principales son la quema de combustibles fósiles, la deforestación, algunas actividades agropecuarias y la industria.",
+      "voz": "El problema es que las actividades humanas aumentan esos gases y el planeta retiene más calor. Las causas principales son la quema de combustibles fósiles, la deforestación, algunas actividades agropecuarias y la industria.",
+      "items": [
+        {
+          "titulo": "Combustibles fósiles",
+          "texto": "Carbón, petróleo y gas",
+          "palabra": "combustibles"
+        },
+        {
+          "titulo": "Deforestación",
+          "texto": "Menos árboles que absorben CO₂",
+          "palabra": "deforestación"
+        },
+        {
+          "titulo": "Actividades agropecuarias",
+          "texto": "Ganadería y fertilizantes",
+          "palabra": "agropecuarias"
+        },
+        {
+          "titulo": "Industria",
+          "texto": "Cemento y otros procesos",
+          "palabra": "industria"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Las consecuencias",
+      "texto": "Sus consecuencias incluyen más calor extremo, sequías en unas zonas e inundaciones en otras, el deshielo de los glaciares y la subida del nivel del mar. También se alteran los ecosistemas, los cultivos y la salud.",
+      "voz": "Sus consecuencias incluyen más calor extremo, sequías en unas zonas e inundaciones en otras, el deshielo de los glaciares y la subida del nivel del mar. También se alteran los ecosistemas, los cultivos y la salud.",
+      "items": [
+        {
+          "titulo": "Calor extremo",
+          "palabra": "calor"
+        },
+        {
+          "titulo": "Sequías e inundaciones",
+          "palabra": "sequías"
+        },
+        {
+          "titulo": "Glaciares y nivel del mar",
+          "palabra": "glaciares"
+        },
+        {
+          "titulo": "Ecosistemas, cultivos y salud",
+          "palabra": "ecosistemas"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Mitigación y adaptación",
+      "texto": "Hay dos tipos de acciones. La mitigación reduce las emisiones o aumenta la absorción de carbono, como proteger los bosques o ahorrar energía. La adaptación nos prepara para los efectos, como cuidar el agua o tener planes ante inundaciones.",
+      "voz": "Hay dos tipos de acciones. La mitigación reduce las emisiones o aumenta la absorción de carbono, como proteger los bosques o ahorrar energía. La adaptación nos prepara para los efectos, como cuidar el agua o tener planes ante inundaciones.",
+      "columnas": [
+        {
+          "titulo": "Mitigación",
+          "palabra": "mitigación",
+          "puntos": [
+            {
+              "texto": "Reduce las emisiones",
+              "palabra": "reduce"
+            },
+            {
+              "texto": "Proteger bosques, ahorrar energía",
+              "palabra": "bosques"
+            }
+          ]
+        },
+        {
+          "titulo": "Adaptación",
+          "palabra": "adaptación",
+          "puntos": [
+            {
+              "texto": "Prepararse para los efectos",
+              "palabra": "prepara"
+            },
+            {
+              "texto": "Cuidar el agua, planes ante inundaciones",
+              "palabra": "inundaciones"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el cambio climático. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el cambio climático. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

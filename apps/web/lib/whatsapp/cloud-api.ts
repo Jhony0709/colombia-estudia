@@ -190,6 +190,27 @@ export function sendList(
   );
 }
 
+/** Texto con hasta 3 botones de respuesta rápida (título ≤ 20); la elección llega como `button_reply`. */
+export function sendButtons(
+  to: string,
+  body: string,
+  buttons: Array<{ id: string; title: string }>,
+  phoneNumberId?: string | null
+): Promise<SendResult> {
+  return send(
+    to,
+    {
+      type: 'interactive',
+      interactive: {
+        type: 'button',
+        body: { text: body },
+        action: { buttons: buttons.map((reply) => ({ type: 'reply', reply })) },
+      },
+    },
+    phoneNumberId
+  );
+}
+
 /**
  * Una plantilla aprobada en Meta; `params` llena `{{1}}`, `{{2}}`… del cuerpo, en orden.
  * `urlSuffix` llena la parte variable del primer botón de enlace, si la plantilla lo tiene.

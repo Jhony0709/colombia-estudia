@@ -1,0 +1,958 @@
+{
+  "tema": "comprension-lectora",
+  "componente": "Consolidación",
+  "area": "Lengua castellana",
+  "titulo": "Comprensión lectora",
+  "siguiente": "La materia y sus transformaciones",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la comprensión lectora.",
+      "voz": "Repaso del tema: la comprensión lectora.",
+      "audio": "voz/comprension-lectora/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 96,
+      "frames": 124,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "la comprensión lectora.",
+          "from": 42,
+          "to": 92
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 16
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 42
+        },
+        {
+          "w": "comprensión",
+          "f": 47
+        },
+        {
+          "w": "lectora",
+          "f": 64
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "pasos",
+      "titulo": "Los niveles de comprensión",
+      "texto": "La comprensión lectora tiene tres niveles. En el literal, identificamos lo que el texto dice directamente. En el inferencial, descubrimos lo que no está escrito, con las pistas de la lectura. Y en el crítico, analizamos el texto y formamos opiniones con argumentos.",
+      "voz": "La comprensión lectora tiene tres niveles. En el literal, identificamos lo que el texto dice directamente. En el inferencial, descubrimos lo que no está escrito, con las pistas de la lectura. Y en el crítico, analizamos el texto y formamos opiniones con argumentos.",
+      "items": [
+        {
+          "titulo": "Literal",
+          "texto": "Lo que dice el texto",
+          "palabra": "literal"
+        },
+        {
+          "titulo": "Inferencial",
+          "texto": "Lo que no está escrito",
+          "palabra": "inferencial"
+        },
+        {
+          "titulo": "Crítico",
+          "texto": "Opinar con argumentos",
+          "palabra": "crítico"
+        }
+      ],
+      "audio": "voz/comprension-lectora/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 449,
+      "frames": 477,
+      "chunks": [
+        {
+          "text": "La comprensión lectora tiene tres niveles.",
+          "from": 0,
+          "to": 66
+        },
+        {
+          "text": "En el literal, identificamos lo",
+          "from": 77,
+          "to": 130
+        },
+        {
+          "text": "que el texto dice directamente.",
+          "from": 130,
+          "to": 182
+        },
+        {
+          "text": "En el inferencial, descubrimos lo que no está",
+          "from": 194,
+          "to": 260
+        },
+        {
+          "text": "escrito, con las pistas de la lectura.",
+          "from": 260,
+          "to": 316
+        },
+        {
+          "text": "Y en el crítico, analizamos el",
+          "from": 325,
+          "to": 375
+        },
+        {
+          "text": "texto y formamos opiniones con argumentos.",
+          "from": 375,
+          "to": 444
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "comprensión",
+          "f": 6
+        },
+        {
+          "w": "lectora",
+          "f": 20
+        },
+        {
+          "w": "tiene",
+          "f": 33
+        },
+        {
+          "w": "tres",
+          "f": 41
+        },
+        {
+          "w": "niveles",
+          "f": 48
+        },
+        {
+          "w": "en",
+          "f": 77
+        },
+        {
+          "w": "el",
+          "f": 84
+        },
+        {
+          "w": "literal",
+          "f": 86
+        },
+        {
+          "w": "identificamos",
+          "f": 104
+        },
+        {
+          "w": "lo",
+          "f": 127
+        },
+        {
+          "w": "que",
+          "f": 131
+        },
+        {
+          "w": "el",
+          "f": 133
+        },
+        {
+          "w": "texto",
+          "f": 137
+        },
+        {
+          "w": "dice",
+          "f": 149
+        },
+        {
+          "w": "directamente",
+          "f": 157
+        },
+        {
+          "w": "en",
+          "f": 194
+        },
+        {
+          "w": "el",
+          "f": 200
+        },
+        {
+          "w": "inferencial",
+          "f": 204
+        },
+        {
+          "w": "descubrimos",
+          "f": 223
+        },
+        {
+          "w": "lo",
+          "f": 240
+        },
+        {
+          "w": "que",
+          "f": 243
+        },
+        {
+          "w": "no",
+          "f": 247
+        },
+        {
+          "w": "está",
+          "f": 250
+        },
+        {
+          "w": "escrito",
+          "f": 254
+        },
+        {
+          "w": "con",
+          "f": 272
+        },
+        {
+          "w": "las",
+          "f": 277
+        },
+        {
+          "w": "pistas",
+          "f": 282
+        },
+        {
+          "w": "de",
+          "f": 292
+        },
+        {
+          "w": "la",
+          "f": 295
+        },
+        {
+          "w": "lectura",
+          "f": 299
+        },
+        {
+          "w": "y",
+          "f": 325
+        },
+        {
+          "w": "en",
+          "f": 329
+        },
+        {
+          "w": "el",
+          "f": 332
+        },
+        {
+          "w": "crítico",
+          "f": 335
+        },
+        {
+          "w": "analizamos",
+          "f": 350
+        },
+        {
+          "w": "el",
+          "f": 368
+        },
+        {
+          "w": "texto",
+          "f": 371
+        },
+        {
+          "w": "y",
+          "f": 380
+        },
+        {
+          "w": "formamos",
+          "f": 382
+        },
+        {
+          "w": "opiniones",
+          "f": 396
+        },
+        {
+          "w": "con",
+          "f": 410
+        },
+        {
+          "w": "argumentos",
+          "f": 414
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Los tipos de textos",
+      "texto": "Según lo que el autor quiere expresar, un texto puede ser narrativo, si cuenta hechos; descriptivo, si explica cómo es algo; expositivo, si presenta información; o argumentativo, si defiende una opinión.",
+      "voz": "Según lo que el autor quiere expresar, un texto puede ser narrativo, si cuenta hechos; descriptivo, si explica cómo es algo; expositivo, si presenta información; o argumentativo, si defiende una opinión.",
+      "items": [
+        {
+          "titulo": "Narrativo",
+          "texto": "Cuenta hechos reales o imaginarios",
+          "palabra": "narrativo"
+        },
+        {
+          "titulo": "Descriptivo",
+          "texto": "Explica cómo es algo",
+          "palabra": "descriptivo"
+        },
+        {
+          "titulo": "Expositivo",
+          "texto": "Presenta información sobre un tema",
+          "palabra": "expositivo"
+        },
+        {
+          "titulo": "Argumentativo",
+          "texto": "Defiende una opinión con razones",
+          "palabra": "argumentativo"
+        }
+      ],
+      "audio": "voz/comprension-lectora/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 381,
+      "frames": 409,
+      "chunks": [
+        {
+          "text": "Según lo que el autor quiere expresar, un",
+          "from": 0,
+          "to": 72
+        },
+        {
+          "text": "texto puede ser narrativo, si cuenta hechos;",
+          "from": 72,
+          "to": 149
+        },
+        {
+          "text": "descriptivo, si explica cómo es algo;",
+          "from": 153,
+          "to": 222
+        },
+        {
+          "text": "expositivo, si presenta información;",
+          "from": 231,
+          "to": 292
+        },
+        {
+          "text": "o argumentativo, si defiende una opinión.",
+          "from": 302,
+          "to": 376
+        }
+      ],
+      "words": [
+        {
+          "w": "según",
+          "f": 0
+        },
+        {
+          "w": "lo",
+          "f": 11
+        },
+        {
+          "w": "que",
+          "f": 15
+        },
+        {
+          "w": "el",
+          "f": 18
+        },
+        {
+          "w": "autor",
+          "f": 21
+        },
+        {
+          "w": "quiere",
+          "f": 30
+        },
+        {
+          "w": "expresar",
+          "f": 36
+        },
+        {
+          "w": "un",
+          "f": 57
+        },
+        {
+          "w": "texto",
+          "f": 62
+        },
+        {
+          "w": "puede",
+          "f": 73
+        },
+        {
+          "w": "ser",
+          "f": 80
+        },
+        {
+          "w": "narrativo",
+          "f": 85
+        },
+        {
+          "w": "si",
+          "f": 117
+        },
+        {
+          "w": "cuenta",
+          "f": 123
+        },
+        {
+          "w": "hechos",
+          "f": 136
+        },
+        {
+          "w": "descriptivo",
+          "f": 153
+        },
+        {
+          "w": "si",
+          "f": 177
+        },
+        {
+          "w": "explica",
+          "f": 182
+        },
+        {
+          "w": "cómo",
+          "f": 197
+        },
+        {
+          "w": "es",
+          "f": 204
+        },
+        {
+          "w": "algo",
+          "f": 208
+        },
+        {
+          "w": "expositivo",
+          "f": 231
+        },
+        {
+          "w": "si",
+          "f": 255
+        },
+        {
+          "w": "presenta",
+          "f": 259
+        },
+        {
+          "w": "información",
+          "f": 270
+        },
+        {
+          "w": "o",
+          "f": 302
+        },
+        {
+          "w": "argumentativo",
+          "f": 304
+        },
+        {
+          "w": "si",
+          "f": 331
+        },
+        {
+          "w": "defiende",
+          "f": 335
+        },
+        {
+          "w": "una",
+          "f": 347
+        },
+        {
+          "w": "opinión",
+          "f": 350
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "La estructura de un texto",
+      "texto": "Un texto bien organizado tiene introducción, que presenta el tema; desarrollo, que explica las ideas; y conclusión, que resume o reflexiona. En los cuentos se llaman inicio, nudo y desenlace.",
+      "voz": "Un texto bien organizado tiene introducción, que presenta el tema; desarrollo, que explica las ideas; y conclusión, que resume o reflexiona. En los cuentos se llaman inicio, nudo y desenlace.",
+      "items": [
+        {
+          "titulo": "Introducción",
+          "texto": "Presenta el tema",
+          "palabra": "introducción"
+        },
+        {
+          "titulo": "Desarrollo",
+          "texto": "Explica las ideas",
+          "palabra": "desarrollo"
+        },
+        {
+          "titulo": "Conclusión",
+          "texto": "Resume o reflexiona",
+          "palabra": "conclusión"
+        }
+      ],
+      "audio": "voz/comprension-lectora/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 344,
+      "frames": 372,
+      "chunks": [
+        {
+          "text": "Un texto bien organizado tiene",
+          "from": 0,
+          "to": 46
+        },
+        {
+          "text": "introducción, que presenta el tema;",
+          "from": 46,
+          "to": 99
+        },
+        {
+          "text": "desarrollo, que explica las ideas;",
+          "from": 110,
+          "to": 165
+        },
+        {
+          "text": "y conclusión, que resume o reflexiona.",
+          "from": 171,
+          "to": 236
+        },
+        {
+          "text": "En los cuentos se llaman inicio, nudo y desenlace.",
+          "from": 248,
+          "to": 340
+        }
+      ],
+      "words": [
+        {
+          "w": "un",
+          "f": 0
+        },
+        {
+          "w": "texto",
+          "f": 7
+        },
+        {
+          "w": "bien",
+          "f": 17
+        },
+        {
+          "w": "organizado",
+          "f": 22
+        },
+        {
+          "w": "tiene",
+          "f": 38
+        },
+        {
+          "w": "introducción",
+          "f": 44
+        },
+        {
+          "w": "que",
+          "f": 66
+        },
+        {
+          "w": "presenta",
+          "f": 71
+        },
+        {
+          "w": "el",
+          "f": 83
+        },
+        {
+          "w": "tema",
+          "f": 86
+        },
+        {
+          "w": "desarrollo",
+          "f": 110
+        },
+        {
+          "w": "que",
+          "f": 129
+        },
+        {
+          "w": "explica",
+          "f": 132
+        },
+        {
+          "w": "las",
+          "f": 146
+        },
+        {
+          "w": "ideas",
+          "f": 150
+        },
+        {
+          "w": "y",
+          "f": 171
+        },
+        {
+          "w": "conclusión",
+          "f": 177
+        },
+        {
+          "w": "que",
+          "f": 193
+        },
+        {
+          "w": "resume",
+          "f": 197
+        },
+        {
+          "w": "o",
+          "f": 211
+        },
+        {
+          "w": "reflexiona",
+          "f": 215
+        },
+        {
+          "w": "en",
+          "f": 248
+        },
+        {
+          "w": "los",
+          "f": 253
+        },
+        {
+          "w": "cuentos",
+          "f": 258
+        },
+        {
+          "w": "se",
+          "f": 267
+        },
+        {
+          "w": "llaman",
+          "f": 270
+        },
+        {
+          "w": "inicio",
+          "f": 281
+        },
+        {
+          "w": "nudo",
+          "f": 295
+        },
+        {
+          "w": "y",
+          "f": 306
+        },
+        {
+          "w": "desenlace",
+          "f": 310
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "comparar",
+      "titulo": "Coherencia y cohesión",
+      "texto": "La coherencia hace que las ideas sigan un orden lógico y se relacionen con el tema. La cohesión conecta las palabras, las oraciones y los párrafos, por ejemplo con conectores como además, porque o por eso.",
+      "voz": "La coherencia hace que las ideas sigan un orden lógico y se relacionen con el tema. La cohesión conecta las palabras, las oraciones y los párrafos, por ejemplo con conectores como además, porque o por eso.",
+      "columnas": [
+        {
+          "titulo": "Coherencia",
+          "palabra": "coherencia",
+          "puntos": [
+            {
+              "texto": "Las ideas siguen un orden lógico",
+              "palabra": "orden"
+            },
+            {
+              "texto": "Todo se relaciona con el tema",
+              "palabra": "tema"
+            }
+          ]
+        },
+        {
+          "titulo": "Cohesión",
+          "palabra": "cohesión",
+          "puntos": [
+            {
+              "texto": "Conecta palabras, oraciones y párrafos",
+              "palabra": "conecta"
+            },
+            {
+              "texto": "Usa conectores: además, porque, por eso",
+              "palabra": "conectores"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/comprension-lectora/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 346,
+      "frames": 374,
+      "chunks": [
+        {
+          "text": "La coherencia hace que las ideas sigan un",
+          "from": 0,
+          "to": 60
+        },
+        {
+          "text": "orden lógico y se relacionen con el tema.",
+          "from": 60,
+          "to": 119
+        },
+        {
+          "text": "La cohesión conecta las palabras, las oraciones",
+          "from": 131,
+          "to": 214
+        },
+        {
+          "text": "y los párrafos, por ejemplo con conectores",
+          "from": 214,
+          "to": 288
+        },
+        {
+          "text": "como además, porque o por eso.",
+          "from": 288,
+          "to": 341
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "coherencia",
+          "f": 5
+        },
+        {
+          "w": "hace",
+          "f": 18
+        },
+        {
+          "w": "que",
+          "f": 25
+        },
+        {
+          "w": "las",
+          "f": 28
+        },
+        {
+          "w": "ideas",
+          "f": 34
+        },
+        {
+          "w": "sigan",
+          "f": 42
+        },
+        {
+          "w": "un",
+          "f": 51
+        },
+        {
+          "w": "orden",
+          "f": 55
+        },
+        {
+          "w": "lógico",
+          "f": 63
+        },
+        {
+          "w": "y",
+          "f": 76
+        },
+        {
+          "w": "se",
+          "f": 77
+        },
+        {
+          "w": "relacionen",
+          "f": 81
+        },
+        {
+          "w": "con",
+          "f": 96
+        },
+        {
+          "w": "el",
+          "f": 102
+        },
+        {
+          "w": "tema",
+          "f": 106
+        },
+        {
+          "w": "la",
+          "f": 131
+        },
+        {
+          "w": "cohesión",
+          "f": 136
+        },
+        {
+          "w": "conecta",
+          "f": 149
+        },
+        {
+          "w": "las",
+          "f": 161
+        },
+        {
+          "w": "palabras",
+          "f": 166
+        },
+        {
+          "w": "las",
+          "f": 182
+        },
+        {
+          "w": "oraciones",
+          "f": 188
+        },
+        {
+          "w": "y",
+          "f": 203
+        },
+        {
+          "w": "los",
+          "f": 205
+        },
+        {
+          "w": "párrafos",
+          "f": 211
+        },
+        {
+          "w": "por",
+          "f": 237
+        },
+        {
+          "w": "ejemplo",
+          "f": 242
+        },
+        {
+          "w": "con",
+          "f": 253
+        },
+        {
+          "w": "conectores",
+          "f": 257
+        },
+        {
+          "w": "como",
+          "f": 274
+        },
+        {
+          "w": "además",
+          "f": 282
+        },
+        {
+          "w": "porque",
+          "f": 307
+        },
+        {
+          "w": "o",
+          "f": 317
+        },
+        {
+          "w": "por",
+          "f": 319
+        },
+        {
+          "w": "eso",
+          "f": 325
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la comprensión lectora. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la comprensión lectora. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/comprension-lectora/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 155,
+      "frames": 315,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 19
+        },
+        {
+          "text": "Repasaste la comprensión lectora.",
+          "from": 24,
+          "to": 74
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 87,
+          "to": 150
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 3
+        },
+        {
+          "w": "bien",
+          "f": 10
+        },
+        {
+          "w": "repasaste",
+          "f": 24
+        },
+        {
+          "w": "la",
+          "f": 40
+        },
+        {
+          "w": "comprensión",
+          "f": 44
+        },
+        {
+          "w": "lectora",
+          "f": 59
+        },
+        {
+          "w": "sigue",
+          "f": 87
+        },
+        {
+          "w": "con",
+          "f": 97
+        },
+        {
+          "w": "el",
+          "f": 102
+        },
+        {
+          "w": "siguiente",
+          "f": 104
+        },
+        {
+          "w": "tema",
+          "f": 117
+        },
+        {
+          "w": "de",
+          "f": 125
+        },
+        {
+          "w": "tu",
+          "f": 127
+        },
+        {
+          "w": "ruta",
+          "f": 132
+        }
+      ]
+    }
+  ]
+}

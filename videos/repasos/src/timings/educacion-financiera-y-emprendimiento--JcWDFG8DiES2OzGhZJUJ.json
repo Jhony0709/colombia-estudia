@@ -1,0 +1,1077 @@
+{
+  "tema": "educacion-financiera-y-emprendimiento",
+  "componente": "Transición",
+  "area": "Economía y ciencias políticas",
+  "titulo": "Educación financiera, emprendimiento y economía cotidiana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la educación financiera, el emprendimiento y la economía cotidiana.",
+      "voz": "Repaso del tema: la educación financiera, el emprendimiento y la economía cotidiana.",
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 156,
+      "frames": 184,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 34
+        },
+        {
+          "text": "la educación financiera, el emprendimiento",
+          "from": 37,
+          "to": 110
+        },
+        {
+          "text": "y la economía cotidiana.",
+          "from": 110,
+          "to": 152
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 17
+        },
+        {
+          "w": "tema",
+          "f": 22
+        },
+        {
+          "w": "la",
+          "f": 37
+        },
+        {
+          "w": "educación",
+          "f": 40
+        },
+        {
+          "w": "financiera",
+          "f": 55
+        },
+        {
+          "w": "el",
+          "f": 75
+        },
+        {
+          "w": "emprendimiento",
+          "f": 79
+        },
+        {
+          "w": "y",
+          "f": 102
+        },
+        {
+          "w": "la",
+          "f": 105
+        },
+        {
+          "w": "economía",
+          "f": 107
+        },
+        {
+          "w": "cotidiana",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Ingresos y gastos",
+      "texto": "Los ingresos son el dinero que recibimos, y los gastos, lo que pagamos. Los gastos pueden ser fijos, como el arriendo; variables, como la comida; o extraordinarios, como una reparación imprevista.",
+      "voz": "Los ingresos son el dinero que recibimos, y los gastos, lo que pagamos. Los gastos pueden ser fijos, como el arriendo; variables, como la comida; o extraordinarios, como una reparación imprevista.",
+      "items": [
+        {
+          "titulo": "Ingresos",
+          "texto": "Lo que recibimos",
+          "palabra": "ingresos"
+        },
+        {
+          "titulo": "Gastos fijos",
+          "texto": "El arriendo",
+          "palabra": "fijos"
+        },
+        {
+          "titulo": "Gastos variables",
+          "texto": "La comida",
+          "palabra": "variables"
+        },
+        {
+          "titulo": "Extraordinarios",
+          "texto": "Una reparación",
+          "palabra": "extraordinarios"
+        }
+      ],
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 331,
+      "frames": 359,
+      "chunks": [
+        {
+          "text": "Los ingresos son el dinero que recibimos,",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "y los gastos, lo que pagamos.",
+          "from": 59,
+          "to": 101
+        },
+        {
+          "text": "Los gastos pueden ser fijos, como el arriendo;",
+          "from": 108,
+          "to": 182
+        },
+        {
+          "text": "variables, como la comida;",
+          "from": 189,
+          "to": 236
+        },
+        {
+          "text": "o extraordinarios, como una reparación imprevista.",
+          "from": 239,
+          "to": 326
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "ingresos",
+          "f": 8
+        },
+        {
+          "w": "son",
+          "f": 18
+        },
+        {
+          "w": "el",
+          "f": 23
+        },
+        {
+          "w": "dinero",
+          "f": 26
+        },
+        {
+          "w": "que",
+          "f": 36
+        },
+        {
+          "w": "recibimos",
+          "f": 39
+        },
+        {
+          "w": "y",
+          "f": 56
+        },
+        {
+          "w": "los",
+          "f": 59
+        },
+        {
+          "w": "gastos",
+          "f": 64
+        },
+        {
+          "w": "lo",
+          "f": 74
+        },
+        {
+          "w": "que",
+          "f": 78
+        },
+        {
+          "w": "pagamos",
+          "f": 82
+        },
+        {
+          "w": "los",
+          "f": 108
+        },
+        {
+          "w": "gastos",
+          "f": 115
+        },
+        {
+          "w": "pueden",
+          "f": 125
+        },
+        {
+          "w": "ser",
+          "f": 133
+        },
+        {
+          "w": "fijos",
+          "f": 139
+        },
+        {
+          "w": "como",
+          "f": 152
+        },
+        {
+          "w": "el",
+          "f": 160
+        },
+        {
+          "w": "arriendo",
+          "f": 163
+        },
+        {
+          "w": "variables",
+          "f": 189
+        },
+        {
+          "w": "como",
+          "f": 209
+        },
+        {
+          "w": "la",
+          "f": 217
+        },
+        {
+          "w": "comida",
+          "f": 220
+        },
+        {
+          "w": "o",
+          "f": 239
+        },
+        {
+          "w": "extraordinarios",
+          "f": 242
+        },
+        {
+          "w": "como",
+          "f": 266
+        },
+        {
+          "w": "una",
+          "f": 272
+        },
+        {
+          "w": "reparación",
+          "f": 278
+        },
+        {
+          "w": "imprevista",
+          "f": 293
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "pasos",
+      "titulo": "El presupuesto",
+      "texto": "Para hacer un presupuesto, identifica tus ingresos, registra tus gastos, clasifícalos, compara los ingresos con los gastos y establece prioridades.",
+      "voz": "Para hacer un presupuesto, identifica tus ingresos, registra tus gastos, clasifícalos, compara los ingresos con los gastos y establece prioridades.",
+      "items": [
+        {
+          "titulo": "Ingresos",
+          "palabra": "identifica"
+        },
+        {
+          "titulo": "Gastos",
+          "palabra": "registra"
+        },
+        {
+          "titulo": "Clasificar",
+          "palabra": "clasifícalos"
+        },
+        {
+          "titulo": "Comparar",
+          "palabra": "compara"
+        },
+        {
+          "titulo": "Prioridades",
+          "palabra": "prioridades"
+        }
+      ],
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 243,
+      "frames": 271,
+      "chunks": [
+        {
+          "text": "Para hacer un presupuesto, identifica tus ingresos,",
+          "from": 0,
+          "to": 84
+        },
+        {
+          "text": "registra tus gastos, clasifícalos, compara los ingresos",
+          "from": 84,
+          "to": 174
+        },
+        {
+          "text": "con los gastos y establece prioridades.",
+          "from": 174,
+          "to": 238
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "hacer",
+          "f": 7
+        },
+        {
+          "w": "un",
+          "f": 14
+        },
+        {
+          "w": "presupuesto",
+          "f": 17
+        },
+        {
+          "w": "identifica",
+          "f": 34
+        },
+        {
+          "w": "tus",
+          "f": 50
+        },
+        {
+          "w": "ingresos",
+          "f": 56
+        },
+        {
+          "w": "registra",
+          "f": 72
+        },
+        {
+          "w": "tus",
+          "f": 85
+        },
+        {
+          "w": "gastos",
+          "f": 91
+        },
+        {
+          "w": "clasifícalos",
+          "f": 103
+        },
+        {
+          "w": "compara",
+          "f": 129
+        },
+        {
+          "w": "los",
+          "f": 140
+        },
+        {
+          "w": "ingresos",
+          "f": 146
+        },
+        {
+          "w": "con",
+          "f": 157
+        },
+        {
+          "w": "los",
+          "f": 162
+        },
+        {
+          "w": "gastos",
+          "f": 167
+        },
+        {
+          "w": "y",
+          "f": 179
+        },
+        {
+          "w": "establece",
+          "f": 182
+        },
+        {
+          "w": "prioridades",
+          "f": 197
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Ahorro y crédito",
+      "texto": "Ahorrar es reservar dinero para emergencias o metas. Un crédito, en cambio, es dinero prestado que se devuelve en cuotas, durante un plazo y con intereses: el interés es el costo de usar dinero prestado.",
+      "voz": "Ahorrar es reservar dinero para emergencias o metas. Un crédito, en cambio, es dinero prestado que se devuelve en cuotas, durante un plazo y con intereses: el interés es el costo de usar dinero prestado.",
+      "items": [
+        {
+          "titulo": "Ahorro",
+          "texto": "Emergencias y metas",
+          "palabra": "ahorrar"
+        },
+        {
+          "titulo": "Crédito",
+          "texto": "Dinero prestado",
+          "palabra": "crédito"
+        },
+        {
+          "titulo": "Cuotas y plazo",
+          "texto": "Cómo se devuelve",
+          "palabra": "cuotas"
+        },
+        {
+          "titulo": "Interés",
+          "texto": "El costo del préstamo",
+          "palabra": "interés"
+        }
+      ],
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 346,
+      "frames": 374,
+      "chunks": [
+        {
+          "text": "Ahorrar es reservar dinero para emergencias o metas.",
+          "from": 0,
+          "to": 83
+        },
+        {
+          "text": "Un crédito, en cambio, es dinero prestado que se",
+          "from": 91,
+          "to": 167
+        },
+        {
+          "text": "devuelve en cuotas, durante un plazo y con intereses:",
+          "from": 167,
+          "to": 250
+        },
+        {
+          "text": "el interés es el costo de usar dinero prestado.",
+          "from": 258,
+          "to": 341
+        }
+      ],
+      "words": [
+        {
+          "w": "ahorrar",
+          "f": 0
+        },
+        {
+          "w": "es",
+          "f": 14
+        },
+        {
+          "w": "reservar",
+          "f": 18
+        },
+        {
+          "w": "dinero",
+          "f": 31
+        },
+        {
+          "w": "para",
+          "f": 41
+        },
+        {
+          "w": "emergencias",
+          "f": 46
+        },
+        {
+          "w": "o",
+          "f": 65
+        },
+        {
+          "w": "metas",
+          "f": 67
+        },
+        {
+          "w": "un",
+          "f": 91
+        },
+        {
+          "w": "crédito",
+          "f": 97
+        },
+        {
+          "w": "en",
+          "f": 109
+        },
+        {
+          "w": "cambio",
+          "f": 113
+        },
+        {
+          "w": "es",
+          "f": 127
+        },
+        {
+          "w": "dinero",
+          "f": 131
+        },
+        {
+          "w": "prestado",
+          "f": 141
+        },
+        {
+          "w": "que",
+          "f": 153
+        },
+        {
+          "w": "se",
+          "f": 157
+        },
+        {
+          "w": "devuelve",
+          "f": 160
+        },
+        {
+          "w": "en",
+          "f": 170
+        },
+        {
+          "w": "cuotas",
+          "f": 173
+        },
+        {
+          "w": "durante",
+          "f": 196
+        },
+        {
+          "w": "un",
+          "f": 208
+        },
+        {
+          "w": "plazo",
+          "f": 211
+        },
+        {
+          "w": "y",
+          "f": 221
+        },
+        {
+          "w": "con",
+          "f": 223
+        },
+        {
+          "w": "intereses",
+          "f": 229
+        },
+        {
+          "w": "el",
+          "f": 258
+        },
+        {
+          "w": "interés",
+          "f": 263
+        },
+        {
+          "w": "es",
+          "f": 275
+        },
+        {
+          "w": "el",
+          "f": 279
+        },
+        {
+          "w": "costo",
+          "f": 283
+        },
+        {
+          "w": "de",
+          "f": 291
+        },
+        {
+          "w": "usar",
+          "f": 293
+        },
+        {
+          "w": "dinero",
+          "f": 300
+        },
+        {
+          "w": "prestado",
+          "f": 311
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El trabajo",
+      "texto": "En un empleo formal hay contrato de trabajo, salario, prestaciones sociales y seguridad social en salud, pensión y riesgos laborales. La prestación de servicios es distinta: es un contrato civil o comercial, con autonomía.",
+      "voz": "En un empleo formal hay contrato de trabajo, salario, prestaciones sociales y seguridad social en salud, pensión y riesgos laborales. La prestación de servicios es distinta: es un contrato civil o comercial, con autonomía.",
+      "items": [
+        {
+          "titulo": "Contrato de trabajo",
+          "palabra": "contrato"
+        },
+        {
+          "titulo": "Salario y prestaciones",
+          "palabra": "salario"
+        },
+        {
+          "titulo": "Seguridad social",
+          "texto": "Salud, pensión, riesgos",
+          "palabra": "seguridad"
+        },
+        {
+          "titulo": "Prestación de servicios",
+          "texto": "Contrato civil o comercial",
+          "palabra": "prestación"
+        }
+      ],
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 374,
+      "frames": 402,
+      "chunks": [
+        {
+          "text": "En un empleo formal hay contrato de",
+          "from": 0,
+          "to": 55
+        },
+        {
+          "text": "trabajo, salario, prestaciones sociales y seguridad social",
+          "from": 55,
+          "to": 147
+        },
+        {
+          "text": "en salud, pensión y riesgos laborales.",
+          "from": 147,
+          "to": 207
+        },
+        {
+          "text": "La prestación de servicios es distinta:",
+          "from": 219,
+          "to": 275
+        },
+        {
+          "text": "es un contrato civil o comercial, con autonomía.",
+          "from": 285,
+          "to": 369
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "un",
+          "f": 6
+        },
+        {
+          "w": "empleo",
+          "f": 10
+        },
+        {
+          "w": "formal",
+          "f": 18
+        },
+        {
+          "w": "hay",
+          "f": 30
+        },
+        {
+          "w": "contrato",
+          "f": 35
+        },
+        {
+          "w": "de",
+          "f": 48
+        },
+        {
+          "w": "trabajo",
+          "f": 51
+        },
+        {
+          "w": "salario",
+          "f": 66
+        },
+        {
+          "w": "prestaciones",
+          "f": 81
+        },
+        {
+          "w": "sociales",
+          "f": 98
+        },
+        {
+          "w": "y",
+          "f": 113
+        },
+        {
+          "w": "seguridad",
+          "f": 116
+        },
+        {
+          "w": "social",
+          "f": 129
+        },
+        {
+          "w": "en",
+          "f": 140
+        },
+        {
+          "w": "salud",
+          "f": 143
+        },
+        {
+          "w": "pensión",
+          "f": 160
+        },
+        {
+          "w": "y",
+          "f": 175
+        },
+        {
+          "w": "riesgos",
+          "f": 178
+        },
+        {
+          "w": "laborales",
+          "f": 189
+        },
+        {
+          "w": "la",
+          "f": 219
+        },
+        {
+          "w": "prestación",
+          "f": 223
+        },
+        {
+          "w": "de",
+          "f": 236
+        },
+        {
+          "w": "servicios",
+          "f": 239
+        },
+        {
+          "w": "es",
+          "f": 252
+        },
+        {
+          "w": "distinta",
+          "f": 255
+        },
+        {
+          "w": "es",
+          "f": 285
+        },
+        {
+          "w": "un",
+          "f": 290
+        },
+        {
+          "w": "contrato",
+          "f": 294
+        },
+        {
+          "w": "civil",
+          "f": 307
+        },
+        {
+          "w": "o",
+          "f": 318
+        },
+        {
+          "w": "comercial",
+          "f": 321
+        },
+        {
+          "w": "con",
+          "f": 339
+        },
+        {
+          "w": "autonomía",
+          "f": 345
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Emprender",
+      "texto": "Un emprendimiento parte de una idea de negocio que responde a una necesidad del mercado. La ganancia es lo que queda de los ingresos por ventas después de descontar los costos.",
+      "voz": "Un emprendimiento parte de una idea de negocio que responde a una necesidad del mercado. La ganancia es lo que queda de los ingresos por ventas después de descontar los costos.",
+      "items": [
+        {
+          "titulo": "Idea de negocio",
+          "palabra": "idea"
+        },
+        {
+          "titulo": "Necesidad del mercado",
+          "palabra": "necesidad"
+        },
+        {
+          "titulo": "Ganancia",
+          "texto": "Ventas menos costos",
+          "palabra": "ganancia"
+        },
+        {
+          "titulo": "Costos",
+          "texto": "Lo que cuesta producir",
+          "palabra": "costos"
+        }
+      ],
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 272,
+      "frames": 300,
+      "chunks": [
+        {
+          "text": "Un emprendimiento parte de una idea de negocio",
+          "from": 0,
+          "to": 67
+        },
+        {
+          "text": "que responde a una necesidad del mercado.",
+          "from": 67,
+          "to": 127
+        },
+        {
+          "text": "La ganancia es lo que queda de los",
+          "from": 137,
+          "to": 189
+        },
+        {
+          "text": "ingresos por ventas después de descontar los costos.",
+          "from": 189,
+          "to": 267
+        }
+      ],
+      "words": [
+        {
+          "w": "un",
+          "f": 0
+        },
+        {
+          "w": "emprendimiento",
+          "f": 7
+        },
+        {
+          "w": "parte",
+          "f": 27
+        },
+        {
+          "w": "de",
+          "f": 36
+        },
+        {
+          "w": "una",
+          "f": 39
+        },
+        {
+          "w": "idea",
+          "f": 43
+        },
+        {
+          "w": "de",
+          "f": 53
+        },
+        {
+          "w": "negocio",
+          "f": 56
+        },
+        {
+          "w": "que",
+          "f": 68
+        },
+        {
+          "w": "responde",
+          "f": 72
+        },
+        {
+          "w": "a",
+          "f": 83
+        },
+        {
+          "w": "una",
+          "f": 85
+        },
+        {
+          "w": "necesidad",
+          "f": 89
+        },
+        {
+          "w": "del",
+          "f": 104
+        },
+        {
+          "w": "mercado",
+          "f": 110
+        },
+        {
+          "w": "la",
+          "f": 137
+        },
+        {
+          "w": "ganancia",
+          "f": 142
+        },
+        {
+          "w": "es",
+          "f": 157
+        },
+        {
+          "w": "lo",
+          "f": 161
+        },
+        {
+          "w": "que",
+          "f": 165
+        },
+        {
+          "w": "queda",
+          "f": 169
+        },
+        {
+          "w": "de",
+          "f": 175
+        },
+        {
+          "w": "los",
+          "f": 177
+        },
+        {
+          "w": "ingresos",
+          "f": 183
+        },
+        {
+          "w": "por",
+          "f": 194
+        },
+        {
+          "w": "ventas",
+          "f": 200
+        },
+        {
+          "w": "después",
+          "f": 212
+        },
+        {
+          "w": "de",
+          "f": 223
+        },
+        {
+          "w": "descontar",
+          "f": 226
+        },
+        {
+          "w": "los",
+          "f": 241
+        },
+        {
+          "w": "costos",
+          "f": 247
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la educación financiera y el emprendimiento. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la educación financiera y el emprendimiento. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/educacion-financiera-y-emprendimiento/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 188,
+      "frames": 348,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 24
+        },
+        {
+          "text": "Repasaste la educación financiera",
+          "from": 33,
+          "to": 79
+        },
+        {
+          "text": "y el emprendimiento.",
+          "from": 79,
+          "to": 106
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 119,
+          "to": 184
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "la",
+          "f": 49
+        },
+        {
+          "w": "educación",
+          "f": 51
+        },
+        {
+          "w": "financiera",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 79
+        },
+        {
+          "w": "el",
+          "f": 80
+        },
+        {
+          "w": "emprendimiento",
+          "f": 83
+        },
+        {
+          "w": "sigue",
+          "f": 119
+        },
+        {
+          "w": "con",
+          "f": 130
+        },
+        {
+          "w": "el",
+          "f": 135
+        },
+        {
+          "w": "siguiente",
+          "f": 137
+        },
+        {
+          "w": "tema",
+          "f": 150
+        },
+        {
+          "w": "de",
+          "f": 158
+        },
+        {
+          "w": "tu",
+          "f": 162
+        },
+        {
+          "w": "ruta",
+          "f": 167
+        }
+      ]
+    }
+  ]
+}

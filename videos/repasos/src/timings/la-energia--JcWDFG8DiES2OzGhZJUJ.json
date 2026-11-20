@@ -1,0 +1,918 @@
+{
+  "tema": "la-energia",
+  "componente": "Desarrollo",
+  "area": "Ciencias naturales",
+  "titulo": "La energía, sus formas y sus transformaciones",
+  "siguiente": "La población, las migraciones y la diversidad cultural del mundo",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la energía, sus formas y sus transformaciones.",
+      "voz": "Repaso del tema: la energía, sus formas y sus transformaciones.",
+      "audio": "voz/la-energia/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 123,
+      "frames": 151,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 35
+        },
+        {
+          "text": "la energía, sus formas y sus transformaciones.",
+          "from": 38,
+          "to": 118
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 17
+        },
+        {
+          "w": "tema",
+          "f": 22
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "energía",
+          "f": 41
+        },
+        {
+          "w": "sus",
+          "f": 56
+        },
+        {
+          "w": "formas",
+          "f": 62
+        },
+        {
+          "w": "y",
+          "f": 74
+        },
+        {
+          "w": "sus",
+          "f": 76
+        },
+        {
+          "w": "transformaciones",
+          "f": 81
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Formas de energía",
+      "texto": "La energía es la capacidad de producir cambios o realizar trabajo. Entre sus formas están la luminosa, de la luz; la térmica, ligada a la temperatura; la eléctrica; la cinética, del movimiento; la potencial, almacenada por la posición; y la química, guardada en las sustancias.",
+      "voz": "La energía es la capacidad de producir cambios o realizar trabajo. Entre sus formas están la luminosa, de la luz; la térmica, ligada a la temperatura; la eléctrica; la cinética, del movimiento; la potencial, almacenada por la posición; y la química, guardada en las sustancias.",
+      "items": [
+        {
+          "titulo": "Luminosa",
+          "texto": "La luz del Sol, una bombilla",
+          "palabra": "luminosa"
+        },
+        {
+          "titulo": "Térmica",
+          "texto": "El agua caliente, una estufa",
+          "palabra": "térmica"
+        },
+        {
+          "titulo": "Eléctrica",
+          "texto": "Un televisor, un ventilador",
+          "palabra": "eléctrica"
+        },
+        {
+          "titulo": "Cinética",
+          "texto": "Una bicicleta que avanza",
+          "palabra": "cinética"
+        },
+        {
+          "titulo": "Potencial",
+          "texto": "Una roca en lo alto de una montaña",
+          "palabra": "potencial"
+        },
+        {
+          "titulo": "Química",
+          "texto": "Los alimentos, las pilas, la gasolina",
+          "palabra": "química"
+        }
+      ],
+      "audio": "voz/la-energia/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 523,
+      "frames": 551,
+      "chunks": [
+        {
+          "text": "La energía es la capacidad de",
+          "from": 0,
+          "to": 44
+        },
+        {
+          "text": "producir cambios o realizar trabajo.",
+          "from": 44,
+          "to": 98
+        },
+        {
+          "text": "Entre sus formas están la luminosa, de la luz;",
+          "from": 108,
+          "to": 194
+        },
+        {
+          "text": "la térmica, ligada a la temperatura;",
+          "from": 205,
+          "to": 275
+        },
+        {
+          "text": "la eléctrica;",
+          "from": 278,
+          "to": 302
+        },
+        {
+          "text": "la cinética, del movimiento;",
+          "from": 304,
+          "to": 357
+        },
+        {
+          "text": "la potencial, almacenada por la posición;",
+          "from": 366,
+          "to": 434
+        },
+        {
+          "text": "y la química, guardada en las sustancias.",
+          "from": 443,
+          "to": 518
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 4
+        },
+        {
+          "w": "es",
+          "f": 15
+        },
+        {
+          "w": "la",
+          "f": 18
+        },
+        {
+          "w": "capacidad",
+          "f": 22
+        },
+        {
+          "w": "de",
+          "f": 36
+        },
+        {
+          "w": "producir",
+          "f": 40
+        },
+        {
+          "w": "cambios",
+          "f": 52
+        },
+        {
+          "w": "o",
+          "f": 66
+        },
+        {
+          "w": "realizar",
+          "f": 69
+        },
+        {
+          "w": "trabajo",
+          "f": 81
+        },
+        {
+          "w": "entre",
+          "f": 108
+        },
+        {
+          "w": "sus",
+          "f": 118
+        },
+        {
+          "w": "formas",
+          "f": 124
+        },
+        {
+          "w": "están",
+          "f": 138
+        },
+        {
+          "w": "la",
+          "f": 148
+        },
+        {
+          "w": "luminosa",
+          "f": 152
+        },
+        {
+          "w": "de",
+          "f": 175
+        },
+        {
+          "w": "la",
+          "f": 179
+        },
+        {
+          "w": "luz",
+          "f": 183
+        },
+        {
+          "w": "la",
+          "f": 205
+        },
+        {
+          "w": "térmica",
+          "f": 210
+        },
+        {
+          "w": "ligada",
+          "f": 233
+        },
+        {
+          "w": "a",
+          "f": 244
+        },
+        {
+          "w": "la",
+          "f": 247
+        },
+        {
+          "w": "temperatura",
+          "f": 251
+        },
+        {
+          "w": "la",
+          "f": 278
+        },
+        {
+          "w": "eléctrica",
+          "f": 281
+        },
+        {
+          "w": "la",
+          "f": 304
+        },
+        {
+          "w": "cinética",
+          "f": 308
+        },
+        {
+          "w": "del",
+          "f": 327
+        },
+        {
+          "w": "movimiento",
+          "f": 332
+        },
+        {
+          "w": "la",
+          "f": 366
+        },
+        {
+          "w": "potencial",
+          "f": 370
+        },
+        {
+          "w": "almacenada",
+          "f": 391
+        },
+        {
+          "w": "por",
+          "f": 409
+        },
+        {
+          "w": "la",
+          "f": 413
+        },
+        {
+          "w": "posición",
+          "f": 416
+        },
+        {
+          "w": "y",
+          "f": 443
+        },
+        {
+          "w": "la",
+          "f": 448
+        },
+        {
+          "w": "química",
+          "f": 453
+        },
+        {
+          "w": "guardada",
+          "f": 469
+        },
+        {
+          "w": "en",
+          "f": 481
+        },
+        {
+          "w": "las",
+          "f": 483
+        },
+        {
+          "w": "sustancias",
+          "f": 487
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Las transformaciones de la energía",
+      "texto": "La energía cambia de una forma a otra. Una bombilla convierte la energía eléctrica en luz y calor; un panel solar, la luz del Sol en electricidad; y el cuerpo, la energía química de los alimentos en movimiento. La energía no se crea ni desaparece: se transforma.",
+      "voz": "La energía cambia de una forma a otra. Una bombilla convierte la energía eléctrica en luz y calor; un panel solar, la luz del Sol en electricidad; y el cuerpo, la energía química de los alimentos en movimiento. La energía no se crea ni desaparece: se transforma.",
+      "imagenes": [
+        {
+          "src": "desarrollo/transformaciones-de-la-energia.webp",
+          "focos": [
+            {
+              "palabra": "bombilla",
+              "x": 0.1,
+              "y": 0.45,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "panel",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "cuerpo",
+              "x": 0.67,
+              "y": 0.45,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "transforma",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-energia/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 482,
+      "frames": 510,
+      "chunks": [
+        {
+          "text": "La energía cambia de una forma a otra.",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "Una bombilla convierte la energía",
+          "from": 68,
+          "to": 119
+        },
+        {
+          "text": "eléctrica en luz y calor;",
+          "from": 119,
+          "to": 159
+        },
+        {
+          "text": "un panel solar, la luz del Sol en electricidad;",
+          "from": 169,
+          "to": 264
+        },
+        {
+          "text": "y el cuerpo, la energía química",
+          "from": 274,
+          "to": 322
+        },
+        {
+          "text": "de los alimentos en movimiento.",
+          "from": 322,
+          "to": 370
+        },
+        {
+          "text": "La energía no se crea ni desaparece:",
+          "from": 381,
+          "to": 440
+        },
+        {
+          "text": "se transforma.",
+          "from": 441,
+          "to": 478
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 5
+        },
+        {
+          "w": "cambia",
+          "f": 19
+        },
+        {
+          "w": "de",
+          "f": 28
+        },
+        {
+          "w": "una",
+          "f": 30
+        },
+        {
+          "w": "forma",
+          "f": 35
+        },
+        {
+          "w": "a",
+          "f": 45
+        },
+        {
+          "w": "otra",
+          "f": 47
+        },
+        {
+          "w": "una",
+          "f": 68
+        },
+        {
+          "w": "bombilla",
+          "f": 75
+        },
+        {
+          "w": "convierte",
+          "f": 89
+        },
+        {
+          "w": "la",
+          "f": 102
+        },
+        {
+          "w": "energía",
+          "f": 104
+        },
+        {
+          "w": "eléctrica",
+          "f": 117
+        },
+        {
+          "w": "en",
+          "f": 132
+        },
+        {
+          "w": "luz",
+          "f": 135
+        },
+        {
+          "w": "y",
+          "f": 142
+        },
+        {
+          "w": "calor",
+          "f": 145
+        },
+        {
+          "w": "un",
+          "f": 169
+        },
+        {
+          "w": "panel",
+          "f": 173
+        },
+        {
+          "w": "solar",
+          "f": 183
+        },
+        {
+          "w": "la",
+          "f": 208
+        },
+        {
+          "w": "luz",
+          "f": 212
+        },
+        {
+          "w": "del",
+          "f": 218
+        },
+        {
+          "w": "sol",
+          "f": 223
+        },
+        {
+          "w": "en",
+          "f": 231
+        },
+        {
+          "w": "electricidad",
+          "f": 236
+        },
+        {
+          "w": "y",
+          "f": 274
+        },
+        {
+          "w": "el",
+          "f": 278
+        },
+        {
+          "w": "cuerpo",
+          "f": 282
+        },
+        {
+          "w": "la",
+          "f": 294
+        },
+        {
+          "w": "energía",
+          "f": 297
+        },
+        {
+          "w": "química",
+          "f": 312
+        },
+        {
+          "w": "de",
+          "f": 325
+        },
+        {
+          "w": "los",
+          "f": 327
+        },
+        {
+          "w": "alimentos",
+          "f": 332
+        },
+        {
+          "w": "en",
+          "f": 347
+        },
+        {
+          "w": "movimiento",
+          "f": 350
+        },
+        {
+          "w": "la",
+          "f": 381
+        },
+        {
+          "w": "energía",
+          "f": 386
+        },
+        {
+          "w": "no",
+          "f": 401
+        },
+        {
+          "w": "se",
+          "f": 404
+        },
+        {
+          "w": "crea",
+          "f": 407
+        },
+        {
+          "w": "ni",
+          "f": 415
+        },
+        {
+          "w": "desaparece",
+          "f": 419
+        },
+        {
+          "w": "se",
+          "f": 441
+        },
+        {
+          "w": "transforma",
+          "f": 446
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Fuentes de energía",
+      "texto": "Las fuentes renovables se regeneran naturalmente, como el sol, el viento y el agua en movimiento. Las no renovables son limitadas y tardan muchísimo en formarse, como el carbón, el petróleo y el gas natural.",
+      "voz": "Las fuentes renovables se regeneran naturalmente, como el sol, el viento y el agua en movimiento. Las no renovables son limitadas y tardan muchísimo en formarse, como el carbón, el petróleo y el gas natural.",
+      "columnas": [
+        {
+          "titulo": "Renovables",
+          "palabra": "renovables",
+          "puntos": [
+            {
+              "texto": "Se regeneran naturalmente",
+              "palabra": "regeneran"
+            },
+            {
+              "texto": "Solar, eólica e hidráulica",
+              "palabra": "sol"
+            }
+          ]
+        },
+        {
+          "titulo": "No renovables",
+          "palabra": "renovables",
+          "vez": 1,
+          "puntos": [
+            {
+              "texto": "Son limitadas",
+              "palabra": "limitadas"
+            },
+            {
+              "texto": "Carbón, petróleo y gas natural",
+              "palabra": "carbón"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-energia/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 360,
+      "frames": 388,
+      "chunks": [
+        {
+          "text": "Las fuentes renovables se regeneran naturalmente, como el",
+          "from": 0,
+          "to": 90
+        },
+        {
+          "text": "sol, el viento y el agua en movimiento.",
+          "from": 90,
+          "to": 152
+        },
+        {
+          "text": "Las no renovables son limitadas y tardan",
+          "from": 165,
+          "to": 236
+        },
+        {
+          "text": "muchísimo en formarse, como el carbón, el",
+          "from": 236,
+          "to": 309
+        },
+        {
+          "text": "petróleo y el gas natural.",
+          "from": 309,
+          "to": 355
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "fuentes",
+          "f": 8
+        },
+        {
+          "w": "renovables",
+          "f": 18
+        },
+        {
+          "w": "se",
+          "f": 35
+        },
+        {
+          "w": "regeneran",
+          "f": 38
+        },
+        {
+          "w": "naturalmente",
+          "f": 52
+        },
+        {
+          "w": "como",
+          "f": 79
+        },
+        {
+          "w": "el",
+          "f": 86
+        },
+        {
+          "w": "sol",
+          "f": 90
+        },
+        {
+          "w": "el",
+          "f": 100
+        },
+        {
+          "w": "viento",
+          "f": 106
+        },
+        {
+          "w": "y",
+          "f": 118
+        },
+        {
+          "w": "el",
+          "f": 120
+        },
+        {
+          "w": "agua",
+          "f": 124
+        },
+        {
+          "w": "en",
+          "f": 129
+        },
+        {
+          "w": "movimiento",
+          "f": 132
+        },
+        {
+          "w": "las",
+          "f": 165
+        },
+        {
+          "w": "no",
+          "f": 172
+        },
+        {
+          "w": "renovables",
+          "f": 177
+        },
+        {
+          "w": "son",
+          "f": 195
+        },
+        {
+          "w": "limitadas",
+          "f": 201
+        },
+        {
+          "w": "y",
+          "f": 219
+        },
+        {
+          "w": "tardan",
+          "f": 223
+        },
+        {
+          "w": "muchísimo",
+          "f": 232
+        },
+        {
+          "w": "en",
+          "f": 247
+        },
+        {
+          "w": "formarse",
+          "f": 250
+        },
+        {
+          "w": "como",
+          "f": 268
+        },
+        {
+          "w": "el",
+          "f": 274
+        },
+        {
+          "w": "carbón",
+          "f": 277
+        },
+        {
+          "w": "el",
+          "f": 292
+        },
+        {
+          "w": "petróleo",
+          "f": 297
+        },
+        {
+          "w": "y",
+          "f": 316
+        },
+        {
+          "w": "el",
+          "f": 319
+        },
+        {
+          "w": "gas",
+          "f": 322
+        },
+        {
+          "w": "natural",
+          "f": 327
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la energía y sus transformaciones. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la energía y sus transformaciones. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/la-energia/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 167,
+      "frames": 327,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 21
+        },
+        {
+          "text": "Repasaste la energía y sus transformaciones.",
+          "from": 24,
+          "to": 88
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 98,
+          "to": 163
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 24
+        },
+        {
+          "w": "la",
+          "f": 40
+        },
+        {
+          "w": "energía",
+          "f": 42
+        },
+        {
+          "w": "y",
+          "f": 54
+        },
+        {
+          "w": "sus",
+          "f": 56
+        },
+        {
+          "w": "transformaciones",
+          "f": 61
+        },
+        {
+          "w": "sigue",
+          "f": 98
+        },
+        {
+          "w": "con",
+          "f": 108
+        },
+        {
+          "w": "el",
+          "f": 113
+        },
+        {
+          "w": "siguiente",
+          "f": 116
+        },
+        {
+          "w": "tema",
+          "f": 129
+        },
+        {
+          "w": "de",
+          "f": 138
+        },
+        {
+          "w": "tu",
+          "f": 141
+        },
+        {
+          "w": "ruta",
+          "f": 145
+        }
+      ]
+    }
+  ]
+}

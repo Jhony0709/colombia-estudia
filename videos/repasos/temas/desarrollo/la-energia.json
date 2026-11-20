@@ -1,0 +1,136 @@
+{
+  "tema": "la-energia",
+  "componente": "Desarrollo",
+  "area": "Ciencias naturales",
+  "titulo": "La energía, sus formas y sus transformaciones",
+  "siguiente": "La población, las migraciones y la diversidad cultural del mundo",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la energía, sus formas y sus transformaciones.",
+      "voz": "Repaso del tema: la energía, sus formas y sus transformaciones."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Formas de energía",
+      "texto": "La energía es la capacidad de producir cambios o realizar trabajo. Entre sus formas están la luminosa, de la luz; la térmica, ligada a la temperatura; la eléctrica; la cinética, del movimiento; la potencial, almacenada por la posición; y la química, guardada en las sustancias.",
+      "voz": "La energía es la capacidad de producir cambios o realizar trabajo. Entre sus formas están la luminosa, de la luz; la térmica, ligada a la temperatura; la eléctrica; la cinética, del movimiento; la potencial, almacenada por la posición; y la química, guardada en las sustancias.",
+      "items": [
+        {
+          "titulo": "Luminosa",
+          "texto": "La luz del Sol, una bombilla",
+          "palabra": "luminosa"
+        },
+        {
+          "titulo": "Térmica",
+          "texto": "El agua caliente, una estufa",
+          "palabra": "térmica"
+        },
+        {
+          "titulo": "Eléctrica",
+          "texto": "Un televisor, un ventilador",
+          "palabra": "eléctrica"
+        },
+        {
+          "titulo": "Cinética",
+          "texto": "Una bicicleta que avanza",
+          "palabra": "cinética"
+        },
+        {
+          "titulo": "Potencial",
+          "texto": "Una roca en lo alto de una montaña",
+          "palabra": "potencial"
+        },
+        {
+          "titulo": "Química",
+          "texto": "Los alimentos, las pilas, la gasolina",
+          "palabra": "química"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Las transformaciones de la energía",
+      "texto": "La energía cambia de una forma a otra. Una bombilla convierte la energía eléctrica en luz y calor; un panel solar, la luz del Sol en electricidad; y el cuerpo, la energía química de los alimentos en movimiento. La energía no se crea ni desaparece: se transforma.",
+      "voz": "La energía cambia de una forma a otra. Una bombilla convierte la energía eléctrica en luz y calor; un panel solar, la luz del Sol en electricidad; y el cuerpo, la energía química de los alimentos en movimiento. La energía no se crea ni desaparece: se transforma.",
+      "imagenes": [
+        {
+          "src": "desarrollo/transformaciones-de-la-energia.webp",
+          "focos": [
+            {
+              "palabra": "bombilla",
+              "x": 0.1,
+              "y": 0.45,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "panel",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "cuerpo",
+              "x": 0.67,
+              "y": 0.45,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "transforma",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Fuentes de energía",
+      "texto": "Las fuentes renovables se regeneran naturalmente, como el sol, el viento y el agua en movimiento. Las no renovables son limitadas y tardan muchísimo en formarse, como el carbón, el petróleo y el gas natural.",
+      "voz": "Las fuentes renovables se regeneran naturalmente, como el sol, el viento y el agua en movimiento. Las no renovables son limitadas y tardan muchísimo en formarse, como el carbón, el petróleo y el gas natural.",
+      "columnas": [
+        {
+          "titulo": "Renovables",
+          "palabra": "renovables",
+          "puntos": [
+            {
+              "texto": "Se regeneran naturalmente",
+              "palabra": "regeneran"
+            },
+            {
+              "texto": "Solar, eólica e hidráulica",
+              "palabra": "sol"
+            }
+          ]
+        },
+        {
+          "titulo": "No renovables",
+          "palabra": "renovables",
+          "vez": 1,
+          "puntos": [
+            {
+              "texto": "Son limitadas",
+              "palabra": "limitadas"
+            },
+            {
+              "texto": "Carbón, petróleo y gas natural",
+              "palabra": "carbón"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la energía y sus transformaciones. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la energía y sus transformaciones. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

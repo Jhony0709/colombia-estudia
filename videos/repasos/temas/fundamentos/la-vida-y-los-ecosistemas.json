@@ -1,0 +1,177 @@
+{
+  "tema": "la-vida-y-los-ecosistemas",
+  "componente": "Fundamentos",
+  "area": "Ciencias naturales",
+  "titulo": "La vida y los ecosistemas",
+  "siguiente": "Teoría del universo, el sistema solar y la Tierra",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la vida y los ecosistemas.",
+      "voz": "Repaso del tema: la vida y los ecosistemas."
+    },
+    {
+      "id": "s1",
+      "tipo": "comparar",
+      "titulo": "Los componentes de un ecosistema",
+      "texto": "Un ecosistema reúne a los seres vivos de un lugar, los elementos físicos que los rodean y sus relaciones. Los factores bióticos son los seres vivos. Los abióticos son los elementos sin vida, como el agua, el aire, la luz, la temperatura y el suelo.",
+      "voz": "Un ecosistema reúne a los seres vivos de un lugar, los elementos físicos que los rodean y sus relaciones. Los factores bióticos son los seres vivos. Los abióticos son los elementos sin vida, como el agua, el aire, la luz, la temperatura y el suelo.",
+      "columnas": [
+        {
+          "titulo": "Factores bióticos",
+          "palabra": "bióticos",
+          "puntos": [
+            {
+              "texto": "Los seres vivos",
+              "palabra": "seres",
+              "vez": 1
+            },
+            {
+              "texto": "Animales, plantas, hongos y bacterias",
+              "palabra": "vivos",
+              "vez": 1
+            }
+          ]
+        },
+        {
+          "titulo": "Factores abióticos",
+          "palabra": "abióticos",
+          "puntos": [
+            {
+              "texto": "Los elementos sin vida",
+              "palabra": "elementos"
+            },
+            {
+              "texto": "Agua, aire, luz, temperatura y suelo",
+              "palabra": "agua"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "pasos",
+      "titulo": "Niveles de organización",
+      "texto": "Los seres vivos se organizan en niveles: individuo, población, comunidad, ecosistema y biosfera.",
+      "voz": "Los seres vivos se organizan en niveles: individuo, población, comunidad, ecosistema y biosfera.",
+      "items": [
+        {
+          "titulo": "Individuo",
+          "palabra": "individuo"
+        },
+        {
+          "titulo": "Población",
+          "palabra": "población"
+        },
+        {
+          "titulo": "Comunidad",
+          "palabra": "comunidad"
+        },
+        {
+          "titulo": "Ecosistema",
+          "palabra": "ecosistema"
+        },
+        {
+          "titulo": "Biosfera",
+          "palabra": "biosfera"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Una cadena alimentaria",
+      "texto": "En una cadena alimentaria, la energía pasa del que sirve de alimento al que lo consume: de la hierba al saltamontes, a la rana y a la serpiente. Los descomponedores devuelven los nutrientes al ambiente.",
+      "voz": "En una cadena alimentaria, la energía pasa del que sirve de alimento al que lo consume: de la hierba al saltamontes, a la rana y a la serpiente. Los descomponedores devuelven los nutrientes al ambiente.",
+      "imagenes": [
+        {
+          "src": "fundamentos/cadena-alimentaria.webp",
+          "focos": [
+            {
+              "palabra": "hierba",
+              "x": 0.2,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "saltamontes",
+              "x": 0.4,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "rana",
+              "x": 0.6,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "serpiente",
+              "x": 0.85,
+              "y": 0.5,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "descomponedores",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "La fotosíntesis",
+      "texto": "En la fotosíntesis, la planta usa la luz solar, el agua y el dióxido de carbono. Produce glucosa, que le da energía, y libera oxígeno al ambiente.",
+      "voz": "En la fotosíntesis, la planta usa la luz solar, el agua y el dióxido de carbono. Produce glucosa, que le da energía, y libera oxígeno al ambiente.",
+      "imagenes": [
+        {
+          "src": "fundamentos/fotosintesis.webp",
+          "focos": [
+            {
+              "palabra": "luz",
+              "x": 0.2,
+              "y": 0.3,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "agua",
+              "x": 0.6,
+              "y": 0.8,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "dióxido",
+              "x": 0.2,
+              "y": 0.6,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "glucosa",
+              "x": 0.8,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "oxígeno",
+              "x": 0.8,
+              "y": 0.35,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la vida y los ecosistemas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la vida y los ecosistemas. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

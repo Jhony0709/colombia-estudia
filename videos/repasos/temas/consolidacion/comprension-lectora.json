@@ -1,0 +1,135 @@
+{
+  "tema": "comprension-lectora",
+  "componente": "Consolidación",
+  "area": "Lengua castellana",
+  "titulo": "Comprensión lectora",
+  "siguiente": "La materia y sus transformaciones",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la comprensión lectora.",
+      "voz": "Repaso del tema: la comprensión lectora."
+    },
+    {
+      "id": "s1",
+      "tipo": "pasos",
+      "titulo": "Los niveles de comprensión",
+      "texto": "La comprensión lectora tiene tres niveles. En el literal, identificamos lo que el texto dice directamente. En el inferencial, descubrimos lo que no está escrito, con las pistas de la lectura. Y en el crítico, analizamos el texto y formamos opiniones con argumentos.",
+      "voz": "La comprensión lectora tiene tres niveles. En el literal, identificamos lo que el texto dice directamente. En el inferencial, descubrimos lo que no está escrito, con las pistas de la lectura. Y en el crítico, analizamos el texto y formamos opiniones con argumentos.",
+      "items": [
+        {
+          "titulo": "Literal",
+          "texto": "Lo que dice el texto",
+          "palabra": "literal"
+        },
+        {
+          "titulo": "Inferencial",
+          "texto": "Lo que no está escrito",
+          "palabra": "inferencial"
+        },
+        {
+          "titulo": "Crítico",
+          "texto": "Opinar con argumentos",
+          "palabra": "crítico"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Los tipos de textos",
+      "texto": "Según lo que el autor quiere expresar, un texto puede ser narrativo, si cuenta hechos; descriptivo, si explica cómo es algo; expositivo, si presenta información; o argumentativo, si defiende una opinión.",
+      "voz": "Según lo que el autor quiere expresar, un texto puede ser narrativo, si cuenta hechos; descriptivo, si explica cómo es algo; expositivo, si presenta información; o argumentativo, si defiende una opinión.",
+      "items": [
+        {
+          "titulo": "Narrativo",
+          "texto": "Cuenta hechos reales o imaginarios",
+          "palabra": "narrativo"
+        },
+        {
+          "titulo": "Descriptivo",
+          "texto": "Explica cómo es algo",
+          "palabra": "descriptivo"
+        },
+        {
+          "titulo": "Expositivo",
+          "texto": "Presenta información sobre un tema",
+          "palabra": "expositivo"
+        },
+        {
+          "titulo": "Argumentativo",
+          "texto": "Defiende una opinión con razones",
+          "palabra": "argumentativo"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "La estructura de un texto",
+      "texto": "Un texto bien organizado tiene introducción, que presenta el tema; desarrollo, que explica las ideas; y conclusión, que resume o reflexiona. En los cuentos se llaman inicio, nudo y desenlace.",
+      "voz": "Un texto bien organizado tiene introducción, que presenta el tema; desarrollo, que explica las ideas; y conclusión, que resume o reflexiona. En los cuentos se llaman inicio, nudo y desenlace.",
+      "items": [
+        {
+          "titulo": "Introducción",
+          "texto": "Presenta el tema",
+          "palabra": "introducción"
+        },
+        {
+          "titulo": "Desarrollo",
+          "texto": "Explica las ideas",
+          "palabra": "desarrollo"
+        },
+        {
+          "titulo": "Conclusión",
+          "texto": "Resume o reflexiona",
+          "palabra": "conclusión"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "comparar",
+      "titulo": "Coherencia y cohesión",
+      "texto": "La coherencia hace que las ideas sigan un orden lógico y se relacionen con el tema. La cohesión conecta las palabras, las oraciones y los párrafos, por ejemplo con conectores como además, porque o por eso.",
+      "voz": "La coherencia hace que las ideas sigan un orden lógico y se relacionen con el tema. La cohesión conecta las palabras, las oraciones y los párrafos, por ejemplo con conectores como además, porque o por eso.",
+      "columnas": [
+        {
+          "titulo": "Coherencia",
+          "palabra": "coherencia",
+          "puntos": [
+            {
+              "texto": "Las ideas siguen un orden lógico",
+              "palabra": "orden"
+            },
+            {
+              "texto": "Todo se relaciona con el tema",
+              "palabra": "tema"
+            }
+          ]
+        },
+        {
+          "titulo": "Cohesión",
+          "palabra": "cohesión",
+          "puntos": [
+            {
+              "texto": "Conecta palabras, oraciones y párrafos",
+              "palabra": "conecta"
+            },
+            {
+              "texto": "Usa conectores: además, porque, por eso",
+              "palabra": "conectores"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la comprensión lectora. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la comprensión lectora. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

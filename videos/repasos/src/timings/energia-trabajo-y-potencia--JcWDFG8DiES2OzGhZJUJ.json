@@ -1,0 +1,1341 @@
+{
+  "tema": "energia-trabajo-y-potencia",
+  "componente": "Transición",
+  "area": "Física",
+  "titulo": "Energía, trabajo, potencia y conservación de la energía",
+  "siguiente": "El ser humano, la libertad y la existencia",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la energía, el trabajo, la potencia y la conservación de la energía.",
+      "voz": "Repaso del tema: la energía, el trabajo, la potencia y la conservación de la energía.",
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 158,
+      "frames": 186,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "la energía, el trabajo, la potencia",
+          "from": 34,
+          "to": 96
+        },
+        {
+          "text": "y la conservación de la energía.",
+          "from": 96,
+          "to": 153
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "energía",
+          "f": 37
+        },
+        {
+          "w": "el",
+          "f": 55
+        },
+        {
+          "w": "trabajo",
+          "f": 60
+        },
+        {
+          "w": "la",
+          "f": 76
+        },
+        {
+          "w": "potencia",
+          "f": 80
+        },
+        {
+          "w": "y",
+          "f": 94
+        },
+        {
+          "w": "la",
+          "f": 96
+        },
+        {
+          "w": "conservación",
+          "f": 100
+        },
+        {
+          "w": "de",
+          "f": 117
+        },
+        {
+          "w": "la",
+          "f": 121
+        },
+        {
+          "w": "energía",
+          "f": 123
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "El trabajo mecánico",
+      "texto": "La energía permite producir cambios y se mide en julios. Hay trabajo mecánico cuando una fuerza produce un desplazamiento en su misma dirección: W = F · d. Si empujas una caja con 20 N a lo largo de 5 m, haces 100 J de trabajo.",
+      "voz": "La energía permite producir cambios y se mide en julios. Hay trabajo mecánico cuando una fuerza produce un desplazamiento en su misma dirección: el trabajo es igual a la fuerza por el desplazamiento. Si empujas una caja con veinte newtons a lo largo de cinco metros, haces cien julios de trabajo.",
+      "imagenes": [
+        {
+          "src": "transicion/trabajo-mecanico.webp",
+          "focos": [
+            {
+              "palabra": "fuerza",
+              "x": 0.45,
+              "y": 0.6,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "desplazamiento",
+              "x": 0.6,
+              "y": 0.85,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "igual",
+              "x": 0.75,
+              "y": 0.2,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "caja",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 485,
+      "frames": 513,
+      "chunks": [
+        {
+          "text": "La energía permite producir cambios",
+          "from": 0,
+          "to": 58
+        },
+        {
+          "text": "y se mide en julios.",
+          "from": 58,
+          "to": 91
+        },
+        {
+          "text": "Hay trabajo mecánico cuando una fuerza produce",
+          "from": 100,
+          "to": 166
+        },
+        {
+          "text": "un desplazamiento en su misma dirección:",
+          "from": 166,
+          "to": 223
+        },
+        {
+          "text": "W = F · d.",
+          "from": 236,
+          "to": 317
+        },
+        {
+          "text": "Si empujas una caja con 20 N a lo",
+          "from": 331,
+          "to": 401
+        },
+        {
+          "text": "largo de 5 m, haces 100 J de trabajo.",
+          "from": 401,
+          "to": 481
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 5
+        },
+        {
+          "w": "permite",
+          "f": 20
+        },
+        {
+          "w": "producir",
+          "f": 32
+        },
+        {
+          "w": "cambios",
+          "f": 44
+        },
+        {
+          "w": "y",
+          "f": 57
+        },
+        {
+          "w": "se",
+          "f": 60
+        },
+        {
+          "w": "mide",
+          "f": 64
+        },
+        {
+          "w": "en",
+          "f": 71
+        },
+        {
+          "w": "julios",
+          "f": 74
+        },
+        {
+          "w": "hay",
+          "f": 100
+        },
+        {
+          "w": "trabajo",
+          "f": 106
+        },
+        {
+          "w": "mecánico",
+          "f": 116
+        },
+        {
+          "w": "cuando",
+          "f": 132
+        },
+        {
+          "w": "una",
+          "f": 139
+        },
+        {
+          "w": "fuerza",
+          "f": 144
+        },
+        {
+          "w": "produce",
+          "f": 155
+        },
+        {
+          "w": "un",
+          "f": 165
+        },
+        {
+          "w": "desplazamiento",
+          "f": 169
+        },
+        {
+          "w": "en",
+          "f": 189
+        },
+        {
+          "w": "su",
+          "f": 191
+        },
+        {
+          "w": "misma",
+          "f": 195
+        },
+        {
+          "w": "dirección",
+          "f": 203
+        },
+        {
+          "w": "el",
+          "f": 236
+        },
+        {
+          "w": "trabajo",
+          "f": 241
+        },
+        {
+          "w": "es",
+          "f": 253
+        },
+        {
+          "w": "igual",
+          "f": 256
+        },
+        {
+          "w": "a",
+          "f": 264
+        },
+        {
+          "w": "la",
+          "f": 266
+        },
+        {
+          "w": "fuerza",
+          "f": 270
+        },
+        {
+          "w": "por",
+          "f": 283
+        },
+        {
+          "w": "el",
+          "f": 288
+        },
+        {
+          "w": "desplazamiento",
+          "f": 292
+        },
+        {
+          "w": "si",
+          "f": 331
+        },
+        {
+          "w": "empujas",
+          "f": 335
+        },
+        {
+          "w": "una",
+          "f": 347
+        },
+        {
+          "w": "caja",
+          "f": 352
+        },
+        {
+          "w": "con",
+          "f": 359
+        },
+        {
+          "w": "veinte",
+          "f": 365
+        },
+        {
+          "w": "newtons",
+          "f": 373
+        },
+        {
+          "w": "a",
+          "f": 386
+        },
+        {
+          "w": "lo",
+          "f": 389
+        },
+        {
+          "w": "largo",
+          "f": 392
+        },
+        {
+          "w": "de",
+          "f": 401
+        },
+        {
+          "w": "cinco",
+          "f": 403
+        },
+        {
+          "w": "metros",
+          "f": 413
+        },
+        {
+          "w": "haces",
+          "f": 425
+        },
+        {
+          "w": "cien",
+          "f": 432
+        },
+        {
+          "w": "julios",
+          "f": 438
+        },
+        {
+          "w": "de",
+          "f": 448
+        },
+        {
+          "w": "trabajo",
+          "f": 451
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "La energía cinética",
+      "texto": "La energía cinética es la que tiene un cuerpo por moverse: depende de su masa y de su velocidad, que va elevada al cuadrado. Se calcula como Ec = m · v² / 2.",
+      "voz": "La energía cinética es la que tiene un cuerpo por moverse: depende de su masa y de su velocidad, que va elevada al cuadrado. Se calcula como la masa por la velocidad al cuadrado, dividido entre dos.",
+      "items": [
+        {
+          "titulo": "Masa",
+          "texto": "m, en kilogramos",
+          "palabra": "masa"
+        },
+        {
+          "titulo": "Velocidad",
+          "texto": "v, al cuadrado",
+          "palabra": "velocidad"
+        },
+        {
+          "titulo": "Fórmula",
+          "texto": "Ec = m · v² / 2",
+          "palabra": "calcula"
+        }
+      ],
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 331,
+      "frames": 359,
+      "chunks": [
+        {
+          "text": "La energía cinética es la que",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "tiene un cuerpo por moverse:",
+          "from": 47,
+          "to": 92
+        },
+        {
+          "text": "depende de su masa y de su",
+          "from": 95,
+          "to": 138
+        },
+        {
+          "text": "velocidad, que va elevada al cuadrado.",
+          "from": 138,
+          "to": 201
+        },
+        {
+          "text": "Se calcula como Ec = m · v² / 2.",
+          "from": 210,
+          "to": 326
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 6
+        },
+        {
+          "w": "cinética",
+          "f": 20
+        },
+        {
+          "w": "es",
+          "f": 36
+        },
+        {
+          "w": "la",
+          "f": 40
+        },
+        {
+          "w": "que",
+          "f": 44
+        },
+        {
+          "w": "tiene",
+          "f": 47
+        },
+        {
+          "w": "un",
+          "f": 54
+        },
+        {
+          "w": "cuerpo",
+          "f": 57
+        },
+        {
+          "w": "por",
+          "f": 67
+        },
+        {
+          "w": "moverse",
+          "f": 74
+        },
+        {
+          "w": "depende",
+          "f": 95
+        },
+        {
+          "w": "de",
+          "f": 107
+        },
+        {
+          "w": "su",
+          "f": 110
+        },
+        {
+          "w": "masa",
+          "f": 115
+        },
+        {
+          "w": "y",
+          "f": 123
+        },
+        {
+          "w": "de",
+          "f": 125
+        },
+        {
+          "w": "su",
+          "f": 128
+        },
+        {
+          "w": "velocidad",
+          "f": 132
+        },
+        {
+          "w": "que",
+          "f": 161
+        },
+        {
+          "w": "va",
+          "f": 165
+        },
+        {
+          "w": "elevada",
+          "f": 169
+        },
+        {
+          "w": "al",
+          "f": 180
+        },
+        {
+          "w": "cuadrado",
+          "f": 184
+        },
+        {
+          "w": "se",
+          "f": 210
+        },
+        {
+          "w": "calcula",
+          "f": 215
+        },
+        {
+          "w": "como",
+          "f": 227
+        },
+        {
+          "w": "la",
+          "f": 233
+        },
+        {
+          "w": "masa",
+          "f": 236
+        },
+        {
+          "w": "por",
+          "f": 244
+        },
+        {
+          "w": "la",
+          "f": 248
+        },
+        {
+          "w": "velocidad",
+          "f": 251
+        },
+        {
+          "w": "al",
+          "f": 266
+        },
+        {
+          "w": "cuadrado",
+          "f": 270
+        },
+        {
+          "w": "dividido",
+          "f": 282
+        },
+        {
+          "w": "entre",
+          "f": 297
+        },
+        {
+          "w": "dos",
+          "f": 306
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "La energía potencial",
+      "texto": "La energía potencial gravitacional depende de la altura: a más altura, más energía, como una maceta en una repisa. Y la potencial elástica se guarda al estirar o comprimir un resorte.",
+      "voz": "La energía potencial gravitacional depende de la altura: a más altura, más energía, como una maceta en una repisa. Y la potencial elástica se guarda al estirar o comprimir un resorte.",
+      "imagenes": [
+        {
+          "src": "transicion/energia-potencial-gravitacional.webp",
+          "focos": [
+            {
+              "palabra": "altura",
+              "x": 0.3,
+              "y": 0.6,
+              "zoom": 1.4
+            },
+            {
+              "palabra": "maceta",
+              "x": 0.4,
+              "y": 0.2,
+              "zoom": 1.3
+            }
+          ]
+        },
+        {
+          "src": "transicion/resorte.webp",
+          "palabra": "elástica",
+          "focos": [
+            {
+              "palabra": "comprimir",
+              "x": 0.6,
+              "y": 0.72,
+              "zoom": 1.3
+            }
+          ]
+        }
+      ],
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 322,
+      "frames": 350,
+      "chunks": [
+        {
+          "text": "La energía potencial gravitacional",
+          "from": 0,
+          "to": 55
+        },
+        {
+          "text": "depende de la altura:",
+          "from": 55,
+          "to": 89
+        },
+        {
+          "text": "a más altura, más energía, como",
+          "from": 101,
+          "to": 151
+        },
+        {
+          "text": "una maceta en una repisa.",
+          "from": 151,
+          "to": 191
+        },
+        {
+          "text": "Y la potencial elástica se guarda",
+          "from": 201,
+          "to": 258
+        },
+        {
+          "text": "al estirar o comprimir un resorte.",
+          "from": 258,
+          "to": 318
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 5
+        },
+        {
+          "w": "potencial",
+          "f": 18
+        },
+        {
+          "w": "gravitacional",
+          "f": 33
+        },
+        {
+          "w": "depende",
+          "f": 55
+        },
+        {
+          "w": "de",
+          "f": 68
+        },
+        {
+          "w": "la",
+          "f": 70
+        },
+        {
+          "w": "altura",
+          "f": 72
+        },
+        {
+          "w": "a",
+          "f": 101
+        },
+        {
+          "w": "más",
+          "f": 104
+        },
+        {
+          "w": "altura",
+          "f": 110
+        },
+        {
+          "w": "más",
+          "f": 124
+        },
+        {
+          "w": "energía",
+          "f": 130
+        },
+        {
+          "w": "como",
+          "f": 144
+        },
+        {
+          "w": "una",
+          "f": 150
+        },
+        {
+          "w": "maceta",
+          "f": 155
+        },
+        {
+          "w": "en",
+          "f": 167
+        },
+        {
+          "w": "una",
+          "f": 171
+        },
+        {
+          "w": "repisa",
+          "f": 176
+        },
+        {
+          "w": "y",
+          "f": 201
+        },
+        {
+          "w": "la",
+          "f": 206
+        },
+        {
+          "w": "potencial",
+          "f": 210
+        },
+        {
+          "w": "elástica",
+          "f": 225
+        },
+        {
+          "w": "se",
+          "f": 239
+        },
+        {
+          "w": "guarda",
+          "f": 242
+        },
+        {
+          "w": "al",
+          "f": 250
+        },
+        {
+          "w": "estirar",
+          "f": 254
+        },
+        {
+          "w": "o",
+          "f": 266
+        },
+        {
+          "w": "comprimir",
+          "f": 268
+        },
+        {
+          "w": "un",
+          "f": 282
+        },
+        {
+          "w": "resorte",
+          "f": 286
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Energía mecánica y potencia",
+      "texto": "La energía mecánica es la suma de la cinética y la potencial. Y la potencia indica qué tan rápido se hace un trabajo: es el trabajo dividido entre el tiempo, y se mide en vatios.",
+      "voz": "La energía mecánica es la suma de la cinética y la potencial. Y la potencia indica qué tan rápido se hace un trabajo: es el trabajo dividido entre el tiempo, y se mide en vatios.",
+      "items": [
+        {
+          "titulo": "Energía mecánica",
+          "texto": "Em = Ec + Ep",
+          "palabra": "suma"
+        },
+        {
+          "titulo": "Potencia",
+          "texto": "P = W / t",
+          "palabra": "potencia"
+        },
+        {
+          "titulo": "Vatios",
+          "texto": "Su unidad",
+          "palabra": "vatios"
+        }
+      ],
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 298,
+      "frames": 326,
+      "chunks": [
+        {
+          "text": "La energía mecánica es la suma",
+          "from": 0,
+          "to": 49
+        },
+        {
+          "text": "de la cinética y la potencial.",
+          "from": 49,
+          "to": 98
+        },
+        {
+          "text": "Y la potencia indica qué tan",
+          "from": 105,
+          "to": 147
+        },
+        {
+          "text": "rápido se hace un trabajo:",
+          "from": 147,
+          "to": 186
+        },
+        {
+          "text": "es el trabajo dividido entre el",
+          "from": 194,
+          "to": 247
+        },
+        {
+          "text": "tiempo, y se mide en vatios.",
+          "from": 247,
+          "to": 294
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 4
+        },
+        {
+          "w": "mecánica",
+          "f": 17
+        },
+        {
+          "w": "es",
+          "f": 33
+        },
+        {
+          "w": "la",
+          "f": 37
+        },
+        {
+          "w": "suma",
+          "f": 40
+        },
+        {
+          "w": "de",
+          "f": 48
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "cinética",
+          "f": 54
+        },
+        {
+          "w": "y",
+          "f": 69
+        },
+        {
+          "w": "la",
+          "f": 71
+        },
+        {
+          "w": "potencial",
+          "f": 75
+        },
+        {
+          "w": "y",
+          "f": 105
+        },
+        {
+          "w": "la",
+          "f": 109
+        },
+        {
+          "w": "potencia",
+          "f": 113
+        },
+        {
+          "w": "indica",
+          "f": 125
+        },
+        {
+          "w": "qué",
+          "f": 136
+        },
+        {
+          "w": "tan",
+          "f": 140
+        },
+        {
+          "w": "rápido",
+          "f": 145
+        },
+        {
+          "w": "se",
+          "f": 155
+        },
+        {
+          "w": "hace",
+          "f": 158
+        },
+        {
+          "w": "un",
+          "f": 163
+        },
+        {
+          "w": "trabajo",
+          "f": 166
+        },
+        {
+          "w": "es",
+          "f": 194
+        },
+        {
+          "w": "el",
+          "f": 200
+        },
+        {
+          "w": "trabajo",
+          "f": 202
+        },
+        {
+          "w": "dividido",
+          "f": 214
+        },
+        {
+          "w": "entre",
+          "f": 226
+        },
+        {
+          "w": "el",
+          "f": 233
+        },
+        {
+          "w": "tiempo",
+          "f": 236
+        },
+        {
+          "w": "y",
+          "f": 250
+        },
+        {
+          "w": "se",
+          "f": 254
+        },
+        {
+          "w": "mide",
+          "f": 257
+        },
+        {
+          "w": "en",
+          "f": 264
+        },
+        {
+          "w": "vatios",
+          "f": 267
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "imagen",
+      "titulo": "La conservación de la energía",
+      "texto": "La energía no se crea ni se destruye: se transforma. En una montaña rusa, arriba el carro tiene mucha energía potencial; al bajar, la potencial disminuye y la cinética aumenta. Y con el rozamiento, parte se convierte en calor y sonido.",
+      "voz": "La energía no se crea ni se destruye: se transforma. En una montaña rusa, arriba el carro tiene mucha energía potencial; al bajar, la potencial disminuye y la cinética aumenta. Y con el rozamiento, parte se convierte en calor y sonido.",
+      "imagenes": [
+        {
+          "src": "transicion/montana-rusa.webp",
+          "focos": [
+            {
+              "palabra": "arriba",
+              "x": 0.2,
+              "y": 0.2,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "bajar",
+              "x": 0.65,
+              "y": 0.35,
+              "zoom": 1.4
+            },
+            {
+              "palabra": "cinética",
+              "x": 0.55,
+              "y": 0.85,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "rozamiento",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 413,
+      "frames": 441,
+      "chunks": [
+        {
+          "text": "La energía no se crea ni se destruye:",
+          "from": 0,
+          "to": 52
+        },
+        {
+          "text": "se transforma.",
+          "from": 53,
+          "to": 79
+        },
+        {
+          "text": "En una montaña rusa, arriba el",
+          "from": 87,
+          "to": 139
+        },
+        {
+          "text": "carro tiene mucha energía potencial;",
+          "from": 139,
+          "to": 202
+        },
+        {
+          "text": "al bajar, la potencial disminuye",
+          "from": 211,
+          "to": 268
+        },
+        {
+          "text": "y la cinética aumenta.",
+          "from": 268,
+          "to": 306
+        },
+        {
+          "text": "Y con el rozamiento, parte se",
+          "from": 316,
+          "to": 363
+        },
+        {
+          "text": "convierte en calor y sonido.",
+          "from": 363,
+          "to": 408
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "energía",
+          "f": 5
+        },
+        {
+          "w": "no",
+          "f": 17
+        },
+        {
+          "w": "se",
+          "f": 21
+        },
+        {
+          "w": "crea",
+          "f": 24
+        },
+        {
+          "w": "ni",
+          "f": 32
+        },
+        {
+          "w": "se",
+          "f": 36
+        },
+        {
+          "w": "destruye",
+          "f": 39
+        },
+        {
+          "w": "se",
+          "f": 53
+        },
+        {
+          "w": "transforma",
+          "f": 57
+        },
+        {
+          "w": "en",
+          "f": 87
+        },
+        {
+          "w": "una",
+          "f": 92
+        },
+        {
+          "w": "montaña",
+          "f": 98
+        },
+        {
+          "w": "rusa",
+          "f": 111
+        },
+        {
+          "w": "arriba",
+          "f": 125
+        },
+        {
+          "w": "el",
+          "f": 135
+        },
+        {
+          "w": "carro",
+          "f": 139
+        },
+        {
+          "w": "tiene",
+          "f": 150
+        },
+        {
+          "w": "mucha",
+          "f": 158
+        },
+        {
+          "w": "energía",
+          "f": 166
+        },
+        {
+          "w": "potencial",
+          "f": 179
+        },
+        {
+          "w": "al",
+          "f": 211
+        },
+        {
+          "w": "bajar",
+          "f": 217
+        },
+        {
+          "w": "la",
+          "f": 227
+        },
+        {
+          "w": "potencial",
+          "f": 231
+        },
+        {
+          "w": "disminuye",
+          "f": 245
+        },
+        {
+          "w": "y",
+          "f": 266
+        },
+        {
+          "w": "la",
+          "f": 270
+        },
+        {
+          "w": "cinética",
+          "f": 273
+        },
+        {
+          "w": "aumenta",
+          "f": 288
+        },
+        {
+          "w": "y",
+          "f": 316
+        },
+        {
+          "w": "con",
+          "f": 321
+        },
+        {
+          "w": "el",
+          "f": 327
+        },
+        {
+          "w": "rozamiento",
+          "f": 329
+        },
+        {
+          "w": "parte",
+          "f": 350
+        },
+        {
+          "w": "se",
+          "f": 360
+        },
+        {
+          "w": "convierte",
+          "f": 363
+        },
+        {
+          "w": "en",
+          "f": 375
+        },
+        {
+          "w": "calor",
+          "f": 378
+        },
+        {
+          "w": "y",
+          "f": 388
+        },
+        {
+          "w": "sonido",
+          "f": 389
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la energía, el trabajo y la potencia. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la energía, el trabajo y la potencia. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/energia-trabajo-y-potencia/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 180,
+      "frames": 340,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste la energía, el trabajo y la potencia.",
+          "from": 26,
+          "to": 101
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 110,
+          "to": 176
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 26
+        },
+        {
+          "w": "la",
+          "f": 42
+        },
+        {
+          "w": "energía",
+          "f": 44
+        },
+        {
+          "w": "el",
+          "f": 62
+        },
+        {
+          "w": "trabajo",
+          "f": 67
+        },
+        {
+          "w": "y",
+          "f": 78
+        },
+        {
+          "w": "la",
+          "f": 80
+        },
+        {
+          "w": "potencia",
+          "f": 83
+        },
+        {
+          "w": "sigue",
+          "f": 110
+        },
+        {
+          "w": "con",
+          "f": 120
+        },
+        {
+          "w": "el",
+          "f": 125
+        },
+        {
+          "w": "siguiente",
+          "f": 127
+        },
+        {
+          "w": "tema",
+          "f": 140
+        },
+        {
+          "w": "de",
+          "f": 148
+        },
+        {
+          "w": "tu",
+          "f": 151
+        },
+        {
+          "w": "ruta",
+          "f": 156
+        }
+      ]
+    }
+  ]
+}

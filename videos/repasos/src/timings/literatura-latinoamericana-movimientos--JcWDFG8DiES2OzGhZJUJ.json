@@ -1,0 +1,1339 @@
+{
+  "tema": "literatura-latinoamericana-movimientos",
+  "componente": "Preparación",
+  "area": "Lengua castellana",
+  "titulo": "Literatura latinoamericana: movimientos, autores y obras representativas",
+  "siguiente": "Evolución biológica y selección natural",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la literatura latinoamericana, sus movimientos, autores y obras.",
+      "voz": "Repaso del tema: la literatura latinoamericana, sus movimientos, autores y obras.",
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 155,
+      "frames": 183,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "la literatura latinoamericana, sus",
+          "from": 34,
+          "to": 97
+        },
+        {
+          "text": "movimientos, autores y obras.",
+          "from": 97,
+          "to": 150
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 17
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "literatura",
+          "f": 38
+        },
+        {
+          "w": "latinoamericana",
+          "f": 55
+        },
+        {
+          "w": "sus",
+          "f": 82
+        },
+        {
+          "w": "movimientos",
+          "f": 88
+        },
+        {
+          "w": "autores",
+          "f": 109
+        },
+        {
+          "w": "y",
+          "f": 125
+        },
+        {
+          "w": "obras",
+          "f": 129
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "linea",
+      "titulo": "Un recorrido por la literatura",
+      "texto": "La literatura latinoamericana ha pasado por varios períodos: la precolombina, la de la Conquista y la Colonia, el Romanticismo y el Realismo del siglo XIX, el Modernismo y el Boom.",
+      "voz": "La literatura latinoamericana ha pasado por varios períodos: la precolombina, la de la Conquista y la Colonia, el Romanticismo y el Realismo del siglo diecinueve, el Modernismo y el Boom.",
+      "items": [
+        {
+          "etiqueta": "Antes de 1492",
+          "titulo": "Precolombina",
+          "texto": "Tradición oral",
+          "palabra": "precolombina"
+        },
+        {
+          "etiqueta": "Desde 1492",
+          "titulo": "Conquista y Colonia",
+          "texto": "Crónicas y cartas",
+          "palabra": "colonia"
+        },
+        {
+          "etiqueta": "Siglo XIX",
+          "titulo": "Romanticismo y Realismo",
+          "texto": "Después de la independencia",
+          "palabra": "romanticismo"
+        },
+        {
+          "etiqueta": "Fines del XIX",
+          "titulo": "Modernismo",
+          "texto": "Rubén Darío",
+          "palabra": "modernismo"
+        },
+        {
+          "etiqueta": "1960-1970",
+          "titulo": "Boom",
+          "texto": "Fama internacional",
+          "palabra": "boom"
+        }
+      ],
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 337,
+      "frames": 365,
+      "chunks": [
+        {
+          "text": "La literatura latinoamericana ha",
+          "from": 0,
+          "to": 51
+        },
+        {
+          "text": "pasado por varios períodos:",
+          "from": 51,
+          "to": 94
+        },
+        {
+          "text": "la precolombina, la de la Conquista y la",
+          "from": 108,
+          "to": 185
+        },
+        {
+          "text": "Colonia, el Romanticismo y el Realismo del siglo",
+          "from": 185,
+          "to": 277
+        },
+        {
+          "text": "XIX, el Modernismo y el Boom.",
+          "from": 277,
+          "to": 333
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "literatura",
+          "f": 5
+        },
+        {
+          "w": "latinoamericana",
+          "f": 22
+        },
+        {
+          "w": "ha",
+          "f": 50
+        },
+        {
+          "w": "pasado",
+          "f": 54
+        },
+        {
+          "w": "por",
+          "f": 63
+        },
+        {
+          "w": "varios",
+          "f": 69
+        },
+        {
+          "w": "períodos",
+          "f": 77
+        },
+        {
+          "w": "la",
+          "f": 108
+        },
+        {
+          "w": "precolombina",
+          "f": 112
+        },
+        {
+          "w": "la",
+          "f": 140
+        },
+        {
+          "w": "de",
+          "f": 144
+        },
+        {
+          "w": "la",
+          "f": 147
+        },
+        {
+          "w": "conquista",
+          "f": 150
+        },
+        {
+          "w": "y",
+          "f": 165
+        },
+        {
+          "w": "la",
+          "f": 168
+        },
+        {
+          "w": "colonia",
+          "f": 172
+        },
+        {
+          "w": "el",
+          "f": 199
+        },
+        {
+          "w": "romanticismo",
+          "f": 203
+        },
+        {
+          "w": "y",
+          "f": 228
+        },
+        {
+          "w": "el",
+          "f": 230
+        },
+        {
+          "w": "realismo",
+          "f": 234
+        },
+        {
+          "w": "del",
+          "f": 247
+        },
+        {
+          "w": "siglo",
+          "f": 251
+        },
+        {
+          "w": "diecinueve",
+          "f": 259
+        },
+        {
+          "w": "el",
+          "f": 278
+        },
+        {
+          "w": "modernismo",
+          "f": 284
+        },
+        {
+          "w": "y",
+          "f": 304
+        },
+        {
+          "w": "el",
+          "f": 307
+        },
+        {
+          "w": "boom",
+          "f": 311
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Los orígenes",
+      "texto": "La literatura precolombina se transmitía de forma oral, con mitos, leyendas y cantos, como el Popol Vuh de los mayas. Con la conquista llegaron las crónicas, los diarios y las cartas, como los de Cristóbal Colón; y Bartolomé de las Casas denunció los abusos contra los indígenas.",
+      "voz": "La literatura precolombina se transmitía de forma oral, con mitos, leyendas y cantos, como el Popol Vuh de los mayas. Con la conquista llegaron las crónicas, los diarios y las cartas, como los de Cristóbal Colón; y Bartolomé de las Casas denunció los abusos contra los indígenas.",
+      "items": [
+        {
+          "titulo": "Tradición oral",
+          "texto": "Mitos, leyendas y cantos",
+          "palabra": "oral"
+        },
+        {
+          "titulo": "Popol Vuh",
+          "texto": "Tradición maya quiché",
+          "palabra": "popol"
+        },
+        {
+          "titulo": "Crónicas y cartas",
+          "texto": "Cristóbal Colón",
+          "palabra": "crónicas"
+        },
+        {
+          "titulo": "Bartolomé de las Casas",
+          "texto": "Denunció los abusos",
+          "palabra": "bartolomé"
+        }
+      ],
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 455,
+      "frames": 483,
+      "chunks": [
+        {
+          "text": "La literatura precolombina se transmitía de forma",
+          "from": 0,
+          "to": 81
+        },
+        {
+          "text": "oral, con mitos, leyendas y cantos, como",
+          "from": 81,
+          "to": 147
+        },
+        {
+          "text": "el Popol Vuh de los mayas.",
+          "from": 147,
+          "to": 190
+        },
+        {
+          "text": "Con la conquista llegaron las crónicas, los diarios",
+          "from": 200,
+          "to": 271
+        },
+        {
+          "text": "y las cartas, como los de Cristóbal Colón;",
+          "from": 271,
+          "to": 329
+        },
+        {
+          "text": "y Bartolomé de las Casas denunció",
+          "from": 338,
+          "to": 395
+        },
+        {
+          "text": "los abusos contra los indígenas.",
+          "from": 395,
+          "to": 450
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "literatura",
+          "f": 6
+        },
+        {
+          "w": "precolombina",
+          "f": 24
+        },
+        {
+          "w": "se",
+          "f": 43
+        },
+        {
+          "w": "transmitía",
+          "f": 46
+        },
+        {
+          "w": "de",
+          "f": 63
+        },
+        {
+          "w": "forma",
+          "f": 66
+        },
+        {
+          "w": "oral",
+          "f": 76
+        },
+        {
+          "w": "con",
+          "f": 86
+        },
+        {
+          "w": "mitos",
+          "f": 92
+        },
+        {
+          "w": "leyendas",
+          "f": 104
+        },
+        {
+          "w": "y",
+          "f": 119
+        },
+        {
+          "w": "cantos",
+          "f": 122
+        },
+        {
+          "w": "como",
+          "f": 137
+        },
+        {
+          "w": "el",
+          "f": 143
+        },
+        {
+          "w": "popol",
+          "f": 147
+        },
+        {
+          "w": "vuh",
+          "f": 158
+        },
+        {
+          "w": "de",
+          "f": 167
+        },
+        {
+          "w": "los",
+          "f": 170
+        },
+        {
+          "w": "mayas",
+          "f": 176
+        },
+        {
+          "w": "con",
+          "f": 200
+        },
+        {
+          "w": "la",
+          "f": 205
+        },
+        {
+          "w": "conquista",
+          "f": 209
+        },
+        {
+          "w": "llegaron",
+          "f": 221
+        },
+        {
+          "w": "las",
+          "f": 231
+        },
+        {
+          "w": "crónicas",
+          "f": 236
+        },
+        {
+          "w": "los",
+          "f": 251
+        },
+        {
+          "w": "diarios",
+          "f": 256
+        },
+        {
+          "w": "y",
+          "f": 266
+        },
+        {
+          "w": "las",
+          "f": 268
+        },
+        {
+          "w": "cartas",
+          "f": 273
+        },
+        {
+          "w": "como",
+          "f": 286
+        },
+        {
+          "w": "los",
+          "f": 293
+        },
+        {
+          "w": "de",
+          "f": 296
+        },
+        {
+          "w": "cristóbal",
+          "f": 300
+        },
+        {
+          "w": "colón",
+          "f": 314
+        },
+        {
+          "w": "y",
+          "f": 338
+        },
+        {
+          "w": "bartolomé",
+          "f": 341
+        },
+        {
+          "w": "de",
+          "f": 359
+        },
+        {
+          "w": "las",
+          "f": 362
+        },
+        {
+          "w": "casas",
+          "f": 367
+        },
+        {
+          "w": "denunció",
+          "f": 378
+        },
+        {
+          "w": "los",
+          "f": 389
+        },
+        {
+          "w": "abusos",
+          "f": 394
+        },
+        {
+          "w": "contra",
+          "f": 404
+        },
+        {
+          "w": "los",
+          "f": 413
+        },
+        {
+          "w": "indígenas",
+          "f": 419
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Romanticismo y Realismo",
+      "texto": "En el siglo XIX, el Romanticismo exaltó los sentimientos, la libertad y la naturaleza, como en María, del colombiano Jorge Isaacs. El Realismo, en cambio, retrató la sociedad y sus problemas, como en Martín Rivas, del chileno Alberto Blest Gana.",
+      "voz": "En el siglo diecinueve, el Romanticismo exaltó los sentimientos, la libertad y la naturaleza, como en María, del colombiano Jorge Isaacs. El Realismo, en cambio, retrató la sociedad y sus problemas, como en Martín Rivas, del chileno Alberto Blest Gana.",
+      "columnas": [
+        {
+          "titulo": "Romanticismo",
+          "palabra": "romanticismo",
+          "puntos": [
+            {
+              "texto": "Sentimientos y naturaleza",
+              "palabra": "sentimientos"
+            },
+            {
+              "texto": "María, de Jorge Isaacs",
+              "palabra": "isaacs"
+            }
+          ]
+        },
+        {
+          "titulo": "Realismo",
+          "palabra": "realismo",
+          "puntos": [
+            {
+              "texto": "La sociedad y sus problemas",
+              "palabra": "sociedad"
+            },
+            {
+              "texto": "Martín Rivas, de Blest Gana",
+              "palabra": "blest"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 432,
+      "frames": 460,
+      "chunks": [
+        {
+          "text": "En el siglo XIX, el Romanticismo exaltó",
+          "from": 0,
+          "to": 71
+        },
+        {
+          "text": "los sentimientos, la libertad y la naturaleza,",
+          "from": 71,
+          "to": 154
+        },
+        {
+          "text": "como en María, del colombiano Jorge Isaacs.",
+          "from": 154,
+          "to": 232
+        },
+        {
+          "text": "El Realismo, en cambio, retrató la sociedad",
+          "from": 241,
+          "to": 313
+        },
+        {
+          "text": "y sus problemas, como en Martín Rivas,",
+          "from": 313,
+          "to": 376
+        },
+        {
+          "text": "del chileno Alberto Blest Gana.",
+          "from": 376,
+          "to": 428
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "el",
+          "f": 7
+        },
+        {
+          "w": "siglo",
+          "f": 10
+        },
+        {
+          "w": "diecinueve",
+          "f": 19
+        },
+        {
+          "w": "el",
+          "f": 36
+        },
+        {
+          "w": "romanticismo",
+          "f": 39
+        },
+        {
+          "w": "exaltó",
+          "f": 60
+        },
+        {
+          "w": "los",
+          "f": 71
+        },
+        {
+          "w": "sentimientos",
+          "f": 75
+        },
+        {
+          "w": "la",
+          "f": 99
+        },
+        {
+          "w": "libertad",
+          "f": 103
+        },
+        {
+          "w": "y",
+          "f": 119
+        },
+        {
+          "w": "la",
+          "f": 123
+        },
+        {
+          "w": "naturaleza",
+          "f": 126
+        },
+        {
+          "w": "como",
+          "f": 156
+        },
+        {
+          "w": "en",
+          "f": 164
+        },
+        {
+          "w": "maría",
+          "f": 167
+        },
+        {
+          "w": "del",
+          "f": 183
+        },
+        {
+          "w": "colombiano",
+          "f": 189
+        },
+        {
+          "w": "jorge",
+          "f": 204
+        },
+        {
+          "w": "isaacs",
+          "f": 214
+        },
+        {
+          "w": "el",
+          "f": 241
+        },
+        {
+          "w": "realismo",
+          "f": 248
+        },
+        {
+          "w": "en",
+          "f": 261
+        },
+        {
+          "w": "cambio",
+          "f": 265
+        },
+        {
+          "w": "retrató",
+          "f": 278
+        },
+        {
+          "w": "la",
+          "f": 291
+        },
+        {
+          "w": "sociedad",
+          "f": 295
+        },
+        {
+          "w": "y",
+          "f": 308
+        },
+        {
+          "w": "sus",
+          "f": 309
+        },
+        {
+          "w": "problemas",
+          "f": 315
+        },
+        {
+          "w": "como",
+          "f": 333
+        },
+        {
+          "w": "en",
+          "f": 341
+        },
+        {
+          "w": "martín",
+          "f": 344
+        },
+        {
+          "w": "rivas",
+          "f": 357
+        },
+        {
+          "w": "del",
+          "f": 367
+        },
+        {
+          "w": "chileno",
+          "f": 373
+        },
+        {
+          "w": "alberto",
+          "f": 384
+        },
+        {
+          "w": "blest",
+          "f": 396
+        },
+        {
+          "w": "gana",
+          "f": 405
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Modernismo y Boom",
+      "texto": "El Modernismo buscó un lenguaje elegante y musical; su gran figura fue el nicaragüense Rubén Darío. En los años sesenta y setenta, el Boom llevó al mundo novelas como Cien años de soledad, Rayuela y La ciudad y los perros.",
+      "voz": "El Modernismo buscó un lenguaje elegante y musical; su gran figura fue el nicaragüense Rubén Darío. En los años sesenta y setenta, el Boom llevó al mundo novelas como Cien años de soledad, Rayuela y La ciudad y los perros.",
+      "items": [
+        {
+          "titulo": "Modernismo",
+          "texto": "Rubén Darío, Azul…",
+          "palabra": "modernismo"
+        },
+        {
+          "titulo": "Boom",
+          "texto": "Reconocimiento internacional",
+          "palabra": "boom"
+        },
+        {
+          "titulo": "Obras",
+          "texto": "Cien años de soledad, Rayuela…",
+          "palabra": "cien"
+        }
+      ],
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 372,
+      "frames": 400,
+      "chunks": [
+        {
+          "text": "El Modernismo buscó un lenguaje elegante y musical;",
+          "from": 0,
+          "to": 79
+        },
+        {
+          "text": "su gran figura fue el nicaragüense Rubén Darío.",
+          "from": 88,
+          "to": 162
+        },
+        {
+          "text": "En los años sesenta y setenta, el Boom",
+          "from": 169,
+          "to": 232
+        },
+        {
+          "text": "llevó al mundo novelas como Cien años de",
+          "from": 232,
+          "to": 298
+        },
+        {
+          "text": "soledad, Rayuela y La ciudad y los perros.",
+          "from": 298,
+          "to": 368
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "modernismo",
+          "f": 6
+        },
+        {
+          "w": "buscó",
+          "f": 24
+        },
+        {
+          "w": "un",
+          "f": 33
+        },
+        {
+          "w": "lenguaje",
+          "f": 35
+        },
+        {
+          "w": "elegante",
+          "f": 45
+        },
+        {
+          "w": "y",
+          "f": 58
+        },
+        {
+          "w": "musical",
+          "f": 60
+        },
+        {
+          "w": "su",
+          "f": 88
+        },
+        {
+          "w": "gran",
+          "f": 93
+        },
+        {
+          "w": "figura",
+          "f": 99
+        },
+        {
+          "w": "fue",
+          "f": 109
+        },
+        {
+          "w": "el",
+          "f": 113
+        },
+        {
+          "w": "nicaragüense",
+          "f": 116
+        },
+        {
+          "w": "rubén",
+          "f": 135
+        },
+        {
+          "w": "darío",
+          "f": 145
+        },
+        {
+          "w": "en",
+          "f": 169
+        },
+        {
+          "w": "los",
+          "f": 174
+        },
+        {
+          "w": "años",
+          "f": 178
+        },
+        {
+          "w": "sesenta",
+          "f": 185
+        },
+        {
+          "w": "y",
+          "f": 196
+        },
+        {
+          "w": "setenta",
+          "f": 198
+        },
+        {
+          "w": "el",
+          "f": 214
+        },
+        {
+          "w": "boom",
+          "f": 218
+        },
+        {
+          "w": "llevó",
+          "f": 225
+        },
+        {
+          "w": "al",
+          "f": 232
+        },
+        {
+          "w": "mundo",
+          "f": 235
+        },
+        {
+          "w": "novelas",
+          "f": 244
+        },
+        {
+          "w": "como",
+          "f": 257
+        },
+        {
+          "w": "cien",
+          "f": 264
+        },
+        {
+          "w": "años",
+          "f": 271
+        },
+        {
+          "w": "de",
+          "f": 278
+        },
+        {
+          "w": "soledad",
+          "f": 281
+        },
+        {
+          "w": "rayuela",
+          "f": 299
+        },
+        {
+          "w": "y",
+          "f": 313
+        },
+        {
+          "w": "la",
+          "f": 315
+        },
+        {
+          "w": "ciudad",
+          "f": 319
+        },
+        {
+          "w": "y",
+          "f": 330
+        },
+        {
+          "w": "los",
+          "f": 333
+        },
+        {
+          "w": "perros",
+          "f": 340
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "El realismo mágico",
+      "texto": "El realismo mágico presenta hechos extraordinarios en ambientes cotidianos, y los personajes los aceptan como normales: personas que levitan o lluvias que duran años. Su gran referente es Cien años de soledad, de Gabriel García Márquez, Premio Nobel de Literatura en 1982.",
+      "voz": "El realismo mágico presenta hechos extraordinarios en ambientes cotidianos, y los personajes los aceptan como normales: personas que levitan o lluvias que duran años. Su gran referente es Cien años de soledad, de Gabriel García Márquez, Premio Nobel de Literatura en mil novecientos ochenta y dos.",
+      "items": [
+        {
+          "titulo": "Lo extraordinario",
+          "texto": "Personas que levitan",
+          "palabra": "extraordinarios"
+        },
+        {
+          "titulo": "Lo cotidiano",
+          "texto": "Los personajes lo aceptan",
+          "palabra": "cotidianos"
+        },
+        {
+          "titulo": "García Márquez",
+          "texto": "Premio Nobel en 1982",
+          "palabra": "gabriel"
+        }
+      ],
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 481,
+      "frames": 509,
+      "chunks": [
+        {
+          "text": "El realismo mágico presenta hechos extraordinarios",
+          "from": 0,
+          "to": 73
+        },
+        {
+          "text": "en ambientes cotidianos, y los personajes",
+          "from": 73,
+          "to": 134
+        },
+        {
+          "text": "los aceptan como normales:",
+          "from": 134,
+          "to": 172
+        },
+        {
+          "text": "personas que levitan o lluvias que duran años.",
+          "from": 181,
+          "to": 254
+        },
+        {
+          "text": "Su gran referente es Cien años",
+          "from": 264,
+          "to": 326
+        },
+        {
+          "text": "de soledad, de Gabriel García Márquez,",
+          "from": 326,
+          "to": 404
+        },
+        {
+          "text": "Premio Nobel de Literatura en 1982.",
+          "from": 404,
+          "to": 476
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "realismo",
+          "f": 7
+        },
+        {
+          "w": "mágico",
+          "f": 20
+        },
+        {
+          "w": "presenta",
+          "f": 31
+        },
+        {
+          "w": "hechos",
+          "f": 42
+        },
+        {
+          "w": "extraordinarios",
+          "f": 52
+        },
+        {
+          "w": "en",
+          "f": 74
+        },
+        {
+          "w": "ambientes",
+          "f": 77
+        },
+        {
+          "w": "cotidianos",
+          "f": 89
+        },
+        {
+          "w": "y",
+          "f": 108
+        },
+        {
+          "w": "los",
+          "f": 111
+        },
+        {
+          "w": "personajes",
+          "f": 116
+        },
+        {
+          "w": "los",
+          "f": 131
+        },
+        {
+          "w": "aceptan",
+          "f": 136
+        },
+        {
+          "w": "como",
+          "f": 147
+        },
+        {
+          "w": "normales",
+          "f": 154
+        },
+        {
+          "w": "personas",
+          "f": 181
+        },
+        {
+          "w": "que",
+          "f": 195
+        },
+        {
+          "w": "levitan",
+          "f": 199
+        },
+        {
+          "w": "o",
+          "f": 215
+        },
+        {
+          "w": "lluvias",
+          "f": 218
+        },
+        {
+          "w": "que",
+          "f": 230
+        },
+        {
+          "w": "duran",
+          "f": 234
+        },
+        {
+          "w": "años",
+          "f": 242
+        },
+        {
+          "w": "su",
+          "f": 264
+        },
+        {
+          "w": "gran",
+          "f": 270
+        },
+        {
+          "w": "referente",
+          "f": 276
+        },
+        {
+          "w": "es",
+          "f": 292
+        },
+        {
+          "w": "cien",
+          "f": 297
+        },
+        {
+          "w": "años",
+          "f": 306
+        },
+        {
+          "w": "de",
+          "f": 313
+        },
+        {
+          "w": "soledad",
+          "f": 316
+        },
+        {
+          "w": "de",
+          "f": 331
+        },
+        {
+          "w": "gabriel",
+          "f": 335
+        },
+        {
+          "w": "garcía",
+          "f": 347
+        },
+        {
+          "w": "márquez",
+          "f": 359
+        },
+        {
+          "w": "premio",
+          "f": 378
+        },
+        {
+          "w": "nobel",
+          "f": 388
+        },
+        {
+          "w": "de",
+          "f": 396
+        },
+        {
+          "w": "literatura",
+          "f": 400
+        },
+        {
+          "w": "en",
+          "f": 421
+        },
+        {
+          "w": "mil",
+          "f": 426
+        },
+        {
+          "w": "novecientos",
+          "f": 431
+        },
+        {
+          "w": "ochenta",
+          "f": 448
+        },
+        {
+          "w": "y",
+          "f": 459
+        },
+        {
+          "w": "dos",
+          "f": 461
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los movimientos de la literatura latinoamericana. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los movimientos de la literatura latinoamericana. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/literatura-latinoamericana-movimientos/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 195,
+      "frames": 355,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 25
+        },
+        {
+          "text": "Repasaste los movimientos de",
+          "from": 28,
+          "to": 73
+        },
+        {
+          "text": "la literatura latinoamericana.",
+          "from": 73,
+          "to": 121
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 122,
+          "to": 191
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 6
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 28
+        },
+        {
+          "w": "los",
+          "f": 44
+        },
+        {
+          "w": "movimientos",
+          "f": 48
+        },
+        {
+          "w": "de",
+          "f": 67
+        },
+        {
+          "w": "la",
+          "f": 70
+        },
+        {
+          "w": "literatura",
+          "f": 72
+        },
+        {
+          "w": "latinoamericana",
+          "f": 90
+        },
+        {
+          "w": "sigue",
+          "f": 122
+        },
+        {
+          "w": "con",
+          "f": 132
+        },
+        {
+          "w": "el",
+          "f": 137
+        },
+        {
+          "w": "siguiente",
+          "f": 139
+        },
+        {
+          "w": "tema",
+          "f": 153
+        },
+        {
+          "w": "de",
+          "f": 161
+        },
+        {
+          "w": "tu",
+          "f": 164
+        },
+        {
+          "w": "ruta",
+          "f": 169
+        }
+      ]
+    }
+  ]
+}

@@ -76,9 +76,10 @@ const PUBLIC_ROUTES = new Map([
     'learn/assessments/[assignmentId]/request/route.ts',
     'exige sesión; solo el examen propio (personId de la sesión) y detenido sin intentos',
   ],
-  ['webhooks/wompi/route.ts', 'firma de Wompi (checksum del evento), no sesión'],
+  ['webhooks/bold/route.ts', 'firma de Bold (x-bold-signature), no sesión'],
   ['webhooks/whatsapp/route.ts', 'firma X-Hub-Signature-256 de Meta, no sesión'],
   ['jobs/daily/route.ts', 'CRON_SECRET en Authorization: Bearer, no sesión'],
+  ['jobs/waiting-chats/route.ts', 'CRON_SECRET en Authorization: Bearer, no sesión'],
 ]);
 
 function walk(dir: string, out: string[] = []): string[] {

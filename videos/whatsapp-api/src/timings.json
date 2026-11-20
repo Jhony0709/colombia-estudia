@@ -1,0 +1,58 @@
+[
+  {
+    "id": "s1",
+    "sub": "WhatsApp es por donde nos escriben. Con la API oficial, ese canal ahora vive dentro de la plataforma ALBA.",
+    "tts": "Guatsap es por donde nos escriben. Con la A P I oficial, ese canal ahora vive dentro de la plataforma Alba.",
+    "voiceFrames": 186,
+    "lead": 8,
+    "frames": 208
+  },
+  {
+    "id": "s2",
+    "sub": "Ya funciona: un bot responde las 24 horas. Cuando alguien pide un asesor, los tres recibimos el aviso, y quien toma el chat responde desde la bandeja.",
+    "tts": "Ya funciona: un bot responde las veinticuatro horas. Cuando alguien pide un asesor, los tres recibimos el aviso, y quien toma el chat responde desde la bandeja.",
+    "voiceFrames": 270,
+    "lead": 8,
+    "frames": 292
+  },
+  {
+    "id": "s3",
+    "sub": "Primera puerta: una sola bandeja para todos los canales. Hoy WhatsApp; mañana Instagram y Messenger. Cada conversación queda ligada al estudiante, con su historial.",
+    "tts": "Primera puerta: una sola bandeja para todos los canales. Hoy, guatsap; mañana, Instagram y Mésenyer. Cada conversación queda ligada al estudiante, con su historial.",
+    "voiceFrames": 283,
+    "lead": 8,
+    "frames": 305
+  },
+  {
+    "id": "s4",
+    "sub": "Segunda: pagos en línea. La plataforma ya cobra con Wompi. El siguiente paso: enviar el enlace de la cuota por WhatsApp y confirmar el pago en el mismo chat.",
+    "tts": "Segunda: pagos en línea. La plataforma ya cobra con Uómpi. El siguiente paso: enviar el enlace de la cuota por guatsap, y confirmar el pago en el mismo chat.",
+    "voiceFrames": 276,
+    "lead": 8,
+    "frames": 298
+  },
+  {
+    "id": "s5",
+    "sub": "Tercera: gestión de cuenta. Saldo, recordatorios de cuota, clases en vivo y nuevas oportunidades de examen, automáticos y en el canal que ya usan.",
+    "tts": "Tercera: gestión de cuenta. Saldo, recordatorios de cuota, clases en vivo y nuevas oportunidades de examen, automáticos, y en el canal que ya usan.",
+    "voiceFrames": 256,
+    "lead": 8,
+    "frames": 278
+  },
+  {
+    "id": "s6",
+    "sub": "Y cuesta poco: responder dentro de las 24 horas no se cobra. Solo pagamos los avisos que enviamos fuera de esa ventana.",
+    "tts": "Y cuesta poco: responder dentro de las veinticuatro horas no se cobra. Solo pagamos los avisos que enviamos fuera de esa ventana.",
+    "voiceFrames": 214,
+    "lead": 8,
+    "frames": 236
+  },
+  {
+    "id": "s7",
+    "sub": "Un número. Una plataforma. Todo medido. ALBA Futuro Educativo: aprender es avanzar.",
+    "tts": "Un número. Una plataforma. Todo medido. Alba Futuro Educativo: aprender es avanzar.",
+    "voiceFrames": 181,
+    "lead": 8,
+    "frames": 249
+  }
+]

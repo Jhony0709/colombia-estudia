@@ -5,14 +5,20 @@ import 'server-only';
  * Quien la toma es el único que responde hasta cerrarla. En WhatsApp solo se puede escribir
  * dentro de las 24 h desde su último mensaje; pasado eso, hace falta una plantilla.
  *
- * `Conversation` y `ConversationMessage` todavía no están en `TENANT_SCOPED_MODELS`: cada
- * consulta lleva su `institutionId` a mano.
+ * Las consultas van por el cliente base y llevan su `institutionId` a mano.
  */
 
-import { prisma } from '@/lib/db/tenant';
+import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { SERVICE_WINDOW_MS, sendText } from '@/lib/whatsapp/cloud-api';
 import { logger } from '@/lib/observability/logger';
+import { isBoldConfigured } from '@/lib/billing/bold';
+import {
+  createStaffLink,
+  nextChargeOf,
+  type PersonCharge,
+} from '@/features/billing/server/account.service';
+import { intakeSummary, type IntakeData, type IntakeKind } from '../intake';
 
 // El saludo y la despedida no detienen la acción: si no salen, queda en el log.
 const logNotSent = (conversationId: string, err: unknown) =>
@@ -20,12 +26,17 @@ const logNotSent = (conversationId: string, err: unknown) =>
 
 export type ConversationView = 'waiting' | 'mine' | 'open' | 'bot' | 'closed';
 
+const isUnattended = (row: { status: string; waitingSince: Date | null }) =>
+  row.status === 'CLOSED' && row.waitingSince !== null;
+
 export interface ConversationRow {
   id: string;
   contact: string;
   contactName: string | null;
   personName: string | null;
   status: 'BOT' | 'WAITING' | 'OPEN' | 'CLOSED';
+  /** Se cerró sola tras 24 h esperando asesor (19/11): nadie la tomó. */
+  unattended: boolean;
   assignedToName: string | null;
   /** ISO */
   lastMessageAt: string;
@@ -64,6 +75,7 @@ export async function listConversations({
       contact: true,
       contactName: true,
       status: true,
+      waitingSince: true,
       lastMessageAt: true,
       person: { select: { givenName: true, familyName: true } },
       assignedTo: { select: { givenName: true, familyName: true } },
@@ -80,12 +92,43 @@ export async function listConversations({
     contactName: row.contactName,
     personName: fullName(row.person),
     status: row.status,
+    unattended: isUnattended(row),
     assignedToName: fullName(row.assignedTo),
     lastMessageAt: row.lastMessageAt.toISOString(),
     lastMessage: row.messages[0]
       ? { body: row.messages[0].body, inbound: row.messages[0].direction === 'INBOUND' }
       : null,
   }));
+}
+
+/**
+ * Una huella barata de la bandeja o de un chat (19/11): la pantalla la consulta cada pocos
+ * segundos y solo se vuelve a pedir entera cuando cambia.
+ */
+export async function conversationsPulse({
+  institutionId,
+  conversationId,
+}: {
+  institutionId: string;
+  conversationId?: string;
+}): Promise<string> {
+  if (conversationId) {
+    const row = await prisma.conversation.findFirst({
+      where: { id: conversationId, institutionId },
+      select: { status: true, assignedToId: true, lastMessageAt: true, personId: true },
+    });
+    return row
+      ? [row.status, row.assignedToId, row.personId, row.lastMessageAt.getTime()].join('|')
+      : '';
+  }
+  const [latest, byStatus] = await Promise.all([
+    prisma.conversation.aggregate({ where: { institutionId }, _max: { lastMessageAt: true } }),
+    prisma.conversation.groupBy({ by: ['status'], where: { institutionId }, _count: true }),
+  ]);
+  return [
+    latest._max.lastMessageAt?.getTime() ?? 0,
+    ...byStatus.map((s) => `${s.status}:${s._count}`).sort(),
+  ].join('|');
 }
 
 export async function countWaitingConversations(institutionId: string): Promise<number> {
@@ -95,7 +138,17 @@ export async function countWaitingConversations(institutionId: string): Promise<
 export interface ConversationDetail extends ConversationRow {
   /** El código de la persona de la plataforma (`/personas/[code]`), si se encontró. */
   personCode: string | null;
+  /** Lo que dejó por el chat (inscripción o certificado); `complete` = respondió todo. */
+  intake: {
+    kind: IntakeKind;
+    complete: boolean;
+    fields: Array<{ label: string; value: string }>;
+    /** Cuándo autorizó el tratamiento de datos por el chat (Ley 1581), ISO. */
+    consentAt: string | null;
+  } | null;
   assignedToId: string | null;
+  /** La próxima cuota de la persona enlazada, para mandarle el link de pago (19/11). */
+  charge: (PersonCharge & { hasEmail: boolean }) | null;
   /** Se le puede escribir libre: escribió en las últimas 24 h. */
   canReply: boolean;
   messages: Array<{
@@ -126,9 +179,13 @@ export async function getConversation({
       contactName: true,
       status: true,
       assignedToId: true,
+      waitingSince: true,
       lastInboundAt: true,
       lastMessageAt: true,
-      person: { select: { givenName: true, familyName: true, code: true } },
+      intakeKind: true,
+      intakeStep: true,
+      intake: true,
+      person: { select: { id: true, givenName: true, familyName: true, code: true, email: true } },
       assignedTo: { select: { givenName: true, familyName: true } },
       messages: {
         orderBy: { createdAt: 'desc' },
@@ -147,19 +204,32 @@ export async function getConversation({
   if (!row) return null;
   const messages = [...row.messages].reverse();
   const last = messages.at(-1) ?? null;
+  const charge =
+    row.person && isBoldConfigured()
+      ? await nextChargeOf({ institutionId, personId: row.person.id })
+      : null;
   return {
     id: row.id,
     contact: row.contact,
     contactName: row.contactName,
     personName: fullName(row.person),
     status: row.status,
+    unattended: isUnattended(row),
     personCode: row.person?.code ?? null,
     assignedToId: row.assignedToId,
     assignedToName: fullName(row.assignedTo),
     lastMessageAt: row.lastMessageAt.toISOString(),
+    charge: charge ? { ...charge, hasEmail: Boolean(row.person?.email) } : null,
+    intake: row.intakeKind
+      ? {
+          kind: row.intakeKind,
+          complete: row.intakeStep === null,
+          fields: intakeSummary(row.intakeKind, (row.intake ?? {}) as IntakeData),
+          consentAt: ((row.intake ?? {}) as IntakeData)._consentAt ?? null,
+        }
+      : null,
     lastMessage: last ? { body: last.body, inbound: last.direction === 'INBOUND' } : null,
-    canReply:
-      row.lastInboundAt !== null && now.getTime() - row.lastInboundAt.getTime() < SERVICE_WINDOW_MS,
+    canReply: inWindow(row.lastInboundAt, now),
     messages: messages.map((m) => ({
       id: m.id,
       inbound: m.direction === 'INBOUND',
@@ -179,6 +249,12 @@ async function phoneNumberIdOf(institutionId: string): Promise<string | null> {
   return institution?.whatsappPhoneNumberId ?? null;
 }
 
+const OUT_OF_WINDOW =
+  'Pasaron más de 24 horas desde su último mensaje: WhatsApp solo deja escribirle con una plantilla';
+
+const inWindow = (lastInboundAt: Date | null, now: Date) =>
+  lastInboundAt !== null && now.getTime() - lastInboundAt.getTime() < SERVICE_WINDOW_MS;
+
 /** Envía por el canal y lo guarda como de `actorId`. Sin enviar, no se guarda. */
 async function deliver(
   conversation: { id: string; contact: string; lastInboundAt: Date | null },
@@ -189,15 +265,7 @@ async function deliver(
     now,
   }: { institutionId: string; actorId: string; body: string; now: Date }
 ) {
-  if (
-    conversation.lastInboundAt === null ||
-    now.getTime() - conversation.lastInboundAt.getTime() >= SERVICE_WINDOW_MS
-  ) {
-    throw new APIError(
-      'Pasaron más de 24 horas desde su último mensaje: WhatsApp solo deja escribirle con una plantilla',
-      'CONFLICT'
-    );
-  }
+  if (!inWindow(conversation.lastInboundAt, now)) throw new APIError(OUT_OF_WINDOW, 'CONFLICT');
   const result = await sendText(conversation.contact, body, await phoneNumberIdOf(institutionId));
   if (!result.sent) {
     throw new APIError(`No se pudo enviar por WhatsApp (${result.reason})`, 'INTERNAL');
@@ -316,6 +384,71 @@ export async function replyToConversation({
   return { sent: true };
 }
 
+/**
+ * «Link de pago» (19/11): la próxima cuota de la persona enlazada, por Bold. `email` se lo envía
+ * Bold a su correo; `chat` lo deja en WhatsApp, dentro de las 24 h. Solo quien tomó el chat.
+ */
+export async function sendPaymentLink({
+  institutionId,
+  actorId,
+  conversationId,
+  delivery,
+  origin,
+  now = new Date(),
+}: {
+  institutionId: string;
+  actorId: string;
+  conversationId: string;
+  delivery: 'email' | 'chat';
+  origin: string;
+  now?: Date;
+}): Promise<{ delivery: 'email' | 'chat'; amount: number }> {
+  const conversation = await prisma.conversation.findFirst({
+    where: { id: conversationId, institutionId },
+    select: { ...CONVERSATION_SELECT, person: { select: { id: true, email: true } } },
+  });
+  if (!conversation) throw new APIError('Not found', 'NOT_FOUND');
+  if (conversation.status !== 'OPEN' || conversation.assignedToId !== actorId) {
+    throw new APIError('Solo cobra quien tomó el chat', 'CONFLICT');
+  }
+  if (!conversation.person) {
+    throw new APIError('Este chat no está enlazado a una persona de la plataforma', 'CONFLICT');
+  }
+  // Antes de crear el link: fuera de las 24 h no habría cómo dejarlo en el chat.
+  if (delivery === 'chat' && !inWindow(conversation.lastInboundAt, now)) {
+    throw new APIError(OUT_OF_WINDOW, 'CONFLICT');
+  }
+
+  const link = await createStaffLink({
+    institutionId,
+    personId: conversation.person.id,
+    delivery,
+    payerEmail: conversation.person.email,
+    origin,
+    now,
+  });
+  if (delivery === 'chat') {
+    await deliver(conversation, {
+      institutionId,
+      actorId,
+      body: `Este es el link para pagar tu cuota ${link.position} ($${link.amount.toLocaleString('es-CO')}). Puedes pagar con tarjeta, PSE o Nequi, y vence en 24 horas:\n${link.url}`,
+      now,
+    });
+  }
+  await prisma.auditLog.create({
+    data: {
+      institutionId,
+      actorId,
+      entity: 'conversation',
+      entityId: conversationId,
+      action: 'payment_link_sent',
+      after: { delivery, reference: link.reference, installmentId: link.installmentId },
+      occurredAt: now,
+    },
+  });
+  return { delivery, amount: link.amount };
+}
+
 /** Cerrar: quien la tomó. Se le avisa a la persona y la próxima vez la atiende el bot. */
 export async function closeConversation({
   institutionId,
@@ -355,4 +488,83 @@ export async function closeConversation({
     }),
   ]);
   return { status: 'CLOSED' };
+}
+
+/**
+ * «Crear persona» desde los datos de inscripción del chat (14/11): la ficha en Personas con
+ * nombre, correo y teléfono, el rol de estudiante, y la conversación enlazada. Si ya hay una
+ * persona con ese correo, solo se enlaza. Después se invita y se matricula desde su ficha.
+ */
+export async function createPersonFromIntake({
+  institutionId,
+  actorId,
+  conversationId,
+}: {
+  institutionId: string;
+  actorId: string;
+  conversationId: string;
+}): Promise<{ personCode: string; created: boolean }> {
+  const conversation = await prisma.conversation.findFirst({
+    where: { id: conversationId, institutionId },
+    select: { personId: true, intakeKind: true, intakeStep: true, intake: true },
+  });
+  if (!conversation) throw new APIError('Conversation not found', 'NOT_FOUND');
+  if (conversation.intakeKind !== 'ENROLL' || conversation.intakeStep !== null) {
+    throw new APIError('Este chat no tiene datos de inscripción completos', 'CONFLICT');
+  }
+  const db = createTenantClient(institutionId);
+  if (conversation.personId) {
+    const linked = await db.person.findUniqueOrThrow({
+      where: { id: conversation.personId },
+      select: { code: true },
+    });
+    return { personCode: linked.code, created: false };
+  }
+
+  const data = (conversation.intake ?? {}) as IntakeData;
+  const email = data.email?.trim().toLowerCase() ?? '';
+  const [givenName = '', ...rest] = (data.fullName ?? '').trim().split(/\s+/);
+  if (!email || !givenName) throw new APIError('Faltan el nombre o el correo', 'VALIDATION_ERROR');
+
+  const existing = await db.person.findFirst({
+    where: { email, anonymizedAt: null },
+    select: { id: true, code: true },
+  });
+  const person =
+    existing ??
+    (await db.$transaction(async (tx) => {
+      const created = await tx.person.create({
+        data: {
+          institutionId,
+          givenName,
+          familyName: rest.join(' ') || '—',
+          email,
+          phone: data.phone ?? null,
+        },
+        select: { id: true, code: true },
+      });
+      await tx.membership.create({
+        data: { institutionId, personId: created.id, role: 'STUDENT' },
+      });
+      await tx.auditLog.create({
+        data: {
+          institutionId,
+          actorId,
+          entity: 'person',
+          entityId: created.id,
+          action: 'created_from_whatsapp',
+          after: { conversationId },
+        },
+      });
+      return created;
+    }));
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { personId: person.id },
+  });
+  // El código lo asigna un trigger al insertar: se relee si el `create` no lo devolvió.
+  const code =
+    person.code ||
+    (await db.person.findUniqueOrThrow({ where: { id: person.id }, select: { code: true } })).code;
+  return { personCode: code, created: !existing };
 }

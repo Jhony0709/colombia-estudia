@@ -1,0 +1,160 @@
+{
+  "tema": "el-siglo-xx-y-el-mundo-actual",
+  "componente": "Preparación",
+  "area": "Ciencias sociales",
+  "titulo": "El siglo XX y la configuración del mundo actual",
+  "siguiente": "English basic grammar",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el siglo XX y la configuración del mundo actual.",
+      "voz": "Repaso del tema: el siglo veinte y la configuración del mundo actual."
+    },
+    {
+      "id": "s1",
+      "tipo": "linea",
+      "titulo": "De las guerras mundiales a la ONU",
+      "texto": "El siglo XX comenzó con la Primera Guerra Mundial, en 1914. En 1917, la Revolución rusa abrió el camino a la Unión Soviética. En 1929 llegó la Gran Depresión. La Segunda Guerra Mundial comenzó en 1939, y al terminar, en 1945, se creó la ONU.",
+      "voz": "El siglo veinte comenzó con la Primera Guerra Mundial, en mil novecientos catorce. En mil novecientos diecisiete, la Revolución rusa abrió el camino a la Unión Soviética. En mil novecientos veintinueve llegó la Gran Depresión. La Segunda Guerra Mundial comenzó en mil novecientos treinta y nueve, y al terminar, en mil novecientos cuarenta y cinco, se creó la ONU.",
+      "items": [
+        {
+          "etiqueta": "1914",
+          "titulo": "Primera Guerra Mundial",
+          "texto": "1914-1918",
+          "palabra": "primera"
+        },
+        {
+          "etiqueta": "1917",
+          "titulo": "Revolución rusa",
+          "texto": "Camino a la URSS",
+          "palabra": "revolución"
+        },
+        {
+          "etiqueta": "1929",
+          "titulo": "Gran Depresión",
+          "texto": "Crisis económica",
+          "palabra": "depresión"
+        },
+        {
+          "etiqueta": "1939",
+          "titulo": "Segunda Guerra Mundial",
+          "texto": "1939-1945",
+          "palabra": "segunda"
+        },
+        {
+          "etiqueta": "1945",
+          "titulo": "ONU",
+          "texto": "Paz y derechos humanos",
+          "palabra": "onu"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "La Guerra Fría (1947-1991)",
+      "texto": "De 1947 a 1991, la Guerra Fría dividió el mundo en dos bloques que nunca se enfrentaron en una guerra total. El capitalista, liderado por Estados Unidos, defendía la propiedad privada y los mercados; el socialista, liderado por la Unión Soviética, la propiedad estatal y la planificación. Compitieron en armas nucleares y en el espacio, hasta que la Unión Soviética se disolvió en 1991.",
+      "voz": "De mil novecientos cuarenta y siete a mil novecientos noventa y uno, la Guerra Fría dividió el mundo en dos bloques que nunca se enfrentaron en una guerra total. El capitalista, liderado por Estados Unidos, defendía la propiedad privada y los mercados; el socialista, liderado por la Unión Soviética, la propiedad estatal y la planificación. Compitieron en armas nucleares y en el espacio, hasta que la Unión Soviética se disolvió en mil novecientos noventa y uno.",
+      "columnas": [
+        {
+          "titulo": "Bloque capitalista",
+          "palabra": "capitalista",
+          "puntos": [
+            {
+              "texto": "Liderado por Estados Unidos",
+              "palabra": "estados"
+            },
+            {
+              "texto": "Propiedad privada y mercados",
+              "palabra": "privada"
+            }
+          ]
+        },
+        {
+          "titulo": "Bloque socialista",
+          "palabra": "socialista",
+          "puntos": [
+            {
+              "texto": "Liderado por la Unión Soviética",
+              "palabra": "unión"
+            },
+            {
+              "texto": "Propiedad estatal y planificación",
+              "palabra": "estatal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "linea",
+      "titulo": "Colombia en el siglo XX",
+      "texto": "En Colombia, entre los años cuarenta y cincuenta se vivió La Violencia entre liberales y conservadores, y el 9 de abril de 1948 fue asesinado Jorge Eliécer Gaitán. En 1958 comenzó el Frente Nacional. En la segunda mitad del siglo surgió el conflicto armado, que tuvo múltiples causas. Y en 1991, una nueva Constitución amplió los derechos y la participación ciudadana.",
+      "voz": "En Colombia, entre los años cuarenta y cincuenta se vivió La Violencia entre liberales y conservadores, y el nueve de abril de mil novecientos cuarenta y ocho fue asesinado Jorge Eliécer Gaitán. En mil novecientos cincuenta y ocho comenzó el Frente Nacional. En la segunda mitad del siglo surgió el conflicto armado, que tuvo múltiples causas. Y en mil novecientos noventa y uno, una nueva Constitución amplió los derechos y la participación ciudadana.",
+      "items": [
+        {
+          "etiqueta": "Años 40 y 50",
+          "titulo": "La Violencia",
+          "texto": "Liberales y conservadores",
+          "palabra": "violencia"
+        },
+        {
+          "etiqueta": "1948",
+          "titulo": "Asesinato de Gaitán",
+          "texto": "El Bogotazo",
+          "palabra": "gaitán"
+        },
+        {
+          "etiqueta": "1958",
+          "titulo": "Frente Nacional",
+          "texto": "Alternancia en el poder",
+          "palabra": "frente"
+        },
+        {
+          "etiqueta": "Desde 1950",
+          "titulo": "Conflicto armado",
+          "texto": "Múltiples causas",
+          "palabra": "conflicto"
+        },
+        {
+          "etiqueta": "1991",
+          "titulo": "Constitución",
+          "texto": "Derechos y participación",
+          "palabra": "constitución"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "América Latina",
+      "texto": "En América Latina, la Revolución cubana triunfó en 1959, y países como Chile, Argentina, Brasil y Uruguay vivieron dictaduras militares que violaron los derechos humanos. También crecieron los movimientos obreros, campesinos, estudiantiles e indígenas.",
+      "voz": "En América Latina, la Revolución cubana triunfó en mil novecientos cincuenta y nueve, y países como Chile, Argentina, Brasil y Uruguay vivieron dictaduras militares que violaron los derechos humanos. También crecieron los movimientos obreros, campesinos, estudiantiles e indígenas.",
+      "items": [
+        {
+          "titulo": "Revolución cubana",
+          "texto": "1959",
+          "palabra": "cubana"
+        },
+        {
+          "titulo": "Dictaduras militares",
+          "texto": "Chile, Argentina, Brasil, Uruguay",
+          "palabra": "dictaduras"
+        },
+        {
+          "titulo": "Movimientos sociales",
+          "texto": "Obreros, campesinos, estudiantes…",
+          "palabra": "movimientos"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el siglo XX y el mundo actual. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el siglo veinte y el mundo actual. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

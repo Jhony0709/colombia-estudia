@@ -1,0 +1,151 @@
+{
+  "tema": "la-celula",
+  "componente": "Fundamentos",
+  "area": "Ciencias naturales",
+  "titulo": "La célula y la organización de los seres vivos",
+  "siguiente": "La vida y los ecosistemas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la célula y la organización de los seres vivos.",
+      "voz": "Repaso del tema: la célula y la organización de los seres vivos."
+    },
+    {
+      "id": "s1",
+      "tipo": "linea",
+      "titulo": "Cómo se descubrió la célula",
+      "texto": "La célula es la unidad básica de la vida. Robert Hooke la nombró en 1665, al observar corcho. Leeuwenhoek vio microorganismos vivos con sus propios microscopios. Schleiden y Schwann propusieron que plantas y animales están hechos de células. Y Virchow, en 1855, que toda célula viene de otra célula.",
+      "voz": "La célula es la unidad básica de la vida. Robert Hooke la nombró en mil seiscientos sesenta y cinco, al observar corcho. Leeuwenhoek vio microorganismos vivos con sus propios microscopios. Schleiden y Schwann propusieron que plantas y animales están hechos de células. Y Virchow, en mil ochocientos cincuenta y cinco, que toda célula viene de otra célula.",
+      "items": [
+        {
+          "etiqueta": "1665",
+          "titulo": "Robert Hooke",
+          "texto": "Nombra la célula al observar corcho",
+          "palabra": "hooke"
+        },
+        {
+          "etiqueta": "1670",
+          "titulo": "Van Leeuwenhoek",
+          "texto": "Ve microorganismos vivos",
+          "palabra": "leeuwenhoek"
+        },
+        {
+          "etiqueta": "1838",
+          "titulo": "Schleiden y Schwann",
+          "texto": "Plantas y animales están hechos de células",
+          "palabra": "schleiden"
+        },
+        {
+          "etiqueta": "1855",
+          "titulo": "Rudolf Virchow",
+          "texto": "Toda célula viene de otra célula",
+          "palabra": "virchow"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Dos grandes tipos de células",
+      "texto": "Hay dos grandes tipos de células. Las procariotas, como las bacterias, no tienen un núcleo rodeado por membrana. Las eucariotas sí lo tienen. Entre ellas están la célula animal y la vegetal, que además tiene pared celular, cloroplastos y una gran vacuola.",
+      "voz": "Hay dos grandes tipos de células. Las procariotas, como las bacterias, no tienen un núcleo rodeado por membrana. Las eucariotas sí lo tienen. Entre ellas están la célula animal y la vegetal, que además tiene pared celular, cloroplastos y una gran vacuola.",
+      "imagenes": [
+        {
+          "src": "fundamentos/celula-procariota-y-eucariota.webp",
+          "focos": [
+            {
+              "palabra": "procariotas",
+              "x": 0.2,
+              "y": 0.6,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "eucariotas",
+              "x": 0.62,
+              "y": 0.45,
+              "zoom": 1.3
+            }
+          ]
+        },
+        {
+          "src": "fundamentos/celula-animal-y-vegetal.webp",
+          "palabra": "animal",
+          "focos": [
+            {
+              "palabra": "vegetal",
+              "x": 0.68,
+              "y": 0.5,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "vacuola",
+              "x": 0.6,
+              "y": 0.6,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las funciones vitales",
+      "texto": "Toda célula cumple tres funciones vitales: la nutrición, para obtener materia y energía; la relación, para detectar estímulos y responder; y la reproducción, para originar nuevas células, por mitosis o meiosis.",
+      "voz": "Toda célula cumple tres funciones vitales: la nutrición, para obtener materia y energía; la relación, para detectar estímulos y responder; y la reproducción, para originar nuevas células, por mitosis o meiosis.",
+      "items": [
+        {
+          "titulo": "Nutrición",
+          "texto": "Obtiene y transforma materia y energía",
+          "palabra": "nutrición"
+        },
+        {
+          "titulo": "Relación",
+          "texto": "Detecta estímulos y responde",
+          "palabra": "relación"
+        },
+        {
+          "titulo": "Reproducción",
+          "texto": "Origina nuevas células: mitosis o meiosis",
+          "palabra": "reproducción"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "pasos",
+      "titulo": "De la célula al organismo",
+      "texto": "En los organismos pluricelulares, las células se especializan y trabajan juntas: forman tejidos, los tejidos forman órganos, y los órganos, sistemas. Así se construye un organismo completo.",
+      "voz": "En los organismos pluricelulares, las células se especializan y trabajan juntas: forman tejidos, los tejidos forman órganos, y los órganos, sistemas. Así se construye un organismo completo.",
+      "items": [
+        {
+          "titulo": "Célula",
+          "palabra": "especializan"
+        },
+        {
+          "titulo": "Tejido",
+          "palabra": "tejidos"
+        },
+        {
+          "titulo": "Órgano",
+          "palabra": "órganos"
+        },
+        {
+          "titulo": "Sistema",
+          "palabra": "sistemas"
+        },
+        {
+          "titulo": "Organismo",
+          "palabra": "organismo"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la célula. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la célula. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

@@ -1,0 +1,1278 @@
+{
+  "tema": "lenguaje-comunicacion-y-realidad-social",
+  "componente": "Transición",
+  "area": "Lengua castellana",
+  "titulo": "El lenguaje, la comunicación y la realidad social",
+  "siguiente": "Energía, trabajo, potencia y conservación de la energía",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el lenguaje, la comunicación y la construcción de la realidad social.",
+      "voz": "Repaso del tema: el lenguaje, la comunicación y la construcción de la realidad social.",
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 165,
+      "frames": 193,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 37
+        },
+        {
+          "text": "el lenguaje, la comunicación y la",
+          "from": 46,
+          "to": 102
+        },
+        {
+          "text": "construcción de la realidad social.",
+          "from": 102,
+          "to": 160
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 18
+        },
+        {
+          "w": "tema",
+          "f": 23
+        },
+        {
+          "w": "el",
+          "f": 46
+        },
+        {
+          "w": "lenguaje",
+          "f": 52
+        },
+        {
+          "w": "la",
+          "f": 69
+        },
+        {
+          "w": "comunicación",
+          "f": 72
+        },
+        {
+          "w": "y",
+          "f": 93
+        },
+        {
+          "w": "la",
+          "f": 95
+        },
+        {
+          "w": "construcción",
+          "f": 99
+        },
+        {
+          "w": "de",
+          "f": 116
+        },
+        {
+          "w": "la",
+          "f": 119
+        },
+        {
+          "w": "realidad",
+          "f": 123
+        },
+        {
+          "w": "social",
+          "f": 134
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "pasos",
+      "titulo": "Cómo ha cambiado la comunicación",
+      "texto": "La comunicación ha cambiado con el tiempo. Primero fue oral; luego llegaron la escritura, la imprenta, los medios masivos como la radio y la televisión, la comunicación digital y, hoy, la inteligencia artificial.",
+      "voz": "La comunicación ha cambiado con el tiempo. Primero fue oral; luego llegaron la escritura, la imprenta, los medios masivos como la radio y la televisión, la comunicación digital y, hoy, la inteligencia artificial.",
+      "items": [
+        {
+          "titulo": "Oral",
+          "palabra": "oral"
+        },
+        {
+          "titulo": "Escritura",
+          "palabra": "escritura"
+        },
+        {
+          "titulo": "Imprenta",
+          "palabra": "imprenta"
+        },
+        {
+          "titulo": "Medios masivos",
+          "palabra": "masivos"
+        },
+        {
+          "titulo": "Digital",
+          "palabra": "digital"
+        },
+        {
+          "titulo": "IA",
+          "palabra": "inteligencia"
+        }
+      ],
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 367,
+      "frames": 395,
+      "chunks": [
+        {
+          "text": "La comunicación ha cambiado con el tiempo.",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "Primero fue oral;",
+          "from": 72,
+          "to": 102
+        },
+        {
+          "text": "luego llegaron la escritura, la imprenta, los medios",
+          "from": 104,
+          "to": 194
+        },
+        {
+          "text": "masivos como la radio y la televisión, la",
+          "from": 194,
+          "to": 265
+        },
+        {
+          "text": "comunicación digital y, hoy, la inteligencia artificial.",
+          "from": 265,
+          "to": 362
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "comunicación",
+          "f": 5
+        },
+        {
+          "w": "ha",
+          "f": 24
+        },
+        {
+          "w": "cambiado",
+          "f": 27
+        },
+        {
+          "w": "con",
+          "f": 38
+        },
+        {
+          "w": "el",
+          "f": 43
+        },
+        {
+          "w": "tiempo",
+          "f": 47
+        },
+        {
+          "w": "primero",
+          "f": 72
+        },
+        {
+          "w": "fue",
+          "f": 85
+        },
+        {
+          "w": "oral",
+          "f": 90
+        },
+        {
+          "w": "luego",
+          "f": 104
+        },
+        {
+          "w": "llegaron",
+          "f": 113
+        },
+        {
+          "w": "la",
+          "f": 124
+        },
+        {
+          "w": "escritura",
+          "f": 126
+        },
+        {
+          "w": "la",
+          "f": 148
+        },
+        {
+          "w": "imprenta",
+          "f": 151
+        },
+        {
+          "w": "los",
+          "f": 169
+        },
+        {
+          "w": "medios",
+          "f": 175
+        },
+        {
+          "w": "masivos",
+          "f": 183
+        },
+        {
+          "w": "como",
+          "f": 196
+        },
+        {
+          "w": "la",
+          "f": 203
+        },
+        {
+          "w": "radio",
+          "f": 208
+        },
+        {
+          "w": "y",
+          "f": 217
+        },
+        {
+          "w": "la",
+          "f": 219
+        },
+        {
+          "w": "televisión",
+          "f": 223
+        },
+        {
+          "w": "la",
+          "f": 252
+        },
+        {
+          "w": "comunicación",
+          "f": 256
+        },
+        {
+          "w": "digital",
+          "f": 275
+        },
+        {
+          "w": "y",
+          "f": 297
+        },
+        {
+          "w": "hoy",
+          "f": 303
+        },
+        {
+          "w": "la",
+          "f": 312
+        },
+        {
+          "w": "inteligencia",
+          "f": 314
+        },
+        {
+          "w": "artificial",
+          "f": 331
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Verbal y no verbal",
+      "texto": "La comunicación verbal usa palabras, orales o escritas. La no verbal comunica con gestos, postura, mirada, distancia y tono de voz: alguien puede decir que está tranquilo, pero su rostro muestra preocupación.",
+      "voz": "La comunicación verbal usa palabras, orales o escritas. La no verbal comunica con gestos, postura, mirada, distancia y tono de voz: alguien puede decir que está tranquilo, pero su rostro muestra preocupación.",
+      "columnas": [
+        {
+          "titulo": "Verbal",
+          "palabra": "verbal",
+          "puntos": [
+            {
+              "texto": "Palabras orales",
+              "palabra": "orales"
+            },
+            {
+              "texto": "Palabras escritas",
+              "palabra": "escritas"
+            }
+          ]
+        },
+        {
+          "titulo": "No verbal",
+          "palabra": "verbal",
+          "vez": 1,
+          "puntos": [
+            {
+              "texto": "Gestos, postura y mirada",
+              "palabra": "gestos"
+            },
+            {
+              "texto": "Tono de voz",
+              "palabra": "tono"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 349,
+      "frames": 377,
+      "chunks": [
+        {
+          "text": "La comunicación verbal usa",
+          "from": 0,
+          "to": 44
+        },
+        {
+          "text": "palabras, orales o escritas.",
+          "from": 44,
+          "to": 91
+        },
+        {
+          "text": "La no verbal comunica con gestos, postura,",
+          "from": 101,
+          "to": 167
+        },
+        {
+          "text": "mirada, distancia y tono de voz:",
+          "from": 167,
+          "to": 217
+        },
+        {
+          "text": "alguien puede decir que está tranquilo,",
+          "from": 228,
+          "to": 289
+        },
+        {
+          "text": "pero su rostro muestra preocupación.",
+          "from": 289,
+          "to": 344
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "comunicación",
+          "f": 6
+        },
+        {
+          "w": "verbal",
+          "f": 24
+        },
+        {
+          "w": "usa",
+          "f": 34
+        },
+        {
+          "w": "palabras",
+          "f": 40
+        },
+        {
+          "w": "orales",
+          "f": 57
+        },
+        {
+          "w": "o",
+          "f": 71
+        },
+        {
+          "w": "escritas",
+          "f": 74
+        },
+        {
+          "w": "la",
+          "f": 101
+        },
+        {
+          "w": "no",
+          "f": 106
+        },
+        {
+          "w": "verbal",
+          "f": 110
+        },
+        {
+          "w": "comunica",
+          "f": 121
+        },
+        {
+          "w": "con",
+          "f": 134
+        },
+        {
+          "w": "gestos",
+          "f": 140
+        },
+        {
+          "w": "postura",
+          "f": 153
+        },
+        {
+          "w": "mirada",
+          "f": 169
+        },
+        {
+          "w": "distancia",
+          "f": 180
+        },
+        {
+          "w": "y",
+          "f": 194
+        },
+        {
+          "w": "tono",
+          "f": 197
+        },
+        {
+          "w": "de",
+          "f": 205
+        },
+        {
+          "w": "voz",
+          "f": 208
+        },
+        {
+          "w": "alguien",
+          "f": 228
+        },
+        {
+          "w": "puede",
+          "f": 239
+        },
+        {
+          "w": "decir",
+          "f": 247
+        },
+        {
+          "w": "que",
+          "f": 256
+        },
+        {
+          "w": "está",
+          "f": 259
+        },
+        {
+          "w": "tranquilo",
+          "f": 265
+        },
+        {
+          "w": "pero",
+          "f": 279
+        },
+        {
+          "w": "su",
+          "f": 285
+        },
+        {
+          "w": "rostro",
+          "f": 290
+        },
+        {
+          "w": "muestra",
+          "f": 300
+        },
+        {
+          "w": "preocupación",
+          "f": 309
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las variedades de la lengua",
+      "texto": "No todos hablamos igual. El dialecto es la variedad de una región, como el español del Caribe; la jerga, el vocabulario de un oficio o un grupo; el sociolecto, el de un grupo social; y el registro, formal o informal, cambia según la situación. Ninguna variedad es inferior.",
+      "voz": "No todos hablamos igual. El dialecto es la variedad de una región, como el español del Caribe; la jerga, el vocabulario de un oficio o un grupo; el sociolecto, el de un grupo social; y el registro, formal o informal, cambia según la situación. Ninguna variedad es inferior.",
+      "items": [
+        {
+          "titulo": "Dialecto",
+          "texto": "De una región",
+          "palabra": "dialecto"
+        },
+        {
+          "titulo": "Jerga",
+          "texto": "De un oficio o grupo",
+          "palabra": "jerga"
+        },
+        {
+          "titulo": "Sociolecto",
+          "texto": "De un grupo social",
+          "palabra": "sociolecto"
+        },
+        {
+          "titulo": "Registro",
+          "texto": "Formal o informal",
+          "palabra": "registro"
+        }
+      ],
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 496,
+      "frames": 524,
+      "chunks": [
+        {
+          "text": "No todos hablamos igual.",
+          "from": 0,
+          "to": 39
+        },
+        {
+          "text": "El dialecto es la variedad de una",
+          "from": 49,
+          "to": 102
+        },
+        {
+          "text": "región, como el español del Caribe;",
+          "from": 102,
+          "to": 158
+        },
+        {
+          "text": "la jerga, el vocabulario de un oficio o un grupo;",
+          "from": 168,
+          "to": 252
+        },
+        {
+          "text": "el sociolecto, el de un grupo social;",
+          "from": 259,
+          "to": 323
+        },
+        {
+          "text": "y el registro, formal o",
+          "from": 332,
+          "to": 369
+        },
+        {
+          "text": "informal, cambia según la situación.",
+          "from": 369,
+          "to": 426
+        },
+        {
+          "text": "Ninguna variedad es inferior.",
+          "from": 437,
+          "to": 492
+        }
+      ],
+      "words": [
+        {
+          "w": "no",
+          "f": 0
+        },
+        {
+          "w": "todos",
+          "f": 6
+        },
+        {
+          "w": "hablamos",
+          "f": 14
+        },
+        {
+          "w": "igual",
+          "f": 27
+        },
+        {
+          "w": "el",
+          "f": 49
+        },
+        {
+          "w": "dialecto",
+          "f": 54
+        },
+        {
+          "w": "es",
+          "f": 68
+        },
+        {
+          "w": "la",
+          "f": 70
+        },
+        {
+          "w": "variedad",
+          "f": 74
+        },
+        {
+          "w": "de",
+          "f": 84
+        },
+        {
+          "w": "una",
+          "f": 87
+        },
+        {
+          "w": "región",
+          "f": 92
+        },
+        {
+          "w": "como",
+          "f": 115
+        },
+        {
+          "w": "el",
+          "f": 122
+        },
+        {
+          "w": "español",
+          "f": 125
+        },
+        {
+          "w": "del",
+          "f": 137
+        },
+        {
+          "w": "caribe",
+          "f": 142
+        },
+        {
+          "w": "la",
+          "f": 168
+        },
+        {
+          "w": "jerga",
+          "f": 173
+        },
+        {
+          "w": "el",
+          "f": 186
+        },
+        {
+          "w": "vocabulario",
+          "f": 191
+        },
+        {
+          "w": "de",
+          "f": 210
+        },
+        {
+          "w": "un",
+          "f": 212
+        },
+        {
+          "w": "oficio",
+          "f": 216
+        },
+        {
+          "w": "o",
+          "f": 229
+        },
+        {
+          "w": "un",
+          "f": 232
+        },
+        {
+          "w": "grupo",
+          "f": 235
+        },
+        {
+          "w": "el",
+          "f": 259
+        },
+        {
+          "w": "sociolecto",
+          "f": 265
+        },
+        {
+          "w": "el",
+          "f": 289
+        },
+        {
+          "w": "de",
+          "f": 293
+        },
+        {
+          "w": "un",
+          "f": 295
+        },
+        {
+          "w": "grupo",
+          "f": 298
+        },
+        {
+          "w": "social",
+          "f": 307
+        },
+        {
+          "w": "y",
+          "f": 332
+        },
+        {
+          "w": "el",
+          "f": 336
+        },
+        {
+          "w": "registro",
+          "f": 340
+        },
+        {
+          "w": "formal",
+          "f": 359
+        },
+        {
+          "w": "o",
+          "f": 371
+        },
+        {
+          "w": "informal",
+          "f": 373
+        },
+        {
+          "w": "cambia",
+          "f": 389
+        },
+        {
+          "w": "según",
+          "f": 399
+        },
+        {
+          "w": "la",
+          "f": 406
+        },
+        {
+          "w": "situación",
+          "f": 410
+        },
+        {
+          "w": "ninguna",
+          "f": 437
+        },
+        {
+          "w": "variedad",
+          "f": 449
+        },
+        {
+          "w": "es",
+          "f": 458
+        },
+        {
+          "w": "inferior",
+          "f": 462
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Signos y significados",
+      "texto": "La semiótica estudia los signos. Todo signo tiene un significante, su forma, y un significado, la idea que le asociamos: una paloma blanca puede significar la paz. Y un mismo símbolo puede significar cosas distintas según la cultura.",
+      "voz": "La semiótica estudia los signos. Todo signo tiene un significante, su forma, y un significado, la idea que le asociamos: una paloma blanca puede significar la paz. Y un mismo símbolo puede significar cosas distintas según la cultura.",
+      "items": [
+        {
+          "titulo": "Significante",
+          "texto": "La forma: una paloma blanca",
+          "palabra": "significante"
+        },
+        {
+          "titulo": "Significado",
+          "texto": "La idea: la paz",
+          "palabra": "significado"
+        },
+        {
+          "titulo": "Según la cultura",
+          "texto": "No siempre es universal",
+          "palabra": "cultura"
+        }
+      ],
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 443,
+      "frames": 471,
+      "chunks": [
+        {
+          "text": "La semiótica estudia los signos.",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "Todo signo tiene un significante, su forma, y",
+          "from": 67,
+          "to": 152
+        },
+        {
+          "text": "un significado, la idea que le asociamos:",
+          "from": 152,
+          "to": 229
+        },
+        {
+          "text": "una paloma blanca puede significar la paz.",
+          "from": 240,
+          "to": 309
+        },
+        {
+          "text": "Y un mismo símbolo puede significar",
+          "from": 322,
+          "to": 382
+        },
+        {
+          "text": "cosas distintas según la cultura.",
+          "from": 382,
+          "to": 439
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "semiótica",
+          "f": 6
+        },
+        {
+          "w": "estudia",
+          "f": 24
+        },
+        {
+          "w": "los",
+          "f": 34
+        },
+        {
+          "w": "signos",
+          "f": 39
+        },
+        {
+          "w": "todo",
+          "f": 67
+        },
+        {
+          "w": "signo",
+          "f": 75
+        },
+        {
+          "w": "tiene",
+          "f": 83
+        },
+        {
+          "w": "un",
+          "f": 89
+        },
+        {
+          "w": "significante",
+          "f": 92
+        },
+        {
+          "w": "su",
+          "f": 121
+        },
+        {
+          "w": "forma",
+          "f": 127
+        },
+        {
+          "w": "y",
+          "f": 144
+        },
+        {
+          "w": "un",
+          "f": 147
+        },
+        {
+          "w": "significado",
+          "f": 150
+        },
+        {
+          "w": "la",
+          "f": 185
+        },
+        {
+          "w": "idea",
+          "f": 189
+        },
+        {
+          "w": "que",
+          "f": 201
+        },
+        {
+          "w": "le",
+          "f": 205
+        },
+        {
+          "w": "asociamos",
+          "f": 207
+        },
+        {
+          "w": "una",
+          "f": 240
+        },
+        {
+          "w": "paloma",
+          "f": 247
+        },
+        {
+          "w": "blanca",
+          "f": 258
+        },
+        {
+          "w": "puede",
+          "f": 270
+        },
+        {
+          "w": "significar",
+          "f": 277
+        },
+        {
+          "w": "la",
+          "f": 294
+        },
+        {
+          "w": "paz",
+          "f": 297
+        },
+        {
+          "w": "y",
+          "f": 322
+        },
+        {
+          "w": "un",
+          "f": 327
+        },
+        {
+          "w": "mismo",
+          "f": 330
+        },
+        {
+          "w": "símbolo",
+          "f": 340
+        },
+        {
+          "w": "puede",
+          "f": 352
+        },
+        {
+          "w": "significar",
+          "f": 359
+        },
+        {
+          "w": "cosas",
+          "f": 376
+        },
+        {
+          "w": "distintas",
+          "f": 385
+        },
+        {
+          "w": "según",
+          "f": 400
+        },
+        {
+          "w": "la",
+          "f": 409
+        },
+        {
+          "w": "cultura",
+          "f": 412
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Persuadir no es manipular",
+      "texto": "El lenguaje también influye en las personas. Persuadir es convencer con razones o emociones; manipular es engañar, ocultar información o distorsionar los hechos. Ante un mensaje, pregúntate quién lo produce, qué omite y si puedes verificarlo.",
+      "voz": "El lenguaje también influye en las personas. Persuadir es convencer con razones o emociones; manipular es engañar, ocultar información o distorsionar los hechos. Ante un mensaje, pregúntate quién lo produce, qué omite y si puedes verificarlo.",
+      "items": [
+        {
+          "titulo": "Persuadir",
+          "texto": "Razones y emociones",
+          "palabra": "persuadir"
+        },
+        {
+          "titulo": "Manipular",
+          "texto": "Engaño y ocultamiento",
+          "palabra": "manipular"
+        },
+        {
+          "titulo": "Analizar el mensaje",
+          "texto": "¿Quién? ¿Qué omite? ¿Se verifica?",
+          "palabra": "produce"
+        }
+      ],
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 456,
+      "frames": 484,
+      "chunks": [
+        {
+          "text": "El lenguaje también influye en las personas.",
+          "from": 0,
+          "to": 68
+        },
+        {
+          "text": "Persuadir es convencer con razones o emociones;",
+          "from": 78,
+          "to": 163
+        },
+        {
+          "text": "manipular es engañar, ocultar información",
+          "from": 172,
+          "to": 253
+        },
+        {
+          "text": "o distorsionar los hechos.",
+          "from": 253,
+          "to": 303
+        },
+        {
+          "text": "Ante un mensaje, pregúntate quién lo produce,",
+          "from": 315,
+          "to": 393
+        },
+        {
+          "text": "qué omite y si puedes verificarlo.",
+          "from": 393,
+          "to": 451
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "lenguaje",
+          "f": 7
+        },
+        {
+          "w": "también",
+          "f": 18
+        },
+        {
+          "w": "influye",
+          "f": 28
+        },
+        {
+          "w": "en",
+          "f": 39
+        },
+        {
+          "w": "las",
+          "f": 42
+        },
+        {
+          "w": "personas",
+          "f": 48
+        },
+        {
+          "w": "persuadir",
+          "f": 78
+        },
+        {
+          "w": "es",
+          "f": 96
+        },
+        {
+          "w": "convencer",
+          "f": 102
+        },
+        {
+          "w": "con",
+          "f": 116
+        },
+        {
+          "w": "razones",
+          "f": 121
+        },
+        {
+          "w": "o",
+          "f": 137
+        },
+        {
+          "w": "emociones",
+          "f": 140
+        },
+        {
+          "w": "manipular",
+          "f": 172
+        },
+        {
+          "w": "es",
+          "f": 196
+        },
+        {
+          "w": "engañar",
+          "f": 203
+        },
+        {
+          "w": "ocultar",
+          "f": 224
+        },
+        {
+          "w": "información",
+          "f": 239
+        },
+        {
+          "w": "o",
+          "f": 260
+        },
+        {
+          "w": "distorsionar",
+          "f": 263
+        },
+        {
+          "w": "los",
+          "f": 283
+        },
+        {
+          "w": "hechos",
+          "f": 289
+        },
+        {
+          "w": "ante",
+          "f": 315
+        },
+        {
+          "w": "un",
+          "f": 324
+        },
+        {
+          "w": "mensaje",
+          "f": 327
+        },
+        {
+          "w": "pregúntate",
+          "f": 343
+        },
+        {
+          "w": "quién",
+          "f": 360
+        },
+        {
+          "w": "lo",
+          "f": 365
+        },
+        {
+          "w": "produce",
+          "f": 369
+        },
+        {
+          "w": "qué",
+          "f": 386
+        },
+        {
+          "w": "omite",
+          "f": 393
+        },
+        {
+          "w": "y",
+          "f": 406
+        },
+        {
+          "w": "si",
+          "f": 409
+        },
+        {
+          "w": "puedes",
+          "f": 413
+        },
+        {
+          "w": "verificarlo",
+          "f": 422
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el lenguaje y la comunicación. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el lenguaje y la comunicación. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/lenguaje-comunicacion-y-realidad-social/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 162,
+      "frames": 322,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 20
+        },
+        {
+          "text": "Repasaste el lenguaje y la comunicación.",
+          "from": 22,
+          "to": 82
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 91,
+          "to": 157
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 6
+        },
+        {
+          "w": "bien",
+          "f": 14
+        },
+        {
+          "w": "repasaste",
+          "f": 22
+        },
+        {
+          "w": "el",
+          "f": 37
+        },
+        {
+          "w": "lenguaje",
+          "f": 39
+        },
+        {
+          "w": "y",
+          "f": 51
+        },
+        {
+          "w": "la",
+          "f": 53
+        },
+        {
+          "w": "comunicación",
+          "f": 57
+        },
+        {
+          "w": "sigue",
+          "f": 91
+        },
+        {
+          "w": "con",
+          "f": 100
+        },
+        {
+          "w": "el",
+          "f": 105
+        },
+        {
+          "w": "siguiente",
+          "f": 108
+        },
+        {
+          "w": "tema",
+          "f": 120
+        },
+        {
+          "w": "de",
+          "f": 128
+        },
+        {
+          "w": "tu",
+          "f": 131
+        },
+        {
+          "w": "ruta",
+          "f": 136
+        }
+      ]
+    }
+  ]
+}

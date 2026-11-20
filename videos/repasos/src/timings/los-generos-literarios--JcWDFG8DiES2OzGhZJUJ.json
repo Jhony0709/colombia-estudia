@@ -1,0 +1,1004 @@
+{
+  "tema": "los-generos-literarios",
+  "componente": "Profundización",
+  "area": "Lengua castellana",
+  "titulo": "Los géneros literarios y sus características",
+  "siguiente": "La organización de los seres vivos y los sistemas del cuerpo humano",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los géneros literarios y sus características.",
+      "voz": "Repaso del tema: los géneros literarios y sus características.",
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 116,
+      "frames": 144,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 30
+        },
+        {
+          "text": "los géneros literarios y sus características.",
+          "from": 35,
+          "to": 111
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "los",
+          "f": 35
+        },
+        {
+          "w": "géneros",
+          "f": 40
+        },
+        {
+          "w": "literarios",
+          "f": 49
+        },
+        {
+          "w": "y",
+          "f": 65
+        },
+        {
+          "w": "sus",
+          "f": 67
+        },
+        {
+          "w": "características",
+          "f": 73
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los tres grandes géneros",
+      "texto": "La literatura usa las palabras para expresar ideas, sentimientos e historias. Sus obras se clasifican en tres grandes géneros: el narrativo, el lírico y el dramático.",
+      "voz": "La literatura usa las palabras para expresar ideas, sentimientos e historias. Sus obras se clasifican en tres grandes géneros: el narrativo, el lírico y el dramático.",
+      "items": [
+        {
+          "titulo": "Narrativo",
+          "texto": "Cuenta una historia",
+          "palabra": "narrativo"
+        },
+        {
+          "titulo": "Lírico",
+          "texto": "Expresa sentimientos",
+          "palabra": "lírico"
+        },
+        {
+          "titulo": "Dramático",
+          "texto": "Se representa ante un público",
+          "palabra": "dramático"
+        }
+      ],
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 292,
+      "frames": 320,
+      "chunks": [
+        {
+          "text": "La literatura usa las palabras para",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "expresar ideas, sentimientos e historias.",
+          "from": 56,
+          "to": 123
+        },
+        {
+          "text": "Sus obras se clasifican en tres grandes géneros:",
+          "from": 134,
+          "to": 206
+        },
+        {
+          "text": "el narrativo, el lírico y el dramático.",
+          "from": 207,
+          "to": 287
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "literatura",
+          "f": 6
+        },
+        {
+          "w": "usa",
+          "f": 24
+        },
+        {
+          "w": "las",
+          "f": 31
+        },
+        {
+          "w": "palabras",
+          "f": 36
+        },
+        {
+          "w": "para",
+          "f": 48
+        },
+        {
+          "w": "expresar",
+          "f": 53
+        },
+        {
+          "w": "ideas",
+          "f": 66
+        },
+        {
+          "w": "sentimientos",
+          "f": 82
+        },
+        {
+          "w": "e",
+          "f": 102
+        },
+        {
+          "w": "historias",
+          "f": 103
+        },
+        {
+          "w": "sus",
+          "f": 134
+        },
+        {
+          "w": "obras",
+          "f": 143
+        },
+        {
+          "w": "se",
+          "f": 150
+        },
+        {
+          "w": "clasifican",
+          "f": 153
+        },
+        {
+          "w": "en",
+          "f": 171
+        },
+        {
+          "w": "tres",
+          "f": 174
+        },
+        {
+          "w": "grandes",
+          "f": 180
+        },
+        {
+          "w": "géneros",
+          "f": 191
+        },
+        {
+          "w": "el",
+          "f": 207
+        },
+        {
+          "w": "narrativo",
+          "f": 212
+        },
+        {
+          "w": "el",
+          "f": 233
+        },
+        {
+          "w": "lírico",
+          "f": 237
+        },
+        {
+          "w": "y",
+          "f": 251
+        },
+        {
+          "w": "el",
+          "f": 254
+        },
+        {
+          "w": "dramático",
+          "f": 256
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "El género narrativo",
+      "texto": "El género narrativo cuenta una historia. Un narrador relata lo que hacen los personajes en un tiempo y un espacio, y la trama reúne todos los acontecimientos.",
+      "voz": "El género narrativo cuenta una historia. Un narrador relata lo que hacen los personajes en un tiempo y un espacio, y la trama reúne todos los acontecimientos.",
+      "items": [
+        {
+          "titulo": "Narrador",
+          "texto": "La voz que cuenta",
+          "palabra": "narrador"
+        },
+        {
+          "titulo": "Personajes",
+          "texto": "Quienes participan",
+          "palabra": "personajes"
+        },
+        {
+          "titulo": "Tiempo y espacio",
+          "texto": "Cuándo y dónde",
+          "palabra": "tiempo"
+        },
+        {
+          "titulo": "Trama",
+          "texto": "Los acontecimientos",
+          "palabra": "trama"
+        }
+      ],
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 275,
+      "frames": 303,
+      "chunks": [
+        {
+          "text": "El género narrativo cuenta una historia.",
+          "from": 0,
+          "to": 65
+        },
+        {
+          "text": "Un narrador relata lo que hacen los",
+          "from": 75,
+          "to": 134
+        },
+        {
+          "text": "personajes en un tiempo y un espacio,",
+          "from": 134,
+          "to": 197
+        },
+        {
+          "text": "y la trama reúne todos los acontecimientos.",
+          "from": 197,
+          "to": 270
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "género",
+          "f": 7
+        },
+        {
+          "w": "narrativo",
+          "f": 17
+        },
+        {
+          "w": "cuenta",
+          "f": 34
+        },
+        {
+          "w": "una",
+          "f": 43
+        },
+        {
+          "w": "historia",
+          "f": 47
+        },
+        {
+          "w": "un",
+          "f": 75
+        },
+        {
+          "w": "narrador",
+          "f": 80
+        },
+        {
+          "w": "relata",
+          "f": 93
+        },
+        {
+          "w": "lo",
+          "f": 104
+        },
+        {
+          "w": "que",
+          "f": 108
+        },
+        {
+          "w": "hacen",
+          "f": 111
+        },
+        {
+          "w": "los",
+          "f": 117
+        },
+        {
+          "w": "personajes",
+          "f": 122
+        },
+        {
+          "w": "en",
+          "f": 138
+        },
+        {
+          "w": "un",
+          "f": 142
+        },
+        {
+          "w": "tiempo",
+          "f": 146
+        },
+        {
+          "w": "y",
+          "f": 157
+        },
+        {
+          "w": "un",
+          "f": 158
+        },
+        {
+          "w": "espacio",
+          "f": 162
+        },
+        {
+          "w": "y",
+          "f": 188
+        },
+        {
+          "w": "la",
+          "f": 193
+        },
+        {
+          "w": "trama",
+          "f": 197
+        },
+        {
+          "w": "reúne",
+          "f": 208
+        },
+        {
+          "w": "todos",
+          "f": 218
+        },
+        {
+          "w": "los",
+          "f": 224
+        },
+        {
+          "w": "acontecimientos",
+          "f": 229
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "El género lírico",
+      "texto": "El género lírico expresa sentimientos y emociones con un lenguaje artístico. Se escribe en versos, que se agrupan en estrofas, y puede tener rima.",
+      "voz": "El género lírico expresa sentimientos y emociones con un lenguaje artístico. Se escribe en versos, que se agrupan en estrofas, y puede tener rima.",
+      "items": [
+        {
+          "titulo": "Verso",
+          "texto": "Cada línea del poema",
+          "palabra": "versos"
+        },
+        {
+          "titulo": "Estrofa",
+          "texto": "Un grupo de versos",
+          "palabra": "estrofas"
+        },
+        {
+          "titulo": "Rima",
+          "texto": "Sonidos que se repiten al final",
+          "palabra": "rima"
+        }
+      ],
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 246,
+      "frames": 274,
+      "chunks": [
+        {
+          "text": "El género lírico expresa sentimientos y",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "emociones con un lenguaje artístico.",
+          "from": 59,
+          "to": 113
+        },
+        {
+          "text": "Se escribe en versos, que se agrupan",
+          "from": 122,
+          "to": 185
+        },
+        {
+          "text": "en estrofas, y puede tener rima.",
+          "from": 185,
+          "to": 241
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "género",
+          "f": 6
+        },
+        {
+          "w": "lírico",
+          "f": 17
+        },
+        {
+          "w": "expresa",
+          "f": 27
+        },
+        {
+          "w": "sentimientos",
+          "f": 38
+        },
+        {
+          "w": "y",
+          "f": 56
+        },
+        {
+          "w": "emociones",
+          "f": 57
+        },
+        {
+          "w": "con",
+          "f": 72
+        },
+        {
+          "w": "un",
+          "f": 77
+        },
+        {
+          "w": "lenguaje",
+          "f": 80
+        },
+        {
+          "w": "artístico",
+          "f": 91
+        },
+        {
+          "w": "se",
+          "f": 122
+        },
+        {
+          "w": "escribe",
+          "f": 127
+        },
+        {
+          "w": "en",
+          "f": 138
+        },
+        {
+          "w": "versos",
+          "f": 141
+        },
+        {
+          "w": "que",
+          "f": 154
+        },
+        {
+          "w": "se",
+          "f": 158
+        },
+        {
+          "w": "agrupan",
+          "f": 160
+        },
+        {
+          "w": "en",
+          "f": 172
+        },
+        {
+          "w": "estrofas",
+          "f": 176
+        },
+        {
+          "w": "y",
+          "f": 193
+        },
+        {
+          "w": "puede",
+          "f": 197
+        },
+        {
+          "w": "tener",
+          "f": 206
+        },
+        {
+          "w": "rima",
+          "f": 217
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El género dramático",
+      "texto": "El género dramático se escribe para representarse ante un público. Los personajes hablan en diálogos, las acotaciones indican gestos y movimientos, y la obra se divide en actos y escenas.",
+      "voz": "El género dramático se escribe para representarse ante un público. Los personajes hablan en diálogos, las acotaciones indican gestos y movimientos, y la obra se divide en actos y escenas.",
+      "items": [
+        {
+          "titulo": "Diálogo",
+          "texto": "Los personajes conversan",
+          "palabra": "diálogos"
+        },
+        {
+          "titulo": "Acotaciones",
+          "texto": "Indicaciones entre paréntesis",
+          "palabra": "acotaciones"
+        },
+        {
+          "titulo": "Actos y escenas",
+          "texto": "Organizan la obra",
+          "palabra": "actos"
+        }
+      ],
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 325,
+      "frames": 353,
+      "chunks": [
+        {
+          "text": "El género dramático se escribe",
+          "from": 0,
+          "to": 49
+        },
+        {
+          "text": "para representarse ante un público.",
+          "from": 49,
+          "to": 107
+        },
+        {
+          "text": "Los personajes hablan en diálogos, las acotaciones",
+          "from": 113,
+          "to": 201
+        },
+        {
+          "text": "indican gestos y movimientos, y la obra",
+          "from": 201,
+          "to": 269
+        },
+        {
+          "text": "se divide en actos y escenas.",
+          "from": 269,
+          "to": 320
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "género",
+          "f": 6
+        },
+        {
+          "w": "dramático",
+          "f": 17
+        },
+        {
+          "w": "se",
+          "f": 36
+        },
+        {
+          "w": "escribe",
+          "f": 39
+        },
+        {
+          "w": "para",
+          "f": 50
+        },
+        {
+          "w": "representarse",
+          "f": 57
+        },
+        {
+          "w": "ante",
+          "f": 79
+        },
+        {
+          "w": "un",
+          "f": 86
+        },
+        {
+          "w": "público",
+          "f": 88
+        },
+        {
+          "w": "los",
+          "f": 113
+        },
+        {
+          "w": "personajes",
+          "f": 121
+        },
+        {
+          "w": "hablan",
+          "f": 138
+        },
+        {
+          "w": "en",
+          "f": 146
+        },
+        {
+          "w": "diálogos",
+          "f": 150
+        },
+        {
+          "w": "las",
+          "f": 175
+        },
+        {
+          "w": "acotaciones",
+          "f": 180
+        },
+        {
+          "w": "indican",
+          "f": 199
+        },
+        {
+          "w": "gestos",
+          "f": 210
+        },
+        {
+          "w": "y",
+          "f": 222
+        },
+        {
+          "w": "movimientos",
+          "f": 224
+        },
+        {
+          "w": "y",
+          "f": 254
+        },
+        {
+          "w": "la",
+          "f": 259
+        },
+        {
+          "w": "obra",
+          "f": 263
+        },
+        {
+          "w": "se",
+          "f": 269
+        },
+        {
+          "w": "divide",
+          "f": 272
+        },
+        {
+          "w": "en",
+          "f": 280
+        },
+        {
+          "w": "actos",
+          "f": 284
+        },
+        {
+          "w": "y",
+          "f": 294
+        },
+        {
+          "w": "escenas",
+          "f": 296
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Los subgéneros",
+      "texto": "Cada género tiene subgéneros. Narrativos: el cuento, la novela, el mito, la leyenda y la fábula. Líricos: la oda, la elegía y la canción lírica. Dramáticos: la comedia, la tragedia y el drama.",
+      "voz": "Cada género tiene subgéneros. Narrativos: el cuento, la novela, el mito, la leyenda y la fábula. Líricos: la oda, la elegía y la canción lírica. Dramáticos: la comedia, la tragedia y el drama.",
+      "items": [
+        {
+          "titulo": "Narrativos",
+          "texto": "Cuento, novela, mito, leyenda, fábula",
+          "palabra": "narrativos"
+        },
+        {
+          "titulo": "Líricos",
+          "texto": "Oda, elegía, canción lírica",
+          "palabra": "líricos"
+        },
+        {
+          "titulo": "Dramáticos",
+          "texto": "Comedia, tragedia, drama",
+          "palabra": "dramáticos"
+        }
+      ],
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 367,
+      "frames": 395,
+      "chunks": [
+        {
+          "text": "Cada género tiene subgéneros.",
+          "from": 0,
+          "to": 49
+        },
+        {
+          "text": "Narrativos:",
+          "from": 53,
+          "to": 75
+        },
+        {
+          "text": "el cuento, la novela, el mito,",
+          "from": 76,
+          "to": 127
+        },
+        {
+          "text": "la leyenda y la fábula.",
+          "from": 127,
+          "to": 167
+        },
+        {
+          "text": "Líricos:",
+          "from": 177,
+          "to": 196
+        },
+        {
+          "text": "la oda, la elegía y la canción lírica.",
+          "from": 200,
+          "to": 268
+        },
+        {
+          "text": "Dramáticos:",
+          "from": 280,
+          "to": 302
+        },
+        {
+          "text": "la comedia, la tragedia y el drama.",
+          "from": 303,
+          "to": 362
+        }
+      ],
+      "words": [
+        {
+          "w": "cada",
+          "f": 0
+        },
+        {
+          "w": "género",
+          "f": 9
+        },
+        {
+          "w": "tiene",
+          "f": 19
+        },
+        {
+          "w": "subgéneros",
+          "f": 25
+        },
+        {
+          "w": "narrativos",
+          "f": 53
+        },
+        {
+          "w": "el",
+          "f": 76
+        },
+        {
+          "w": "cuento",
+          "f": 81
+        },
+        {
+          "w": "la",
+          "f": 93
+        },
+        {
+          "w": "novela",
+          "f": 96
+        },
+        {
+          "w": "el",
+          "f": 111
+        },
+        {
+          "w": "mito",
+          "f": 116
+        },
+        {
+          "w": "la",
+          "f": 128
+        },
+        {
+          "w": "leyenda",
+          "f": 132
+        },
+        {
+          "w": "y",
+          "f": 144
+        },
+        {
+          "w": "la",
+          "f": 146
+        },
+        {
+          "w": "fábula",
+          "f": 150
+        },
+        {
+          "w": "líricos",
+          "f": 177
+        },
+        {
+          "w": "la",
+          "f": 200
+        },
+        {
+          "w": "oda",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 217
+        },
+        {
+          "w": "elegía",
+          "f": 220
+        },
+        {
+          "w": "y",
+          "f": 235
+        },
+        {
+          "w": "la",
+          "f": 238
+        },
+        {
+          "w": "canción",
+          "f": 242
+        },
+        {
+          "w": "lírica",
+          "f": 254
+        },
+        {
+          "w": "dramáticos",
+          "f": 280
+        },
+        {
+          "w": "la",
+          "f": 303
+        },
+        {
+          "w": "comedia",
+          "f": 307
+        },
+        {
+          "w": "la",
+          "f": 321
+        },
+        {
+          "w": "tragedia",
+          "f": 325
+        },
+        {
+          "w": "y",
+          "f": 339
+        },
+        {
+          "w": "el",
+          "f": 341
+        },
+        {
+          "w": "drama",
+          "f": 344
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los géneros literarios. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los géneros literarios. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/los-generos-literarios/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 142,
+      "frames": 302,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 18
+        },
+        {
+          "text": "Repasaste los géneros literarios.",
+          "from": 19,
+          "to": 67
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 73,
+          "to": 138
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 19
+        },
+        {
+          "w": "los",
+          "f": 35
+        },
+        {
+          "w": "géneros",
+          "f": 39
+        },
+        {
+          "w": "literarios",
+          "f": 50
+        },
+        {
+          "w": "sigue",
+          "f": 73
+        },
+        {
+          "w": "con",
+          "f": 83
+        },
+        {
+          "w": "el",
+          "f": 88
+        },
+        {
+          "w": "siguiente",
+          "f": 91
+        },
+        {
+          "w": "tema",
+          "f": 103
+        },
+        {
+          "w": "de",
+          "f": 111
+        },
+        {
+          "w": "tu",
+          "f": 114
+        },
+        {
+          "w": "ruta",
+          "f": 119
+        }
+      ]
+    }
+  ]
+}

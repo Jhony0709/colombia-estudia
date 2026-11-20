@@ -1,0 +1,136 @@
+{
+  "tema": "evolucion-del-hombre-y-civilizaciones",
+  "componente": "Fundamentos",
+  "area": "Ciencias sociales",
+  "titulo": "Evolución del hombre y civilizaciones antiguas",
+  "siguiente": "Los números naturales y las operaciones básicas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la evolución del hombre y las civilizaciones antiguas.",
+      "voz": "Repaso del tema: la evolución del hombre y las civilizaciones antiguas."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "La hominización",
+      "texto": "La hominización es el proceso evolutivo que dio origen al ser humano moderno. Sus hitos más importantes fueron la bipedestación, el aumento del volumen cerebral, la organización social y la conciencia simbólica.",
+      "voz": "La hominización es el proceso evolutivo que dio origen al ser humano moderno. Sus hitos más importantes fueron la bipedestación, el aumento del volumen cerebral, la organización social y la conciencia simbólica.",
+      "items": [
+        {
+          "titulo": "Bipedestación",
+          "texto": "Caminar en dos pies",
+          "palabra": "bipedestación"
+        },
+        {
+          "titulo": "Más volumen cerebral",
+          "texto": "Un cerebro más grande",
+          "palabra": "cerebral"
+        },
+        {
+          "titulo": "Organización social",
+          "texto": "Vivir y trabajar en grupo",
+          "palabra": "social"
+        },
+        {
+          "titulo": "Conciencia simbólica",
+          "texto": "Pensar con símbolos",
+          "palabra": "simbólica"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Del nomadismo al sedentarismo",
+      "texto": "Primero, los grupos humanos eran nómadas: se desplazaban en busca de alimento, agua y refugio, sin asentamientos permanentes. Después se volvieron sedentarios: se establecieron en un territorio, desarrollaron la agricultura y la ganadería, y construyeron aldeas.",
+      "voz": "Primero, los grupos humanos eran nómadas: se desplazaban en busca de alimento, agua y refugio, sin asentamientos permanentes. Después se volvieron sedentarios: se establecieron en un territorio, desarrollaron la agricultura y la ganadería, y construyeron aldeas.",
+      "columnas": [
+        {
+          "titulo": "Nomadismo",
+          "palabra": "nómadas",
+          "puntos": [
+            {
+              "texto": "Se desplazaban buscando recursos",
+              "palabra": "desplazaban"
+            },
+            {
+              "texto": "Sin asentamientos permanentes",
+              "palabra": "asentamientos"
+            }
+          ]
+        },
+        {
+          "titulo": "Sedentarismo",
+          "palabra": "sedentarios",
+          "puntos": [
+            {
+              "texto": "Se establecen en un territorio",
+              "palabra": "establecieron"
+            },
+            {
+              "texto": "Agricultura y ganadería",
+              "palabra": "agricultura"
+            },
+            {
+              "texto": "Las primeras aldeas",
+              "palabra": "aldeas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "linea",
+      "titulo": "Las civilizaciones antiguas (antes de Cristo)",
+      "texto": "Así surgieron las primeras civilizaciones: Mesopotamia, con la escritura cuneiforme; Egipto, con sus pirámides; India, en el valle del Indo; China, con el papel y la pólvora; Creta, con la navegación y el comercio; y Grecia, cuna de la democracia y la filosofía.",
+      "voz": "Así surgieron las primeras civilizaciones: Mesopotamia, con la escritura cuneiforme; Egipto, con sus pirámides; India, en el valle del Indo; China, con el papel y la pólvora; Creta, con la navegación y el comercio; y Grecia, cuna de la democracia y la filosofía.",
+      "items": [
+        {
+          "etiqueta": "3500",
+          "titulo": "Mesopotamia",
+          "texto": "Escritura cuneiforme",
+          "palabra": "mesopotamia"
+        },
+        {
+          "etiqueta": "3100",
+          "titulo": "Egipto",
+          "texto": "Pirámides",
+          "palabra": "egipto"
+        },
+        {
+          "etiqueta": "2500",
+          "titulo": "India",
+          "texto": "Valle del Indo",
+          "palabra": "india"
+        },
+        {
+          "etiqueta": "2000",
+          "titulo": "China",
+          "texto": "Papel y pólvora",
+          "palabra": "china"
+        },
+        {
+          "etiqueta": "2000",
+          "titulo": "Creta",
+          "texto": "Navegación y comercio",
+          "palabra": "creta"
+        },
+        {
+          "etiqueta": "1200",
+          "titulo": "Grecia",
+          "texto": "Democracia y filosofía",
+          "palabra": "grecia"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la evolución del hombre y las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la evolución del hombre y las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

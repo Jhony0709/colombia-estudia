@@ -1,0 +1,150 @@
+{
+  "tema": "civilizaciones-antiguas",
+  "componente": "Dominio",
+  "area": "Ciencias sociales",
+  "titulo": "Las civilizaciones antiguas y sus aportes a la humanidad",
+  "siguiente": "Las funciones lineales y su aplicación en situaciones cotidianas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las civilizaciones antiguas y sus aportes a la humanidad.",
+      "voz": "Repaso del tema: las civilizaciones antiguas y sus aportes a la humanidad."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es una civilización?",
+      "texto": "Una civilización es una sociedad que construye ciudades, establece normas, crea formas de escritura y desarrolla conocimientos. Las primeras surgieron cerca de los ríos, porque el agua permitía cultivar, alimentarse y transportarse.",
+      "voz": "Una civilización es una sociedad que construye ciudades, establece normas, crea formas de escritura y desarrolla conocimientos. Las primeras surgieron cerca de los ríos, porque el agua permitía cultivar, alimentarse y transportarse.",
+      "items": [
+        {
+          "titulo": "Ciudades",
+          "palabra": "ciudades"
+        },
+        {
+          "titulo": "Normas",
+          "palabra": "normas"
+        },
+        {
+          "titulo": "Escritura",
+          "palabra": "escritura"
+        },
+        {
+          "titulo": "Cerca de los ríos",
+          "texto": "Agua para cultivar y transportarse",
+          "palabra": "ríos"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Mesopotamia y Egipto",
+      "texto": "Mesopotamia, la tierra entre los ríos Tigris y Éufrates, construyó canales de riego y creó la escritura cuneiforme. Egipto creció junto al río Nilo: lo gobernaba el faraón, escribía con jeroglíficos y construyó las pirámides.",
+      "voz": "Mesopotamia, la tierra entre los ríos Tigris y Éufrates, construyó canales de riego y creó la escritura cuneiforme. Egipto creció junto al río Nilo: lo gobernaba el faraón, escribía con jeroglíficos y construyó las pirámides.",
+      "columnas": [
+        {
+          "titulo": "Mesopotamia",
+          "palabra": "mesopotamia",
+          "puntos": [
+            {
+              "texto": "Entre el Tigris y el Éufrates",
+              "palabra": "tigris"
+            },
+            {
+              "texto": "Escritura cuneiforme",
+              "palabra": "cuneiforme"
+            }
+          ]
+        },
+        {
+          "titulo": "Egipto",
+          "palabra": "egipto",
+          "puntos": [
+            {
+              "texto": "Junto al Nilo, con el faraón",
+              "palabra": "faraón"
+            },
+            {
+              "texto": "Jeroglíficos y pirámides",
+              "palabra": "jeroglíficos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Grecia y Roma",
+      "texto": "Grecia se organizó en ciudades-Estado, o polis; en Atenas se desarrollaron la filosofía y una democracia en la que solo participaban algunos hombres. Roma creó leyes que influyeron en el derecho, construyó caminos y acueductos, y su lengua, el latín, dio origen al español.",
+      "voz": "Grecia se organizó en ciudades-Estado, o polis; en Atenas se desarrollaron la filosofía y una democracia en la que solo participaban algunos hombres. Roma creó leyes que influyeron en el derecho, construyó caminos y acueductos, y su lengua, el latín, dio origen al español.",
+      "columnas": [
+        {
+          "titulo": "Grecia",
+          "palabra": "grecia",
+          "puntos": [
+            {
+              "texto": "Ciudades-Estado o polis",
+              "palabra": "polis"
+            },
+            {
+              "texto": "Filosofía y democracia en Atenas",
+              "palabra": "filosofía"
+            }
+          ]
+        },
+        {
+          "titulo": "Roma",
+          "palabra": "roma",
+          "puntos": [
+            {
+              "texto": "Leyes, caminos y acueductos",
+              "palabra": "leyes"
+            },
+            {
+              "texto": "El latín, origen del español",
+              "palabra": "latín"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Su huella en el mundo actual",
+      "texto": "Muchos de sus aportes siguen vivos. El español viene del latín; parte del derecho actual tiene raíces romanas; la democracia tiene antecedentes en Grecia; y la escritura permitió guardar y transmitir el conocimiento.",
+      "voz": "Muchos de sus aportes siguen vivos. El español viene del latín; parte del derecho actual tiene raíces romanas; la democracia tiene antecedentes en Grecia; y la escritura permitió guardar y transmitir el conocimiento.",
+      "items": [
+        {
+          "titulo": "Idioma",
+          "texto": "El español viene del latín",
+          "palabra": "español"
+        },
+        {
+          "titulo": "Derecho",
+          "texto": "Raíces romanas",
+          "palabra": "derecho"
+        },
+        {
+          "titulo": "Política",
+          "texto": "Antecedentes en Grecia",
+          "palabra": "democracia"
+        },
+        {
+          "titulo": "Escritura",
+          "texto": "Guardar el conocimiento",
+          "palabra": "escritura"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las civilizaciones antiguas. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

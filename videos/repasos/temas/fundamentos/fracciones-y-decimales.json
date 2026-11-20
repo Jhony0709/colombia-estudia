@@ -1,0 +1,129 @@
+{
+  "tema": "fracciones-y-decimales",
+  "componente": "Fundamentos",
+  "area": "Matemáticas",
+  "titulo": "Las fracciones y los números decimales",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las fracciones y los números decimales.",
+      "voz": "Repaso del tema: las fracciones y los números decimales."
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "Las partes de una fracción",
+      "texto": "Una fracción representa partes iguales de una unidad. En tres cuartos, el numerador, 3, dice cuántas partes se toman, y el denominador, 4, en cuántas partes iguales se divide la unidad.",
+      "voz": "Una fracción representa partes iguales de una unidad. En tres cuartos, el numerador, tres, dice cuántas partes se toman, y el denominador, cuatro, en cuántas partes iguales se divide la unidad.",
+      "imagenes": [
+        {
+          "src": "fundamentos/fraccion-tres-cuartos.webp",
+          "focos": [
+            {
+              "palabra": "unidad",
+              "x": 0.3,
+              "y": 0.5,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "numerador",
+              "x": 0.72,
+              "y": 0.38,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "denominador",
+              "x": 0.72,
+              "y": 0.62,
+              "zoom": 1.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Tipos de fracciones",
+      "texto": "Una fracción es propia si el numerador es menor, como 2/5; impropia si es mayor, como 7/4; aparente si representa un entero, como 8/4; y equivalente si vale lo mismo que otra, como 1/2 y 2/4.",
+      "voz": "Una fracción es propia si el numerador es menor, como dos quintos; impropia si es mayor, como siete cuartos; aparente si representa un entero, como ocho cuartos; y equivalente si vale lo mismo que otra, como un medio y dos cuartos.",
+      "items": [
+        {
+          "titulo": "Propia",
+          "texto": "2/5",
+          "palabra": "propia"
+        },
+        {
+          "titulo": "Impropia",
+          "texto": "7/4",
+          "palabra": "impropia"
+        },
+        {
+          "titulo": "Aparente",
+          "texto": "8/4 = 2",
+          "palabra": "aparente"
+        },
+        {
+          "titulo": "Equivalente",
+          "texto": "1/2 = 2/4",
+          "palabra": "equivalente"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Operar con fracciones",
+      "texto": "Con el mismo denominador, sumamos o restamos los numeradores. Para multiplicar, multiplicamos los numeradores entre sí y los denominadores entre sí. Para dividir, multiplicamos por el inverso de la segunda fracción.",
+      "voz": "Con el mismo denominador, sumamos o restamos los numeradores. Para multiplicar, multiplicamos los numeradores entre sí y los denominadores entre sí. Para dividir, multiplicamos por el inverso de la segunda fracción.",
+      "items": [
+        {
+          "titulo": "Sumar y restar",
+          "texto": "Mismo denominador: se operan los numeradores",
+          "palabra": "sumamos"
+        },
+        {
+          "titulo": "Multiplicar",
+          "texto": "Numerador por numerador, denominador por denominador",
+          "palabra": "multiplicar"
+        },
+        {
+          "titulo": "Dividir",
+          "texto": "Por el inverso de la segunda",
+          "palabra": "dividir"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Decimales y porcentajes",
+      "texto": "Los números decimales tienen una parte entera y una parte menor que la unidad, separadas por una coma. Para convertir una fracción en decimal, dividimos: tres cuartos es 0,75. Y un porcentaje es una parte de cada 100: el 25 % es 0,25.",
+      "voz": "Los números decimales tienen una parte entera y una parte menor que la unidad, separadas por una coma. Para convertir una fracción en decimal, dividimos: tres cuartos es cero coma setenta y cinco. Y un porcentaje es una parte de cada cien: el veinticinco por ciento es cero coma veinticinco.",
+      "items": [
+        {
+          "titulo": "Decimales",
+          "texto": "12,75: 12 enteros y 75 centésimas",
+          "palabra": "decimales"
+        },
+        {
+          "titulo": "De fracción a decimal",
+          "texto": "3/4 = 3 ÷ 4 = 0,75",
+          "palabra": "convertir"
+        },
+        {
+          "titulo": "Porcentajes",
+          "texto": "25 % = 25/100 = 0,25",
+          "palabra": "porcentaje"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las fracciones y los números decimales. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las fracciones y los números decimales. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

@@ -180,6 +180,29 @@ describe('lo que sí sale', () => {
     expect(html).toContain('<strong>negrita</strong>');
   });
 
+  it('una escena sale como figure con su tipo, su título y la lista (14/11)', () => {
+    const html = render(
+      ':::escena{tipo="ciclo" titulo="El ciclo del agua"}\n- **Evaporación**: sube\n- **Lluvia**: cae\n:::\n'
+    );
+    expect(html).toContain(
+      '<figure class="escena escena-ciclo"><figcaption>El ciclo del agua</figcaption>'
+    );
+    expect(html).toContain('<li><strong>Evaporación</strong>: sube</li>');
+  });
+
+  it('una escena con sublistas las deja dentro de su punto (19/11)', () => {
+    const html = render(':::escena{tipo="mapa" titulo="Raíz"}\n- **A**\n  - a1\n- B\n:::\n');
+    expect(html).toContain('<figure class="escena escena-mapa"><figcaption>Raíz</figcaption>');
+    expect(html).toMatch(/<li><strong>A<\/strong>\s*<ul>\s*<li>a1<\/li>\s*<\/ul>\s*<\/li>/);
+  });
+
+  it('una escena sin título usa el del tipo, y un tipo desconocido cae en pasos', () => {
+    const html = render(':::escena{tipo="rueda"}\n1. Uno\n2. Dos\n:::\n');
+    expect(html).toContain(
+      '<figure class="escena escena-pasos"><figcaption>Paso a paso</figcaption>'
+    );
+  });
+
   it('un callout con título propio lo usa, y un tipo desconocido cae en nota', () => {
     const html = render(':::callout{kind="rosa" title="Para pensar"}\nTexto\n:::\n');
 

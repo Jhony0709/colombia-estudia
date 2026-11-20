@@ -1,0 +1,148 @@
+{
+  "tema": "comunicacion-y-textos-argumentativos",
+  "componente": "Proyección",
+  "area": "Lengua castellana",
+  "titulo": "Comunicación, pensamiento crítico y textos argumentativos",
+  "siguiente": "Present Simple",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la comunicación, el pensamiento crítico y los textos argumentativos.",
+      "voz": "Repaso del tema: la comunicación, el pensamiento crítico y los textos argumentativos."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Tres niveles de lectura",
+      "texto": "Leer bien tiene tres niveles. El literal identifica lo que el texto dice; el inferencial deduce lo que no dice directamente; y el crítico evalúa la intención del autor y la validez de sus argumentos.",
+      "voz": "Leer bien tiene tres niveles. El literal identifica lo que el texto dice; el inferencial deduce lo que no dice directamente; y el crítico evalúa la intención del autor y la validez de sus argumentos.",
+      "items": [
+        {
+          "titulo": "Literal",
+          "texto": "Lo que dice el texto",
+          "palabra": "literal"
+        },
+        {
+          "titulo": "Inferencial",
+          "texto": "Lo que se deduce",
+          "palabra": "inferencial"
+        },
+        {
+          "titulo": "Crítico",
+          "texto": "Evaluar la intención",
+          "palabra": "crítico"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las partes de la argumentación",
+      "texto": "Argumentar es defender una postura con razones. Un texto argumentativo tiene una tesis, argumentos, evidencias que los respaldan, contraargumentos con su refutación y una conclusión.",
+      "voz": "Argumentar es defender una postura con razones. Un texto argumentativo tiene una tesis, argumentos, evidencias que los respaldan, contraargumentos con su refutación y una conclusión.",
+      "items": [
+        {
+          "titulo": "Tesis",
+          "palabra": "tesis"
+        },
+        {
+          "titulo": "Argumentos",
+          "palabra": "argumentos"
+        },
+        {
+          "titulo": "Evidencias",
+          "palabra": "evidencias"
+        },
+        {
+          "titulo": "Contraargumento y refutación",
+          "palabra": "contraargumentos"
+        },
+        {
+          "titulo": "Conclusión",
+          "palabra": "conclusión"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "Cómo se escribe",
+      "texto": "Se organiza en tres partes: la introducción presenta el tema y la tesis; el desarrollo, los argumentos y las evidencias; y la conclusión retoma la postura.",
+      "voz": "Se organiza en tres partes: la introducción presenta el tema y la tesis; el desarrollo, los argumentos y las evidencias; y la conclusión retoma la postura.",
+      "items": [
+        {
+          "titulo": "Introducción",
+          "palabra": "introducción"
+        },
+        {
+          "titulo": "Desarrollo",
+          "palabra": "desarrollo"
+        },
+        {
+          "titulo": "Conclusión",
+          "palabra": "conclusión"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Errores de razonamiento",
+      "texto": "El pensamiento crítico detecta errores de razonamiento: la generalización apresurada, el ataque a la persona en lugar de a sus argumentos, la falsa causa y el falso dilema, que presenta solo dos opciones.",
+      "voz": "El pensamiento crítico detecta errores de razonamiento: la generalización apresurada, el ataque a la persona en lugar de a sus argumentos, la falsa causa y el falso dilema, que presenta solo dos opciones.",
+      "items": [
+        {
+          "titulo": "Generalización apresurada",
+          "texto": "Concluir con pocos casos",
+          "palabra": "generalización"
+        },
+        {
+          "titulo": "Ataque personal",
+          "texto": "Atacar a la persona",
+          "palabra": "ataque"
+        },
+        {
+          "titulo": "Falsa causa",
+          "texto": "Causa sin pruebas",
+          "palabra": "causa"
+        },
+        {
+          "titulo": "Falso dilema",
+          "texto": "Solo dos opciones",
+          "palabra": "dilema"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Hechos, opiniones y fuentes",
+      "texto": "Ante la información digital, distingue los hechos, que se comprueban con evidencias, de las opiniones, que expresan una valoración personal. Y antes de compartir, revisa quién publicó, la fuente original y si otros medios lo confirman.",
+      "voz": "Ante la información digital, distingue los hechos, que se comprueban con evidencias, de las opiniones, que expresan una valoración personal. Y antes de compartir, revisa quién publicó, la fuente original y si otros medios lo confirman.",
+      "items": [
+        {
+          "titulo": "Hecho",
+          "texto": "Se comprueba con evidencias",
+          "palabra": "hechos"
+        },
+        {
+          "titulo": "Opinión",
+          "texto": "Valoración personal",
+          "palabra": "opiniones"
+        },
+        {
+          "titulo": "Revisar la fuente",
+          "texto": "¿Quién lo publicó?",
+          "palabra": "publicó"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la comunicación y los textos argumentativos. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la comunicación y los textos argumentativos. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

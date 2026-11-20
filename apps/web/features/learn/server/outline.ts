@@ -269,6 +269,30 @@ export function neighbours(
   };
 }
 
+export interface StepNeighbour {
+  assignmentId: string;
+  title: string;
+  kind: ItemKind;
+  enabled: boolean;
+  /** Título del tema que hay que completar antes, cuando la secuencia lo bloquea. */
+  blockedBy: string | null;
+  /** Está en un componente todavía no habilitado (3/10): la barra lo dice en vez de «aún no». */
+  locked: boolean;
+}
+
+/** El vecino, recortado a lo que la barra de acciones necesita. */
+export const neighbourView = (item: SequencedItem | null): StepNeighbour | null =>
+  item === null
+    ? null
+    : {
+        assignmentId: item.assignmentId,
+        title: item.title,
+        kind: item.kind,
+        enabled: item.enabled,
+        blockedBy: item.blockedBy,
+        locked: item.unavailableReason === 'LOCKED',
+      };
+
 /** Cuántos completados sobre cuántos hay: la línea de avance de la cabecera. */
 export function progressOf(items: SequencedItem[]): { completed: number; total: number } {
   return {

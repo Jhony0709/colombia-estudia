@@ -1,0 +1,1021 @@
+{
+  "tema": "la-poblacion",
+  "componente": "Desarrollo",
+  "area": "Ciencias sociales",
+  "titulo": "La población, las migraciones y la diversidad cultural del mundo",
+  "siguiente": "La potenciación y la radicación de números naturales y enteros",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la población, las migraciones y la diversidad cultural.",
+      "voz": "Repaso del tema: la población, las migraciones y la diversidad cultural.",
+      "audio": "voz/la-poblacion/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 131,
+      "frames": 159,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 29
+        },
+        {
+          "text": "la población, las migraciones",
+          "from": 34,
+          "to": 84
+        },
+        {
+          "text": "y la diversidad cultural.",
+          "from": 84,
+          "to": 127
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "población",
+          "f": 38
+        },
+        {
+          "w": "las",
+          "f": 56
+        },
+        {
+          "w": "migraciones",
+          "f": 62
+        },
+        {
+          "w": "y",
+          "f": 79
+        },
+        {
+          "w": "la",
+          "f": 82
+        },
+        {
+          "w": "diversidad",
+          "f": 84
+        },
+        {
+          "w": "cultural",
+          "f": 99
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Por qué cambia la población",
+      "texto": "La población es el conjunto de personas que habitan un territorio. Cambia por tres factores: la natalidad, las personas que nacen; la mortalidad, las que mueren; y la migración, las que se desplazan de un lugar a otro.",
+      "voz": "La población es el conjunto de personas que habitan un territorio. Cambia por tres factores: la natalidad, las personas que nacen; la mortalidad, las que mueren; y la migración, las que se desplazan de un lugar a otro.",
+      "items": [
+        {
+          "titulo": "Natalidad",
+          "texto": "Las personas que nacen",
+          "palabra": "natalidad"
+        },
+        {
+          "titulo": "Mortalidad",
+          "texto": "Las personas que mueren",
+          "palabra": "mortalidad"
+        },
+        {
+          "titulo": "Migración",
+          "texto": "Las que se desplazan",
+          "palabra": "migración"
+        }
+      ],
+      "audio": "voz/la-poblacion/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 383,
+      "frames": 411,
+      "chunks": [
+        {
+          "text": "La población es el conjunto de",
+          "from": 0,
+          "to": 42
+        },
+        {
+          "text": "personas que habitan un territorio.",
+          "from": 42,
+          "to": 91
+        },
+        {
+          "text": "Cambia por tres factores:",
+          "from": 102,
+          "to": 148
+        },
+        {
+          "text": "la natalidad, las personas que nacen;",
+          "from": 158,
+          "to": 223
+        },
+        {
+          "text": "la mortalidad, las que mueren;",
+          "from": 232,
+          "to": 282
+        },
+        {
+          "text": "y la migración, las que se",
+          "from": 289,
+          "to": 332
+        },
+        {
+          "text": "desplazan de un lugar a otro.",
+          "from": 332,
+          "to": 379
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "población",
+          "f": 5
+        },
+        {
+          "w": "es",
+          "f": 18
+        },
+        {
+          "w": "el",
+          "f": 21
+        },
+        {
+          "w": "conjunto",
+          "f": 24
+        },
+        {
+          "w": "de",
+          "f": 36
+        },
+        {
+          "w": "personas",
+          "f": 39
+        },
+        {
+          "w": "que",
+          "f": 52
+        },
+        {
+          "w": "habitan",
+          "f": 55
+        },
+        {
+          "w": "un",
+          "f": 65
+        },
+        {
+          "w": "territorio",
+          "f": 69
+        },
+        {
+          "w": "cambia",
+          "f": 102
+        },
+        {
+          "w": "por",
+          "f": 113
+        },
+        {
+          "w": "tres",
+          "f": 119
+        },
+        {
+          "w": "factores",
+          "f": 125
+        },
+        {
+          "w": "la",
+          "f": 158
+        },
+        {
+          "w": "natalidad",
+          "f": 162
+        },
+        {
+          "w": "las",
+          "f": 184
+        },
+        {
+          "w": "personas",
+          "f": 190
+        },
+        {
+          "w": "que",
+          "f": 203
+        },
+        {
+          "w": "nacen",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 232
+        },
+        {
+          "w": "mortalidad",
+          "f": 236
+        },
+        {
+          "w": "las",
+          "f": 258
+        },
+        {
+          "w": "que",
+          "f": 264
+        },
+        {
+          "w": "mueren",
+          "f": 267
+        },
+        {
+          "w": "y",
+          "f": 289
+        },
+        {
+          "w": "la",
+          "f": 294
+        },
+        {
+          "w": "migración",
+          "f": 297
+        },
+        {
+          "w": "las",
+          "f": 314
+        },
+        {
+          "w": "que",
+          "f": 319
+        },
+        {
+          "w": "se",
+          "f": 323
+        },
+        {
+          "w": "desplazan",
+          "f": 326
+        },
+        {
+          "w": "de",
+          "f": 340
+        },
+        {
+          "w": "un",
+          "f": 342
+        },
+        {
+          "w": "lugar",
+          "f": 344
+        },
+        {
+          "w": "a",
+          "f": 354
+        },
+        {
+          "w": "otro",
+          "f": 356
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "comparar",
+      "titulo": "Las migraciones",
+      "texto": "Las personas migran por razones económicas, familiares, educativas, sociales o ambientales. La migración interna ocurre dentro de un mismo país, como de Boyacá a Bogotá. La internacional, de un país a otro, como de Colombia a España.",
+      "voz": "Las personas migran por razones económicas, familiares, educativas, sociales o ambientales. La migración interna ocurre dentro de un mismo país, como de Boyacá a Bogotá. La internacional, de un país a otro, como de Colombia a España.",
+      "columnas": [
+        {
+          "titulo": "Migración interna",
+          "palabra": "interna",
+          "puntos": [
+            {
+              "texto": "Dentro del mismo país",
+              "palabra": "dentro"
+            },
+            {
+              "texto": "De Boyacá a Bogotá",
+              "palabra": "boyacá"
+            }
+          ]
+        },
+        {
+          "titulo": "Migración internacional",
+          "palabra": "internacional",
+          "puntos": [
+            {
+              "texto": "De un país a otro",
+              "palabra": "país",
+              "vez": 1
+            },
+            {
+              "texto": "De Colombia a España",
+              "palabra": "españa"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-poblacion/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 409,
+      "frames": 437,
+      "chunks": [
+        {
+          "text": "Las personas migran por razones económicas,",
+          "from": 0,
+          "to": 77
+        },
+        {
+          "text": "familiares, educativas, sociales o ambientales.",
+          "from": 77,
+          "to": 161
+        },
+        {
+          "text": "La migración interna ocurre dentro de un",
+          "from": 169,
+          "to": 231
+        },
+        {
+          "text": "mismo país, como de Boyacá a Bogotá.",
+          "from": 231,
+          "to": 287
+        },
+        {
+          "text": "La internacional, de un país a",
+          "from": 297,
+          "to": 349
+        },
+        {
+          "text": "otro, como de Colombia a España.",
+          "from": 349,
+          "to": 404
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "personas",
+          "f": 8
+        },
+        {
+          "w": "migran",
+          "f": 19
+        },
+        {
+          "w": "por",
+          "f": 28
+        },
+        {
+          "w": "razones",
+          "f": 32
+        },
+        {
+          "w": "económicas",
+          "f": 43
+        },
+        {
+          "w": "familiares",
+          "f": 65
+        },
+        {
+          "w": "educativas",
+          "f": 84
+        },
+        {
+          "w": "sociales",
+          "f": 116
+        },
+        {
+          "w": "o",
+          "f": 134
+        },
+        {
+          "w": "ambientales",
+          "f": 137
+        },
+        {
+          "w": "la",
+          "f": 169
+        },
+        {
+          "w": "migración",
+          "f": 174
+        },
+        {
+          "w": "interna",
+          "f": 186
+        },
+        {
+          "w": "ocurre",
+          "f": 197
+        },
+        {
+          "w": "dentro",
+          "f": 206
+        },
+        {
+          "w": "de",
+          "f": 215
+        },
+        {
+          "w": "un",
+          "f": 217
+        },
+        {
+          "w": "mismo",
+          "f": 220
+        },
+        {
+          "w": "país",
+          "f": 229
+        },
+        {
+          "w": "como",
+          "f": 239
+        },
+        {
+          "w": "de",
+          "f": 247
+        },
+        {
+          "w": "boyacá",
+          "f": 249
+        },
+        {
+          "w": "a",
+          "f": 265
+        },
+        {
+          "w": "bogotá",
+          "f": 268
+        },
+        {
+          "w": "la",
+          "f": 297
+        },
+        {
+          "w": "internacional",
+          "f": 301
+        },
+        {
+          "w": "de",
+          "f": 326
+        },
+        {
+          "w": "un",
+          "f": 329
+        },
+        {
+          "w": "país",
+          "f": 332
+        },
+        {
+          "w": "a",
+          "f": 341
+        },
+        {
+          "w": "otro",
+          "f": 344
+        },
+        {
+          "w": "como",
+          "f": 353
+        },
+        {
+          "w": "de",
+          "f": 360
+        },
+        {
+          "w": "colombia",
+          "f": 363
+        },
+        {
+          "w": "a",
+          "f": 376
+        },
+        {
+          "w": "españa",
+          "f": 378
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Espacio urbano y espacio rural",
+      "texto": "El espacio urbano reúne ciudades y pueblos con muchos habitantes, comercios y servicios. El espacio rural es el campo, donde se practican la agricultura, la ganadería y la pesca. Los dos están conectados.",
+      "voz": "El espacio urbano reúne ciudades y pueblos con muchos habitantes, comercios y servicios. El espacio rural es el campo, donde se practican la agricultura, la ganadería y la pesca. Los dos están conectados.",
+      "columnas": [
+        {
+          "titulo": "Urbano",
+          "palabra": "urbano",
+          "puntos": [
+            {
+              "texto": "Ciudades y pueblos",
+              "palabra": "ciudades"
+            },
+            {
+              "texto": "Muchos habitantes y servicios",
+              "palabra": "servicios"
+            }
+          ]
+        },
+        {
+          "titulo": "Rural",
+          "palabra": "rural",
+          "puntos": [
+            {
+              "texto": "El campo",
+              "palabra": "campo"
+            },
+            {
+              "texto": "Agricultura, ganadería y pesca",
+              "palabra": "agricultura"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-poblacion/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 353,
+      "frames": 381,
+      "chunks": [
+        {
+          "text": "El espacio urbano reúne ciudades y pueblos",
+          "from": 0,
+          "to": 66
+        },
+        {
+          "text": "con muchos habitantes, comercios y servicios.",
+          "from": 66,
+          "to": 136
+        },
+        {
+          "text": "El espacio rural es el campo, donde se",
+          "from": 146,
+          "to": 212
+        },
+        {
+          "text": "practican la agricultura, la ganadería y la pesca.",
+          "from": 212,
+          "to": 300
+        },
+        {
+          "text": "Los dos están conectados.",
+          "from": 309,
+          "to": 348
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "espacio",
+          "f": 7
+        },
+        {
+          "w": "urbano",
+          "f": 17
+        },
+        {
+          "w": "reúne",
+          "f": 30
+        },
+        {
+          "w": "ciudades",
+          "f": 38
+        },
+        {
+          "w": "y",
+          "f": 50
+        },
+        {
+          "w": "pueblos",
+          "f": 53
+        },
+        {
+          "w": "con",
+          "f": 63
+        },
+        {
+          "w": "muchos",
+          "f": 67
+        },
+        {
+          "w": "habitantes",
+          "f": 76
+        },
+        {
+          "w": "comercios",
+          "f": 95
+        },
+        {
+          "w": "y",
+          "f": 111
+        },
+        {
+          "w": "servicios",
+          "f": 113
+        },
+        {
+          "w": "el",
+          "f": 146
+        },
+        {
+          "w": "espacio",
+          "f": 151
+        },
+        {
+          "w": "rural",
+          "f": 162
+        },
+        {
+          "w": "es",
+          "f": 172
+        },
+        {
+          "w": "el",
+          "f": 176
+        },
+        {
+          "w": "campo",
+          "f": 180
+        },
+        {
+          "w": "donde",
+          "f": 204
+        },
+        {
+          "w": "se",
+          "f": 214
+        },
+        {
+          "w": "practican",
+          "f": 217
+        },
+        {
+          "w": "la",
+          "f": 233
+        },
+        {
+          "w": "agricultura",
+          "f": 235
+        },
+        {
+          "w": "la",
+          "f": 257
+        },
+        {
+          "w": "ganadería",
+          "f": 261
+        },
+        {
+          "w": "y",
+          "f": 277
+        },
+        {
+          "w": "la",
+          "f": 280
+        },
+        {
+          "w": "pesca",
+          "f": 284
+        },
+        {
+          "w": "los",
+          "f": 309
+        },
+        {
+          "w": "dos",
+          "f": 316
+        },
+        {
+          "w": "están",
+          "f": 321
+        },
+        {
+          "w": "conectados",
+          "f": 329
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La diversidad cultural",
+      "texto": "La diversidad cultural es la variedad de lenguas, creencias, tradiciones, comidas y formas de vida. Colombia tiene comunidades indígenas, afrocolombianas, raizales, palenqueras y campesinas, entre otras. Respetarla es reconocer esas diferencias, sin discriminar.",
+      "voz": "La diversidad cultural es la variedad de lenguas, creencias, tradiciones, comidas y formas de vida. Colombia tiene comunidades indígenas, afrocolombianas, raizales, palenqueras y campesinas, entre otras. Respetarla es reconocer esas diferencias, sin discriminar.",
+      "items": [
+        {
+          "titulo": "Lenguas y creencias",
+          "palabra": "lenguas"
+        },
+        {
+          "titulo": "Tradiciones y comidas",
+          "palabra": "tradiciones"
+        },
+        {
+          "titulo": "Comunidades",
+          "texto": "Indígenas, afrocolombianas, raizales, palenqueras, campesinas…",
+          "palabra": "comunidades"
+        },
+        {
+          "titulo": "Respeto",
+          "texto": "Reconocer las diferencias sin discriminar",
+          "palabra": "respetarla"
+        }
+      ],
+      "audio": "voz/la-poblacion/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 441,
+      "frames": 469,
+      "chunks": [
+        {
+          "text": "La diversidad cultural es la variedad de lenguas,",
+          "from": 0,
+          "to": 75
+        },
+        {
+          "text": "creencias, tradiciones, comidas y formas de vida.",
+          "from": 75,
+          "to": 151
+        },
+        {
+          "text": "Colombia tiene comunidades indígenas, afrocolombianas, raizales,",
+          "from": 161,
+          "to": 264
+        },
+        {
+          "text": "palenqueras y campesinas, entre otras.",
+          "from": 264,
+          "to": 325
+        },
+        {
+          "text": "Respetarla es reconocer esas",
+          "from": 335,
+          "to": 384
+        },
+        {
+          "text": "diferencias, sin discriminar.",
+          "from": 384,
+          "to": 436
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "diversidad",
+          "f": 5
+        },
+        {
+          "w": "cultural",
+          "f": 19
+        },
+        {
+          "w": "es",
+          "f": 34
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "variedad",
+          "f": 41
+        },
+        {
+          "w": "de",
+          "f": 52
+        },
+        {
+          "w": "lenguas",
+          "f": 56
+        },
+        {
+          "w": "creencias",
+          "f": 69
+        },
+        {
+          "w": "tradiciones",
+          "f": 86
+        },
+        {
+          "w": "comidas",
+          "f": 107
+        },
+        {
+          "w": "y",
+          "f": 123
+        },
+        {
+          "w": "formas",
+          "f": 126
+        },
+        {
+          "w": "de",
+          "f": 137
+        },
+        {
+          "w": "vida",
+          "f": 140
+        },
+        {
+          "w": "colombia",
+          "f": 161
+        },
+        {
+          "w": "tiene",
+          "f": 173
+        },
+        {
+          "w": "comunidades",
+          "f": 179
+        },
+        {
+          "w": "indígenas",
+          "f": 197
+        },
+        {
+          "w": "afrocolombianas",
+          "f": 216
+        },
+        {
+          "w": "raizales",
+          "f": 246
+        },
+        {
+          "w": "palenqueras",
+          "f": 263
+        },
+        {
+          "w": "y",
+          "f": 281
+        },
+        {
+          "w": "campesinas",
+          "f": 283
+        },
+        {
+          "w": "entre",
+          "f": 302
+        },
+        {
+          "w": "otras",
+          "f": 312
+        },
+        {
+          "w": "respetarla",
+          "f": 335
+        },
+        {
+          "w": "es",
+          "f": 353
+        },
+        {
+          "w": "reconocer",
+          "f": 357
+        },
+        {
+          "w": "esas",
+          "f": 372
+        },
+        {
+          "w": "diferencias",
+          "f": 378
+        },
+        {
+          "w": "sin",
+          "f": 398
+        },
+        {
+          "w": "discriminar",
+          "f": 406
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la población y la diversidad cultural. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la población y la diversidad cultural. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/la-poblacion/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 174,
+      "frames": 334,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 21
+        },
+        {
+          "text": "Repasaste la población y la diversidad cultural.",
+          "from": 26,
+          "to": 100
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 110,
+          "to": 170
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 26
+        },
+        {
+          "w": "la",
+          "f": 41
+        },
+        {
+          "w": "población",
+          "f": 45
+        },
+        {
+          "w": "y",
+          "f": 62
+        },
+        {
+          "w": "la",
+          "f": 66
+        },
+        {
+          "w": "diversidad",
+          "f": 68
+        },
+        {
+          "w": "cultural",
+          "f": 83
+        },
+        {
+          "w": "sigue",
+          "f": 110
+        },
+        {
+          "w": "con",
+          "f": 119
+        },
+        {
+          "w": "el",
+          "f": 124
+        },
+        {
+          "w": "siguiente",
+          "f": 126
+        },
+        {
+          "w": "tema",
+          "f": 138
+        },
+        {
+          "w": "de",
+          "f": 146
+        },
+        {
+          "w": "tu",
+          "f": 149
+        },
+        {
+          "w": "ruta",
+          "f": 153
+        }
+      ]
+    }
+  ]
+}

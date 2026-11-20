@@ -1,0 +1,165 @@
+{
+  "tema": "funciones-y-modelacion-matematica",
+  "componente": "Proyección",
+  "area": "Matemáticas",
+  "titulo": "Funciones y modelación matemática",
+  "siguiente": "Introducción al pensamiento filosófico",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las funciones y la modelación matemática.",
+      "voz": "Repaso del tema: las funciones y la modelación matemática."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Cuatro formas de representar",
+      "texto": "Una función muestra cómo cambia una cantidad cuando cambia otra: a cada entrada le corresponde una sola salida. Se puede representar con palabras, con una expresión algebraica, con una tabla o con una gráfica.",
+      "voz": "Una función muestra cómo cambia una cantidad cuando cambia otra: a cada entrada le corresponde una sola salida. Se puede representar con palabras, con una expresión algebraica, con una tabla o con una gráfica.",
+      "items": [
+        {
+          "titulo": "Verbal",
+          "texto": "Ahorro $10.000 por semana",
+          "palabra": "palabras"
+        },
+        {
+          "titulo": "Algebraica",
+          "texto": "f(x) = 10.000x",
+          "palabra": "algebraica"
+        },
+        {
+          "titulo": "Tabla",
+          "texto": "1 → $10.000 · 2 → $20.000",
+          "palabra": "tabla"
+        },
+        {
+          "titulo": "Gráfica",
+          "texto": "Puntos en el plano cartesiano",
+          "palabra": "gráfica"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Dominio y rango",
+      "texto": "El dominio son los valores que puede tomar x, y el rango, los resultados de la función. Si una máquina hace 4 botellas por minuto durante máximo 5 minutos, el dominio va de 0 a 5 minutos y el rango, de 0 a 20 botellas.",
+      "voz": "El dominio son los valores que puede tomar equis, y el rango, los resultados de la función. Si una máquina hace cuatro botellas por minuto durante máximo cinco minutos, el dominio va de cero a cinco minutos y el rango, de cero a veinte botellas.",
+      "items": [
+        {
+          "titulo": "Dominio",
+          "texto": "De 0 a 5 minutos",
+          "palabra": "dominio"
+        },
+        {
+          "titulo": "Rango",
+          "texto": "De 0 a 20 botellas",
+          "palabra": "rango"
+        },
+        {
+          "titulo": "La función",
+          "texto": "f(x) = 4x",
+          "palabra": "máquina"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Función lineal y función afín",
+      "texto": "La función lineal, f(x) = mx, es una recta que pasa por el origen. La afín, f(x) = mx + b, corta el eje y en b: como un taxi que cobra $4.500 al iniciar y $2.000 por kilómetro. La pendiente, m, dice si la función crece, decrece o es constante.",
+      "voz": "La función lineal, efe de equis igual a eme equis, es una recta que pasa por el origen. La afín, efe de equis igual a eme equis más be, corta el eje ye en be: como un taxi que cobra cuatro mil quinientos pesos al iniciar y dos mil por kilómetro. La pendiente, eme, dice si la función crece, decrece o es constante.",
+      "columnas": [
+        {
+          "titulo": "Lineal",
+          "palabra": "lineal",
+          "puntos": [
+            {
+              "texto": "f(x) = mx",
+              "palabra": "eme"
+            },
+            {
+              "texto": "Pasa por el origen",
+              "palabra": "origen"
+            }
+          ]
+        },
+        {
+          "titulo": "Afín",
+          "palabra": "afín",
+          "puntos": [
+            {
+              "texto": "f(x) = mx + b",
+              "palabra": "be"
+            },
+            {
+              "texto": "Taxi: f(x) = 4.500 + 2.000x",
+              "palabra": "taxi"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La función cuadrática",
+      "texto": "La función cuadrática, f(x) = ax² + bx + c, tiene forma de parábola: abre hacia arriba si a es positiva y hacia abajo si es negativa. Describe, por ejemplo, la trayectoria de una pelota lanzada al aire, y su punto máximo o mínimo se llama vértice.",
+      "voz": "La función cuadrática tiene forma de parábola: abre hacia arriba si a es positiva y hacia abajo si es negativa. Describe, por ejemplo, la trayectoria de una pelota lanzada al aire, y su punto máximo o mínimo se llama vértice.",
+      "items": [
+        {
+          "titulo": "Parábola",
+          "texto": "f(x) = ax² + bx + c",
+          "palabra": "parábola"
+        },
+        {
+          "titulo": "Hacia arriba o abajo",
+          "texto": "Según el signo de a",
+          "palabra": "arriba"
+        },
+        {
+          "titulo": "Una pelota lanzada",
+          "texto": "Ejemplo de uso",
+          "palabra": "pelota"
+        },
+        {
+          "titulo": "Vértice",
+          "texto": "Máximo o mínimo",
+          "palabra": "vértice"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "pasos",
+      "titulo": "Modelar una situación",
+      "texto": "Para modelar una situación real, se identifica el problema, se reconocen las variables, se plantea la función y se calcula e interpreta el resultado. Si vendes camisetas a $30.000 e invertiste $100.000, la ganancia es G(x) = 30.000x − 100.000; con 10 camisetas, ganas $200.000.",
+      "voz": "Para modelar una situación real, se identifica el problema, se reconocen las variables, se plantea la función y se calcula e interpreta el resultado. Si vendes camisetas a treinta mil pesos e invertiste cien mil, la ganancia es ge de equis igual a treinta mil equis menos cien mil; con diez camisetas, ganas doscientos mil.",
+      "items": [
+        {
+          "titulo": "Identificar",
+          "palabra": "identifica"
+        },
+        {
+          "titulo": "Variables",
+          "palabra": "variables"
+        },
+        {
+          "titulo": "Función",
+          "palabra": "plantea"
+        },
+        {
+          "titulo": "Interpretar",
+          "palabra": "interpreta"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las funciones y la modelación matemática. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las funciones y la modelación matemática. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

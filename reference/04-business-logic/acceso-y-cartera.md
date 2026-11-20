@@ -138,12 +138,15 @@ UI muestra un resumen ("Vas a registrar $300.000 por transferencia a la cuota 3 
 {nombre}") y `…/confirm` lo confirma. Un pago equivocado se **anula** (`voidedAt`,
 `voidReason`, auditado) y la cuota y el estado se recalculan. Nunca se edita ni se borra.
 
-**En línea** (Wompi: tarjeta, PSE, Nequi): el estudiante elige la cuota en
-`/aprender/mi-cuenta` → `POST …/pay` crea la transacción y redirige al checkout de Wompi
-→ el webhook `POST /api/webhooks/wompi`, verificado con la firma, confirma el `Payment`
-(idempotente por `gatewayRef`) y recalcula la cuota en la misma transacción. Un pago
-`APPROVED` en Wompi que no llegue por webhook se concilia con la consulta de estado en el
-job diario. La comisión (2,65 % + $700 + IVA) la asume quien la institución decida; la UI
+**En línea** (Bold desde el 18/11; antes Wompi): el estudiante elige la cuota en
+`/aprender/mi-cuenta` → `POST …/pay` crea un link de pago de Bold por lo pendiente (un solo
+pago, vence en 1 h; queda en `PaymentLink` y se reutiliza mientras siga vigente) y redirige a
+él. El pago se registra cuando Bold dice que el link está pagado, y eso se le pregunta al volver
+del pago (`?pago=`), al llegar el webhook firmado `POST /api/webhooks/bold` y en el job diario;
+el paso del link a `PAID` lo hace una sola vez. Con el monto igual a lo pendiente el `Payment`
+se confirma y la cuota se recalcula; con otro monto queda sin confirmar y se avisa a operación.
+Los casos, uno por uno, en `06-external-integrations/README.md`. La
+comisión de la pasarela la asume quien la institución decida; la UI
 muestra ambas opciones y transferencia/Bre-B siguen costando cero.
 
 ## 8. Ciclo de vida de la matrícula
@@ -184,6 +187,6 @@ job diario idempotente (`POST /api/jobs/daily`, Vercel Cron, `CRON_SECRET`) que:
 4. cierra intentos `IN_PROGRESS` con `deadlineAt < now` (entrega lo guardado y califica);
 5. recuerda sesiones en vivo a 24 h y 1 h;
 6. emite certificados de módulos y programas completados desde la última corrida;
-7. concilia transacciones de Wompi pendientes.
+7. consulta en Bold los links de pago abiertos y concilia pagos en línea sin confirmar.
 
 Cada corrida escribe un `AuditLog` con conteos. Sin colas, sin workers.

@@ -1,0 +1,1077 @@
+{
+  "tema": "la-celula",
+  "componente": "Fundamentos",
+  "area": "Ciencias naturales",
+  "titulo": "La célula y la organización de los seres vivos",
+  "siguiente": "La vida y los ecosistemas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la célula y la organización de los seres vivos.",
+      "voz": "Repaso del tema: la célula y la organización de los seres vivos.",
+      "audio": "voz/la-celula/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 123,
+      "frames": 151,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "la célula y la organización de los seres vivos.",
+          "from": 41,
+          "to": 118
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 41
+        },
+        {
+          "w": "célula",
+          "f": 46
+        },
+        {
+          "w": "y",
+          "f": 58
+        },
+        {
+          "w": "la",
+          "f": 60
+        },
+        {
+          "w": "organización",
+          "f": 62
+        },
+        {
+          "w": "de",
+          "f": 79
+        },
+        {
+          "w": "los",
+          "f": 82
+        },
+        {
+          "w": "seres",
+          "f": 86
+        },
+        {
+          "w": "vivos",
+          "f": 95
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "linea",
+      "titulo": "Cómo se descubrió la célula",
+      "texto": "La célula es la unidad básica de la vida. Robert Hooke la nombró en 1665, al observar corcho. Leeuwenhoek vio microorganismos vivos con sus propios microscopios. Schleiden y Schwann propusieron que plantas y animales están hechos de células. Y Virchow, en 1855, que toda célula viene de otra célula.",
+      "voz": "La célula es la unidad básica de la vida. Robert Hooke la nombró en mil seiscientos sesenta y cinco, al observar corcho. Leeuwenhoek vio microorganismos vivos con sus propios microscopios. Schleiden y Schwann propusieron que plantas y animales están hechos de células. Y Virchow, en mil ochocientos cincuenta y cinco, que toda célula viene de otra célula.",
+      "items": [
+        {
+          "etiqueta": "1665",
+          "titulo": "Robert Hooke",
+          "texto": "Nombra la célula al observar corcho",
+          "palabra": "hooke"
+        },
+        {
+          "etiqueta": "1670",
+          "titulo": "Van Leeuwenhoek",
+          "texto": "Ve microorganismos vivos",
+          "palabra": "leeuwenhoek"
+        },
+        {
+          "etiqueta": "1838",
+          "titulo": "Schleiden y Schwann",
+          "texto": "Plantas y animales están hechos de células",
+          "palabra": "schleiden"
+        },
+        {
+          "etiqueta": "1855",
+          "titulo": "Rudolf Virchow",
+          "texto": "Toda célula viene de otra célula",
+          "palabra": "virchow"
+        }
+      ],
+      "audio": "voz/la-celula/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 611,
+      "frames": 639,
+      "chunks": [
+        {
+          "text": "La célula es la unidad básica de la vida.",
+          "from": 0,
+          "to": 62
+        },
+        {
+          "text": "Robert Hooke la nombró en 1665, al observar corcho.",
+          "from": 75,
+          "to": 197
+        },
+        {
+          "text": "Leeuwenhoek vio microorganismos vivos",
+          "from": 215,
+          "to": 279
+        },
+        {
+          "text": "con sus propios microscopios.",
+          "from": 279,
+          "to": 329
+        },
+        {
+          "text": "Schleiden y Schwann propusieron que plantas",
+          "from": 341,
+          "to": 406
+        },
+        {
+          "text": "y animales están hechos de células.",
+          "from": 406,
+          "to": 459
+        },
+        {
+          "text": "Y Virchow, en 1855, que toda",
+          "from": 466,
+          "to": 536
+        },
+        {
+          "text": "célula viene de otra célula.",
+          "from": 536,
+          "to": 606
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "célula",
+          "f": 6
+        },
+        {
+          "w": "es",
+          "f": 17
+        },
+        {
+          "w": "la",
+          "f": 20
+        },
+        {
+          "w": "unidad",
+          "f": 23
+        },
+        {
+          "w": "básica",
+          "f": 32
+        },
+        {
+          "w": "de",
+          "f": 44
+        },
+        {
+          "w": "la",
+          "f": 46
+        },
+        {
+          "w": "vida",
+          "f": 50
+        },
+        {
+          "w": "robert",
+          "f": 75
+        },
+        {
+          "w": "hooke",
+          "f": 88
+        },
+        {
+          "w": "la",
+          "f": 98
+        },
+        {
+          "w": "nombró",
+          "f": 103
+        },
+        {
+          "w": "en",
+          "f": 111
+        },
+        {
+          "w": "mil",
+          "f": 115
+        },
+        {
+          "w": "seiscientos",
+          "f": 119
+        },
+        {
+          "w": "sesenta",
+          "f": 134
+        },
+        {
+          "w": "y",
+          "f": 146
+        },
+        {
+          "w": "cinco",
+          "f": 147
+        },
+        {
+          "w": "al",
+          "f": 162
+        },
+        {
+          "w": "observar",
+          "f": 167
+        },
+        {
+          "w": "corcho",
+          "f": 182
+        },
+        {
+          "w": "leeuwenhoek",
+          "f": 215
+        },
+        {
+          "w": "vio",
+          "f": 239
+        },
+        {
+          "w": "microorganismos",
+          "f": 247
+        },
+        {
+          "w": "vivos",
+          "f": 273
+        },
+        {
+          "w": "con",
+          "f": 282
+        },
+        {
+          "w": "sus",
+          "f": 286
+        },
+        {
+          "w": "propios",
+          "f": 292
+        },
+        {
+          "w": "microscopios",
+          "f": 302
+        },
+        {
+          "w": "schleiden",
+          "f": 341
+        },
+        {
+          "w": "y",
+          "f": 358
+        },
+        {
+          "w": "schwann",
+          "f": 362
+        },
+        {
+          "w": "propusieron",
+          "f": 376
+        },
+        {
+          "w": "que",
+          "f": 393
+        },
+        {
+          "w": "plantas",
+          "f": 397
+        },
+        {
+          "w": "y",
+          "f": 408
+        },
+        {
+          "w": "animales",
+          "f": 409
+        },
+        {
+          "w": "están",
+          "f": 424
+        },
+        {
+          "w": "hechos",
+          "f": 431
+        },
+        {
+          "w": "de",
+          "f": 439
+        },
+        {
+          "w": "células",
+          "f": 442
+        },
+        {
+          "w": "y",
+          "f": 466
+        },
+        {
+          "w": "virchow",
+          "f": 471
+        },
+        {
+          "w": "en",
+          "f": 487
+        },
+        {
+          "w": "mil",
+          "f": 491
+        },
+        {
+          "w": "ochocientos",
+          "f": 497
+        },
+        {
+          "w": "cincuenta",
+          "f": 511
+        },
+        {
+          "w": "y",
+          "f": 523
+        },
+        {
+          "w": "cinco",
+          "f": 524
+        },
+        {
+          "w": "que",
+          "f": 536
+        },
+        {
+          "w": "toda",
+          "f": 541
+        },
+        {
+          "w": "célula",
+          "f": 547
+        },
+        {
+          "w": "viene",
+          "f": 558
+        },
+        {
+          "w": "de",
+          "f": 566
+        },
+        {
+          "w": "otra",
+          "f": 568
+        },
+        {
+          "w": "célula",
+          "f": 575
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Dos grandes tipos de células",
+      "texto": "Hay dos grandes tipos de células. Las procariotas, como las bacterias, no tienen un núcleo rodeado por membrana. Las eucariotas sí lo tienen. Entre ellas están la célula animal y la vegetal, que además tiene pared celular, cloroplastos y una gran vacuola.",
+      "voz": "Hay dos grandes tipos de células. Las procariotas, como las bacterias, no tienen un núcleo rodeado por membrana. Las eucariotas sí lo tienen. Entre ellas están la célula animal y la vegetal, que además tiene pared celular, cloroplastos y una gran vacuola.",
+      "imagenes": [
+        {
+          "src": "fundamentos/celula-procariota-y-eucariota.webp",
+          "focos": [
+            {
+              "palabra": "procariotas",
+              "x": 0.2,
+              "y": 0.6,
+              "zoom": 1.8
+            },
+            {
+              "palabra": "eucariotas",
+              "x": 0.62,
+              "y": 0.45,
+              "zoom": 1.3
+            }
+          ]
+        },
+        {
+          "src": "fundamentos/celula-animal-y-vegetal.webp",
+          "palabra": "animal",
+          "focos": [
+            {
+              "palabra": "vegetal",
+              "x": 0.68,
+              "y": 0.5,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "vacuola",
+              "x": 0.6,
+              "y": 0.6,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-celula/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 460,
+      "frames": 488,
+      "chunks": [
+        {
+          "text": "Hay dos grandes tipos de células.",
+          "from": 0,
+          "to": 55
+        },
+        {
+          "text": "Las procariotas, como las bacterias, no",
+          "from": 60,
+          "to": 123
+        },
+        {
+          "text": "tienen un núcleo rodeado por membrana.",
+          "from": 123,
+          "to": 185
+        },
+        {
+          "text": "Las eucariotas sí lo tienen.",
+          "from": 192,
+          "to": 250
+        },
+        {
+          "text": "Entre ellas están la célula animal y",
+          "from": 257,
+          "to": 321
+        },
+        {
+          "text": "la vegetal, que además tiene pared celular,",
+          "from": 321,
+          "to": 398
+        },
+        {
+          "text": "cloroplastos y una gran vacuola.",
+          "from": 398,
+          "to": 456
+        }
+      ],
+      "words": [
+        {
+          "w": "hay",
+          "f": 0
+        },
+        {
+          "w": "dos",
+          "f": 8
+        },
+        {
+          "w": "grandes",
+          "f": 14
+        },
+        {
+          "w": "tipos",
+          "f": 24
+        },
+        {
+          "w": "de",
+          "f": 34
+        },
+        {
+          "w": "células",
+          "f": 37
+        },
+        {
+          "w": "las",
+          "f": 60
+        },
+        {
+          "w": "procariotas",
+          "f": 67
+        },
+        {
+          "w": "como",
+          "f": 89
+        },
+        {
+          "w": "las",
+          "f": 97
+        },
+        {
+          "w": "bacterias",
+          "f": 102
+        },
+        {
+          "w": "no",
+          "f": 120
+        },
+        {
+          "w": "tienen",
+          "f": 125
+        },
+        {
+          "w": "un",
+          "f": 134
+        },
+        {
+          "w": "núcleo",
+          "f": 137
+        },
+        {
+          "w": "rodeado",
+          "f": 149
+        },
+        {
+          "w": "por",
+          "f": 160
+        },
+        {
+          "w": "membrana",
+          "f": 165
+        },
+        {
+          "w": "las",
+          "f": 192
+        },
+        {
+          "w": "eucariotas",
+          "f": 198
+        },
+        {
+          "w": "sí",
+          "f": 223
+        },
+        {
+          "w": "lo",
+          "f": 230
+        },
+        {
+          "w": "tienen",
+          "f": 234
+        },
+        {
+          "w": "entre",
+          "f": 257
+        },
+        {
+          "w": "ellas",
+          "f": 268
+        },
+        {
+          "w": "están",
+          "f": 276
+        },
+        {
+          "w": "la",
+          "f": 283
+        },
+        {
+          "w": "célula",
+          "f": 286
+        },
+        {
+          "w": "animal",
+          "f": 298
+        },
+        {
+          "w": "y",
+          "f": 313
+        },
+        {
+          "w": "la",
+          "f": 318
+        },
+        {
+          "w": "vegetal",
+          "f": 321
+        },
+        {
+          "w": "que",
+          "f": 348
+        },
+        {
+          "w": "además",
+          "f": 353
+        },
+        {
+          "w": "tiene",
+          "f": 364
+        },
+        {
+          "w": "pared",
+          "f": 371
+        },
+        {
+          "w": "celular",
+          "f": 378
+        },
+        {
+          "w": "cloroplastos",
+          "f": 394
+        },
+        {
+          "w": "y",
+          "f": 418
+        },
+        {
+          "w": "una",
+          "f": 420
+        },
+        {
+          "w": "gran",
+          "f": 426
+        },
+        {
+          "w": "vacuola",
+          "f": 431
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Las funciones vitales",
+      "texto": "Toda célula cumple tres funciones vitales: la nutrición, para obtener materia y energía; la relación, para detectar estímulos y responder; y la reproducción, para originar nuevas células, por mitosis o meiosis.",
+      "voz": "Toda célula cumple tres funciones vitales: la nutrición, para obtener materia y energía; la relación, para detectar estímulos y responder; y la reproducción, para originar nuevas células, por mitosis o meiosis.",
+      "items": [
+        {
+          "titulo": "Nutrición",
+          "texto": "Obtiene y transforma materia y energía",
+          "palabra": "nutrición"
+        },
+        {
+          "titulo": "Relación",
+          "texto": "Detecta estímulos y responde",
+          "palabra": "relación"
+        },
+        {
+          "titulo": "Reproducción",
+          "texto": "Origina nuevas células: mitosis o meiosis",
+          "palabra": "reproducción"
+        }
+      ],
+      "audio": "voz/la-celula/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 407,
+      "frames": 435,
+      "chunks": [
+        {
+          "text": "Toda célula cumple tres funciones vitales:",
+          "from": 0,
+          "to": 70
+        },
+        {
+          "text": "la nutrición, para obtener materia y energía;",
+          "from": 80,
+          "to": 155
+        },
+        {
+          "text": "la relación, para detectar estímulos y responder;",
+          "from": 163,
+          "to": 245
+        },
+        {
+          "text": "y la reproducción, para originar nuevas",
+          "from": 252,
+          "to": 336
+        },
+        {
+          "text": "células, por mitosis o meiosis.",
+          "from": 336,
+          "to": 403
+        }
+      ],
+      "words": [
+        {
+          "w": "toda",
+          "f": 0
+        },
+        {
+          "w": "célula",
+          "f": 9
+        },
+        {
+          "w": "cumple",
+          "f": 22
+        },
+        {
+          "w": "tres",
+          "f": 30
+        },
+        {
+          "w": "funciones",
+          "f": 37
+        },
+        {
+          "w": "vitales",
+          "f": 50
+        },
+        {
+          "w": "la",
+          "f": 80
+        },
+        {
+          "w": "nutrición",
+          "f": 84
+        },
+        {
+          "w": "para",
+          "f": 101
+        },
+        {
+          "w": "obtener",
+          "f": 106
+        },
+        {
+          "w": "materia",
+          "f": 118
+        },
+        {
+          "w": "y",
+          "f": 133
+        },
+        {
+          "w": "energía",
+          "f": 134
+        },
+        {
+          "w": "la",
+          "f": 163
+        },
+        {
+          "w": "relación",
+          "f": 168
+        },
+        {
+          "w": "para",
+          "f": 185
+        },
+        {
+          "w": "detectar",
+          "f": 191
+        },
+        {
+          "w": "estímulos",
+          "f": 206
+        },
+        {
+          "w": "y",
+          "f": 222
+        },
+        {
+          "w": "responder",
+          "f": 225
+        },
+        {
+          "w": "y",
+          "f": 252
+        },
+        {
+          "w": "la",
+          "f": 257
+        },
+        {
+          "w": "reproducción",
+          "f": 261
+        },
+        {
+          "w": "para",
+          "f": 285
+        },
+        {
+          "w": "originar",
+          "f": 290
+        },
+        {
+          "w": "nuevas",
+          "f": 304
+        },
+        {
+          "w": "células",
+          "f": 313
+        },
+        {
+          "w": "por",
+          "f": 340
+        },
+        {
+          "w": "mitosis",
+          "f": 347
+        },
+        {
+          "w": "o",
+          "f": 365
+        },
+        {
+          "w": "meiosis",
+          "f": 369
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "pasos",
+      "titulo": "De la célula al organismo",
+      "texto": "En los organismos pluricelulares, las células se especializan y trabajan juntas: forman tejidos, los tejidos forman órganos, y los órganos, sistemas. Así se construye un organismo completo.",
+      "voz": "En los organismos pluricelulares, las células se especializan y trabajan juntas: forman tejidos, los tejidos forman órganos, y los órganos, sistemas. Así se construye un organismo completo.",
+      "items": [
+        {
+          "titulo": "Célula",
+          "palabra": "especializan"
+        },
+        {
+          "titulo": "Tejido",
+          "palabra": "tejidos"
+        },
+        {
+          "titulo": "Órgano",
+          "palabra": "órganos"
+        },
+        {
+          "titulo": "Sistema",
+          "palabra": "sistemas"
+        },
+        {
+          "titulo": "Organismo",
+          "palabra": "organismo"
+        }
+      ],
+      "audio": "voz/la-celula/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 342,
+      "frames": 370,
+      "chunks": [
+        {
+          "text": "En los organismos pluricelulares, las células",
+          "from": 0,
+          "to": 76
+        },
+        {
+          "text": "se especializan y trabajan juntas:",
+          "from": 76,
+          "to": 133
+        },
+        {
+          "text": "forman tejidos, los tejidos forman",
+          "from": 142,
+          "to": 199
+        },
+        {
+          "text": "órganos, y los órganos, sistemas.",
+          "from": 199,
+          "to": 255
+        },
+        {
+          "text": "Así se construye un organismo completo.",
+          "from": 263,
+          "to": 337
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "los",
+          "f": 6
+        },
+        {
+          "w": "organismos",
+          "f": 11
+        },
+        {
+          "w": "pluricelulares",
+          "f": 27
+        },
+        {
+          "w": "las",
+          "f": 58
+        },
+        {
+          "w": "células",
+          "f": 63
+        },
+        {
+          "w": "se",
+          "f": 76
+        },
+        {
+          "w": "especializan",
+          "f": 78
+        },
+        {
+          "w": "y",
+          "f": 99
+        },
+        {
+          "w": "trabajan",
+          "f": 103
+        },
+        {
+          "w": "juntas",
+          "f": 116
+        },
+        {
+          "w": "forman",
+          "f": 142
+        },
+        {
+          "w": "tejidos",
+          "f": 154
+        },
+        {
+          "w": "los",
+          "f": 171
+        },
+        {
+          "w": "tejidos",
+          "f": 176
+        },
+        {
+          "w": "forman",
+          "f": 188
+        },
+        {
+          "w": "órganos",
+          "f": 199
+        },
+        {
+          "w": "y",
+          "f": 212
+        },
+        {
+          "w": "los",
+          "f": 216
+        },
+        {
+          "w": "órganos",
+          "f": 222
+        },
+        {
+          "w": "sistemas",
+          "f": 233
+        },
+        {
+          "w": "así",
+          "f": 263
+        },
+        {
+          "w": "se",
+          "f": 273
+        },
+        {
+          "w": "construye",
+          "f": 277
+        },
+        {
+          "w": "un",
+          "f": 291
+        },
+        {
+          "w": "organismo",
+          "f": 294
+        },
+        {
+          "w": "completo",
+          "f": 309
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la célula. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la célula. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/la-celula/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 119,
+      "frames": 279,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 20
+        },
+        {
+          "text": "Repasaste la célula.",
+          "from": 21,
+          "to": 53
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 53,
+          "to": 114
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 21
+        },
+        {
+          "w": "la",
+          "f": 37
+        },
+        {
+          "w": "célula",
+          "f": 40
+        },
+        {
+          "w": "sigue",
+          "f": 53
+        },
+        {
+          "w": "con",
+          "f": 62
+        },
+        {
+          "w": "el",
+          "f": 67
+        },
+        {
+          "w": "siguiente",
+          "f": 69
+        },
+        {
+          "w": "tema",
+          "f": 80
+        },
+        {
+          "w": "de",
+          "f": 89
+        },
+        {
+          "w": "tu",
+          "f": 92
+        },
+        {
+          "w": "ruta",
+          "f": 96
+        }
+      ]
+    }
+  ]
+}

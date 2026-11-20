@@ -38,6 +38,9 @@ export interface RegistrationInput {
   phone: string | null;
   /** ISO `YYYY-MM-DD`. Obligatoria: sin ella no hay matrícula (schema.prisma, `Person.birthDate`). */
   birthDate: string;
+  /** CC, TI, CE, PPT o PA (14/11); el número llega sin puntos ni espacios. */
+  documentType: string;
+  documentNumber: string;
   password: string;
   acceptsDataPolicy: boolean;
   now?: Date;
@@ -85,6 +88,25 @@ export async function registerPerson(input: RegistrationInput): Promise<Registra
     );
   }
 
+  // El documento identifica a la persona en la institución (`@@unique`): si ya hay una ficha
+  // con él, es la misma persona y su camino es entrar o pedir la invitación.
+  const sameDocument = await db.person.findFirst({
+    where: {
+      documentType: input.documentType,
+      documentNumber: input.documentNumber,
+      anonymizedAt: null,
+    },
+    select: { authUserId: true },
+  });
+  if (sameDocument) {
+    throw new APIError(
+      sameDocument.authUserId
+        ? 'Ya hay una cuenta con este documento: inicia sesión o recupera tu contraseña.'
+        : 'Este documento ya está registrado en la institución. Pide tu enlace de invitación al equipo.',
+      'CONFLICT'
+    );
+  }
+
   const institution = await db.institution.findUniqueOrThrow({
     where: { id: institutionId },
     select: { introCohortId: true, dataPolicyVersion: true },
@@ -125,6 +147,8 @@ export async function registerPerson(input: RegistrationInput): Promise<Registra
           email,
           phone: input.phone,
           birthDate,
+          documentType: input.documentType,
+          documentNumber: input.documentNumber,
           authUserId,
         },
         select: { id: true },

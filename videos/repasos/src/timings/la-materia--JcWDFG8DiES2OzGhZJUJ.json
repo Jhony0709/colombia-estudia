@@ -1,0 +1,1299 @@
+{
+  "tema": "la-materia",
+  "componente": "Consolidación",
+  "area": "Ciencias naturales",
+  "titulo": "La materia y sus transformaciones",
+  "siguiente": "Operaciones con números enteros",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la materia y sus transformaciones.",
+      "voz": "Repaso del tema: la materia y sus transformaciones.",
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 105,
+      "frames": 133,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "la materia y sus transformaciones.",
+          "from": 36,
+          "to": 100
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 19
+        },
+        {
+          "w": "la",
+          "f": 36
+        },
+        {
+          "w": "materia",
+          "f": 41
+        },
+        {
+          "w": "y",
+          "f": 55
+        },
+        {
+          "w": "sus",
+          "f": 57
+        },
+        {
+          "w": "transformaciones",
+          "f": 63
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es la materia?",
+      "texto": "La materia es todo lo que tiene masa y ocupa un lugar en el espacio. La masa es la cantidad de materia de un cuerpo, y el volumen, el espacio que ocupa. Está formada por partículas muy pequeñas, como los átomos y las moléculas.",
+      "voz": "La materia es todo lo que tiene masa y ocupa un lugar en el espacio. La masa es la cantidad de materia de un cuerpo, y el volumen, el espacio que ocupa. Está formada por partículas muy pequeñas, como los átomos y las moléculas.",
+      "items": [
+        {
+          "titulo": "Masa",
+          "texto": "La cantidad de materia",
+          "palabra": "masa",
+          "vez": 1
+        },
+        {
+          "titulo": "Volumen",
+          "texto": "El espacio que ocupa",
+          "palabra": "volumen"
+        },
+        {
+          "titulo": "Partículas",
+          "texto": "Átomos y moléculas",
+          "palabra": "átomos"
+        }
+      ],
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 396,
+      "frames": 424,
+      "chunks": [
+        {
+          "text": "La materia es todo lo que tiene masa",
+          "from": 0,
+          "to": 57
+        },
+        {
+          "text": "y ocupa un lugar en el espacio.",
+          "from": 57,
+          "to": 107
+        },
+        {
+          "text": "La masa es la cantidad de materia de un",
+          "from": 120,
+          "to": 184
+        },
+        {
+          "text": "cuerpo, y el volumen, el espacio que ocupa.",
+          "from": 184,
+          "to": 255
+        },
+        {
+          "text": "Está formada por partículas muy pequeñas,",
+          "from": 264,
+          "to": 336
+        },
+        {
+          "text": "como los átomos y las moléculas.",
+          "from": 336,
+          "to": 391
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "materia",
+          "f": 6
+        },
+        {
+          "w": "es",
+          "f": 19
+        },
+        {
+          "w": "todo",
+          "f": 22
+        },
+        {
+          "w": "lo",
+          "f": 28
+        },
+        {
+          "w": "que",
+          "f": 31
+        },
+        {
+          "w": "tiene",
+          "f": 34
+        },
+        {
+          "w": "masa",
+          "f": 42
+        },
+        {
+          "w": "y",
+          "f": 56
+        },
+        {
+          "w": "ocupa",
+          "f": 60
+        },
+        {
+          "w": "un",
+          "f": 72
+        },
+        {
+          "w": "lugar",
+          "f": 75
+        },
+        {
+          "w": "en",
+          "f": 84
+        },
+        {
+          "w": "el",
+          "f": 87
+        },
+        {
+          "w": "espacio",
+          "f": 91
+        },
+        {
+          "w": "la",
+          "f": 120
+        },
+        {
+          "w": "masa",
+          "f": 125
+        },
+        {
+          "w": "es",
+          "f": 132
+        },
+        {
+          "w": "la",
+          "f": 135
+        },
+        {
+          "w": "cantidad",
+          "f": 138
+        },
+        {
+          "w": "de",
+          "f": 151
+        },
+        {
+          "w": "materia",
+          "f": 155
+        },
+        {
+          "w": "de",
+          "f": 167
+        },
+        {
+          "w": "un",
+          "f": 170
+        },
+        {
+          "w": "cuerpo",
+          "f": 172
+        },
+        {
+          "w": "y",
+          "f": 191
+        },
+        {
+          "w": "el",
+          "f": 194
+        },
+        {
+          "w": "volumen",
+          "f": 198
+        },
+        {
+          "w": "el",
+          "f": 218
+        },
+        {
+          "w": "espacio",
+          "f": 224
+        },
+        {
+          "w": "que",
+          "f": 236
+        },
+        {
+          "w": "ocupa",
+          "f": 239
+        },
+        {
+          "w": "está",
+          "f": 264
+        },
+        {
+          "w": "formada",
+          "f": 274
+        },
+        {
+          "w": "por",
+          "f": 285
+        },
+        {
+          "w": "partículas",
+          "f": 290
+        },
+        {
+          "w": "muy",
+          "f": 306
+        },
+        {
+          "w": "pequeñas",
+          "f": 311
+        },
+        {
+          "w": "como",
+          "f": 328
+        },
+        {
+          "w": "los",
+          "f": 335
+        },
+        {
+          "w": "átomos",
+          "f": 341
+        },
+        {
+          "w": "y",
+          "f": 354
+        },
+        {
+          "w": "las",
+          "f": 357
+        },
+        {
+          "w": "moléculas",
+          "f": 362
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Los estados de la materia",
+      "texto": "Los tres estados más comunes son el sólido, con forma y volumen definidos; el líquido, que adopta la forma del recipiente; y el gaseoso, sin forma ni volumen definidos.",
+      "voz": "Los tres estados más comunes son el sólido, con forma y volumen definidos; el líquido, que adopta la forma del recipiente; y el gaseoso, sin forma ni volumen definidos.",
+      "imagenes": [
+        {
+          "src": "consolidacion/estados-de-la-materia.webp",
+          "focos": [
+            {
+              "palabra": "sólido",
+              "x": 0.17,
+              "y": 0.45,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "líquido",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "gaseoso",
+              "x": 0.78,
+              "y": 0.45,
+              "zoom": 1.7
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 303,
+      "frames": 331,
+      "chunks": [
+        {
+          "text": "Los tres estados más comunes son el",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "sólido, con forma y volumen definidos;",
+          "from": 59,
+          "to": 124
+        },
+        {
+          "text": "el líquido, que adopta la forma del recipiente;",
+          "from": 135,
+          "to": 204
+        },
+        {
+          "text": "y el gaseoso, sin forma ni volumen definidos.",
+          "from": 214,
+          "to": 298
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "tres",
+          "f": 7
+        },
+        {
+          "w": "estados",
+          "f": 14
+        },
+        {
+          "w": "más",
+          "f": 24
+        },
+        {
+          "w": "comunes",
+          "f": 29
+        },
+        {
+          "w": "son",
+          "f": 41
+        },
+        {
+          "w": "el",
+          "f": 49
+        },
+        {
+          "w": "sólido",
+          "f": 52
+        },
+        {
+          "w": "con",
+          "f": 74
+        },
+        {
+          "w": "forma",
+          "f": 80
+        },
+        {
+          "w": "y",
+          "f": 90
+        },
+        {
+          "w": "volumen",
+          "f": 92
+        },
+        {
+          "w": "definidos",
+          "f": 103
+        },
+        {
+          "w": "el",
+          "f": 135
+        },
+        {
+          "w": "líquido",
+          "f": 141
+        },
+        {
+          "w": "que",
+          "f": 154
+        },
+        {
+          "w": "adopta",
+          "f": 158
+        },
+        {
+          "w": "la",
+          "f": 168
+        },
+        {
+          "w": "forma",
+          "f": 171
+        },
+        {
+          "w": "del",
+          "f": 179
+        },
+        {
+          "w": "recipiente",
+          "f": 183
+        },
+        {
+          "w": "y",
+          "f": 214
+        },
+        {
+          "w": "el",
+          "f": 217
+        },
+        {
+          "w": "gaseoso",
+          "f": 221
+        },
+        {
+          "w": "sin",
+          "f": 236
+        },
+        {
+          "w": "forma",
+          "f": 242
+        },
+        {
+          "w": "ni",
+          "f": 252
+        },
+        {
+          "w": "volumen",
+          "f": 256
+        },
+        {
+          "w": "definidos",
+          "f": 267
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Los cambios de estado",
+      "texto": "Al ganar o perder calor, la materia cambia de estado: fusión, de sólido a líquido; solidificación, de líquido a sólido; vaporización, de líquido a gas; condensación, de gas a líquido; sublimación, de sólido a gas; y deposición, de gas a sólido.",
+      "voz": "Al ganar o perder calor, la materia cambia de estado: fusión, de sólido a líquido; solidificación, de líquido a sólido; vaporización, de líquido a gas; condensación, de gas a líquido; sublimación, de sólido a gas; y deposición, de gas a sólido.",
+      "imagenes": [
+        {
+          "src": "consolidacion/cambios-de-estado.webp",
+          "focos": [
+            {
+              "palabra": "fusión",
+              "x": 0.3,
+              "y": 0.55,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "vaporización",
+              "x": 0.62,
+              "y": 0.55,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "sublimación",
+              "x": 0.5,
+              "y": 0.82,
+              "zoom": 1.5
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 457,
+      "frames": 485,
+      "chunks": [
+        {
+          "text": "Al ganar o perder calor,",
+          "from": 0,
+          "to": 38
+        },
+        {
+          "text": "la materia cambia de estado:",
+          "from": 38,
+          "to": 82
+        },
+        {
+          "text": "fusión, de sólido a líquido;",
+          "from": 86,
+          "to": 137
+        },
+        {
+          "text": "solidificación, de líquido a sólido;",
+          "from": 143,
+          "to": 208
+        },
+        {
+          "text": "vaporización, de líquido a gas;",
+          "from": 216,
+          "to": 272
+        },
+        {
+          "text": "condensación, de gas a líquido;",
+          "from": 280,
+          "to": 334
+        },
+        {
+          "text": "sublimación, de sólido a gas;",
+          "from": 340,
+          "to": 390
+        },
+        {
+          "text": "y deposición, de gas a sólido.",
+          "from": 392,
+          "to": 453
+        }
+      ],
+      "words": [
+        {
+          "w": "al",
+          "f": 0
+        },
+        {
+          "w": "ganar",
+          "f": 6
+        },
+        {
+          "w": "o",
+          "f": 14
+        },
+        {
+          "w": "perder",
+          "f": 17
+        },
+        {
+          "w": "calor",
+          "f": 26
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "materia",
+          "f": 41
+        },
+        {
+          "w": "cambia",
+          "f": 54
+        },
+        {
+          "w": "de",
+          "f": 63
+        },
+        {
+          "w": "estado",
+          "f": 65
+        },
+        {
+          "w": "fusión",
+          "f": 86
+        },
+        {
+          "w": "de",
+          "f": 103
+        },
+        {
+          "w": "sólido",
+          "f": 107
+        },
+        {
+          "w": "a",
+          "f": 118
+        },
+        {
+          "w": "líquido",
+          "f": 120
+        },
+        {
+          "w": "solidificación",
+          "f": 143
+        },
+        {
+          "w": "de",
+          "f": 174
+        },
+        {
+          "w": "líquido",
+          "f": 178
+        },
+        {
+          "w": "a",
+          "f": 189
+        },
+        {
+          "w": "sólido",
+          "f": 191
+        },
+        {
+          "w": "vaporización",
+          "f": 216
+        },
+        {
+          "w": "de",
+          "f": 243
+        },
+        {
+          "w": "líquido",
+          "f": 247
+        },
+        {
+          "w": "a",
+          "f": 258
+        },
+        {
+          "w": "gas",
+          "f": 260
+        },
+        {
+          "w": "condensación",
+          "f": 280
+        },
+        {
+          "w": "de",
+          "f": 304
+        },
+        {
+          "w": "gas",
+          "f": 308
+        },
+        {
+          "w": "a",
+          "f": 314
+        },
+        {
+          "w": "líquido",
+          "f": 316
+        },
+        {
+          "w": "sublimación",
+          "f": 340
+        },
+        {
+          "w": "de",
+          "f": 364
+        },
+        {
+          "w": "sólido",
+          "f": 368
+        },
+        {
+          "w": "a",
+          "f": 379
+        },
+        {
+          "w": "gas",
+          "f": 381
+        },
+        {
+          "w": "y",
+          "f": 392
+        },
+        {
+          "w": "deposición",
+          "f": 397
+        },
+        {
+          "w": "de",
+          "f": 417
+        },
+        {
+          "w": "gas",
+          "f": 420
+        },
+        {
+          "w": "a",
+          "f": 427
+        },
+        {
+          "w": "sólido",
+          "f": 429
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "comparar",
+      "titulo": "Sustancias puras y mezclas",
+      "texto": "Las sustancias puras tienen una composición definida, y pueden ser elementos o compuestos. Las mezclas combinan dos o más sustancias: en las homogéneas no se distinguen sus componentes, como el agua con sal; en las heterogéneas sí, como el agua con aceite.",
+      "voz": "Las sustancias puras tienen una composición definida, y pueden ser elementos o compuestos. Las mezclas combinan dos o más sustancias: en las homogéneas no se distinguen sus componentes, como el agua con sal; en las heterogéneas sí, como el agua con aceite.",
+      "columnas": [
+        {
+          "titulo": "Sustancias puras",
+          "palabra": "puras",
+          "puntos": [
+            {
+              "texto": "Composición definida",
+              "palabra": "definida"
+            },
+            {
+              "texto": "Elementos o compuestos",
+              "palabra": "compuestos"
+            }
+          ]
+        },
+        {
+          "titulo": "Mezclas",
+          "palabra": "mezclas",
+          "puntos": [
+            {
+              "texto": "Homogéneas: no se distinguen sus partes",
+              "palabra": "homogéneas"
+            },
+            {
+              "texto": "Heterogéneas: sí se distinguen",
+              "palabra": "heterogéneas"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 417,
+      "frames": 445,
+      "chunks": [
+        {
+          "text": "Las sustancias puras tienen una composición definida,",
+          "from": 0,
+          "to": 83
+        },
+        {
+          "text": "y pueden ser elementos o compuestos.",
+          "from": 83,
+          "to": 139
+        },
+        {
+          "text": "Las mezclas combinan dos o más sustancias:",
+          "from": 149,
+          "to": 219
+        },
+        {
+          "text": "en las homogéneas no se distinguen sus",
+          "from": 225,
+          "to": 280
+        },
+        {
+          "text": "componentes, como el agua con sal;",
+          "from": 280,
+          "to": 328
+        },
+        {
+          "text": "en las heterogéneas sí, como el agua con aceite.",
+          "from": 331,
+          "to": 412
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "sustancias",
+          "f": 6
+        },
+        {
+          "w": "puras",
+          "f": 21
+        },
+        {
+          "w": "tienen",
+          "f": 30
+        },
+        {
+          "w": "una",
+          "f": 38
+        },
+        {
+          "w": "composición",
+          "f": 43
+        },
+        {
+          "w": "definida",
+          "f": 60
+        },
+        {
+          "w": "y",
+          "f": 84
+        },
+        {
+          "w": "pueden",
+          "f": 89
+        },
+        {
+          "w": "ser",
+          "f": 97
+        },
+        {
+          "w": "elementos",
+          "f": 102
+        },
+        {
+          "w": "o",
+          "f": 116
+        },
+        {
+          "w": "compuestos",
+          "f": 118
+        },
+        {
+          "w": "las",
+          "f": 149
+        },
+        {
+          "w": "mezclas",
+          "f": 156
+        },
+        {
+          "w": "combinan",
+          "f": 169
+        },
+        {
+          "w": "dos",
+          "f": 183
+        },
+        {
+          "w": "o",
+          "f": 191
+        },
+        {
+          "w": "más",
+          "f": 194
+        },
+        {
+          "w": "sustancias",
+          "f": 198
+        },
+        {
+          "w": "en",
+          "f": 225
+        },
+        {
+          "w": "las",
+          "f": 230
+        },
+        {
+          "w": "homogéneas",
+          "f": 234
+        },
+        {
+          "w": "no",
+          "f": 251
+        },
+        {
+          "w": "se",
+          "f": 255
+        },
+        {
+          "w": "distinguen",
+          "f": 258
+        },
+        {
+          "w": "sus",
+          "f": 270
+        },
+        {
+          "w": "componentes",
+          "f": 275
+        },
+        {
+          "w": "como",
+          "f": 297
+        },
+        {
+          "w": "el",
+          "f": 303
+        },
+        {
+          "w": "agua",
+          "f": 307
+        },
+        {
+          "w": "con",
+          "f": 312
+        },
+        {
+          "w": "sal",
+          "f": 319
+        },
+        {
+          "w": "en",
+          "f": 331
+        },
+        {
+          "w": "las",
+          "f": 335
+        },
+        {
+          "w": "heterogéneas",
+          "f": 339
+        },
+        {
+          "w": "sí",
+          "f": 358
+        },
+        {
+          "w": "como",
+          "f": 364
+        },
+        {
+          "w": "el",
+          "f": 371
+        },
+        {
+          "w": "agua",
+          "f": 374
+        },
+        {
+          "w": "con",
+          "f": 380
+        },
+        {
+          "w": "aceite",
+          "f": 385
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "Cambios físicos y químicos",
+      "texto": "En un cambio físico, la materia cambia su estado o su forma, pero conserva su composición, como al derretir hielo. En un cambio químico se forman sustancias nuevas, como en la oxidación de un clavo o la combustión de la madera.",
+      "voz": "En un cambio físico, la materia cambia su estado o su forma, pero conserva su composición, como al derretir hielo. En un cambio químico se forman sustancias nuevas, como en la oxidación de un clavo o la combustión de la madera.",
+      "columnas": [
+        {
+          "titulo": "Cambio físico",
+          "palabra": "físico",
+          "puntos": [
+            {
+              "texto": "Conserva su composición",
+              "palabra": "conserva"
+            },
+            {
+              "texto": "Derretir hielo",
+              "palabra": "derretir"
+            }
+          ]
+        },
+        {
+          "titulo": "Cambio químico",
+          "palabra": "químico",
+          "puntos": [
+            {
+              "texto": "Se forman sustancias nuevas",
+              "palabra": "nuevas"
+            },
+            {
+              "texto": "Oxidación y combustión",
+              "palabra": "oxidación"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 377,
+      "frames": 405,
+      "chunks": [
+        {
+          "text": "En un cambio físico, la materia cambia",
+          "from": 0,
+          "to": 67
+        },
+        {
+          "text": "su estado o su forma, pero conserva",
+          "from": 67,
+          "to": 129
+        },
+        {
+          "text": "su composición, como al derretir hielo.",
+          "from": 129,
+          "to": 197
+        },
+        {
+          "text": "En un cambio químico se forman sustancias",
+          "from": 207,
+          "to": 269
+        },
+        {
+          "text": "nuevas, como en la oxidación de un",
+          "from": 269,
+          "to": 320
+        },
+        {
+          "text": "clavo o la combustión de la madera.",
+          "from": 320,
+          "to": 372
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "un",
+          "f": 7
+        },
+        {
+          "w": "cambio",
+          "f": 10
+        },
+        {
+          "w": "físico",
+          "f": 20
+        },
+        {
+          "w": "la",
+          "f": 33
+        },
+        {
+          "w": "materia",
+          "f": 36
+        },
+        {
+          "w": "cambia",
+          "f": 47
+        },
+        {
+          "w": "su",
+          "f": 56
+        },
+        {
+          "w": "estado",
+          "f": 59
+        },
+        {
+          "w": "o",
+          "f": 72
+        },
+        {
+          "w": "su",
+          "f": 75
+        },
+        {
+          "w": "forma",
+          "f": 80
+        },
+        {
+          "w": "pero",
+          "f": 102
+        },
+        {
+          "w": "conserva",
+          "f": 109
+        },
+        {
+          "w": "su",
+          "f": 123
+        },
+        {
+          "w": "composición",
+          "f": 127
+        },
+        {
+          "w": "como",
+          "f": 157
+        },
+        {
+          "w": "al",
+          "f": 164
+        },
+        {
+          "w": "derretir",
+          "f": 169
+        },
+        {
+          "w": "hielo",
+          "f": 184
+        },
+        {
+          "w": "en",
+          "f": 207
+        },
+        {
+          "w": "un",
+          "f": 213
+        },
+        {
+          "w": "cambio",
+          "f": 216
+        },
+        {
+          "w": "químico",
+          "f": 226
+        },
+        {
+          "w": "se",
+          "f": 240
+        },
+        {
+          "w": "forman",
+          "f": 244
+        },
+        {
+          "w": "sustancias",
+          "f": 254
+        },
+        {
+          "w": "nuevas",
+          "f": 270
+        },
+        {
+          "w": "como",
+          "f": 281
+        },
+        {
+          "w": "en",
+          "f": 288
+        },
+        {
+          "w": "la",
+          "f": 290
+        },
+        {
+          "w": "oxidación",
+          "f": 292
+        },
+        {
+          "w": "de",
+          "f": 308
+        },
+        {
+          "w": "un",
+          "f": 311
+        },
+        {
+          "w": "clavo",
+          "f": 314
+        },
+        {
+          "w": "o",
+          "f": 327
+        },
+        {
+          "w": "la",
+          "f": 331
+        },
+        {
+          "w": "combustión",
+          "f": 334
+        },
+        {
+          "w": "de",
+          "f": 348
+        },
+        {
+          "w": "la",
+          "f": 351
+        },
+        {
+          "w": "madera",
+          "f": 355
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la materia y sus transformaciones. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la materia y sus transformaciones. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/la-materia/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 183,
+      "frames": 343,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste la materia y sus transformaciones.",
+          "from": 32,
+          "to": 104
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 111,
+          "to": 178
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 3
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 32
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "materia",
+          "f": 53
+        },
+        {
+          "w": "y",
+          "f": 66
+        },
+        {
+          "w": "sus",
+          "f": 69
+        },
+        {
+          "w": "transformaciones",
+          "f": 75
+        },
+        {
+          "w": "sigue",
+          "f": 111
+        },
+        {
+          "w": "con",
+          "f": 121
+        },
+        {
+          "w": "el",
+          "f": 126
+        },
+        {
+          "w": "siguiente",
+          "f": 128
+        },
+        {
+          "w": "tema",
+          "f": 141
+        },
+        {
+          "w": "de",
+          "f": 149
+        },
+        {
+          "w": "tu",
+          "f": 153
+        },
+        {
+          "w": "ruta",
+          "f": 157
+        }
+      ]
+    }
+  ]
+}

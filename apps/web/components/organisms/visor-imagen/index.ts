@@ -1,0 +1,1 @@
+export { VisorImagen } from './VisorImagen';

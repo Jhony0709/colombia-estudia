@@ -13,7 +13,9 @@
  * 4. cuotas vencidas → aviso al pagador, solo si `notifyPayerOnOverdue` (y correo, si hay);
  * 5. sesiones en vivo en las próximas 24 h → aviso a los matriculados;
  * 6. concilia pagos de pasarela sin confirmar de más de una hora;
- * 7. borra los medios que nada usa pasado el periodo de gracia (`sweepUnusedMedia`).
+ * 7. borra los medios que nada usa pasado el periodo de gracia (`sweepUnusedMedia`);
+ * 8. borra las conversaciones de WhatsApp sin persona de la plataforma con 12 meses sin
+ *    mensajes (retención, 14/11).
  */
 
 import 'server-only';
@@ -21,11 +23,11 @@ import 'server-only';
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { getMailer, isMailConfigured } from '@/lib/mail';
 import { renderOverdueEmail } from '@/lib/mail/templates/overdue';
-import { fetchTransaction } from '@/lib/billing/wompi';
 import { logger } from '@/lib/observability/logger';
 import { expireIfDue } from '@/features/learn/server/attempt.service';
 import { issueDueCertificates } from '@/features/certificates/server/certificates.service';
 import { settleAgreements, confirmPayment } from '@/features/billing/server/billing.service';
+import { syncOpenPaymentLinks } from '@/features/billing/server/account.service';
 import {
   notify,
   notifyMany,
@@ -45,6 +47,7 @@ export interface DailyJobReport {
   liveSessionReminders: number;
   gatewayReconciled: number;
   mediaSwept: number;
+  conversationsPurged: number;
 }
 
 const day = (d: Date) => d.toISOString().slice(0, 10);
@@ -89,6 +92,7 @@ async function runForInstitution({
     liveSessionReminders: 0,
     gatewayReconciled: 0,
     mediaSwept: 0,
+    conversationsPurged: 0,
   };
 
   // 1. Intentos vencidos.
@@ -241,18 +245,23 @@ async function runForInstitution({
     report.liveSessionReminders += r.created;
   }
 
-  // 6. Conciliación de pasarela: pagos GATEWAY sin confirmar de más de una hora.
+  // 6. Conciliación de pasarela: links abiertos que Bold ya cobró (webhook perdido) y pagos en
+  // línea que quedaron sin confirmar y hoy cuadran con lo pendiente. Un pago `GATEWAY` solo
+  // existe si Bold dijo que el link estaba pagado, así que aquí no se vuelve a preguntar.
+  try {
+    report.gatewayReconciled += await syncOpenPaymentLinks({ institutionId, now });
+  } catch (err) {
+    logger.warn({ event: 'job-link-sync-failed', institutionId, error: String(err) });
+  }
   const stale = await db.payment.findMany({
     where: {
       method: 'GATEWAY',
       confirmedAt: null,
       voidedAt: null,
       createdAt: { lt: new Date(now.getTime() - 3600 * 1000) },
-      gatewayRef: { not: null },
     },
     select: {
       id: true,
-      gatewayRef: true,
       amount: true,
       installment: {
         select: {
@@ -263,19 +272,11 @@ async function runForInstitution({
     },
   });
   for (const p of stale) {
-    if (!p.gatewayRef) continue;
     try {
-      const tx = await fetchTransaction(p.gatewayRef);
-      if (!tx) continue;
       const paid = p.installment.payments
         .filter((x) => x.confirmedAt && !x.voidedAt)
         .reduce((s, x) => s + x.amount.toNumber(), 0);
-      const pending = p.installment.amount.toNumber() - paid;
-      if (
-        tx.status === 'APPROVED' &&
-        Math.round(tx.amount_in_cents / 100) === p.amount.toNumber() &&
-        p.amount.toNumber() === pending
-      ) {
+      if (p.amount.toNumber() === p.installment.amount.toNumber() - paid) {
         await confirmPayment({ institutionId, actorId: null, paymentId: p.id, now });
         report.gatewayReconciled++;
       }
@@ -289,6 +290,18 @@ async function runForInstitution({
     report.mediaSwept = (await sweepUnusedMedia({ institutionId, now })).swept;
   } catch (err) {
     logger.warn({ event: 'job-media-sweep-failed', institutionId, error: String(err) });
+  }
+
+  // 8. Retención de mensajería: quien nunca fue persona de la plataforma, 12 meses sin escribir.
+  // Los mensajes caen en cascada (`ConversationMessage.conversation onDelete: Cascade`).
+  try {
+    const cutoff = new Date(now);
+    cutoff.setUTCFullYear(cutoff.getUTCFullYear() - 1);
+    report.conversationsPurged = (
+      await db.conversation.deleteMany({ where: { personId: null, lastMessageAt: { lt: cutoff } } })
+    ).count;
+  } catch (err) {
+    logger.warn({ event: 'job-conversation-purge-failed', institutionId, error: String(err) });
   }
 
   await db.auditLog.create({

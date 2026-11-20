@@ -1,0 +1,136 @@
+{
+  "tema": "elementos-de-la-comunicacion",
+  "componente": "Fundamentos",
+  "area": "Lengua castellana",
+  "titulo": "Elementos de la comunicación y sus características",
+  "siguiente": "Organizadores gráficos",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los elementos de la comunicación y sus características.",
+      "voz": "Repaso del tema: los elementos de la comunicación y sus características."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los elementos de la comunicación",
+      "texto": "Para comunicarnos intervienen varios elementos. El emisor comparte el mensaje y el receptor lo recibe y lo decodifica. El mensaje es la información; el código, los signos que lo forman; el canal, el medio por el que viaja. Y el contexto es el entorno donde ocurre.",
+      "voz": "Para comunicarnos intervienen varios elementos. El emisor comparte el mensaje y el receptor lo recibe y lo decodifica. El mensaje es la información; el código, los signos que lo forman; el canal, el medio por el que viaja. Y el contexto es el entorno donde ocurre.",
+      "items": [
+        {
+          "titulo": "Emisor",
+          "texto": "Comparte la información",
+          "palabra": "emisor"
+        },
+        {
+          "titulo": "Receptor",
+          "texto": "Recibe el mensaje y lo decodifica",
+          "palabra": "receptor"
+        },
+        {
+          "titulo": "Mensaje",
+          "texto": "La información que se comunica",
+          "palabra": "mensaje",
+          "vez": 1
+        },
+        {
+          "titulo": "Código",
+          "texto": "Los signos y normas que lo forman",
+          "palabra": "código"
+        },
+        {
+          "titulo": "Canal",
+          "texto": "El medio por el que viaja",
+          "palabra": "canal"
+        },
+        {
+          "titulo": "Contexto",
+          "texto": "El entorno donde ocurre",
+          "palabra": "contexto"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Cómo viaja un mensaje",
+      "texto": "El emisor codifica el mensaje. El mensaje viaja por un canal, como el aire, el papel o la radio. El receptor lo decodifica, y solo lo entiende si comparte el mismo código.",
+      "voz": "El emisor codifica el mensaje. El mensaje viaja por un canal, como el aire, el papel o la radio. El receptor lo decodifica, y solo lo entiende si comparte el mismo código.",
+      "imagenes": [
+        {
+          "src": "fundamentos/proceso-comunicativo.webp",
+          "focos": [
+            {
+              "palabra": "emisor",
+              "x": 0.2,
+              "y": 0.3,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "canal",
+              "x": 0.5,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "receptor",
+              "x": 0.8,
+              "y": 0.3,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "código",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Lo que estorba y lo que ayuda",
+      "texto": "El ruido es cualquier señal que interfiere con el mensaje, como una falla en un aparato o alguien que interrumpe. La retroalimentación es la respuesta del receptor al emisor, y hace que la conversación sea fluida.",
+      "voz": "El ruido es cualquier señal que interfiere con el mensaje, como una falla en un aparato o alguien que interrumpe. La retroalimentación es la respuesta del receptor al emisor, y hace que la conversación sea fluida.",
+      "columnas": [
+        {
+          "titulo": "Ruido",
+          "palabra": "ruido",
+          "puntos": [
+            {
+              "texto": "Interfiere con el mensaje",
+              "palabra": "interfiere"
+            },
+            {
+              "texto": "Una falla o una interrupción",
+              "palabra": "falla"
+            }
+          ]
+        },
+        {
+          "titulo": "Retroalimentación",
+          "palabra": "retroalimentación",
+          "puntos": [
+            {
+              "texto": "La respuesta del receptor",
+              "palabra": "respuesta"
+            },
+            {
+              "texto": "Hace fluida la conversación",
+              "palabra": "fluida"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los elementos de la comunicación. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los elementos de la comunicación. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

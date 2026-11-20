@@ -1,0 +1,166 @@
+{
+  "tema": "universo-sistema-solar-y-tierra",
+  "componente": "Fundamentos",
+  "area": "Ciencias sociales",
+  "titulo": "Teoría del universo, el sistema solar y la Tierra",
+  "siguiente": "Evolución del hombre y civilizaciones antiguas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el universo, el sistema solar y la Tierra.",
+      "voz": "Repaso del tema: el universo, el sistema solar y la Tierra."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "El universo",
+      "texto": "El universo es el conjunto del espacio, el tiempo, la materia y la energía. Se originó hace unos 13.800 millones de años con el Big Bang y está en constante expansión. Nuestra galaxia es la Vía Láctea.",
+      "voz": "El universo es el conjunto del espacio, el tiempo, la materia y la energía. Se originó hace unos trece mil ochocientos millones de años con el Big Bang y está en constante expansión. Nuestra galaxia es la Vía Láctea.",
+      "items": [
+        {
+          "titulo": "Big Bang",
+          "texto": "Su origen, hace 13.800 millones de años",
+          "palabra": "big"
+        },
+        {
+          "titulo": "En expansión",
+          "texto": "El universo sigue creciendo",
+          "palabra": "expansión"
+        },
+        {
+          "titulo": "Vía Láctea",
+          "texto": "Nuestra galaxia, una espiral barrada",
+          "palabra": "láctea"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "El sistema solar",
+      "texto": "El sistema solar se formó hace unos 4.600 millones de años. Lo forman el Sol, ocho planetas, satélites como la Luna y cuerpos menores, como asteroides y cometas.",
+      "voz": "El sistema solar se formó hace unos cuatro mil seiscientos millones de años. Lo forman el Sol, ocho planetas, satélites como la Luna y cuerpos menores, como asteroides y cometas.",
+      "imagenes": [
+        {
+          "src": "fundamentos/sistema-solar.webp",
+          "focos": [
+            {
+              "palabra": "sol",
+              "x": 0.1,
+              "y": 0.45,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "planetas",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            },
+            {
+              "palabra": "luna",
+              "x": 0.35,
+              "y": 0.5,
+              "zoom": 1.9
+            },
+            {
+              "palabra": "asteroides",
+              "x": 0.47,
+              "y": 0.5,
+              "zoom": 1.9
+            },
+            {
+              "palabra": "cometas",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Los movimientos de la Tierra",
+      "texto": "La Tierra tiene dos movimientos. La rotación es el giro sobre su eje: dura 24 horas y produce el día y la noche. La traslación es el giro alrededor del Sol: dura 365 días y 6 horas, y por eso cada 4 años hay un año bisiesto.",
+      "voz": "La Tierra tiene dos movimientos. La rotación es el giro sobre su eje: dura veinticuatro horas y produce el día y la noche. La traslación es el giro alrededor del Sol: dura trescientos sesenta y cinco días y seis horas, y por eso cada cuatro años hay un año bisiesto.",
+      "columnas": [
+        {
+          "titulo": "Rotación",
+          "palabra": "rotación",
+          "puntos": [
+            {
+              "texto": "Gira sobre su eje",
+              "palabra": "eje"
+            },
+            {
+              "texto": "Dura 24 horas",
+              "palabra": "veinticuatro"
+            },
+            {
+              "texto": "Produce el día y la noche",
+              "palabra": "noche"
+            }
+          ]
+        },
+        {
+          "titulo": "Traslación",
+          "palabra": "traslación",
+          "puntos": [
+            {
+              "texto": "Gira alrededor del Sol",
+              "palabra": "alrededor"
+            },
+            {
+              "texto": "Dura 365 días y 6 horas",
+              "palabra": "trescientos"
+            },
+            {
+              "texto": "Cada 4 años, un año bisiesto",
+              "palabra": "bisiesto"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "Las capas de la Tierra",
+      "texto": "Por dentro, la Tierra tiene capas. La corteza es sólida y muy fina. El manto es muy caliente y algunas de sus rocas están fundidas. Y el núcleo es de hierro: líquido por fuera y sólido por dentro.",
+      "voz": "Por dentro, la Tierra tiene capas. La corteza es sólida y muy fina. El manto es muy caliente y algunas de sus rocas están fundidas. Y el núcleo es de hierro: líquido por fuera y sólido por dentro.",
+      "imagenes": [
+        {
+          "src": "fundamentos/estructura-interna-de-la-tierra.webp",
+          "focos": [
+            {
+              "palabra": "corteza",
+              "x": 0.55,
+              "y": 0.2,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "manto",
+              "x": 0.5,
+              "y": 0.35,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "núcleo",
+              "x": 0.42,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el universo, el sistema solar y la Tierra. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste el universo, el sistema solar y la Tierra. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

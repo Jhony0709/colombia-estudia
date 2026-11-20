@@ -1690,6 +1690,15 @@
       }
     },
     "lesson": {
+      "viewer": {
+        "open": "Ampliar imagen",
+        "untitled": "Imagen",
+        "close": "Cerrar",
+        "zoomIn": "Acercar",
+        "zoomOut": "Alejar",
+        "fit": "Ajustar a la pantalla",
+        "hint": "Pellizca, usa la rueda o haz doble clic para acercar y arrastra para mover. Con el teclado: + y −, las flechas y 0 para ajustar."
+      },
       "navLabel": "Navegación del tema",
       "objective": "Objetivo de aprendizaje",
       "readingProgress": "Avance de lectura del tema",
@@ -1861,7 +1870,9 @@
       "attemptsInProgress": "Tienes un intento en curso. {left, plural, =0 {Cuando lo entregues, habrás usado tu único intento} one {Cuando lo entregues te quedará # más} other {Cuando lo entregues te quedarán # más}}.",
       "inProgressBody": "Tienes un intento en curso: tus respuestas están guardadas y puedes seguir donde lo dejaste.",
       "previewBody": "Vista de estudiante: sin límite de intentos ni de tiempo, y al entregar ves la revisión completa.",
-      "reviewPreview": "Completa en la vista de estudiante"
+      "reviewPreview": "Completa en la vista de estudiante",
+      "navLabel": "Navegación del examen",
+      "previewSkip": "Vista de estudiante: puedes seguir sin presentarlo."
     },
     "attempt": {
       "attemptNumber": "Intento {number}",
@@ -2122,7 +2133,12 @@
     "account": {
       "title": "Mi cuenta",
       "description": "Tus cuotas, tus pagos y tu acuerdo de pago si lo tienes. Tu acceso a las clases no depende de esto.",
-      "returned": "Recibimos la respuesta del pago en línea. Cuando la pasarela lo confirme, lo verás aquí como confirmado; puede tardar unos minutos.",
+      "returned": {
+        "paid": "Recibimos tu pago. La cuota ya aparece como pagada.",
+        "review": "Recibimos tu pago, pero el monto no coincide con lo que estaba pendiente. Lo revisamos y te avisamos.",
+        "pending": "Tu pago está en proceso. Cuando la pasarela lo confirme, lo verás aquí como confirmado; puede tardar unos minutos.",
+        "failed": "El pago no se completó. Puedes intentarlo de nuevo o pagar por transferencia."
+      },
       "empty": "No tienes cuentas por pagar",
       "emptyHint": "Si crees que es un error, escríbenos.",
       "statuses": {
@@ -2136,6 +2152,8 @@
       "totals": "Pagado {paid} de {total} · vencido {overdue}.",
       "agreementActive": "Tienes un acuerdo de pago vigente desde el {date}.",
       "payOnline": "Pagar en línea",
+      "payByEmail": "Enviarme el link al correo",
+      "payEmailSent": "Te enviamos el link de pago a tu correo. Vence en 24 horas.",
       "payError": "No se pudo abrir el pago en línea. Inténtalo de nuevo o paga por transferencia.",
       "transferData": "Datos para transferencia",
       "transferHint": "Escríbenos a {email} y te mandamos la cuenta bancaria y la llave de Bre-B. Manda el comprobante por el mismo medio y registramos tu pago.",
@@ -2736,7 +2754,7 @@
         },
         "years": {
           "q": "¿Puedo retomar después de muchos años?",
-          "a": "Sí. No hay límite de edad ni importa cuánto tiempo haya pasado: necesitas el certificado del último grado aprobado (mínimo 5.º de primaria) y tu documento de identidad."
+          "a": "Sí. Puedes empezar desde los 16 años y no importa cuánto tiempo haya pasado: necesitas el certificado del último grado aprobado (mínimo 5.º de primaria) y tu documento de identidad."
         },
         "legal": {
           "q": "¿El título es válido en Colombia?",
@@ -2765,7 +2783,7 @@
       "rights": "© {year} {name}. Todos los derechos reservados."
     },
     "meta": {
-      "title": "ALBA Futuro Educativo · Termina tu bachillerato virtual",
+      "title": "Bachillerato virtual para adultos | ALBA Futuro Educativo",
       "description": "Termina tu bachillerato con un programa flexible, 100 % en línea y con acompañamiento real, pensado para la vida adulta."
     },
     "contact": {
@@ -3234,7 +3252,7 @@
         "TRANSFER": "Transferencia",
         "BRE_B": "Bre-B",
         "CASH": "Efectivo",
-        "GATEWAY": "Pago en línea (Wompi)"
+        "GATEWAY": "Pago en línea (Bold)"
       },
       "review": "Revisar el pago",
       "summaryTitle": "Vas a registrar",
@@ -3391,6 +3409,15 @@
     "phoneHint": "Opcional. Por si el equipo necesita contactarte.",
     "birthDate": "Fecha de nacimiento",
     "birthDateHint": "Hace falta para matricularte.",
+    "documentType": "Tipo de documento",
+    "documentNumber": "Número de documento",
+    "documentTypes": {
+      "CC": "Cédula de ciudadanía",
+      "TI": "Tarjeta de identidad",
+      "CE": "Cédula de extranjería",
+      "PPT": "Permiso por protección temporal",
+      "PA": "Pasaporte"
+    },
     "password": "Contraseña",
     "passwordHint": "Mínimo 12 caracteres.",
     "acceptPolicy": "Acepto la política de tratamiento de datos",
@@ -3417,6 +3444,8 @@
       "nameMissing": "Escribe tu nombre y tu apellido.",
       "birthDate": "Gracias, {name}. ¿Cuál es tu fecha de nacimiento?",
       "birthDateInvalid": "Escribe una fecha de nacimiento válida.",
+      "document": "¿Cuál es tu documento de identidad?",
+      "documentInvalid": "Escribe el número del documento, sin puntos ni espacios.",
       "email": "¿A qué correo te escribimos?",
       "emailInvalid": "Revisa el correo: le falta algo, como la @ o el dominio.",
       "phone": "¿Y un número de celular? Es opcional.",
@@ -3532,7 +3561,7 @@
     },
     "funnels": {
       "title": "Últimos 30 días",
-      "description": "Desde el {since}. Los tres embudos de la dirección UX, con los datos que ya se guardan.",
+      "description": "Desde el {since}. Cuántas personas empiezan, cuánto avanzan y cuántas actividades se aprueban.",
       "onboarding": "Empezaron a estudiar",
       "onboardingHint": "Personas nuevas con rol de estudiante que completaron al menos un tema.",
       "lessons": "Temas completados",
@@ -3545,7 +3574,7 @@
     },
     "journey": {
       "title": "El recorrido del estudiante",
-      "description": "Personas distintas que dieron cada paso en los últimos 30 días. Los dos primeros y el último los declara la pantalla; los demás los decide el servidor.",
+      "description": "Personas distintas que dieron cada paso en los últimos 30 días, desde que entran a su panel hasta que terminan un tema.",
       "steps": {
         "saw_action": "Vieron qué hacer en su panel",
         "clicked_action": "Entraron al tema desde ahí",
@@ -3734,7 +3763,7 @@
         "items": [
           "Con la institución educativa en convenio que expide el título, y con las autoridades educativas cuando la ley lo exija, para el registro académico y la certificación.",
           "Con la entidad aliada que financia tu matrícula, si es el caso: solo tu avance y tus resultados en ese programa.",
-          "Con proveedores que tratan los datos por nuestra cuenta (encargados), bajo contratos que les exigen confidencialidad y seguridad: alojamiento y base de datos (Vercel y Supabase), correo electrónico, video (Vimeo), monitoreo de errores (Sentry), mensajería (WhatsApp, de Meta) y, cuando el pago en línea esté habilitado, la pasarela de pagos (Wompi).",
+          "Con proveedores que tratan los datos por nuestra cuenta (encargados), bajo contratos que les exigen confidencialidad y seguridad: alojamiento y base de datos (Vercel y Supabase), correo electrónico, video (Vimeo), monitoreo de errores (Sentry), mensajería (WhatsApp, de Meta) y, cuando el pago en línea esté habilitado, la pasarela de pagos (Bold).",
           "Con autoridades judiciales o administrativas, cuando lo ordenen en ejercicio de sus funciones."
         ],
         "closing": [
@@ -3971,7 +4000,8 @@
       "BOT": "Bot",
       "WAITING": "Esperando asesor",
       "OPEN": "En curso",
-      "CLOSED": "Cerrado"
+      "CLOSED": "Cerrado",
+      "UNATTENDED": "Sin atender"
     },
     "fromYou": "Equipo:",
     "fromBot": "Bot:",
@@ -3979,6 +4009,18 @@
     "emptyHint": "Cuando alguien pida un asesor por WhatsApp, aparece en «Esperando» y les llega un aviso a quienes atienden.",
     "nobody": "Nadie",
     "student": "En la plataforma: {name}",
+    "intake": {
+      "ENROLL": "Datos de inscripción",
+      "CERTIFICATE": "Solicitud de certificado",
+      "incomplete": "Aún está respondiendo en el chat.",
+      "consent": "Autorizó el tratamiento de sus datos por el chat el {at}."
+    },
+    "charge": {
+      "title": "Link de pago",
+      "next": "Cuota {position} · {amount} · vence el {date}",
+      "hint": "Por Bold. El link vence en 24 horas.",
+      "takeFirst": "Toma el chat para enviarle el link."
+    },
     "thread": {
       "label": "Conversación con {name}",
       "bot": "Bot",
@@ -4001,7 +4043,373 @@
       "confirmClose": "Sí, cerrar",
       "cancel": "Cancelar",
       "closed": "Chat cerrado.",
+      "createPerson": "Crear persona",
+      "personCreated": "Persona creada.",
+      "linkByEmail": "Enviar al correo",
+      "linkToChat": "Dejar en el chat",
+      "linkEmailed": "Bold le envió el link a su correo.",
+      "linkInChat": "Link de pago enviado al chat.",
+      "linkNoEmail": "No tiene correo registrado.",
+      "linkNoWindow": "Pasaron más de 24 horas desde su último mensaje: no se le puede escribir.",
       "error": "No se pudo completar la acción."
+    }
+  },
+  "sitePages": {
+    "common": {
+      "home": "Inicio",
+      "breadcrumb": "Ruta de la página",
+      "reviewed": "Revisado el {date} por el equipo académico de {name}.",
+      "faqTitle": "Preguntas frecuentes",
+      "sources": "Fuentes",
+      "related": "Sigue leyendo",
+      "ctaTitle": "Cuéntanos en qué grado quedaste",
+      "ctaBody": "Con ese dato te decimos desde dónde sigues y qué te falta para graduarte.",
+      "whatsapp": "Escribir por WhatsApp",
+      "write": "Escribir por correo",
+      "register": "Crear cuenta",
+      "enter": "Ir a mi cuenta",
+      "contactTitle": "Canales de atención",
+      "contactWhatsapp": "WhatsApp",
+      "contactEmail": "Correo",
+      "contactWeb": "Sitio web"
+    },
+    "bogota": {
+      "nav": "Bachillerato para adultos en Bogotá",
+      "meta": {
+        "title": "Bachillerato para adultos en Bogotá",
+        "description": "Termina tu bachillerato desde Bogotá, 100 % en línea y por ciclos: empiezas donde quedaste, estudias a tu ritmo y recibes tu título de bachiller."
+      },
+      "eyebrow": "Bogotá",
+      "h1": "Bachillerato para adultos en Bogotá, 100 % virtual",
+      "lead": "Si vives en Bogotá y no terminaste el colegio, puedes hacerlo por ciclos y en línea: empiezas en el punto donde quedaste, estudias en los ratos que te deja el trabajo y te gradúas como bachiller.",
+      "whatsappMessage": "Hola, vivo en Bogotá y quiero terminar mi bachillerato. Me quedé en el grado ___.",
+      "sections": [
+        {
+          "id": "para-quien",
+          "title": "¿Para quién es?",
+          "paragraphs": [
+            "Para jóvenes y adultos desde los 16 años que dejaron el colegio y quieren su título de bachiller sin volver a un salón todos los días. No importa cuántos años hayan pasado desde tu último grado."
+          ],
+          "items": [
+            "Trabajas y no tienes un horario fijo para estudiar.",
+            "Cuidas a tu familia y necesitas estudiar desde casa.",
+            "Te piden el título para un empleo, un ascenso o para seguir una carrera."
+          ]
+        },
+        {
+          "id": "como-funciona",
+          "title": "Cómo funciona",
+          "paragraphs": [
+            "El programa es bachillerato por ciclos para adultos. Con el certificado del último grado que aprobaste te decimos en qué ciclo empiezas: no repites lo que ya aprobaste.",
+            "Todo se estudia en línea. Los temas, las actividades y los cuestionarios están disponibles las 24 horas, desde el celular o el computador, y un tutor te acompaña durante el proceso."
+          ]
+        },
+        {
+          "id": "que-necesitas",
+          "title": "Qué necesitas",
+          "items": [
+            "Tener 16 años o más.",
+            "El certificado del último grado aprobado (mínimo 5.º de primaria).",
+            "Tu documento de identidad."
+          ],
+          "closing": [
+            "En la página de requisitos explicamos cómo conseguir el certificado, incluso si tu colegio ya cerró."
+          ]
+        },
+        {
+          "id": "titulo",
+          "title": "Qué título recibes",
+          "paragraphs": [
+            "El título de bachiller. El bachillerato por ciclos para adultos está regulado por el Decreto 3011 de 1997, hoy recogido en el Decreto 1075 de 2015. El programa se dicta en convenio con instituciones educativas autorizadas: al inscribirte te asignamos la institución que valida tu proceso, y a ella le puedes pedir tus certificaciones."
+          ]
+        },
+        {
+          "id": "otras-opciones",
+          "title": "Otras formas de terminar el bachillerato en Bogotá",
+          "paragraphs": [
+            "Queremos que elijas con toda la información. En Bogotá hay tres caminos:"
+          ],
+          "items": [
+            "Validación del ICFES: un solo examen de cinco áreas, para mayores de 18 años, con dos convocatorias al año. Sirve si ya dominas los temas y solo te falta el título.",
+            "Ciclos gratuitos de la Secretaría de Educación del Distrito: presenciales, en colegios oficiales, con inscripciones en fechas fijas como la «Matriculatón».",
+            "Ciclos en línea, como los de ALBA: estudias a tu ritmo y con acompañamiento, sin desplazarte."
+          ],
+          "closing": [
+            "Si puedes asistir a clase en un horario fijo, la opción pública es gratuita. Si necesitas estudiar a tu ritmo y desde donde estés, la modalidad virtual suele ser la que se termina."
+          ]
+        },
+        {
+          "id": "donde",
+          "title": "¿Tengo que ir a algún lugar?",
+          "paragraphs": [
+            "No. Nuestra operación es 100 % virtual y no tenemos una sede de atención al público: te atendemos por WhatsApp y por correo, y estudias en la plataforma."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "¿Puedo estudiar si trabajo?",
+          "a": "Sí. El programa es 100 % en línea y está disponible las 24 horas: estudias en los ratos que te deja el trabajo, desde el celular o el computador."
+        },
+        {
+          "q": "¿Cuánto cuesta?",
+          "a": "Escríbenos y te contamos el valor, las becas o cupones disponibles y las formas de pago."
+        },
+        {
+          "q": "¿El título es válido en Colombia?",
+          "a": "Sí. Es bachillerato por ciclos para adultos, regulado por el Decreto 3011 de 1997, y se dicta en convenio con instituciones educativas autorizadas."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Decreto 1075 de 2015, educación de adultos (compila el Decreto 3011 de 1997)",
+          "url": "https://cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_1075_2015_pr017.htm"
+        },
+        {
+          "label": "Validación del bachillerato ante el ICFES: requisitos y convocatorias",
+          "url": "https://www.calendariodecolombia.com/educacion/como-validar-el-bachillerato-en-colombia-y-requisitos-para-presentar-el-examen-de-validacion-ante-el-icfes"
+        },
+        {
+          "label": "Matriculatón 2026 de la Secretaría de Educación del Distrito",
+          "url": "https://www.noticiasrcn.com/economia/matriculaton-bogota-abre-inscripciones-para-validar-el-bachillerato-en-2026-984630"
+        }
+      ],
+      "related": ["ciclos", "requisitos", "faq"]
+    },
+    "ciclos": {
+      "nav": "Bachillerato por ciclos",
+      "meta": {
+        "title": "Bachillerato por ciclos: qué es y cómo funciona",
+        "description": "Qué son los ciclos (CLEI), a qué grados equivale cada uno y cómo saber en cuál empiezas para terminar tu bachillerato siendo adulto."
+      },
+      "eyebrow": "Modalidad",
+      "h1": "Bachillerato por ciclos: qué es y en cuál empiezas",
+      "lead": "El bachillerato por ciclos es la forma en que los adultos terminan el colegio en Colombia: en vez de once grados, se cursan seis ciclos que agrupan los grados, y empiezas en el que corresponde al último que aprobaste.",
+      "whatsappMessage": "Hola, quiero saber en qué ciclo empezaría mi bachillerato. Me quedé en el grado ___.",
+      "sections": [
+        {
+          "id": "que-es",
+          "title": "Qué es un ciclo (CLEI)",
+          "paragraphs": [
+            "CLEI significa «ciclo lectivo especial integrado». Es la unidad en que se organiza la educación formal para jóvenes y adultos, creada por el Decreto 3011 de 1997 y hoy recogida en el Decreto 1075 de 2015. Cada ciclo reúne los aprendizajes de uno o varios grados del colegio tradicional."
+          ]
+        },
+        {
+          "id": "equivalencias",
+          "title": "A qué grados equivale cada ciclo",
+          "table": {
+            "caption": "Equivalencia entre ciclos y grados",
+            "head": ["Ciclo", "Grados", "Nivel"],
+            "rows": [
+              ["CLEI 1", "1.º, 2.º y 3.º", "Básica primaria"],
+              ["CLEI 2", "4.º y 5.º", "Básica primaria"],
+              ["CLEI 3", "6.º y 7.º", "Básica secundaria"],
+              ["CLEI 4", "8.º y 9.º", "Básica secundaria"],
+              ["CLEI 5", "10.º", "Media"],
+              ["CLEI 6", "11.º", "Media"]
+            ]
+          },
+          "closing": ["Al aprobar el CLEI 6 recibes el título de bachiller."]
+        },
+        {
+          "id": "en-cual-empiezo",
+          "title": "¿En qué ciclo empiezo?",
+          "paragraphs": [
+            "En el que sigue al último grado que aprobaste. No repites lo que ya tienes certificado."
+          ],
+          "items": [
+            "Si aprobaste 5.º de primaria, empiezas en el CLEI 3.",
+            "Si aprobaste 7.º, empiezas en el CLEI 4.",
+            "Si aprobaste 9.º, empiezas en el CLEI 5.",
+            "Si aprobaste 10.º, solo te falta el CLEI 6."
+          ],
+          "closing": [
+            "Con tu certificado del último grado aprobado te confirmamos tu punto de partida."
+          ]
+        },
+        {
+          "id": "validar",
+          "title": "¿Es lo mismo que «validar» el bachillerato?",
+          "paragraphs": [
+            "En la calle se usa «validar» para las dos cosas, pero son caminos distintos. La validación es un examen del ICFES: si lo apruebas, obtienes el título sin cursar nada. Por ciclos, en cambio, estudias y apruebas cada ciclo con acompañamiento. Los dos terminan en el título de bachiller."
+          ]
+        },
+        {
+          "id": "en-alba",
+          "title": "Cómo se estudia por ciclos en ALBA",
+          "paragraphs": [
+            "En línea y a tu ritmo: los temas, las actividades y los cuestionarios están disponibles las 24 horas, y un tutor te acompaña. Si hay clases en vivo, quedan grabadas en la plataforma."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "¿El bachillerato por ciclos es legal?",
+          "a": "Sí. Es la modalidad de educación formal para jóvenes y adultos que regula el Decreto 3011 de 1997, hoy recogido en el Decreto 1075 de 2015."
+        },
+        {
+          "q": "¿Cuánto dura?",
+          "a": "Depende del ciclo en el que empieces. Con tu certificado del último grado aprobado te decimos qué te falta y cuánto tiempo toma."
+        },
+        {
+          "q": "¿Puedo empezar si solo hice la primaria?",
+          "a": "Sí. Con 5.º de primaria aprobado empiezas en el CLEI 3."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Decreto 1075 de 2015, educación de adultos (compila el Decreto 3011 de 1997)",
+          "url": "https://cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_1075_2015_pr017.htm"
+        },
+        {
+          "label": "Validación del bachillerato ante el ICFES: requisitos y convocatorias",
+          "url": "https://www.calendariodecolombia.com/educacion/como-validar-el-bachillerato-en-colombia-y-requisitos-para-presentar-el-examen-de-validacion-ante-el-icfes"
+        }
+      ],
+      "related": ["requisitos", "bogota", "faq"]
+    },
+    "requisitos": {
+      "nav": "Requisitos",
+      "meta": {
+        "title": "Requisitos para terminar el bachillerato",
+        "description": "Qué necesitas para terminar tu bachillerato por ciclos: edad, documentos y cómo conseguir el certificado del último grado aprobado."
+      },
+      "eyebrow": "Paso a paso",
+      "h1": "Requisitos para terminar tu bachillerato",
+      "lead": "Son tres: tener 16 años o más, el certificado del último grado que aprobaste y tu documento de identidad. Aquí te explicamos cada uno y qué hacer si no tienes el certificado.",
+      "whatsappMessage": "Hola, quiero terminar mi bachillerato y tengo una duda sobre los requisitos.",
+      "sections": [
+        {
+          "id": "lista",
+          "title": "Lo que necesitas",
+          "items": [
+            "Tener 16 años o más.",
+            "El certificado de estudios del último grado aprobado. El mínimo para empezar es 5.º de primaria.",
+            "Tu documento de identidad."
+          ]
+        },
+        {
+          "id": "certificado",
+          "title": "Cómo conseguir el certificado del último grado",
+          "paragraphs": [
+            "Lo expide el colegio donde cursaste ese grado: pídelo en su secretaría con tu nombre completo, tu documento y el año en que estudiaste.",
+            "Si el colegio ya cerró, sus archivos pasan a la secretaría de educación del municipio o distrito donde funcionaba, y es allí donde se solicita."
+          ],
+          "closing": ["Si no sabes por dónde empezar, escríbenos y te orientamos."]
+        },
+        {
+          "id": "menores",
+          "title": "Si tienes 16 o 17 años",
+          "paragraphs": [
+            "Puedes estudiar. Tu acudiente acompaña la matrícula y autoriza el tratamiento de tus datos."
+          ]
+        },
+        {
+          "id": "inscripcion",
+          "title": "Cómo te inscribes",
+          "items": [
+            "Nos escribes por WhatsApp o creas tu cuenta en la plataforma.",
+            "Revisamos tu certificado y te decimos en qué ciclo empiezas.",
+            "Te matriculas y empiezas a estudiar en línea, a tu ritmo."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "¿Qué pasa si no tengo el certificado?",
+          "a": "Hay que pedirlo: sin él no se puede saber en qué ciclo empiezas. Lo expide tu antiguo colegio o, si cerró, la secretaría de educación del lugar donde funcionaba."
+        },
+        {
+          "q": "¿Hay una edad máxima?",
+          "a": "No. Puedes empezar desde los 16 años y no importa cuánto tiempo haya pasado desde tu último grado."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Decreto 1075 de 2015, educación de adultos (compila el Decreto 3011 de 1997)",
+          "url": "https://cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_1075_2015_pr017.htm"
+        }
+      ],
+      "related": ["ciclos", "bogota", "contacto"]
+    },
+    "faq": {
+      "nav": "Preguntas frecuentes",
+      "meta": {
+        "title": "Preguntas frecuentes sobre el bachillerato",
+        "description": "Respuestas cortas sobre el bachillerato por ciclos de ALBA: requisitos, validez del título, horarios, costos, certificados y soporte."
+      },
+      "eyebrow": "Dudas",
+      "h1": "Preguntas frecuentes",
+      "lead": "Las dudas que más nos llegan, con respuestas cortas. Si la tuya no está, escríbenos.",
+      "whatsappMessage": "Hola, tengo una pregunta sobre el bachillerato.",
+      "sections": [],
+      "faq": [
+        {
+          "q": "¿Puedo estudiar si trabajo?",
+          "a": "Sí. El programa es 100 % en línea y está disponible las 24 horas: estudias en los ratos que te deja el trabajo, desde el celular o el computador."
+        },
+        {
+          "q": "¿Necesito conectarme a una hora fija?",
+          "a": "No. Los componentes están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
+        },
+        {
+          "q": "¿Cómo sé qué ruta me corresponde?",
+          "a": "Depende del último grado que aprobaste. Con tu certificado te decimos en qué ciclo empiezas y qué te queda por cursar: no repites lo que ya aprobaste."
+        },
+        {
+          "q": "¿Cuáles son los requisitos?",
+          "a": "Tener 16 años o más, el certificado del último grado aprobado (mínimo 5.º de primaria) y tu documento de identidad."
+        },
+        {
+          "q": "¿Puedo retomar después de muchos años?",
+          "a": "Sí. No importa cuánto tiempo haya pasado desde tu último grado."
+        },
+        {
+          "q": "¿El título es válido en Colombia?",
+          "a": "Sí. Es bachillerato por ciclos para adultos, regulado por el Decreto 3011 de 1997. El programa se dicta en convenio con instituciones educativas autorizadas: al inscribirte te asignamos la que valida tu proceso."
+        },
+        {
+          "q": "¿Tienen sede?",
+          "a": "No tenemos una sede de atención al público: toda la operación es 100 % virtual. Te atendemos por WhatsApp y por correo."
+        },
+        {
+          "q": "¿Cuánto cuesta?",
+          "a": "Escríbenos y te contamos el valor, las becas o cupones disponibles y las formas de pago."
+        },
+        {
+          "q": "¿Cómo pido un certificado de estudio?",
+          "a": "Por WhatsApp. Te pedimos tus datos y te lo entregamos en tres días hábiles."
+        },
+        {
+          "q": "Olvidé mi contraseña, ¿qué hago?",
+          "a": "En la pantalla de ingreso elige «Olvidé mi contraseña» y te llega un enlace al correo para crear una nueva."
+        }
+      ],
+      "sources": [],
+      "related": ["requisitos", "ciclos", "contacto"]
+    },
+    "contacto": {
+      "nav": "Contacto",
+      "meta": {
+        "title": "Contacto",
+        "description": "Escríbenos por WhatsApp o por correo: te contamos cómo terminar tu bachillerato en línea y resolvemos tus dudas."
+      },
+      "eyebrow": "Contacto",
+      "h1": "Hablemos",
+      "lead": "Te atendemos por WhatsApp y por correo. Cuéntanos en qué grado quedaste y te decimos cómo seguir.",
+      "whatsappMessage": "Hola, quiero información para terminar mi bachillerato.",
+      "sections": [
+        {
+          "id": "virtual",
+          "title": "Atención 100 % virtual",
+          "paragraphs": [
+            "No tenemos una sede de atención al público. La operación es en línea y nuestra sede administrativa está en Bogotá, Colombia."
+          ]
+        }
+      ],
+      "faq": [],
+      "sources": [],
+      "related": ["requisitos", "faq"]
     }
   }
 }

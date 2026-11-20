@@ -1,0 +1,855 @@
+{
+  "tema": "elementos-de-la-comunicacion",
+  "componente": "Fundamentos",
+  "area": "Lengua castellana",
+  "titulo": "Elementos de la comunicación y sus características",
+  "siguiente": "Organizadores gráficos",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los elementos de la comunicación y sus características.",
+      "voz": "Repaso del tema: los elementos de la comunicación y sus características.",
+      "audio": "voz/elementos-de-la-comunicacion/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 133,
+      "frames": 161,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 31
+        },
+        {
+          "text": "los elementos de la",
+          "from": 36,
+          "to": 68
+        },
+        {
+          "text": "comunicación y sus características.",
+          "from": 68,
+          "to": 128
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "los",
+          "f": 36
+        },
+        {
+          "w": "elementos",
+          "f": 41
+        },
+        {
+          "w": "de",
+          "f": 54
+        },
+        {
+          "w": "la",
+          "f": 57
+        },
+        {
+          "w": "comunicación",
+          "f": 60
+        },
+        {
+          "w": "y",
+          "f": 81
+        },
+        {
+          "w": "sus",
+          "f": 83
+        },
+        {
+          "w": "características",
+          "f": 88
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los elementos de la comunicación",
+      "texto": "Para comunicarnos intervienen varios elementos. El emisor comparte el mensaje y el receptor lo recibe y lo decodifica. El mensaje es la información; el código, los signos que lo forman; el canal, el medio por el que viaja. Y el contexto es el entorno donde ocurre.",
+      "voz": "Para comunicarnos intervienen varios elementos. El emisor comparte el mensaje y el receptor lo recibe y lo decodifica. El mensaje es la información; el código, los signos que lo forman; el canal, el medio por el que viaja. Y el contexto es el entorno donde ocurre.",
+      "items": [
+        {
+          "titulo": "Emisor",
+          "texto": "Comparte la información",
+          "palabra": "emisor"
+        },
+        {
+          "titulo": "Receptor",
+          "texto": "Recibe el mensaje y lo decodifica",
+          "palabra": "receptor"
+        },
+        {
+          "titulo": "Mensaje",
+          "texto": "La información que se comunica",
+          "palabra": "mensaje",
+          "vez": 1
+        },
+        {
+          "titulo": "Código",
+          "texto": "Los signos y normas que lo forman",
+          "palabra": "código"
+        },
+        {
+          "titulo": "Canal",
+          "texto": "El medio por el que viaja",
+          "palabra": "canal"
+        },
+        {
+          "titulo": "Contexto",
+          "texto": "El entorno donde ocurre",
+          "palabra": "contexto"
+        }
+      ],
+      "audio": "voz/elementos-de-la-comunicacion/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 475,
+      "frames": 503,
+      "chunks": [
+        {
+          "text": "Para comunicarnos intervienen varios elementos.",
+          "from": 0,
+          "to": 75
+        },
+        {
+          "text": "El emisor comparte el mensaje y el",
+          "from": 84,
+          "to": 141
+        },
+        {
+          "text": "receptor lo recibe y lo decodifica.",
+          "from": 141,
+          "to": 200
+        },
+        {
+          "text": "El mensaje es la información;",
+          "from": 213,
+          "to": 257
+        },
+        {
+          "text": "el código, los signos que lo forman;",
+          "from": 266,
+          "to": 327
+        },
+        {
+          "text": "el canal, el medio por el que viaja.",
+          "from": 336,
+          "to": 401
+        },
+        {
+          "text": "Y el contexto es el entorno donde ocurre.",
+          "from": 410,
+          "to": 471
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "comunicarnos",
+          "f": 8
+        },
+        {
+          "w": "intervienen",
+          "f": 29
+        },
+        {
+          "w": "varios",
+          "f": 45
+        },
+        {
+          "w": "elementos",
+          "f": 54
+        },
+        {
+          "w": "el",
+          "f": 84
+        },
+        {
+          "w": "emisor",
+          "f": 89
+        },
+        {
+          "w": "comparte",
+          "f": 100
+        },
+        {
+          "w": "el",
+          "f": 112
+        },
+        {
+          "w": "mensaje",
+          "f": 115
+        },
+        {
+          "w": "y",
+          "f": 129
+        },
+        {
+          "w": "el",
+          "f": 131
+        },
+        {
+          "w": "receptor",
+          "f": 134
+        },
+        {
+          "w": "lo",
+          "f": 148
+        },
+        {
+          "w": "recibe",
+          "f": 153
+        },
+        {
+          "w": "y",
+          "f": 166
+        },
+        {
+          "w": "lo",
+          "f": 170
+        },
+        {
+          "w": "decodifica",
+          "f": 174
+        },
+        {
+          "w": "el",
+          "f": 213
+        },
+        {
+          "w": "mensaje",
+          "f": 218
+        },
+        {
+          "w": "es",
+          "f": 230
+        },
+        {
+          "w": "la",
+          "f": 233
+        },
+        {
+          "w": "información",
+          "f": 235
+        },
+        {
+          "w": "el",
+          "f": 266
+        },
+        {
+          "w": "código",
+          "f": 273
+        },
+        {
+          "w": "los",
+          "f": 289
+        },
+        {
+          "w": "signos",
+          "f": 294
+        },
+        {
+          "w": "que",
+          "f": 304
+        },
+        {
+          "w": "lo",
+          "f": 308
+        },
+        {
+          "w": "forman",
+          "f": 312
+        },
+        {
+          "w": "el",
+          "f": 336
+        },
+        {
+          "w": "canal",
+          "f": 343
+        },
+        {
+          "w": "el",
+          "f": 362
+        },
+        {
+          "w": "medio",
+          "f": 367
+        },
+        {
+          "w": "por",
+          "f": 375
+        },
+        {
+          "w": "el",
+          "f": 379
+        },
+        {
+          "w": "que",
+          "f": 383
+        },
+        {
+          "w": "viaja",
+          "f": 387
+        },
+        {
+          "w": "y",
+          "f": 410
+        },
+        {
+          "w": "el",
+          "f": 414
+        },
+        {
+          "w": "contexto",
+          "f": 418
+        },
+        {
+          "w": "es",
+          "f": 431
+        },
+        {
+          "w": "el",
+          "f": 434
+        },
+        {
+          "w": "entorno",
+          "f": 437
+        },
+        {
+          "w": "donde",
+          "f": 448
+        },
+        {
+          "w": "ocurre",
+          "f": 455
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Cómo viaja un mensaje",
+      "texto": "El emisor codifica el mensaje. El mensaje viaja por un canal, como el aire, el papel o la radio. El receptor lo decodifica, y solo lo entiende si comparte el mismo código.",
+      "voz": "El emisor codifica el mensaje. El mensaje viaja por un canal, como el aire, el papel o la radio. El receptor lo decodifica, y solo lo entiende si comparte el mismo código.",
+      "imagenes": [
+        {
+          "src": "fundamentos/proceso-comunicativo.webp",
+          "focos": [
+            {
+              "palabra": "emisor",
+              "x": 0.2,
+              "y": 0.3,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "canal",
+              "x": 0.5,
+              "y": 0.4,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "receptor",
+              "x": 0.8,
+              "y": 0.3,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "código",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ],
+      "audio": "voz/elementos-de-la-comunicacion/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 315,
+      "frames": 343,
+      "chunks": [
+        {
+          "text": "El emisor codifica el mensaje.",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "El mensaje viaja por un canal, como",
+          "from": 65,
+          "to": 131
+        },
+        {
+          "text": "el aire, el papel o la radio.",
+          "from": 131,
+          "to": 185
+        },
+        {
+          "text": "El receptor lo decodifica, y solo lo",
+          "from": 192,
+          "to": 251
+        },
+        {
+          "text": "entiende si comparte el mismo código.",
+          "from": 251,
+          "to": 311
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "emisor",
+          "f": 8
+        },
+        {
+          "w": "codifica",
+          "f": 20
+        },
+        {
+          "w": "el",
+          "f": 34
+        },
+        {
+          "w": "mensaje",
+          "f": 38
+        },
+        {
+          "w": "el",
+          "f": 65
+        },
+        {
+          "w": "mensaje",
+          "f": 70
+        },
+        {
+          "w": "viaja",
+          "f": 83
+        },
+        {
+          "w": "por",
+          "f": 91
+        },
+        {
+          "w": "un",
+          "f": 96
+        },
+        {
+          "w": "canal",
+          "f": 100
+        },
+        {
+          "w": "como",
+          "f": 121
+        },
+        {
+          "w": "el",
+          "f": 129
+        },
+        {
+          "w": "aire",
+          "f": 133
+        },
+        {
+          "w": "el",
+          "f": 143
+        },
+        {
+          "w": "papel",
+          "f": 149
+        },
+        {
+          "w": "o",
+          "f": 162
+        },
+        {
+          "w": "la",
+          "f": 165
+        },
+        {
+          "w": "radio",
+          "f": 170
+        },
+        {
+          "w": "el",
+          "f": 192
+        },
+        {
+          "w": "receptor",
+          "f": 197
+        },
+        {
+          "w": "lo",
+          "f": 212
+        },
+        {
+          "w": "decodifica",
+          "f": 215
+        },
+        {
+          "w": "y",
+          "f": 236
+        },
+        {
+          "w": "solo",
+          "f": 238
+        },
+        {
+          "w": "lo",
+          "f": 245
+        },
+        {
+          "w": "entiende",
+          "f": 247
+        },
+        {
+          "w": "si",
+          "f": 257
+        },
+        {
+          "w": "comparte",
+          "f": 261
+        },
+        {
+          "w": "el",
+          "f": 273
+        },
+        {
+          "w": "mismo",
+          "f": 277
+        },
+        {
+          "w": "código",
+          "f": 286
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "comparar",
+      "titulo": "Lo que estorba y lo que ayuda",
+      "texto": "El ruido es cualquier señal que interfiere con el mensaje, como una falla en un aparato o alguien que interrumpe. La retroalimentación es la respuesta del receptor al emisor, y hace que la conversación sea fluida.",
+      "voz": "El ruido es cualquier señal que interfiere con el mensaje, como una falla en un aparato o alguien que interrumpe. La retroalimentación es la respuesta del receptor al emisor, y hace que la conversación sea fluida.",
+      "columnas": [
+        {
+          "titulo": "Ruido",
+          "palabra": "ruido",
+          "puntos": [
+            {
+              "texto": "Interfiere con el mensaje",
+              "palabra": "interfiere"
+            },
+            {
+              "texto": "Una falla o una interrupción",
+              "palabra": "falla"
+            }
+          ]
+        },
+        {
+          "titulo": "Retroalimentación",
+          "palabra": "retroalimentación",
+          "puntos": [
+            {
+              "texto": "La respuesta del receptor",
+              "palabra": "respuesta"
+            },
+            {
+              "texto": "Hace fluida la conversación",
+              "palabra": "fluida"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/elementos-de-la-comunicacion/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 349,
+      "frames": 377,
+      "chunks": [
+        {
+          "text": "El ruido es cualquier señal que interfiere",
+          "from": 0,
+          "to": 65
+        },
+        {
+          "text": "con el mensaje, como una falla en",
+          "from": 65,
+          "to": 116
+        },
+        {
+          "text": "un aparato o alguien que interrumpe.",
+          "from": 116,
+          "to": 172
+        },
+        {
+          "text": "La retroalimentación es la respuesta del receptor al",
+          "from": 181,
+          "to": 268
+        },
+        {
+          "text": "emisor, y hace que la conversación sea fluida.",
+          "from": 268,
+          "to": 344
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "ruido",
+          "f": 7
+        },
+        {
+          "w": "es",
+          "f": 14
+        },
+        {
+          "w": "cualquier",
+          "f": 17
+        },
+        {
+          "w": "señal",
+          "f": 27
+        },
+        {
+          "w": "que",
+          "f": 36
+        },
+        {
+          "w": "interfiere",
+          "f": 39
+        },
+        {
+          "w": "con",
+          "f": 53
+        },
+        {
+          "w": "el",
+          "f": 59
+        },
+        {
+          "w": "mensaje",
+          "f": 62
+        },
+        {
+          "w": "como",
+          "f": 90
+        },
+        {
+          "w": "una",
+          "f": 96
+        },
+        {
+          "w": "falla",
+          "f": 102
+        },
+        {
+          "w": "en",
+          "f": 108
+        },
+        {
+          "w": "un",
+          "f": 112
+        },
+        {
+          "w": "aparato",
+          "f": 115
+        },
+        {
+          "w": "o",
+          "f": 133
+        },
+        {
+          "w": "alguien",
+          "f": 137
+        },
+        {
+          "w": "que",
+          "f": 146
+        },
+        {
+          "w": "interrumpe",
+          "f": 148
+        },
+        {
+          "w": "la",
+          "f": 181
+        },
+        {
+          "w": "retroalimentación",
+          "f": 187
+        },
+        {
+          "w": "es",
+          "f": 215
+        },
+        {
+          "w": "la",
+          "f": 218
+        },
+        {
+          "w": "respuesta",
+          "f": 222
+        },
+        {
+          "w": "del",
+          "f": 234
+        },
+        {
+          "w": "receptor",
+          "f": 238
+        },
+        {
+          "w": "al",
+          "f": 253
+        },
+        {
+          "w": "emisor",
+          "f": 256
+        },
+        {
+          "w": "y",
+          "f": 275
+        },
+        {
+          "w": "hace",
+          "f": 279
+        },
+        {
+          "w": "que",
+          "f": 286
+        },
+        {
+          "w": "la",
+          "f": 289
+        },
+        {
+          "w": "conversación",
+          "f": 293
+        },
+        {
+          "w": "sea",
+          "f": 311
+        },
+        {
+          "w": "fluida",
+          "f": 318
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los elementos de la comunicación. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los elementos de la comunicación. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/elementos-de-la-comunicacion/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 180,
+      "frames": 340,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste los elementos de la comunicación.",
+          "from": 32,
+          "to": 98
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 109,
+          "to": 176
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 32
+        },
+        {
+          "w": "los",
+          "f": 48
+        },
+        {
+          "w": "elementos",
+          "f": 53
+        },
+        {
+          "w": "de",
+          "f": 67
+        },
+        {
+          "w": "la",
+          "f": 69
+        },
+        {
+          "w": "comunicación",
+          "f": 73
+        },
+        {
+          "w": "sigue",
+          "f": 109
+        },
+        {
+          "w": "con",
+          "f": 120
+        },
+        {
+          "w": "el",
+          "f": 125
+        },
+        {
+          "w": "siguiente",
+          "f": 127
+        },
+        {
+          "w": "tema",
+          "f": 140
+        },
+        {
+          "w": "de",
+          "f": 148
+        },
+        {
+          "w": "tu",
+          "f": 152
+        },
+        {
+          "w": "ruta",
+          "f": 156
+        }
+      ]
+    }
+  ]
+}

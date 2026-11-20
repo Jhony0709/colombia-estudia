@@ -1,0 +1,1080 @@
+{
+  "tema": "proyecto-de-vida",
+  "componente": "Bachillerato",
+  "area": "Proyecto de vida",
+  "titulo": "Proyecto de vida",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: el proyecto de vida, el autoconocimiento y la construcción del futuro.",
+      "voz": "Repaso del tema: el proyecto de vida, el autoconocimiento y la construcción del futuro.",
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 151,
+      "frames": 179,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 33
+        },
+        {
+          "text": "el proyecto de vida, el autoconocimiento",
+          "from": 35,
+          "to": 99
+        },
+        {
+          "text": "y la construcción del futuro.",
+          "from": 99,
+          "to": 146
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 17
+        },
+        {
+          "w": "tema",
+          "f": 21
+        },
+        {
+          "w": "el",
+          "f": 35
+        },
+        {
+          "w": "proyecto",
+          "f": 40
+        },
+        {
+          "w": "de",
+          "f": 54
+        },
+        {
+          "w": "vida",
+          "f": 56
+        },
+        {
+          "w": "el",
+          "f": 67
+        },
+        {
+          "w": "autoconocimiento",
+          "f": 72
+        },
+        {
+          "w": "y",
+          "f": 96
+        },
+        {
+          "w": "la",
+          "f": 98
+        },
+        {
+          "w": "construcción",
+          "f": 101
+        },
+        {
+          "w": "del",
+          "f": 117
+        },
+        {
+          "w": "futuro",
+          "f": 121
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "¿Qué es el proyecto de vida?",
+      "texto": "El proyecto de vida reúne tus sueños, intereses, valores, decisiones y acciones para orientar tu futuro. No hace falta tenerlo todo resuelto: se empieza por conocerse y explorar posibilidades.",
+      "voz": "El proyecto de vida reúne tus sueños, intereses, valores, decisiones y acciones para orientar tu futuro. No hace falta tenerlo todo resuelto: se empieza por conocerse y explorar posibilidades.",
+      "items": [
+        {
+          "titulo": "Sueños y decisiones",
+          "texto": "Orientan tu futuro",
+          "palabra": "sueños"
+        },
+        {
+          "titulo": "Conocerse",
+          "palabra": "conocerse"
+        },
+        {
+          "titulo": "Explorar",
+          "texto": "Las posibilidades",
+          "palabra": "explorar"
+        }
+      ],
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 333,
+      "frames": 361,
+      "chunks": [
+        {
+          "text": "El proyecto de vida reúne tus sueños, intereses,",
+          "from": 0,
+          "to": 77
+        },
+        {
+          "text": "valores, decisiones y acciones para orientar tu futuro.",
+          "from": 77,
+          "to": 165
+        },
+        {
+          "text": "No hace falta tenerlo todo resuelto:",
+          "from": 179,
+          "to": 235
+        },
+        {
+          "text": "se empieza por conocerse y explorar posibilidades.",
+          "from": 238,
+          "to": 329
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "proyecto",
+          "f": 6
+        },
+        {
+          "w": "de",
+          "f": 20
+        },
+        {
+          "w": "vida",
+          "f": 22
+        },
+        {
+          "w": "reúne",
+          "f": 31
+        },
+        {
+          "w": "tus",
+          "f": 40
+        },
+        {
+          "w": "sueños",
+          "f": 45
+        },
+        {
+          "w": "intereses",
+          "f": 60
+        },
+        {
+          "w": "valores",
+          "f": 80
+        },
+        {
+          "w": "decisiones",
+          "f": 94
+        },
+        {
+          "w": "y",
+          "f": 111
+        },
+        {
+          "w": "acciones",
+          "f": 113
+        },
+        {
+          "w": "para",
+          "f": 127
+        },
+        {
+          "w": "orientar",
+          "f": 133
+        },
+        {
+          "w": "tu",
+          "f": 145
+        },
+        {
+          "w": "futuro",
+          "f": 149
+        },
+        {
+          "w": "no",
+          "f": 179
+        },
+        {
+          "w": "hace",
+          "f": 183
+        },
+        {
+          "w": "falta",
+          "f": 188
+        },
+        {
+          "w": "tenerlo",
+          "f": 198
+        },
+        {
+          "w": "todo",
+          "f": 210
+        },
+        {
+          "w": "resuelto",
+          "f": 216
+        },
+        {
+          "w": "se",
+          "f": 238
+        },
+        {
+          "w": "empieza",
+          "f": 241
+        },
+        {
+          "w": "por",
+          "f": 253
+        },
+        {
+          "w": "conocerse",
+          "f": 257
+        },
+        {
+          "w": "y",
+          "f": 273
+        },
+        {
+          "w": "explorar",
+          "f": 276
+        },
+        {
+          "w": "posibilidades",
+          "f": 290
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "El autoconocimiento",
+      "texto": "Conocerse es reconocer tus intereses, lo que te gusta; tus habilidades, lo que sabes hacer; tus valores, lo que consideras importante; y tus motivaciones, lo que te impulsa a avanzar.",
+      "voz": "Conocerse es reconocer tus intereses, lo que te gusta; tus habilidades, lo que sabes hacer; tus valores, lo que consideras importante; y tus motivaciones, lo que te impulsa a avanzar.",
+      "items": [
+        {
+          "titulo": "Intereses",
+          "texto": "Lo que te gusta",
+          "palabra": "intereses"
+        },
+        {
+          "titulo": "Habilidades",
+          "texto": "Lo que sabes hacer",
+          "palabra": "habilidades"
+        },
+        {
+          "titulo": "Valores",
+          "texto": "Lo que es importante",
+          "palabra": "valores"
+        },
+        {
+          "titulo": "Motivaciones",
+          "texto": "Lo que te impulsa",
+          "palabra": "motivaciones"
+        }
+      ],
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 318,
+      "frames": 346,
+      "chunks": [
+        {
+          "text": "Conocerse es reconocer tus intereses,",
+          "from": 0,
+          "to": 58
+        },
+        {
+          "text": "lo que te gusta;",
+          "from": 58,
+          "to": 83
+        },
+        {
+          "text": "tus habilidades, lo que sabes hacer;",
+          "from": 91,
+          "to": 145
+        },
+        {
+          "text": "tus valores, lo que consideras importante;",
+          "from": 152,
+          "to": 218
+        },
+        {
+          "text": "y tus motivaciones, lo que te impulsa a avanzar.",
+          "from": 226,
+          "to": 313
+        }
+      ],
+      "words": [
+        {
+          "w": "conocerse",
+          "f": 0
+        },
+        {
+          "w": "es",
+          "f": 18
+        },
+        {
+          "w": "reconocer",
+          "f": 22
+        },
+        {
+          "w": "tus",
+          "f": 36
+        },
+        {
+          "w": "intereses",
+          "f": 41
+        },
+        {
+          "w": "lo",
+          "f": 58
+        },
+        {
+          "w": "que",
+          "f": 62
+        },
+        {
+          "w": "te",
+          "f": 65
+        },
+        {
+          "w": "gusta",
+          "f": 69
+        },
+        {
+          "w": "tus",
+          "f": 91
+        },
+        {
+          "w": "habilidades",
+          "f": 97
+        },
+        {
+          "w": "lo",
+          "f": 117
+        },
+        {
+          "w": "que",
+          "f": 121
+        },
+        {
+          "w": "sabes",
+          "f": 124
+        },
+        {
+          "w": "hacer",
+          "f": 132
+        },
+        {
+          "w": "tus",
+          "f": 152
+        },
+        {
+          "w": "valores",
+          "f": 159
+        },
+        {
+          "w": "lo",
+          "f": 174
+        },
+        {
+          "w": "que",
+          "f": 178
+        },
+        {
+          "w": "consideras",
+          "f": 182
+        },
+        {
+          "w": "importante",
+          "f": 197
+        },
+        {
+          "w": "y",
+          "f": 226
+        },
+        {
+          "w": "tus",
+          "f": 231
+        },
+        {
+          "w": "motivaciones",
+          "f": 237
+        },
+        {
+          "w": "lo",
+          "f": 259
+        },
+        {
+          "w": "que",
+          "f": 263
+        },
+        {
+          "w": "te",
+          "f": 267
+        },
+        {
+          "w": "impulsa",
+          "f": 269
+        },
+        {
+          "w": "a",
+          "f": 281
+        },
+        {
+          "w": "avanzar",
+          "f": 283
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Vocación, profesión y trabajo",
+      "texto": "La vocación es una inclinación profunda hacia ciertas actividades; la profesión requiere formación especializada; y el trabajo produce bienes o servicios y puede generar ingresos. Después del bachillerato hay muchos caminos, y se pueden combinar.",
+      "voz": "La vocación es una inclinación profunda hacia ciertas actividades; la profesión requiere formación especializada; y el trabajo produce bienes o servicios y puede generar ingresos. Después del bachillerato hay muchos caminos, y se pueden combinar.",
+      "items": [
+        {
+          "titulo": "Vocación",
+          "texto": "Una inclinación profunda",
+          "palabra": "vocación"
+        },
+        {
+          "titulo": "Profesión",
+          "texto": "Formación especializada",
+          "palabra": "profesión"
+        },
+        {
+          "titulo": "Trabajo",
+          "texto": "Genera ingresos",
+          "palabra": "trabajo"
+        },
+        {
+          "titulo": "Muchos caminos",
+          "texto": "Estudiar, trabajar, emprender…",
+          "palabra": "caminos"
+        }
+      ],
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 411,
+      "frames": 439,
+      "chunks": [
+        {
+          "text": "La vocación es una inclinación",
+          "from": 0,
+          "to": 44
+        },
+        {
+          "text": "profunda hacia ciertas actividades;",
+          "from": 44,
+          "to": 95
+        },
+        {
+          "text": "la profesión requiere formación especializada;",
+          "from": 108,
+          "to": 176
+        },
+        {
+          "text": "y el trabajo produce bienes o",
+          "from": 186,
+          "to": 233
+        },
+        {
+          "text": "servicios y puede generar ingresos.",
+          "from": 233,
+          "to": 289
+        },
+        {
+          "text": "Después del bachillerato hay muchos",
+          "from": 302,
+          "to": 359
+        },
+        {
+          "text": "caminos, y se pueden combinar.",
+          "from": 359,
+          "to": 407
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "vocación",
+          "f": 6
+        },
+        {
+          "w": "es",
+          "f": 18
+        },
+        {
+          "w": "una",
+          "f": 22
+        },
+        {
+          "w": "inclinación",
+          "f": 25
+        },
+        {
+          "w": "profunda",
+          "f": 41
+        },
+        {
+          "w": "hacia",
+          "f": 53
+        },
+        {
+          "w": "ciertas",
+          "f": 60
+        },
+        {
+          "w": "actividades",
+          "f": 71
+        },
+        {
+          "w": "la",
+          "f": 108
+        },
+        {
+          "w": "profesión",
+          "f": 113
+        },
+        {
+          "w": "requiere",
+          "f": 125
+        },
+        {
+          "w": "formación",
+          "f": 136
+        },
+        {
+          "w": "especializada",
+          "f": 149
+        },
+        {
+          "w": "y",
+          "f": 186
+        },
+        {
+          "w": "el",
+          "f": 189
+        },
+        {
+          "w": "trabajo",
+          "f": 193
+        },
+        {
+          "w": "produce",
+          "f": 204
+        },
+        {
+          "w": "bienes",
+          "f": 217
+        },
+        {
+          "w": "o",
+          "f": 229
+        },
+        {
+          "w": "servicios",
+          "f": 232
+        },
+        {
+          "w": "y",
+          "f": 249
+        },
+        {
+          "w": "puede",
+          "f": 252
+        },
+        {
+          "w": "generar",
+          "f": 259
+        },
+        {
+          "w": "ingresos",
+          "f": 271
+        },
+        {
+          "w": "después",
+          "f": 302
+        },
+        {
+          "w": "del",
+          "f": 313
+        },
+        {
+          "w": "bachillerato",
+          "f": 317
+        },
+        {
+          "w": "hay",
+          "f": 335
+        },
+        {
+          "w": "muchos",
+          "f": 339
+        },
+        {
+          "w": "caminos",
+          "f": 348
+        },
+        {
+          "w": "y",
+          "f": 363
+        },
+        {
+          "w": "se",
+          "f": 366
+        },
+        {
+          "w": "pueden",
+          "f": 371
+        },
+        {
+          "w": "combinar",
+          "f": 379
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Metas que se cumplen",
+      "texto": "Para convertir un sueño en una meta, hazla específica, medible, alcanzable, relevante y con un plazo. Por ejemplo: en los próximos seis meses compararé tres programas de formación audiovisual.",
+      "voz": "Para convertir un sueño en una meta, hazla específica, medible, alcanzable, relevante y con un plazo. Por ejemplo: en los próximos seis meses compararé tres programas de formación audiovisual.",
+      "items": [
+        {
+          "titulo": "Específica",
+          "palabra": "específica"
+        },
+        {
+          "titulo": "Medible",
+          "palabra": "medible"
+        },
+        {
+          "titulo": "Alcanzable",
+          "palabra": "alcanzable"
+        },
+        {
+          "titulo": "Relevante",
+          "palabra": "relevante"
+        },
+        {
+          "titulo": "Con plazo",
+          "palabra": "plazo"
+        }
+      ],
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 337,
+      "frames": 365,
+      "chunks": [
+        {
+          "text": "Para convertir un sueño en una meta, hazla",
+          "from": 0,
+          "to": 73
+        },
+        {
+          "text": "específica, medible, alcanzable, relevante y con un plazo.",
+          "from": 73,
+          "to": 174
+        },
+        {
+          "text": "Por ejemplo:",
+          "from": 185,
+          "to": 207
+        },
+        {
+          "text": "en los próximos seis meses compararé",
+          "from": 208,
+          "to": 267
+        },
+        {
+          "text": "tres programas de formación audiovisual.",
+          "from": 267,
+          "to": 333
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "convertir",
+          "f": 8
+        },
+        {
+          "w": "un",
+          "f": 23
+        },
+        {
+          "w": "sueño",
+          "f": 26
+        },
+        {
+          "w": "en",
+          "f": 34
+        },
+        {
+          "w": "una",
+          "f": 38
+        },
+        {
+          "w": "meta",
+          "f": 44
+        },
+        {
+          "w": "hazla",
+          "f": 57
+        },
+        {
+          "w": "específica",
+          "f": 66
+        },
+        {
+          "w": "medible",
+          "f": 88
+        },
+        {
+          "w": "alcanzable",
+          "f": 104
+        },
+        {
+          "w": "relevante",
+          "f": 127
+        },
+        {
+          "w": "y",
+          "f": 147
+        },
+        {
+          "w": "con",
+          "f": 152
+        },
+        {
+          "w": "un",
+          "f": 157
+        },
+        {
+          "w": "plazo",
+          "f": 160
+        },
+        {
+          "w": "por",
+          "f": 185
+        },
+        {
+          "w": "ejemplo",
+          "f": 192
+        },
+        {
+          "w": "en",
+          "f": 208
+        },
+        {
+          "w": "los",
+          "f": 212
+        },
+        {
+          "w": "próximos",
+          "f": 217
+        },
+        {
+          "w": "seis",
+          "f": 229
+        },
+        {
+          "w": "meses",
+          "f": 236
+        },
+        {
+          "w": "compararé",
+          "f": 246
+        },
+        {
+          "w": "tres",
+          "f": 261
+        },
+        {
+          "w": "programas",
+          "f": 269
+        },
+        {
+          "w": "de",
+          "f": 282
+        },
+        {
+          "w": "formación",
+          "f": 285
+        },
+        {
+          "w": "audiovisual",
+          "f": 300
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Habilidades para la vida",
+      "texto": "Para avanzar ayudan la disciplina, la responsabilidad, la resiliencia, que es aprender de las dificultades, y la gestión del tiempo. Y recuerda: el éxito no tiene una única definición.",
+      "voz": "Para avanzar ayudan la disciplina, la responsabilidad, la resiliencia, que es aprender de las dificultades, y la gestión del tiempo. Y recuerda: el éxito no tiene una única definición.",
+      "items": [
+        {
+          "titulo": "Disciplina",
+          "palabra": "disciplina"
+        },
+        {
+          "titulo": "Responsabilidad",
+          "palabra": "responsabilidad"
+        },
+        {
+          "titulo": "Resiliencia",
+          "texto": "Aprender de las dificultades",
+          "palabra": "resiliencia"
+        },
+        {
+          "titulo": "Gestión del tiempo",
+          "palabra": "gestión"
+        }
+      ],
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 351,
+      "frames": 379,
+      "chunks": [
+        {
+          "text": "Para avanzar ayudan la disciplina, la responsabilidad,",
+          "from": 0,
+          "to": 102
+        },
+        {
+          "text": "la resiliencia, que es aprender de las",
+          "from": 102,
+          "to": 173
+        },
+        {
+          "text": "dificultades, y la gestión del tiempo.",
+          "from": 173,
+          "to": 245
+        },
+        {
+          "text": "Y recuerda:",
+          "from": 251,
+          "to": 275
+        },
+        {
+          "text": "el éxito no tiene una única definición.",
+          "from": 281,
+          "to": 347
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "avanzar",
+          "f": 8
+        },
+        {
+          "w": "ayudan",
+          "f": 24
+        },
+        {
+          "w": "la",
+          "f": 36
+        },
+        {
+          "w": "disciplina",
+          "f": 39
+        },
+        {
+          "w": "la",
+          "f": 60
+        },
+        {
+          "w": "responsabilidad",
+          "f": 64
+        },
+        {
+          "w": "la",
+          "f": 102
+        },
+        {
+          "w": "resiliencia",
+          "f": 108
+        },
+        {
+          "w": "que",
+          "f": 139
+        },
+        {
+          "w": "es",
+          "f": 144
+        },
+        {
+          "w": "aprender",
+          "f": 148
+        },
+        {
+          "w": "de",
+          "f": 162
+        },
+        {
+          "w": "las",
+          "f": 165
+        },
+        {
+          "w": "dificultades",
+          "f": 169
+        },
+        {
+          "w": "y",
+          "f": 204
+        },
+        {
+          "w": "la",
+          "f": 209
+        },
+        {
+          "w": "gestión",
+          "f": 213
+        },
+        {
+          "w": "del",
+          "f": 223
+        },
+        {
+          "w": "tiempo",
+          "f": 228
+        },
+        {
+          "w": "y",
+          "f": 251
+        },
+        {
+          "w": "recuerda",
+          "f": 257
+        },
+        {
+          "w": "el",
+          "f": 281
+        },
+        {
+          "w": "éxito",
+          "f": 286
+        },
+        {
+          "w": "no",
+          "f": 297
+        },
+        {
+          "w": "tiene",
+          "f": 301
+        },
+        {
+          "w": "una",
+          "f": 307
+        },
+        {
+          "w": "única",
+          "f": 312
+        },
+        {
+          "w": "definición",
+          "f": 321
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el proyecto de vida. Sigue construyendo tu camino.",
+      "voz": "¡Muy bien! Repasaste el proyecto de vida. Sigue construyendo tu camino.",
+      "audio": "voz/proyecto-de-vida/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 142,
+      "frames": 302,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste el proyecto de vida.",
+          "from": 34,
+          "to": 81
+        },
+        {
+          "text": "Sigue construyendo tu camino.",
+          "from": 82,
+          "to": 138
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 34
+        },
+        {
+          "w": "el",
+          "f": 49
+        },
+        {
+          "w": "proyecto",
+          "f": 53
+        },
+        {
+          "w": "de",
+          "f": 68
+        },
+        {
+          "w": "vida",
+          "f": 71
+        },
+        {
+          "w": "sigue",
+          "f": 82
+        },
+        {
+          "w": "construyendo",
+          "f": 92
+        },
+        {
+          "w": "tu",
+          "f": 110
+        },
+        {
+          "w": "camino",
+          "f": 114
+        }
+      ]
+    }
+  ]
+}

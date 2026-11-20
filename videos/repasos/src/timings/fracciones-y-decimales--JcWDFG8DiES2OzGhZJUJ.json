@@ -1,0 +1,1033 @@
+{
+  "tema": "fracciones-y-decimales",
+  "componente": "Fundamentos",
+  "area": "Matemáticas",
+  "titulo": "Las fracciones y los números decimales",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las fracciones y los números decimales.",
+      "voz": "Repaso del tema: las fracciones y los números decimales.",
+      "audio": "voz/fracciones-y-decimales/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 99,
+      "frames": 127,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 29
+        },
+        {
+          "text": "las fracciones y los números decimales.",
+          "from": 31,
+          "to": 95
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 13
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "las",
+          "f": 31
+        },
+        {
+          "w": "fracciones",
+          "f": 37
+        },
+        {
+          "w": "y",
+          "f": 52
+        },
+        {
+          "w": "los",
+          "f": 54
+        },
+        {
+          "w": "números",
+          "f": 58
+        },
+        {
+          "w": "decimales",
+          "f": 68
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "Las partes de una fracción",
+      "texto": "Una fracción representa partes iguales de una unidad. En tres cuartos, el numerador, 3, dice cuántas partes se toman, y el denominador, 4, en cuántas partes iguales se divide la unidad.",
+      "voz": "Una fracción representa partes iguales de una unidad. En tres cuartos, el numerador, tres, dice cuántas partes se toman, y el denominador, cuatro, en cuántas partes iguales se divide la unidad.",
+      "imagenes": [
+        {
+          "src": "fundamentos/fraccion-tres-cuartos.webp",
+          "focos": [
+            {
+              "palabra": "unidad",
+              "x": 0.3,
+              "y": 0.5,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "numerador",
+              "x": 0.72,
+              "y": 0.38,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "denominador",
+              "x": 0.72,
+              "y": 0.62,
+              "zoom": 1.7
+            }
+          ]
+        }
+      ],
+      "audio": "voz/fracciones-y-decimales/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 335,
+      "frames": 363,
+      "chunks": [
+        {
+          "text": "Una fracción representa partes",
+          "from": 0,
+          "to": 44
+        },
+        {
+          "text": "iguales de una unidad.",
+          "from": 44,
+          "to": 76
+        },
+        {
+          "text": "En tres cuartos, el numerador, 3, dice cuántas",
+          "from": 85,
+          "to": 173
+        },
+        {
+          "text": "partes se toman, y el denominador, 4, en",
+          "from": 173,
+          "to": 249
+        },
+        {
+          "text": "cuántas partes iguales se divide la unidad.",
+          "from": 249,
+          "to": 330
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "fracción",
+          "f": 9
+        },
+        {
+          "w": "representa",
+          "f": 21
+        },
+        {
+          "w": "partes",
+          "f": 35
+        },
+        {
+          "w": "iguales",
+          "f": 46
+        },
+        {
+          "w": "de",
+          "f": 55
+        },
+        {
+          "w": "una",
+          "f": 58
+        },
+        {
+          "w": "unidad",
+          "f": 62
+        },
+        {
+          "w": "en",
+          "f": 85
+        },
+        {
+          "w": "tres",
+          "f": 91
+        },
+        {
+          "w": "cuartos",
+          "f": 99
+        },
+        {
+          "w": "el",
+          "f": 112
+        },
+        {
+          "w": "numerador",
+          "f": 116
+        },
+        {
+          "w": "tres",
+          "f": 133
+        },
+        {
+          "w": "dice",
+          "f": 154
+        },
+        {
+          "w": "cuántas",
+          "f": 162
+        },
+        {
+          "w": "partes",
+          "f": 174
+        },
+        {
+          "w": "se",
+          "f": 184
+        },
+        {
+          "w": "toman",
+          "f": 188
+        },
+        {
+          "w": "y",
+          "f": 209
+        },
+        {
+          "w": "el",
+          "f": 212
+        },
+        {
+          "w": "denominador",
+          "f": 216
+        },
+        {
+          "w": "cuatro",
+          "f": 239
+        },
+        {
+          "w": "en",
+          "f": 255
+        },
+        {
+          "w": "cuántas",
+          "f": 259
+        },
+        {
+          "w": "partes",
+          "f": 269
+        },
+        {
+          "w": "iguales",
+          "f": 279
+        },
+        {
+          "w": "se",
+          "f": 290
+        },
+        {
+          "w": "divide",
+          "f": 294
+        },
+        {
+          "w": "la",
+          "f": 304
+        },
+        {
+          "w": "unidad",
+          "f": 307
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Tipos de fracciones",
+      "texto": "Una fracción es propia si el numerador es menor, como 2/5; impropia si es mayor, como 7/4; aparente si representa un entero, como 8/4; y equivalente si vale lo mismo que otra, como 1/2 y 2/4.",
+      "voz": "Una fracción es propia si el numerador es menor, como dos quintos; impropia si es mayor, como siete cuartos; aparente si representa un entero, como ocho cuartos; y equivalente si vale lo mismo que otra, como un medio y dos cuartos.",
+      "items": [
+        {
+          "titulo": "Propia",
+          "texto": "2/5",
+          "palabra": "propia"
+        },
+        {
+          "titulo": "Impropia",
+          "texto": "7/4",
+          "palabra": "impropia"
+        },
+        {
+          "titulo": "Aparente",
+          "texto": "8/4 = 2",
+          "palabra": "aparente"
+        },
+        {
+          "titulo": "Equivalente",
+          "texto": "1/2 = 2/4",
+          "palabra": "equivalente"
+        }
+      ],
+      "audio": "voz/fracciones-y-decimales/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 371,
+      "frames": 399,
+      "chunks": [
+        {
+          "text": "Una fracción es propia si el",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "numerador es menor, como 2/5;",
+          "from": 47,
+          "to": 95
+        },
+        {
+          "text": "impropia si es mayor, como 7/4;",
+          "from": 105,
+          "to": 170
+        },
+        {
+          "text": "aparente si representa un entero, como 8/4;",
+          "from": 174,
+          "to": 256
+        },
+        {
+          "text": "y equivalente si vale lo mismo",
+          "from": 265,
+          "to": 320
+        },
+        {
+          "text": "que otra, como 1/2 y 2/4.",
+          "from": 320,
+          "to": 366
+        }
+      ],
+      "words": [
+        {
+          "w": "una",
+          "f": 0
+        },
+        {
+          "w": "fracción",
+          "f": 9
+        },
+        {
+          "w": "es",
+          "f": 22
+        },
+        {
+          "w": "propia",
+          "f": 25
+        },
+        {
+          "w": "si",
+          "f": 33
+        },
+        {
+          "w": "el",
+          "f": 36
+        },
+        {
+          "w": "numerador",
+          "f": 39
+        },
+        {
+          "w": "es",
+          "f": 53
+        },
+        {
+          "w": "menor",
+          "f": 56
+        },
+        {
+          "w": "como",
+          "f": 67
+        },
+        {
+          "w": "dos",
+          "f": 75
+        },
+        {
+          "w": "quintos",
+          "f": 80
+        },
+        {
+          "w": "impropia",
+          "f": 105
+        },
+        {
+          "w": "si",
+          "f": 121
+        },
+        {
+          "w": "es",
+          "f": 124
+        },
+        {
+          "w": "mayor",
+          "f": 127
+        },
+        {
+          "w": "como",
+          "f": 139
+        },
+        {
+          "w": "siete",
+          "f": 146
+        },
+        {
+          "w": "cuartos",
+          "f": 155
+        },
+        {
+          "w": "aparente",
+          "f": 174
+        },
+        {
+          "w": "si",
+          "f": 191
+        },
+        {
+          "w": "representa",
+          "f": 195
+        },
+        {
+          "w": "un",
+          "f": 210
+        },
+        {
+          "w": "entero",
+          "f": 214
+        },
+        {
+          "w": "como",
+          "f": 226
+        },
+        {
+          "w": "ocho",
+          "f": 233
+        },
+        {
+          "w": "cuartos",
+          "f": 240
+        },
+        {
+          "w": "y",
+          "f": 265
+        },
+        {
+          "w": "equivalente",
+          "f": 268
+        },
+        {
+          "w": "si",
+          "f": 286
+        },
+        {
+          "w": "vale",
+          "f": 290
+        },
+        {
+          "w": "lo",
+          "f": 296
+        },
+        {
+          "w": "mismo",
+          "f": 300
+        },
+        {
+          "w": "que",
+          "f": 309
+        },
+        {
+          "w": "otra",
+          "f": 315
+        },
+        {
+          "w": "como",
+          "f": 323
+        },
+        {
+          "w": "un",
+          "f": 329
+        },
+        {
+          "w": "medio",
+          "f": 333
+        },
+        {
+          "w": "y",
+          "f": 340
+        },
+        {
+          "w": "dos",
+          "f": 343
+        },
+        {
+          "w": "cuartos",
+          "f": 350
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "Operar con fracciones",
+      "texto": "Con el mismo denominador, sumamos o restamos los numeradores. Para multiplicar, multiplicamos los numeradores entre sí y los denominadores entre sí. Para dividir, multiplicamos por el inverso de la segunda fracción.",
+      "voz": "Con el mismo denominador, sumamos o restamos los numeradores. Para multiplicar, multiplicamos los numeradores entre sí y los denominadores entre sí. Para dividir, multiplicamos por el inverso de la segunda fracción.",
+      "items": [
+        {
+          "titulo": "Sumar y restar",
+          "texto": "Mismo denominador: se operan los numeradores",
+          "palabra": "sumamos"
+        },
+        {
+          "titulo": "Multiplicar",
+          "texto": "Numerador por numerador, denominador por denominador",
+          "palabra": "multiplicar"
+        },
+        {
+          "titulo": "Dividir",
+          "texto": "Por el inverso de la segunda",
+          "palabra": "dividir"
+        }
+      ],
+      "audio": "voz/fracciones-y-decimales/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 363,
+      "frames": 391,
+      "chunks": [
+        {
+          "text": "Con el mismo denominador, sumamos",
+          "from": 0,
+          "to": 54
+        },
+        {
+          "text": "o restamos los numeradores.",
+          "from": 54,
+          "to": 98
+        },
+        {
+          "text": "Para multiplicar, multiplicamos los numeradores entre",
+          "from": 106,
+          "to": 188
+        },
+        {
+          "text": "sí y los denominadores entre sí.",
+          "from": 188,
+          "to": 238
+        },
+        {
+          "text": "Para dividir, multiplicamos por el",
+          "from": 251,
+          "to": 307
+        },
+        {
+          "text": "inverso de la segunda fracción.",
+          "from": 307,
+          "to": 358
+        }
+      ],
+      "words": [
+        {
+          "w": "con",
+          "f": 0
+        },
+        {
+          "w": "el",
+          "f": 7
+        },
+        {
+          "w": "mismo",
+          "f": 10
+        },
+        {
+          "w": "denominador",
+          "f": 18
+        },
+        {
+          "w": "sumamos",
+          "f": 39
+        },
+        {
+          "w": "o",
+          "f": 54
+        },
+        {
+          "w": "restamos",
+          "f": 57
+        },
+        {
+          "w": "los",
+          "f": 69
+        },
+        {
+          "w": "numeradores",
+          "f": 74
+        },
+        {
+          "w": "para",
+          "f": 106
+        },
+        {
+          "w": "multiplicar",
+          "f": 113
+        },
+        {
+          "w": "multiplicamos",
+          "f": 133
+        },
+        {
+          "w": "los",
+          "f": 153
+        },
+        {
+          "w": "numeradores",
+          "f": 157
+        },
+        {
+          "w": "entre",
+          "f": 175
+        },
+        {
+          "w": "sí",
+          "f": 183
+        },
+        {
+          "w": "y",
+          "f": 189
+        },
+        {
+          "w": "los",
+          "f": 193
+        },
+        {
+          "w": "denominadores",
+          "f": 197
+        },
+        {
+          "w": "entre",
+          "f": 220
+        },
+        {
+          "w": "sí",
+          "f": 228
+        },
+        {
+          "w": "para",
+          "f": 251
+        },
+        {
+          "w": "dividir",
+          "f": 259
+        },
+        {
+          "w": "multiplicamos",
+          "f": 271
+        },
+        {
+          "w": "por",
+          "f": 293
+        },
+        {
+          "w": "el",
+          "f": 297
+        },
+        {
+          "w": "inverso",
+          "f": 301
+        },
+        {
+          "w": "de",
+          "f": 312
+        },
+        {
+          "w": "la",
+          "f": 314
+        },
+        {
+          "w": "segunda",
+          "f": 318
+        },
+        {
+          "w": "fracción",
+          "f": 329
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Decimales y porcentajes",
+      "texto": "Los números decimales tienen una parte entera y una parte menor que la unidad, separadas por una coma. Para convertir una fracción en decimal, dividimos: tres cuartos es 0,75. Y un porcentaje es una parte de cada 100: el 25 % es 0,25.",
+      "voz": "Los números decimales tienen una parte entera y una parte menor que la unidad, separadas por una coma. Para convertir una fracción en decimal, dividimos: tres cuartos es cero coma setenta y cinco. Y un porcentaje es una parte de cada cien: el veinticinco por ciento es cero coma veinticinco.",
+      "items": [
+        {
+          "titulo": "Decimales",
+          "texto": "12,75: 12 enteros y 75 centésimas",
+          "palabra": "decimales"
+        },
+        {
+          "titulo": "De fracción a decimal",
+          "texto": "3/4 = 3 ÷ 4 = 0,75",
+          "palabra": "convertir"
+        },
+        {
+          "titulo": "Porcentajes",
+          "texto": "25 % = 25/100 = 0,25",
+          "palabra": "porcentaje"
+        }
+      ],
+      "audio": "voz/fracciones-y-decimales/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 513,
+      "frames": 541,
+      "chunks": [
+        {
+          "text": "Los números decimales tienen una parte entera y una",
+          "from": 0,
+          "to": 79
+        },
+        {
+          "text": "parte menor que la unidad, separadas por una coma.",
+          "from": 79,
+          "to": 157
+        },
+        {
+          "text": "Para convertir una fracción en decimal, dividimos:",
+          "from": 166,
+          "to": 246
+        },
+        {
+          "text": "tres cuartos es 0,75.",
+          "from": 254,
+          "to": 336
+        },
+        {
+          "text": "Y un porcentaje es una parte de cada 100:",
+          "from": 348,
+          "to": 414
+        },
+        {
+          "text": "el 25 % es 0,25.",
+          "from": 421,
+          "to": 509
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "números",
+          "f": 6
+        },
+        {
+          "w": "decimales",
+          "f": 16
+        },
+        {
+          "w": "tienen",
+          "f": 32
+        },
+        {
+          "w": "una",
+          "f": 41
+        },
+        {
+          "w": "parte",
+          "f": 47
+        },
+        {
+          "w": "entera",
+          "f": 55
+        },
+        {
+          "w": "y",
+          "f": 69
+        },
+        {
+          "w": "una",
+          "f": 72
+        },
+        {
+          "w": "parte",
+          "f": 77
+        },
+        {
+          "w": "menor",
+          "f": 86
+        },
+        {
+          "w": "que",
+          "f": 95
+        },
+        {
+          "w": "la",
+          "f": 99
+        },
+        {
+          "w": "unidad",
+          "f": 102
+        },
+        {
+          "w": "separadas",
+          "f": 115
+        },
+        {
+          "w": "por",
+          "f": 131
+        },
+        {
+          "w": "una",
+          "f": 137
+        },
+        {
+          "w": "coma",
+          "f": 142
+        },
+        {
+          "w": "para",
+          "f": 166
+        },
+        {
+          "w": "convertir",
+          "f": 174
+        },
+        {
+          "w": "una",
+          "f": 187
+        },
+        {
+          "w": "fracción",
+          "f": 193
+        },
+        {
+          "w": "en",
+          "f": 206
+        },
+        {
+          "w": "decimal",
+          "f": 209
+        },
+        {
+          "w": "dividimos",
+          "f": 223
+        },
+        {
+          "w": "tres",
+          "f": 254
+        },
+        {
+          "w": "cuartos",
+          "f": 263
+        },
+        {
+          "w": "es",
+          "f": 279
+        },
+        {
+          "w": "cero",
+          "f": 284
+        },
+        {
+          "w": "coma",
+          "f": 294
+        },
+        {
+          "w": "setenta",
+          "f": 305
+        },
+        {
+          "w": "y",
+          "f": 319
+        },
+        {
+          "w": "cinco",
+          "f": 321
+        },
+        {
+          "w": "y",
+          "f": 348
+        },
+        {
+          "w": "un",
+          "f": 352
+        },
+        {
+          "w": "porcentaje",
+          "f": 355
+        },
+        {
+          "w": "es",
+          "f": 373
+        },
+        {
+          "w": "una",
+          "f": 376
+        },
+        {
+          "w": "parte",
+          "f": 382
+        },
+        {
+          "w": "de",
+          "f": 391
+        },
+        {
+          "w": "cada",
+          "f": 394
+        },
+        {
+          "w": "cien",
+          "f": 402
+        },
+        {
+          "w": "el",
+          "f": 421
+        },
+        {
+          "w": "veinticinco",
+          "f": 426
+        },
+        {
+          "w": "por",
+          "f": 443
+        },
+        {
+          "w": "ciento",
+          "f": 449
+        },
+        {
+          "w": "es",
+          "f": 458
+        },
+        {
+          "w": "cero",
+          "f": 461
+        },
+        {
+          "w": "coma",
+          "f": 470
+        },
+        {
+          "w": "veinticinco",
+          "f": 478
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las fracciones y los números decimales. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las fracciones y los números decimales. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/fracciones-y-decimales/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 174,
+      "frames": 334,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 21
+        },
+        {
+          "text": "Repasaste las fracciones y los números decimales.",
+          "from": 28,
+          "to": 98
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 107,
+          "to": 170
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 5
+        },
+        {
+          "w": "bien",
+          "f": 12
+        },
+        {
+          "w": "repasaste",
+          "f": 28
+        },
+        {
+          "w": "las",
+          "f": 43
+        },
+        {
+          "w": "fracciones",
+          "f": 47
+        },
+        {
+          "w": "y",
+          "f": 62
+        },
+        {
+          "w": "los",
+          "f": 64
+        },
+        {
+          "w": "números",
+          "f": 68
+        },
+        {
+          "w": "decimales",
+          "f": 79
+        },
+        {
+          "w": "sigue",
+          "f": 107
+        },
+        {
+          "w": "con",
+          "f": 117
+        },
+        {
+          "w": "el",
+          "f": 122
+        },
+        {
+          "w": "siguiente",
+          "f": 124
+        },
+        {
+          "w": "tema",
+          "f": 136
+        },
+        {
+          "w": "de",
+          "f": 144
+        },
+        {
+          "w": "tu",
+          "f": 147
+        },
+        {
+          "w": "ruta",
+          "f": 152
+        }
+      ]
+    }
+  ]
+}

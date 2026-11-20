@@ -27,7 +27,7 @@ import type { LessonForm } from '@colombia-estudia/domain';
 import { createTenantClient } from '@/lib/db/tenant';
 import { resolveRenderAssets } from '@/features/content/server/render-assets';
 import { getCohortOutline, type CohortGate, type OutlineModule } from './cohort.service';
-import { neighbours } from './outline';
+import { neighbours, neighbourView, type StepNeighbour } from './outline';
 import { readText } from '@/lib/media/storage';
 import { parseWebVtt, type Cue } from '@/lib/media/webvtt';
 import { lessonFormOf } from './lesson-form';
@@ -48,16 +48,7 @@ export type LessonGate =
   /** Su componente no está habilitado para esta matrícula (3/10). */
   | { kind: 'LOCKED' };
 
-export interface LessonNeighbour {
-  assignmentId: string;
-  title: string;
-  kind: 'LESSON' | 'ASSESSMENT';
-  enabled: boolean;
-  /** Título del tema que hay que completar antes, cuando la secuencia lo bloquea. */
-  blockedBy: string | null;
-  /** Está en un componente todavía no habilitado (3/10): la barra lo dice en vez de «aún no». */
-  locked: boolean;
-}
+export type LessonNeighbour = StepNeighbour;
 
 export interface LessonProgressView {
   status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
@@ -133,28 +124,6 @@ const blocked = (gate: LessonGate): LessonForStudent => ({
   navigation: NO_NAV,
   route: [],
 });
-
-/** El vecino, recortado a lo que la barra de acciones necesita. */
-const neighbourView = (
-  item: {
-    assignmentId: string;
-    title: string;
-    kind: 'LESSON' | 'ASSESSMENT';
-    enabled: boolean;
-    blockedBy: string | null;
-    unavailableReason: 'NOT_YET' | 'CLOSED' | 'LOCKED' | null;
-  } | null
-): LessonNeighbour | null =>
-  item === null
-    ? null
-    : {
-        assignmentId: item.assignmentId,
-        title: item.title,
-        kind: item.kind,
-        enabled: item.enabled,
-        blockedBy: item.blockedBy,
-        locked: item.unavailableReason === 'LOCKED',
-      };
 
 /**
  * La evidencia guardada, con valores por defecto.

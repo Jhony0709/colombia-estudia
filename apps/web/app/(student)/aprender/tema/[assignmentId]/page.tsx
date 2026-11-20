@@ -20,7 +20,9 @@ import { EmptyState } from '@/components/molecules/empty-state';
 import { Alert } from '@/components/atoms/alert';
 import { Button } from '@/components/atoms/button';
 import { StickyActionBar } from '@/components/organisms/sticky-action-bar';
-import { ArrowDown, ArrowLeft, ArrowRight, CircleCheck, Target, Lock } from 'lucide-react';
+import { Escenas } from '@/components/organisms/escenas';
+import { VisorImagen } from '@/components/organisms/visor-imagen';
+import { ArrowDown, CircleCheck, Target } from 'lucide-react';
 import { Callout } from '@/components/atoms/callout';
 import { requiredReadingSeconds } from '@colombia-estudia/domain';
 import { EvidenceRecorder } from './evidence-recorder';
@@ -36,6 +38,7 @@ import { PrimaryActionTracker } from '@/components/molecules/primary-action-trac
 import { RouteRail, WithRouteRail } from '../../route-rail';
 import { cn } from '@/lib/utils';
 import { PreviewStrip } from '../../../preview-strip';
+import { StepLink } from '../../step-link';
 
 /**
  * `cache` de React memoiza por petición: `generateMetadata` y la página piden lo mismo, y
@@ -246,6 +249,8 @@ export default async function LessonPage({
                     lang={lesson.language}
                     dangerouslySetInnerHTML={{ __html: lesson.html }}
                   />
+                  <Escenas />
+                  <VisorImagen />
                   {/* Transcripción sincronizada de cada video (§2): clic lleva al segundo. */}
                   <TranscriptPanel transcripts={lesson.transcripts} />
                   {evidence}
@@ -330,6 +335,7 @@ export default async function LessonPage({
             assignmentId={lesson.assignmentId}
             enrollmentId={lesson.enrollmentId}
             currentTitle={lesson.title}
+            preview={lesson.preview}
             status={status}
             form={lesson.form}
             submission={submission?.status ?? null}
@@ -381,7 +387,8 @@ function placeInRoute(
  *   formulario ya a la vista no pasaba nada visible: ni enviaba ni avisaba);
  * - actividad devuelta → «Enviar nueva versión»; en revisión → nada que pulsar, se dice;
  * - siguiente habilitado → «Siguiente: …» o «Ir al examen: …»;
- * - siguiente bloqueado → se dice qué falta, sin botón que no lleve a ninguna parte.
+ * - siguiente bloqueado → se dice qué falta, sin botón que no lleve a ninguna parte;
+ * - vista de estudiante (19/11) → siempre «Siguiente», aunque falte la actividad.
  *
  * Anterior y «Volver a la ruta» son salidas, en texto. Hasta el 23/9 esta barra solo tenía
  * anterior/siguiente y el estado de la evidencia flotaba en medio del scroll.
@@ -392,6 +399,7 @@ async function LessonNav({
   assignmentId,
   enrollmentId,
   currentTitle,
+  preview,
   status,
   form,
   submission,
@@ -404,6 +412,8 @@ async function LessonNav({
   assignmentId: string;
   enrollmentId: string;
   currentTitle: string;
+  /** Vista de estudiante (19/11): se puede seguir sin enviar la actividad. */
+  preview: boolean;
   status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
   form: 'VIDEO' | 'MARKDOWN' | 'SUBMISSION';
   submission: 'SUBMITTED' | 'RETURNED' | 'APPROVED' | null;
@@ -442,7 +452,9 @@ async function LessonNav({
       {node}
     </PrimaryActionTracker>
   );
-  if (pendingSubmission && submission !== 'SUBMITTED') {
+  if (preview && next) {
+    action = track('next', <StepLink item={next} direction="next" currentTitle={currentTitle} />);
+  } else if (pendingSubmission && submission !== 'SUBMITTED') {
     action = track(
       'submit',
       <Button asChild>
@@ -467,7 +479,7 @@ async function LessonNav({
     // a ninguna parte).
     action = track(
       !next.enabled ? 'blocked' : next.kind === 'ASSESSMENT' ? 'exam' : 'next',
-      <NavLink item={next} direction="next" currentTitle={currentTitle} />
+      <StepLink item={next} direction="next" currentTitle={currentTitle} />
     );
   }
 
@@ -487,7 +499,7 @@ async function LessonNav({
       // «Volver a la ruta» se fue de aquí (auditoría 27/9): bajo `lg` lo lleva la barra de
       // tarea y desde `lg` el riel («Ver toda la ruta»); en el pie era el tercer enlace de una
       // barra que en el teléfono ocupaba tres filas.
-      secondary={previous ? <NavLink item={previous} direction="previous" /> : null}
+      secondary={previous ? <StepLink item={previous} direction="previous" /> : null}
       action={
         action ? (
           <EnterOnChange value={status} className="inline-flex">
@@ -496,80 +508,5 @@ async function LessonNav({
         ) : null
       }
     />
-  );
-}
-
-async function NavLink({
-  item,
-  direction,
-  currentTitle,
-}: {
-  item: LessonNeighbour;
-  direction: 'previous' | 'next';
-  /** Para decir «completa este tema» en vez de repetir su propio título. */
-  currentTitle?: string;
-}) {
-  const t = await getTranslations('learn');
-
-  const href =
-    item.kind === 'LESSON'
-      ? `/aprender/tema/${item.assignmentId}`
-      : `/aprender/examen/${item.assignmentId}`;
-
-  if (!item.enabled) {
-    const reason =
-      item.blockedBy === currentTitle
-        ? t('lesson.completeToContinue', { title: item.title })
-        : item.blockedBy
-          ? t('blockedBy', { title: item.blockedBy })
-          : item.locked
-            ? t('lesson.nextLocked')
-            : t('notYet');
-    return (
-      <span className="type-caption text-text-muted inline-flex items-center gap-1.5 text-left sm:max-w-[20rem] sm:text-right">
-        {/* En el teléfono (4/10) la barra ya dice el estado arriba; aquí basta el candado y
-            «Siguiente»: la frase entera eran dos líneas más bajo el pulgar. */}
-        <Lock aria-hidden className="size-4 shrink-0 sm:hidden" />
-        <span className="sm:hidden" aria-hidden="true">
-          {t('lesson.nextShortLocked')}
-        </span>
-        <span className="sr-only sm:not-sr-only">{reason}</span>
-      </span>
-    );
-  }
-
-  if (direction === 'next') {
-    return (
-      <Button asChild>
-        <Link href={href}>
-          {/* En el teléfono cabe «Siguiente» y poco más; el título completo va en el nombre
-              accesible. Desde `sm`, el título truncado a lo que quepa. */}
-          <span className="sr-only sm:not-sr-only sm:max-w-[16rem] sm:truncate lg:max-w-[18rem] xl:max-w-[24rem]">
-            {item.kind === 'ASSESSMENT'
-              ? t('lesson.nextExam', { title: item.title })
-              : t('lesson.next', { title: item.title })}
-          </span>
-          <span aria-hidden className="sm:hidden">
-            {t('lesson.nextShort')}
-          </span>
-          <ArrowRight aria-hidden className="size-4 shrink-0" />
-        </Link>
-      </Button>
-    );
-  }
-
-  return (
-    <Link
-      href={href}
-      className="text-text-link type-caption min-h-touch inline-flex min-w-0 items-center gap-1 underline"
-    >
-      <ArrowLeft aria-hidden className="size-4 shrink-0" />
-      <span className="sr-only sm:not-sr-only sm:max-w-[12rem] sm:truncate">
-        {t('lesson.previous', { title: item.title })}
-      </span>
-      <span aria-hidden className="sm:hidden">
-        {t('lesson.previousShort')}
-      </span>
-    </Link>
   );
 }

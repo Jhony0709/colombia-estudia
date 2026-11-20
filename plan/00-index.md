@@ -23,6 +23,7 @@ queda hecho → criterio de salida**. Los criterios de salida son los de
 | [`10-endurecer-y-lanzar.md`](10-endurecer-y-lanzar.md)               | Observabilidad, e2e, restauración, corte, capacitación, rollback                                                      | 6           |
 | [`11-ux.md`](11-ux.md)                                               | Principios, flujos clave con estados, móvil, formularios, carga y error, offline, copy                                | Transversal |
 | [`12-calidad-y-proceso.md`](12-calidad-y-proceso.md)                 | Git, PR, revisión, DoD, pirámide de pruebas, ADRs, releases                                                           | Transversal |
+| [`13-seo.md`](13-seo.md)                                             | Búsquedas objetivo, páginas públicas, plantilla, guías, presencia local, medición                                     | 7           |
 
 ## Cómo se usa
 

@@ -1,0 +1,146 @@
+{
+  "tema": "los-generos-literarios",
+  "componente": "Profundización",
+  "area": "Lengua castellana",
+  "titulo": "Los géneros literarios y sus características",
+  "siguiente": "La organización de los seres vivos y los sistemas del cuerpo humano",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los géneros literarios y sus características.",
+      "voz": "Repaso del tema: los géneros literarios y sus características."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los tres grandes géneros",
+      "texto": "La literatura usa las palabras para expresar ideas, sentimientos e historias. Sus obras se clasifican en tres grandes géneros: el narrativo, el lírico y el dramático.",
+      "voz": "La literatura usa las palabras para expresar ideas, sentimientos e historias. Sus obras se clasifican en tres grandes géneros: el narrativo, el lírico y el dramático.",
+      "items": [
+        {
+          "titulo": "Narrativo",
+          "texto": "Cuenta una historia",
+          "palabra": "narrativo"
+        },
+        {
+          "titulo": "Lírico",
+          "texto": "Expresa sentimientos",
+          "palabra": "lírico"
+        },
+        {
+          "titulo": "Dramático",
+          "texto": "Se representa ante un público",
+          "palabra": "dramático"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "El género narrativo",
+      "texto": "El género narrativo cuenta una historia. Un narrador relata lo que hacen los personajes en un tiempo y un espacio, y la trama reúne todos los acontecimientos.",
+      "voz": "El género narrativo cuenta una historia. Un narrador relata lo que hacen los personajes en un tiempo y un espacio, y la trama reúne todos los acontecimientos.",
+      "items": [
+        {
+          "titulo": "Narrador",
+          "texto": "La voz que cuenta",
+          "palabra": "narrador"
+        },
+        {
+          "titulo": "Personajes",
+          "texto": "Quienes participan",
+          "palabra": "personajes"
+        },
+        {
+          "titulo": "Tiempo y espacio",
+          "texto": "Cuándo y dónde",
+          "palabra": "tiempo"
+        },
+        {
+          "titulo": "Trama",
+          "texto": "Los acontecimientos",
+          "palabra": "trama"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "El género lírico",
+      "texto": "El género lírico expresa sentimientos y emociones con un lenguaje artístico. Se escribe en versos, que se agrupan en estrofas, y puede tener rima.",
+      "voz": "El género lírico expresa sentimientos y emociones con un lenguaje artístico. Se escribe en versos, que se agrupan en estrofas, y puede tener rima.",
+      "items": [
+        {
+          "titulo": "Verso",
+          "texto": "Cada línea del poema",
+          "palabra": "versos"
+        },
+        {
+          "titulo": "Estrofa",
+          "texto": "Un grupo de versos",
+          "palabra": "estrofas"
+        },
+        {
+          "titulo": "Rima",
+          "texto": "Sonidos que se repiten al final",
+          "palabra": "rima"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "El género dramático",
+      "texto": "El género dramático se escribe para representarse ante un público. Los personajes hablan en diálogos, las acotaciones indican gestos y movimientos, y la obra se divide en actos y escenas.",
+      "voz": "El género dramático se escribe para representarse ante un público. Los personajes hablan en diálogos, las acotaciones indican gestos y movimientos, y la obra se divide en actos y escenas.",
+      "items": [
+        {
+          "titulo": "Diálogo",
+          "texto": "Los personajes conversan",
+          "palabra": "diálogos"
+        },
+        {
+          "titulo": "Acotaciones",
+          "texto": "Indicaciones entre paréntesis",
+          "palabra": "acotaciones"
+        },
+        {
+          "titulo": "Actos y escenas",
+          "texto": "Organizan la obra",
+          "palabra": "actos"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Los subgéneros",
+      "texto": "Cada género tiene subgéneros. Narrativos: el cuento, la novela, el mito, la leyenda y la fábula. Líricos: la oda, la elegía y la canción lírica. Dramáticos: la comedia, la tragedia y el drama.",
+      "voz": "Cada género tiene subgéneros. Narrativos: el cuento, la novela, el mito, la leyenda y la fábula. Líricos: la oda, la elegía y la canción lírica. Dramáticos: la comedia, la tragedia y el drama.",
+      "items": [
+        {
+          "titulo": "Narrativos",
+          "texto": "Cuento, novela, mito, leyenda, fábula",
+          "palabra": "narrativos"
+        },
+        {
+          "titulo": "Líricos",
+          "texto": "Oda, elegía, canción lírica",
+          "palabra": "líricos"
+        },
+        {
+          "titulo": "Dramáticos",
+          "texto": "Comedia, tragedia, drama",
+          "palabra": "dramáticos"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los géneros literarios. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los géneros literarios. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

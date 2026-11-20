@@ -1,0 +1,214 @@
+{
+  "tema": "organizacion-de-los-seres-vivos",
+  "componente": "Profundización",
+  "area": "Ciencias naturales",
+  "titulo": "La organización de los seres vivos y los sistemas del cuerpo humano",
+  "siguiente": "La economía, los recursos naturales y las actividades económicas",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la organización de los seres vivos y los sistemas del cuerpo humano.",
+      "voz": "Repaso del tema: la organización de los seres vivos y los sistemas del cuerpo humano."
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "Los niveles de organización",
+      "texto": "La célula es la unidad básica de los seres vivos. Células semejantes forman un tejido, como el muscular. Varios tejidos forman un órgano, como el corazón. Los órganos forman un sistema, como el circulatorio, y todos los sistemas, el organismo.",
+      "voz": "La célula es la unidad básica de los seres vivos. Células semejantes forman un tejido, como el muscular. Varios tejidos forman un órgano, como el corazón. Los órganos forman un sistema, como el circulatorio, y todos los sistemas, el organismo.",
+      "imagenes": [
+        {
+          "src": "profundizacion/niveles-de-organizacion.webp",
+          "focos": [
+            {
+              "palabra": "célula",
+              "x": 0.1,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "tejido",
+              "x": 0.28,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "órgano",
+              "x": 0.48,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "sistema",
+              "x": 0.7,
+              "y": 0.55,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "organismo",
+              "x": 0.9,
+              "y": 0.55,
+              "zoom": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "imagen",
+      "titulo": "Digestivo y respiratorio",
+      "texto": "El sistema digestivo transforma los alimentos en nutrientes: pasan por la boca, el esófago, el estómago y los intestinos. El respiratorio toma oxígeno del aire y elimina dióxido de carbono. En los alvéolos de los pulmones, el oxígeno pasa a la sangre.",
+      "voz": "El sistema digestivo transforma los alimentos en nutrientes: pasan por la boca, el esófago, el estómago y los intestinos. El respiratorio toma oxígeno del aire y elimina dióxido de carbono. En los alvéolos de los pulmones, el oxígeno pasa a la sangre.",
+      "imagenes": [
+        {
+          "src": "profundizacion/sistema-digestivo.webp",
+          "focos": [
+            {
+              "palabra": "boca",
+              "x": 0.45,
+              "y": 0.15,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "estómago",
+              "x": 0.45,
+              "y": 0.33,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "intestinos",
+              "x": 0.45,
+              "y": 0.45,
+              "zoom": 1.5
+            }
+          ]
+        },
+        {
+          "src": "profundizacion/sistema-respiratorio.webp",
+          "palabra": "respiratorio",
+          "focos": [
+            {
+              "palabra": "alvéolos",
+              "x": 0.55,
+              "y": 0.3,
+              "zoom": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "imagen",
+      "titulo": "Circulatorio y urinario",
+      "texto": "El sistema circulatorio lleva la sangre por todo el cuerpo: el corazón la bombea, las arterias la llevan a los tejidos y las venas la devuelven. El urinario filtra la sangre en los riñones y elimina los desechos en la orina.",
+      "voz": "El sistema circulatorio lleva la sangre por todo el cuerpo: el corazón la bombea, las arterias la llevan a los tejidos y las venas la devuelven. El urinario filtra la sangre en los riñones y elimina los desechos en la orina.",
+      "imagenes": [
+        {
+          "src": "profundizacion/sistema-circulatorio.webp",
+          "focos": [
+            {
+              "palabra": "corazón",
+              "x": 0.45,
+              "y": 0.27,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "arterias",
+              "x": 0.45,
+              "y": 0.4,
+              "zoom": 1.4
+            }
+          ]
+        },
+        {
+          "src": "profundizacion/sistema-urinario.webp",
+          "palabra": "urinario",
+          "focos": [
+            {
+              "palabra": "riñones",
+              "x": 0.45,
+              "y": 0.35,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "orina",
+              "x": 0.45,
+              "y": 0.48,
+              "zoom": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "imagen",
+      "titulo": "El sistema nervioso",
+      "texto": "El sistema nervioso recibe información, la procesa y coordina las respuestas. Lo forman el cerebro, el cerebelo, que ayuda con el equilibrio, la médula espinal y los nervios.",
+      "voz": "El sistema nervioso recibe información, la procesa y coordina las respuestas. Lo forman el cerebro, el cerebelo, que ayuda con el equilibrio, la médula espinal y los nervios.",
+      "imagenes": [
+        {
+          "src": "profundizacion/sistema-nervioso.webp",
+          "focos": [
+            {
+              "palabra": "cerebro",
+              "x": 0.45,
+              "y": 0.12,
+              "zoom": 1.6
+            },
+            {
+              "palabra": "médula",
+              "x": 0.45,
+              "y": 0.35,
+              "zoom": 1.5
+            },
+            {
+              "palabra": "nervios",
+              "x": 0.5,
+              "y": 0.5,
+              "zoom": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Los sistemas trabajan juntos",
+      "texto": "Los sistemas trabajan juntos. Al jugar fútbol, el nervioso coordina los movimientos, el respiratorio toma oxígeno, el circulatorio lo lleva a las células y el digestivo aporta los nutrientes.",
+      "voz": "Los sistemas trabajan juntos. Al jugar fútbol, el nervioso coordina los movimientos, el respiratorio toma oxígeno, el circulatorio lo lleva a las células y el digestivo aporta los nutrientes.",
+      "items": [
+        {
+          "titulo": "Nervioso",
+          "texto": "Coordina los movimientos",
+          "palabra": "nervioso"
+        },
+        {
+          "titulo": "Respiratorio",
+          "texto": "Toma oxígeno",
+          "palabra": "respiratorio"
+        },
+        {
+          "titulo": "Circulatorio",
+          "texto": "Lo lleva a las células",
+          "palabra": "circulatorio"
+        },
+        {
+          "titulo": "Digestivo",
+          "texto": "Aporta los nutrientes",
+          "palabra": "digestivo"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la organización de los seres vivos. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la organización de los seres vivos. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

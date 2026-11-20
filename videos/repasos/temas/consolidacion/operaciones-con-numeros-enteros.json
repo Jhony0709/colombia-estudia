@@ -1,0 +1,69 @@
+{
+  "tema": "operaciones-con-numeros-enteros",
+  "componente": "Consolidación",
+  "area": "Matemáticas",
+  "titulo": "Operaciones con números enteros",
+  "siguiente": "Colombia: organización territorial, política y ciudadana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: las operaciones con números enteros.",
+      "voz": "Repaso del tema: las operaciones con números enteros."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los números enteros",
+      "texto": "Los números enteros son los positivos, los negativos y el cero, que no es positivo ni negativo. Sirven para representar temperaturas, deudas, ganancias y pérdidas.",
+      "voz": "Los números enteros son los positivos, los negativos y el cero, que no es positivo ni negativo. Sirven para representar temperaturas, deudas, ganancias y pérdidas.",
+      "items": [
+        {
+          "titulo": "Positivos",
+          "texto": "+1, +2, +3…",
+          "palabra": "positivos"
+        },
+        {
+          "titulo": "Negativos",
+          "texto": "−1, −2, −3…",
+          "palabra": "negativos"
+        },
+        {
+          "titulo": "Cero",
+          "texto": "Ni positivo ni negativo",
+          "palabra": "cero"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las reglas de los signos",
+      "texto": "Para sumar con signos iguales, se suman y se conserva el signo; con signos diferentes, se restan y queda el signo del número con mayor valor absoluto. Para restar, se suma el opuesto: 5 − 8 = 5 + (−8) = −3. Y al multiplicar o dividir, signos iguales dan positivo y signos diferentes, negativo.",
+      "voz": "Para sumar con signos iguales, se suman y se conserva el signo; con signos diferentes, se restan y queda el signo del número con mayor valor absoluto. Para restar, se suma el opuesto: cinco menos ocho es igual a cinco más menos ocho, que da menos tres. Y al multiplicar o dividir, signos iguales dan positivo y signos diferentes, negativo.",
+      "items": [
+        {
+          "titulo": "Sumar",
+          "texto": "Iguales: se suman y se conserva el signo. Diferentes: se restan y queda el del mayor valor absoluto",
+          "palabra": "sumar"
+        },
+        {
+          "titulo": "Restar",
+          "texto": "Se suma el opuesto: 5 − 8 = 5 + (−8) = −3",
+          "palabra": "restar"
+        },
+        {
+          "titulo": "Multiplicar y dividir",
+          "texto": "Signos iguales: positivo. Diferentes: negativo",
+          "palabra": "multiplicar"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste las operaciones con números enteros. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste las operaciones con números enteros. Sigue con el siguiente tema de tu ruta."
+    }
+  ]
+}

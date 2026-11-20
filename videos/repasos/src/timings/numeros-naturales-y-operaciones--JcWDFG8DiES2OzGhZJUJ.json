@@ -1,0 +1,705 @@
+{
+  "tema": "numeros-naturales-y-operaciones",
+  "componente": "Fundamentos",
+  "area": "Matemáticas",
+  "titulo": "Los números naturales y las operaciones básicas",
+  "siguiente": "Las fracciones y los números decimales",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: los números naturales y las operaciones básicas.",
+      "voz": "Repaso del tema: los números naturales y las operaciones básicas.",
+      "audio": "voz/numeros-naturales-y-operaciones/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 119,
+      "frames": 147,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "los números naturales y las operaciones básicas.",
+          "from": 33,
+          "to": 114
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 18
+        },
+        {
+          "w": "tema",
+          "f": 23
+        },
+        {
+          "w": "los",
+          "f": 33
+        },
+        {
+          "w": "números",
+          "f": 38
+        },
+        {
+          "w": "naturales",
+          "f": 48
+        },
+        {
+          "w": "y",
+          "f": 64
+        },
+        {
+          "w": "las",
+          "f": 67
+        },
+        {
+          "w": "operaciones",
+          "f": 71
+        },
+        {
+          "w": "básicas",
+          "f": 88
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Los números naturales",
+      "texto": "Los números naturales sirven para contar, ordenar y representar cantidades. El valor de cada cifra depende de su posición: en 3.452, el 3 vale 3.000.",
+      "voz": "Los números naturales sirven para contar, ordenar y representar cantidades. El valor de cada cifra depende de su posición: en tres mil cuatrocientos cincuenta y dos, el tres vale tres mil.",
+      "items": [
+        {
+          "titulo": "Contar",
+          "texto": "¿Cuántos estudiantes hay?",
+          "palabra": "contar"
+        },
+        {
+          "titulo": "Ordenar",
+          "texto": "Primero, segundo, tercero",
+          "palabra": "ordenar"
+        },
+        {
+          "titulo": "Valor posicional",
+          "texto": "En 3.452, el 3 vale 3.000",
+          "palabra": "posición"
+        }
+      ],
+      "audio": "voz/numeros-naturales-y-operaciones/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 340,
+      "frames": 368,
+      "chunks": [
+        {
+          "text": "Los números naturales sirven para",
+          "from": 0,
+          "to": 58
+        },
+        {
+          "text": "contar, ordenar y representar cantidades.",
+          "from": 58,
+          "to": 130
+        },
+        {
+          "text": "El valor de cada cifra depende de su posición:",
+          "from": 140,
+          "to": 215
+        },
+        {
+          "text": "en 3.452, el 3 vale 3.000.",
+          "from": 226,
+          "to": 336
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "números",
+          "f": 8
+        },
+        {
+          "w": "naturales",
+          "f": 17
+        },
+        {
+          "w": "sirven",
+          "f": 33
+        },
+        {
+          "w": "para",
+          "f": 44
+        },
+        {
+          "w": "contar",
+          "f": 50
+        },
+        {
+          "w": "ordenar",
+          "f": 65
+        },
+        {
+          "w": "y",
+          "f": 84
+        },
+        {
+          "w": "representar",
+          "f": 88
+        },
+        {
+          "w": "cantidades",
+          "f": 107
+        },
+        {
+          "w": "el",
+          "f": 140
+        },
+        {
+          "w": "valor",
+          "f": 145
+        },
+        {
+          "w": "de",
+          "f": 154
+        },
+        {
+          "w": "cada",
+          "f": 157
+        },
+        {
+          "w": "cifra",
+          "f": 165
+        },
+        {
+          "w": "depende",
+          "f": 177
+        },
+        {
+          "w": "de",
+          "f": 189
+        },
+        {
+          "w": "su",
+          "f": 191
+        },
+        {
+          "w": "posición",
+          "f": 195
+        },
+        {
+          "w": "en",
+          "f": 226
+        },
+        {
+          "w": "tres",
+          "f": 231
+        },
+        {
+          "w": "mil",
+          "f": 238
+        },
+        {
+          "w": "cuatrocientos",
+          "f": 243
+        },
+        {
+          "w": "cincuenta",
+          "f": 261
+        },
+        {
+          "w": "y",
+          "f": 274
+        },
+        {
+          "w": "dos",
+          "f": 276
+        },
+        {
+          "w": "el",
+          "f": 284
+        },
+        {
+          "w": "tres",
+          "f": 289
+        },
+        {
+          "w": "vale",
+          "f": 297
+        },
+        {
+          "w": "tres",
+          "f": 305
+        },
+        {
+          "w": "mil",
+          "f": 313
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Las cuatro operaciones",
+      "texto": "Las cuatro operaciones básicas son la suma, para reunir cantidades; la resta, para quitar; la multiplicación, una suma repetida; y la división, para repartir en partes iguales.",
+      "voz": "Las cuatro operaciones básicas son la suma, para reunir cantidades; la resta, para quitar; la multiplicación, una suma repetida; y la división, para repartir en partes iguales.",
+      "items": [
+        {
+          "titulo": "Suma",
+          "texto": "125 + 43 = 168",
+          "palabra": "suma"
+        },
+        {
+          "titulo": "Resta",
+          "texto": "250 − 85 = 165",
+          "palabra": "resta"
+        },
+        {
+          "titulo": "Multiplicación",
+          "texto": "6 × 30 = 180",
+          "palabra": "multiplicación"
+        },
+        {
+          "titulo": "División",
+          "texto": "48 ÷ 8 = 6",
+          "palabra": "división"
+        }
+      ],
+      "audio": "voz/numeros-naturales-y-operaciones/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 303,
+      "frames": 331,
+      "chunks": [
+        {
+          "text": "Las cuatro operaciones básicas son",
+          "from": 0,
+          "to": 53
+        },
+        {
+          "text": "la suma, para reunir cantidades;",
+          "from": 53,
+          "to": 103
+        },
+        {
+          "text": "la resta, para quitar;",
+          "from": 113,
+          "to": 147
+        },
+        {
+          "text": "la multiplicación, una suma repetida;",
+          "from": 150,
+          "to": 210
+        },
+        {
+          "text": "y la división, para repartir en partes iguales.",
+          "from": 218,
+          "to": 298
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "cuatro",
+          "f": 8
+        },
+        {
+          "w": "operaciones",
+          "f": 16
+        },
+        {
+          "w": "básicas",
+          "f": 31
+        },
+        {
+          "w": "son",
+          "f": 44
+        },
+        {
+          "w": "la",
+          "f": 50
+        },
+        {
+          "w": "suma",
+          "f": 54
+        },
+        {
+          "w": "para",
+          "f": 65
+        },
+        {
+          "w": "reunir",
+          "f": 72
+        },
+        {
+          "w": "cantidades",
+          "f": 82
+        },
+        {
+          "w": "la",
+          "f": 113
+        },
+        {
+          "w": "resta",
+          "f": 118
+        },
+        {
+          "w": "para",
+          "f": 127
+        },
+        {
+          "w": "quitar",
+          "f": 134
+        },
+        {
+          "w": "la",
+          "f": 150
+        },
+        {
+          "w": "multiplicación",
+          "f": 155
+        },
+        {
+          "w": "una",
+          "f": 178
+        },
+        {
+          "w": "suma",
+          "f": 184
+        },
+        {
+          "w": "repetida",
+          "f": 192
+        },
+        {
+          "w": "y",
+          "f": 218
+        },
+        {
+          "w": "la",
+          "f": 223
+        },
+        {
+          "w": "división",
+          "f": 226
+        },
+        {
+          "w": "para",
+          "f": 239
+        },
+        {
+          "w": "repartir",
+          "f": 246
+        },
+        {
+          "w": "en",
+          "f": 259
+        },
+        {
+          "w": "partes",
+          "f": 262
+        },
+        {
+          "w": "iguales",
+          "f": 273
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "El orden de las operaciones",
+      "texto": "Con varias operaciones hay un orden: primero los paréntesis, luego las multiplicaciones y divisiones, y al final las sumas y restas. Por eso, 8 + 4 × 3 da 20, y no 36.",
+      "voz": "Con varias operaciones hay un orden: primero los paréntesis, luego las multiplicaciones y divisiones, y al final las sumas y restas. Por eso, ocho más cuatro por tres da veinte, y no treinta y seis.",
+      "items": [
+        {
+          "titulo": "Paréntesis",
+          "palabra": "paréntesis"
+        },
+        {
+          "titulo": "× y ÷",
+          "palabra": "multiplicaciones"
+        },
+        {
+          "titulo": "+ y −",
+          "palabra": "sumas"
+        }
+      ],
+      "audio": "voz/numeros-naturales-y-operaciones/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 350,
+      "frames": 378,
+      "chunks": [
+        {
+          "text": "Con varias operaciones hay un orden:",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "primero los paréntesis, luego las multiplicaciones y divisiones,",
+          "from": 63,
+          "to": 173
+        },
+        {
+          "text": "y al final las sumas y restas.",
+          "from": 173,
+          "to": 224
+        },
+        {
+          "text": "Por eso, 8 + 4 × 3 da 20, y no 36.",
+          "from": 234,
+          "to": 346
+        }
+      ],
+      "words": [
+        {
+          "w": "con",
+          "f": 0
+        },
+        {
+          "w": "varias",
+          "f": 6
+        },
+        {
+          "w": "operaciones",
+          "f": 15
+        },
+        {
+          "w": "hay",
+          "f": 32
+        },
+        {
+          "w": "un",
+          "f": 37
+        },
+        {
+          "w": "orden",
+          "f": 42
+        },
+        {
+          "w": "primero",
+          "f": 63
+        },
+        {
+          "w": "los",
+          "f": 76
+        },
+        {
+          "w": "paréntesis",
+          "f": 82
+        },
+        {
+          "w": "luego",
+          "f": 101
+        },
+        {
+          "w": "las",
+          "f": 109
+        },
+        {
+          "w": "multiplicaciones",
+          "f": 113
+        },
+        {
+          "w": "y",
+          "f": 139
+        },
+        {
+          "w": "divisiones",
+          "f": 142
+        },
+        {
+          "w": "y",
+          "f": 171
+        },
+        {
+          "w": "al",
+          "f": 175
+        },
+        {
+          "w": "final",
+          "f": 178
+        },
+        {
+          "w": "las",
+          "f": 188
+        },
+        {
+          "w": "sumas",
+          "f": 192
+        },
+        {
+          "w": "y",
+          "f": 203
+        },
+        {
+          "w": "restas",
+          "f": 206
+        },
+        {
+          "w": "por",
+          "f": 234
+        },
+        {
+          "w": "eso",
+          "f": 241
+        },
+        {
+          "w": "ocho",
+          "f": 252
+        },
+        {
+          "w": "más",
+          "f": 262
+        },
+        {
+          "w": "cuatro",
+          "f": 267
+        },
+        {
+          "w": "por",
+          "f": 278
+        },
+        {
+          "w": "tres",
+          "f": 284
+        },
+        {
+          "w": "da",
+          "f": 292
+        },
+        {
+          "w": "veinte",
+          "f": 296
+        },
+        {
+          "w": "y",
+          "f": 309
+        },
+        {
+          "w": "no",
+          "f": 313
+        },
+        {
+          "w": "treinta",
+          "f": 317
+        },
+        {
+          "w": "y",
+          "f": 327
+        },
+        {
+          "w": "seis",
+          "f": 329
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste los números naturales y las operaciones. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste los números naturales y las operaciones. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/numeros-naturales-y-operaciones/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 177,
+      "frames": 337,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 23
+        },
+        {
+          "text": "Repasaste los números naturales y las operaciones.",
+          "from": 33,
+          "to": 105
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 109,
+          "to": 173
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 4
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 33
+        },
+        {
+          "w": "los",
+          "f": 49
+        },
+        {
+          "w": "números",
+          "f": 53
+        },
+        {
+          "w": "naturales",
+          "f": 62
+        },
+        {
+          "w": "y",
+          "f": 76
+        },
+        {
+          "w": "las",
+          "f": 78
+        },
+        {
+          "w": "operaciones",
+          "f": 83
+        },
+        {
+          "w": "sigue",
+          "f": 109
+        },
+        {
+          "w": "con",
+          "f": 118
+        },
+        {
+          "w": "el",
+          "f": 123
+        },
+        {
+          "w": "siguiente",
+          "f": 125
+        },
+        {
+          "w": "tema",
+          "f": 138
+        },
+        {
+          "w": "de",
+          "f": 146
+        },
+        {
+          "w": "tu",
+          "f": 149
+        },
+        {
+          "w": "ruta",
+          "f": 154
+        }
+      ]
+    }
+  ]
+}

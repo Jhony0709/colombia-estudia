@@ -29,7 +29,7 @@ Qué se prueba, dónde y con qué umbral. Sin esto no cierra una fase.
   certificado en la siguiente corrida del job y `/certificado/[code]` lo verifica.
 - **Fase 5**: registrar, confirmar y anular un pago deja `Installment.status` y el estado
   derivado correctos en los tres pasos; un acuerdo firmado anula las cuotas pendientes y
-  crea las nuevas; un pago en sandbox de Wompi confirma la cuota por webhook una sola vez
+  crea las nuevas; un pago en sandbox de Bold confirma la cuota por webhook una sola vez
   aunque el evento llegue dos veces.
 - **Fase 6**: restauración de backup probada; ≥ 90 % de los activos con invitación aceptada
   en 14 días; 0 tickets por progreso perdido; regla de rollback escrita y ensayada.

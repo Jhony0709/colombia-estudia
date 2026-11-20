@@ -4,7 +4,7 @@
  * responsable, las cuotas (Fase C, 23/9).
  * SSOT: docs/plan-redefinicion-2009.md Fase C.2.
  *
- * `?pago=<ref>` es la vuelta del checkout de Wompi (`returnPath` en `startCheckout`).
+ * `?pago=<ref>` es la vuelta del link de pago de Bold (`returnPath` en `startCheckout`).
  */
 
 import type { Metadata } from 'next';
@@ -14,13 +14,14 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { getWardDetail } from '@/features/family/server/family.service';
 import { getPolicy } from '@/features/admin/server/policies.service';
 import { AccountSummary } from '@/features/billing/components/account-summary';
-import { isWompiConfigured } from '@/lib/billing/wompi';
+import { isBoldConfigured } from '@/lib/billing/bold';
+import { checkReturnedPayment } from '@/features/billing/server/account.service';
+import { PaymentReturn } from '@/features/billing/components/payment-return';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { DataTable } from '@/components/molecules/data-table';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { Badge } from '@/components/atoms/badge';
-import { Alert } from '@/components/atoms/alert';
 import { PayButton } from '@/features/billing/components/pay-button';
 
 export const metadata: Metadata = { title: 'Mi familia' };
@@ -37,7 +38,14 @@ export default async function WardPage({
   const ctx = await getRequestContext();
   const { enrollmentId } = await params;
   const sp = await searchParams;
-  const returned = typeof sp.pago === 'string';
+  const returned =
+    typeof sp.pago === 'string'
+      ? await checkReturnedPayment({
+          institutionId: ctx.institution.id,
+          reference: sp.pago,
+          scopes: ctx.capabilities.get('billing.read.own') ?? [],
+        })
+      : null;
 
   const [detail, policy, t, te, ta, tc, format] = await Promise.all([
     getWardDetail({
@@ -59,7 +67,7 @@ export default async function WardPage({
   type Module = (typeof modules)[number];
   type Assessment = (typeof assessments)[number];
   type Score = (typeof scores)[number];
-  const online = isWompiConfigured();
+  const online = isBoldConfigured();
 
   return (
     <Page>
@@ -75,7 +83,7 @@ export default async function WardPage({
         }
       />
 
-      {returned && <Alert severity="info">{ta('returned')}</Alert>}
+      <PaymentReturn outcome={returned} />
 
       <PageSection
         title={t('progressTitle')}

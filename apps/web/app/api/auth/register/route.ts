@@ -23,6 +23,11 @@ const schema = z.object({
   email: z.string().trim().email('Correo inválido').max(160),
   phone: z.union([z.literal(''), z.string().trim().max(40)]),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Fecha inválida'),
+  documentType: z.enum(['CC', 'TI', 'CE', 'PPT', 'PA']),
+  documentNumber: z
+    .string()
+    .transform((v) => v.replace(/[\s.-]/g, '').toUpperCase())
+    .pipe(z.string().regex(/^[A-Z0-9]{4,20}$/, 'Escribe el número del documento')),
   // Mismo mínimo que la invitación (`/api/invitations/[token]/accept`): 12. El plan decía 8;
   // dos mínimos distintos para la misma cuenta serían dos reglas que explicar.
   password: z.string().min(12, 'La contraseña debe tener al menos 12 caracteres'),
@@ -47,6 +52,8 @@ export const POST = apiHandler<Input>({ schema })(async (req, _ctx, input) => {
     email: input.email,
     phone: input.phone === '' ? null : input.phone,
     birthDate: input.birthDate,
+    documentType: input.documentType,
+    documentNumber: input.documentNumber,
     password: input.password,
     acceptsDataPolicy: input.acceptsDataPolicy === true,
   });

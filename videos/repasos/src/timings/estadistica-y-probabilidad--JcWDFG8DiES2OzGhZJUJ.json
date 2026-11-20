@@ -1,0 +1,1246 @@
+{
+  "tema": "estadistica-y-probabilidad",
+  "componente": "Bachillerato",
+  "area": "Matemáticas",
+  "titulo": "Estadística, probabilidad y análisis de datos",
+  "siguiente": "Química en la vida cotidiana",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: la estadística, la probabilidad y el análisis de datos.",
+      "voz": "Repaso del tema: la estadística, la probabilidad y el análisis de datos.",
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 131,
+      "frames": 159,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 32
+        },
+        {
+          "text": "la estadística, la probabilidad y",
+          "from": 37,
+          "to": 92
+        },
+        {
+          "text": "el análisis de datos.",
+          "from": 92,
+          "to": 127
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 14
+        },
+        {
+          "w": "tema",
+          "f": 18
+        },
+        {
+          "w": "la",
+          "f": 37
+        },
+        {
+          "w": "estadística",
+          "f": 40
+        },
+        {
+          "w": "la",
+          "f": 60
+        },
+        {
+          "w": "probabilidad",
+          "f": 63
+        },
+        {
+          "w": "y",
+          "f": 82
+        },
+        {
+          "w": "el",
+          "f": 85
+        },
+        {
+          "w": "análisis",
+          "f": 88
+        },
+        {
+          "w": "de",
+          "f": 102
+        },
+        {
+          "w": "datos",
+          "f": 106
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Población, muestra y variables",
+      "texto": "La población es el conjunto total que se quiere estudiar, y la muestra, una parte de ella. Las variables pueden ser cualitativas, como el color favorito, o cuantitativas, como la estatura o el número de hermanos.",
+      "voz": "La población es el conjunto total que se quiere estudiar, y la muestra, una parte de ella. Las variables pueden ser cualitativas, como el color favorito, o cuantitativas, como la estatura o el número de hermanos.",
+      "items": [
+        {
+          "titulo": "Población",
+          "texto": "El conjunto total",
+          "palabra": "población"
+        },
+        {
+          "titulo": "Muestra",
+          "texto": "Una parte",
+          "palabra": "muestra"
+        },
+        {
+          "titulo": "Cualitativas",
+          "texto": "Categorías: color favorito",
+          "palabra": "cualitativas"
+        },
+        {
+          "titulo": "Cuantitativas",
+          "texto": "Números: estatura, hermanos",
+          "palabra": "cuantitativas"
+        }
+      ],
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 386,
+      "frames": 414,
+      "chunks": [
+        {
+          "text": "La población es el conjunto total que se quiere",
+          "from": 0,
+          "to": 74
+        },
+        {
+          "text": "estudiar, y la muestra, una parte de ella.",
+          "from": 74,
+          "to": 141
+        },
+        {
+          "text": "Las variables pueden ser cualitativas, como el",
+          "from": 154,
+          "to": 242
+        },
+        {
+          "text": "color favorito, o cuantitativas, como la estatura",
+          "from": 242,
+          "to": 336
+        },
+        {
+          "text": "o el número de hermanos.",
+          "from": 336,
+          "to": 382
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "población",
+          "f": 6
+        },
+        {
+          "w": "es",
+          "f": 21
+        },
+        {
+          "w": "el",
+          "f": 23
+        },
+        {
+          "w": "conjunto",
+          "f": 26
+        },
+        {
+          "w": "total",
+          "f": 40
+        },
+        {
+          "w": "que",
+          "f": 50
+        },
+        {
+          "w": "se",
+          "f": 54
+        },
+        {
+          "w": "quiere",
+          "f": 58
+        },
+        {
+          "w": "estudiar",
+          "f": 64
+        },
+        {
+          "w": "y",
+          "f": 82
+        },
+        {
+          "w": "la",
+          "f": 87
+        },
+        {
+          "w": "muestra",
+          "f": 91
+        },
+        {
+          "w": "una",
+          "f": 109
+        },
+        {
+          "w": "parte",
+          "f": 116
+        },
+        {
+          "w": "de",
+          "f": 127
+        },
+        {
+          "w": "ella",
+          "f": 130
+        },
+        {
+          "w": "las",
+          "f": 154
+        },
+        {
+          "w": "variables",
+          "f": 160
+        },
+        {
+          "w": "pueden",
+          "f": 174
+        },
+        {
+          "w": "ser",
+          "f": 181
+        },
+        {
+          "w": "cualitativas",
+          "f": 186
+        },
+        {
+          "w": "como",
+          "f": 220
+        },
+        {
+          "w": "el",
+          "f": 227
+        },
+        {
+          "w": "color",
+          "f": 230
+        },
+        {
+          "w": "favorito",
+          "f": 238
+        },
+        {
+          "w": "o",
+          "f": 267
+        },
+        {
+          "w": "cuantitativas",
+          "f": 271
+        },
+        {
+          "w": "como",
+          "f": 299
+        },
+        {
+          "w": "la",
+          "f": 307
+        },
+        {
+          "w": "estatura",
+          "f": 309
+        },
+        {
+          "w": "o",
+          "f": 328
+        },
+        {
+          "w": "el",
+          "f": 331
+        },
+        {
+          "w": "número",
+          "f": 334
+        },
+        {
+          "w": "de",
+          "f": 344
+        },
+        {
+          "w": "hermanos",
+          "f": 346
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "Media, mediana y moda",
+      "texto": "La media se obtiene sumando los datos y dividiendo entre cuántos son: 3, 4, 5, 3 y 5 suman 20, y entre 5 da 4. La mediana es el valor central de los datos ordenados, y la moda, el que más se repite.",
+      "voz": "La media se obtiene sumando los datos y dividiendo entre cuántos son: tres, cuatro, cinco, tres y cinco suman veinte, y entre cinco da cuatro. La mediana es el valor central de los datos ordenados, y la moda, el que más se repite.",
+      "items": [
+        {
+          "titulo": "Media",
+          "texto": "20 ÷ 5 = 4",
+          "palabra": "media"
+        },
+        {
+          "titulo": "Mediana",
+          "texto": "El valor central",
+          "palabra": "mediana"
+        },
+        {
+          "titulo": "Moda",
+          "texto": "El que más se repite",
+          "palabra": "moda"
+        }
+      ],
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 416,
+      "frames": 444,
+      "chunks": [
+        {
+          "text": "La media se obtiene sumando los",
+          "from": 0,
+          "to": 48
+        },
+        {
+          "text": "datos y dividiendo entre cuántos son:",
+          "from": 48,
+          "to": 105
+        },
+        {
+          "text": "3, 4, 5, 3 y 5 suman 20, y entre 5 da 4.",
+          "from": 116,
+          "to": 256
+        },
+        {
+          "text": "La mediana es el valor central de los datos",
+          "from": 268,
+          "to": 339
+        },
+        {
+          "text": "ordenados, y la moda, el que más se repite.",
+          "from": 339,
+          "to": 411
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "media",
+          "f": 6
+        },
+        {
+          "w": "se",
+          "f": 15
+        },
+        {
+          "w": "obtiene",
+          "f": 17
+        },
+        {
+          "w": "sumando",
+          "f": 28
+        },
+        {
+          "w": "los",
+          "f": 39
+        },
+        {
+          "w": "datos",
+          "f": 44
+        },
+        {
+          "w": "y",
+          "f": 56
+        },
+        {
+          "w": "dividiendo",
+          "f": 59
+        },
+        {
+          "w": "entre",
+          "f": 75
+        },
+        {
+          "w": "cuántos",
+          "f": 82
+        },
+        {
+          "w": "son",
+          "f": 93
+        },
+        {
+          "w": "tres",
+          "f": 116
+        },
+        {
+          "w": "cuatro",
+          "f": 130
+        },
+        {
+          "w": "cinco",
+          "f": 144
+        },
+        {
+          "w": "tres",
+          "f": 157
+        },
+        {
+          "w": "y",
+          "f": 165
+        },
+        {
+          "w": "cinco",
+          "f": 167
+        },
+        {
+          "w": "suman",
+          "f": 178
+        },
+        {
+          "w": "veinte",
+          "f": 189
+        },
+        {
+          "w": "y",
+          "f": 215
+        },
+        {
+          "w": "entre",
+          "f": 219
+        },
+        {
+          "w": "cinco",
+          "f": 227
+        },
+        {
+          "w": "da",
+          "f": 236
+        },
+        {
+          "w": "cuatro",
+          "f": 240
+        },
+        {
+          "w": "la",
+          "f": 268
+        },
+        {
+          "w": "mediana",
+          "f": 273
+        },
+        {
+          "w": "es",
+          "f": 284
+        },
+        {
+          "w": "el",
+          "f": 287
+        },
+        {
+          "w": "valor",
+          "f": 290
+        },
+        {
+          "w": "central",
+          "f": 297
+        },
+        {
+          "w": "de",
+          "f": 310
+        },
+        {
+          "w": "los",
+          "f": 312
+        },
+        {
+          "w": "datos",
+          "f": 317
+        },
+        {
+          "w": "ordenados",
+          "f": 326
+        },
+        {
+          "w": "y",
+          "f": 352
+        },
+        {
+          "w": "la",
+          "f": 357
+        },
+        {
+          "w": "moda",
+          "f": 360
+        },
+        {
+          "w": "el",
+          "f": 371
+        },
+        {
+          "w": "que",
+          "f": 376
+        },
+        {
+          "w": "más",
+          "f": 380
+        },
+        {
+          "w": "se",
+          "f": 385
+        },
+        {
+          "w": "repite",
+          "f": 388
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "La dispersión",
+      "texto": "El rango es la diferencia entre el valor máximo y el mínimo. La varianza y la desviación estándar miden qué tan alejados están los datos de la media; la desviación estándar es la raíz cuadrada de la varianza.",
+      "voz": "El rango es la diferencia entre el valor máximo y el mínimo. La varianza y la desviación estándar miden qué tan alejados están los datos de la media; la desviación estándar es la raíz cuadrada de la varianza.",
+      "items": [
+        {
+          "titulo": "Rango",
+          "texto": "Máximo − mínimo",
+          "palabra": "rango"
+        },
+        {
+          "titulo": "Varianza",
+          "texto": "Qué tan alejados",
+          "palabra": "varianza"
+        },
+        {
+          "titulo": "Desviación estándar",
+          "texto": "Raíz de la varianza",
+          "palabra": "desviación"
+        }
+      ],
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 333,
+      "frames": 361,
+      "chunks": [
+        {
+          "text": "El rango es la diferencia entre",
+          "from": 0,
+          "to": 46
+        },
+        {
+          "text": "el valor máximo y el mínimo.",
+          "from": 46,
+          "to": 88
+        },
+        {
+          "text": "La varianza y la desviación estándar miden qué",
+          "from": 97,
+          "to": 160
+        },
+        {
+          "text": "tan alejados están los datos de la media;",
+          "from": 160,
+          "to": 217
+        },
+        {
+          "text": "la desviación estándar es la",
+          "from": 228,
+          "to": 278
+        },
+        {
+          "text": "raíz cuadrada de la varianza.",
+          "from": 278,
+          "to": 329
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "rango",
+          "f": 6
+        },
+        {
+          "w": "es",
+          "f": 14
+        },
+        {
+          "w": "la",
+          "f": 17
+        },
+        {
+          "w": "diferencia",
+          "f": 20
+        },
+        {
+          "w": "entre",
+          "f": 34
+        },
+        {
+          "w": "el",
+          "f": 41
+        },
+        {
+          "w": "valor",
+          "f": 44
+        },
+        {
+          "w": "máximo",
+          "f": 54
+        },
+        {
+          "w": "y",
+          "f": 67
+        },
+        {
+          "w": "el",
+          "f": 69
+        },
+        {
+          "w": "mínimo",
+          "f": 72
+        },
+        {
+          "w": "la",
+          "f": 97
+        },
+        {
+          "w": "varianza",
+          "f": 101
+        },
+        {
+          "w": "y",
+          "f": 113
+        },
+        {
+          "w": "la",
+          "f": 115
+        },
+        {
+          "w": "desviación",
+          "f": 118
+        },
+        {
+          "w": "estándar",
+          "f": 132
+        },
+        {
+          "w": "miden",
+          "f": 146
+        },
+        {
+          "w": "qué",
+          "f": 155
+        },
+        {
+          "w": "tan",
+          "f": 159
+        },
+        {
+          "w": "alejados",
+          "f": 164
+        },
+        {
+          "w": "están",
+          "f": 177
+        },
+        {
+          "w": "los",
+          "f": 184
+        },
+        {
+          "w": "datos",
+          "f": 188
+        },
+        {
+          "w": "de",
+          "f": 197
+        },
+        {
+          "w": "la",
+          "f": 200
+        },
+        {
+          "w": "media",
+          "f": 204
+        },
+        {
+          "w": "la",
+          "f": 228
+        },
+        {
+          "w": "desviación",
+          "f": 232
+        },
+        {
+          "w": "estándar",
+          "f": 246
+        },
+        {
+          "w": "es",
+          "f": 261
+        },
+        {
+          "w": "la",
+          "f": 265
+        },
+        {
+          "w": "raíz",
+          "f": 269
+        },
+        {
+          "w": "cuadrada",
+          "f": 278
+        },
+        {
+          "w": "de",
+          "f": 293
+        },
+        {
+          "w": "la",
+          "f": 296
+        },
+        {
+          "w": "varianza",
+          "f": 299
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "La probabilidad",
+      "texto": "La probabilidad mide qué tan posible es un evento, de 0, imposible, a 1, seguro. Se calcula dividiendo los casos favorables entre los posibles: al lanzar un dado, la probabilidad de sacar un número par es 3 de 6, es decir, el 50 %.",
+      "voz": "La probabilidad mide qué tan posible es un evento, de cero, imposible, a uno, seguro. Se calcula dividiendo los casos favorables entre los posibles: al lanzar un dado, la probabilidad de sacar un número par es tres de seis, es decir, el cincuenta por ciento.",
+      "items": [
+        {
+          "titulo": "Imposible",
+          "texto": "P = 0",
+          "palabra": "imposible"
+        },
+        {
+          "titulo": "Seguro",
+          "texto": "P = 1",
+          "palabra": "seguro"
+        },
+        {
+          "titulo": "Fórmula",
+          "texto": "Favorables ÷ posibles",
+          "palabra": "favorables"
+        },
+        {
+          "titulo": "Un dado",
+          "texto": "Par: 3/6 = 50 %",
+          "palabra": "dado"
+        }
+      ],
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 448,
+      "frames": 476,
+      "chunks": [
+        {
+          "text": "La probabilidad mide qué tan posible es un",
+          "from": 0,
+          "to": 87
+        },
+        {
+          "text": "evento, de 0, imposible, a 1, seguro.",
+          "from": 87,
+          "to": 163
+        },
+        {
+          "text": "Se calcula dividiendo los casos",
+          "from": 173,
+          "to": 220
+        },
+        {
+          "text": "favorables entre los posibles:",
+          "from": 220,
+          "to": 265
+        },
+        {
+          "text": "al lanzar un dado, la probabilidad de sacar un número",
+          "from": 273,
+          "to": 378
+        },
+        {
+          "text": "par es 3 de 6, es decir, el 50 %.",
+          "from": 378,
+          "to": 443
+        }
+      ],
+      "words": [
+        {
+          "w": "la",
+          "f": 0
+        },
+        {
+          "w": "probabilidad",
+          "f": 6
+        },
+        {
+          "w": "mide",
+          "f": 23
+        },
+        {
+          "w": "qué",
+          "f": 31
+        },
+        {
+          "w": "tan",
+          "f": 35
+        },
+        {
+          "w": "posible",
+          "f": 40
+        },
+        {
+          "w": "es",
+          "f": 52
+        },
+        {
+          "w": "un",
+          "f": 56
+        },
+        {
+          "w": "evento",
+          "f": 60
+        },
+        {
+          "w": "de",
+          "f": 88
+        },
+        {
+          "w": "cero",
+          "f": 93
+        },
+        {
+          "w": "imposible",
+          "f": 104
+        },
+        {
+          "w": "a",
+          "f": 133
+        },
+        {
+          "w": "uno",
+          "f": 139
+        },
+        {
+          "w": "seguro",
+          "f": 147
+        },
+        {
+          "w": "se",
+          "f": 173
+        },
+        {
+          "w": "calcula",
+          "f": 178
+        },
+        {
+          "w": "dividiendo",
+          "f": 191
+        },
+        {
+          "w": "los",
+          "f": 204
+        },
+        {
+          "w": "casos",
+          "f": 208
+        },
+        {
+          "w": "favorables",
+          "f": 216
+        },
+        {
+          "w": "entre",
+          "f": 233
+        },
+        {
+          "w": "los",
+          "f": 240
+        },
+        {
+          "w": "posibles",
+          "f": 245
+        },
+        {
+          "w": "al",
+          "f": 273
+        },
+        {
+          "w": "lanzar",
+          "f": 277
+        },
+        {
+          "w": "un",
+          "f": 287
+        },
+        {
+          "w": "dado",
+          "f": 290
+        },
+        {
+          "w": "la",
+          "f": 300
+        },
+        {
+          "w": "probabilidad",
+          "f": 304
+        },
+        {
+          "w": "de",
+          "f": 320
+        },
+        {
+          "w": "sacar",
+          "f": 324
+        },
+        {
+          "w": "un",
+          "f": 333
+        },
+        {
+          "w": "número",
+          "f": 336
+        },
+        {
+          "w": "par",
+          "f": 347
+        },
+        {
+          "w": "es",
+          "f": 354
+        },
+        {
+          "w": "tres",
+          "f": 359
+        },
+        {
+          "w": "de",
+          "f": 366
+        },
+        {
+          "w": "seis",
+          "f": 370
+        },
+        {
+          "w": "es",
+          "f": 381
+        },
+        {
+          "w": "decir",
+          "f": 386
+        },
+        {
+          "w": "el",
+          "f": 395
+        },
+        {
+          "w": "cincuenta",
+          "f": 398
+        },
+        {
+          "w": "por",
+          "f": 411
+        },
+        {
+          "w": "ciento",
+          "f": 416
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "conceptos",
+      "titulo": "Leer los datos con sentido crítico",
+      "texto": "Ante una estadística, pregunta quién hizo el estudio, cuántas personas participaron y cómo las eligieron. Y desconfía de un gráfico con la escala recortada: puede exagerar las diferencias.",
+      "voz": "Ante una estadística, pregunta quién hizo el estudio, cuántas personas participaron y cómo las eligieron. Y desconfía de un gráfico con la escala recortada: puede exagerar las diferencias.",
+      "items": [
+        {
+          "titulo": "¿Quién lo hizo?",
+          "palabra": "quién"
+        },
+        {
+          "titulo": "¿Cuántas personas?",
+          "palabra": "cuántas"
+        },
+        {
+          "titulo": "¿Cómo las eligieron?",
+          "palabra": "eligieron"
+        },
+        {
+          "titulo": "Escala recortada",
+          "texto": "Exagera las diferencias",
+          "palabra": "escala"
+        }
+      ],
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 315,
+      "frames": 343,
+      "chunks": [
+        {
+          "text": "Ante una estadística, pregunta quién",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "hizo el estudio, cuántas personas",
+          "from": 56,
+          "to": 107
+        },
+        {
+          "text": "participaron y cómo las eligieron.",
+          "from": 107,
+          "to": 160
+        },
+        {
+          "text": "Y desconfía de un gráfico con la escala recortada:",
+          "from": 168,
+          "to": 246
+        },
+        {
+          "text": "puede exagerar las diferencias.",
+          "from": 257,
+          "to": 311
+        }
+      ],
+      "words": [
+        {
+          "w": "ante",
+          "f": 0
+        },
+        {
+          "w": "una",
+          "f": 9
+        },
+        {
+          "w": "estadística",
+          "f": 13
+        },
+        {
+          "w": "pregunta",
+          "f": 32
+        },
+        {
+          "w": "quién",
+          "f": 45
+        },
+        {
+          "w": "hizo",
+          "f": 50
+        },
+        {
+          "w": "el",
+          "f": 56
+        },
+        {
+          "w": "estudio",
+          "f": 60
+        },
+        {
+          "w": "cuántas",
+          "f": 80
+        },
+        {
+          "w": "personas",
+          "f": 93
+        },
+        {
+          "w": "participaron",
+          "f": 106
+        },
+        {
+          "w": "y",
+          "f": 127
+        },
+        {
+          "w": "cómo",
+          "f": 131
+        },
+        {
+          "w": "las",
+          "f": 138
+        },
+        {
+          "w": "eligieron",
+          "f": 143
+        },
+        {
+          "w": "y",
+          "f": 168
+        },
+        {
+          "w": "desconfía",
+          "f": 173
+        },
+        {
+          "w": "de",
+          "f": 188
+        },
+        {
+          "w": "un",
+          "f": 191
+        },
+        {
+          "w": "gráfico",
+          "f": 194
+        },
+        {
+          "w": "con",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 211
+        },
+        {
+          "w": "escala",
+          "f": 213
+        },
+        {
+          "w": "recortada",
+          "f": 224
+        },
+        {
+          "w": "puede",
+          "f": 257
+        },
+        {
+          "w": "exagerar",
+          "f": 265
+        },
+        {
+          "w": "las",
+          "f": 279
+        },
+        {
+          "w": "diferencias",
+          "f": 284
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste la estadística y la probabilidad. Sigue con el siguiente tema de tu ruta.",
+      "voz": "¡Muy bien! Repasaste la estadística y la probabilidad. Sigue con el siguiente tema de tu ruta.",
+      "audio": "voz/estadistica-y-probabilidad/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 166,
+      "frames": 326,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 22
+        },
+        {
+          "text": "Repasaste la estadística y la probabilidad.",
+          "from": 25,
+          "to": 87
+        },
+        {
+          "text": "Sigue con el siguiente tema de tu ruta.",
+          "from": 94,
+          "to": 162
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 6
+        },
+        {
+          "w": "bien",
+          "f": 13
+        },
+        {
+          "w": "repasaste",
+          "f": 25
+        },
+        {
+          "w": "la",
+          "f": 41
+        },
+        {
+          "w": "estadística",
+          "f": 43
+        },
+        {
+          "w": "y",
+          "f": 60
+        },
+        {
+          "w": "la",
+          "f": 61
+        },
+        {
+          "w": "probabilidad",
+          "f": 65
+        },
+        {
+          "w": "sigue",
+          "f": 94
+        },
+        {
+          "w": "con",
+          "f": 104
+        },
+        {
+          "w": "el",
+          "f": 109
+        },
+        {
+          "w": "siguiente",
+          "f": 111
+        },
+        {
+          "w": "tema",
+          "f": 123
+        },
+        {
+          "w": "de",
+          "f": 132
+        },
+        {
+          "w": "tu",
+          "f": 135
+        },
+        {
+          "w": "ruta",
+          "f": 139
+        }
+      ]
+    }
+  ]
+}

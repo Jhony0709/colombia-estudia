@@ -21,7 +21,7 @@ export async function handleInboundMessage(message: InboundMessage): Promise<Inb
   const code = CODE.exec(message.text)?.[1];
   if (!code) return 'no_code';
 
-  // Sin sesión ni institución: la solicitud dice de cuál es, como la cuota en Wompi.
+  // Sin sesión ni institución: la solicitud dice de cuál es, como la cuota en el pago en línea.
   const found = await prisma.accessRequest.findFirst({
     where: { id: code },
     select: { id: true, institutionId: true, status: true },
