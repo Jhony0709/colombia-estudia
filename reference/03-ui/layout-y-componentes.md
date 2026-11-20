@@ -465,7 +465,7 @@ parecerse por casualidad.
 | `atoms/alert`                      | estable                                                                                                                         |
 | `atoms/callout`                    | 27/9: recuadro con título (`note`/`example`/`important`), mismas clases `.callout` que el `:::callout` del Markdown; sin `role` |
 | `atoms/progress-bar`               | 27/9: barra de avance SVG (`role="progressbar"`); 4/10: `tone="on-accent"` (sobre el azul) y `grow` (crece al aparecer)         |
-| `organisms/student-tab-bar`        | 27/9: pestañas inferiores del estudiante bajo `lg`; 4/10: Inicio · Calendario · Resultados · Biblioteca (+ Mi cuenta si aplica) |
+| `organisms/student-tab-bar`        | 27/9: pestañas inferiores del estudiante bajo `lg`; 4/10: Inicio · Calendario · Resultados · Biblioteca (+ Mis pagos si aplica) |
 | `molecules/charts`                 | 4/10: `ActivityColumns` (cliente, foco itinerante), `ExamBullet`/`ExamBulletBar`, `DayStrip`. Ver §3b                           |
 | `molecules/empty-state` (icono)    | 4/10: `icon` opcional, decorativo                                                                                               |
 | `atoms/password-input`             | estable                                                                                                                         |

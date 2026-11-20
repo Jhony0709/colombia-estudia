@@ -2131,7 +2131,7 @@
       "error": "No se pudo enviar el reporte. Inténtalo de nuevo."
     },
     "account": {
-      "title": "Mi cuenta",
+      "title": "Mis pagos",
       "description": "Tus cuotas, tus pagos y tu acuerdo de pago si lo tienes. Tu acceso a las clases no depende de esto.",
       "returned": {
         "paid": "Recibimos tu pago. La cuota ya aparece como pagada.",

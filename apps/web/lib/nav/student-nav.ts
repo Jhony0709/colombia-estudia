@@ -2,7 +2,7 @@
  * Los destinos del estudiante, filtrados por capacidad. Puro, como `staff-nav.ts`.
  * SSOT: reference/01-routing/routes.md:31-38.
  *
- * «Mi cuenta» (`/aprender/mi-cuenta`) solo con `billing.read.own`: el estudiante adulto que
+ * «Mis pagos» (`/aprender/mi-cuenta`) solo con `billing.read.own`: el estudiante adulto que
  * paga o el acudiente; un plan que paga un aliado no la da (decisión 8).
  *
  * «Resultados» aparece con el primer resultado (6/10): antes era una pestaña vacía.
@@ -54,11 +54,12 @@ const NAV: readonly StudentDefinition[] = [
     needs: 'score.read.own',
     section: 'historial',
   },
+  // A la vista (20/11): en el menú de la persona nadie encontraba dónde pagar.
   {
     href: '/aprender/mi-cuenta',
-    label: 'Mi cuenta',
+    label: 'Mis pagos',
     needs: 'billing.read.own',
-    section: 'historial',
+    section: 'estudiar',
   },
   // El estudiante que además es acudiente (Fase C, 23/9): su otra área, en el menú.
   {

@@ -38,7 +38,7 @@ export function renderOverdueEmail(data: {
       paragraphs: [escapeHtml(line), calm],
       cta: {
         href: new URL('/aprender/mi-cuenta', data.origin).toString(),
-        label: 'Ir a mi cuenta',
+        label: 'Ir a mis pagos',
       },
       footnote: `Si ya pagaste, no tienes que hacer nada: el pago puede tardar en reflejarse.`,
     }),

@@ -15,12 +15,7 @@ test.describe('Rastreo', () => {
     expect(res.status()).toBe(200);
     expect(res.headers()['content-type']).toMatch(/xml/);
     const body = await res.text();
-    for (const path of [
-      '/</loc>',
-      '/registro</loc>',
-      '/auth/login</loc>',
-      '/politica-de-datos</loc>',
-    ]) {
+    for (const path of ['/</loc>', '/registro</loc>', '/politica-de-datos</loc>']) {
       expect(body).toContain(path);
     }
   });

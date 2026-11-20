@@ -179,7 +179,7 @@ async function runForInstitution({
         personId: payer.id,
         type: 'overdue_reminder',
         title: 'Tienes una cuota vencida',
-        body: `La cuota ${i.position} de ${i.paymentPlan.enrollment.cohort.program.name} ($${i.amount.toNumber().toLocaleString('es-CO')}) venció el ${day(i.dueOn)}. Puedes pagarla en «Mi cuenta» o escribirnos para un acuerdo.`,
+        body: `La cuota ${i.position} de ${i.paymentPlan.enrollment.cohort.program.name} ($${i.amount.toNumber().toLocaleString('es-CO')}) venció el ${day(i.dueOn)}. Puedes pagarla en «Mis pagos» o escribirnos para un acuerdo.`,
         href: '/aprender/mi-cuenta',
         dedupeKey: `overdue_reminder:${i.id}:${day(now)}`,
       });

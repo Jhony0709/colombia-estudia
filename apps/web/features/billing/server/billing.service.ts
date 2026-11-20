@@ -1217,7 +1217,7 @@ export async function signAgreement({
       personId: payerPersonId,
       type: 'agreement_signed',
       title: 'Acuerdo de pago registrado',
-      body: `Tu acuerdo de pago quedó registrado con ${preview.created.length} cuotas nuevas. Puedes verlas en «Mi cuenta».`,
+      body: `Tu acuerdo de pago quedó registrado con ${preview.created.length} cuotas nuevas. Puedes verlas en «Mis pagos».`,
       href: '/aprender/mi-cuenta',
       dedupeKey: `agreement_signed:${agreementId}`,
     });

@@ -22,7 +22,7 @@ import { AccountSummary } from '@/features/billing/components/account-summary';
 import { getPolicy } from '@/features/admin/server/policies.service';
 import { PayButton } from './pay-button';
 
-export const metadata: Metadata = { title: 'Mi cuenta' };
+export const metadata: Metadata = { title: 'Mis pagos' };
 
 export default async function MyAccountPage({
   searchParams,
