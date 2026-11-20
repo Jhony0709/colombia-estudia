@@ -20,6 +20,7 @@ describe('buildStudentNav', () => {
       '/aprender/resultados',
       '/aprender/calendario',
       '/aprender/biblioteca',
+      '/aprender/catalogo',
       '/aprender/certificados',
     ]);
   });

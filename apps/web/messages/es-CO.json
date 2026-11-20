@@ -612,6 +612,9 @@
     },
     "close": "Cerrar",
     "closeNamed": "Cerrar la cohorte {code}",
+    "closeConfirm": "Sale del catálogo y no admite matrículas nuevas. Quien ya está sigue estudiando hasta su fecha de acceso. No se puede volver a abrir.",
+    "closeConfirmTitle": "¿Cerrar la cohorte {code}?",
+    "closeConfirmAction": "Cerrar la cohorte",
     "empty": "Aún no hay cohortes. Crea la primera.",
     "emptyFiltered": "Ninguna cohorte con ese estado.",
     "tableCaption": "Cohortes de la institución, con su programa, fechas, matrículas y estado.",
@@ -1371,10 +1374,10 @@
       "title": "Contenido",
       "lockedFree": "Se abre cuando te inscribes. Aquí ves todo lo que trae.",
       "lockedPaid": "Se abre cuando el equipo complete tu matrícula. Aquí ves todo lo que trae.",
-      "beforeEntry": "No está en tu ruta: tu matrícula empieza en un componente posterior. Si necesitas tomarlo, escríbenos.",
-      "moduleItems": "Del componente",
+      "beforeEntry": "No está en tu ruta: tu matrícula empieza en una etapa posterior. Si necesitas tomarla, escríbenos.",
+      "moduleItems": "De la etapa",
       "locked": "Bloqueado",
-      "siblings": "Otros componentes de {program}"
+      "siblings": "Otras etapas de {program}"
     },
     "course": {
       "seeRoute": "Ver la ruta del curso",
@@ -1425,7 +1428,7 @@
     "resumeTitle": "Continuar donde ibas",
     "resumeAction": "Seguir con “{title}”",
     "outlineTitle": "La ruta del programa",
-    "moduleEmpty": "Este componente todavía no tiene temas asignados.",
+    "moduleEmpty": "Esta etapa todavía no tiene temas asignados.",
     "moduleSummary": "{completed} de {total} completados{minutes, plural, =0 {} other { · # min}}",
     "moduleLocked": "Se abre al completar “{title}”",
     "moduleAccess": {
@@ -1435,7 +1438,7 @@
       "CLOSED": "Cerró el {date}. Escríbenos si necesitas volver a abrirlo."
     },
     "nextComponent": {
-      "overline": "Siguiente componente",
+      "overline": "Siguiente etapa",
       "title": "Terminaste lo que tienes habilitado",
       "body": "Lo que sigue es «{module}». Pídelo aquí y el equipo lo habilita; te avisamos cuando esté listo.",
       "payTitle": "«{module}» se abre con tu pago",
@@ -1465,6 +1468,8 @@
       "paymentNone": "No te queda ninguna cuota pendiente.",
       "paymentCta": "Pagar o ver mis pagos",
       "paymentSee": "Ver mis pagos",
+      "noPlan": "Aún no tienes plan de pagos",
+      "noPlanBody": "El equipo está definiendo tus cuotas. Cuando estén listas, verás cuánto pagar, cuándo y qué etapa abre cada una.",
       "week": "Esta semana",
       "weekDay": "{day}: {steps, plural, =0 {sin actividad} one {1 paso} other {# pasos}}",
       "weekEmpty": "Cuando completes tu primer paso, aquí verás tu semana.",
@@ -1484,7 +1489,7 @@
       "helpWhatsApp": "Escribir por WhatsApp"
     },
     "later": {
-      "title": "{count, plural, one {Después: 1 componente más} other {Después: # componentes más}}"
+      "title": "{count, plural, one {Después: 1 etapa más} other {Después: # etapas más}}"
     },
     "form": {
       "VIDEO": "Vídeo",
@@ -1504,6 +1509,7 @@
       "progress": "{percent} % de {program} · {completed} de {total} completados",
       "routeSize": "{total, plural, =1 {1 paso} other {# pasos}} en {program}, a tu ritmo",
       "step": "{module} · paso {current} de {total}",
+      "after": "Después",
       "programPercent": "{percent} % del programa",
       "eyebrow": "Tu aprendizaje importa",
       "title": "Sigue avanzando en tu programa",
@@ -1610,7 +1616,7 @@
       "progressLabel": "Avance en {module}",
       "progress": "{completed} de {total} completados · {percent} %",
       "allRoute": "Ver toda la ruta",
-      "toggle": "Ruta del componente",
+      "toggle": "Ruta de la etapa",
       "hide": "Ocultar la ruta",
       "show": "Mostrar la ruta"
     },
@@ -1626,12 +1632,12 @@
     "blockedBy": "Se habilita al completar “{title}”.",
     "notYet": "Todavía no está disponible.",
     "closed": "Ya cerró.",
-    "lockedModule": "El componente todavía no está habilitado.",
+    "lockedModule": "La etapa todavía no está habilitada.",
     "noSession": "No hay sesión",
     "noSessionHint": "Inicia sesión para ver tu programa.",
     "catalog": {
       "title": "Cursos abiertos",
-      "hint": "Cada componente dice de qué programa hace parte. Los gratuitos empiezan ya; los de pago los matricula el equipo contigo.",
+      "hint": "Cada etapa dice de qué programa hace parte. Las gratuitas empiezan ya; las de pago las matricula el equipo contigo.",
       "noEnrollmentHint": "Todavía no estás en ningún programa. Elige un curso para empezar.",
       "free": "Gratis",
       "grade": "{grade}.º",
@@ -1650,7 +1656,7 @@
       "period": {
         "ONE_TIME": "pago único",
         "MONTHLY": "al mes",
-        "PER_MODULE": "por componente"
+        "PER_MODULE": "por etapa"
       },
       "availableUntil": "disponible hasta el {date}",
       "featuredFree": "Empieza aquí, gratis",
@@ -1664,14 +1670,14 @@
       "firstHint": "Elige tu primer curso. Los gratuitos empiezan en cuanto te inscribes.",
       "requestedOn": "Lo pediste el {date}. El equipo te escribe para completar tu matrícula y el pago.",
       "others": "Cursos que puedes tomar",
-      "componentOf": "Componente {position} de {total}",
-      "componentOfProgram": "Componente {position} de {total} de {program}",
+      "componentOf": "Etapa {position} de {total}",
+      "componentOfProgram": "Etapa {position} de {total} de {program}",
       "partOf": "Parte de {program}",
       "workshops": "Talleres",
       "moreWorkshops": "+{count}",
       "activityCount": "{count, plural, =1 {1 actividad} other {# actividades}}",
       "assessmentCount": "{count, plural, =1 {1 cuestionario} other {# cuestionarios}}",
-      "groupMeta": "{count, plural, =1 {1 componente} other {# componentes}} · abierto hasta el {date}",
+      "groupMeta": "{count, plural, =1 {1 etapa} other {# etapas}} · abierto hasta el {date}",
       "groupRequested": "Pediste inscribirte el {date} en {module}. El equipo te escribe para completar tu matrícula y el pago.",
       "requestedPill": "Solicitado",
       "priceOnRequest": "Precio a consultar",
@@ -1772,14 +1778,14 @@
           "body": "El plazo para estudiarlo terminó. Escríbenos si necesitas volver a abrirlo."
         },
         "LOCKED": {
-          "title": "Este componente todavía no está habilitado",
+          "title": "Esta etapa todavía no está habilitada",
           "body": "El equipo lo habilita cuando lo pidas. Escríbenos y seguimos."
         }
       },
       "place": "{module} · Paso {index} de {total}",
       "outline": "En este tema",
       "nextExam": "Ir al examen: {title}",
-      "nextLocked": "El siguiente componente se habilita cuando el equipo lo active.",
+      "nextLocked": "La siguiente etapa se habilita cuando el equipo la active.",
       "nextShortLocked": "Siguiente bloqueado",
       "nextIn": "Siguiente en {time}",
       "readToEnd": "Lee hasta el final",
@@ -1853,8 +1859,8 @@
     "assessment": {
       "beforeTitle": "Antes de empezar",
       "whatToExpect": "Qué esperar",
-      "mustPass": "Para completar este examen necesitas {percent} % o más. Puedes prepararte repasando los temas del componente antes de empezar.",
-      "mustTake": "Este examen se completa al entregarlo. Puedes prepararte repasando los temas del componente antes de empezar.",
+      "mustPass": "Para completar este examen necesitas {percent} % o más. Puedes prepararte repasando los temas de la etapa antes de empezar.",
+      "mustTake": "Este examen se completa al entregarlo. Puedes prepararte repasando los temas de la etapa antes de empezar.",
       "countsFor": "Cuenta para la nota de {subject}",
       "kind": {
         "DIAGNOSTIC": "Examen diagnóstico",
@@ -1894,7 +1900,7 @@
         "IN_PROGRESS": "Tienes un intento abierto."
       },
       "anotherChance": {
-        "body": "Usaste todos tus intentos sin aprobar. Para seguir con el componente, un asesor tiene que habilitarte otra oportunidad. Mientras tanto, repasa los temas.",
+        "body": "Usaste todos tus intentos sin aprobar. Para seguir con la etapa, un asesor tiene que habilitarte otra oportunidad. Mientras tanto, repasa los temas.",
         "ask": "Pedir otra oportunidad",
         "requested": "Listo, pediste otra oportunidad. Escríbenos por WhatsApp para que un asesor la revise.",
         "requestedOn": "Pediste otra oportunidad el {date}. Te avisamos cuando un asesor la habilite.",
@@ -1990,7 +1996,7 @@
       },
       "closing": {
         "title": "Aprender es avanzar",
-        "body": "Terminaste este cuestionario. Cada componente completado es un paso hacia una meta mayor, y el siguiente paso no tiene que ser enorme: lo importante es seguir avanzando.",
+        "body": "Terminaste este cuestionario. Cada etapa completada es un paso hacia una meta mayor, y el siguiente paso no tiene que ser enorme: lo importante es seguir avanzando.",
         "next": "Seguir con el siguiente paso",
         "nextTitle": "Sigue: {title}",
         "toRoute": "Ir a mi ruta",
@@ -2003,7 +2009,7 @@
         "continueAttempt": "Continuar el intento",
         "pendingBody": "Tu intento quedó entregado. Cuando tenga su nota, lo verás aquí y en tu ruta.",
         "previewRetryBody": "En la vista de estudiante presentarlo basta para seguir: repítelo si quieres ver otras respuestas.",
-        "blockedBody": "No alcanzaste el puntaje para aprobar y ya no te quedan intentos. Para seguir con el componente, pide otra oportunidad: un asesor la habilita.",
+        "blockedBody": "No alcanzaste el puntaje para aprobar y ya no te quedan intentos. Para seguir con la etapa, pide otra oportunidad: un asesor la habilita.",
         "anotherChance": "Pedir otra oportunidad"
       }
     },
@@ -2040,7 +2046,7 @@
         "blockedBy": "Se habilita al completar “{title}”.",
         "notYet": "Todavía no está disponible.",
         "closed": "La cohorte ya cerró.",
-        "locked": "Su componente todavía no está habilitado.",
+        "locked": "Su etapa todavía no está habilitada.",
         "pending": "Pendiente. Puedes presentarlo cuando quieras.",
         "pendingDue": "Pendiente. Vence el {date}.",
         "inProgress": "Tienes un intento en curso. Tus respuestas están guardadas.",
@@ -2256,7 +2262,7 @@
     },
     "completed": {
       "title": "Cursos completados",
-      "hint": "Los componentes que ya terminaste, con sus talleres. Cada constancia se puede verificar con su código.",
+      "hint": "Las etapas que ya terminaste, con sus talleres. Cada constancia se puede verificar con su código.",
       "finishedOn": "Terminado el {date}",
       "certificate": "Ver constancia",
       "results": "Ver resultados",
@@ -2796,7 +2802,7 @@
         },
         "schedule": {
           "q": "¿Necesito conectarme a una hora fija?",
-          "a": "No. El programa es 100 % virtual: los componentes están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
+          "a": "No. El programa es 100 % virtual: las etapas están disponibles las 24 horas y avanzas a tu ritmo con un tutor. Si hay clases en vivo, quedan grabadas en la plataforma."
         },
         "route": {
           "q": "¿Cómo sé qué ruta me corresponde?",
@@ -3492,13 +3498,13 @@
     "passwordHint": "Mínimo 12 caracteres.",
     "acceptPolicy": "Acepto la política de tratamiento de datos",
     "viewPolicy": "Ver política",
-    "minorNotice": "Como eres menor de edad, puedes empezar el componente de introducción sin costo. Para matricularte en un programa de pago, tu acudiente firmará la política de datos y la matrícula.",
+    "minorNotice": "Como eres menor de edad, puedes empezar la etapa de introducción sin costo. Para matricularte en un programa de pago, tu acudiente firmará la política de datos y la matrícula.",
     "submit": "Crear cuenta",
     "haveAccount": "¿Ya tienes cuenta?",
     "login": "Inicia sesión",
     "success": "Cuenta creada",
     "enrolled": "Ya estás en {code} — {name}. Puedes empezar a estudiar.",
-    "enrolledFree": "Tu componente de introducción es gratis y ya está listo: estás en {code} — {name}. Entra y empieza a estudiar.",
+    "enrolledFree": "Tu etapa de introducción es gratis y ya está lista: estás en {code} — {name}. Entra y empieza a estudiar.",
     "operationsPending": "Tu cuenta está lista. El equipo te matriculará en tu cohorte y te avisará.",
     "enter": "Entrar",
     "goToLogin": "Ir a iniciar sesión",
@@ -3536,10 +3542,10 @@
     "progress": "{completed} de {total} temas · {percent}%",
     "accessUntil": "Acceso hasta el {date}",
     "open": "Ver el avance de {name}",
-    "progressTitle": "Avance por componente",
+    "progressTitle": "Avance por etapa",
     "progressHint": "{completed} de {total} temas completados en total.",
-    "progressCaption": "Temas completados por componente",
-    "module": "Componente",
+    "progressCaption": "Temas completados por etapa",
+    "module": "Etapa",
     "lessonsDone": "Temas",
     "noLessons": "Esta cohorte todavía no tiene temas asignados",
     "assessmentsTitle": "Exámenes",
@@ -3917,7 +3923,7 @@
   },
   "moduleFeedback": {
     "metaTitle": "Cuéntanos cómo te fue",
-    "overline": "Encuesta del componente",
+    "overline": "Encuesta de la etapa",
     "title": "¿Cómo te fue en {module}?",
     "description": "Cuatro preguntas y un espacio para tus ideas. Toma menos de un minuto y nos ayuda a mejorar.",
     "later": "Ahora no",
@@ -3932,7 +3938,7 @@
     },
     "questions": {
       "usefulness": {
-        "prompt": "{name}, ¿qué tan útiles te parecieron los talleres de este componente?",
+        "prompt": "{name}, ¿qué tan útiles te parecieron los talleres de esta etapa?",
         "words": ["Nada útiles", "Poco útiles", "Más o menos", "Útiles", "Muy útiles"]
       },
       "understanding": {
@@ -3967,7 +3973,7 @@
     "error": "No pudimos enviar tu opinión. Inténtalo de nuevo.",
     "done": {
       "title": "Recibimos tu opinión",
-      "body": "La lee el equipo académico para mejorar los próximos componentes. Gracias por tomarte el tiempo.",
+      "body": "La lee el equipo académico para mejorar las próximas etapas. Gracias por tomarte el tiempo.",
       "back": "Volver a mi ruta",
       "next": "Si ya quieres seguir, pide que habiliten {module}.",
       "previewBody": "Es la vista de estudiante: tu respuesta se guarda, pero no aparece en las opiniones de la cohorte."
@@ -3978,7 +3984,7 @@
     },
     "invite": {
       "title": "¿Cómo te fue en {module}?",
-      "body": "Cuatro preguntas y un espacio para tus ideas. Nos ayuda a mejorar el próximo componente.",
+      "body": "Cuatro preguntas y un espacio para tus ideas. Nos ayuda a mejorar la próxima etapa.",
       "cta": "Contar cómo me fue"
     }
   },

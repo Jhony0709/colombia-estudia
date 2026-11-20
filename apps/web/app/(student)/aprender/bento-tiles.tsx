@@ -134,6 +134,18 @@ export async function PaymentTile({ account }: { account: AccountView }) {
   );
 }
 
+/** ¿Qué debo? Aún nada: el plan de pagos lo define el equipo (escenario 6 de la maqueta). */
+export async function NoPlanTile() {
+  const t = await getTranslations('learn.tiles');
+  return (
+    <section aria-labelledby="tile-pago" className={TILE}>
+      <TileTitle id="tile-pago">{t('paymentDone')}</TileTitle>
+      <p className="type-body-emphasis text-text m-0">{t('noPlan')}</p>
+      <p className="type-caption text-text-muted m-0">{t('noPlanBody')}</p>
+    </section>
+  );
+}
+
 /** ¿Cómo va mi semana? Los últimos siete días, uno por cuadro. */
 export async function WeekTile({ activity }: { activity: StudyActivity }) {
   const [t, format] = await Promise.all([getTranslations('learn.tiles'), getFormatter()]);
@@ -312,10 +324,12 @@ export async function HelpTile({
   phone,
   email,
   name,
+  className,
 }: {
   phone: string | null;
   email: string | null;
   name: string;
+  className?: string;
 }) {
   if (!phone && !email) return null;
   const t = await getTranslations('learn');
@@ -323,7 +337,7 @@ export async function HelpTile({
   return (
     <section
       aria-labelledby="tile-ayuda"
-      className="bg-surface-note rounded-card flex min-w-0 flex-col gap-3 p-5"
+      className={cn('bg-surface-note rounded-card flex min-w-0 flex-col gap-3 p-5', className)}
     >
       <h2 id="tile-ayuda" className="type-subheading text-text m-0">
         {t('tiles.help')}

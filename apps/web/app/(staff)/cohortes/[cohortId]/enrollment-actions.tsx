@@ -492,7 +492,7 @@ export function EnrollmentActions({
 
       {mode === 'withdraw' && (
         <form
-          className="space-y-2"
+          className="w-64 max-w-full space-y-2 whitespace-normal"
           noValidate
           onSubmit={async (e) => {
             e.preventDefault();
@@ -530,7 +530,7 @@ export function EnrollmentActions({
 
       {mode === 'extend' && (
         <form
-          className="space-y-2"
+          className="w-64 max-w-full space-y-2 whitespace-normal"
           noValidate
           onSubmit={async (e) => {
             e.preventDefault();

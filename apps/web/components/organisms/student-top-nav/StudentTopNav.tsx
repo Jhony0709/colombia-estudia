@@ -28,6 +28,7 @@ import {
   BarChart3,
   CalendarDays,
   ChevronDown,
+  Compass,
   Library,
   LogOut,
   Monitor,
@@ -67,6 +68,7 @@ const PERSONAL_ICONS: Record<string, LucideIcon> = {
   '/aprender/mi-cuenta': Wallet,
   '/aprender/calendario': CalendarDays,
   '/aprender/biblioteca': Library,
+  '/aprender/catalogo': Compass,
   '/familia': Users,
 };
 

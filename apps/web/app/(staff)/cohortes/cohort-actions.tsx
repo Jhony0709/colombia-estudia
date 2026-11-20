@@ -15,6 +15,7 @@ import { FormField, FormInput, FormSelect } from '@/components/atoms/form-field'
 import { Button } from '@/components/atoms/button';
 import { Alert } from '@/components/atoms/alert';
 import { Sheet } from '@/components/organisms/sheet';
+import { Dialog, DialogClose } from '@/components/organisms/dialog';
 import type { CohortFormOptions } from '@/features/cohorts/server/cohorts.service';
 
 interface Missing {
@@ -75,6 +76,7 @@ export function CohortStatusAction({
   const t = useTranslations('cohorts');
   const { busy, error, missing, send } = useCohortMutation();
   const [reviewing, setReviewing] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   if (status !== 'PLANNED' && status !== 'OPEN') return null;
 
@@ -86,12 +88,39 @@ export function CohortStatusAction({
         variant={prominent ? (op === 'open' ? 'primary' : 'secondary') : 'quiet'}
         disabled={busy}
         aria-label={op === 'open' ? t('openNamed', { code }) : t('closeNamed', { code })}
-        onClick={() =>
-          op === 'open' ? setReviewing(true) : send(`/api/cohorts/${cohortId}`, 'PATCH', { op })
-        }
+        onClick={() => (op === 'open' ? setReviewing(true) : setConfirming(true))}
       >
         {op === 'open' ? t('open') : t('close')}
       </Button>
+
+      {/* Cerrar no tiene vuelta atrás desde la pantalla (20/11): se confirma. */}
+      {op === 'close' && (
+        <Dialog
+          open={confirming}
+          onOpenChange={setConfirming}
+          locked={busy}
+          size="sm"
+          title={t('closeConfirmTitle', { code })}
+          description={t('closeConfirm')}
+        >
+          {error && <Alert severity="error">{error}</Alert>}
+          <div className="flex flex-wrap justify-end gap-2">
+            <DialogClose>
+              <Button type="button" variant="secondary" disabled={busy}>
+                {t('cancel')}
+              </Button>
+            </DialogClose>
+            <Button
+              loading={busy}
+              onClick={async () => {
+                if (await send(`/api/cohorts/${cohortId}`, 'PATCH', { op })) setConfirming(false);
+              }}
+            >
+              {t('closeConfirmAction')}
+            </Button>
+          </div>
+        </Dialog>
+      )}
 
       {/* Abrir pasa por la revisión previa (23/9): qué se asigna, quién entra, qué se
           queda fuera. Es la misma regla que ejecuta la apertura. */}

@@ -94,6 +94,8 @@ export interface CohortOutline {
   progress: { completed: number; total: number };
   /** Decisión 8: se dice que la financia una entidad aliada, sin nombrarla. */
   partnerFunded: boolean;
+  /** Programa de pago, adulto y sin plan todavía (20/11): se le dice que el equipo lo define. */
+  awaitingPlan: boolean;
   /** Vista de estudiante de un admin (31/10): todo abierto, sin fechas ni secuencia. */
   preview: boolean;
 }
@@ -109,6 +111,7 @@ const EMPTY: CohortOutline = {
   upcoming: null,
   progress: { completed: 0, total: 0 },
   partnerFunded: false,
+  awaitingPlan: false,
   preview: false,
 };
 
@@ -208,6 +211,11 @@ export async function getCohortOutline({
 
   const partnerFunded = enrollment.paymentPlan?.payerType === 'PARTNER';
   const preview = enrollment.isPreview;
+  const awaitingPlan =
+    !preview &&
+    cohort.program.pricing !== 'FREE' &&
+    !enrollment.paymentPlan &&
+    !enrollment.isMinorAtEnrollment;
 
   // Los estados terminales van antes que los datos: si el acceso venció, cargar la ruta
   // entera es trabajo para una pantalla que no la va a enseñar.
@@ -233,6 +241,7 @@ export async function getCohortOutline({
       enrollmentId: enrollment.id,
       cohort: cohortInfo,
       partnerFunded,
+      awaitingPlan,
       preview,
     };
   }
@@ -446,6 +455,7 @@ export async function getCohortOutline({
     upcoming: nextPoint(all),
     progress: progressOf(all),
     partnerFunded,
+    awaitingPlan,
     preview,
   };
 }
@@ -459,6 +469,7 @@ export interface MyEnrollment {
   resume: SequencedItem | null;
   upcoming: SequencedItem | null;
   partnerFunded: boolean;
+  awaitingPlan: boolean;
   preview: boolean;
 }
 
@@ -502,6 +513,7 @@ export async function listMyEnrollments({
             resume: outline.resume,
             upcoming: outline.upcoming,
             partnerFunded: outline.partnerFunded,
+            awaitingPlan: outline.awaitingPlan,
             preview: outline.preview,
           },
         ]

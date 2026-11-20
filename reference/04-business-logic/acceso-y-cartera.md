@@ -101,6 +101,9 @@ por defecto, ninguno.
   Habilitarlo a mano desde la ficha de la matrícula sigue valiendo.
 - **Nunca para un menor**: con `isMinorAtEnrollment = true` la lista no se guarda al crear el
   plan y no se lee al calcular el acceso (`stageInstallments`).
+- **Sin plan todavía** (programa de pago, adulto, sin `PaymentPlan`): no hay `billing.read.own`,
+  así que no ve «Mis pagos»; el inicio lo dice en el módulo de la cuota (`CohortOutline.awaitingPlan`,
+  `NoPlanTile`). Sus componentes bloqueados se piden al equipo.
 - **Nunca cierra**: una cuota vencida, un pago anulado o una cuota `VOID` no bloquean lo ya
   habilitado. Lo que la persona ya había empezado al crear el plan queda habilitado.
 - En un acuerdo de pago, las etapas de las cuotas anuladas pasan a las cuotas nuevas, en orden.

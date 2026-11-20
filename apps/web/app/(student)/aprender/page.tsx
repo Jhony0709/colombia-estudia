@@ -33,6 +33,7 @@ import {
   ExploreTile,
   HelpTile,
   NextTile,
+  NoPlanTile,
   PaymentTile,
   RouteTile,
   StageTile,
@@ -203,8 +204,22 @@ export default async function LearnPage({
   // era un muro de ceros; lo que sirve es el siguiente paso, la ruta y cómo funciona.
   const firstDay = !selected.gate && selected.progress.completed === 0;
   // Lo que viene: primero lo que pide algo; los cierres de cohorte y de acceso, si no hay más.
-  const nextItem =
-    agenda.find((e) => e.kind !== 'COHORT_END' && e.kind !== 'ACCESS_UNTIL') ?? agenda[0] ?? null;
+  const nextItem = agenda.find((e) => e.kind !== 'COHORT_END' && e.kind !== 'ACCESS_UNTIL') ?? null;
+  // Sin nada que pida algo, el fin de la cohorte no aporta: ahí van los otros cursos (20/11).
+  const exploreInNext = Boolean(account) && !nextItem && openCourses > 0;
+  const exploreBelow = Boolean(account) && Boolean(nextItem) && openCourses > 0;
+  // Exámenes del inicio: solo los que se pueden presentar o ya tienen nota (20/11).
+  const examsNow = exams.filter((exam) => exam.best || exam.enabled);
+  // Sin cuenta ni cursos abiertos, la ayuda sube a ese hueco y la ruta va a lo ancho.
+  const helpUp = !account && !selected.awaitingPlan && openCourses === 0;
+  const helpTile = (
+    <HelpTile
+      phone={ctx.institution.supportPhone ?? null}
+      email={ctx.institution.supportEmail ?? null}
+      name={ctx.person.givenName}
+      className={helpUp ? 'max-lg:order-last' : undefined}
+    />
+  );
   const completedSection = <CompletedCourses courses={completedCourses} />;
   const currentIndex = current ? outline.modules.findIndex((m) => m.id === current.id) : -1;
   // E2 (23/9): con dos o más matrículas, un selector en el héroe; con una, nada.
@@ -290,25 +305,29 @@ export default async function LearnPage({
           )}
           {account ? (
             <PaymentTile account={account} />
+          ) : selected.awaitingPlan ? (
+            <NoPlanTile />
+          ) : openCourses > 0 ? (
+            <ExploreTile count={openCourses} />
           ) : (
-            openCourses > 0 && <ExploreTile count={openCourses} />
+            helpTile
           )}
           {!selected.gate && <WeekTile activity={activity} />}
-          <NextTile item={nextItem} />
+          {exploreInNext ? (
+            <ExploreTile count={openCourses} />
+          ) : (
+            <NextTile item={nextItem ?? agenda[0] ?? null} />
+          )}
           {outline.enrollmentId && outline.modules.length > 1 && (
             <RouteTile
               modules={outline.modules}
               currentId={current?.id ?? null}
               enrollmentId={outline.enrollmentId}
               programName={selected.cohort.programName}
-              className="sm:col-span-2 lg:col-span-3"
+              className={cn('sm:col-span-2', helpUp ? 'lg:col-span-4' : 'lg:col-span-3')}
             />
           )}
-          <HelpTile
-            phone={ctx.institution.supportPhone ?? null}
-            email={ctx.institution.supportEmail ?? null}
-            name={ctx.person.givenName}
-          />
+          {!helpUp && helpTile}
         </section>
       )}
 
@@ -327,11 +346,10 @@ export default async function LearnPage({
         </div>
       )}
 
-      {!finished && (exams.length > 0 || completedCourses.length > 0) && (
+      {!finished && (examsNow.length > 0 || completedCourses.length > 0 || exploreBelow) && (
         <InView className="space-y-8">
-          <ExamsCard exams={exams} />
-          {/* Con dos o más cursos abiertos y uno terminado, también se puede explorar desde aquí. */}
-          {account && openCourses > 0 && <ExploreTile count={openCourses} />}
+          <ExamsCard exams={examsNow} />
+          {exploreBelow && <ExploreTile count={openCourses} />}
           {completedSection}
         </InView>
       )}
@@ -537,6 +555,28 @@ async function CurrentActivity({
                 />
               ))}
             </ol>
+          </div>
+        )}
+
+        {strip && steps && stepIndex + 1 < steps.length && (
+          <div className="space-y-2">
+            <p className="type-overline m-0 uppercase opacity-90">{t('hero.after')}</p>
+            <ul className="m-0 list-none space-y-2 p-0">
+              {steps.slice(stepIndex + 1, stepIndex + 4).map((step) => {
+                const Icon = FORM_ICONS[formOf(step)];
+                return (
+                  <li
+                    key={step.assignmentId}
+                    className="type-body flex items-start gap-2 opacity-90"
+                  >
+                    <Icon aria-hidden className="mt-1 size-4 shrink-0" />
+                    <span className="line-clamp-1 min-w-0">
+                      {step.title} · {itemMeta(step, t)}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
       </div>

@@ -19,13 +19,13 @@ cómo se nombra en material comercial. El código usa el término en inglés.
 
 ## Programa y cohortes
 
-| Término        | Significado                                                                                                                              | UI                                  | Venta        |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ------------ |
-| **Program**    | Lo que se vende: "Bachillerato Valida YA". Dueño del catálogo.                                                                           | "Programa"                          | "Programa"   |
-| **Module**     | Unidad del programa que se habilita a mano por matrícula (3/10): "Fundamentos". Agrupa talleres; cada taller cierra con su cuestionario. | "Componente" (7/10; antes "Módulo") | "Componente" |
-| **Subject**    | Lengua castellana, Matemáticas. Transversal: el mismo taller se repite en varios componentes con temas más avanzados.                    | "Taller" (7/10; antes "Asignatura") | —            |
-| **Cohort**     | Edición del programa con fechas: "2026-1", "2026-1 ValoraT". Unidad comercial y académica.                                               | "Cohorte"                           | "Cohorte"    |
-| **Enrollment** | Estudiante en una cohorte. Estado, acceso hasta, si era menor al matricularse.                                                           | "Matrícula"                         | —            |
+| Término        | Significado                                                                                                                              | UI                                                                                | Venta      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ---------- |
+| **Program**    | Lo que se vende: "Bachillerato Valida YA". Dueño del catálogo.                                                                           | "Programa"                                                                        | "Programa" |
+| **Module**     | Unidad del programa que se habilita a mano por matrícula (3/10): "Fundamentos". Agrupa talleres; cada taller cierra con su cuestionario. | "Componente" (7/10; antes "Módulo"); "Etapa" al estudiante y al acudiente (20/11) | "Etapa"    |
+| **Subject**    | Lengua castellana, Matemáticas. Transversal: el mismo taller se repite en varios componentes con temas más avanzados.                    | "Taller" (7/10; antes "Asignatura")                                               | —          |
+| **Cohort**     | Edición del programa con fechas: "2026-1", "2026-1 ValoraT". Unidad comercial y académica.                                               | "Cohorte"                                                                         | "Cohorte"  |
+| **Enrollment** | Estudiante en una cohorte. Estado, acceso hasta, si era menor al matricularse.                                                           | "Matrícula"                                                                       | —          |
 
 ## Contenido y evaluación
 

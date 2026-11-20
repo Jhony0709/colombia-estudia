@@ -130,3 +130,27 @@ describe('getCohortOutline en la vista de estudiante', () => {
     expect(items(outline).find((i) => i.assignmentId === 'q')?.status).toBe('IN_PROGRESS');
   });
 });
+
+// Escenario 6 de la maqueta (20/11): programa de pago sin plan todavía.
+describe('getCohortOutline · awaitingPlan', () => {
+  const run = async (overrides: Record<string, unknown>, isPreview = false) => {
+    db.enrollment.findFirst.mockResolvedValue({ ...enrollment(isPreview), ...overrides });
+    return (await getCohortOutline({ institutionId: 'inst-1', personId: 'p-1', now: NOW }))
+      .awaitingPlan;
+  };
+
+  it('adulto en un programa de pago y sin plan', async () => {
+    expect(await run({})).toBe(true);
+  });
+
+  it('no para un menor, con plan, en la vista de estudiante ni en un programa gratis', async () => {
+    expect(await run({ isMinorAtEnrollment: true })).toBe(false);
+    expect(await run({ paymentPlan: { payerType: 'PERSON', installments: [] } })).toBe(false);
+    expect(await run({}, true)).toBe(false);
+    expect(
+      await run({
+        cohort: { ...enrollment(false).cohort, program: { name: 'Intro', pricing: 'FREE' } },
+      })
+    ).toBe(false);
+  });
+});

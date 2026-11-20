@@ -58,6 +58,8 @@ const NAV: readonly StudentDefinition[] = [
   },
   { href: '/aprender/calendario', label: 'Calendario', needs: 'lesson.read', section: 'historial' },
   { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'historial' },
+  // Los demás cursos abiertos (20/11): antes solo se llegaba desde el inicio.
+  { href: '/aprender/catalogo', label: 'Otros cursos', needs: 'lesson.read', section: 'historial' },
   {
     href: '/aprender/certificados',
     label: 'Constancias',

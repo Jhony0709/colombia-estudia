@@ -1289,8 +1289,11 @@ para adultos que pide `acceso-y-cartera.md` §2; la regla 1 de `CLAUDE.md` no se
 pasan al menú de la persona. El catálogo sale del inicio a `/aprender/catalogo` (el inicio lo enlaza;
 sin matrícula sigue ahí, porque elegir curso es lo que toca). En la ruta, el componente bloqueado
 dice con qué cuota se abre y ofrece pagar en vez de «pedir»; los bloqueados de más adelante van en
-una sola fila. Inicio y Mis pagos dicen qué abre la próxima cuota. **No hecho**: llamar «etapa» al
-componente de cara al estudiante; toca constancias, portada, acudientes y glosario, y se decide aparte.
+una sola fila. Inicio y Mis pagos dicen qué abre la próxima cuota. Vocabulario (Jhonny, 20/11:
+«ve con ambas»): de cara al estudiante y al acudiente el componente se llama «etapa» (ruta, catálogo,
+exámenes, encuesta, registro, acudientes, portada). El equipo sigue diciendo «componente». **Pendiente**:
+las constancias (`learn.certificates.*`, `certificatePublic`) siguen con «componente» hasta decidir
+qué dice el documento.
 
 ## 2026-11-19 — Imágenes en el contenido: dónde, quién las hace y el visor
 
