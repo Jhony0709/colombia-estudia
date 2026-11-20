@@ -28,6 +28,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { toCsv } from '@/lib/csv/serialize';
 import { notify } from '@/features/notifications/server/notifications.service';
+import { openPaidStages } from './stage-unlock.service';
 
 export type { AccountStatus };
 export type PayerType = 'PERSON' | 'PARTNER';
@@ -52,6 +53,8 @@ export interface InstallmentView {
   overdue: boolean;
   agreementId: string | null;
   externalInvoiceRef: string | null;
+  /** Los componentes que abre al quedar pagada (20/11), por nombre. */
+  unlocks: string[];
 }
 
 export interface PaymentView {
@@ -81,7 +84,7 @@ export interface AgreementView {
 export interface AccountView {
   enrollmentId: string;
   student: { id: string; name: string; isMinor: boolean };
-  cohort: { id: string; code: string; name: string; programId: string };
+  cohort: { id: string; code: string; name: string; programId: string; programName: string };
   /** El grado por el que entró (25/9), para sugerir el precio de lista. */
   entryGrade: number | null;
   plan: {
@@ -124,6 +127,7 @@ const PLAN_SELECT = {
       status: true,
       agreementId: true,
       externalInvoiceRef: true,
+      unlockModuleIds: true,
       payments: {
         orderBy: { paidAt: 'desc' as const },
         select: {
@@ -157,6 +161,7 @@ type PlanRow = {
     status: string;
     agreementId: string | null;
     externalInvoiceRef: string | null;
+    unlockModuleIds?: string[];
     payments: Array<{
       id: string;
       amount: { toNumber(): number };
@@ -231,7 +236,15 @@ export async function getAccount({
       isMinorAtEnrollment: true,
       entryGrade: true,
       student: { select: { id: true, givenName: true, familyName: true } },
-      cohort: { select: { id: true, code: true, name: true, programId: true } },
+      cohort: {
+        select: {
+          id: true,
+          code: true,
+          name: true,
+          programId: true,
+          program: { select: { name: true } },
+        },
+      },
       paymentPlan: { select: PLAN_SELECT },
       paymentAgreements: {
         orderBy: { signedAt: 'desc' },
@@ -268,6 +281,17 @@ export async function getAccount({
     : [];
   const confirmerName = new Map(confirmers.map((p) => [p.id, `${p.givenName} ${p.familyName}`]));
 
+  const stageIds = e.isMinorAtEnrollment
+    ? []
+    : (plan?.installments.flatMap((i) => i.unlockModuleIds ?? []) ?? []);
+  const stages = stageIds.length
+    ? await db.module.findMany({
+        where: { id: { in: stageIds } },
+        select: { id: true, name: true },
+      })
+    : [];
+  const stageName = new Map(stages.map((m) => [m.id, m.name]));
+
   const installments: InstallmentView[] = plan
     ? plan.installments.map((i) => {
         const paid = i.payments
@@ -293,6 +317,9 @@ export async function getAccount({
           ),
           agreementId: i.agreementId,
           externalInvoiceRef: i.externalInvoiceRef,
+          unlocks: e.isMinorAtEnrollment
+            ? []
+            : (i.unlockModuleIds ?? []).flatMap((id) => stageName.get(id) ?? []),
         };
       })
     : [];
@@ -333,7 +360,13 @@ export async function getAccount({
       name: `${e.student.givenName} ${e.student.familyName}`,
       isMinor: e.isMinorAtEnrollment,
     },
-    cohort: e.cohort,
+    cohort: {
+      id: e.cohort.id,
+      code: e.cohort.code,
+      name: e.cohort.name,
+      programId: e.cohort.programId,
+      programName: e.cohort.program.name,
+    },
     entryGrade: e.entryGrade,
     plan: plan
       ? {
@@ -560,6 +593,8 @@ export interface CreatePlanInput {
   periodicity: Periodicity;
   /** El precio de lista del que sale el total (25/9); nulo si el total se escribió a mano. */
   priceId?: string | null;
+  /** Por cuota, en orden: los componentes que abre al quedar pagada (20/11). */
+  unlocks?: string[][];
 }
 
 /**
@@ -634,6 +669,24 @@ export async function createPaymentPlans({
     if (!payer) throw new APIError('El pagador no existe', 'VALIDATION_ERROR');
   }
 
+  const unlocks = (input.unlocks ?? []).map((ids) => [...new Set(ids)]);
+  const stageIds = unlocks.flat();
+  if (unlocks.length > input.installments) {
+    throw new APIError('Hay más listas de etapas que cuotas', 'VALIDATION_ERROR');
+  }
+  if (new Set(stageIds).size !== stageIds.length) {
+    throw new APIError('Una etapa solo la puede abrir una cuota', 'VALIDATION_ERROR');
+  }
+  if (stageIds.length > 0) {
+    const programIds = [...new Set(enrollments.map((e) => e.cohort.programId))];
+    const found = await db.module.count({
+      where: { id: { in: stageIds }, programId: programIds[0], archivedAt: null },
+    });
+    if (programIds.length !== 1 || found !== stageIds.length) {
+      throw new APIError('Alguna etapa no es del programa de la matrícula', 'VALIDATION_ERROR');
+    }
+  }
+
   const amounts = splitAmount(input.totalAmount, input.installments);
   const dates = scheduleDates(input.firstDueOn, input.installments, input.periodicity);
 
@@ -667,11 +720,22 @@ export async function createPaymentPlans({
               amount,
               dueOn: dates[i]!,
               status: 'OPEN',
+              // A un menor nunca se le condiciona el acceso al pago.
+              unlockModuleIds: e.isMinorAtEnrollment ? [] : (unlocks[i] ?? []),
             })),
           },
         },
         select: { id: true },
       });
+      if (!e.isMinorAtEnrollment && stageIds.length > 0) {
+        await keepStartedStagesOpen(tx, {
+          institutionId,
+          actorId,
+          enrollmentId: e.id,
+          stageIds,
+          now,
+        });
+      }
       await tx.auditLog.create({
         data: {
           institutionId,
@@ -685,6 +749,7 @@ export async function createPaymentPlans({
             totalAmount: input.totalAmount,
             installments: input.installments,
             periodicity: input.periodicity,
+            ...(stageIds.length > 0 && !e.isMinorAtEnrollment ? { unlocks } : {}),
           },
           occurredAt: now,
         },
@@ -693,6 +758,47 @@ export async function createPaymentPlans({
     created++;
   }
   return { created, skipped };
+}
+
+/** Lo que la persona ya empezó no se cierra: queda habilitado al crear el plan. */
+async function keepStartedStagesOpen(
+  tx: Tx,
+  {
+    institutionId,
+    actorId,
+    enrollmentId,
+    stageIds,
+    now,
+  }: { institutionId: string; actorId: string; enrollmentId: string; stageIds: string[]; now: Date }
+): Promise<void> {
+  const [progress, unlocked] = await Promise.all([
+    tx.lessonProgress.findMany({
+      where: { enrollmentId, assignment: { lesson: { moduleId: { in: stageIds } } } },
+      select: { assignment: { select: { lesson: { select: { moduleId: true } } } } },
+    }),
+    tx.enrollmentModule.findMany({ where: { enrollmentId }, select: { moduleId: true } }),
+  ]);
+  const open = new Set(unlocked.map((row) => row.moduleId));
+  const started = new Set(progress.map((row) => row.assignment.lesson.moduleId));
+  for (const moduleId of started) {
+    if (!moduleId || open.has(moduleId)) continue;
+    const row = await tx.enrollmentModule.create({
+      data: { institutionId, enrollmentId, moduleId, unlockedAt: now, unlockedById: actorId },
+      select: { id: true },
+    });
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'enrollment_module',
+        entityId: row.id,
+        action: 'unlock',
+        before: {},
+        after: { enrollmentId, moduleId, reason: 'already_started' },
+        occurredAt: now,
+      },
+    });
+  }
 }
 
 /** Solo montos y fechas de cuotas sin pagos; las pagadas o abonadas no se tocan. Audita. */
@@ -710,7 +816,7 @@ export async function updateInstallment({
   amount?: number;
   dueOn?: Date;
   now?: Date;
-}): Promise<InstallmentView> {
+}): Promise<Omit<InstallmentView, 'unlocks'>> {
   const db = createTenantClient(institutionId);
   const i = await db.installment.findFirst({
     where: { id: installmentId },
@@ -979,6 +1085,10 @@ export async function confirmPayment({
   // Un acuerdo con todas sus cuotas pagadas queda cumplido aquí mismo, no solo en el job.
   await settleAgreements({ institutionId, enrollmentId: e.id, now });
 
+  if (result.installmentStatus === 'PAID') {
+    await openPaidStages({ institutionId, installmentId: result.installmentId, now });
+  }
+
   if (installment.paymentPlan.payerPersonId) {
     await notify(institutionId, {
       personId: installment.paymentPlan.payerPersonId,
@@ -1175,12 +1285,21 @@ export async function signAgreement({
         },
         select: { id: true },
       });
+      // Las etapas de las cuotas anuladas pasan a las nuevas, en orden; las que sobran, a la última.
+      const voided = await tx.installment.findMany({
+        where: { id: { in: preview.voided.map((v) => v.id) } },
+        orderBy: { position: 'asc' },
+        select: { unlockModuleIds: true },
+      });
+      const last = preview.created.length - 1;
+      const stagesOf = (index: number) =>
+        voided.flatMap((v, i) => (Math.min(i, last) === index ? v.unlockModuleIds : []));
       await tx.installment.updateMany({
         where: { id: { in: preview.voided.map((v) => v.id) } },
         data: { status: 'VOID' },
       });
       await tx.installment.createMany({
-        data: preview.created.map((c) => ({
+        data: preview.created.map((c, index) => ({
           institutionId,
           paymentPlanId: plan.id,
           agreementId: agreement.id,
@@ -1188,6 +1307,7 @@ export async function signAgreement({
           amount: c.amount,
           dueOn: new Date(`${c.dueOn}T00:00:00.000Z`),
           status: 'OPEN',
+          unlockModuleIds: stagesOf(index),
         })),
       });
       await tx.auditLog.create({

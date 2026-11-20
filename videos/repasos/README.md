@@ -53,4 +53,4 @@ El volumen de la música es `MUSICA` en `src/Video.tsx` (0.04 desde el 20/11). P
 
 ## En la plataforma
 
-El MP4 va a Vimeo con su VTT (los recursos de video piden subtítulos revisados) y se registra como recurso. En el taller, después de las actividades del tema, va un tema nuevo «Repaso: <tema>» con `::video{asset="<id>"}`. Se completa al ver el 90 % del video o leer la transcripción (`packages/domain/src/lesson-completion.ts:45`).
+El MP4 va a Vimeo con su VTT (los recursos de video piden subtítulos revisados) y se registra como recurso. `VIMEO_TOKEN=… npm run vimeo [tema …]` sube los que falten (oculto en vimeo.com, embebible solo en albafuturoeducativo.com) y anota el id de cada tema en `vimeo.json`. En el taller, después de las actividades del tema, va un tema nuevo «Repaso: <tema>» con `::video{asset="<id>"}`. Se completa al ver el 90 % del video o leer la transcripción (`packages/domain/src/lesson-completion.ts:45`).

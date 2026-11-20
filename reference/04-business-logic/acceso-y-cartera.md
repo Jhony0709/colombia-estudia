@@ -88,6 +88,26 @@ activar cada flag conscientemente; cada activación queda en `AuditLog`.
 Se retiró `hideOptionalActivities` (auditoría fase 0): no existe `Lesson.isOptional` ni
 actividades de pago aparte; un flag que no hace nada engaña al que lo activa.
 
+### Etapas por cuota (20/11)
+
+No es un flag de `RestrictionPolicy` ni una suspensión: es qué **abre** cada cuota. Al crear el
+plan, operación puede decir qué componentes habilita cada cuota (`Installment.unlockModuleIds`);
+por defecto, ninguno.
+
+- Al quedar la cuota `PAID` (`confirmPayment`), sus componentes se habilitan solos
+  (`openPaidStages`: `EnrollmentModule` + `AuditLog` `reason: installment_paid` + aviso
+  `module_unlocked`).
+- Un componente con cuota está bloqueado hasta ese pago, también si es el primero de la ruta.
+  Habilitarlo a mano desde la ficha de la matrícula sigue valiendo.
+- **Nunca para un menor**: con `isMinorAtEnrollment = true` la lista no se guarda al crear el
+  plan y no se lee al calcular el acceso (`stageInstallments`).
+- **Nunca cierra**: una cuota vencida, un pago anulado o una cuota `VOID` no bloquean lo ya
+  habilitado. Lo que la persona ya había empezado al crear el plan queda habilitado.
+- En un acuerdo de pago, las etapas de las cuotas anuladas pasan a las cuotas nuevas, en orden.
+
+Para adultos sigue pendiente la validación jurídica de §2; la decisión de usarlo es de Jhonny
+(`PRODUCT_DECISIONS.md`, 20/11).
+
 ## 4. Estado de cuenta: derivado, por matrícula, con `now`
 
 `Account.status` **se calcula** a partir de las `Installment` de la matrícula (solo pagos

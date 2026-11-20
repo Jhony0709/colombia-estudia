@@ -26,7 +26,9 @@ import { LogoutDialog } from '@/components/organisms/logout-dialog';
 import {
   Award,
   BarChart3,
+  CalendarDays,
   ChevronDown,
+  Library,
   LogOut,
   Monitor,
   Moon,
@@ -63,6 +65,8 @@ const PERSONAL_ICONS: Record<string, LucideIcon> = {
   '/aprender/resultados': BarChart3,
   '/aprender/certificados': Award,
   '/aprender/mi-cuenta': Wallet,
+  '/aprender/calendario': CalendarDays,
+  '/aprender/biblioteca': Library,
   '/familia': Users,
 };
 

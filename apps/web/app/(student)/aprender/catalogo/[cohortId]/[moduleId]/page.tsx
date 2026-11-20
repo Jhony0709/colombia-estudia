@@ -82,7 +82,7 @@ export default async function CoursePreviewPage({
             label={tc('label')}
             items={[
               { label: tc('home'), href: '/aprender' },
-              { label: t('catalog.others'), href: '/aprender#cursos-abiertos' },
+              { label: t('catalog.others'), href: '/aprender/catalogo' },
               { label: course.name },
             ]}
           />

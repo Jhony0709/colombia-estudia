@@ -6,6 +6,7 @@
     "voces": "node tools/elevenlabs.mjs && node tools/timings.mjs",
     "tiempos": "node tools/timings.mjs",
     "imagenes": "node tools/imagenes.mjs",
+    "vimeo": "node tools/vimeo.mjs",
     "studio": "node tools/imagenes.mjs && remotion studio src/index.ts",
     "render": "node tools/imagenes.mjs && remotion render src/index.ts"
   },

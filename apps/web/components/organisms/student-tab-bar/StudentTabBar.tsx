@@ -2,7 +2,7 @@
 
 /**
  * La barra inferior de pestañas del estudiante en el teléfono (27/9, del diseño aprobado):
- * Mis programas, Calendario, Biblioteca y Mi cuenta al alcance del pulgar. Sustituye al
+ * Inicio, Mi ruta, Resultados y Mis pagos (20/11) al alcance del pulgar. Sustituye al
  * segundo renglón de la barra superior, que bajo `md` hacía scroll horizontal.
  *
  * Solo bajo `lg`; en modo tarea (`<html class="task-mode">`, el player y el intento) se
@@ -12,24 +12,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  ChartColumn,
-  CalendarDays,
-  House,
-  Library,
-  UserRound,
-  type LucideIcon,
-} from 'lucide-react';
+import { ChartColumn, House, Route, Wallet, type LucideIcon } from 'lucide-react';
 import type { NavDestination } from '@/lib/nav/staff-nav';
 import { isActive } from '@/lib/nav/is-active';
 import { cn } from '@/lib/utils';
 
 const ICONS: Record<string, LucideIcon> = {
   '/aprender': House,
-  '/aprender/calendario': CalendarDays,
+  '/aprender/ruta': Route,
   '/aprender/resultados': ChartColumn,
-  '/aprender/biblioteca': Library,
-  '/aprender/mi-cuenta': UserRound,
+  '/aprender/mi-cuenta': Wallet,
 };
 
 export function StudentTabBar({ items }: { items: NavDestination[] }) {

@@ -18,6 +18,14 @@ import { Alert } from '@/components/atoms/alert';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import type { ProgramPriceView } from '@/features/billing/server/prices.service';
+import {
+  StageMatrix,
+  presetMap,
+  toUnlocks,
+  type PlanStage,
+  type StageMap,
+  type StagePreset,
+} from './stage-matrix';
 
 async function call(
   url: string,
@@ -41,6 +49,7 @@ export function CreatePlan({
   partners,
   prices,
   suggestedPriceId,
+  stages,
 }: {
   enrollmentId: string;
   isMinor: boolean;
@@ -49,6 +58,8 @@ export function CreatePlan({
   prices: ProgramPriceView[];
   /** El precio vigente para el grado de entrada de la matrícula, preseleccionado. */
   suggestedPriceId: string | null;
+  /** Los componentes de la ruta (20/11); vacío para un menor o en progresión libre. */
+  stages: PlanStage[];
 }) {
   const t = useTranslations('billing.plan');
   const tp = useTranslations('admin.curriculum.prices');
@@ -86,6 +97,19 @@ export function CreatePlan({
   };
   const [firstDueOn, setFirstDueOn] = useState('');
   const [periodicity, setPeriodicity] = useState('MONTHLY');
+  const [preset, setPreset] = useState<StagePreset>('none');
+  const [stageMap, setStageMap] = useState<StageMap>({});
+  const installments = Math.min(36, Math.max(1, Number(count) || 1));
+  const choosePreset = (next: StagePreset, n = installments) => {
+    setPreset(next);
+    if (next !== 'custom') setStageMap(presetMap(next, stages, n));
+  };
+  const toggleStage = (stageId: string, installment: number) => {
+    setPreset('custom');
+    setStageMap(({ [stageId]: current, ...rest }) =>
+      current === installment ? rest : { ...rest, [stageId]: installment }
+    );
+  };
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -103,6 +127,7 @@ export function CreatePlan({
         firstDueOn,
         periodicity,
         priceId: priceId === '' ? null : priceId,
+        ...(preset !== 'none' ? { unlocks: toUnlocks(stageMap, stages, installments) } : {}),
       });
       if (!r.ok) return setError(apiErrorText(r.payload, t('error')));
       announce(t('created'));
@@ -181,6 +206,7 @@ export function CreatePlan({
             onChange={(e) => {
               setCount(e.target.value);
               if (priceId !== '') applyPrice(priceId, e.target.value);
+              choosePreset(preset, Math.min(36, Math.max(1, Number(e.target.value) || 1)));
             }}
           />
         </FormField>
@@ -204,6 +230,16 @@ export function CreatePlan({
           </FormSelect>
         </FormField>
       </div>
+      {stages.length > 0 && (
+        <StageMatrix
+          stages={stages}
+          count={installments}
+          preset={preset}
+          map={stageMap}
+          onPreset={choosePreset}
+          onToggle={toggleStage}
+        />
+      )}
       {error && <Alert severity="error">{error}</Alert>}
       <Button
         type="submit"

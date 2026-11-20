@@ -14,6 +14,7 @@ import { workshopStart, type SequencedItem } from '@/features/learn/server/outli
 import { PageSection } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { ProgressBar } from '@/components/atoms/progress-bar';
+import { Button } from '@/components/atoms/button';
 import { CoverImage } from '@/components/atoms/cover-image';
 import { FORM_ICONS, formOf, hrefFor, itemMeta } from './route-rail';
 import { UnlockRequestButton } from './unlock-request-button';
@@ -40,7 +41,14 @@ export async function RouteSection({
   // ítem a retomar, o el del primero sin completar, o el primero), los demás en una línea
   // con «x de y · min». Si todo está completo, abierto el último.
   const currentModuleId = (resume ?? upcoming)?.moduleId ?? modules[modules.length - 1]?.id ?? null;
-  const firstLockedId = modules.find((m) => m.access.state === 'LOCKED')?.id ?? null;
+  const firstLockedIndex = modules.findIndex((m) => m.access.state === 'LOCKED');
+  const firstLockedId = modules[firstLockedIndex]?.id ?? null;
+  // Lo bloqueado después del siguiente va en una sola fila (20/11): nueve candados eran ruido.
+  const later =
+    firstLockedIndex < 0
+      ? []
+      : modules.slice(firstLockedIndex + 1).filter((m) => m.access.state === 'LOCKED');
+  const shownModules = modules.filter((m) => !later.includes(m));
 
   // Los estados terminales tienen pantalla propia: enseñar una ruta que no se puede recorrer
   // es peor que explicar por qué.
@@ -65,7 +73,7 @@ export async function RouteSection({
         <EmptyState title={t('emptyTitle')} description={t('emptyHint')} />
       ) : (
         <div className="space-y-3">
-          {modules.map((module) => (
+          {shownModules.map((module) => (
             <ModuleBlock
               key={module.id}
               module={module}
@@ -82,6 +90,16 @@ export async function RouteSection({
               }
             />
           ))}
+          {later.length > 0 && (
+            <div className="bg-surface-sunken rounded-card p-4 sm:p-5">
+              <p className="type-body-emphasis text-text m-0">
+                {t('later.title', { count: later.length })}
+              </p>
+              <p className="type-caption text-text-muted m-0 mt-1">
+                {later.map((m) => m.name).join(' · ')}
+              </p>
+            </div>
+          )}
         </div>
       )}
     </PageSection>
@@ -128,9 +146,16 @@ async function ModuleBlock({
   const locked =
     closed ||
     (module.items.length > 0 && module.items.every((item) => !item.enabled) && !!first?.blockedBy);
+  const cop = (value: number) =>
+    format.number(value, { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
   const lockedText =
     access.state === 'LOCKED'
-      ? t('moduleAccess.LOCKED')
+      ? module.installment
+        ? t('moduleAccess.INSTALLMENT', {
+            position: module.installment.position,
+            amount: cop(module.installment.amount),
+          })
+        : t('moduleAccess.LOCKED')
       : access.state === 'NOT_YET'
         ? t('moduleAccess.NOT_YET', { date: format.dateTime(access.from, { dateStyle: 'long' }) })
         : access.state === 'CLOSED'
@@ -256,7 +281,17 @@ async function ModuleBlock({
         )}
       </details>
       {/* Fuera del `summary`: un botón dentro de él también abriría y cerraría el bloque. */}
-      {request && (
+      {request && module.installment && (
+        <div className="mt-3">
+          <Button asChild>
+            <Link href="/aprender/mi-cuenta">
+              {t('payInstallment', { position: module.installment.position })}
+              <ArrowRight aria-hidden className="size-4 shrink-0" />
+            </Link>
+          </Button>
+        </div>
+      )}
+      {request && !module.installment && (
         <div className="mt-3">
           <UnlockRequestButton
             enrollmentId={request.enrollmentId}

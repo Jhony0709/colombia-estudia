@@ -29,15 +29,17 @@ const NAV: readonly StudentDefinition[] = [
     label: 'Inicio',
     needs: 'lesson.read',
     section: 'estudiar',
-    // El player, los exámenes y las páginas de curso cuelgan de Inicio; los otros, su prefijo.
-    activeUnder: [
-      '/aprender/tema/',
-      '/aprender/examen/',
-      '/aprender/curso/',
-      '/aprender/catalogo/',
-    ],
+    activeUnder: ['/aprender/catalogo'],
   },
-  { href: '/aprender/calendario', label: 'Calendario', needs: 'lesson.read', section: 'estudiar' },
+  // Tres destinos a la vista (20/11): qué hago, dónde voy, qué debo. El resto, al menú.
+  {
+    href: '/aprender/ruta',
+    label: 'Mi ruta',
+    needs: 'lesson.read',
+    section: 'estudiar',
+    // El player, los exámenes y la página del curso son la ruta.
+    activeUnder: ['/aprender/tema/', '/aprender/examen/', '/aprender/curso/'],
+  },
   // Resultados sube a pestaña (4/10): «¿cómo me fue?» es de las tres preguntas del estudiante y
   // vivía detrás del menú de la persona.
   {
@@ -47,19 +49,20 @@ const NAV: readonly StudentDefinition[] = [
     section: 'estudiar',
     needsResults: true,
   },
-  { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'estudiar' },
-  {
-    href: '/aprender/certificados',
-    label: 'Constancias',
-    needs: 'score.read.own',
-    section: 'historial',
-  },
   // A la vista (20/11): en el menú de la persona nadie encontraba dónde pagar.
   {
     href: '/aprender/mi-cuenta',
     label: 'Mis pagos',
     needs: 'billing.read.own',
     section: 'estudiar',
+  },
+  { href: '/aprender/calendario', label: 'Calendario', needs: 'lesson.read', section: 'historial' },
+  { href: '/aprender/biblioteca', label: 'Biblioteca', needs: 'lesson.read', section: 'historial' },
+  {
+    href: '/aprender/certificados',
+    label: 'Constancias',
+    needs: 'score.read.own',
+    section: 'historial',
   },
   // El estudiante que además es acudiente (Fase C, 23/9): su otra área, en el menú.
   {

@@ -1430,13 +1430,30 @@
     "moduleLocked": "Se abre al completar “{title}”",
     "moduleAccess": {
       "LOCKED": "Se habilita cuando el equipo lo active.",
+      "INSTALLMENT": "Se abre al pagar la cuota {position}: {amount}.",
       "NOT_YET": "Se habilita el {date}.",
       "CLOSED": "Cerró el {date}. Escríbenos si necesitas volver a abrirlo."
     },
     "nextComponent": {
       "overline": "Siguiente componente",
       "title": "Terminaste lo que tienes habilitado",
-      "body": "Lo que sigue es «{module}». Pídelo aquí y el equipo lo habilita; te avisamos cuando esté listo."
+      "body": "Lo que sigue es «{module}». Pídelo aquí y el equipo lo habilita; te avisamos cuando esté listo.",
+      "payTitle": "«{module}» se abre con tu pago",
+      "payBody": "Paga la cuota {position} ({amount}) y «{module}» se abre al instante. Te avisamos cuando esté listo."
+    },
+    "payInstallment": "Pagar cuota {position}",
+    "explore": {
+      "title": "Otros cursos",
+      "body": "{count, plural, one {Hay 1 curso abierto en el que no estás.} other {Hay # cursos abiertos en los que no estás.}} Los gratuitos empiezan en cuanto te inscribes.",
+      "cta": "Explorar cursos",
+      "listTitle": "Todos los cursos"
+    },
+    "payments": {
+      "label": "Tus pagos",
+      "cta": "Ver mis pagos"
+    },
+    "later": {
+      "title": "{count, plural, one {Después: 1 componente más} other {Después: # componentes más}}"
     },
     "form": {
       "VIDEO": "Vídeo",
@@ -2132,7 +2149,9 @@
     },
     "account": {
       "title": "Mis pagos",
-      "description": "Tus cuotas, tus pagos y tu acuerdo de pago si lo tienes. Tu acceso a las clases no depende de esto.",
+      "description": "Tus cuotas, tus pagos y tu acuerdo de pago si lo tienes.",
+      "opens": "La cuota {position} abre: {names}",
+      "unlocks": "Abre",
       "returned": {
         "paid": "Recibimos tu pago. La cuota ya aparece como pagada.",
         "review": "Recibimos tu pago, pero el monto no coincide con lo que estaba pendiente. Lo revisamos y te avisamos.",
@@ -2903,6 +2922,8 @@
       "position": "Componente {position}",
       "first": "Abierto desde la matrícula",
       "waiting": "Espera habilitación",
+      "byInstallment": "Se abre al pagar la cuota {position}",
+      "thePayment": "el pago de la cuota {position}",
       "unlockedBy": "Habilitado por {name} el {date}",
       "someone": "alguien del equipo",
       "window": "Del {from} al {until}",
@@ -3200,6 +3221,7 @@
       "dueOn": "Vence",
       "amount": "Monto",
       "paid": "Pagado",
+      "unlocks": "Abre",
       "overdue": "Vencida",
       "statuses": {
         "OPEN": "Pendiente",
@@ -3235,7 +3257,24 @@
       "weekly": "Semanal",
       "create": "Crear el plan",
       "created": "Plan creado.",
-      "error": "No se pudo crear el plan."
+      "error": "No se pudo crear el plan.",
+      "stages": {
+        "title": "¿Qué componentes abre cada cuota?",
+        "hint": "Al quedar pagada una cuota, sus componentes se habilitan solos y el estudiante recibe el aviso. Lo que no tenga cuota lo habilita el equipo desde la matrícula.",
+        "presetLabel": "Componentes por cuota",
+        "preset": {
+          "none": "Nada automático",
+          "each": "Uno por cuota",
+          "first": "Todo con la primera",
+          "custom": "A mano"
+        },
+        "noneNote": "Sigue como hasta ahora: el primer componente abierto y los demás los habilita el equipo.",
+        "installment": "Cuota {position}",
+        "rowLabel": "Componentes que abre la cuota {position}",
+        "stage": "Componente {position}: {name}",
+        "opens": "Abre {names}",
+        "opensNone": "No abre nada"
+      }
     },
     "payment": {
       "title": "Registrar un pago",

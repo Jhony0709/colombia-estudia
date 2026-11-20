@@ -115,6 +115,10 @@ job diario (intentos vencidos), con `AuditLog`.
 amount)`, recalculado en la transacción del pago. Montos `Decimal(12,0)`: pesos enteros;
 Prisma los devuelve como `Decimal.js`, nunca `number`.
 
+**`Installment.unlockModuleIds`** (20/11): ids de los componentes que la cuota habilita al quedar
+`PAID`. Lista de texto sin FK: se valida al crear el plan (componentes del programa, cada uno en
+una sola cuota) y se ignora para menores. Ver `acceso-y-cartera.md` §3.
+
 **`Score.recordedById` nulo = derivado por `grading.ts`**; con valor = corrección manual
 auditada. **`Certificate`**: índice único parcial en SQL para `PROGRAM` (el `@@unique` con
 `moduleId` nulo no lo garantiza).

@@ -66,6 +66,10 @@ la mora sigue gobernada por `RestrictionPolicy` y nunca toca el acceso de un men
 no se consulta. Regla general aprobada por el cliente el 3/10 con la condición de que hoy no
 hay menores matriculados.
 
+**Etapas por cuota (20/11).** Si el plan de pagos de la matrícula dice que una cuota abre un
+componente, ese componente espera a esa cuota, también el primero de la ruta, y se habilita solo al
+pagarla. Nunca para un menor. La regla y sus límites, en `acceso-y-cartera.md` §3.
+
 `Enrollment` pasa a `COMPLETED` cuando todas las asignaciones de tema están `COMPLETED` y
 toda evaluación `SUBJECT`/`FINAL` tiene un intento `GRADED` con `score/maxScore × 100 ≥
 passPercent` (o cualquier `GRADED` si `passPercent` es nulo).

@@ -38,7 +38,7 @@ import {
   type MyEnrollment,
   type OutlineModule,
 } from '@/features/learn/server/cohort.service';
-import { ArrowRight, CalendarDays, FileText, Play } from 'lucide-react';
+import { ArrowRight, CalendarDays, FileText, LockOpen, Play } from 'lucide-react';
 import { FORM_ICONS, formOf, hrefFor, itemMeta } from './route-rail';
 import { Page, PageHeader } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
@@ -50,6 +50,10 @@ import { InView } from '@/components/atoms/motion';
 import { CoverImage } from '@/components/atoms/cover-image';
 import { BrandWave } from '@/components/atoms/brand-wave';
 import { cn } from '@/lib/utils';
+import { listOwnAccounts } from '@/features/billing/server/account.service';
+import { getPolicy } from '@/features/admin/server/policies.service';
+import { AccountSummary } from '@/features/billing/components/account-summary';
+import type { StageInstallment } from '@/features/billing/server/stage-installments';
 
 export const metadata: Metadata = { title: 'Aprender' };
 
@@ -172,6 +176,31 @@ export default async function LearnPage({
       )
     : [];
 
+  // La cuenta de la matrícula elegida (20/11): qué debo y qué abre, sin salir del inicio.
+  const billingScopes = ctx.capabilities.get('billing.read.own') ?? [];
+  const [accounts, policy] =
+    billingScopes.length > 0
+      ? await Promise.all([
+          listOwnAccounts({ institutionId, scopes: billingScopes }),
+          getPolicy({ institutionId }),
+        ])
+      : [[], null];
+  const account = accounts.find((a) => a.enrollmentId === selected.enrollmentId) ?? null;
+  const opensNext =
+    account?.installments.find((i) => i.id === account.summary.next?.id)?.unlocks ?? [];
+  // Los cursos abiertos en los que no está: se exploran en su pantalla, no aquí.
+  const openCourses = catalog.filter((c) => !c.enrollment && !c.beforeEntry).length;
+  const explore =
+    openCourses > 0 ? (
+      <SideCard
+        title={t('explore.title')}
+        moreHref="/aprender/catalogo"
+        moreLabel={t('explore.cta')}
+      >
+        <p className="type-body text-text-muted m-0">{t('explore.body', { count: openCourses })}</p>
+      </SideCard>
+    ) : null;
+
   const nowIso = new Date().toISOString();
   // Lo que viene (4/10): sesiones, entregas y, si no hay nada más, el fin de la cohorte o del
   // acceso, que también es una fecha que el estudiante quiere ver venir.
@@ -251,6 +280,9 @@ export default async function LearnPage({
               : null
           }
           lockedNextId={selected.upcoming?.moduleId ?? null}
+          lockedInstallment={
+            outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.installment ?? null
+          }
           requestedAt={
             selected.upcoming
               ? (pending.unlock[`${selected.enrollmentId}:${selected.upcoming.moduleId}`] ?? null)
@@ -260,19 +292,41 @@ export default async function LearnPage({
         />
       )}
 
+      {account && policy && !finished && (
+        <section
+          aria-label={t('payments.label')}
+          className="bg-surface-base border-border-muted rounded-card space-y-2 border p-5"
+        >
+          <AccountSummary
+            account={account}
+            requireAgreementForNextCohort={policy.requireAgreementForNextCohort}
+          />
+          {opensNext.length > 0 && (
+            <p className="type-body-emphasis m-0 flex items-center gap-2">
+              <LockOpen aria-hidden className="text-text-link size-4 shrink-0" />
+              {t('account.opens', {
+                position: account.summary.next?.position ?? 0,
+                names: opensNext.join(', '),
+              })}
+            </p>
+          )}
+          <Link
+            href="/aprender/mi-cuenta"
+            className="type-body text-text-link min-h-touch inline-flex items-center gap-1.5 underline underline-offset-4"
+          >
+            {t('payments.cta')}
+            <ArrowRight aria-hidden className="size-4 shrink-0" />
+          </Link>
+        </section>
+      )}
+
       {!selected.gate && !firstDay && <ProgressKpis outline={outline} activity={activity} />}
 
       {firstDay && (
         <div className="motion-enter motion-order-1 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
           <div className="min-w-0 space-y-8">
-            {/* Los otros cursos también el primer día (6/10): esconderlos hacía parecer
-                obligatorio el que tocó en el registro. */}
-            <CatalogSection
-              courses={catalog}
-              contact={contact}
-              requested={pending.enroll}
-              title={t('catalog.others')}
-            />
+            {/* Los otros cursos, a un clic (20/11): el catálogo entero aquí eran tres pantallas. */}
+            {explore}
           </div>
           <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
             <HowItWorks />
@@ -312,7 +366,7 @@ export default async function LearnPage({
 
           <InView className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
             <div className="min-w-0 space-y-8">
-              <CatalogSection courses={catalog} contact={contact} requested={pending.enroll} />
+              {explore}
               {completedSection}
             </div>
             {resources.length > 0 && (
@@ -421,6 +475,7 @@ async function CurrentActivity({
   moduleName,
   lockedNext,
   lockedNextId,
+  lockedInstallment,
   requestedAt,
   switcher,
   steps,
@@ -433,6 +488,8 @@ async function CurrentActivity({
   lockedNext: string | null;
   /** El componente bloqueado que sigue, para pedirlo desde el héroe (6/10). */
   lockedNextId: string | null;
+  /** La cuota que abre ese componente (20/11): se paga, no se pide. */
+  lockedInstallment: StageInstallment | null;
   /** ISO: ya lo pidió y sigue sin resolver. */
   requestedAt: string | null;
   switcher: React.ReactNode;
@@ -459,7 +516,17 @@ async function CurrentActivity({
         date: 'startsOn' in gate ? gate.startsOn : 'accessUntil' in gate ? gate.accessUntil : '',
       })
     : lockedNext
-      ? t('nextComponent.body', { module: lockedNext })
+      ? lockedInstallment
+        ? t('nextComponent.payBody', {
+            module: lockedNext,
+            position: lockedInstallment.position,
+            amount: format.number(lockedInstallment.amount, {
+              style: 'currency',
+              currency: 'COP',
+              maximumFractionDigits: 0,
+            }),
+          })
+        : t('nextComponent.body', { module: lockedNext })
       : starting && resume
         ? t('startHere.body', { how: t(`startHere.how.${formOf(resume)}`) })
         : waiting
@@ -541,7 +608,9 @@ async function CurrentActivity({
             {gate
               ? t(`gate.${gate.kind}.title`)
               : lockedNext
-                ? t('nextComponent.title', { module: lockedNext })
+                ? lockedInstallment
+                  ? t('nextComponent.payTitle', { module: lockedNext })
+                  : t('nextComponent.title', { module: lockedNext })
                 : resume
                   ? resume.title
                   : waiting
@@ -571,7 +640,16 @@ async function CurrentActivity({
 
         {body && <p className="type-body max-w-reading m-0 opacity-90">{body}</p>}
 
-        {!gate && lockedNext && lockedNextId && (
+        {!gate && lockedNext && lockedInstallment && (
+          <Button asChild size="lg" variant="secondary">
+            <Link href="/aprender/mi-cuenta">
+              {t('payInstallment', { position: lockedInstallment.position })}
+              <ArrowRight aria-hidden className="size-4 shrink-0" />
+            </Link>
+          </Button>
+        )}
+
+        {!gate && lockedNext && lockedNextId && !lockedInstallment && (
           <UnlockRequestButton
             enrollmentId={row.enrollmentId}
             moduleId={lockedNextId}

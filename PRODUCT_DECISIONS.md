@@ -1264,6 +1264,34 @@ y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de ap
 los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
 cada consulta lleva su `institutionId`.
 
+## 2026-11-20 — Etapas por cuota: una cuota puede abrir componentes al quedar pagada
+
+**Decisión** (Jhonny, 20/11): al crear el plan de pagos, operación elige qué componentes abre cada
+cuota («una etapa por cuota», «todo con la primera», «nada automático» o a mano, cuota por cuota).
+Cuando la cuota queda `PAID`, esos componentes se habilitan solos (`EnrollmentModule`, auditado
+como `enrollment_module.unlock` con `reason: installment_paid`) y el estudiante recibe
+`module_unlocked`. Un componente con cuota queda bloqueado hasta ese pago **aunque sea el primero
+de la ruta**; habilitar a mano sigue existiendo (becas, acuerdos).
+
+**Límites**: nunca aplica a una matrícula de menor (`isMinorAtEnrollment`): ni se guarda ni se lee.
+No es suspensión por mora: una cuota vencida no cierra lo ya abierto, y anular un pago tampoco. Lo
+que el estudiante ya había empezado al crear el plan queda habilitado. El formulario propone «nada
+automático»: activarlo es una decisión de operación, plan por plan.
+
+**Por qué**: un adulto matriculado terminaba su primer componente sin pagar, y abrir los siguientes
+«cuando hay pago» era práctica de operación, a mano. **Pendiente de Jhonny**: la validación jurídica
+para adultos que pide `acceso-y-cartera.md` §2; la regla 1 de `CLAUDE.md` no se tocó.
+
+**Schema**: `Installment.unlockModuleIds` (migración `20261120000000_installment_unlock_modules`).
+
+**Pantallas del estudiante** (mismo día, tras la auditoría de UX): la barra queda en tres destinos
+—Inicio, Mi ruta (`/aprender/ruta`), Mis pagos— más Resultados cuando hay; Calendario y Biblioteca
+pasan al menú de la persona. El catálogo sale del inicio a `/aprender/catalogo` (el inicio lo enlaza;
+sin matrícula sigue ahí, porque elegir curso es lo que toca). En la ruta, el componente bloqueado
+dice con qué cuota se abre y ofrece pagar en vez de «pedir»; los bloqueados de más adelante van en
+una sola fila. Inicio y Mis pagos dicen qué abre la próxima cuota. **No hecho**: llamar «etapa» al
+componente de cara al estudiante; toca constancias, portada, acudientes y glosario, y se decide aparte.
+
 ## 2026-11-19 — Imágenes en el contenido: dónde, quién las hace y el visor
 
 **Decisión** (Jhonny, 19/11: «verifica dónde podemos agregar imágenes… o si puedes hacer todo tú,

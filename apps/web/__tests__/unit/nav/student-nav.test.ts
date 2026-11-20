@@ -16,8 +16,9 @@ describe('buildStudentNav', () => {
   it('shows «Resultados» once there is something to see', () => {
     expect(buildStudentNav(student, { hasResults: true }).map((i) => i.href)).toEqual([
       '/aprender',
-      '/aprender/calendario',
+      '/aprender/ruta',
       '/aprender/resultados',
+      '/aprender/calendario',
       '/aprender/biblioteca',
       '/aprender/certificados',
     ]);
@@ -28,6 +29,16 @@ describe('buildStudentNav', () => {
     const hrefs = buildStudentNav(student, { hasResults: false }).map((i) => i.href);
     expect(hrefs).not.toContain('/aprender/resultados');
     expect(hrefs).toContain('/aprender/certificados');
+  });
+
+  // 20/11: tres destinos a la vista; pagar deja de estar en el menú de la persona.
+  it('puts «Mis pagos» in the bar for whoever pays', () => {
+    const nav = buildStudentNav(caps('lesson.read', 'billing.read.own'));
+    expect(nav.filter((i) => i.section === 'estudiar').map((i) => i.href)).toEqual([
+      '/aprender',
+      '/aprender/ruta',
+      '/aprender/mi-cuenta',
+    ]);
   });
 
   it('keeps the previous behaviour when the caller does not say', () => {

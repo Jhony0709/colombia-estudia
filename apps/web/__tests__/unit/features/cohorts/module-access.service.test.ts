@@ -50,6 +50,35 @@ beforeEach(() => {
   db.accessRequest.findMany.mockResolvedValue([]);
 });
 
+// 20/11: un componente con cuota espera a esa cuota, también el primero; nunca para un menor.
+describe('listModuleAccess con etapas por cuota', () => {
+  const installments = [
+    { position: 1, amount: { toNumber: () => 95000 }, status: 'OPEN', unlockModuleIds: ['mod-1'] },
+  ];
+  beforeEach(() => {
+    db.module.findMany.mockResolvedValue([{ id: 'mod-1', name: 'Fundamentos', position: 1 }]);
+    db.enrollmentModule.findMany.mockResolvedValue([]);
+  });
+
+  it('el primero queda bloqueado hasta que se pague su cuota', async () => {
+    db.enrollment.findFirst.mockResolvedValue({ ...ENROLLMENT, paymentPlan: { installments } });
+
+    const { modules } = await listModuleAccess(BASE);
+    expect(modules[0]).toMatchObject({ first: false, state: 'LOCKED', installmentPosition: 1 });
+  });
+
+  it('a un menor no se le bloquea por cuota', async () => {
+    db.enrollment.findFirst.mockResolvedValue({
+      ...ENROLLMENT,
+      isMinorAtEnrollment: true,
+      paymentPlan: { installments },
+    });
+
+    const { modules } = await listModuleAccess(BASE);
+    expect(modules[0]).toMatchObject({ first: true, state: 'OPEN', installmentPosition: null });
+  });
+});
+
 describe('setModuleAccess', () => {
   // 6/10: si el estudiante lo había pedido, la solicitud queda hecha en la misma transacción.
   it('habilitar cierra la solicitud abierta de ese componente', async () => {

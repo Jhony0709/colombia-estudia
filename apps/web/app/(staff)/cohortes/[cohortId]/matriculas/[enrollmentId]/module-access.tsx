@@ -113,13 +113,19 @@ function ModuleRow({
                 ? t('first')
                 : row.unlockedAt
                   ? t('unlockedBy', {
-                      name: row.unlockedByName ?? t('someone'),
+                      name:
+                        row.unlockedByName ??
+                        (row.installmentPosition
+                          ? t('thePayment', { position: row.installmentPosition })
+                          : t('someone')),
                       date: new Intl.DateTimeFormat('es-CO', {
                         day: 'numeric',
                         month: 'short',
                       }).format(new Date(row.unlockedAt)),
                     })
-                  : t('waiting')}
+                  : row.installmentPosition
+                    ? t('byInstallment', { position: row.installmentPosition })
+                    : t('waiting')}
               {row.availableFrom || row.availableUntil
                 ? ` · ${t('window', { from: row.availableFrom ?? '—', until: row.availableUntil ?? '—' })}`
                 : ''}

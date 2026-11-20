@@ -1162,6 +1162,8 @@ model Installment {
   dueOn              DateTime          @db.Date
   status             InstallmentStatus @default(OPEN)
   externalInvoiceRef String?
+  /// Componentes que la cuota habilita al quedar pagada (20/11). Nunca para un menor.
+  unlockModuleIds    String[]          @default([])
 
   institution Institution       @relation(fields: [institutionId], references: [id])
   paymentPlan PaymentPlan       @relation(fields: [paymentPlanId], references: [id])

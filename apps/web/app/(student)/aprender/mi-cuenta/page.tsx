@@ -21,6 +21,7 @@ import { Badge } from '@/components/atoms/badge';
 import { AccountSummary } from '@/features/billing/components/account-summary';
 import { getPolicy } from '@/features/admin/server/policies.service';
 import { PayButton } from './pay-button';
+import { LockOpen } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Mis pagos' };
 
@@ -78,6 +79,8 @@ export default async function MyAccountPage({
         accounts.map((a) => {
           type Installment = (typeof a.installments)[number];
           type Payment = (typeof a.payments)[number];
+          const opensNext = a.installments.find((i) => i.id === a.summary.next?.id)?.unlocks ?? [];
+          const anyUnlocks = a.installments.some((i) => i.unlocks.length > 0);
           return (
             <section
               key={a.enrollmentId}
@@ -86,7 +89,7 @@ export default async function MyAccountPage({
             >
               <div className="bg-surface-base border-border-muted rounded-card elevation-resting border p-5">
                 <h2 id={`cuenta-${a.enrollmentId}`} className="type-heading">
-                  {a.cohort.code} — {a.cohort.name}
+                  {a.cohort.programName}
                 </h2>
                 {/* E4 (23/9): la cuenta en lenguaje de persona; la frontera menor/adulto va dentro. */}
                 <div className="mt-2">
@@ -95,6 +98,15 @@ export default async function MyAccountPage({
                     requireAgreementForNextCohort={policy.requireAgreementForNextCohort}
                   />
                 </div>
+                {opensNext.length > 0 && (
+                  <p className="type-body-emphasis m-0 mt-3 flex items-center gap-2">
+                    <LockOpen aria-hidden className="text-text-link size-4 shrink-0" />
+                    {t('opens', {
+                      position: a.summary.next?.position ?? 0,
+                      names: opensNext.join(', '),
+                    })}
+                  </p>
+                )}
                 {a.summary.next && (
                   <div className="mt-4 flex flex-wrap items-start gap-4">
                     {online ? <PayButton installmentId={a.summary.next.id} /> : null}
@@ -132,6 +144,15 @@ export default async function MyAccountPage({
                       numeric: true,
                       cell: (i) => cop(i.amount),
                     },
+                    ...(anyUnlocks
+                      ? [
+                          {
+                            key: 'unlocks',
+                            header: t('unlocks'),
+                            cell: (i: Installment) => i.unlocks.join(', ') || '—',
+                          },
+                        ]
+                      : []),
                     {
                       key: 'status',
                       header: t('status'),

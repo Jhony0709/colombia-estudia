@@ -12,6 +12,7 @@ import { requireCapability } from '@/lib/authz/with-capability';
 import { getAccount } from '@/features/billing/server/billing.service';
 import { currentPriceFor, listProgramPrices } from '@/features/billing/server/prices.service';
 import { listCohortFormOptions } from '@/features/cohorts/server/cohorts.service';
+import { listModuleAccess } from '@/features/cohorts/server/module-access.service';
 import { Page, PageHeader, PageSection } from '@/components/templates/page';
 import { Breadcrumb } from '@/components/molecules/breadcrumb';
 import { DataTable } from '@/components/molecules/data-table';
@@ -49,6 +50,17 @@ export default async function EnrollmentBillingPage({
     getFormatter(),
   ]);
   if (!account) notFound();
+
+  // Los componentes de la ruta, para decir qué abre cada cuota (20/11). Nunca para un menor.
+  const access =
+    account.plan || account.student.isMinor
+      ? null
+      : await listModuleAccess({ institutionId: ctx.institution.id, enrollmentId }).catch(
+          () => null
+        );
+  const stages = access?.applies
+    ? access.modules.map((m) => ({ id: m.moduleId, name: m.name, position: m.position }))
+    : [];
 
   // La lista de precios del programa (25/9), para que el plan salga de un precio y no de
   // un número escrito a mano. Solo hace falta si todavía no hay plan.
@@ -114,6 +126,7 @@ export default async function EnrollmentBillingPage({
             partners={options.partners}
             prices={prices}
             suggestedPriceId={suggested?.id ?? null}
+            stages={stages}
           />
         </PageSection>
       ) : (
@@ -179,6 +192,15 @@ export default async function EnrollmentBillingPage({
                   numeric: true,
                   cell: (i) => cop(i.paid),
                 },
+                ...(account.installments.some((i) => i.unlocks.length > 0)
+                  ? [
+                      {
+                        key: 'unlocks',
+                        header: t('installment.unlocks'),
+                        cell: (i: Installment) => i.unlocks.join(', ') || '—',
+                      },
+                    ]
+                  : []),
                 {
                   key: 'status',
                   header: t('status'),

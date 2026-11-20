@@ -22,6 +22,10 @@ import {
   type OutlineItem,
   type SequencedItem,
 } from './outline';
+import {
+  stageInstallments,
+  type StageInstallment,
+} from '@/features/billing/server/stage-installments';
 
 /**
  * Por qué el estudiante no puede estudiar ahora mismo.
@@ -57,6 +61,8 @@ export interface OutlineModule {
   coverUrl: string | null;
   /** Si el componente está abierto para esta matrícula (3/10): ver `moduleAccess`. */
   access: ModuleAccess;
+  /** La cuota que lo abre (20/11), mientras siga bloqueado por ella. */
+  installment: StageInstallment | null;
   items: SequencedItem[];
 }
 
@@ -157,6 +163,7 @@ export async function getCohortOutline({
       accessUntil: true,
       startsAtModule: true,
       isPreview: true,
+      isMinorAtEnrollment: true,
       cohort: {
         select: {
           id: true,
@@ -171,7 +178,14 @@ export async function getCohortOutline({
           program: { select: { name: true, pricing: true } },
         },
       },
-      paymentPlan: { select: { payerType: true } },
+      paymentPlan: {
+        select: {
+          payerType: true,
+          installments: {
+            select: { position: true, amount: true, status: true, unlockModuleIds: true },
+          },
+        },
+      },
     },
   });
 
@@ -371,11 +385,16 @@ export async function getCohortOutline({
   // Qué componente está habilitado para esta matrícula (3/10): el primero de su ruta, y los
   // que operación haya abierto a mano.
   const unlockOf = new Map(unlocks.map((row) => [row.moduleId, row]));
+  const stages = stageInstallments(
+    enrollment.isMinorAtEnrollment,
+    enrollment.paymentPlan?.installments
+  );
   const accessOf = new Map(
     modules.map((module, index) => [
       module.id,
       moduleAccess({
-        first: index === 0,
+        // El primero está abierto salvo que lo abra una cuota (20/11).
+        first: index === 0 && !stages.has(module.id),
         unlock: unlockOf.get(module.id) ?? null,
         progression: preview ? 'FREE' : cohortInfo.progression,
         now,
@@ -419,6 +438,8 @@ export async function getCohortOutline({
           ? (coverUrls.get(module.coverMedia.providerRef) ?? null)
           : null,
       access: accessOf.get(module.id) ?? { state: 'OPEN' as const },
+      installment:
+        accessOf.get(module.id)?.state === 'LOCKED' ? (stages.get(module.id) ?? null) : null,
       items: all.filter((item) => item.moduleId === module.id),
     })),
     resume,

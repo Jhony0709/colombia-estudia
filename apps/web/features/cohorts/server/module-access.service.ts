@@ -18,6 +18,7 @@ import { APIError } from '@/lib/core/errors';
 import { notify } from '@/features/notifications/server/notifications.service';
 import { moduleAccess, type ModuleAccess } from '@/features/learn/server/outline';
 import { closeRequests } from '@/features/requests/server/requests.service';
+import { stageInstallments } from '@/features/billing/server/stage-installments';
 
 export interface ModuleAccessRow {
   moduleId: string;
@@ -33,6 +34,8 @@ export interface ModuleAccessRow {
   availableUntil: string | null;
   /** ISO: el estudiante pidió habilitarlo y sigue sin resolver (6/10). */
   requestedAt: string | null;
+  /** La cuota que lo abre al quedar pagada (20/11); nulo si ninguna. */
+  installmentPosition: number | null;
 }
 
 export interface ModuleAccessList {
@@ -62,7 +65,15 @@ async function loadEnrollment(institutionId: string, enrollmentId: string) {
       id: true,
       studentId: true,
       startsAtModule: true,
+      isMinorAtEnrollment: true,
       cohort: { select: { programId: true, progression: true } },
+      paymentPlan: {
+        select: {
+          installments: {
+            select: { position: true, amount: true, status: true, unlockModuleIds: true },
+          },
+        },
+      },
     },
   });
   if (!enrollment) throw new APIError('Not found', 'NOT_FOUND');
@@ -109,17 +120,23 @@ export async function listModuleAccess({
   ]);
   const unlockOf = new Map(unlocks.map((row) => [row.moduleId, row]));
   const requestOf = new Map(requests.map((row) => [row.moduleId, row.createdAt.toISOString()]));
+  const stages = stageInstallments(
+    enrollment.isMinorAtEnrollment,
+    enrollment.paymentPlan?.installments
+  );
 
   return {
     applies: progression === 'LINEAR',
     modules: modules.map((component, index) => {
       const unlock = unlockOf.get(component.id) ?? null;
+      // El primero está abierto salvo que lo abra una cuota (20/11).
+      const first = index === 0 && !stages.has(component.id);
       return {
         moduleId: component.id,
         name: component.name,
         position: component.position,
-        first: index === 0,
-        state: moduleAccess({ first: index === 0, unlock, progression, now }).state,
+        first,
+        state: moduleAccess({ first, unlock, progression, now }).state,
         unlockedAt: unlock ? unlock.unlockedAt.toISOString() : null,
         unlockedByName: unlock?.unlockedBy
           ? `${unlock.unlockedBy.givenName} ${unlock.unlockedBy.familyName}`
@@ -127,6 +144,7 @@ export async function listModuleAccess({
         availableFrom: bogotaDay(unlock?.availableFrom ?? null),
         availableUntil: bogotaDay(unlock?.availableUntil ?? null),
         requestedAt: requestOf.get(component.id) ?? null,
+        installmentPosition: stages.get(component.id)?.position ?? null,
       };
     }),
   };
