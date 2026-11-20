@@ -18,7 +18,6 @@ import { getFormatter, getTranslations } from 'next-intl/server';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { listOpenCourses } from '@/features/learn/server/catalog.service';
 import { getCalendarForStudent } from '@/features/learn/server/calendar.service';
-import { getLibraryForStudent } from '@/features/learn/server/library.service';
 import { getStudyActivity } from '@/features/learn/server/activity.service';
 import { getResultsForStudent } from '@/features/learn/server/attempt.service';
 import { issueAfterProgress } from '@/features/certificates/server/certificates.service';
@@ -29,8 +28,16 @@ import { UnlockRequestButton } from './unlock-request-button';
 import { listMyPendingRequests } from '@/features/requests/server/requests.service';
 import { CatalogSection, FeaturedCourse } from './catalog-section';
 import { KeepLearningHero } from './keep-learning-hero';
-import Image from 'next/image';
-import { AgendaCard, ExamsCard, HelpCard, ProgressKpis, RhythmCard } from './dashboard-cards';
+import { AgendaCard, ExamsCard, HelpCard } from './dashboard-cards';
+import {
+  ExploreTile,
+  HelpTile,
+  NextTile,
+  PaymentTile,
+  RouteTile,
+  StageTile,
+  WeekTile,
+} from './bento-tiles';
 import {
   getCohortOutline,
   listMyEnrollments,
@@ -38,21 +45,16 @@ import {
   type MyEnrollment,
   type OutlineModule,
 } from '@/features/learn/server/cohort.service';
-import { ArrowRight, CalendarDays, FileText, LockOpen, Play } from 'lucide-react';
+import { ArrowRight, CalendarDays } from 'lucide-react';
 import { FORM_ICONS, formOf, hrefFor, itemMeta } from './route-rail';
 import { Page, PageHeader } from '@/components/templates/page';
 import { EmptyState } from '@/components/molecules/empty-state';
 import { Button } from '@/components/atoms/button';
-import { ProgressBar } from '@/components/atoms/progress-bar';
 import { PrimaryActionTracker } from '@/components/molecules/primary-action-tracker';
 import { EnrollmentSwitcher } from './enrollment-switcher';
 import { InView } from '@/components/atoms/motion';
-import { CoverImage } from '@/components/atoms/cover-image';
-import { BrandWave } from '@/components/atoms/brand-wave';
 import { cn } from '@/lib/utils';
 import { listOwnAccounts } from '@/features/billing/server/account.service';
-import { getPolicy } from '@/features/admin/server/policies.service';
-import { AccountSummary } from '@/features/billing/components/account-summary';
 import type { StageInstallment } from '@/features/billing/server/stage-installments';
 
 export const metadata: Metadata = { title: 'Aprender' };
@@ -161,10 +163,9 @@ export default async function LearnPage({
   const picked = Array.isArray(matricula) ? matricula[0] : matricula;
   const selected = mine.find((row) => row.enrollmentId === picked) ?? mine[0]!;
 
-  const [outline, events, library, activity] = await Promise.all([
+  const [outline, events, activity] = await Promise.all([
     getCohortOutline({ institutionId, personId, enrollmentId: selected.enrollmentId }),
     getCalendarForStudent({ institutionId, personId }),
-    getLibraryForStudent({ institutionId, personId }),
     getStudyActivity({ institutionId, personId }),
   ]);
   // Los exámenes del programa elegido, con su mejor nota visible y su umbral (4/10). Solo si
@@ -178,28 +179,11 @@ export default async function LearnPage({
 
   // La cuenta de la matrícula elegida (20/11): qué debo y qué abre, sin salir del inicio.
   const billingScopes = ctx.capabilities.get('billing.read.own') ?? [];
-  const [accounts, policy] =
-    billingScopes.length > 0
-      ? await Promise.all([
-          listOwnAccounts({ institutionId, scopes: billingScopes }),
-          getPolicy({ institutionId }),
-        ])
-      : [[], null];
+  const accounts =
+    billingScopes.length > 0 ? await listOwnAccounts({ institutionId, scopes: billingScopes }) : [];
   const account = accounts.find((a) => a.enrollmentId === selected.enrollmentId) ?? null;
-  const opensNext =
-    account?.installments.find((i) => i.id === account.summary.next?.id)?.unlocks ?? [];
   // Los cursos abiertos en los que no está: se exploran en su pantalla, no aquí.
   const openCourses = catalog.filter((c) => !c.enrollment && !c.beforeEntry).length;
-  const explore =
-    openCourses > 0 ? (
-      <SideCard
-        title={t('explore.title')}
-        moreHref="/aprender/catalogo"
-        moreLabel={t('explore.cta')}
-      >
-        <p className="type-body text-text-muted m-0">{t('explore.body', { count: openCourses })}</p>
-      </SideCard>
-    ) : null;
 
   const nowIso = new Date().toISOString();
   // Lo que viene (4/10): sesiones, entregas y, si no hay nada más, el fin de la cohorte o del
@@ -208,7 +192,6 @@ export default async function LearnPage({
     .filter((e) => e.at >= nowIso)
     .slice(0, 3)
     .map((e) => ({ id: e.id, kind: e.kind, title: e.title, at: e.at, href: e.href }));
-  const resources = [...library.modules.flatMap((m) => m.items), ...library.recordings].slice(0, 3);
   const current = currentModule(outline);
 
   // Lo terminado (5/10): con el programa elegido completado, el panel deja de ser «lo que
@@ -219,9 +202,11 @@ export default async function LearnPage({
   // El primer día (6/10): matrícula abierta y nada completado. Sin datos, el panel de métricas
   // era un muro de ceros; lo que sirve es el siguiente paso, la ruta y cómo funciona.
   const firstDay = !selected.gate && selected.progress.completed === 0;
-  // Las fechas de cierre no piden nada hoy; el primer día solo cuentan las que sí.
-  const firstDayAgenda = agenda.filter((e) => e.kind !== 'COHORT_END' && e.kind !== 'ACCESS_UNTIL');
+  // Lo que viene: primero lo que pide algo; los cierres de cohorte y de acceso, si no hay más.
+  const nextItem =
+    agenda.find((e) => e.kind !== 'COHORT_END' && e.kind !== 'ACCESS_UNTIL') ?? agenda[0] ?? null;
   const completedSection = <CompletedCourses courses={completedCourses} />;
+  const currentIndex = current ? outline.modules.findIndex((m) => m.id === current.id) : -1;
   // E2 (23/9): con dos o más matrículas, un selector en el héroe; con una, nada.
   const switcher =
     mine.length > 1 ? (
@@ -269,72 +254,65 @@ export default async function LearnPage({
           switcher={switcher}
         />
       ) : (
-        <CurrentActivity
-          row={selected}
-          cover={current?.coverUrl ?? null}
-          moduleName={selected.resume ? (current?.name ?? null) : null}
-          steps={selected.resume && current ? current.items : null}
-          lockedNext={
-            selected.upcoming?.unavailableReason === 'LOCKED' && !selected.resume
-              ? (outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.name ?? null)
-              : null
-          }
-          lockedNextId={selected.upcoming?.moduleId ?? null}
-          lockedInstallment={
-            outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.installment ?? null
-          }
-          requestedAt={
-            selected.upcoming
-              ? (pending.unlock[`${selected.enrollmentId}:${selected.upcoming.moduleId}`] ?? null)
-              : null
-          }
-          switcher={switcher}
-        />
-      )}
-
-      {account && policy && !finished && (
+        // El inicio en grid (20/11, maqueta «Inicio A · Foco»): lo que toca hoy en grande y,
+        // al lado, módulos chicos que responden una pregunta cada uno.
         <section
-          aria-label={t('payments.label')}
-          className="bg-surface-base border-border-muted rounded-card space-y-2 border p-5"
+          aria-label={t('tiles.label')}
+          className="motion-enter grid gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(11.5rem,auto)] lg:grid-cols-4"
         >
-          <AccountSummary
-            account={account}
-            requireAgreementForNextCohort={policy.requireAgreementForNextCohort}
-          />
-          {opensNext.length > 0 && (
-            <p className="type-body-emphasis m-0 flex items-center gap-2">
-              <LockOpen aria-hidden className="text-text-link size-4 shrink-0" />
-              {t('account.opens', {
-                position: account.summary.next?.position ?? 0,
-                names: opensNext.join(', '),
-              })}
-            </p>
+          <div className="sm:col-span-2 lg:row-span-2">
+            <CurrentActivity
+              row={selected}
+              moduleName={selected.resume ? (current?.name ?? null) : null}
+              steps={selected.resume && current ? current.items : null}
+              lockedNext={
+                selected.upcoming?.unavailableReason === 'LOCKED' && !selected.resume
+                  ? (outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.name ??
+                    null)
+                  : null
+              }
+              lockedNextId={selected.upcoming?.moduleId ?? null}
+              lockedInstallment={
+                outline.modules.find((m) => m.id === selected.upcoming?.moduleId)?.installment ??
+                null
+              }
+              requestedAt={
+                selected.upcoming
+                  ? (pending.unlock[`${selected.enrollmentId}:${selected.upcoming.moduleId}`] ??
+                    null)
+                  : null
+              }
+              switcher={switcher}
+            />
+          </div>
+          {current && currentIndex >= 0 && !selected.gate && (
+            <StageTile module={current} index={currentIndex} total={outline.modules.length} />
           )}
-          <Link
-            href="/aprender/mi-cuenta"
-            className="type-body text-text-link min-h-touch inline-flex items-center gap-1.5 underline underline-offset-4"
-          >
-            {t('payments.cta')}
-            <ArrowRight aria-hidden className="size-4 shrink-0" />
-          </Link>
+          {account ? (
+            <PaymentTile account={account} />
+          ) : (
+            openCourses > 0 && <ExploreTile count={openCourses} />
+          )}
+          {!selected.gate && <WeekTile activity={activity} />}
+          <NextTile item={nextItem} />
+          {outline.enrollmentId && outline.modules.length > 1 && (
+            <RouteTile
+              modules={outline.modules}
+              currentId={current?.id ?? null}
+              enrollmentId={outline.enrollmentId}
+              programName={selected.cohort.programName}
+              className="sm:col-span-2 lg:col-span-3"
+            />
+          )}
+          <HelpTile
+            phone={ctx.institution.supportPhone ?? null}
+            email={ctx.institution.supportEmail ?? null}
+            name={ctx.person.givenName}
+          />
         </section>
       )}
 
-      {!selected.gate && !firstDay && <ProgressKpis outline={outline} activity={activity} />}
-
-      {firstDay && (
-        <div className="motion-enter motion-order-1 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-          <div className="min-w-0 space-y-8">
-            {/* Los otros cursos, a un clic (20/11): el catálogo entero aquí eran tres pantallas. */}
-            {explore}
-          </div>
-          <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
-            <HowItWorks />
-            {firstDayAgenda.length > 0 && <AgendaCard items={firstDayAgenda} />}
-            {help}
-          </aside>
-        </div>
-      )}
+      {firstDay && <HowItWorks />}
 
       {finished && (
         <div className="motion-enter motion-order-1 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
@@ -349,102 +327,15 @@ export default async function LearnPage({
         </div>
       )}
 
-      {!finished && !firstDay && (
-        <>
-          {/* 2/3 + 1/3 en escritorio (4/10): a la izquierda cómo voy (ritmo, exámenes); a la
-              derecha lo que viene y a quién preguntar. En el teléfono, apilado en ese orden. */}
-          <div className="motion-enter motion-order-2 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-            <div className="min-w-0 space-y-6">
-              {!selected.gate && <RhythmCard activity={activity} />}
-              <ExamsCard exams={exams} />
-            </div>
-            <aside className="min-w-0 space-y-6" aria-label={t('aside.label')}>
-              <AgendaCard items={agenda} />
-              {help}
-            </aside>
-          </div>
-
-          <InView className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-            <div className="min-w-0 space-y-8">
-              {explore}
-              {completedSection}
-            </div>
-            {resources.length > 0 && (
-              <aside className="min-w-0" aria-label={t('aside.resources')}>
-                <SideCard
-                  title={t('aside.resources')}
-                  moreHref="/aprender/biblioteca"
-                  moreLabel={t('aside.library')}
-                >
-                  <ul className="m-0 list-none space-y-3 p-0">
-                    {resources.map((item) => (
-                      <li key={item.id} className="flex items-start gap-3">
-                        <span className="bg-surface-sunken text-text-muted rounded-control inline-flex size-9 shrink-0 items-center justify-center">
-                          {item.kind === 'RECORDING' ? (
-                            <Play aria-hidden className="size-4" />
-                          ) : (
-                            <FileText aria-hidden className="size-4" />
-                          )}
-                        </span>
-                        <span className="min-w-0">
-                          <a
-                            href={item.href}
-                            className="type-body-emphasis text-text-link block underline"
-                          >
-                            {item.title}
-                          </a>
-                          <span className="type-caption text-text-muted block">
-                            {t(`aside.kind.${item.kind}`)}
-                            {item.lessonTitle ? ` · ${item.lessonTitle}` : ''}
-                          </span>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </SideCard>
-              </aside>
-            )}
-          </InView>
-        </>
+      {!finished && (exams.length > 0 || completedCourses.length > 0) && (
+        <InView className="space-y-8">
+          <ExamsCard exams={exams} />
+          {/* Con dos o más cursos abiertos y uno terminado, también se puede explorar desde aquí. */}
+          {account && openCourses > 0 && <ExploreTile count={openCourses} />}
+          {completedSection}
+        </InView>
       )}
     </Page>
-  );
-}
-
-/** Una tarjeta de la columna derecha: título, enlace «Ver todo» opcional, contenido. */
-function SideCard({
-  title,
-  moreHref,
-  moreLabel,
-  children,
-}: {
-  title: string;
-  moreHref?: string;
-  moreLabel?: string;
-  children: React.ReactNode;
-}) {
-  const id = `lateral-${title.toLowerCase().replace(/\s+/g, '-')}`;
-  return (
-    <section
-      aria-labelledby={id}
-      className="bg-surface-base rounded-card elevation-resting space-y-4 p-5"
-    >
-      <div className="flex items-baseline justify-between gap-3">
-        <h2 id={id} className="type-body-emphasis text-text m-0">
-          {title}
-        </h2>
-        {moreHref && moreLabel && (
-          <Link
-            href={moreHref}
-            className="type-caption text-text-link inline-flex items-center gap-1 underline"
-          >
-            {moreLabel}
-            <ArrowRight aria-hidden className="size-3.5" />
-          </Link>
-        )}
-      </div>
-      {children}
-    </section>
   );
 }
 
@@ -471,7 +362,6 @@ function currentModule(outline: CohortOutline): OutlineModule | null {
 
 async function CurrentActivity({
   row,
-  cover,
   moduleName,
   lockedNext,
   lockedNextId,
@@ -481,7 +371,6 @@ async function CurrentActivity({
   steps,
 }: {
   row: MyEnrollment;
-  cover: string | null;
   /** El componente de lo que toca, para la línea de contexto del héroe. */
   moduleName: string | null;
   /** El nombre del siguiente componente cuando lo que toca está en uno bloqueado (3/10). */
@@ -503,8 +392,6 @@ async function CurrentActivity({
   // Todo hecho y la matrícula aún activa (5/10): un examen final sin aprobar, o la constancia
   // por emitir. Antes el héroe decía «Continúa donde quedaste» sin botón: sin salida.
   const routeDone = !gate && !lockedNext && !resume && !upcoming && progress.total > 0;
-  const percent =
-    progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100);
   const starting = !gate && progress.completed === 0;
   // Dónde está dentro del componente (8/10): «paso 2 de 6», con una tira de segmentos.
   const stepIndex =
@@ -527,71 +414,38 @@ async function CurrentActivity({
             }),
           })
         : t('nextComponent.body', { module: lockedNext })
-      : starting && resume
-        ? t('startHere.body', { how: t(`startHere.how.${formOf(resume)}`) })
-        : waiting
-          ? t('startHere.waiting', {
-              title: waiting.title,
-              reason:
-                waiting.unavailableReason === 'CLOSED'
-                  ? t('startHere.closed')
-                  : waiting.unavailableReason === 'NOT_YET'
-                    ? t('startHere.notYet', {
-                        // `availableFrom` es la fecha de inicio de la cohorte (`@db.Date`,
-                        // medianoche UTC) cuando la asignación viene de abrirla, y un
-                        // instante cuando viene de «Actualizaciones del programa».
-                        date: format.dateTime(waiting.availableFrom, {
-                          dateStyle: 'long',
-                          ...(isDayOnly(waiting.availableFrom) ? { timeZone: 'UTC' } : {}),
-                        }),
-                      })
-                    : waiting.blockedBy
-                      ? t('startHere.blocked', { title: waiting.blockedBy })
-                      : t('startHere.unavailable'),
-            })
-          : routeDone
-            ? t('routeDone.body', { program: cohort.programName })
-            : null;
-
-  // La foto de marca: sin portada y también cuando la firma de la portada venció (8/10).
-  const brandPhoto = (
-    <Image
-      src="/photos/aprender-hero-wide.webp"
-      alt=""
-      width={1600}
-      height={500}
-      sizes="(min-width: 640px) 46vw, 0px"
-      priority
-      className="h-full w-full object-cover object-right-top"
-    />
-  );
+      : waiting
+        ? t('startHere.waiting', {
+            title: waiting.title,
+            reason:
+              waiting.unavailableReason === 'CLOSED'
+                ? t('startHere.closed')
+                : waiting.unavailableReason === 'NOT_YET'
+                  ? t('startHere.notYet', {
+                      // `availableFrom` es la fecha de inicio de la cohorte (`@db.Date`,
+                      // medianoche UTC) cuando la asignación viene de abrirla, y un
+                      // instante cuando viene de «Actualizaciones del programa».
+                      date: format.dateTime(waiting.availableFrom, {
+                        dateStyle: 'long',
+                        ...(isDayOnly(waiting.availableFrom) ? { timeZone: 'UTC' } : {}),
+                      }),
+                    })
+                  : waiting.blockedBy
+                    ? t('startHere.blocked', { title: waiting.blockedBy })
+                    : t('startHere.unavailable'),
+          })
+        : routeDone
+          ? t('routeDone.body', { program: cohort.programName })
+          : null;
 
   return (
-    // El héroe ES lo que toca hoy (4/10): antes había un héroe de ánimo con su propio
-    // «Continuar aprendiendo» y, debajo, esta tarjeta con otro «Continuar». En el teléfono el
-    // botón quedaba tras pantalla y media. El azul de marca y la foto se quedan; el mensaje
-    // ahora es la actividad.
+    // El módulo grande del grid (20/11): lo que toca hoy y un botón. Sin foto ni párrafo de
+    // arranque; el avance del programa lo dicen los módulos de al lado.
     <section
       aria-labelledby="actual-titulo"
-      // Coreografía del panel (experiencia-colombia-estudia §6): héroe → KPIs → lo demás.
-      className="bg-accent-base text-text-on-accent rounded-card motion-enter-md relative overflow-hidden sm:min-h-[17rem]"
+      className="bg-accent-base text-text-on-accent rounded-card border-brand-yellow motion-enter-md flex h-full flex-col justify-between gap-6 border-b-[6px] p-6 sm:p-8"
     >
-      {/* La portada del componente o, sin ella, la foto de marca: decorativa (WCAG 1.1.1),
-          solo desde `sm`; en el teléfono el texto y el botón van primero. */}
-      <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[46%] sm:block">
-        {cover ? (
-          <CoverImage src={cover} className="h-full w-full object-cover" fallback={brandPhoto} />
-        ) : (
-          brandPhoto
-        )}
-        {/* Un píxel más a la izquierda: el borde fraccional de la foto dejaba una raya. */}
-        <div className="hero-cover-scrim absolute inset-y-0 -left-px right-0" />
-      </div>
-
-      {/* La onda del landing cierra el héroe sobre el fondo de la página (8/10). */}
-      <BrandWave base="canvas" className="absolute inset-x-0 -bottom-px h-12 sm:h-20" />
-
-      <div className="relative max-w-[36rem] space-y-5 p-6 pb-16 sm:p-10 sm:pb-24">
+      <div className="space-y-5">
         <div className="space-y-2">
           {switcher ?? (
             <p className="type-overline m-0 uppercase opacity-90">
@@ -599,9 +453,15 @@ async function CurrentActivity({
                 ? cohort.programName
                 : lockedNext
                   ? t('nextComponent.overline')
-                  : starting
-                    ? t('startHere.title')
-                    : t('hero.resume')}
+                  : strip && steps
+                    ? t('hero.step', {
+                        module: moduleName ?? '',
+                        current: stepIndex + 1,
+                        total: steps.length,
+                      })
+                    : starting
+                      ? t('startHere.title')
+                      : t('hero.resume')}
             </p>
           )}
           <h2 id="actual-titulo" className="type-display m-0 text-balance">
@@ -660,19 +520,7 @@ async function CurrentActivity({
         )}
 
         {strip && steps && (
-          <div className="space-y-2">
-            <p className="type-caption m-0 flex flex-wrap justify-between gap-x-4 opacity-90">
-              <span>
-                {t('hero.step', {
-                  module: moduleName ?? '',
-                  current: stepIndex + 1,
-                  total: steps.length,
-                })}
-              </span>
-              {!starting && (
-                <span className="tabular-nums">{t('hero.programPercent', { percent })}</span>
-              )}
-            </p>
+          <div>
             {/* Hecho en amarillo (el sol de la marca), el actual en blanco, lo demás tenue. */}
             <ol aria-hidden="true" className="m-0 flex list-none gap-1 p-0">
               {steps.map((step, i) => (
@@ -691,7 +539,9 @@ async function CurrentActivity({
             </ol>
           </div>
         )}
+      </div>
 
+      <div className="space-y-4">
         {!gate && (
           <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
             {resume && (
@@ -722,32 +572,6 @@ async function CurrentActivity({
             </Link>
           </div>
         )}
-
-        {/* Sin tira (esperando, ruta hecha): el avance del programa, como antes. */}
-        {!gate &&
-          !strip &&
-          (starting ? (
-            <p className="type-caption m-0 opacity-90">
-              {t('hero.routeSize', { total: progress.total, program: cohort.programName })}
-            </p>
-          ) : (
-            <div className="max-w-[24rem] space-y-1.5">
-              <ProgressBar
-                percent={percent}
-                label={t('progressLabel', { program: cohort.programName })}
-                tone="on-accent"
-                grow
-              />
-              <p className="type-caption m-0 opacity-90">
-                {t('hero.progress', {
-                  percent,
-                  completed: progress.completed,
-                  total: progress.total,
-                  program: cohort.programName,
-                })}
-              </p>
-            </div>
-          ))}
 
         {/* Programa terminado: `KeepLearningHero` (8/10). */}
         {(gate?.kind === 'ACCESS_EXPIRED' || routeDone) && (
