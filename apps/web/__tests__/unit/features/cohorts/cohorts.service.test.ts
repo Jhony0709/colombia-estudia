@@ -242,4 +242,41 @@ describe('createCohort', () => {
     ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
     expect(tx.cohort.create).not.toHaveBeenCalled();
   });
+
+  // Acceso por cohorte (20/11): opcional, nunca antes del fin.
+  const data = {
+    code: '2026-2',
+    name: 'Cohorte',
+    programId: 'prog-1',
+    partnerId: null,
+    progression: 'LINEAR' as const,
+    startsOn: new Date('2026-02-01'),
+    endsOn: new Date('2026-06-30'),
+  };
+
+  it('rejects an access date before the end of the cohort', async () => {
+    await expect(
+      createCohort({ ...BASE, data: { ...data, accessUntil: new Date('2026-06-01') } })
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(tx.cohort.create).not.toHaveBeenCalled();
+  });
+
+  it('saves the access date and audits it', async () => {
+    tx.program.findFirst.mockResolvedValue({ id: 'prog-1' });
+    tx.cohort.create.mockResolvedValue({ id: 'cohort-9' });
+    const accessUntil = new Date('2026-08-31');
+
+    await createCohort({ ...BASE, data: { ...data, accessUntil } });
+
+    expect(tx.cohort.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ accessUntil }) })
+    );
+    expect(tx.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          after: expect.objectContaining({ accessUntil: '2026-08-31' }),
+        }),
+      })
+    );
+  });
 });

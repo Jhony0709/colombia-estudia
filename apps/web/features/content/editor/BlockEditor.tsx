@@ -281,7 +281,7 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
       return;
     }
     if (kind === 'image') {
-      insertAfter(afterId, { id: newId(), kind: 'image', alt: '', assetId: '' });
+      insertAfter(afterId, { id: newId(), kind: 'image', alt: '', assetId: '', caption: '' });
       return;
     }
     insertAfter(afterId, emptyBlock(kind));
@@ -302,7 +302,7 @@ export const BlockEditor = forwardRef<BlockEditorHandle, BlockEditorProps>(funct
     for (const [i, file] of files.entries()) {
       const id = 'replaceId' in where && i === 0 ? where.replaceId : newId();
       if (!('replaceId' in where && i === 0)) {
-        insertAfter(anchor, { id, kind: 'image', alt: '', assetId: '' });
+        insertAfter(anchor, { id, kind: 'image', alt: '', assetId: '', caption: '' });
       }
       anchor = id;
       setUploading((prev) => ({ ...prev, [id]: true }));
@@ -835,6 +835,17 @@ function BlockBody(props: RowProps) {
               name={`alt-${block.id}`}
               value={block.alt}
               onChange={(event) => onUpdate(block.id, { alt: event.target.value })}
+            />
+          </FormField>
+          <FormField
+            label={t('imageCaption')}
+            name={`caption-${block.id}`}
+            hint={t('imageCaptionHint')}
+          >
+            <FormInput
+              name={`caption-${block.id}`}
+              value={block.caption}
+              onChange={(event) => onUpdate(block.id, { caption: event.target.value })}
             />
           </FormField>
           <details className="type-caption text-text-muted">

@@ -343,6 +343,7 @@ export function NewCohortForm({ options }: { options: CohortFormOptions }) {
     progression: 'LINEAR',
     startsOn: '',
     endsOn: '',
+    accessUntil: '',
   });
 
   // Sin programas no hay cohorte que crear: el botón lo dice en vez de abrir un formulario
@@ -459,6 +460,16 @@ export function NewCohortForm({ options }: { options: CohortFormOptions }) {
               type="date"
               value={values.endsOn}
               onChange={(e) => setValues((v) => ({ ...v, endsOn: e.target.value }))}
+            />
+          </FormField>
+
+          <FormField label={t('accessUntil')} name="accessUntil" hint={t('accessUntilHint')}>
+            <FormInput
+              name="accessUntil"
+              type="date"
+              value={values.accessUntil}
+              min={values.endsOn || undefined}
+              onChange={(e) => setValues((v) => ({ ...v, accessUntil: e.target.value }))}
             />
           </FormField>
 

@@ -20,6 +20,7 @@ const schema = z.object({
   progression: z.enum(PROGRESSIONS as unknown as [string, ...string[]]),
   startsOn: isoDate,
   endsOn: isoDate,
+  accessUntil: z.union([z.literal(''), isoDate]).optional(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -37,6 +38,7 @@ export const POST = apiHandler<Input>({ schema, capability: 'cohort.manage' })(
         progression: input.progression as 'LINEAR' | 'FREE',
         startsOn: new Date(input.startsOn),
         endsOn: new Date(input.endsOn),
+        accessUntil: input.accessUntil ? new Date(input.accessUntil) : null,
       },
     })
 );

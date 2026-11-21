@@ -271,10 +271,15 @@ export async function createCohort({
     progression: Progression;
     startsOn: Date;
     endsOn: Date;
+    /** Nulo: cada matrícula usa los días de acceso del programa. */
+    accessUntil?: Date | null;
   };
 }): Promise<{ id: string }> {
   if (data.endsOn < data.startsOn) {
     throw new APIError('La fecha de fin no puede ser anterior al inicio', 'VALIDATION_ERROR');
+  }
+  if (data.accessUntil && data.accessUntil < data.endsOn) {
+    throw new APIError('El acceso no puede vencer antes del fin de la cohorte', 'VALIDATION_ERROR');
   }
 
   const db = createTenantClient(institutionId);
@@ -306,6 +311,7 @@ export async function createCohort({
             name: data.name,
             programId: data.programId,
             progression: data.progression,
+            accessUntil: data.accessUntil?.toISOString().slice(0, 10) ?? null,
           },
         },
       });

@@ -79,6 +79,14 @@ describe('blocks', () => {
     ]);
   });
 
+  it('una imagen con pie conserva el pie al volver (21/11)', () => {
+    const md = '![Dos células](asset:abc "La célula animal y la vegetal")';
+    const [block] = markdownToBlocks(md);
+
+    expect(block).toMatchObject({ kind: 'image', caption: 'La célula animal y la vegetal' });
+    expect(blocksToMarkdown([block!])).toBe(`${md}\n`);
+  });
+
   it('un vídeo es un bloque de medio con su asset, y vuelve igual', () => {
     const [block] = markdownToBlocks('::video{asset="abc"}');
 

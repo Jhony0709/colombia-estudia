@@ -33,7 +33,8 @@ export type Block =
   | { id: string; kind: 'table'; markdown: string }
   | { id: string; kind: 'math'; latex: string }
   | { id: string; kind: 'media'; media: MediaKind; assetId: string }
-  | { id: string; kind: 'image'; alt: string; assetId: string }
+  /** `caption` es el título del Markdown: el pie de la figura (21/11). */
+  | { id: string; kind: 'image'; alt: string; assetId: string; caption: string }
   | { id: string; kind: 'rule' }
   /** Un recuadro (27/9): nota, ejemplo o importante, con título opcional y cuerpo en Markdown. */
   | { id: string; kind: 'callout'; variant: CalloutKind; title: string; markdown: string }
@@ -72,6 +73,7 @@ interface MdNode {
   attributes?: Record<string, string | null | undefined> | null;
   url?: string;
   alt?: string | null;
+  title?: string | null;
 }
 
 const parser = unified().use(remarkParse).use(remarkGfm).use(remarkMath).use(remarkDirective);
@@ -103,7 +105,14 @@ function toBlock(node: MdNode, markdown: string): Block {
       const only = node.children?.length === 1 ? node.children[0] : undefined;
       if (only?.type === 'image') {
         const match = /^asset:(.+)$/.exec(only.url ?? '');
-        if (match) return { id, kind: 'image', alt: only.alt ?? '', assetId: match[1]! };
+        if (match)
+          return {
+            id,
+            kind: 'image',
+            alt: only.alt ?? '',
+            assetId: match[1]!,
+            caption: only.title ?? '',
+          };
       }
       return { id, kind: 'text', markdown: raw };
     }
@@ -188,8 +197,10 @@ export function blockToMarkdown(block: Block): string {
       const attrs = `kind="${block.variant}"${title === '' ? '' : ` title="${title.replace(/"/g, '\u201d')}"`}`;
       return `:::callout{${attrs}}\n${block.markdown.replace(/\s+$/, '')}\n:::`;
     }
-    case 'image':
-      return `![${block.alt.trim()}](asset:${block.assetId.trim()})`;
+    case 'image': {
+      const caption = block.caption.trim().replace(/"/g, '\u201d');
+      return `![${block.alt.trim()}](asset:${block.assetId.trim()}${caption === '' ? '' : ` "${caption}"`})`;
+    }
     case 'rule':
       return '---';
   }
