@@ -947,7 +947,7 @@ function readinessChecks({
   content: string;
   minutes: string;
   validation: Validation | null;
-  media: Array<{ missingCaptions: boolean }> | null;
+  media: Array<{ kind: string; missingCaptions: boolean }> | null;
   activity: {
     instructions: string | null;
     accepts: ActivityAccepts;
@@ -994,8 +994,10 @@ function readinessChecks({
           : t('readiness.contentOk', { warnings }),
   });
 
-  const videos = media?.length ?? 0;
-  const missing = media?.filter((item) => item.missingCaptions).length ?? 0;
+  // Solo video y audio: las imágenes también son medios, pero no llevan subtítulos (21/11).
+  const playable = media?.filter((item) => item.kind === 'VIDEO' || item.kind === 'AUDIO') ?? [];
+  const videos = playable.length;
+  const missing = playable.filter((item) => item.missingCaptions).length;
   checks.push({
     key: 'videos',
     state: media === null ? 'todo' : videos === 0 ? 'info' : missing > 0 ? 'warn' : 'ok',
