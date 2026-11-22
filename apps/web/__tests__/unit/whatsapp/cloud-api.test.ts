@@ -5,7 +5,12 @@
  */
 
 import { createHmac } from 'node:crypto';
-import { inboundMessages, verifyChallenge, verifySignature } from '@/lib/whatsapp/cloud-api';
+import {
+  inboundMessages,
+  sendText,
+  verifyChallenge,
+  verifySignature,
+} from '@/lib/whatsapp/cloud-api';
 
 beforeEach(() => {
   process.env.WHATSAPP_VERIFY_TOKEN = 'token-1';
@@ -90,6 +95,7 @@ describe('inboundMessages', () => {
         phoneNumberId: 'pn-1',
         text: 'Hola',
         choiceId: null,
+        replyToExternalId: null,
         at: new Date(1793900000 * 1000),
       },
       {
@@ -99,6 +105,7 @@ describe('inboundMessages', () => {
         phoneNumberId: 'pn-1',
         text: '[image]',
         choiceId: null,
+        replyToExternalId: null,
         at: expect.any(Date),
       },
     ]);
@@ -154,5 +161,48 @@ describe('inboundMessages: reacciones', () => {
       ],
     };
     expect(inboundMessages(payload)).toEqual([]);
+  });
+});
+
+describe('responder citando (22/11)', () => {
+  it('lee el mensaje que citó', () => {
+    const payload = {
+      entry: [
+        {
+          changes: [
+            {
+              value: {
+                messages: [
+                  {
+                    id: 'wamid.9',
+                    from: '573001112233',
+                    type: 'text',
+                    text: { body: 'Sí' },
+                    context: { id: 'wamid.8' },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    };
+    expect(inboundMessages(payload)[0]).toMatchObject({ replyToExternalId: 'wamid.8' });
+  });
+
+  it('envía la cita como `context.message_id`; sin cita, no la manda', async () => {
+    process.env.WHATSAPP_ACCESS_TOKEN = 'tok';
+    const fetchMock = jest
+      .spyOn(global, 'fetch')
+      .mockResolvedValue(
+        new Response(JSON.stringify({ messages: [{ id: 'wamid.out' }] }), { status: 200 })
+      );
+    await sendText('573001112233', 'Hola', 'pn-1', 'wamid.8');
+    await sendText('573001112233', 'Hola', 'pn-1');
+    const bodies = fetchMock.mock.calls.map(([, init]) => JSON.parse(String(init?.body)));
+    expect(bodies[0]).toMatchObject({ context: { message_id: 'wamid.8' }, type: 'text' });
+    expect(bodies[1]).not.toHaveProperty('context');
+    fetchMock.mockRestore();
+    delete process.env.WHATSAPP_ACCESS_TOKEN;
   });
 });

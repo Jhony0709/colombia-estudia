@@ -131,6 +131,11 @@ Para la otra oportunidad en un examen (`PRODUCT_DECISIONS.md`, 5/11). Código en
   `WHATSAPP_PHONE_NUMBER_ID`. Dentro de las 24 h desde su último mensaje se escribe texto libre;
   después solo con una plantilla aprobada (`WHATSAPP_TEMPLATE_ATTEMPT_GRANTED`, cuerpo con `{{1}}`
   nombre y `{{2}}` examen, categoría «Utility»).
+- **Bandeja** (22/11): las respuestas desde `/mensajes` pueden citar un mensaje (`context.message_id`)
+  y llevar hasta 3 botones de respuesta; lo que la persona cita llega en `context.id` y se enlaza.
+  Fuera de las 24 h se retoma con `WHATSAPP_TEMPLATE_FOLLOW_UP` (`{{1}}` nombre, «Utility»).
+- **Leído y «escribiendo…»** (22/11): cada mensaje que contesta el bot se marca con
+  `status: read` y `typing_indicator` (`markRead`, `lib/whatsapp/cloud-api.ts`).
 - **Antes de activarlo**: el número del negocio registrado en la cuenta de WhatsApp de ALBA, el
   webhook suscrito al campo `messages` en la app de Meta, la plantilla aprobada y las variables
   en Vercel. Hasta entonces el botón abre `wa.me` al número de soporte y el aviso queda en la

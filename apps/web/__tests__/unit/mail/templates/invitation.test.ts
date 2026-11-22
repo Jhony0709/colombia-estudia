@@ -108,4 +108,12 @@ describe('renderInvitationEmail', () => {
     expect(text).toContain('Hola, Juan');
     expect(text).toContain('Colombia Estudia');
   });
+
+  it('pedida desde WhatsApp (22/11): «confirma tu correo», no «invitación»', () => {
+    const { subject, html, text } = renderInvitationEmail({ ...baseData, confirm: true });
+    expect(subject).toContain('confirma tu correo');
+    expect(html).toContain('Confirmar mi correo');
+    expect(text).toContain('Confirma tu correo aquí');
+    expect(subject).not.toContain('invitación');
+  });
 });

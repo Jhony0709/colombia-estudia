@@ -1264,6 +1264,84 @@ y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de ap
 los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
 cada consulta lleva su `institutionId`.
 
+## 2026-11-22 — El chat, más amable: retomar, avance, horario y encuesta
+
+**Decisión** (Jhonny, 22/11: «haz 1, 2, 3, 4, 5 para asesores si no bot 24/7, 6, 7, 9»):
+
+1. **Retomar lo que quedó a medias** (`nudges.service.ts`, con el cron de cada minuto): un
+   formulario quieto hora y media recibe un solo «¿Seguimos, Laura? Te falta 1 dato» con
+   «Continuar» y «Cancelar»; la cuenta creada por el chat sin confirmar, a las 2 horas, «¿Pudiste
+   confirmar tu correo?» con «Reenviar correo». Siempre dentro de las 24 h, sin plantilla.
+2. **Avance y nombre**: cada pregunta lleva «2 de 4» y, al saber el nombre, «Mucho gusto, Laura 👋».
+   El acudiente cuenta solo cuando ya dijo que es menor, para que el total no cambie.
+3. **Audios, fotos y archivos** fuera de un formulario: «todavía no puedo escucharlos» y la opción
+   de una persona.
+4. **Leído y «escribiendo…»**: cada mensaje que contesta el bot se marca leído con el indicador de
+   escritura de la Cloud API.
+5. **Horario de asesores** (`facts.ts`, **PROPUESTA por confirmar**: lunes a sábado, 8:00 a 18:00,
+   Bogotá). El bot atiende 24/7; fuera del horario, «Hablar con asesor» y el fin de un formulario
+   lo dicen, y la fila no manda recordatorios de «pronto».
+6. **Más tolerante**: fechas como «31 de diciembre de 1990», «31 dic 90» o «1990-12-31», y
+   «¿Quisiste decir laura@gmail.com?» ante dominios mal escritos.
+7. **Mensajes cortos**: el precio en dos líneas con «Ver detalle»; la bienvenida, más corta.
+8. **Encuesta al cerrar** (el 9 de la lista; el 8, prueba social, espera datos reales): «¿Cómo te atendimos hoy?» con 😀 😐 😕; la nota se audita como
+   `conversation.rated` con quién atendió, y no reabre el bot.
+
+**Pendiente**: confirmar el horario; mostrar las notas de la encuesta en algún tablero.
+
+## 2026-11-22 — El bot recibe, orienta y crea la cuenta
+
+**Decisión** (Jhonny, 22/11, tras la auditoría de marketing y producto):
+
+- **Primer contacto**: los botones de WhatsApp de la web ya no abren con «quiero información»
+  (que el bot leía como «programas» y respondía con el precio) ni con «grado ___». Dicen «Hola 👋
+  Quiero terminar mi bachillerato…» y el bot responde con una bienvenida (100 % virtual, a tu
+  ritmo, tutores) y tres caminos: precios, crear la cuenta, asesor.
+- **Sin respuestas sin salida**: cada respuesta termina con botones del siguiente paso; el saludo
+  son tres botones y «Más opciones» abre la lista. La segunda vez seguida que no entiende ofrece
+  una persona. Reconoce pagos y cuotas, duración, ICFES, «¿es virtual?» y los saludos.
+- **Textos**: «etapas» de cara al estudiante (como la plataforma, 20/11); sin «fecha de grado: por
+  definir»; «¿cómo funciona?» en positivo. Mientras espera asesor: un recordatorio a los 10
+  minutos y la propuesta del correo a los 20 (antes, tres en 9 minutos).
+- **Inscripción**: no pregunta el teléfono (es el de WhatsApp, corregible en el resumen); pregunta
+  el último grado aprobado y si es mayor de edad, y el acudiente solo si es menor.
+- **Crear la cuenta por el chat** («Crear mi cuenta»): autorización de datos → ¿mayor de edad? →
+  nombre y apellido → correo → fecha de nacimiento → resumen. Se crea la ficha con rol de
+  estudiante, se matricula en la introducción (como `/registro`) y le llega «Confirma tu correo»
+  (la invitación de siempre: el enlace prueba el correo); en esa página acepta la política y crea
+  su contraseña. Por WhatsApp no viajan ni contraseña ni número de documento. Un menor no deja
+  más datos: se le envía a `/registro` con su acudiente y lo que escribió desde la autorización se
+  borra del hilo («[Dato retirado: menor de edad]»). Un correo ya registrado no crea nada (con
+  cuenta: entrar o recuperar; sin cuenta: pasa a un asesor); si el correo no sale, tampoco se le
+  dice que salió: pasa a un asesor.
+
+**Pendiente**: «¿El título es válido?» sigue sin el número de resolución hasta la validación
+jurídica; el origen de cada chat (qué botón de la web) no se guarda todavía.
+
+**Schema**: `ConversationIntake.ACCOUNT` (misma migración `20261122000000_message_reply_buttons`).
+
+## 2026-11-22 — La bandeja responde a la manera de cada canal
+
+**Decisión** (Jhonny, 22/11: «si es por WhatsApp, responder de la manera que WhatsApp reconoce y
+muestra»): en `/mensajes`, las opciones de respuesta salen de lo que admite el canal
+(`features/messaging/channels.ts`). En WhatsApp:
+
+- **Formato**: barra de negrita, cursiva, tachado, monoespacio, lista y cita con la sintaxis de
+  WhatsApp (`*…*`, `_…_`, `~…~`, ` ``` `, `- `, `> `), vista previa, y el hilo pinta ese formato
+  como lo ve la persona.
+- **Responder citando**: «Responder» en cada mensaje suyo; sale con `context.message_id` y WhatsApp
+  lo muestra encima. Si ella cita uno, el hilo también lo muestra.
+- **Botones de respuesta**: hasta 3, de 20 caracteres; su elección llega al chat como su mensaje.
+- **Fuera de las 24 h**: «Enviar plantilla para retomar» con `WHATSAPP_TEMPLATE_FOLLOW_UP`
+  (`{{1}}` nombre), una por día y auditada (`conversation.follow_up_sent`). Sin la variable, queda
+  el aviso de siempre.
+
+Otro canal (Instagram, …) es una entrada nueva en `channels.ts`; hoy `MessagingChannel` solo
+tiene `WHATSAPP`.
+
+**Schema**: `ConversationMessage.replyToId` y `ConversationMessage.buttons` (migración
+`20261122000000_message_reply_buttons`).
+
 ## 2026-11-20 — Etapas por cuota: una cuota puede abrir componentes al quedar pagada
 
 **Decisión** (Jhonny, 20/11): al crear el plan de pagos, operación elige qué componentes abre cada

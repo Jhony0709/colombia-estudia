@@ -14,6 +14,7 @@ import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { isUniqueViolation } from '@/lib/db/errors';
 import { logger } from '@/lib/observability/logger';
 import {
+  markRead,
   sendButtons,
   sendList,
   sendTemplate,
@@ -24,8 +25,19 @@ import {
 import { notifyMany, staffPersonIds } from '@/features/notifications/server/notifications.service';
 import { handleInboundMessage } from '@/features/requests/server/whatsapp.service';
 import { whatsappIdOf } from '@/features/requests/server/requests.service';
-import { answerFor, asksForMenu, intentFor, menu } from '../bot';
+import {
+  answerFor,
+  asksForMenu,
+  CSAT,
+  greeting,
+  intentFor,
+  MEDIA_REPLY,
+  NOT_UNDERSTOOD,
+  RESEND_ACCOUNT,
+} from '../bot';
+import { createAccountFromChat, resendAccountEmail } from './chat-account.service';
 import { botContext } from './facts.service';
+import { ADVISOR_HOURS_TEXT } from '../facts';
 import {
   cancelsIntake,
   intakeAnswer,
@@ -158,7 +170,9 @@ async function callAdvisors(
         ? `${who} dejó sus datos de inscripción por WhatsApp.`
         : intake === 'CERTIFICATE'
           ? `${who} pidió un certificado por WhatsApp.`
-          : `${who} pidió hablar con un asesor por WhatsApp.`,
+          : intake === 'ACCOUNT'
+            ? `${who} quiso crear su cuenta por WhatsApp y necesita ayuda.`
+            : `${who} pidió hablar con un asesor por WhatsApp.`,
     href: `/mensajes/${conversation.id}`,
     dedupeKey: `conversation_waiting:${conversation.id}:${waitingSince.getTime()}`,
   });
@@ -225,6 +239,14 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
           return prisma.conversation.update({ where: key, data: touch, select });
         });
 
+  // Si respondió citando un mensaje del chat, se enlaza para mostrar la cita en la bandeja.
+  const quoted = message.replyToExternalId
+    ? await prisma.conversationMessage.findFirst({
+        where: { conversationId: conversation.id, externalId: message.replyToExternalId },
+        select: { id: true },
+      })
+    : null;
+
   try {
     await prisma.conversationMessage.create({
       data: {
@@ -233,6 +255,7 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
         direction: 'INBOUND',
         body: message.text,
         externalId: message.id,
+        ...(quoted ? { replyToId: quoted.id } : {}),
         createdAt: now,
       },
     });
@@ -259,6 +282,29 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
     return 'stored';
   }
 
+  // La encuesta al cerrar (22/11): se guarda y se agradece; no reabre el bot.
+  if (conversation.status === 'CLOSED' && message.choiceId?.startsWith('csat_')) {
+    await prisma.auditLog.create({
+      data: {
+        institutionId: institution.id,
+        actorId: null,
+        entity: 'conversation',
+        entityId: conversation.id,
+        action: 'rated',
+        after: {
+          score: Number(message.choiceId.slice('csat_'.length)),
+          assignedToId: conversation.assignedToId,
+        },
+        occurredAt: now,
+      },
+    });
+    await say(conversation, message.from, { text: CSAT.thanks }, phoneNumberId, now);
+    return 'answered';
+  }
+
+  // Doble check azul y «escribiendo…» mientras el bot prepara la respuesta (22/11).
+  await markRead(message.id, phoneNumberId);
+
   // BOT, o CLOSED que vuelve a escribir: lo atiende el bot.
   if (conversation.status === 'CLOSED') {
     await prisma.conversation.update({
@@ -279,10 +325,9 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
   // otra opción del menú, «cancelar» o «menú» lo sacan.
   const { intakeKind, intakeStep } = conversation;
   if (intakeKind && intakeStep !== null && conversation.status !== 'CLOSED') {
-    const leaves =
-      (message.choiceId && !isIntakeChoice(message.choiceId)) ||
-      cancelsIntake(message.text) ||
-      asksForMenu(message.text);
+    const leaves = message.choiceId
+      ? !isIntakeChoice(message.choiceId)
+      : cancelsIntake(message.text) || asksForMenu(message.text);
     if (leaves) {
       await prisma.conversation.update({ where: { id: conversation.id }, data: NO_INTAKE });
     } else {
@@ -292,7 +337,7 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
         intakeStep,
         data,
         { text: message.text, choiceId: message.choiceId },
-        { waId: message.from, now, policyUrl: ctx.policyUrl }
+        { waId: message.from, now, policyUrl: ctx.policyUrl, siteUrl: ctx.siteUrl }
       );
       if (step.status === 'retry') {
         await say(conversation, message.from, step.reply, phoneNumberId, now);
@@ -300,6 +345,17 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
       }
       if (step.status === 'cancel') {
         await prisma.conversation.update({ where: { id: conversation.id }, data: NO_INTAKE });
+        // Un menor (Ley 1581): lo que escribió desde la autorización sale del hilo.
+        if (step.forget && data._consentAt) {
+          await prisma.conversationMessage.updateMany({
+            where: {
+              conversationId: conversation.id,
+              direction: 'INBOUND',
+              createdAt: { gte: new Date(data._consentAt) },
+            },
+            data: { body: '[Dato retirado: menor de edad]' },
+          });
+        }
         await say(conversation, message.from, step.reply, phoneNumberId, now);
         return 'answered';
       }
@@ -311,17 +367,48 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
         await say(conversation, message.from, step.reply, phoneNumberId, now);
         return 'intake';
       }
+      if (intakeKind === 'ACCOUNT') {
+        return accountDone(institution, phoneNumberId, conversation, message.from, step, ctx, now);
+      }
       await prisma.conversation.update({
         where: { id: conversation.id },
         data: { intake: step.data, intakeStep: null, ...waiting(now) },
       });
-      await say(conversation, message.from, step.reply, phoneNumberId, now);
+      const hours = ctx.advisorsOpen ? '' : `\n\nNuestros asesores atienden ${ADVISOR_HOURS_TEXT}.`;
+      await say(
+        conversation,
+        message.from,
+        { ...step.reply, text: step.reply.text + hours },
+        phoneNumberId,
+        now
+      );
       await callAdvisors(institution, phoneNumberId, conversation, now, intakeKind);
       return 'waiting';
     }
   }
 
-  const choice = asksForMenu(message.text) ? null : (message.choiceId ?? intentFor(message.text));
+  // Un audio o una foto fuera de un formulario: todavía no se entienden.
+  if (!message.choiceId && /^\[(audio|voice|image|video|document)\]$/.test(message.text)) {
+    await say(conversation, message.from, MEDIA_REPLY, phoneNumberId, now);
+    return 'answered';
+  }
+
+  if (message.choiceId === RESEND_ACCOUNT) {
+    const resent = await resendAccountEmail({
+      institutionId: institution.id,
+      conversationId: conversation.id,
+    });
+    const text =
+      resent === 'sent'
+        ? 'Listo 📧 Te reenviamos el correo. Ábrelo y toca «Confirmar mi correo».'
+        : resent === 'has_account'
+          ? `Ya confirmaste tu correo 🙌 Entra en ${ctx.siteUrl}/ingresar`
+          : 'No pude reenviarlo 😕 Escribe *asesor* y te ayudamos.';
+    await say(conversation, message.from, { text }, phoneNumberId, now);
+    return 'answered';
+  }
+
+  const choice = message.choiceId ?? (asksForMenu(message.text) ? null : intentFor(message.text));
   logger.info({
     event: 'whatsapp-intent',
     conversationId: conversation.id,
@@ -351,13 +438,85 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
     return 'answered';
   }
 
-  const greeting = menu(institution.name);
+  // Dos veces seguidas sin entender: mejor una persona que otro saludo.
+  const last =
+    asksForMenu(message.text) || message.choiceId
+      ? null
+      : await prisma.conversationMessage.findFirst({
+          where: { conversationId: conversation.id, direction: 'OUTBOUND', fromBot: true },
+          orderBy: { createdAt: 'desc' },
+          select: { body: true },
+        });
+  const hello = greeting(institution.name);
+  const again = last?.body.startsWith(hello.text) || last?.body.startsWith(NOT_UNDERSTOOD.text);
+  await say(conversation, message.from, again ? NOT_UNDERSTOOD : hello, phoneNumberId, now);
+  return 'menu';
+}
+
+/** Terminó de pedir los datos de la cuenta (22/11): se crea y se le dice qué sigue. */
+async function accountDone(
+  institution: { id: string; whatsappAgentPhones: string[] },
+  phoneNumberId: string,
+  conversation: Conversation & { contactName: string | null },
+  to: string,
+  step: { data: IntakeData; reply: IntakeReply },
+  ctx: { siteUrl: string },
+  now: Date
+): Promise<InboundOutcome> {
+  await prisma.conversation.update({
+    where: { id: conversation.id },
+    data: { intake: { ...step.data, _accountAt: now.toISOString() }, intakeStep: null },
+  });
+  await say(conversation, to, step.reply, phoneNumberId, now);
+  const result = await createAccountFromChat({
+    institutionId: institution.id,
+    conversationId: conversation.id,
+    data: step.data,
+    now,
+  });
+  const more = { id: 'opciones', title: 'Más opciones' };
+  if (result.status === 'sent') {
+    await say(
+      conversation,
+      to,
+      {
+        text: `Listo ✅ Te enviamos un correo a ${result.email}. Ábrelo y toca «Confirmar mi correo» para crear tu contraseña.${result.enrolled ? ' Al entrar ya tienes la etapa de introducción abierta para empezar.' : ''}\n\nSi no te llega en unos minutos, revisa la carpeta de spam o escríbenos por aquí.`,
+        buttons: [more],
+      },
+      phoneNumberId,
+      new Date(now.getTime() + 1)
+    );
+    return 'answered';
+  }
+  if (result.status === 'has_account') {
+    await say(
+      conversation,
+      to,
+      {
+        text: `Ya tienes una cuenta con ese correo 🙌 Entra en ${ctx.siteUrl}/ingresar. Si no recuerdas la contraseña: ${ctx.siteUrl}/auth/recuperar`,
+        buttons: [{ id: 'asesor', title: 'Hablar con asesor' }, more],
+      },
+      phoneNumberId,
+      new Date(now.getTime() + 1)
+    );
+    return 'answered';
+  }
+  // Ficha sin cuenta o un fallo: lo resuelve una persona.
+  await prisma.conversation.update({ where: { id: conversation.id }, data: waiting(now) });
   await say(
     conversation,
-    message.from,
-    { text: greeting.body, list: { button: greeting.button, options: greeting.options } },
+    to,
+    {
+      text:
+        result.status === 'has_profile'
+          ? 'Ese correo ya está registrado con nosotros. Un asesor te escribe por aquí para enviarte tu enlace de acceso.'
+          : result.status === 'not_delivered'
+            ? 'Creamos tu cuenta, pero no pudimos enviarte el correo 😕 Un asesor te escribe por aquí con tu enlace.'
+            : 'No pudimos crear tu cuenta en este momento 😕 Un asesor te escribe por aquí para ayudarte.',
+    },
     phoneNumberId,
-    now
+    new Date(now.getTime() + 1)
   );
-  return 'menu';
+  await callAdvisors(institution, phoneNumberId, conversation, now, 'ACCOUNT');
+  return 'waiting';
 }

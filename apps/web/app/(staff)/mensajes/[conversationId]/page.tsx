@@ -21,15 +21,19 @@ import { Alert } from '@/components/atoms/alert';
 import { Badge } from '@/components/atoms/badge';
 import { Card } from '@/components/atoms/card';
 import { cn } from '@/lib/utils';
+import { CHANNEL_FEATURES } from '@/features/messaging/channels';
 import { AutoRefresh } from '../auto-refresh';
 import { STATUS_VARIANT } from '../status';
 import {
   CloseAction,
   CreatePersonAction,
+  FollowUpAction,
   PaymentLinkAction,
   ReplyForm,
   TakeAction,
 } from '../conversation-actions';
+import { MessageText } from '../message-text';
+import { QuoteButton, ReplyTargetProvider } from '../reply-target';
 import { ScrollToLatest } from '../scroll-to-latest';
 import { ThreadItem, ThreadList } from '../thread-motion';
 
@@ -57,6 +61,8 @@ export default async function ConversationPage({
   const takenByOther = conversation.status === 'OPEN' && !mine;
   const canCreatePerson = (ctx.capabilities.get('people.manage')?.length ?? 0) > 0;
   const canCharge = (ctx.capabilities.get('billing.manage')?.length ?? 0) > 0;
+  const features = CHANNEL_FEATURES[conversation.channel];
+  const canQuote = mine && conversation.canReply && features.quote;
 
   return (
     <Page wide>
@@ -156,79 +162,107 @@ export default async function ConversationPage({
             </p>
           </Card>
         )}
-        <section aria-label={t('thread.label', { name })}>
-          {conversation.messages.length === 0 ? (
-            <p className="type-body text-text-muted">{t('thread.empty')}</p>
-          ) : (
-            <ThreadList className="space-y-3">
-              {conversation.messages.map((m) => (
-                <ThreadItem
-                  key={m.id}
-                  inbound={m.inbound}
-                  className={cn('flex', m.inbound ? 'justify-start' : 'justify-end')}
-                >
-                  <div
-                    className={cn(
-                      'rounded-card max-w-[85%] space-y-1 border px-4 py-2',
-                      m.inbound
-                        ? 'bg-surface-base border-border-muted'
-                        : m.fromBot
-                          ? 'bg-surface-sunken border-border-muted'
-                          : 'bg-status-info-muted border-transparent'
-                    )}
+        <ReplyTargetProvider>
+          <section aria-label={t('thread.label', { name })}>
+            {conversation.messages.length === 0 ? (
+              <p className="type-body text-text-muted">{t('thread.empty')}</p>
+            ) : (
+              <ThreadList className="space-y-3">
+                {conversation.messages.map((m) => (
+                  <ThreadItem
+                    key={m.id}
+                    inbound={m.inbound}
+                    className={cn('flex', m.inbound ? 'justify-start' : 'justify-end')}
                   >
-                    <p className="type-caption text-text-muted m-0">
-                      {m.inbound
-                        ? name
-                        : m.fromBot
-                          ? t('thread.bot')
-                          : (m.authorName ?? t('thread.team'))}
-                      {' · '}
-                      <time dateTime={m.at}>
-                        {format.dateTime(new Date(m.at), {
-                          day: 'numeric',
-                          month: 'short',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          hour12: false,
-                        })}
-                      </time>
-                    </p>
-                    <p className="type-body text-text m-0 whitespace-pre-line break-words">
-                      {m.body}
-                    </p>
-                  </div>
-                </ThreadItem>
-              ))}
-            </ThreadList>
-          )}
-        </section>
+                    <div
+                      className={cn(
+                        'rounded-card min-w-0 max-w-[85%] space-y-1 border px-4 py-2',
+                        m.inbound
+                          ? 'bg-surface-base border-border-muted'
+                          : m.fromBot
+                            ? 'bg-surface-sunken border-border-muted'
+                            : 'bg-status-info-muted border-transparent'
+                      )}
+                    >
+                      <p className="type-caption text-text-muted m-0">
+                        {m.inbound
+                          ? name
+                          : m.fromBot
+                            ? t('thread.bot')
+                            : (m.authorName ?? t('thread.team'))}
+                        {' · '}
+                        <time dateTime={m.at}>
+                          {format.dateTime(new Date(m.at), {
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: false,
+                          })}
+                        </time>
+                      </p>
+                      {m.replyTo && (
+                        <p className="border-accent-base bg-surface-sunken rounded-control type-caption text-text-muted m-0 line-clamp-2 border-l-4 px-2 py-1">
+                          {m.replyTo.inbound ? name : t('thread.team')}: {m.replyTo.body}
+                        </p>
+                      )}
+                      <MessageText text={m.body} format={features.format} />
+                      {m.buttons.length > 0 && (
+                        <ul
+                          aria-label={t('thread.buttons')}
+                          className="m-0 flex list-none flex-wrap gap-2 p-0 pt-1"
+                        >
+                          {m.buttons.map((b) => (
+                            <li
+                              key={b}
+                              className="rounded-control border-border-muted bg-surface-base type-caption text-text-link border px-3 py-1"
+                            >
+                              {b}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {canQuote && m.inbound && (
+                        <QuoteButton id={m.id} body={m.body.slice(0, 160)} author={name} />
+                      )}
+                    </div>
+                  </ThreadItem>
+                ))}
+              </ThreadList>
+            )}
+          </section>
 
-        <section className="border-border-muted space-y-4 border-t pt-6">
-          <ScrollToLatest count={conversation.messages.length} />
-          {mine ? (
-            <>
-              {conversation.canReply ? (
-                <ReplyForm conversationId={conversation.id} />
-              ) : (
-                <Alert severity="warning">{t('thread.noReply')}</Alert>
-              )}
-              <CloseAction conversationId={conversation.id} />
-            </>
-          ) : takenByOther ? (
-            <p className="type-body text-text-muted m-0">
-              {t('thread.takenByOther', { name: conversation.assignedToName ?? t('nobody') })}
-            </p>
-          ) : (
-            <TakeAction conversationId={conversation.id} />
-          )}
-          <Link
-            href={'/mensajes' as Route}
-            className="text-text-link type-caption underline underline-offset-4"
-          >
-            {t('thread.back')}
-          </Link>
-        </section>
+          <section className="border-border-muted space-y-4 border-t pt-6">
+            <ScrollToLatest count={conversation.messages.length} />
+            {mine ? (
+              <>
+                {conversation.canReply ? (
+                  <ReplyForm conversationId={conversation.id} features={features} />
+                ) : (
+                  <>
+                    <Alert severity="warning">{t('thread.noReply')}</Alert>
+                    {conversation.canFollowUp && (
+                      <FollowUpAction conversationId={conversation.id} />
+                    )}
+                  </>
+                )}
+                <CloseAction conversationId={conversation.id} />
+              </>
+            ) : takenByOther ? (
+              <p className="type-body text-text-muted m-0">
+                {t('thread.takenByOther', { name: conversation.assignedToName ?? t('nobody') })}
+              </p>
+            ) : (
+              <TakeAction conversationId={conversation.id} />
+            )}
+            <Link
+              href={'/mensajes' as Route}
+              className="text-text-link type-caption underline underline-offset-4"
+            >
+              {t('thread.back')}
+            </Link>
+          </section>
+        </ReplyTargetProvider>
       </div>
     </Page>
   );

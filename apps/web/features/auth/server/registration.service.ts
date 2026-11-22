@@ -197,7 +197,7 @@ export async function registerPerson(input: RegistrationInput): Promise<Registra
  * pantalla dice que operación matriculará. Una cuenta sin matrícula se arregla en un clic;
  * una persona sin cuenta porque la cohorte estaba cerrada, no.
  */
-async function enrollInIntroCohort({
+export async function enrollInIntroCohort({
   institutionId,
   personId,
   email,

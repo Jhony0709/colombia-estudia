@@ -46,23 +46,23 @@ beforeEach(() => {
 });
 
 describe('waitingMessage', () => {
-  it('tres recordatorios, luego el correo y después nada', () => {
+  it('un recordatorio, luego el correo y después nada (22/11)', () => {
     expect(waitingMessage(0, 'info@alba.test')).toMatch(/asesor/);
-    expect(waitingMessage(2, 'info@alba.test')).not.toContain('@');
-    expect(waitingMessage(3, 'info@alba.test')).toContain('info@alba.test');
-    expect(waitingMessage(4, 'info@alba.test')).toBeNull();
+    expect(waitingMessage(0, 'info@alba.test')).not.toContain('@');
+    expect(waitingMessage(1, 'info@alba.test')).toContain('info@alba.test');
+    expect(waitingMessage(2, 'info@alba.test')).toBeNull();
   });
 });
 
 describe('runWaitingReminders', () => {
-  it('a los 3 minutos manda el primero, lo cuenta y lo deja en el hilo', async () => {
+  it('a los 10 minutos manda el recordatorio, lo cuenta y lo deja en el hilo', async () => {
     prisma.conversation.findMany.mockResolvedValue([row(0)]);
-    expect(REMINDER_EVERY_MS).toBe(180_000);
-    const report = await runWaitingReminders(at(3));
+    expect(REMINDER_EVERY_MS).toBe(600_000);
+    const report = await runWaitingReminders(at(10));
     expect(report).toEqual({ checked: 1, sent: 1, failed: 0, closed: 1 });
     expect(prisma.conversation.updateMany).toHaveBeenCalledWith({
       where: { id: 'conv-1', status: 'WAITING', waitingReminders: 0 },
-      data: { waitingReminders: { increment: 1 }, lastMessageAt: at(3) },
+      data: { waitingReminders: { increment: 1 }, lastMessageAt: at(10) },
     });
     expect(mockSendText).toHaveBeenCalledWith('573001112233', expect.any(String), 'pn-1');
     expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
@@ -72,13 +72,13 @@ describe('runWaitingReminders', () => {
 
   it('antes de su turno no manda el siguiente', async () => {
     prisma.conversation.findMany.mockResolvedValue([row(1)]);
-    expect((await runWaitingReminders(at(5))).sent).toBe(0);
+    expect((await runWaitingReminders(at(15))).sent).toBe(0);
     expect(mockSendText).not.toHaveBeenCalled();
   });
 
-  it('a los 12 minutos propone el correo', async () => {
-    prisma.conversation.findMany.mockResolvedValue([row(3)]);
-    await runWaitingReminders(at(12));
+  it('a los 20 minutos propone el correo', async () => {
+    prisma.conversation.findMany.mockResolvedValue([row(1)]);
+    await runWaitingReminders(at(20));
     expect(mockSendText).toHaveBeenCalledWith(
       '573001112233',
       expect.stringContaining('info@alba.test'),
@@ -110,5 +110,16 @@ describe('runWaitingReminders', () => {
     prisma.conversation.updateMany.mockResolvedValue({ count: 0 });
     expect((await runWaitingReminders(at(3))).sent).toBe(0);
     expect(mockSendText).not.toHaveBeenCalled();
+  });
+});
+
+describe('horario de asesores (22/11)', () => {
+  it('fuera del horario no manda recordatorios, pero sí cierra lo vencido', async () => {
+    prisma.conversation.findMany.mockResolvedValue([row(0)]);
+    // Domingo 15/11 a las 3 p. m. en Bogotá.
+    const report = await runWaitingReminders(new Date('2026-11-15T20:00:00.000Z'));
+    expect(report.sent).toBe(0);
+    expect(mockSendText).not.toHaveBeenCalled();
+    expect(prisma.conversation.updateMany).toHaveBeenCalled();
   });
 });

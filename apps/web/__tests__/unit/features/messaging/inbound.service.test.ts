@@ -8,7 +8,7 @@
 const prisma = {
   institution: { findUnique: jest.fn() },
   conversation: { findUnique: jest.fn(), create: jest.fn(), update: jest.fn() },
-  conversationMessage: { create: jest.fn() },
+  conversationMessage: { create: jest.fn(), findFirst: jest.fn() },
 };
 const tenantDb = { person: { findMany: jest.fn() } };
 const mockSendText = jest.fn();
@@ -19,6 +19,7 @@ const mockSendList = jest.fn();
 const mockSendTemplate = jest.fn();
 const mockNotifyMany = jest.fn();
 const mockAttemptCode = jest.fn();
+const mockCreateAccount = jest.fn();
 
 jest.mock('server-only', () => ({}));
 jest.mock('@/lib/db/tenant', () => ({
@@ -37,10 +38,12 @@ jest.mock('@/features/messaging/server/facts.service', () => ({
     policyUrl: 'https://alba.test/politica-de-datos',
     facts: jest.requireActual('@/features/messaging/facts').DEFAULT_FACTS,
     introOpen: true,
+    advisorsOpen: true,
   })),
 }));
 jest.mock('@/lib/seo/site-url', () => ({ siteUrl: () => 'https://alba.test' }));
 jest.mock('@/lib/whatsapp/cloud-api', () => ({
+  markRead: jest.fn(async () => undefined),
   sendText: (...args: unknown[]) => mockSendText(...args),
   sendList: (...args: unknown[]) => mockSendList(...args),
   sendButtons: (...args: unknown[]) => mockSendButtons(...args),
@@ -52,6 +55,9 @@ jest.mock('@/features/notifications/server/notifications.service', () => ({
 }));
 jest.mock('@/features/requests/server/whatsapp.service', () => ({
   handleInboundMessage: (...args: unknown[]) => mockAttemptCode(...args),
+}));
+jest.mock('@/features/messaging/server/chat-account.service', () => ({
+  createAccountFromChat: (...args: unknown[]) => mockCreateAccount(...args),
 }));
 jest.mock('@/features/requests/server/requests.service', () => ({
   whatsappIdOf: (phone: string | null) => (phone ? `57${phone.replace(/\D/g, '')}` : null),
@@ -98,7 +104,7 @@ beforeEach(() => {
 });
 
 describe('handleWhatsAppMessage', () => {
-  it('un mensaje cualquiera queda guardado y el bot saluda con el menú', async () => {
+  it('un saludo queda guardado y el bot responde con tres caminos', async () => {
     expect(await handleWhatsAppMessage(message())).toBe('menu');
 
     expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
@@ -109,9 +115,10 @@ describe('handleWhatsAppMessage', () => {
         externalId: 'wamid.1',
       }),
     });
-    expect(mockSendList).toHaveBeenCalledWith(
+    expect(mockSendButtons).toHaveBeenCalledWith(
       '573001112233',
-      expect.objectContaining({ button: 'Ver opciones' }),
+      expect.stringContaining('Soy el asistente'),
+      expect.arrayContaining([expect.objectContaining({ id: 'opciones' })]),
       'pn-1'
     );
     // Lo que dice el bot también queda en el hilo.
@@ -122,9 +129,10 @@ describe('handleWhatsAppMessage', () => {
 
   it('una opción del menú se responde con su texto', async () => {
     expect(await handleWhatsAppMessage(message({ choiceId: 'requisitos' }))).toBe('answered');
-    expect(mockSendText).toHaveBeenCalledWith(
+    expect(mockSendButtons).toHaveBeenCalledWith(
       '573001112233',
       expect.stringContaining('16 años'),
+      expect.any(Array),
       'pn-1'
     );
     expect(mockSendList).not.toHaveBeenCalled();
@@ -142,9 +150,10 @@ describe('handleWhatsAppMessage', () => {
 
   it('una pregunta escrita a mano llega a su opción sin pasar por el menú', async () => {
     expect(await handleWhatsAppMessage(message({ text: '¿Tienen sede física?' }))).toBe('answered');
-    expect(mockSendText).toHaveBeenCalledWith(
+    expect(mockSendButtons).toHaveBeenCalledWith(
       '573001112233',
-      expect.stringContaining('sede física'),
+      expect.stringContaining('100 % virtuales'),
+      expect.any(Array),
       'pn-1'
     );
     expect(mockSendList).not.toHaveBeenCalled();
@@ -204,16 +213,22 @@ describe('handleWhatsAppMessage', () => {
     });
 
     it('una respuesta que no sirve repite la pregunta sin avanzar', async () => {
-      inIntake(3, { fullName: 'Laura', phone: '+57300' });
+      inIntake(4, { fullName: 'Laura', phone: '+57300', grade: '8°' });
       expect(await handleWhatsAppMessage(message({ text: 'no tengo' }))).toBe('intake');
       expect(prisma.conversation.update).not.toHaveBeenCalledWith(
-        expect.objectContaining({ data: expect.objectContaining({ intakeStep: 4 }) })
+        expect.objectContaining({ data: expect.objectContaining({ intakeStep: 5 }) })
       );
     });
 
     it('confirmar el resumen la deja esperando asesor y avisa con lo que pidió', async () => {
-      const data = { fullName: 'Laura', phone: '+57300', email: 'l@x.co', guardian: 'No aplica' };
-      inIntake(5, data);
+      const data = {
+        fullName: 'Laura',
+        phone: '+57300',
+        grade: '9°',
+        adult: 'Sí, 18 o más',
+        email: 'l@x.co',
+      };
+      inIntake(7, data);
       expect(await handleWhatsAppMessage(message({ choiceId: 'intake_yes' }))).toBe('waiting');
       expect(prisma.conversation.update).toHaveBeenCalledWith({
         where: { id: 'conv-1' },
@@ -234,7 +249,79 @@ describe('handleWhatsAppMessage', () => {
     it('«cancelar» sale del formulario y vuelve el menú', async () => {
       inIntake(2, { fullName: 'Laura' });
       expect(await handleWhatsAppMessage(message({ text: 'cancelar' }))).toBe('menu');
-      expect(mockSendList).toHaveBeenCalled();
+      expect(mockSendButtons).toHaveBeenCalledWith(
+        '573001112233',
+        expect.stringContaining('Soy el asistente'),
+        expect.any(Array),
+        'pn-1'
+      );
+    });
+  });
+
+  it('la segunda vez seguida que no entiende, ofrece una persona (22/11)', async () => {
+    prisma.conversationMessage.findFirst.mockResolvedValueOnce({
+      body: '¡Hola! 👋 Soy el asistente de ALBA Futuro Educativo. Te ayudo a terminar tu bachillerato 100 % virtual. ¿Qué quieres hacer? [Precios y pagos · Crear mi cuenta · Más opciones]',
+    });
+    expect(await handleWhatsAppMessage(message({ text: 'ajá' }))).toBe('menu');
+    expect(mockSendButtons).toHaveBeenCalledWith(
+      '573001112233',
+      expect.stringContaining('No te entendí'),
+      expect.arrayContaining([expect.objectContaining({ id: 'asesor' })]),
+      'pn-1'
+    );
+  });
+
+  it('el mensaje del botón de la web recibe la bienvenida, no el precio (22/11)', async () => {
+    const web = 'Hola 👋 Quiero terminar mi bachillerato con ALBA Futuro Educativo.';
+    expect(await handleWhatsAppMessage(message({ text: web }))).toBe('answered');
+    expect(mockSendButtons).toHaveBeenCalledWith(
+      '573001112233',
+      expect.stringContaining('Qué bueno que quieras terminar'),
+      expect.any(Array),
+      'pn-1'
+    );
+  });
+
+  describe('crear la cuenta por el chat (22/11)', () => {
+    const data = {
+      adult: 'Sí, 18 o más',
+      fullName: 'Laura Gómez',
+      email: 'laura@correo.co',
+      birthDate: '1990-12-31',
+      phone: '+573001112233',
+    };
+    beforeEach(() => {
+      prisma.conversation.update.mockResolvedValue({
+        ...conversation('BOT'),
+        intakeKind: 'ACCOUNT',
+        intakeStep: 6,
+        intake: data,
+      });
+    });
+
+    it('confirmado el resumen, la crea y le dice que revise su correo', async () => {
+      mockCreateAccount.mockResolvedValue({ status: 'sent', email: data.email, enrolled: true });
+      expect(await handleWhatsAppMessage(message({ choiceId: 'intake_yes' }))).toBe('answered');
+      expect(mockCreateAccount).toHaveBeenCalledWith(
+        expect.objectContaining({ institutionId: 'inst-1', conversationId: 'conv-1', data })
+      );
+      expect(mockSendButtons).toHaveBeenCalledWith(
+        '573001112233',
+        expect.stringContaining('laura@correo.co'),
+        expect.any(Array),
+        'pn-1'
+      );
+      expect(mockNotifyMany).not.toHaveBeenCalled();
+    });
+
+    it('si el correo ya tiene ficha sin cuenta, pasa a un asesor', async () => {
+      mockCreateAccount.mockResolvedValue({ status: 'has_profile' });
+      expect(await handleWhatsAppMessage(message({ choiceId: 'intake_yes' }))).toBe('waiting');
+      expect(mockNotifyMany).toHaveBeenCalledWith(
+        'inst-1',
+        ['staff-1', 'staff-2'],
+        expect.objectContaining({ body: expect.stringContaining('crear su cuenta') })
+      );
     });
   });
 
@@ -283,6 +370,19 @@ describe('handleWhatsAppMessage', () => {
       ['staff-2'],
       expect.objectContaining({ type: 'conversation_message' })
     );
+  });
+
+  it('si responde citando un mensaje del chat, queda enlazado a él (22/11)', async () => {
+    prisma.conversation.update.mockResolvedValueOnce(conversation('OPEN', 'staff-2'));
+    prisma.conversationMessage.findFirst.mockResolvedValueOnce({ id: 'm-out' });
+    await handleWhatsAppMessage(message({ replyToExternalId: 'wamid.out' }));
+    expect(prisma.conversationMessage.findFirst).toHaveBeenCalledWith({
+      where: { conversationId: 'conv-1', externalId: 'wamid.out' },
+      select: { id: true },
+    });
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ direction: 'INBOUND', replyToId: 'm-out' }),
+    });
   });
 
   it('cerrada que vuelve a escribir: la atiende el bot otra vez', async () => {

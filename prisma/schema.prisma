@@ -1459,6 +1459,8 @@ enum MessagingChannel {
 enum ConversationIntake {
   ENROLL
   CERTIFICATE
+  /// Crear la cuenta desde el chat (22/11): ficha + invitación al correo.
+  ACCOUNT
 }
 
 enum ConversationStatus {
@@ -1527,11 +1529,18 @@ model ConversationMessage {
   authorId       String?
   fromBot        Boolean          @default(false)
   externalId     String?          @unique
+  /// El mensaje que cita (22/11): en WhatsApp sale encima, como «responder».
+  replyToId      String?
+  /// Botones de respuesta rápida que llevó, `[{ id, title }]` (22/11).
+  buttons        Json?
   createdAt      DateTime         @default(now())
 
-  institution  Institution  @relation(fields: [institutionId], references: [id])
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  author       Person?      @relation("ConversationMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  institution  Institution           @relation(fields: [institutionId], references: [id])
+  conversation Conversation          @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  author       Person?               @relation("ConversationMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  replyTo      ConversationMessage?  @relation("ConversationMessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies      ConversationMessage[] @relation("ConversationMessageReply")
 
   @@index([conversationId, createdAt])
+  @@index([replyToId])
 }

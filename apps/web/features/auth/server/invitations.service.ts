@@ -27,6 +27,8 @@ interface SendInvitationInput {
   /** Origin of the request that creates the invitation (never a configured default). */
   origin: string;
   reinvite?: boolean;
+  /** La pidió la persona desde WhatsApp (22/11): el correo dice «confirma tu correo». */
+  confirm?: boolean;
 }
 
 export interface SentInvitation {
@@ -57,7 +59,7 @@ export interface SentInvitation {
  * `invitation.sent`.
  */
 export async function sendInvitation(input: SendInvitationInput): Promise<SentInvitation> {
-  const { institution, personId, actorId, origin, reinvite = false } = input;
+  const { institution, personId, actorId, origin, reinvite = false, confirm = false } = input;
   const db = createTenantClient(institution.id);
 
   const person = await db.person.findUnique({
@@ -98,6 +100,7 @@ export async function sendInvitation(input: SendInvitationInput): Promise<SentIn
     institutionName: institution.name,
     inviteUrl,
     expiresAt,
+    confirm,
   });
   await getMailer({
     emailFromName: institution.emailFromName,

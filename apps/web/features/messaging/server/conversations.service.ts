@@ -10,7 +10,7 @@ import 'server-only';
 
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
-import { SERVICE_WINDOW_MS, sendText } from '@/lib/whatsapp/cloud-api';
+import { SERVICE_WINDOW_MS, sendButtons, sendTemplate, sendText } from '@/lib/whatsapp/cloud-api';
 import { logger } from '@/lib/observability/logger';
 import { isBoldConfigured } from '@/lib/billing/bold';
 import {
@@ -19,6 +19,8 @@ import {
   type PersonCharge,
 } from '@/features/billing/server/account.service';
 import { intakeSummary, type IntakeData, type IntakeKind } from '../intake';
+import { CHANNEL_FEATURES, type MessagingChannel } from '../channels';
+import { CSAT } from '../bot';
 
 // El saludo y la despedida no detienen la acción: si no salen, queda en el log.
 const logNotSent = (conversationId: string, err: unknown) =>
@@ -149,14 +151,21 @@ export interface ConversationDetail extends ConversationRow {
   assignedToId: string | null;
   /** La próxima cuota de la persona enlazada, para mandarle el link de pago (19/11). */
   charge: (PersonCharge & { hasEmail: boolean }) | null;
+  channel: MessagingChannel;
   /** Se le puede escribir libre: escribió en las últimas 24 h. */
   canReply: boolean;
+  /** Fuera de las 24 h hay plantilla configurada para retomar la conversación (22/11). */
+  canFollowUp: boolean;
   messages: Array<{
     id: string;
     inbound: boolean;
     body: string;
     authorName: string | null;
     fromBot: boolean;
+    /** El mensaje que cita, recortado. */
+    replyTo: { body: string; inbound: boolean } | null;
+    /** Títulos de los botones de respuesta rápida que llevó. */
+    buttons: string[];
     /** ISO */
     at: string;
   }>;
@@ -175,6 +184,7 @@ export async function getConversation({
     where: { id: conversationId, institutionId },
     select: {
       id: true,
+      channel: true,
       contact: true,
       contactName: true,
       status: true,
@@ -196,7 +206,9 @@ export async function getConversation({
           body: true,
           fromBot: true,
           createdAt: true,
+          buttons: true,
           author: { select: { givenName: true, familyName: true } },
+          replyTo: { select: { body: true, direction: true } },
         },
       },
     },
@@ -229,13 +241,19 @@ export async function getConversation({
         }
       : null,
     lastMessage: last ? { body: last.body, inbound: last.direction === 'INBOUND' } : null,
+    channel: row.channel,
     canReply: inWindow(row.lastInboundAt, now),
+    canFollowUp: !inWindow(row.lastInboundAt, now) && followUpTemplate(row.channel) !== null,
     messages: messages.map((m) => ({
       id: m.id,
       inbound: m.direction === 'INBOUND',
       body: m.body,
       authorName: fullName(m.author),
       fromBot: m.fromBot,
+      replyTo: m.replyTo
+        ? { body: m.replyTo.body.slice(0, 160), inbound: m.replyTo.direction === 'INBOUND' }
+        : null,
+      buttons: buttonTitles(m.buttons),
       at: m.createdAt.toISOString(),
     })),
   };
@@ -255,6 +273,19 @@ const OUT_OF_WINDOW =
 const inWindow = (lastInboundAt: Date | null, now: Date) =>
   lastInboundAt !== null && now.getTime() - lastInboundAt.getTime() < SERVICE_WINDOW_MS;
 
+/** La plantilla para retomar un chat fuera de las 24 h; nula si no está configurada. */
+const followUpTemplate = (channel: MessagingChannel) =>
+  CHANNEL_FEATURES[channel].templates ? process.env.WHATSAPP_TEMPLATE_FOLLOW_UP || null : null;
+
+const buttonTitles = (value: unknown): string[] =>
+  Array.isArray(value)
+    ? value.flatMap((b) =>
+        typeof b === 'object' && b !== null && typeof (b as { title?: unknown }).title === 'string'
+          ? [(b as { title: string }).title]
+          : []
+      )
+    : [];
+
 /** Envía por el canal y lo guarda como de `actorId`. Sin enviar, no se guarda. */
 async function deliver(
   conversation: { id: string; contact: string; lastInboundAt: Date | null },
@@ -263,10 +294,32 @@ async function deliver(
     actorId,
     body,
     now,
-  }: { institutionId: string; actorId: string; body: string; now: Date }
+    replyToId = null,
+    buttons = [],
+  }: {
+    institutionId: string;
+    actorId: string;
+    body: string;
+    now: Date;
+    replyToId?: string | null;
+    buttons?: string[];
+  }
 ) {
   if (!inWindow(conversation.lastInboundAt, now)) throw new APIError(OUT_OF_WINDOW, 'CONFLICT');
-  const result = await sendText(conversation.contact, body, await phoneNumberIdOf(institutionId));
+  const quoted = replyToId
+    ? await prisma.conversationMessage.findFirst({
+        where: { id: replyToId, conversationId: conversation.id },
+        select: { id: true, externalId: true },
+      })
+    : null;
+  if (replyToId && !quoted)
+    throw new APIError('Ese mensaje no es de este chat', 'VALIDATION_ERROR');
+  const phoneNumberId = await phoneNumberIdOf(institutionId);
+  // Los ids `agent:n` no chocan con los del menú del bot.
+  const replies = buttons.map((title, i) => ({ id: `agent:${i + 1}`, title }));
+  const result = replies.length
+    ? await sendButtons(conversation.contact, body, replies, phoneNumberId, quoted?.externalId)
+    : await sendText(conversation.contact, body, phoneNumberId, quoted?.externalId);
   if (!result.sent) {
     throw new APIError(`No se pudo enviar por WhatsApp (${result.reason})`, 'INTERNAL');
   }
@@ -279,6 +332,8 @@ async function deliver(
         body,
         authorId: actorId,
         externalId: result.id,
+        ...(quoted ? { replyToId: quoted.id } : {}),
+        ...(replies.length ? { buttons: replies } : {}),
         createdAt: now,
       },
     }),
@@ -288,6 +343,7 @@ async function deliver(
 
 const CONVERSATION_SELECT = {
   id: true,
+  channel: true,
   contact: true,
   status: true,
   assignedToId: true,
@@ -362,25 +418,132 @@ export async function takeConversation({
   return { status: 'OPEN' };
 }
 
-/** Responder: solo quien la tomó. */
+/** Responder: solo quien la tomó. Puede citar un mensaje y llevar botones, si el canal los admite. */
 export async function replyToConversation({
   institutionId,
   actorId,
   conversationId,
   body,
+  replyToId = null,
+  buttons = [],
   now = new Date(),
 }: {
   institutionId: string;
   actorId: string;
   conversationId: string;
   body: string;
+  replyToId?: string | null;
+  buttons?: string[];
   now?: Date;
 }): Promise<{ sent: true }> {
   const conversation = await load(institutionId, conversationId);
   if (conversation.status !== 'OPEN' || conversation.assignedToId !== actorId) {
     throw new APIError('Solo responde quien tomó el chat', 'CONFLICT');
   }
-  await deliver(conversation, { institutionId, actorId, body: body.trim(), now });
+  const features = CHANNEL_FEATURES[conversation.channel];
+  if (replyToId && !features.quote) {
+    throw new APIError('Este canal no permite citar mensajes', 'VALIDATION_ERROR');
+  }
+  const titles = buttons.map((b) => b.trim()).filter(Boolean);
+  if (titles.length) {
+    const limits = features.buttons;
+    if (
+      !limits ||
+      titles.length > limits.max ||
+      titles.some((t) => t.length > limits.titleMax) ||
+      new Set(titles).size !== titles.length
+    ) {
+      throw new APIError('Botones no válidos para este canal', 'VALIDATION_ERROR');
+    }
+  }
+  await deliver(conversation, {
+    institutionId,
+    actorId,
+    body: body.trim(),
+    now,
+    replyToId,
+    buttons: titles,
+  });
+  return { sent: true };
+}
+
+/**
+ * Retomar un chat fuera de las 24 h (22/11): la plantilla de `WHATSAPP_TEMPLATE_FOLLOW_UP`, con
+ * `{{1}}` = su nombre. Una por día: la ventana se abre cuando responda.
+ */
+export async function sendFollowUp({
+  institutionId,
+  actorId,
+  conversationId,
+  now = new Date(),
+}: {
+  institutionId: string;
+  actorId: string;
+  conversationId: string;
+  now?: Date;
+}): Promise<{ sent: true }> {
+  const conversation = await prisma.conversation.findFirst({
+    where: { id: conversationId, institutionId },
+    select: {
+      ...CONVERSATION_SELECT,
+      contactName: true,
+      person: { select: { givenName: true } },
+    },
+  });
+  if (!conversation) throw new APIError('Not found', 'NOT_FOUND');
+  if (conversation.status !== 'OPEN' || conversation.assignedToId !== actorId) {
+    throw new APIError('Solo escribe quien tomó el chat', 'CONFLICT');
+  }
+  if (inWindow(conversation.lastInboundAt, now)) {
+    throw new APIError('Escribió hace menos de 24 horas: respóndele normal', 'CONFLICT');
+  }
+  const template = followUpTemplate(conversation.channel);
+  if (!template) throw new APIError('No hay plantilla para retomar chats', 'CONFLICT');
+  const recent = await prisma.auditLog.findFirst({
+    where: {
+      institutionId,
+      entity: 'conversation',
+      entityId: conversationId,
+      action: 'follow_up_sent',
+      occurredAt: { gte: new Date(now.getTime() - SERVICE_WINDOW_MS) },
+    },
+    select: { id: true },
+  });
+  if (recent)
+    throw new APIError('Ya se le envió la plantilla hoy; espera su respuesta', 'CONFLICT');
+
+  const name = conversation.person?.givenName ?? conversation.contactName ?? 'hola';
+  const result = await sendTemplate(conversation.contact, template, [name], {
+    phoneNumberId: await phoneNumberIdOf(institutionId),
+  });
+  if (!result.sent) {
+    throw new APIError(`No se pudo enviar por WhatsApp (${result.reason})`, 'INTERNAL');
+  }
+  await prisma.$transaction([
+    prisma.conversationMessage.create({
+      data: {
+        institutionId,
+        conversationId,
+        direction: 'OUTBOUND',
+        body: `Plantilla «${template}» para retomar la conversación.`,
+        authorId: actorId,
+        externalId: result.id,
+        createdAt: now,
+      },
+    }),
+    prisma.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: now } }),
+    prisma.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'conversation',
+        entityId: conversationId,
+        action: 'follow_up_sent',
+        after: { template },
+        occurredAt: now,
+      },
+    }),
+  ]);
   return { sent: true };
 }
 
@@ -449,6 +612,34 @@ export async function sendPaymentLink({
   return { delivery, amount: link.amount };
 }
 
+/** La encuesta de cierre (22/11): tres botones; la respuesta la guarda `inbound.service.ts`. */
+async function askRating(
+  conversation: { id: string; contact: string; lastInboundAt: Date | null },
+  institutionId: string,
+  now: Date
+) {
+  if (!inWindow(conversation.lastInboundAt, now)) return;
+  const result = await sendButtons(
+    conversation.contact,
+    CSAT.ask,
+    CSAT.options,
+    await phoneNumberIdOf(institutionId)
+  );
+  if (!result.sent) throw new Error(result.reason);
+  await prisma.conversationMessage.create({
+    data: {
+      institutionId,
+      conversationId: conversation.id,
+      direction: 'OUTBOUND',
+      body: CSAT.ask,
+      fromBot: true,
+      buttons: CSAT.options,
+      externalId: result.id,
+      createdAt: now,
+    },
+  });
+}
+
 /** Cerrar: quien la tomó. Se le avisa a la persona y la próxima vez la atiende el bot. */
 export async function closeConversation({
   institutionId,
@@ -471,6 +662,9 @@ export async function closeConversation({
     body: 'Cerramos esta conversación. Si necesitas algo más, escríbenos cuando quieras.',
     now,
   }).catch((err: unknown) => logNotSent(conversationId, err));
+  await askRating(conversation, institutionId, new Date(now.getTime() + 1)).catch((err: unknown) =>
+    logNotSent(conversationId, err)
+  );
   await prisma.$transaction([
     prisma.conversation.update({
       where: { id: conversationId },

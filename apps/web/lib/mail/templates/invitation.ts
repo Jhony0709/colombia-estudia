@@ -21,6 +21,8 @@ interface InvitationEmailData {
   institutionName: string;
   inviteUrl: string;
   expiresAt: Date;
+  /** La pidió la persona desde WhatsApp (22/11): el correo es para confirmarlo, no una invitación. */
+  confirm?: boolean;
 }
 
 /**
@@ -52,25 +54,37 @@ export function renderInvitationEmail(data: InvitationEmailData): {
   const safeInstitution = escapeHtml(data.institutionName);
   const expiresFormatted = formatDate(data.expiresAt);
 
-  const subject = `${data.givenName}, tienes una invitación de ${data.institutionName}`;
+  const subject = data.confirm
+    ? `${data.givenName}, confirma tu correo para entrar a ${data.institutionName}`
+    : `${data.givenName}, tienes una invitación de ${data.institutionName}`;
+  const intro = data.confirm
+    ? 'Pediste crear tu cuenta por WhatsApp. Confirma que este correo es tuyo y crea tu contraseña.'
+    : `Tienes una invitación de ${data.institutionName}.`;
 
   // El marco de marca (8/10); el logo sale del mismo origen que el enlace.
   const html = renderBrandedEmail({
     origin: new URL(data.inviteUrl).origin,
     preheader: `Activa tu cuenta de ${data.institutionName}.`,
     heading: `Hola, ${safeName}`,
-    paragraphs: [`Tienes una invitación de <strong>${safeInstitution}</strong>.`],
-    cta: { href: data.inviteUrl, label: 'Activar mi cuenta' },
-    footnote: `Este enlace vence el ${expiresFormatted}. Si no solicitaste esta invitación, ignora este correo.`,
+    paragraphs: [
+      data.confirm
+        ? escapeHtml(intro)
+        : `Tienes una invitación de <strong>${safeInstitution}</strong>.`,
+    ],
+    cta: {
+      href: data.inviteUrl,
+      label: data.confirm ? 'Confirmar mi correo' : 'Activar mi cuenta',
+    },
+    footnote: `Este enlace vence el ${expiresFormatted}. Si no ${data.confirm ? 'lo pediste tú' : 'solicitaste esta invitación'}, ignora este correo.`,
   });
 
   const text = `Hola, ${data.givenName}
 
-Tienes una invitación de ${data.institutionName}.
+${intro}
 
-Activa tu cuenta aquí: ${data.inviteUrl}
+${data.confirm ? 'Confirma tu correo aquí' : 'Activa tu cuenta aquí'}: ${data.inviteUrl}
 
-Este enlace vence el ${expiresFormatted}. Si no solicitaste esta invitación, ignora este correo.`;
+Este enlace vence el ${expiresFormatted}. Si no ${data.confirm ? 'lo pediste tú' : 'solicitaste esta invitación'}, ignora este correo.`;
 
   return { subject, html, text };
 }

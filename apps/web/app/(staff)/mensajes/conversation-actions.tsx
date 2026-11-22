@@ -5,15 +5,29 @@
  * refresca la página: el hilo lo pinta el servidor.
  */
 
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Send } from 'lucide-react';
+import {
+  Bold,
+  Code,
+  Italic,
+  List,
+  MousePointerClick,
+  Quote,
+  Send,
+  Strikethrough,
+  X,
+} from 'lucide-react';
 import { Button } from '@/components/atoms/button';
+import { Input } from '@/components/atoms/input';
 import { Label } from '@/components/atoms/label';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { cn } from '@/lib/utils';
+import type { ChannelFeatures } from '@/features/messaging/channels';
+import { MessageText } from './message-text';
+import { useReplyTarget } from './reply-target';
 
 function usePost(conversationId: string) {
   const t = useTranslations('messaging.actions');
@@ -23,7 +37,7 @@ function usePost(conversationId: string) {
   const [error, setError] = useState<string | null>(null);
 
   const post = async (
-    action: 'take' | 'messages' | 'close' | 'person' | 'payment-link',
+    action: 'take' | 'messages' | 'close' | 'person' | 'payment-link' | 'follow-up',
     ok: string,
     body?: unknown
   ): Promise<unknown> => {
@@ -75,21 +89,115 @@ export function TakeAction({ conversationId }: { conversationId: string }) {
   );
 }
 
-export function ReplyForm({ conversationId }: { conversationId: string }) {
+/** Marcas de formato de WhatsApp: envuelven la selección o, en líneas, la prefijan. */
+const MARKS = [
+  { key: 'bold', icon: Bold, wrap: '*' },
+  { key: 'italic', icon: Italic, wrap: '_' },
+  { key: 'strike', icon: Strikethrough, wrap: '~' },
+  { key: 'mono', icon: Code, wrap: '```' },
+  { key: 'list', icon: List, prefix: '- ' },
+  { key: 'quote', icon: Quote, prefix: '> ' },
+] as const;
+
+export function ReplyForm({
+  conversationId,
+  features,
+}: {
+  conversationId: string;
+  features: ChannelFeatures;
+}) {
   const t = useTranslations('messaging.actions');
   const { busy, error, post } = usePost(conversationId);
+  const { target, setTarget } = useReplyTarget();
+  const area = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState('');
+  const [buttons, setButtons] = useState<string[] | null>(null);
+
+  const mark = (m: (typeof MARKS)[number]) => {
+    const el = area.current;
+    if (!el) return;
+    const { selectionStart: a, selectionEnd: b } = el;
+    let next: string;
+    let cursor: [number, number];
+    if ('wrap' in m) {
+      next = text.slice(0, a) + m.wrap + text.slice(a, b) + m.wrap + text.slice(b);
+      cursor = [a + m.wrap.length, b + m.wrap.length];
+    } else {
+      // Prefija cada línea tocada por la selección.
+      const start = text.lastIndexOf('\n', a - 1) + 1;
+      const block = text
+        .slice(start, b)
+        .split('\n')
+        .map((line) => m.prefix + line)
+        .join('\n');
+      next = text.slice(0, start) + block + text.slice(b);
+      cursor = [start + block.length, start + block.length];
+    }
+    setText(next);
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(...cursor);
+    });
+  };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!text.trim()) return;
-    if (await post('messages', t('sent'), { body: text })) setText('');
+    const titles = (buttons ?? []).map((b) => b.trim()).filter(Boolean);
+    const sent = await post('messages', t('sent'), {
+      body: text,
+      replyToId: target?.id ?? null,
+      ...(titles.length ? { buttons: titles } : {}),
+    });
+    if (sent) {
+      setText('');
+      setTarget(null);
+      setButtons(null);
+    }
   };
+
+  const limits = features.buttons;
 
   return (
     <form onSubmit={(e) => void onSubmit(e)} className="space-y-2">
       <Label htmlFor="chat-reply">{t('replyLabel')}</Label>
+      {target && (
+        <div className="border-accent-base bg-surface-sunken rounded-control flex items-start gap-2 border-l-4 px-3 py-2">
+          <div className="min-w-0 flex-1">
+            <p className="type-caption text-text-muted m-0">
+              {t('replyingTo', { name: target.author })}
+            </p>
+            <p className="type-caption text-text m-0 truncate">{target.body}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setTarget(null)}
+            aria-label={t('cancelQuote')}
+            className="text-text-muted hover:text-text shrink-0"
+          >
+            <X aria-hidden className="size-4" />
+          </button>
+        </div>
+      )}
+      {features.format === 'whatsapp' && (
+        <div role="toolbar" aria-label={t('formatLabel')} className="flex flex-wrap gap-1">
+          {MARKS.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              onClick={() => mark(m)}
+              disabled={busy}
+              aria-label={t(`format.${m.key}`)}
+              title={t(`format.${m.key}`)}
+              className="rounded-control text-text-muted hover:bg-surface-sunken hover:text-text inline-flex size-8 items-center justify-center"
+            >
+              <m.icon aria-hidden className="size-4" />
+            </button>
+          ))}
+        </div>
+      )}
       <textarea
+        ref={area}
         id="chat-reply"
         name="body"
         value={text}
@@ -117,14 +225,81 @@ export function ReplyForm({ conversationId }: { conversationId: string }) {
         )}
       />
       <p id="chat-reply-hint" className="type-caption text-text-muted m-0">
-        {t('replyHint')}
+        {t(features.format === 'whatsapp' ? 'replyHintFormat' : 'replyHint')}
       </p>
+      {features.format === 'whatsapp' && /[*_~`>]|^- /m.test(text) && (
+        <div className="rounded-card border-border-muted space-y-1 border px-4 py-2">
+          <p className="type-caption text-text-muted m-0">{t('preview')}</p>
+          <MessageText text={text} format={features.format} />
+        </div>
+      )}
+      {limits &&
+        (buttons === null ? (
+          <Button type="button" variant="quiet" onClick={() => setButtons([''])} disabled={busy}>
+            <MousePointerClick aria-hidden className="size-4 shrink-0" />
+            {t('addButtons')}
+          </Button>
+        ) : (
+          <fieldset className="space-y-2">
+            <legend className="type-caption text-text-muted">
+              {t('buttonsLegend', { max: limits.max, chars: limits.titleMax })}
+            </legend>
+            {buttons.map((value, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={value}
+                  maxLength={limits.titleMax}
+                  aria-label={t('buttonLabel', { n: i + 1 })}
+                  onChange={(e) =>
+                    setButtons(buttons.map((b, j) => (j === i ? e.target.value : b)))
+                  }
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = buttons.filter((_, j) => j !== i);
+                    setButtons(next.length ? next : null);
+                  }}
+                  aria-label={t('removeButton', { n: i + 1 })}
+                  className="text-text-muted hover:text-text shrink-0"
+                >
+                  <X aria-hidden className="size-4" />
+                </button>
+              </div>
+            ))}
+            {buttons.length < limits.max && (
+              <Button type="button" variant="quiet" onClick={() => setButtons([...buttons, ''])}>
+                {t('anotherButton')}
+              </Button>
+            )}
+          </fieldset>
+        ))}
       <Button type="submit" loading={busy} disabled={!text.trim()}>
         <Send aria-hidden className="size-4 shrink-0" />
         {t('send')}
       </Button>
       <ErrorText error={error} />
     </form>
+  );
+}
+
+/** Fuera de las 24 h (22/11): la plantilla aprobada para que vuelva a escribir. */
+export function FollowUpAction({ conversationId }: { conversationId: string }) {
+  const t = useTranslations('messaging.actions');
+  const { busy, error, post } = usePost(conversationId);
+  return (
+    <div className="space-y-2">
+      <Button
+        type="button"
+        variant="secondary"
+        loading={busy}
+        onClick={() => void post('follow-up', t('followUpSent'))}
+      >
+        {t('followUp')}
+      </Button>
+      <p className="type-caption text-text-muted m-0">{t('followUpHint')}</p>
+      <ErrorText error={error} />
+    </div>
   );
 }
 

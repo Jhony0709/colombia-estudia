@@ -16,7 +16,7 @@ import {
   toProgramPriceView,
   withPriceStates,
 } from '@/features/billing/server/prices.service';
-import { DEFAULT_FACTS, type Facts } from '../facts';
+import { advisorsOpen, DEFAULT_FACTS, type Facts } from '../facts';
 import type { BotContext } from '../bot';
 
 const TTL_SECONDS = 600;
@@ -64,7 +64,10 @@ const cachedFacts = unstable_cache(readPlatformFacts, ['whatsapp-bot-facts'], {
 });
 
 /** El contexto del bot para una institución; si la base falla, los valores por defecto. */
-export async function botContext(institutionId: string): Promise<BotContext> {
+export async function botContext(
+  institutionId: string,
+  now: Date = new Date()
+): Promise<BotContext> {
   const site = siteUrl();
   const platform = await cachedFacts(institutionId).catch((err: unknown) => {
     logger.warn({ event: 'whatsapp-bot-facts-failed', institutionId, error: String(err) });
@@ -80,5 +83,6 @@ export async function botContext(institutionId: string): Promise<BotContext> {
     policyUrl: platform?.dataPolicyUrl ?? `${site}/politica-de-datos`,
     facts,
     introOpen: platform?.introOpen ?? true,
+    advisorsOpen: advisorsOpen(now),
   };
 }

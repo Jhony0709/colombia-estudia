@@ -1,8 +1,9 @@
 import 'server-only';
 
 /**
- * Mientras una conversación espera asesor (14/11): cada 3 minutos sin que nadie la tome, un
- * recordatorio; después del tercero, la propuesta de escribir por correo, y ahí se detiene.
+ * Mientras una conversación espera asesor (14/11; 22/11 menos insistente): a los 10 minutos sin
+ * que nadie la tome, un recordatorio; a los 20, la propuesta de escribir por correo, y ahí se
+ * detiene.
  * Lo corre `/api/jobs/waiting-chats` cada minuto. Mientras espera, la persona acaba de escribir:
  * la ventana de 24 h está abierta y esto no lleva plantilla.
  */
@@ -10,16 +11,15 @@ import 'server-only';
 import { prisma } from '@/lib/db/tenant';
 import { logger } from '@/lib/observability/logger';
 import { SERVICE_WINDOW_MS, sendText } from '@/lib/whatsapp/cloud-api';
+import { advisorsOpen } from '../facts';
 
-export const REMINDER_EVERY_MS = 3 * 60_000;
+export const REMINDER_EVERY_MS = 10 * 60_000;
 
 const REMINDERS = [
-  'Seguimos buscando a un asesor disponible para ti ⏳ En un momento te escribimos.',
-  'Gracias por tu paciencia 🙏 Tu conversación sigue en la fila y un asesor la verá pronto.',
-  'Seguimos aquí. Los asesores están ocupados en este momento, pero no hemos olvidado tu mensaje.',
+  'Gracias por tu paciencia 🙏 Tu conversación sigue en la fila y un asesor te escribe pronto.',
 ];
 
-/** El mensaje número `sent` (0, 1, 2 recordatorios; 3 el correo); `null` cuando ya no hay más. */
+/** El mensaje número `sent` (0 el recordatorio; 1 el correo); `null` cuando ya no hay más. */
 export function waitingMessage(sent: number, supportEmail: string): string | null {
   if (sent < REMINDERS.length) return REMINDERS[sent]!;
   if (sent === REMINDERS.length) {
@@ -46,6 +46,9 @@ export async function runWaitingReminders(now: Date = new Date()): Promise<Waiti
     },
     data: { status: 'CLOSED' },
   });
+
+  // Fuera del horario de asesores no se promete «pronto» (22/11): ya se le dijo el horario.
+  if (!advisorsOpen(now)) return { checked: 0, sent: 0, failed: 0, closed: closed.count };
 
   const rows = await prisma.conversation.findMany({
     where: {

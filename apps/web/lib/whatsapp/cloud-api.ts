@@ -55,6 +55,8 @@ export interface InboundMessage {
   text: string;
   /** La opción del menú que eligió (id de la fila o del botón); nulo si escribió. */
   choiceId: string | null;
+  /** El `wamid` del mensaje que citó al responder, si citó uno. */
+  replyToExternalId?: string | null;
   at: Date;
 }
 
@@ -75,6 +77,7 @@ interface WebhookPayload {
             button_reply?: { id?: string; title?: string };
           };
           button?: { payload?: string; text?: string };
+          context?: { id?: string };
         }>;
       };
     }>;
@@ -104,6 +107,7 @@ export function inboundMessages(payload: unknown): InboundMessage[] {
           phoneNumberId: value?.metadata?.phone_number_id ?? null,
           text,
           choiceId,
+          replyToExternalId: m.context?.id ?? null,
           at: Number.isFinite(seconds) ? new Date(seconds * 1000) : new Date(),
         });
       }
@@ -114,11 +118,15 @@ export function inboundMessages(payload: unknown): InboundMessage[] {
 
 export type SendResult = { sent: true; id: string | null } | { sent: false; reason: string };
 
-/** `phoneNumberId`: el número de la institución; sin él, el de `WHATSAPP_PHONE_NUMBER_ID`. */
+/**
+ * `phoneNumberId`: el número de la institución; sin él, el de `WHATSAPP_PHONE_NUMBER_ID`.
+ * `replyTo`: el `wamid` que se cita; WhatsApp lo muestra encima del mensaje.
+ */
 async function send(
   to: string,
   message: Record<string, unknown>,
-  phoneNumberId?: string | null
+  phoneNumberId?: string | null,
+  replyTo?: string | null
 ): Promise<SendResult> {
   const from = phoneNumberId || process.env.WHATSAPP_PHONE_NUMBER_ID;
   if (!process.env.WHATSAPP_ACCESS_TOKEN || !from) return { sent: false, reason: 'not_configured' };
@@ -135,6 +143,7 @@ async function send(
         messaging_product: 'whatsapp',
         recipient_type: 'individual',
         to,
+        ...(replyTo ? { context: { message_id: replyTo } } : {}),
         ...message,
       }),
       signal: AbortSignal.timeout(10_000),
@@ -150,12 +159,36 @@ async function send(
   }
 }
 
+/**
+ * Doble check azul y «escribiendo…» (22/11) mientras el bot prepara la respuesta. WhatsApp
+ * quita el indicador al enviar o a los 25 s. Si falla, no detiene nada.
+ */
+export async function markRead(messageId: string, phoneNumberId: string): Promise<void> {
+  if (!process.env.WHATSAPP_ACCESS_TOKEN) return;
+  const version = process.env.WHATSAPP_API_VERSION || 'v23.0';
+  await fetch(`${GRAPH_URL}/${version}/${phoneNumberId}/messages`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      messaging_product: 'whatsapp',
+      status: 'read',
+      message_id: messageId,
+      typing_indicator: { type: 'text' },
+    }),
+    signal: AbortSignal.timeout(5_000),
+  }).catch(() => undefined);
+}
+
 export function sendText(
   to: string,
   body: string,
-  phoneNumberId?: string | null
+  phoneNumberId?: string | null,
+  replyTo?: string | null
 ): Promise<SendResult> {
-  return send(to, { type: 'text', text: { body, preview_url: false } }, phoneNumberId);
+  return send(to, { type: 'text', text: { body, preview_url: false } }, phoneNumberId, replyTo);
 }
 
 export interface ListOption {
@@ -195,7 +228,8 @@ export function sendButtons(
   to: string,
   body: string,
   buttons: Array<{ id: string; title: string }>,
-  phoneNumberId?: string | null
+  phoneNumberId?: string | null,
+  replyTo?: string | null
 ): Promise<SendResult> {
   return send(
     to,
@@ -207,7 +241,8 @@ export function sendButtons(
         action: { buttons: buttons.map((reply) => ({ type: 'reply', reply })) },
       },
     },
-    phoneNumberId
+    phoneNumberId,
+    replyTo
   );
 }
 

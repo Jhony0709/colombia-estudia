@@ -12,13 +12,15 @@ const prisma = {
     aggregate: jest.fn(),
     groupBy: jest.fn(),
   },
-  conversationMessage: { create: jest.fn() },
+  conversationMessage: { create: jest.fn(), findFirst: jest.fn() },
   institution: { findUnique: jest.fn() },
   person: { findFirst: jest.fn() },
-  auditLog: { create: jest.fn() },
+  auditLog: { create: jest.fn(), findFirst: jest.fn() },
   $transaction: jest.fn(async (ops: unknown[]) => ops),
 };
 const mockSendText = jest.fn();
+const mockSendButtons = jest.fn();
+const mockSendTemplate = jest.fn();
 const tenantTx = {
   person: { findFirst: jest.fn(), findUniqueOrThrow: jest.fn(), create: jest.fn() },
   membership: { create: jest.fn() },
@@ -44,6 +46,8 @@ jest.mock('@/features/billing/server/account.service', () => ({
 jest.mock('@/lib/whatsapp/cloud-api', () => ({
   SERVICE_WINDOW_MS: 24 * 60 * 60 * 1000,
   sendText: (...args: unknown[]) => mockSendText(...args),
+  sendButtons: (...args: unknown[]) => mockSendButtons(...args),
+  sendTemplate: (...args: unknown[]) => mockSendTemplate(...args),
 }));
 
 import {
@@ -51,6 +55,7 @@ import {
   conversationsPulse,
   createPersonFromIntake,
   replyToConversation,
+  sendFollowUp,
   sendPaymentLink,
   takeConversation,
 } from '@/features/messaging/server/conversations.service';
@@ -59,6 +64,7 @@ const NOW = new Date('2026-11-05T15:00:00.000Z');
 const BASE = { institutionId: 'inst-1', actorId: 'staff-1', conversationId: 'conv-1', now: NOW };
 const row = (overrides: Record<string, unknown> = {}) => ({
   id: 'conv-1',
+  channel: 'WHATSAPP',
   contact: '573001112233',
   status: 'WAITING',
   assignedToId: null,
@@ -93,7 +99,8 @@ describe('takeConversation', () => {
     expect(mockSendText).toHaveBeenCalledWith(
       '573001112233',
       expect.stringContaining('Ana'),
-      'pn-1'
+      'pn-1',
+      undefined
     );
   });
 
@@ -127,7 +134,7 @@ describe('replyToConversation', () => {
       row({ status: 'OPEN', assignedToId: 'staff-1' })
     );
     expect(await replyToConversation({ ...BASE, body: '  Hola, Laura ' })).toEqual({ sent: true });
-    expect(mockSendText).toHaveBeenCalledWith('573001112233', 'Hola, Laura', 'pn-1');
+    expect(mockSendText).toHaveBeenCalledWith('573001112233', 'Hola, Laura', 'pn-1', undefined);
     expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         direction: 'OUTBOUND',
@@ -177,6 +184,39 @@ describe('closeConversation', () => {
       row({ status: 'OPEN', assignedToId: 'staff-2' })
     );
     await expect(closeConversation(BASE)).rejects.toMatchObject({ code: 'CONFLICT' });
+  });
+
+  it('después de la despedida, la encuesta de tres botones queda en el hilo (22/11)', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(
+      row({ status: 'OPEN', assignedToId: 'staff-1' })
+    );
+    mockSendButtons.mockResolvedValue({ sent: true, id: 'wamid.csat' });
+    await closeConversation(BASE);
+    expect(mockSendButtons).toHaveBeenCalledWith(
+      '573001112233',
+      '¿Cómo te atendimos hoy?',
+      [
+        { id: 'csat_5', title: '😀 Muy bien' },
+        { id: 'csat_3', title: '😐 Regular' },
+        { id: 'csat_1', title: '😕 Mal' },
+      ],
+      'pn-1'
+    );
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ fromBot: true, externalId: 'wamid.csat' }),
+    });
+  });
+
+  it('fuera de las 24 h no hay encuesta: no se le puede escribir', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(
+      row({
+        status: 'OPEN',
+        assignedToId: 'staff-1',
+        lastInboundAt: new Date(NOW.getTime() - 25 * 60 * 60_000),
+      })
+    );
+    await closeConversation(BASE);
+    expect(mockSendButtons).not.toHaveBeenCalled();
   });
 });
 
@@ -321,5 +361,119 @@ describe('conversationsPulse', () => {
     await expect(conversationsPulse({ institutionId: 'inst-1' })).resolves.toBe(
       `${NOW.getTime()}|BOT:5|WAITING:2`
     );
+  });
+});
+
+describe('replyToConversation: cita y botones (22/11)', () => {
+  beforeEach(() => {
+    prisma.conversation.findFirst.mockResolvedValue(
+      row({ status: 'OPEN', assignedToId: 'staff-1' })
+    );
+    mockSendButtons.mockResolvedValue({ sent: true, id: 'wamid.btn' });
+  });
+
+  it('cita un mensaje del chat: WhatsApp lo recibe con su wamid y queda enlazado', async () => {
+    prisma.conversationMessage.findFirst.mockResolvedValue({ id: 'm-in', externalId: 'wamid.in' });
+    await replyToConversation({ ...BASE, body: 'Claro', replyToId: 'm-in' });
+    expect(prisma.conversationMessage.findFirst).toHaveBeenCalledWith({
+      where: { id: 'm-in', conversationId: 'conv-1' },
+      select: { id: true, externalId: true },
+    });
+    expect(mockSendText).toHaveBeenCalledWith('573001112233', 'Claro', 'pn-1', 'wamid.in');
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ replyToId: 'm-in' }),
+    });
+  });
+
+  it('no cita un mensaje de otro chat', async () => {
+    prisma.conversationMessage.findFirst.mockResolvedValue(null);
+    await expect(
+      replyToConversation({ ...BASE, body: 'Claro', replyToId: 'm-otro' })
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(mockSendText).not.toHaveBeenCalled();
+  });
+
+  it('con botones envía un mensaje interactivo y los guarda', async () => {
+    await replyToConversation({ ...BASE, body: '¿Te sirve el martes?', buttons: ['Sí', ' No '] });
+    const replies = [
+      { id: 'agent:1', title: 'Sí' },
+      { id: 'agent:2', title: 'No' },
+    ];
+    expect(mockSendButtons).toHaveBeenCalledWith(
+      '573001112233',
+      '¿Te sirve el martes?',
+      replies,
+      'pn-1',
+      undefined
+    );
+    expect(mockSendText).not.toHaveBeenCalled();
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ buttons: replies, externalId: 'wamid.btn' }),
+    });
+  });
+
+  it('más de 3 botones, repetidos o largos no salen', async () => {
+    for (const buttons of [['a', 'b', 'c', 'd'], ['Sí', 'Sí'], ['x'.repeat(21)]]) {
+      await expect(replyToConversation({ ...BASE, body: 'Hola', buttons })).rejects.toMatchObject({
+        code: 'VALIDATION_ERROR',
+      });
+    }
+    expect(mockSendButtons).not.toHaveBeenCalled();
+  });
+});
+
+describe('sendFollowUp (22/11)', () => {
+  const OUT = new Date(NOW.getTime() - 30 * 60 * 60_000);
+
+  beforeEach(() => {
+    process.env.WHATSAPP_TEMPLATE_FOLLOW_UP = 'retomar_chat';
+    prisma.conversation.findFirst.mockResolvedValue(
+      row({
+        status: 'OPEN',
+        assignedToId: 'staff-1',
+        lastInboundAt: OUT,
+        contactName: 'Lau',
+        person: { givenName: 'Laura' },
+      })
+    );
+    prisma.auditLog.findFirst.mockResolvedValue(null);
+    mockSendTemplate.mockResolvedValue({ sent: true, id: 'wamid.tpl' });
+  });
+  afterEach(() => {
+    delete process.env.WHATSAPP_TEMPLATE_FOLLOW_UP;
+  });
+
+  it('fuera de las 24 h envía la plantilla con su nombre, la deja en el hilo y la audita', async () => {
+    expect(await sendFollowUp(BASE)).toEqual({ sent: true });
+    expect(mockSendTemplate).toHaveBeenCalledWith('573001112233', 'retomar_chat', ['Laura'], {
+      phoneNumberId: 'pn-1',
+    });
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ direction: 'OUTBOUND', externalId: 'wamid.tpl' }),
+    });
+    expect(prisma.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ action: 'follow_up_sent' }) })
+    );
+  });
+
+  it('dentro de las 24 h, sin plantilla configurada o si ya se envió hoy, no sale', async () => {
+    prisma.conversation.findFirst.mockResolvedValueOnce(
+      row({ status: 'OPEN', assignedToId: 'staff-1', person: null })
+    );
+    await expect(sendFollowUp(BASE)).rejects.toThrow('menos de 24 horas');
+
+    prisma.auditLog.findFirst.mockResolvedValueOnce({ id: 'a-1' });
+    await expect(sendFollowUp(BASE)).rejects.toThrow('Ya se le envió');
+
+    delete process.env.WHATSAPP_TEMPLATE_FOLLOW_UP;
+    await expect(sendFollowUp(BASE)).rejects.toThrow('No hay plantilla');
+    expect(mockSendTemplate).not.toHaveBeenCalled();
+  });
+
+  it('solo quien tomó el chat', async () => {
+    prisma.conversation.findFirst.mockResolvedValue(
+      row({ status: 'OPEN', assignedToId: 'staff-2', lastInboundAt: OUT })
+    );
+    await expect(sendFollowUp(BASE)).rejects.toMatchObject({ code: 'CONFLICT' });
   });
 });

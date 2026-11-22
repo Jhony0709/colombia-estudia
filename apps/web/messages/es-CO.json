@@ -2751,7 +2751,7 @@
       "body1": "Trabajo, familia, responsabilidades… la vida no se detiene.",
       "body2": "En ALBA creemos en tu historia y te damos las herramientas para que sigas construyendo tu futuro.",
       "cta": "Cuéntanos tu historia",
-      "whatsappMessage": "Hola, quiero retomar mis estudios. Me quedé en el grado ___ y me gustaría saber cómo terminar mi bachillerato."
+      "whatsappMessage": "Hola 👋 Quiero retomar mis estudios y terminar mi bachillerato."
     },
     "process": {
       "eyebrow": "Así funciona",
@@ -2847,7 +2847,7 @@
       "description": "Termina tu bachillerato con un programa flexible, 100 % en línea y con acompañamiento real, pensado para la vida adulta."
     },
     "contact": {
-      "message": "Hola, quiero información sobre los programas de {name}."
+      "message": "Hola 👋 Quiero terminar mi bachillerato con {name}."
     },
     "fab": {
       "label": "¿Tienes dudas? Escríbenos",
@@ -4093,7 +4093,8 @@
       "ENROLL": "Datos de inscripción",
       "CERTIFICATE": "Solicitud de certificado",
       "incomplete": "Aún está respondiendo en el chat.",
-      "consent": "Autorizó el tratamiento de sus datos por el chat el {at}."
+      "consent": "Autorizó el tratamiento de sus datos por el chat el {at}.",
+      "ACCOUNT": "Cuenta creada por el chat"
     },
     "charge": {
       "title": "Link de pago",
@@ -4109,7 +4110,8 @@
       "noReply": "Pasaron más de 24 horas desde su último mensaje: WhatsApp no deja escribirle sin plantilla. Cuando vuelva a escribir, puedes responder.",
       "takenBy": "Lo atiende {name}.",
       "takenByOther": "Lo atiende {name}. Solo responde quien lo tomó.",
-      "back": "Volver a mensajes"
+      "back": "Volver a mensajes",
+      "buttons": "Botones del mensaje"
     },
     "actions": {
       "take": "Tomar chat",
@@ -4131,7 +4133,29 @@
       "linkInChat": "Link de pago enviado al chat.",
       "linkNoEmail": "No tiene correo registrado.",
       "linkNoWindow": "Pasaron más de 24 horas desde su último mensaje: no se le puede escribir.",
-      "error": "No se pudo completar la acción."
+      "error": "No se pudo completar la acción.",
+      "quote": "Responder",
+      "replyingTo": "Respondiendo a {name}",
+      "cancelQuote": "Quitar la cita",
+      "formatLabel": "Formato de WhatsApp",
+      "format": {
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "strike": "Tachado",
+        "mono": "Monoespacio",
+        "list": "Lista",
+        "quote": "Cita"
+      },
+      "replyHintFormat": "Le llega por WhatsApp desde el número de la institución, con el formato que ves en la vista previa.",
+      "preview": "Así lo verá en WhatsApp",
+      "addButtons": "Añadir botones de respuesta",
+      "buttonsLegend": "Botones de respuesta: hasta {max}, de {chars} caracteres. Su elección llega al chat.",
+      "buttonLabel": "Botón {n}",
+      "removeButton": "Quitar el botón {n}",
+      "anotherButton": "Otro botón",
+      "followUp": "Enviar plantilla para retomar",
+      "followUpSent": "Plantilla enviada. Cuando responda, puedes escribirle.",
+      "followUpHint": "WhatsApp solo deja escribirle con una plantilla aprobada. Se envía una vez al día."
     }
   },
   "sitePages": {
@@ -4162,7 +4186,7 @@
       "eyebrow": "Bogotá",
       "h1": "Bachillerato para adultos en Bogotá, 100 % virtual",
       "lead": "Si vives en Bogotá y no terminaste el colegio, puedes hacerlo por ciclos y en línea: empiezas en el punto donde quedaste, estudias en los ratos que te deja el trabajo y te gradúas como bachiller.",
-      "whatsappMessage": "Hola, vivo en Bogotá y quiero terminar mi bachillerato. Me quedé en el grado ___.",
+      "whatsappMessage": "Hola 👋 Vivo en Bogotá y quiero terminar mi bachillerato.",
       "sections": [
         {
           "id": "para-quien",
@@ -4265,7 +4289,7 @@
       "eyebrow": "Modalidad",
       "h1": "Bachillerato por ciclos: qué es y en cuál empiezas",
       "lead": "El bachillerato por ciclos es la forma en que los adultos terminan el colegio en Colombia: en vez de once grados, se cursan seis ciclos que agrupan los grados, y empiezas en el que corresponde al último que aprobaste.",
-      "whatsappMessage": "Hola, quiero saber en qué ciclo empezaría mi bachillerato. Me quedé en el grado ___.",
+      "whatsappMessage": "Hola 👋 Quiero saber en qué ciclo empezaría mi bachillerato.",
       "sections": [
         {
           "id": "que-es",
@@ -4421,7 +4445,7 @@
       "eyebrow": "Dudas",
       "h1": "Preguntas frecuentes",
       "lead": "Las dudas que más nos llegan, con respuestas cortas. Si la tuya no está, escríbenos.",
-      "whatsappMessage": "Hola, tengo una pregunta sobre el bachillerato.",
+      "whatsappMessage": "Hola 👋 Quiero terminar mi bachillerato y tengo una pregunta.",
       "sections": [],
       "faq": [
         {
@@ -4477,7 +4501,7 @@
       "eyebrow": "Contacto",
       "h1": "Hablemos",
       "lead": "Te atendemos por WhatsApp y por correo. Cuéntanos en qué grado quedaste y te decimos cómo seguir.",
-      "whatsappMessage": "Hola, quiero información para terminar mi bachillerato.",
+      "whatsappMessage": "Hola 👋 Quiero terminar mi bachillerato.",
       "sections": [
         {
           "id": "virtual",
