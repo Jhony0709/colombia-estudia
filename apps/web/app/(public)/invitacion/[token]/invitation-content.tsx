@@ -104,6 +104,12 @@ export default function InvitationContent({
         case 'NOT_FOUND':
           setError(t('notFound'));
           break;
+        case 'VALIDATION_ERROR':
+          // Contraseña rechazada por Supabase: volver al paso donde se puede cambiar.
+          setPassword('');
+          setStep('password');
+          setError(data.error?.message || t('genericError'));
+          break;
         default:
           setError(data.error?.message || t('genericError'));
       }
@@ -255,6 +261,18 @@ export default function InvitationContent({
               {t('createAccount')}
             </Button>
           </div>
+          <Button
+            type="button"
+            variant="quiet"
+            disabled={loading}
+            onClick={() => {
+              setError(null);
+              setStep('password');
+            }}
+            className="w-full"
+          >
+            {t('back')}
+          </Button>
         </form>
       </section>
     );

@@ -81,6 +81,7 @@ const ACTION_BY_TYPE: Record<string, string> = {
   submission_received: 'reviewSubmissions',
   problem_reported: 'viewLesson',
   reinvite_requested: 'viewPerson',
+  study_certificate_requested: 'viewPerson',
   enrollment_requested: 'reviewRequest',
   unlock_requested: 'reviewRequest',
   attempt_requested: 'reviewRequest',

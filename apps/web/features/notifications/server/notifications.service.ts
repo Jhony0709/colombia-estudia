@@ -59,6 +59,8 @@ export const NOTIFICATION_TYPES = [
   'conversation_waiting',
   // 5/11: llegó un mensaje a una conversación que atiendes.
   'conversation_message',
+  // 23/11: un estudiante pidió el certificado de estudios desde la plataforma.
+  'study_certificate_requested',
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

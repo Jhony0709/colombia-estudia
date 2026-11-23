@@ -29,6 +29,7 @@ export const TOPICS = {
   duration: 'duracion',
   icfes: 'icfes',
   priceDetail: 'detalle_precio',
+  certificateRequest: 'certificado_pedir',
 } as const;
 
 const B = {
@@ -60,7 +61,7 @@ const OPTIONS = [
   {
     id: CHOICES.certificates,
     title: 'Certificados',
-    description: 'Pide un certificado de estudios',
+    description: 'Costo, tiempo de entrega y cómo pedirlo',
   },
   {
     id: CHOICES.legal,
@@ -144,6 +145,8 @@ export interface BotContext {
   introOpen: boolean;
   /** Hay asesores ahora (`advisorsOpen`); el bot atiende siempre. */
   advisorsOpen: boolean;
+  /** El chat está enlazado a un estudiante: solo así se pide un certificado por aquí (23/11). */
+  student?: boolean;
 }
 
 /** La respuesta a una opción; `null` si no es una opción: vuelve el saludo. */
@@ -179,16 +182,27 @@ export function answerFor(choiceId: string | null, ctx: BotContext): BotReply | 
         buttons: [B.enroll, B.advisor, B.more],
       };
     case CHOICES.trial:
-      return { ...intakeStart('ACCOUNT', f, ctx.policyUrl), intake: 'ACCOUNT' };
+      return { ...intakeStart('ACCOUNT', ctx.policyUrl), intake: 'ACCOUNT' };
     case CHOICES.enroll:
-      return { ...intakeStart('ENROLL', f, ctx.policyUrl), intake: 'ENROLL' };
+      return { ...intakeStart('ENROLL', ctx.policyUrl), intake: 'ENROLL' };
     case CHOICES.requirements:
       return {
         text: `Los únicos requisitos:\n\n• Tener ${f.minAge} años como mínimo\n• El certificado de estudios del último año que aprobaste\n\n¿Seguimos?`,
         buttons: [B.trial, B.enroll, B.advisor],
       };
+    // Primero la información; los datos solo si los pide (23/11).
     case CHOICES.certificates:
-      return { ...intakeStart('CERTIFICATE', f, ctx.policyUrl), intake: 'CERTIFICATE' };
+      return {
+        text: `📄 El certificado de estudios cuesta ${cop(f.certificatePrice)} y, después del pago, te lo enviamos en máximo ${f.certificateBusinessDays} días hábiles.\n\nEs para estudiantes: lo pides en la plataforma, en *Certificados*, o por aquí si escribes desde el WhatsApp que registraste.`,
+        buttons: [{ id: TOPICS.certificateRequest, title: 'Pedir certificado' }, B.advisor, B.more],
+      };
+    case TOPICS.certificateRequest:
+      return ctx.student
+        ? { ...intakeStart('CERTIFICATE', ctx.policyUrl), intake: 'CERTIFICATE' }
+        : {
+            text: `Para pedirlo necesitamos saber que eres tú 🔒 Entra a la plataforma con tu cuenta y ve a *Certificados*: ${siteUrl}/aprender/certificados\n\nSi no puedes entrar, te paso con un asesor.`,
+            buttons: [B.advisor, B.more],
+          };
     case CHOICES.legal:
       return {
         text: 'Sí ✅ Las instituciones aliadas se rigen por la resolución que expide la Secretaría de Educación, y todas cuentan con ella. Al inscribirte te asignamos la institución que valida tu proceso y un asesor te comparte sus datos.',

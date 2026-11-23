@@ -1,0 +1,86 @@
+{
+  "tema": "bienvenida-gestion-emocional",
+  "componente": "Introducción",
+  "area": "Gestión emocional",
+  "titulo": "Gestión emocional y riesgos psicosociales",
+  "siguiente": "Aprender es avanzar",
+  "etiqueta": "Bienvenida",
+  "cierre": "¡Empecemos!",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Te damos la bienvenida al taller de gestión emocional y riesgos psicosociales.",
+      "voz": "Te damos la bienvenida al taller de gestión emocional y riesgos psicosociales."
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Aprender es avanzar",
+      "texto": "Comenzar, retomar o culminar los estudios es una decisión importante. El bachillerato no es solo un certificado: fortalece conocimientos y habilidades como la responsabilidad, la organización y la autonomía para aprender. Y puede abrir oportunidades de trabajo, de formación y de proyectos personales.",
+      "voz": "Comenzar, retomar o culminar los estudios es una decisión importante. El bachillerato no es solo un certificado: fortalece conocimientos y habilidades como la responsabilidad, la organización y la autonomía para aprender. Y puede abrir oportunidades de trabajo, de formación y de proyectos personales.",
+      "items": [
+        {
+          "titulo": "Una decisión importante",
+          "texto": "Comenzar, retomar o culminar los estudios",
+          "palabra": "decisión"
+        },
+        {
+          "titulo": "Más que un certificado",
+          "texto": "Responsabilidad, organización y autonomía para aprender",
+          "palabra": "certificado"
+        },
+        {
+          "titulo": "Nuevas oportunidades",
+          "texto": "Trabajo, formación y proyectos personales",
+          "palabra": "oportunidades"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "pasos",
+      "titulo": "Lo que vas a ver",
+      "texto": "En este taller vas a ver cuatro temas: aprender es avanzar, la gestión de las emociones, los riesgos psicosociales y el estrés, y la resolución de conflictos con tus redes de apoyo. Después harás dos actividades prácticas y terminarás con unos aspectos para reflexionar.",
+      "voz": "En este taller vas a ver cuatro temas: aprender es avanzar, la gestión de las emociones, los riesgos psicosociales y el estrés, y la resolución de conflictos con tus redes de apoyo. Después harás dos actividades prácticas y terminarás con unos aspectos para reflexionar.",
+      "items": [
+        { "titulo": "Aprender es avanzar", "palabra": "aprender" },
+        { "titulo": "Gestión de las emociones", "palabra": "gestión" },
+        { "titulo": "Riesgos psicosociales y estrés", "palabra": "riesgos" },
+        { "titulo": "Conflictos y redes de apoyo", "palabra": "conflictos" },
+        { "titulo": "Dos actividades prácticas", "palabra": "actividades" },
+        { "titulo": "Aspectos a reflexionar", "palabra": "aspectos" }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "¿Por qué empezar por aquí?",
+      "texto": "Continuar los estudios no depende solo de la voluntad. La falta de tiempo, el miedo al fracaso o la desmotivación también pesan. Por eso empezamos por las emociones: avanzar en la educación también implica aprender a cuidar de uno mismo.",
+      "voz": "Continuar los estudios no depende solo de la voluntad. La falta de tiempo, el miedo al fracaso o la desmotivación también pesan. Por eso empezamos por las emociones: avanzar en la educación también implica aprender a cuidar de uno mismo.",
+      "items": [
+        {
+          "titulo": "No es solo voluntad",
+          "texto": "Continuar los estudios depende de muchas cosas",
+          "palabra": "voluntad"
+        },
+        {
+          "titulo": "Lo que también pesa",
+          "texto": "Falta de tiempo, miedo al fracaso, desmotivación",
+          "palabra": "tiempo"
+        },
+        {
+          "titulo": "Cuidarse es avanzar",
+          "texto": "Aprender a cuidar de uno mismo",
+          "palabra": "cuidar"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "Cuando quieras, sigue con el primer tema: aprender es avanzar. ¡Vamos!",
+      "voz": "Cuando quieras, sigue con el primer tema: aprender es avanzar. ¡Vamos!"
+    }
+  ]
+}

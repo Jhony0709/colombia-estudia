@@ -55,6 +55,9 @@ export interface Tema {
   area: string;
   titulo: string;
   siguiente?: string;
+  /** Bienvenida (23/11): reemplazan «Repaso del tema» y «¡Tema repasado!». */
+  etiqueta?: string;
+  cierre?: string;
 }
 
 export interface SceneProps extends Escena {

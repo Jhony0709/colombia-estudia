@@ -1,0 +1,156 @@
+{
+  "tema": "gestion-emocional",
+  "componente": "Introducción",
+  "area": "Gestión emocional",
+  "titulo": "Gestión emocional y riesgos psicosociales",
+  "siguiente": "Aspectos a reflexionar",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: gestión emocional y riesgos psicosociales.",
+      "voz": "Repaso del tema: gestión emocional y riesgos psicosociales."
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "Las emociones",
+      "texto": "Las emociones son respuestas ante situaciones, pensamientos o recuerdos. Sentimos alegría, tristeza, miedo, ira, sorpresa o asco. No son buenas ni malas: cumplen una función.",
+      "voz": "Las emociones son respuestas ante situaciones, pensamientos o recuerdos. Sentimos alegría, tristeza, miedo, ira, sorpresa o asco. No son buenas ni malas: cumplen una función.",
+      "imagenes": [
+        {
+          "src": "introduccion/emociones.webp",
+          "focos": [
+            { "palabra": "alegría", "x": 0.18, "y": 0.24, "zoom": 1.7 },
+            { "palabra": "tristeza", "x": 0.5, "y": 0.24, "zoom": 1.7 },
+            { "palabra": "miedo", "x": 0.82, "y": 0.24, "zoom": 1.7 },
+            { "palabra": "ira", "x": 0.18, "y": 0.66, "zoom": 1.7 },
+            { "palabra": "sorpresa", "x": 0.5, "y": 0.66, "zoom": 1.7 },
+            { "palabra": "asco", "x": 0.82, "y": 0.66, "zoom": 1.7 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "¿Cómo reconocer lo que sentimos?",
+      "texto": "Para reconocer una emoción observamos tres cosas: las señales físicas, como la respiración acelerada o la tensión muscular; los pensamientos que aparecen; y los comportamientos, como alejarnos, discutir o buscar compañía.",
+      "voz": "Para reconocer una emoción observamos tres cosas: las señales físicas, como la respiración acelerada o la tensión muscular; los pensamientos que aparecen; y los comportamientos, como alejarnos, discutir o buscar compañía.",
+      "items": [
+        {
+          "titulo": "Señales físicas",
+          "texto": "Respiración acelerada, tensión muscular",
+          "palabra": "señales"
+        },
+        { "titulo": "Pensamientos", "texto": "«No puedo hacerlo»", "palabra": "pensamientos" },
+        {
+          "titulo": "Comportamientos",
+          "texto": "Alejarnos, discutir, buscar compañía",
+          "palabra": "comportamientos"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "Gestionar una emoción",
+      "texto": "Gestionar una emoción no es ignorarla: es reconocerla y responder de forma adecuada. Algunas estrategias: hacer una pausa, respirar despacio, identificar lo que sentimos, expresarlo con respeto y hablar con alguien de confianza.",
+      "voz": "Gestionar una emoción no es ignorarla: es reconocerla y responder de forma adecuada. Algunas estrategias: hacer una pausa, respirar despacio, identificar lo que sentimos, expresarlo con respeto y hablar con alguien de confianza.",
+      "items": [
+        { "titulo": "Hacer una pausa", "palabra": "pausa" },
+        { "titulo": "Respirar", "palabra": "respirar" },
+        { "titulo": "Identificar lo que sentimos", "palabra": "identificar" },
+        { "titulo": "Expresarlo con respeto", "palabra": "respeto" },
+        { "titulo": "Hablar con alguien", "palabra": "hablar" }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Riesgos psicosociales",
+      "texto": "Los riesgos psicosociales son situaciones que pueden afectar nuestro bienestar. Aparecen en la familia, en el estudio, en el trabajo, en las relaciones sociales y en los entornos digitales, como el ciberacoso o la comparación constante.",
+      "voz": "Los riesgos psicosociales son situaciones que pueden afectar nuestro bienestar. Aparecen en la familia, en el estudio, en el trabajo, en las relaciones sociales y en los entornos digitales, como el ciberacoso o la comparación constante.",
+      "items": [
+        { "titulo": "Familia", "texto": "Conflictos, poca comunicación", "palabra": "familia" },
+        { "titulo": "Estudio", "texto": "Evaluaciones, tareas acumuladas", "palabra": "estudio" },
+        { "titulo": "Trabajo", "texto": "Exceso de tareas, presión", "palabra": "trabajo" },
+        {
+          "titulo": "Relaciones sociales",
+          "texto": "Rechazo, aislamiento",
+          "palabra": "relaciones"
+        },
+        {
+          "titulo": "Entornos digitales",
+          "texto": "Ciberacoso, comparación",
+          "palabra": "digitales"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "El estrés",
+      "texto": "El estrés aparece ante situaciones exigentes. Un poco de tensión puede ayudarnos a prepararnos. Pero si se mantiene mucho tiempo, hay que prestar atención a señales como el cansancio frecuente, los problemas para dormir o la preocupación constante.",
+      "voz": "El estrés aparece ante situaciones exigentes. Un poco de tensión puede ayudarnos a prepararnos. Pero si se mantiene mucho tiempo, hay que prestar atención a señales como el cansancio frecuente, los problemas para dormir o la preocupación constante.",
+      "columnas": [
+        {
+          "titulo": "Tensión moderada",
+          "palabra": "tensión",
+          "puntos": [
+            { "texto": "Nos ayuda a prepararnos ante un desafío", "palabra": "prepararnos" }
+          ]
+        },
+        {
+          "titulo": "Estrés que se mantiene",
+          "palabra": "mantiene",
+          "puntos": [
+            { "texto": "Cansancio frecuente", "palabra": "cansancio" },
+            { "texto": "Problemas para dormir", "palabra": "dormir" },
+            { "texto": "Preocupación constante", "palabra": "preocupación" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "pasos",
+      "titulo": "Ante un conflicto",
+      "texto": "Un conflicto no significa que una relación deba terminar. Ayuda escuchar, mantener la calma, expresar las ideas con respeto, evitar la violencia y buscar acuerdos.",
+      "voz": "Un conflicto no significa que una relación deba terminar. Ayuda escuchar, mantener la calma, expresar las ideas con respeto, evitar la violencia y buscar acuerdos.",
+      "items": [
+        { "titulo": "Escuchar", "palabra": "escuchar" },
+        { "titulo": "Mantener la calma", "palabra": "calma" },
+        { "titulo": "Expresar con respeto", "palabra": "respeto" },
+        { "titulo": "Evitar la violencia", "palabra": "violencia" },
+        { "titulo": "Buscar acuerdos", "palabra": "acuerdos" }
+      ]
+    },
+    {
+      "id": "s7",
+      "tipo": "conceptos",
+      "titulo": "Red de apoyo y cuidado personal",
+      "texto": "Tu red de apoyo son las personas e instituciones a las que puedes acudir: familia, amigos, docentes, orientadores o profesionales. Pedir ayuda no es ser incapaz. Y cuidarte, con descanso, actividad física y límites, te ayuda a afrontar mejor las dificultades.",
+      "voz": "Tu red de apoyo son las personas e instituciones a las que puedes acudir: familia, amigos, docentes, orientadores o profesionales. Pedir ayuda no es ser incapaz. Y cuidarte, con descanso, actividad física y límites, te ayuda a afrontar mejor las dificultades.",
+      "items": [
+        {
+          "titulo": "Red de apoyo",
+          "texto": "Familia, amigos, docentes, orientadores, profesionales",
+          "palabra": "red"
+        },
+        { "titulo": "Pedir ayuda", "texto": "No es ser incapaz", "palabra": "pedir" },
+        {
+          "titulo": "Cuidado personal",
+          "texto": "Descanso, actividad física y límites",
+          "palabra": "cuidarte"
+        }
+      ]
+    },
+    {
+      "id": "s8",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el taller. Sigue con los aspectos a reflexionar.",
+      "voz": "¡Muy bien! Repasaste el taller. Sigue con los aspectos a reflexionar."
+    }
+  ]
+}

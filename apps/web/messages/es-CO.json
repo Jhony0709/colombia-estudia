@@ -6,6 +6,7 @@
     "welcome": "Bienvenido",
     "welcomeMessage": "Hola {name}, tienes una invitación de {institution}.",
     "continue": "Continuar",
+    "back": "Volver",
     "createPassword": "Crea tu contraseña",
     "password": "Contraseña",
     "passwordHint": "Mínimo 12 caracteres",
@@ -2118,7 +2119,19 @@
       "ongoingHint": "Lo que te falta para la constancia de cada programa que estás cursando.",
       "ongoingBar": "Avance en {program}",
       "ongoingLeft": "{count, plural, one {Te falta 1 paso.} other {Te faltan # pasos.}}",
-      "ongoingCta": "Seguir con el curso"
+      "ongoingCta": "Seguir con el curso",
+      "study": {
+        "title": "Certificado de estudios",
+        "hint": "No es una constancia: lo expide la institución que valida tu proceso.",
+        "terms": "Cuesta {price} y te lo enviamos en máximo {days} días hábiles después del pago. El equipo te escribe para el pago.",
+        "cta": "Pedir certificado de estudios",
+        "documentPlace": "Lugar de expedición de tu documento",
+        "reason": "¿Para qué lo necesitas?",
+        "send": "Enviar pedido",
+        "cancel": "Cancelar",
+        "sent": "Listo, recibimos tu pedido. El equipo te escribe para el pago y te lo envía apenas esté.",
+        "error": "No pudimos enviar tu pedido. Intenta de nuevo."
+      }
     },
     "library": {
       "title": "Biblioteca",

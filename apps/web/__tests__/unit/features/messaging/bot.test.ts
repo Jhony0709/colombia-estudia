@@ -98,12 +98,18 @@ describe('answerFor', () => {
     expect(off.handoff).toBe(true);
   });
 
-  it('solo «asesor» pasa a la bandeja; inscribirme y certificados piden datos primero', () => {
+  it('solo «asesor» pasa a la bandeja; inscribirme pide datos primero', () => {
     const handoff = Object.values(CHOICES).filter((id) => answerFor(id, CTX)!.handoff);
     expect(handoff).toEqual([CHOICES.advisor]);
     expect(answerFor(CHOICES.enroll, CTX)!.intake).toBe('ENROLL');
     expect(answerFor(CHOICES.trial, CTX)!.intake).toBe('ACCOUNT');
-    expect(answerFor(CHOICES.certificates, CTX)!.intake).toBe('CERTIFICATE');
+    // El certificado solo por el chat si está enlazado a un estudiante (23/11).
+    expect(answerFor(TOPICS.certificateRequest, { ...CTX, student: true })!.intake).toBe(
+      'CERTIFICATE'
+    );
+    const anon = answerFor(TOPICS.certificateRequest, CTX)!;
+    expect(anon.intake).toBeUndefined();
+    expect(anon.text).toContain(`${SITE}/aprender/certificados`);
     // Antes de pedir datos, la autorización con la política (Ley 1581).
     expect(answerFor(CHOICES.enroll, CTX)!.text).toContain(`${SITE}/politica-de-datos`);
     expect(answerFor(CHOICES.enroll, CTX)!.buttons?.map((b) => b.id)).toEqual([

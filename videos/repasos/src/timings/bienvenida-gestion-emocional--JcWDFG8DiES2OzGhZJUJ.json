@@ -1,0 +1,874 @@
+{
+  "tema": "bienvenida-gestion-emocional",
+  "componente": "Introducción",
+  "area": "Gestión emocional",
+  "titulo": "Gestión emocional y riesgos psicosociales",
+  "siguiente": "Aprender es avanzar",
+  "etiqueta": "Bienvenida",
+  "cierre": "¡Empecemos!",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Te damos la bienvenida al taller de gestión emocional y riesgos psicosociales.",
+      "voz": "Te damos la bienvenida al taller de gestión emocional y riesgos psicosociales.",
+      "audio": "voz/bienvenida-gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 138,
+      "frames": 166,
+      "chunks": [
+        {
+          "text": "Te damos la bienvenida al taller",
+          "from": 0,
+          "to": 56
+        },
+        {
+          "text": "de gestión emocional y riesgos psicosociales.",
+          "from": 56,
+          "to": 134
+        }
+      ],
+      "words": [
+        {
+          "w": "te",
+          "f": 0
+        },
+        {
+          "w": "damos",
+          "f": 7
+        },
+        {
+          "w": "la",
+          "f": 15
+        },
+        {
+          "w": "bienvenida",
+          "f": 18
+        },
+        {
+          "w": "al",
+          "f": 31
+        },
+        {
+          "w": "taller",
+          "f": 34
+        },
+        {
+          "w": "de",
+          "f": 44
+        },
+        {
+          "w": "gestión",
+          "f": 46
+        },
+        {
+          "w": "emocional",
+          "f": 57
+        },
+        {
+          "w": "y",
+          "f": 73
+        },
+        {
+          "w": "riesgos",
+          "f": 77
+        },
+        {
+          "w": "psicosociales",
+          "f": 89
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "conceptos",
+      "titulo": "Aprender es avanzar",
+      "texto": "Comenzar, retomar o culminar los estudios es una decisión importante. El bachillerato no es solo un certificado: fortalece conocimientos y habilidades como la responsabilidad, la organización y la autonomía para aprender. Y puede abrir oportunidades de trabajo, de formación y de proyectos personales.",
+      "voz": "Comenzar, retomar o culminar los estudios es una decisión importante. El bachillerato no es solo un certificado: fortalece conocimientos y habilidades como la responsabilidad, la organización y la autonomía para aprender. Y puede abrir oportunidades de trabajo, de formación y de proyectos personales.",
+      "items": [
+        {
+          "titulo": "Una decisión importante",
+          "texto": "Comenzar, retomar o culminar los estudios",
+          "palabra": "decisión"
+        },
+        {
+          "titulo": "Más que un certificado",
+          "texto": "Responsabilidad, organización y autonomía para aprender",
+          "palabra": "certificado"
+        },
+        {
+          "titulo": "Nuevas oportunidades",
+          "texto": "Trabajo, formación y proyectos personales",
+          "palabra": "oportunidades"
+        }
+      ],
+      "audio": "voz/bienvenida-gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 513,
+      "frames": 541,
+      "chunks": [
+        {
+          "text": "Comenzar, retomar o culminar los",
+          "from": 0,
+          "to": 53
+        },
+        {
+          "text": "estudios es una decisión importante.",
+          "from": 53,
+          "to": 113
+        },
+        {
+          "text": "El bachillerato no es solo un certificado:",
+          "from": 124,
+          "to": 192
+        },
+        {
+          "text": "fortalece conocimientos y habilidades como",
+          "from": 197,
+          "to": 262
+        },
+        {
+          "text": "la responsabilidad, la organización y",
+          "from": 262,
+          "to": 320
+        },
+        {
+          "text": "la autonomía para aprender.",
+          "from": 320,
+          "to": 362
+        },
+        {
+          "text": "Y puede abrir oportunidades de trabajo,",
+          "from": 371,
+          "to": 440
+        },
+        {
+          "text": "de formación y de proyectos personales.",
+          "from": 440,
+          "to": 509
+        }
+      ],
+      "words": [
+        {
+          "w": "comenzar",
+          "f": 0
+        },
+        {
+          "w": "retomar",
+          "f": 19
+        },
+        {
+          "w": "o",
+          "f": 35
+        },
+        {
+          "w": "culminar",
+          "f": 38
+        },
+        {
+          "w": "los",
+          "f": 52
+        },
+        {
+          "w": "estudios",
+          "f": 57
+        },
+        {
+          "w": "es",
+          "f": 71
+        },
+        {
+          "w": "una",
+          "f": 75
+        },
+        {
+          "w": "decisión",
+          "f": 79
+        },
+        {
+          "w": "importante",
+          "f": 92
+        },
+        {
+          "w": "el",
+          "f": 124
+        },
+        {
+          "w": "bachillerato",
+          "f": 129
+        },
+        {
+          "w": "no",
+          "f": 149
+        },
+        {
+          "w": "es",
+          "f": 151
+        },
+        {
+          "w": "solo",
+          "f": 154
+        },
+        {
+          "w": "un",
+          "f": 162
+        },
+        {
+          "w": "certificado",
+          "f": 164
+        },
+        {
+          "w": "fortalece",
+          "f": 197
+        },
+        {
+          "w": "conocimientos",
+          "f": 213
+        },
+        {
+          "w": "y",
+          "f": 232
+        },
+        {
+          "w": "habilidades",
+          "f": 234
+        },
+        {
+          "w": "como",
+          "f": 250
+        },
+        {
+          "w": "la",
+          "f": 256
+        },
+        {
+          "w": "responsabilidad",
+          "f": 259
+        },
+        {
+          "w": "la",
+          "f": 290
+        },
+        {
+          "w": "organización",
+          "f": 293
+        },
+        {
+          "w": "y",
+          "f": 316
+        },
+        {
+          "w": "la",
+          "f": 319
+        },
+        {
+          "w": "autonomía",
+          "f": 321
+        },
+        {
+          "w": "para",
+          "f": 339
+        },
+        {
+          "w": "aprender",
+          "f": 344
+        },
+        {
+          "w": "y",
+          "f": 371
+        },
+        {
+          "w": "puede",
+          "f": 376
+        },
+        {
+          "w": "abrir",
+          "f": 383
+        },
+        {
+          "w": "oportunidades",
+          "f": 391
+        },
+        {
+          "w": "de",
+          "f": 410
+        },
+        {
+          "w": "trabajo",
+          "f": 413
+        },
+        {
+          "w": "de",
+          "f": 428
+        },
+        {
+          "w": "formación",
+          "f": 433
+        },
+        {
+          "w": "y",
+          "f": 452
+        },
+        {
+          "w": "de",
+          "f": 456
+        },
+        {
+          "w": "proyectos",
+          "f": 459
+        },
+        {
+          "w": "personales",
+          "f": 475
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "pasos",
+      "titulo": "Lo que vas a ver",
+      "texto": "En este taller vas a ver cuatro temas: aprender es avanzar, la gestión de las emociones, los riesgos psicosociales y el estrés, y la resolución de conflictos con tus redes de apoyo. Después harás dos actividades prácticas y terminarás con unos aspectos para reflexionar.",
+      "voz": "En este taller vas a ver cuatro temas: aprender es avanzar, la gestión de las emociones, los riesgos psicosociales y el estrés, y la resolución de conflictos con tus redes de apoyo. Después harás dos actividades prácticas y terminarás con unos aspectos para reflexionar.",
+      "items": [
+        {
+          "titulo": "Aprender es avanzar",
+          "palabra": "aprender"
+        },
+        {
+          "titulo": "Gestión de las emociones",
+          "palabra": "gestión"
+        },
+        {
+          "titulo": "Riesgos psicosociales y estrés",
+          "palabra": "riesgos"
+        },
+        {
+          "titulo": "Conflictos y redes de apoyo",
+          "palabra": "conflictos"
+        },
+        {
+          "titulo": "Dos actividades prácticas",
+          "palabra": "actividades"
+        },
+        {
+          "titulo": "Aspectos a reflexionar",
+          "palabra": "aspectos"
+        }
+      ],
+      "audio": "voz/bienvenida-gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 456,
+      "frames": 484,
+      "chunks": [
+        {
+          "text": "En este taller vas a ver cuatro temas:",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "aprender es avanzar, la gestión de las emociones,",
+          "from": 69,
+          "to": 149
+        },
+        {
+          "text": "los riesgos psicosociales y el estrés, y la",
+          "from": 149,
+          "to": 219
+        },
+        {
+          "text": "resolución de conflictos con tus redes de apoyo.",
+          "from": 219,
+          "to": 297
+        },
+        {
+          "text": "Después harás dos actividades prácticas y",
+          "from": 308,
+          "to": 376
+        },
+        {
+          "text": "terminarás con unos aspectos para reflexionar.",
+          "from": 376,
+          "to": 451
+        }
+      ],
+      "words": [
+        {
+          "w": "en",
+          "f": 0
+        },
+        {
+          "w": "este",
+          "f": 7
+        },
+        {
+          "w": "taller",
+          "f": 13
+        },
+        {
+          "w": "vas",
+          "f": 23
+        },
+        {
+          "w": "a",
+          "f": 28
+        },
+        {
+          "w": "ver",
+          "f": 30
+        },
+        {
+          "w": "cuatro",
+          "f": 34
+        },
+        {
+          "w": "temas",
+          "f": 45
+        },
+        {
+          "w": "aprender",
+          "f": 69
+        },
+        {
+          "w": "es",
+          "f": 85
+        },
+        {
+          "w": "avanzar",
+          "f": 88
+        },
+        {
+          "w": "la",
+          "f": 107
+        },
+        {
+          "w": "gestión",
+          "f": 111
+        },
+        {
+          "w": "de",
+          "f": 121
+        },
+        {
+          "w": "las",
+          "f": 123
+        },
+        {
+          "w": "emociones",
+          "f": 128
+        },
+        {
+          "w": "los",
+          "f": 149
+        },
+        {
+          "w": "riesgos",
+          "f": 155
+        },
+        {
+          "w": "psicosociales",
+          "f": 166
+        },
+        {
+          "w": "y",
+          "f": 192
+        },
+        {
+          "w": "el",
+          "f": 193
+        },
+        {
+          "w": "estrés",
+          "f": 197
+        },
+        {
+          "w": "y",
+          "f": 219
+        },
+        {
+          "w": "la",
+          "f": 224
+        },
+        {
+          "w": "resolución",
+          "f": 227
+        },
+        {
+          "w": "de",
+          "f": 242
+        },
+        {
+          "w": "conflictos",
+          "f": 246
+        },
+        {
+          "w": "con",
+          "f": 261
+        },
+        {
+          "w": "tus",
+          "f": 266
+        },
+        {
+          "w": "redes",
+          "f": 271
+        },
+        {
+          "w": "de",
+          "f": 279
+        },
+        {
+          "w": "apoyo",
+          "f": 282
+        },
+        {
+          "w": "después",
+          "f": 308
+        },
+        {
+          "w": "harás",
+          "f": 319
+        },
+        {
+          "w": "dos",
+          "f": 326
+        },
+        {
+          "w": "actividades",
+          "f": 331
+        },
+        {
+          "w": "prácticas",
+          "f": 347
+        },
+        {
+          "w": "y",
+          "f": 363
+        },
+        {
+          "w": "terminarás",
+          "f": 366
+        },
+        {
+          "w": "con",
+          "f": 381
+        },
+        {
+          "w": "unos",
+          "f": 386
+        },
+        {
+          "w": "aspectos",
+          "f": 392
+        },
+        {
+          "w": "para",
+          "f": 406
+        },
+        {
+          "w": "reflexionar",
+          "f": 413
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "conceptos",
+      "titulo": "¿Por qué empezar por aquí?",
+      "texto": "Continuar los estudios no depende solo de la voluntad. La falta de tiempo, el miedo al fracaso o la desmotivación también pesan. Por eso empezamos por las emociones: avanzar en la educación también implica aprender a cuidar de uno mismo.",
+      "voz": "Continuar los estudios no depende solo de la voluntad. La falta de tiempo, el miedo al fracaso o la desmotivación también pesan. Por eso empezamos por las emociones: avanzar en la educación también implica aprender a cuidar de uno mismo.",
+      "items": [
+        {
+          "titulo": "No es solo voluntad",
+          "texto": "Continuar los estudios depende de muchas cosas",
+          "palabra": "voluntad"
+        },
+        {
+          "titulo": "Lo que también pesa",
+          "texto": "Falta de tiempo, miedo al fracaso, desmotivación",
+          "palabra": "tiempo"
+        },
+        {
+          "titulo": "Cuidarse es avanzar",
+          "texto": "Aprender a cuidar de uno mismo",
+          "palabra": "cuidar"
+        }
+      ],
+      "audio": "voz/bienvenida-gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 399,
+      "frames": 427,
+      "chunks": [
+        {
+          "text": "Continuar los estudios no depende",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "solo de la voluntad.",
+          "from": 47,
+          "to": 76
+        },
+        {
+          "text": "La falta de tiempo, el miedo al",
+          "from": 78,
+          "to": 138
+        },
+        {
+          "text": "fracaso o la desmotivación también pesan.",
+          "from": 138,
+          "to": 216
+        },
+        {
+          "text": "Por eso empezamos por las emociones:",
+          "from": 226,
+          "to": 282
+        },
+        {
+          "text": "avanzar en la educación también implica",
+          "from": 292,
+          "to": 349
+        },
+        {
+          "text": "aprender a cuidar de uno mismo.",
+          "from": 349,
+          "to": 394
+        }
+      ],
+      "words": [
+        {
+          "w": "continuar",
+          "f": 0
+        },
+        {
+          "w": "los",
+          "f": 15
+        },
+        {
+          "w": "estudios",
+          "f": 20
+        },
+        {
+          "w": "no",
+          "f": 32
+        },
+        {
+          "w": "depende",
+          "f": 35
+        },
+        {
+          "w": "solo",
+          "f": 46
+        },
+        {
+          "w": "de",
+          "f": 53
+        },
+        {
+          "w": "la",
+          "f": 56
+        },
+        {
+          "w": "voluntad",
+          "f": 59
+        },
+        {
+          "w": "la",
+          "f": 78
+        },
+        {
+          "w": "falta",
+          "f": 83
+        },
+        {
+          "w": "de",
+          "f": 92
+        },
+        {
+          "w": "tiempo",
+          "f": 96
+        },
+        {
+          "w": "el",
+          "f": 112
+        },
+        {
+          "w": "miedo",
+          "f": 117
+        },
+        {
+          "w": "al",
+          "f": 124
+        },
+        {
+          "w": "fracaso",
+          "f": 126
+        },
+        {
+          "w": "o",
+          "f": 145
+        },
+        {
+          "w": "la",
+          "f": 148
+        },
+        {
+          "w": "desmotivación",
+          "f": 151
+        },
+        {
+          "w": "también",
+          "f": 186
+        },
+        {
+          "w": "pesan",
+          "f": 200
+        },
+        {
+          "w": "por",
+          "f": 226
+        },
+        {
+          "w": "eso",
+          "f": 233
+        },
+        {
+          "w": "empezamos",
+          "f": 236
+        },
+        {
+          "w": "por",
+          "f": 251
+        },
+        {
+          "w": "las",
+          "f": 255
+        },
+        {
+          "w": "emociones",
+          "f": 260
+        },
+        {
+          "w": "avanzar",
+          "f": 292
+        },
+        {
+          "w": "en",
+          "f": 304
+        },
+        {
+          "w": "la",
+          "f": 307
+        },
+        {
+          "w": "educación",
+          "f": 309
+        },
+        {
+          "w": "también",
+          "f": 326
+        },
+        {
+          "w": "implica",
+          "f": 335
+        },
+        {
+          "w": "aprender",
+          "f": 346
+        },
+        {
+          "w": "a",
+          "f": 358
+        },
+        {
+          "w": "cuidar",
+          "f": 359
+        },
+        {
+          "w": "de",
+          "f": 369
+        },
+        {
+          "w": "uno",
+          "f": 373
+        },
+        {
+          "w": "mismo",
+          "f": 379
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "cierre",
+      "texto": "Cuando quieras, sigue con el primer tema: aprender es avanzar. ¡Vamos!",
+      "voz": "Cuando quieras, sigue con el primer tema: aprender es avanzar. ¡Vamos!",
+      "audio": "voz/bienvenida-gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 144,
+      "frames": 304,
+      "chunks": [
+        {
+          "text": "Cuando quieras, sigue con el primer tema:",
+          "from": 0,
+          "to": 61
+        },
+        {
+          "text": "aprender es avanzar.",
+          "from": 71,
+          "to": 108
+        },
+        {
+          "text": "¡Vamos!",
+          "from": 110,
+          "to": 139
+        }
+      ],
+      "words": [
+        {
+          "w": "cuando",
+          "f": 0
+        },
+        {
+          "w": "quieras",
+          "f": 11
+        },
+        {
+          "w": "sigue",
+          "f": 20
+        },
+        {
+          "w": "con",
+          "f": 29
+        },
+        {
+          "w": "el",
+          "f": 34
+        },
+        {
+          "w": "primer",
+          "f": 37
+        },
+        {
+          "w": "tema",
+          "f": 47
+        },
+        {
+          "w": "aprender",
+          "f": 71
+        },
+        {
+          "w": "es",
+          "f": 86
+        },
+        {
+          "w": "avanzar",
+          "f": 90
+        },
+        {
+          "w": "vamos",
+          "f": 114
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,11 @@
 type Row = Record<string, unknown>;
 type Out = { kind: 'text' | 'buttons' | 'list'; body: string; options: string[]; ids: string[] };
 
-const store: { conv: Row | null; messages: Row[] } = { conv: null, messages: [] };
+const store: { conv: Row | null; messages: Row[]; student: boolean } = {
+  conv: null,
+  messages: [],
+  student: false,
+};
 const outbox: Out[] = [];
 const mockCreateAccount = jest.fn();
 const mockNotify = jest.fn();
@@ -85,6 +89,7 @@ jest.mock('@/lib/db/tenant', () => {
     createTenantClient: () => ({ person: { findMany: jest.fn(async () => []) } }),
     prisma: {
       auditLog: { create: (...args: unknown[]) => mockAudit(...args) },
+      membership: { findFirst: jest.fn(async () => (store.student ? { id: 'm-1' } : null)) },
       institution: {
         findUnique: jest.fn(async () => ({
           id: 'inst-1',
@@ -93,7 +98,9 @@ jest.mock('@/lib/db/tenant', () => {
         })),
       },
       conversation: {
-        findUnique: jest.fn(async () => (store.conv ? { id: store.conv.id } : null)),
+        findUnique: jest.fn(async () =>
+          store.conv ? { id: store.conv.id, personId: store.conv.personId ?? null } : null
+        ),
         create: jest.fn(async ({ data }: { data: Row }) => {
           store.conv = {
             id: 'conv-1',
@@ -169,6 +176,7 @@ const last = () => outbox[outbox.length - 1]!;
 beforeEach(() => {
   store.conv = null;
   store.messages = [];
+  store.student = false;
   outbox.length = 0;
   mockCreateAccount.mockReset();
   mockAudit.mockReset();
@@ -321,6 +329,25 @@ describe('escenarios', () => {
     const pay = await taps('Formas de pago');
     expect(pay.replies[0]!.body).toContain('Nequi');
     expect(pay.replies[0]!.kind).toBe('buttons');
+  });
+
+  it('preguntar por un certificado informa; sin estudiante enlazado, lo manda a la plataforma', async () => {
+    const info = await says('¿Cuánto cuesta un certificado de estudios?');
+    expect(info.replies[0]!.body).toContain('$11.000');
+    expect(store.conv!.intakeKind).toBeNull();
+    const start = await taps('Pedir certificado');
+    expect(start.replies[0]!.body).toContain('https://alba.test/aprender/certificados');
+    expect(store.conv!.intakeKind).toBeNull();
+  });
+
+  it('un estudiante enlazado pide el certificado por el chat sin repetir su nombre', async () => {
+    await says('Necesito un certificado');
+    store.conv!.personId = 'p-1';
+    store.student = true;
+    await taps('Pedir certificado');
+    expect(store.conv!.intakeKind).toBe('CERTIFICATE');
+    const first = await taps('Sí, autorizo');
+    expect(first.replies[0]!.body).toContain('lugar se expidió');
   });
 
   it('el mensaje de la página de requisitos llega a requisitos', async () => {

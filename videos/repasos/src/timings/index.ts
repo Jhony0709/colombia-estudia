@@ -25,24 +25,26 @@ import t23 from './la-vida-y-los-ecosistemas--JcWDFG8DiES2OzGhZJUJ.json';
 import t24 from './numeros-naturales-y-operaciones--JcWDFG8DiES2OzGhZJUJ.json';
 import t25 from './organizadores-graficos--JcWDFG8DiES2OzGhZJUJ.json';
 import t26 from './universo-sistema-solar-y-tierra--JcWDFG8DiES2OzGhZJUJ.json';
-import t27 from './el-siglo-xx-y-el-mundo-actual--JcWDFG8DiES2OzGhZJUJ.json';
-import t28 from './evolucion-biologica-y-seleccion-natural--JcWDFG8DiES2OzGhZJUJ.json';
-import t29 from './literatura-latinoamericana-movimientos--JcWDFG8DiES2OzGhZJUJ.json';
-import t30 from './pronombres-personales-y-verbo-to-be--JcWDFG8DiES2OzGhZJUJ.json';
-import t31 from './economia-y-actividades-economicas--JcWDFG8DiES2OzGhZJUJ.json';
-import t32 from './expresiones-algebraicas--JcWDFG8DiES2OzGhZJUJ.json';
-import t33 from './los-generos-literarios--JcWDFG8DiES2OzGhZJUJ.json';
-import t34 from './organizacion-de-los-seres-vivos--JcWDFG8DiES2OzGhZJUJ.json';
-import t35 from './biotecnologia-genetica-y-futuro--JcWDFG8DiES2OzGhZJUJ.json';
-import t36 from './comunicacion-y-textos-argumentativos--JcWDFG8DiES2OzGhZJUJ.json';
-import t37 from './estado-economia-y-sociedad--JcWDFG8DiES2OzGhZJUJ.json';
-import t38 from './funciones-y-modelacion-matematica--JcWDFG8DiES2OzGhZJUJ.json';
-import t39 from './introduccion-al-pensamiento-filosofico--JcWDFG8DiES2OzGhZJUJ.json';
-import t40 from './present-simple--JcWDFG8DiES2OzGhZJUJ.json';
-import t41 from './educacion-financiera-y-emprendimiento--JcWDFG8DiES2OzGhZJUJ.json';
-import t42 from './energia-trabajo-y-potencia--JcWDFG8DiES2OzGhZJUJ.json';
-import t43 from './lenguaje-comunicacion-y-realidad-social--JcWDFG8DiES2OzGhZJUJ.json';
-import t44 from './ser-humano-libertad-y-existencia--JcWDFG8DiES2OzGhZJUJ.json';
+import t27 from './bienvenida-gestion-emocional--JcWDFG8DiES2OzGhZJUJ.json';
+import t28 from './gestion-emocional--JcWDFG8DiES2OzGhZJUJ.json';
+import t29 from './el-siglo-xx-y-el-mundo-actual--JcWDFG8DiES2OzGhZJUJ.json';
+import t30 from './evolucion-biologica-y-seleccion-natural--JcWDFG8DiES2OzGhZJUJ.json';
+import t31 from './literatura-latinoamericana-movimientos--JcWDFG8DiES2OzGhZJUJ.json';
+import t32 from './pronombres-personales-y-verbo-to-be--JcWDFG8DiES2OzGhZJUJ.json';
+import t33 from './economia-y-actividades-economicas--JcWDFG8DiES2OzGhZJUJ.json';
+import t34 from './expresiones-algebraicas--JcWDFG8DiES2OzGhZJUJ.json';
+import t35 from './los-generos-literarios--JcWDFG8DiES2OzGhZJUJ.json';
+import t36 from './organizacion-de-los-seres-vivos--JcWDFG8DiES2OzGhZJUJ.json';
+import t37 from './biotecnologia-genetica-y-futuro--JcWDFG8DiES2OzGhZJUJ.json';
+import t38 from './comunicacion-y-textos-argumentativos--JcWDFG8DiES2OzGhZJUJ.json';
+import t39 from './estado-economia-y-sociedad--JcWDFG8DiES2OzGhZJUJ.json';
+import t40 from './funciones-y-modelacion-matematica--JcWDFG8DiES2OzGhZJUJ.json';
+import t41 from './introduccion-al-pensamiento-filosofico--JcWDFG8DiES2OzGhZJUJ.json';
+import t42 from './present-simple--JcWDFG8DiES2OzGhZJUJ.json';
+import t43 from './educacion-financiera-y-emprendimiento--JcWDFG8DiES2OzGhZJUJ.json';
+import t44 from './energia-trabajo-y-potencia--JcWDFG8DiES2OzGhZJUJ.json';
+import t45 from './lenguaje-comunicacion-y-realidad-social--JcWDFG8DiES2OzGhZJUJ.json';
+import t46 from './ser-humano-libertad-y-existencia--JcWDFG8DiES2OzGhZJUJ.json';
 
 export const TIMINGS = {
   'estadistica-y-probabilidad--JcWDFG8DiES2OzGhZJUJ': t0,
@@ -72,22 +74,24 @@ export const TIMINGS = {
   'numeros-naturales-y-operaciones--JcWDFG8DiES2OzGhZJUJ': t24,
   'organizadores-graficos--JcWDFG8DiES2OzGhZJUJ': t25,
   'universo-sistema-solar-y-tierra--JcWDFG8DiES2OzGhZJUJ': t26,
-  'el-siglo-xx-y-el-mundo-actual--JcWDFG8DiES2OzGhZJUJ': t27,
-  'evolucion-biologica-y-seleccion-natural--JcWDFG8DiES2OzGhZJUJ': t28,
-  'literatura-latinoamericana-movimientos--JcWDFG8DiES2OzGhZJUJ': t29,
-  'pronombres-personales-y-verbo-to-be--JcWDFG8DiES2OzGhZJUJ': t30,
-  'economia-y-actividades-economicas--JcWDFG8DiES2OzGhZJUJ': t31,
-  'expresiones-algebraicas--JcWDFG8DiES2OzGhZJUJ': t32,
-  'los-generos-literarios--JcWDFG8DiES2OzGhZJUJ': t33,
-  'organizacion-de-los-seres-vivos--JcWDFG8DiES2OzGhZJUJ': t34,
-  'biotecnologia-genetica-y-futuro--JcWDFG8DiES2OzGhZJUJ': t35,
-  'comunicacion-y-textos-argumentativos--JcWDFG8DiES2OzGhZJUJ': t36,
-  'estado-economia-y-sociedad--JcWDFG8DiES2OzGhZJUJ': t37,
-  'funciones-y-modelacion-matematica--JcWDFG8DiES2OzGhZJUJ': t38,
-  'introduccion-al-pensamiento-filosofico--JcWDFG8DiES2OzGhZJUJ': t39,
-  'present-simple--JcWDFG8DiES2OzGhZJUJ': t40,
-  'educacion-financiera-y-emprendimiento--JcWDFG8DiES2OzGhZJUJ': t41,
-  'energia-trabajo-y-potencia--JcWDFG8DiES2OzGhZJUJ': t42,
-  'lenguaje-comunicacion-y-realidad-social--JcWDFG8DiES2OzGhZJUJ': t43,
-  'ser-humano-libertad-y-existencia--JcWDFG8DiES2OzGhZJUJ': t44,
+  'bienvenida-gestion-emocional--JcWDFG8DiES2OzGhZJUJ': t27,
+  'gestion-emocional--JcWDFG8DiES2OzGhZJUJ': t28,
+  'el-siglo-xx-y-el-mundo-actual--JcWDFG8DiES2OzGhZJUJ': t29,
+  'evolucion-biologica-y-seleccion-natural--JcWDFG8DiES2OzGhZJUJ': t30,
+  'literatura-latinoamericana-movimientos--JcWDFG8DiES2OzGhZJUJ': t31,
+  'pronombres-personales-y-verbo-to-be--JcWDFG8DiES2OzGhZJUJ': t32,
+  'economia-y-actividades-economicas--JcWDFG8DiES2OzGhZJUJ': t33,
+  'expresiones-algebraicas--JcWDFG8DiES2OzGhZJUJ': t34,
+  'los-generos-literarios--JcWDFG8DiES2OzGhZJUJ': t35,
+  'organizacion-de-los-seres-vivos--JcWDFG8DiES2OzGhZJUJ': t36,
+  'biotecnologia-genetica-y-futuro--JcWDFG8DiES2OzGhZJUJ': t37,
+  'comunicacion-y-textos-argumentativos--JcWDFG8DiES2OzGhZJUJ': t38,
+  'estado-economia-y-sociedad--JcWDFG8DiES2OzGhZJUJ': t39,
+  'funciones-y-modelacion-matematica--JcWDFG8DiES2OzGhZJUJ': t40,
+  'introduccion-al-pensamiento-filosofico--JcWDFG8DiES2OzGhZJUJ': t41,
+  'present-simple--JcWDFG8DiES2OzGhZJUJ': t42,
+  'educacion-financiera-y-emprendimiento--JcWDFG8DiES2OzGhZJUJ': t43,
+  'energia-trabajo-y-potencia--JcWDFG8DiES2OzGhZJUJ': t44,
+  'lenguaje-comunicacion-y-realidad-social--JcWDFG8DiES2OzGhZJUJ': t45,
+  'ser-humano-libertad-y-existencia--JcWDFG8DiES2OzGhZJUJ': t46,
 };

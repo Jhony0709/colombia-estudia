@@ -8,7 +8,6 @@
  */
 
 import { calculateAgeAt } from '@colombia-estudia/domain';
-import { cop, type Facts } from './facts';
 
 export type IntakeKind = 'ENROLL' | 'CERTIFICATE' | 'ACCOUNT';
 /** Las respuestas por clave; las que empiezan por `_` son del bot (autorización, regreso). */
@@ -188,8 +187,8 @@ export const FIELDS: Record<IntakeKind, Field[]> = {
     },
     { key: 'email', label: 'Correo', ask: '¿Cuál es tu correo electrónico?', check: email },
   ],
+  // El chat ya está enlazado al estudiante (`bot.ts`): su nombre y documento son los de la ficha.
   CERTIFICATE: [
-    { key: 'fullName', label: 'Nombre completo', ask: '¿Cuál es tu nombre completo?' },
     {
       key: 'documentPlace',
       label: 'Lugar de expedición',
@@ -278,13 +277,13 @@ const PURPOSE: Record<IntakeKind, string> = {
 };
 
 /** Lo primero: para qué son los datos y la autorización. */
-export function intakeStart(kind: IntakeKind, facts: Facts, policyUrl: string): IntakeReply {
+export function intakeStart(kind: IntakeKind, policyUrl: string): IntakeReply {
   const intro =
     kind === 'ENROLL'
       ? '¡Qué bien! 🙌 Para formalizar tu matrícula te pido unos datos, uno a la vez.'
       : kind === 'ACCOUNT'
         ? '¡Genial! 🙌 Creamos tu cuenta por aquí en un minuto. Te pido unos datos, uno a la vez, y al final te llega un correo para confirmarlo y crear tu contraseña.'
-        : `Claro que sí 📄 Los certificados tienen un costo de ${cop(facts.certificatePrice)} y, después del pago, te lo enviamos en un plazo máximo de ${facts.certificateBusinessDays} días hábiles. Te pido unos datos, uno a la vez.`;
+        : '¡Listo! 📄 Te pido unos datos, uno a la vez.';
   return consent(intro, kind, policyUrl);
 }
 

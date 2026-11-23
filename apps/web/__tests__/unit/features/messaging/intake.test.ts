@@ -5,7 +5,6 @@
  * SSOT: features/messaging/intake.ts.
  */
 
-import { DEFAULT_FACTS } from '@/features/messaging/facts';
 import {
   cancelsIntake,
   FIELDS,
@@ -29,10 +28,9 @@ const CONFIRM = FIELDS.ENROLL.length + 1;
 
 describe('intakeStart', () => {
   it('pide la autorización con la política antes de cualquier dato', () => {
-    const start = intakeStart('ENROLL', DEFAULT_FACTS, CTX.policyUrl);
+    const start = intakeStart('ENROLL', CTX.policyUrl);
     expect(start.text).toContain(CTX.policyUrl);
     expect(start.buttons?.map((b) => b.id)).toEqual(['intake_yes', 'intake_no']);
-    expect(intakeStart('CERTIFICATE', DEFAULT_FACTS, CTX.policyUrl).text).toContain('$11.000');
   });
 
   it('no pide número de documento por el chat', () => {
@@ -198,10 +196,7 @@ describe('intakeSummary', () => {
   it('etiqueta y valor en orden, sin los vacíos ni los datos del bot', () => {
     expect(
       intakeSummary('CERTIFICATE', { reason: 'Trabajo', fullName: 'Laura', _consentAt: 'x' })
-    ).toEqual([
-      { label: 'Nombre completo', value: 'Laura' },
-      { label: 'Motivo', value: 'Trabajo' },
-    ]);
+    ).toEqual([{ label: 'Motivo', value: 'Trabajo' }]);
   });
 });
 

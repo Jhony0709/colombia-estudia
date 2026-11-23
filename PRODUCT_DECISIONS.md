@@ -1342,6 +1342,25 @@ tiene `WHATSAPP`.
 **Schema**: `ConversationMessage.replyToId` y `ConversationMessage.buttons` (migración
 `20261122000000_message_reply_buttons`).
 
+## 2026-11-23 — El certificado de estudios es de un estudiante, y preguntar no abre formularios
+
+**Decisión** (Jhonny, 23/11: «hay gente que solo quiere preguntar»; «los certificados deben estar
+ligados a un estudiante existente»): en WhatsApp, «Certificados» (lista o texto) informa precio y
+plazo con [Pedir certificado · Hablar con asesor · Más opciones]; el formulario solo empieza con
+«Pedir certificado» y solo si el chat está enlazado a una persona con rol de estudiante (el número
+coincide con su ficha). Entonces ya no pregunta el nombre: solo lugar de expedición y motivo. Si
+no está enlazado, lo manda a `/aprender/certificados` o a un asesor. En la plataforma,
+`/aprender/certificados` tiene «Pedir certificado de estudios» (lugar de expedición y motivo):
+audita `study_certificate.requested` en la persona y avisa a operación y administración con
+enlace a la ficha, uno por persona y día (`POST /api/learn/certificates/request`).
+
+**Por qué**: el chat no puede pedir el número de documento (política de WhatsApp), así que el
+pedido se liga por el número enlazado o por la sesión; un pedido de alguien sin identificar no
+sirve para expedir nada.
+
+**Sin schema**: es un aviso, como «Reportar un problema». Si hace falta seguir el estado
+(pagado, en trámite, enviado), el siguiente paso es un `AccessRequestKind` nuevo.
+
 ## 2026-11-20 — Etapas por cuota: una cuota puede abrir componentes al quedar pagada
 
 **Decisión** (Jhonny, 20/11): al crear el plan de pagos, operación elige qué componentes abre cada

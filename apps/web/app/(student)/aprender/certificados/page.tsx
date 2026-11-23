@@ -35,6 +35,8 @@ import { BrandWave } from '@/components/atoms/brand-wave';
 import { Button } from '@/components/atoms/button';
 import { ProgressBar } from '@/components/atoms/progress-bar';
 import { cn } from '@/lib/utils';
+import { cop, DEFAULT_FACTS } from '@/features/messaging/facts';
+import { StudyCertificateRequest } from './study-certificate-request';
 
 export const metadata: Metadata = { title: 'Constancias' };
 
@@ -148,6 +150,16 @@ export default async function CertificatesPage() {
           </ul>
         </PageSection>
       )}
+
+      <PageSection title={tc('study.title')} description={tc('study.hint')} card>
+        <p className="type-body text-text m-0">
+          {tc('study.terms', {
+            price: cop(DEFAULT_FACTS.certificatePrice),
+            days: DEFAULT_FACTS.certificateBusinessDays,
+          })}
+        </p>
+        <StudyCertificateRequest />
+      </PageSection>
     </Page>
   );
 }

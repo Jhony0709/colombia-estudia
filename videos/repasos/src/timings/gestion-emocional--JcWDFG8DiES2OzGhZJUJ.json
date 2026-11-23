@@ -1,0 +1,1537 @@
+{
+  "tema": "gestion-emocional",
+  "componente": "Introducción",
+  "area": "Gestión emocional",
+  "titulo": "Gestión emocional y riesgos psicosociales",
+  "siguiente": "Aspectos a reflexionar",
+  "escenas": [
+    {
+      "id": "s0",
+      "tipo": "portada",
+      "texto": "Repaso del tema: gestión emocional y riesgos psicosociales.",
+      "voz": "Repaso del tema: gestión emocional y riesgos psicosociales.",
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s0.mp3",
+      "lead": 10,
+      "voiceFrames": 116,
+      "frames": 144,
+      "chunks": [
+        {
+          "text": "Repaso del tema:",
+          "from": 0,
+          "to": 33
+        },
+        {
+          "text": "gestión emocional y riesgos psicosociales.",
+          "from": 36,
+          "to": 111
+        }
+      ],
+      "words": [
+        {
+          "w": "repaso",
+          "f": 0
+        },
+        {
+          "w": "del",
+          "f": 15
+        },
+        {
+          "w": "tema",
+          "f": 20
+        },
+        {
+          "w": "gestión",
+          "f": 36
+        },
+        {
+          "w": "emocional",
+          "f": 47
+        },
+        {
+          "w": "y",
+          "f": 63
+        },
+        {
+          "w": "riesgos",
+          "f": 67
+        },
+        {
+          "w": "psicosociales",
+          "f": 77
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "tipo": "imagen",
+      "titulo": "Las emociones",
+      "texto": "Las emociones son respuestas ante situaciones, pensamientos o recuerdos. Sentimos alegría, tristeza, miedo, ira, sorpresa o asco. No son buenas ni malas: cumplen una función.",
+      "voz": "Las emociones son respuestas ante situaciones, pensamientos o recuerdos. Sentimos alegría, tristeza, miedo, ira, sorpresa o asco. No son buenas ni malas: cumplen una función.",
+      "imagenes": [
+        {
+          "src": "introduccion/emociones.webp",
+          "focos": [
+            {
+              "palabra": "alegría",
+              "x": 0.18,
+              "y": 0.24,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "tristeza",
+              "x": 0.5,
+              "y": 0.24,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "miedo",
+              "x": 0.82,
+              "y": 0.24,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "ira",
+              "x": 0.18,
+              "y": 0.66,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "sorpresa",
+              "x": 0.5,
+              "y": 0.66,
+              "zoom": 1.7
+            },
+            {
+              "palabra": "asco",
+              "x": 0.82,
+              "y": 0.66,
+              "zoom": 1.7
+            }
+          ]
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s1.mp3",
+      "lead": 10,
+      "voiceFrames": 335,
+      "frames": 363,
+      "chunks": [
+        {
+          "text": "Las emociones son respuestas ante",
+          "from": 0,
+          "to": 52
+        },
+        {
+          "text": "situaciones, pensamientos o recuerdos.",
+          "from": 52,
+          "to": 113
+        },
+        {
+          "text": "Sentimos alegría, tristeza, miedo,",
+          "from": 123,
+          "to": 193
+        },
+        {
+          "text": "ira, sorpresa o asco.",
+          "from": 193,
+          "to": 237
+        },
+        {
+          "text": "No son buenas ni malas:",
+          "from": 246,
+          "to": 280
+        },
+        {
+          "text": "cumplen una función.",
+          "from": 281,
+          "to": 330
+        }
+      ],
+      "words": [
+        {
+          "w": "las",
+          "f": 0
+        },
+        {
+          "w": "emociones",
+          "f": 6
+        },
+        {
+          "w": "son",
+          "f": 20
+        },
+        {
+          "w": "respuestas",
+          "f": 25
+        },
+        {
+          "w": "ante",
+          "f": 40
+        },
+        {
+          "w": "situaciones",
+          "f": 48
+        },
+        {
+          "w": "pensamientos",
+          "f": 68
+        },
+        {
+          "w": "o",
+          "f": 89
+        },
+        {
+          "w": "recuerdos",
+          "f": 92
+        },
+        {
+          "w": "sentimos",
+          "f": 123
+        },
+        {
+          "w": "alegría",
+          "f": 139
+        },
+        {
+          "w": "tristeza",
+          "f": 156
+        },
+        {
+          "w": "miedo",
+          "f": 176
+        },
+        {
+          "w": "ira",
+          "f": 192
+        },
+        {
+          "w": "sorpresa",
+          "f": 201
+        },
+        {
+          "w": "o",
+          "f": 219
+        },
+        {
+          "w": "asco",
+          "f": 223
+        },
+        {
+          "w": "no",
+          "f": 246
+        },
+        {
+          "w": "son",
+          "f": 251
+        },
+        {
+          "w": "buenas",
+          "f": 256
+        },
+        {
+          "w": "ni",
+          "f": 265
+        },
+        {
+          "w": "malas",
+          "f": 269
+        },
+        {
+          "w": "cumplen",
+          "f": 281
+        },
+        {
+          "w": "una",
+          "f": 295
+        },
+        {
+          "w": "función",
+          "f": 301
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "tipo": "conceptos",
+      "titulo": "¿Cómo reconocer lo que sentimos?",
+      "texto": "Para reconocer una emoción observamos tres cosas: las señales físicas, como la respiración acelerada o la tensión muscular; los pensamientos que aparecen; y los comportamientos, como alejarnos, discutir o buscar compañía.",
+      "voz": "Para reconocer una emoción observamos tres cosas: las señales físicas, como la respiración acelerada o la tensión muscular; los pensamientos que aparecen; y los comportamientos, como alejarnos, discutir o buscar compañía.",
+      "items": [
+        {
+          "titulo": "Señales físicas",
+          "texto": "Respiración acelerada, tensión muscular",
+          "palabra": "señales"
+        },
+        {
+          "titulo": "Pensamientos",
+          "texto": "«No puedo hacerlo»",
+          "palabra": "pensamientos"
+        },
+        {
+          "titulo": "Comportamientos",
+          "texto": "Alejarnos, discutir, buscar compañía",
+          "palabra": "comportamientos"
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s2.mp3",
+      "lead": 10,
+      "voiceFrames": 386,
+      "frames": 414,
+      "chunks": [
+        {
+          "text": "Para reconocer una emoción observamos tres cosas:",
+          "from": 0,
+          "to": 76
+        },
+        {
+          "text": "las señales físicas, como la respiración",
+          "from": 79,
+          "to": 144
+        },
+        {
+          "text": "acelerada o la tensión muscular;",
+          "from": 144,
+          "to": 196
+        },
+        {
+          "text": "los pensamientos que aparecen;",
+          "from": 205,
+          "to": 251
+        },
+        {
+          "text": "y los comportamientos, como alejarnos,",
+          "from": 259,
+          "to": 331
+        },
+        {
+          "text": "discutir o buscar compañía.",
+          "from": 331,
+          "to": 382
+        }
+      ],
+      "words": [
+        {
+          "w": "para",
+          "f": 0
+        },
+        {
+          "w": "reconocer",
+          "f": 9
+        },
+        {
+          "w": "una",
+          "f": 23
+        },
+        {
+          "w": "emoción",
+          "f": 28
+        },
+        {
+          "w": "observamos",
+          "f": 40
+        },
+        {
+          "w": "tres",
+          "f": 56
+        },
+        {
+          "w": "cosas",
+          "f": 63
+        },
+        {
+          "w": "las",
+          "f": 79
+        },
+        {
+          "w": "señales",
+          "f": 85
+        },
+        {
+          "w": "físicas",
+          "f": 99
+        },
+        {
+          "w": "como",
+          "f": 115
+        },
+        {
+          "w": "la",
+          "f": 122
+        },
+        {
+          "w": "respiración",
+          "f": 125
+        },
+        {
+          "w": "acelerada",
+          "f": 141
+        },
+        {
+          "w": "o",
+          "f": 159
+        },
+        {
+          "w": "la",
+          "f": 162
+        },
+        {
+          "w": "tensión",
+          "f": 165
+        },
+        {
+          "w": "muscular",
+          "f": 176
+        },
+        {
+          "w": "los",
+          "f": 205
+        },
+        {
+          "w": "pensamientos",
+          "f": 210
+        },
+        {
+          "w": "que",
+          "f": 227
+        },
+        {
+          "w": "aparecen",
+          "f": 230
+        },
+        {
+          "w": "y",
+          "f": 259
+        },
+        {
+          "w": "los",
+          "f": 264
+        },
+        {
+          "w": "comportamientos",
+          "f": 269
+        },
+        {
+          "w": "como",
+          "f": 294
+        },
+        {
+          "w": "alejarnos",
+          "f": 300
+        },
+        {
+          "w": "discutir",
+          "f": 321
+        },
+        {
+          "w": "o",
+          "f": 341
+        },
+        {
+          "w": "buscar",
+          "f": 344
+        },
+        {
+          "w": "compañía",
+          "f": 354
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "tipo": "pasos",
+      "titulo": "Gestionar una emoción",
+      "texto": "Gestionar una emoción no es ignorarla: es reconocerla y responder de forma adecuada. Algunas estrategias: hacer una pausa, respirar despacio, identificar lo que sentimos, expresarlo con respeto y hablar con alguien de confianza.",
+      "voz": "Gestionar una emoción no es ignorarla: es reconocerla y responder de forma adecuada. Algunas estrategias: hacer una pausa, respirar despacio, identificar lo que sentimos, expresarlo con respeto y hablar con alguien de confianza.",
+      "items": [
+        {
+          "titulo": "Hacer una pausa",
+          "palabra": "pausa"
+        },
+        {
+          "titulo": "Respirar",
+          "palabra": "respirar"
+        },
+        {
+          "titulo": "Identificar lo que sentimos",
+          "palabra": "identificar"
+        },
+        {
+          "titulo": "Expresarlo con respeto",
+          "palabra": "respeto"
+        },
+        {
+          "titulo": "Hablar con alguien",
+          "palabra": "hablar"
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s3.mp3",
+      "lead": 10,
+      "voiceFrames": 402,
+      "frames": 430,
+      "chunks": [
+        {
+          "text": "Gestionar una emoción no es ignorarla:",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "es reconocerla y responder de forma adecuada.",
+          "from": 62,
+          "to": 129
+        },
+        {
+          "text": "Algunas estrategias:",
+          "from": 141,
+          "to": 177
+        },
+        {
+          "text": "hacer una pausa, respirar despacio, identificar",
+          "from": 178,
+          "to": 264
+        },
+        {
+          "text": "lo que sentimos, expresarlo con respeto",
+          "from": 264,
+          "to": 335
+        },
+        {
+          "text": "y hablar con alguien de confianza.",
+          "from": 335,
+          "to": 397
+        }
+      ],
+      "words": [
+        {
+          "w": "gestionar",
+          "f": 0
+        },
+        {
+          "w": "una",
+          "f": 17
+        },
+        {
+          "w": "emoción",
+          "f": 21
+        },
+        {
+          "w": "no",
+          "f": 33
+        },
+        {
+          "w": "es",
+          "f": 37
+        },
+        {
+          "w": "ignorarla",
+          "f": 40
+        },
+        {
+          "w": "es",
+          "f": 62
+        },
+        {
+          "w": "reconocerla",
+          "f": 65
+        },
+        {
+          "w": "y",
+          "f": 84
+        },
+        {
+          "w": "responder",
+          "f": 86
+        },
+        {
+          "w": "de",
+          "f": 100
+        },
+        {
+          "w": "forma",
+          "f": 103
+        },
+        {
+          "w": "adecuada",
+          "f": 111
+        },
+        {
+          "w": "algunas",
+          "f": 141
+        },
+        {
+          "w": "estrategias",
+          "f": 154
+        },
+        {
+          "w": "hacer",
+          "f": 178
+        },
+        {
+          "w": "una",
+          "f": 188
+        },
+        {
+          "w": "pausa",
+          "f": 194
+        },
+        {
+          "w": "respirar",
+          "f": 210
+        },
+        {
+          "w": "despacio",
+          "f": 223
+        },
+        {
+          "w": "identificar",
+          "f": 241
+        },
+        {
+          "w": "lo",
+          "f": 262
+        },
+        {
+          "w": "que",
+          "f": 266
+        },
+        {
+          "w": "sentimos",
+          "f": 269
+        },
+        {
+          "w": "expresarlo",
+          "f": 296
+        },
+        {
+          "w": "con",
+          "f": 317
+        },
+        {
+          "w": "respeto",
+          "f": 322
+        },
+        {
+          "w": "y",
+          "f": 340
+        },
+        {
+          "w": "hablar",
+          "f": 343
+        },
+        {
+          "w": "con",
+          "f": 351
+        },
+        {
+          "w": "alguien",
+          "f": 356
+        },
+        {
+          "w": "de",
+          "f": 364
+        },
+        {
+          "w": "confianza",
+          "f": 367
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "tipo": "conceptos",
+      "titulo": "Riesgos psicosociales",
+      "texto": "Los riesgos psicosociales son situaciones que pueden afectar nuestro bienestar. Aparecen en la familia, en el estudio, en el trabajo, en las relaciones sociales y en los entornos digitales, como el ciberacoso o la comparación constante.",
+      "voz": "Los riesgos psicosociales son situaciones que pueden afectar nuestro bienestar. Aparecen en la familia, en el estudio, en el trabajo, en las relaciones sociales y en los entornos digitales, como el ciberacoso o la comparación constante.",
+      "items": [
+        {
+          "titulo": "Familia",
+          "texto": "Conflictos, poca comunicación",
+          "palabra": "familia"
+        },
+        {
+          "titulo": "Estudio",
+          "texto": "Evaluaciones, tareas acumuladas",
+          "palabra": "estudio"
+        },
+        {
+          "titulo": "Trabajo",
+          "texto": "Exceso de tareas, presión",
+          "palabra": "trabajo"
+        },
+        {
+          "titulo": "Relaciones sociales",
+          "texto": "Rechazo, aislamiento",
+          "palabra": "relaciones"
+        },
+        {
+          "titulo": "Entornos digitales",
+          "texto": "Ciberacoso, comparación",
+          "palabra": "digitales"
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s4.mp3",
+      "lead": 10,
+      "voiceFrames": 381,
+      "frames": 409,
+      "chunks": [
+        {
+          "text": "Los riesgos psicosociales son situaciones",
+          "from": 0,
+          "to": 59
+        },
+        {
+          "text": "que pueden afectar nuestro bienestar.",
+          "from": 59,
+          "to": 113
+        },
+        {
+          "text": "Aparecen en la familia, en el estudio, en el",
+          "from": 124,
+          "to": 196
+        },
+        {
+          "text": "trabajo, en las relaciones sociales y en los entornos",
+          "from": 196,
+          "to": 283
+        },
+        {
+          "text": "digitales, como el ciberacoso o la comparación constante.",
+          "from": 283,
+          "to": 376
+        }
+      ],
+      "words": [
+        {
+          "w": "los",
+          "f": 0
+        },
+        {
+          "w": "riesgos",
+          "f": 6
+        },
+        {
+          "w": "psicosociales",
+          "f": 16
+        },
+        {
+          "w": "son",
+          "f": 39
+        },
+        {
+          "w": "situaciones",
+          "f": 44
+        },
+        {
+          "w": "que",
+          "f": 62
+        },
+        {
+          "w": "pueden",
+          "f": 65
+        },
+        {
+          "w": "afectar",
+          "f": 74
+        },
+        {
+          "w": "nuestro",
+          "f": 86
+        },
+        {
+          "w": "bienestar",
+          "f": 95
+        },
+        {
+          "w": "aparecen",
+          "f": 124
+        },
+        {
+          "w": "en",
+          "f": 139
+        },
+        {
+          "w": "la",
+          "f": 142
+        },
+        {
+          "w": "familia",
+          "f": 145
+        },
+        {
+          "w": "en",
+          "f": 162
+        },
+        {
+          "w": "el",
+          "f": 166
+        },
+        {
+          "w": "estudio",
+          "f": 170
+        },
+        {
+          "w": "en",
+          "f": 185
+        },
+        {
+          "w": "el",
+          "f": 189
+        },
+        {
+          "w": "trabajo",
+          "f": 192
+        },
+        {
+          "w": "en",
+          "f": 210
+        },
+        {
+          "w": "las",
+          "f": 214
+        },
+        {
+          "w": "relaciones",
+          "f": 217
+        },
+        {
+          "w": "sociales",
+          "f": 231
+        },
+        {
+          "w": "y",
+          "f": 248
+        },
+        {
+          "w": "en",
+          "f": 249
+        },
+        {
+          "w": "los",
+          "f": 251
+        },
+        {
+          "w": "entornos",
+          "f": 257
+        },
+        {
+          "w": "digitales",
+          "f": 269
+        },
+        {
+          "w": "como",
+          "f": 300
+        },
+        {
+          "w": "el",
+          "f": 307
+        },
+        {
+          "w": "ciberacoso",
+          "f": 309
+        },
+        {
+          "w": "o",
+          "f": 332
+        },
+        {
+          "w": "la",
+          "f": 334
+        },
+        {
+          "w": "comparación",
+          "f": 338
+        },
+        {
+          "w": "constante",
+          "f": 354
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "tipo": "comparar",
+      "titulo": "El estrés",
+      "texto": "El estrés aparece ante situaciones exigentes. Un poco de tensión puede ayudarnos a prepararnos. Pero si se mantiene mucho tiempo, hay que prestar atención a señales como el cansancio frecuente, los problemas para dormir o la preocupación constante.",
+      "voz": "El estrés aparece ante situaciones exigentes. Un poco de tensión puede ayudarnos a prepararnos. Pero si se mantiene mucho tiempo, hay que prestar atención a señales como el cansancio frecuente, los problemas para dormir o la preocupación constante.",
+      "columnas": [
+        {
+          "titulo": "Tensión moderada",
+          "palabra": "tensión",
+          "puntos": [
+            {
+              "texto": "Nos ayuda a prepararnos ante un desafío",
+              "palabra": "prepararnos"
+            }
+          ]
+        },
+        {
+          "titulo": "Estrés que se mantiene",
+          "palabra": "mantiene",
+          "puntos": [
+            {
+              "texto": "Cansancio frecuente",
+              "palabra": "cansancio"
+            },
+            {
+              "texto": "Problemas para dormir",
+              "palabra": "dormir"
+            },
+            {
+              "texto": "Preocupación constante",
+              "palabra": "preocupación"
+            }
+          ]
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s5.mp3",
+      "lead": 10,
+      "voiceFrames": 417,
+      "frames": 445,
+      "chunks": [
+        {
+          "text": "El estrés aparece ante situaciones exigentes.",
+          "from": 0,
+          "to": 74
+        },
+        {
+          "text": "Un poco de tensión puede ayudarnos a prepararnos.",
+          "from": 82,
+          "to": 159
+        },
+        {
+          "text": "Pero si se mantiene mucho tiempo, hay que",
+          "from": 167,
+          "to": 234
+        },
+        {
+          "text": "prestar atención a señales como el cansancio frecuente,",
+          "from": 234,
+          "to": 324
+        },
+        {
+          "text": "los problemas para dormir o la preocupación constante.",
+          "from": 324,
+          "to": 412
+        }
+      ],
+      "words": [
+        {
+          "w": "el",
+          "f": 0
+        },
+        {
+          "w": "estrés",
+          "f": 7
+        },
+        {
+          "w": "aparece",
+          "f": 17
+        },
+        {
+          "w": "ante",
+          "f": 28
+        },
+        {
+          "w": "situaciones",
+          "f": 34
+        },
+        {
+          "w": "exigentes",
+          "f": 51
+        },
+        {
+          "w": "un",
+          "f": 82
+        },
+        {
+          "w": "poco",
+          "f": 87
+        },
+        {
+          "w": "de",
+          "f": 95
+        },
+        {
+          "w": "tensión",
+          "f": 98
+        },
+        {
+          "w": "puede",
+          "f": 110
+        },
+        {
+          "w": "ayudarnos",
+          "f": 115
+        },
+        {
+          "w": "a",
+          "f": 131
+        },
+        {
+          "w": "prepararnos",
+          "f": 133
+        },
+        {
+          "w": "pero",
+          "f": 167
+        },
+        {
+          "w": "si",
+          "f": 175
+        },
+        {
+          "w": "se",
+          "f": 178
+        },
+        {
+          "w": "mantiene",
+          "f": 182
+        },
+        {
+          "w": "mucho",
+          "f": 194
+        },
+        {
+          "w": "tiempo",
+          "f": 203
+        },
+        {
+          "w": "hay",
+          "f": 219
+        },
+        {
+          "w": "que",
+          "f": 224
+        },
+        {
+          "w": "prestar",
+          "f": 228
+        },
+        {
+          "w": "atención",
+          "f": 238
+        },
+        {
+          "w": "a",
+          "f": 250
+        },
+        {
+          "w": "señales",
+          "f": 252
+        },
+        {
+          "w": "como",
+          "f": 266
+        },
+        {
+          "w": "el",
+          "f": 271
+        },
+        {
+          "w": "cansancio",
+          "f": 274
+        },
+        {
+          "w": "frecuente",
+          "f": 289
+        },
+        {
+          "w": "los",
+          "f": 318
+        },
+        {
+          "w": "problemas",
+          "f": 325
+        },
+        {
+          "w": "para",
+          "f": 338
+        },
+        {
+          "w": "dormir",
+          "f": 344
+        },
+        {
+          "w": "o",
+          "f": 358
+        },
+        {
+          "w": "la",
+          "f": 361
+        },
+        {
+          "w": "preocupación",
+          "f": 365
+        },
+        {
+          "w": "constante",
+          "f": 382
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "tipo": "pasos",
+      "titulo": "Ante un conflicto",
+      "texto": "Un conflicto no significa que una relación deba terminar. Ayuda escuchar, mantener la calma, expresar las ideas con respeto, evitar la violencia y buscar acuerdos.",
+      "voz": "Un conflicto no significa que una relación deba terminar. Ayuda escuchar, mantener la calma, expresar las ideas con respeto, evitar la violencia y buscar acuerdos.",
+      "items": [
+        {
+          "titulo": "Escuchar",
+          "palabra": "escuchar"
+        },
+        {
+          "titulo": "Mantener la calma",
+          "palabra": "calma"
+        },
+        {
+          "titulo": "Expresar con respeto",
+          "palabra": "respeto"
+        },
+        {
+          "titulo": "Evitar la violencia",
+          "palabra": "violencia"
+        },
+        {
+          "titulo": "Buscar acuerdos",
+          "palabra": "acuerdos"
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s6.mp3",
+      "lead": 10,
+      "voiceFrames": 282,
+      "frames": 310,
+      "chunks": [
+        {
+          "text": "Un conflicto no significa que",
+          "from": 0,
+          "to": 43
+        },
+        {
+          "text": "una relación deba terminar.",
+          "from": 43,
+          "to": 83
+        },
+        {
+          "text": "Ayuda escuchar, mantener la calma, expresar",
+          "from": 96,
+          "to": 172
+        },
+        {
+          "text": "las ideas con respeto, evitar la",
+          "from": 172,
+          "to": 228
+        },
+        {
+          "text": "violencia y buscar acuerdos.",
+          "from": 228,
+          "to": 277
+        }
+      ],
+      "words": [
+        {
+          "w": "un",
+          "f": 0
+        },
+        {
+          "w": "conflicto",
+          "f": 7
+        },
+        {
+          "w": "no",
+          "f": 21
+        },
+        {
+          "w": "significa",
+          "f": 25
+        },
+        {
+          "w": "que",
+          "f": 39
+        },
+        {
+          "w": "una",
+          "f": 41
+        },
+        {
+          "w": "relación",
+          "f": 46
+        },
+        {
+          "w": "deba",
+          "f": 58
+        },
+        {
+          "w": "terminar",
+          "f": 65
+        },
+        {
+          "w": "ayuda",
+          "f": 96
+        },
+        {
+          "w": "escuchar",
+          "f": 107
+        },
+        {
+          "w": "mantener",
+          "f": 124
+        },
+        {
+          "w": "la",
+          "f": 137
+        },
+        {
+          "w": "calma",
+          "f": 141
+        },
+        {
+          "w": "expresar",
+          "f": 154
+        },
+        {
+          "w": "las",
+          "f": 170
+        },
+        {
+          "w": "ideas",
+          "f": 175
+        },
+        {
+          "w": "con",
+          "f": 183
+        },
+        {
+          "w": "respeto",
+          "f": 189
+        },
+        {
+          "w": "evitar",
+          "f": 207
+        },
+        {
+          "w": "la",
+          "f": 220
+        },
+        {
+          "w": "violencia",
+          "f": 223
+        },
+        {
+          "w": "y",
+          "f": 237
+        },
+        {
+          "w": "buscar",
+          "f": 239
+        },
+        {
+          "w": "acuerdos",
+          "f": 250
+        }
+      ]
+    },
+    {
+      "id": "s7",
+      "tipo": "conceptos",
+      "titulo": "Red de apoyo y cuidado personal",
+      "texto": "Tu red de apoyo son las personas e instituciones a las que puedes acudir: familia, amigos, docentes, orientadores o profesionales. Pedir ayuda no es ser incapaz. Y cuidarte, con descanso, actividad física y límites, te ayuda a afrontar mejor las dificultades.",
+      "voz": "Tu red de apoyo son las personas e instituciones a las que puedes acudir: familia, amigos, docentes, orientadores o profesionales. Pedir ayuda no es ser incapaz. Y cuidarte, con descanso, actividad física y límites, te ayuda a afrontar mejor las dificultades.",
+      "items": [
+        {
+          "titulo": "Red de apoyo",
+          "texto": "Familia, amigos, docentes, orientadores, profesionales",
+          "palabra": "red"
+        },
+        {
+          "titulo": "Pedir ayuda",
+          "texto": "No es ser incapaz",
+          "palabra": "pedir"
+        },
+        {
+          "titulo": "Cuidado personal",
+          "texto": "Descanso, actividad física y límites",
+          "palabra": "cuidarte"
+        }
+      ],
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s7.mp3",
+      "lead": 10,
+      "voiceFrames": 473,
+      "frames": 501,
+      "chunks": [
+        {
+          "text": "Tu red de apoyo son las personas",
+          "from": 0,
+          "to": 47
+        },
+        {
+          "text": "e instituciones a las que puedes acudir:",
+          "from": 47,
+          "to": 107
+        },
+        {
+          "text": "familia, amigos, docentes,",
+          "from": 115,
+          "to": 166
+        },
+        {
+          "text": "orientadores o profesionales.",
+          "from": 166,
+          "to": 222
+        },
+        {
+          "text": "Pedir ayuda no es ser incapaz.",
+          "from": 231,
+          "to": 285
+        },
+        {
+          "text": "Y cuidarte, con descanso, actividad física y límites,",
+          "from": 295,
+          "to": 391
+        },
+        {
+          "text": "te ayuda a afrontar mejor las dificultades.",
+          "from": 391,
+          "to": 468
+        }
+      ],
+      "words": [
+        {
+          "w": "tu",
+          "f": 0
+        },
+        {
+          "w": "red",
+          "f": 7
+        },
+        {
+          "w": "de",
+          "f": 13
+        },
+        {
+          "w": "apoyo",
+          "f": 16
+        },
+        {
+          "w": "son",
+          "f": 26
+        },
+        {
+          "w": "las",
+          "f": 31
+        },
+        {
+          "w": "personas",
+          "f": 36
+        },
+        {
+          "w": "e",
+          "f": 49
+        },
+        {
+          "w": "instituciones",
+          "f": 52
+        },
+        {
+          "w": "a",
+          "f": 70
+        },
+        {
+          "w": "las",
+          "f": 72
+        },
+        {
+          "w": "que",
+          "f": 77
+        },
+        {
+          "w": "puedes",
+          "f": 81
+        },
+        {
+          "w": "acudir",
+          "f": 90
+        },
+        {
+          "w": "familia",
+          "f": 115
+        },
+        {
+          "w": "amigos",
+          "f": 134
+        },
+        {
+          "w": "docentes",
+          "f": 150
+        },
+        {
+          "w": "orientadores",
+          "f": 169
+        },
+        {
+          "w": "o",
+          "f": 192
+        },
+        {
+          "w": "profesionales",
+          "f": 195
+        },
+        {
+          "w": "pedir",
+          "f": 231
+        },
+        {
+          "w": "ayuda",
+          "f": 242
+        },
+        {
+          "w": "no",
+          "f": 254
+        },
+        {
+          "w": "es",
+          "f": 259
+        },
+        {
+          "w": "ser",
+          "f": 261
+        },
+        {
+          "w": "incapaz",
+          "f": 267
+        },
+        {
+          "w": "y",
+          "f": 295
+        },
+        {
+          "w": "cuidarte",
+          "f": 302
+        },
+        {
+          "w": "con",
+          "f": 318
+        },
+        {
+          "w": "descanso",
+          "f": 324
+        },
+        {
+          "w": "actividad",
+          "f": 341
+        },
+        {
+          "w": "física",
+          "f": 358
+        },
+        {
+          "w": "y",
+          "f": 371
+        },
+        {
+          "w": "límites",
+          "f": 373
+        },
+        {
+          "w": "te",
+          "f": 398
+        },
+        {
+          "w": "ayuda",
+          "f": 401
+        },
+        {
+          "w": "a",
+          "f": 408
+        },
+        {
+          "w": "afrontar",
+          "f": 411
+        },
+        {
+          "w": "mejor",
+          "f": 427
+        },
+        {
+          "w": "las",
+          "f": 435
+        },
+        {
+          "w": "dificultades",
+          "f": 439
+        }
+      ]
+    },
+    {
+      "id": "s8",
+      "tipo": "cierre",
+      "texto": "¡Muy bien! Repasaste el taller. Sigue con los aspectos a reflexionar.",
+      "voz": "¡Muy bien! Repasaste el taller. Sigue con los aspectos a reflexionar.",
+      "audio": "voz/gestion-emocional/JcWDFG8DiES2OzGhZJUJ/s8.mp3",
+      "lead": 10,
+      "voiceFrames": 134,
+      "frames": 294,
+      "chunks": [
+        {
+          "text": "¡Muy bien!",
+          "from": 0,
+          "to": 18
+        },
+        {
+          "text": "Repasaste el taller.",
+          "from": 20,
+          "to": 52
+        },
+        {
+          "text": "Sigue con los aspectos a reflexionar.",
+          "from": 63,
+          "to": 130
+        }
+      ],
+      "words": [
+        {
+          "w": "muy",
+          "f": 3
+        },
+        {
+          "w": "bien",
+          "f": 11
+        },
+        {
+          "w": "repasaste",
+          "f": 20
+        },
+        {
+          "w": "el",
+          "f": 36
+        },
+        {
+          "w": "taller",
+          "f": 39
+        },
+        {
+          "w": "sigue",
+          "f": 63
+        },
+        {
+          "w": "con",
+          "f": 73
+        },
+        {
+          "w": "los",
+          "f": 77
+        },
+        {
+          "w": "aspectos",
+          "f": 82
+        },
+        {
+          "w": "a",
+          "f": 97
+        },
+        {
+          "w": "reflexionar",
+          "f": 100
+        }
+      ]
+    }
+  ]
+}

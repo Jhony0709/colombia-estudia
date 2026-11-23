@@ -34,6 +34,7 @@ import {
   MEDIA_REPLY,
   NOT_UNDERSTOOD,
   RESEND_ACCOUNT,
+  TOPICS,
 } from '../bot';
 import { createAccountFromChat, resendAccountEmail } from './chat-account.service';
 import { botContext } from './facts.service';
@@ -134,6 +135,20 @@ async function personFor(institutionId: string, waId: string): Promise<string | 
   });
   const matches = candidates.filter((p) => whatsappIdOf(p.phone) === waId);
   return matches.length === 1 ? matches[0]!.id : null;
+}
+
+/** El chat está enlazado a una persona con rol de estudiante (23/11: certificados). */
+async function linkedStudent(institutionId: string, conversationId: string): Promise<boolean> {
+  const row = await prisma.conversation.findUnique({
+    where: { id: conversationId },
+    select: { personId: true },
+  });
+  if (!row?.personId) return false;
+  const membership = await prisma.membership.findFirst({
+    where: { institutionId, personId: row.personId, role: 'STUDENT', revokedAt: null },
+    select: { id: true },
+  });
+  return membership !== null;
 }
 
 /** Avisa a quienes atienden: plantilla a sus WhatsApp y aviso en la plataforma. */
@@ -415,7 +430,11 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
     source: message.choiceId ? 'choice' : 'text',
     choice: choice ?? 'none',
   });
-  const reply = answerFor(choice, ctx);
+  const student =
+    choice === TOPICS.certificateRequest
+      ? await linkedStudent(institution.id, conversation.id)
+      : false;
+  const reply = answerFor(choice, { ...ctx, student });
 
   if (reply?.handoff) {
     await prisma.conversation.update({ where: { id: conversation.id }, data: waiting(now) });

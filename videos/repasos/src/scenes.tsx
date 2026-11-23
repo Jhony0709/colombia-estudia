@@ -94,7 +94,7 @@ export function Portada(p: SceneProps) {
         }}
       />
       <Rise delay={cue(p, 'repaso')}>
-        <Pill>Repaso del tema</Pill>
+        <Pill>{p.meta.etiqueta ?? 'Repaso del tema'}</Pill>
       </Rise>
       <Rise delay={cue(p, 'tema') + 4}>
         <div
@@ -514,7 +514,7 @@ export function Cierre(p: SceneProps) {
               marginTop: 26,
             }}
           >
-            ¡Tema repasado!
+            {p.meta.cierre ?? '¡Tema repasado!'}
           </div>
         </Rise>
         {p.meta.siguiente && (
