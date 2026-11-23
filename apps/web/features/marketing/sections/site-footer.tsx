@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { SITE_PAGES } from '@/lib/seo/pages';
+import { SITE_PAGES, type SitePageKey } from '@/lib/seo/pages';
 import { SiteContainer } from '../site-container';
 import { AlbaLogo } from '../brand/alba-logo';
 import { whatsappUrl } from '../contact-links';
@@ -11,6 +11,14 @@ import type { LandingInstitution } from '../landing';
  * existen, y la línea de derechos. Sin redes ni centro de ayuda: no hay ninguno que enlazar
  * todavía. Deja sitio abajo para el botón flotante en el teléfono.
  */
+
+// Las páginas de contenido por columna (23/11); una nueva sin columna cae en «Guías».
+const EXPLORE: SitePageKey[] = ['precio', 'nosotros'];
+const SUPPORT: SitePageKey[] = ['contacto'];
+export const GUIDES = SITE_PAGES.map((page) => page.key).filter(
+  (key) => !EXPLORE.includes(key) && !SUPPORT.includes(key)
+);
+const pathOf = (key: SitePageKey) => SITE_PAGES.find((page) => page.key === key)!.path;
 export async function SiteFooter({
   institution,
   signedIn,
@@ -26,7 +34,7 @@ export async function SiteFooter({
     'site-small min-h-touch inline-flex items-center hover:text-[var(--site-blue)] hover:underline';
   return (
     <footer className="border-t border-[var(--site-line)] bg-[var(--site-bg)] pb-24 sm:pb-0">
-      <SiteContainer className="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))]">
+      <SiteContainer className="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.2fr)_repeat(4,minmax(0,1fr))]">
         <div className="space-y-3">
           <AlbaLogo className="h-10" />
           <p className="site-small m-0 max-w-xs">{t('footer.tagline')}</p>
@@ -41,9 +49,16 @@ export async function SiteFooter({
           <Link href="/#historias" className={link}>
             {t('nav.stories')}
           </Link>
-          {SITE_PAGES.map((page) => (
-            <Link key={page.key} href={page.path} className={link}>
-              {pages(`${page.key}.nav`)}
+          {EXPLORE.map((key) => (
+            <Link key={key} href={pathOf(key)} className={link}>
+              {pages(`${key}.nav`)}
+            </Link>
+          ))}
+        </FooterColumn>
+        <FooterColumn title={t('footer.guides')}>
+          {GUIDES.map((key) => (
+            <Link key={key} href={pathOf(key)} className={link}>
+              {pages(`${key}.nav`)}
             </Link>
           ))}
         </FooterColumn>
@@ -53,9 +68,14 @@ export async function SiteFooter({
               {t('footer.write')}
             </a>
           )}
-          <a href={`mailto:${institution.supportEmail}`} className={link}>
+          <a href={`mailto:${institution.supportEmail}`} className={`${link} break-all`}>
             {institution.supportEmail}
           </a>
+          {SUPPORT.map((key) => (
+            <Link key={key} href={pathOf(key)} className={link}>
+              {pages(`${key}.nav`)}
+            </Link>
+          ))}
           <Link href={signedIn ? '/ingresar' : '/auth/login'} className={link}>
             {signedIn ? t('nav.enter') : t('nav.login')}
           </Link>
@@ -76,7 +96,8 @@ export async function SiteFooter({
 }
 
 function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
-  const items = (Array.isArray(children) ? children : [children]).filter(Boolean);
+  // `flat`: un `.map()` entre los hijos llega como un arreglo y cada enlace necesita su `<li>`.
+  const items = [children].flat(2).filter(Boolean);
   return (
     <div>
       <h2 className="m-0 mb-1 text-sm font-semibold text-[var(--site-navy)]">{title}</h2>

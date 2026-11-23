@@ -2746,7 +2746,7 @@
         "tutor": {
           "title": "Tutor y acompañamiento",
           "tags": ["Tutor profesional", "Seguimiento"],
-          "body": "Un tutor resuelve tus dudas y te acompaña en tu proceso de validación, con soporte por WhatsApp las 24 horas.",
+          "body": "Un tutor resuelve tus dudas y te acompaña en cada ciclo, y nuestro asistente de WhatsApp te responde las 24 horas.",
           "cta": "Cómo funciona el acompañamiento"
         },
         "diploma": {
@@ -2758,7 +2758,7 @@
       }
     },
     "stories": {
-      "eyebrow": "Historias reales",
+      "eyebrow": "Tu historia",
       "titleA": "No empiezas de cero.",
       "titleB": "Empiezas desde donde estás.",
       "body1": "Trabajo, familia, responsabilidades… la vida no se detiene.",
@@ -2831,12 +2831,17 @@
         },
         "legal": {
           "q": "¿El título es válido en Colombia?",
-          "a": "Sí. Es bachillerato por ciclos para adultos, regulado por el Decreto 3011 del Ministerio de Educación Nacional. El programa se dicta en convenio con instituciones educativas autorizadas y el título queda registrado ante el Ministerio."
+          "a": "Sí. Es bachillerato por ciclos para adultos, regulado por el Decreto 3011 de 1997, hoy recogido en el Decreto 1075 de 2015 del Ministerio de Educación Nacional. El programa se dicta en convenio con instituciones educativas autorizadas y el título queda registrado ante el Ministerio."
         },
         "price": {
           "q": "¿Cuánto cuesta?",
-          "a": "Escríbenos y te contamos el valor, las becas o cupones disponibles y las formas de pago."
+          "a": "La matrícula es gratis y pagas por etapas de {modulePrice}. El bachillerato completo, con derechos de grado, cuesta {total}. Pagas con tarjeta, PSE o Nequi, o acuerdas un plan de pagos con un asesor; pregúntanos también por becas o cupones."
         }
+      },
+      "more": {
+        "route": "Cómo funcionan los ciclos",
+        "legal": "Quiénes somos",
+        "price": "Ver el detalle de precios"
       }
     },
     "final": {
@@ -2849,6 +2854,7 @@
     "footer": {
       "tagline": "Aprender es avanzar.",
       "explore": "Explora",
+      "guides": "Guías",
       "support": "Soporte",
       "legal": "Legal",
       "write": "Escríbenos",
@@ -4361,6 +4367,10 @@
       ],
       "faq": [
         {
+          "q": "¿Qué es el bachiller básico y a qué grado equivale?",
+          "a": "Así se le dice a haber terminado la educación básica, que va hasta 9.º. Por ciclos, equivale a aprobar el CLEI 4. El título de bachiller llega al terminar la media (10.º y 11.º), es decir, al aprobar el CLEI 6."
+        },
+        {
           "q": "¿El bachillerato por ciclos es legal?",
           "a": "Sí. Es la modalidad de educación formal para jóvenes y adultos que regula el Decreto 3011 de 1997, hoy recogido en el Decreto 1075 de 2015."
         },
@@ -4375,6 +4385,10 @@
       ],
       "sources": [
         {
+          "label": "Ley 115 de 1994, ley general de educación (niveles: básica de nueve grados y media de dos)",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=292"
+        },
+        {
           "label": "Decreto 1075 de 2015, educación de adultos (compila el Decreto 3011 de 1997)",
           "url": "https://cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_1075_2015_pr017.htm"
         },
@@ -4388,7 +4402,7 @@
     "validar": {
       "nav": "Validar el bachillerato",
       "meta": {
-        "title": "Validar el bachillerato: examen del ICFES o por ciclos",
+        "title": "Validar el bachillerato: ICFES o por ciclos",
         "description": "Cómo validar el bachillerato en Colombia: el examen de validación del ICFES o el bachillerato por ciclos. Requisitos, diferencias y cuál te conviene."
       },
       "eyebrow": "Guía",
@@ -4492,7 +4506,7 @@
     "precio": {
       "nav": "Precios",
       "meta": {
-        "title": "¿Cuánto cuesta terminar el bachillerato virtual?",
+        "title": "¿Cuánto cuesta el bachillerato virtual?",
         "description": "Matrícula gratis y pagas por etapas de {modulePrice}. El bachillerato completo, con derechos de grado, cuesta {total}. Formas de pago y planes."
       },
       "eyebrow": "Precios",
@@ -4707,7 +4721,7 @@
     "nosotros": {
       "nav": "Quiénes somos",
       "meta": {
-        "title": "Quiénes somos: ALBA, bachillerato virtual para adultos",
+        "title": "Quiénes somos: bachillerato virtual",
         "description": "ALBA Futuro Educativo es un programa de bachillerato 100 % virtual para jóvenes y adultos en Colombia: quiénes somos, cómo funciona y quién te acompaña."
       },
       "eyebrow": "Nosotros",

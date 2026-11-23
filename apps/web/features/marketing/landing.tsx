@@ -29,7 +29,7 @@ import { Programs } from './sections/programs';
 import { Stories } from './sections/stories';
 import { ProcessTimeline } from './sections/process-timeline';
 import { ValueStrip } from './sections/value-strip';
-import { Faq } from './sections/faq';
+import { Faq, type LandingPrices } from './sections/faq';
 import { FinalCta } from './sections/final-cta';
 import { SiteFooter } from './sections/site-footer';
 import { FloatingContact } from './sections/floating-contact';
@@ -46,9 +46,11 @@ export interface LandingInstitution {
 export async function Landing({
   institution,
   signedIn,
+  prices,
 }: {
   institution: LandingInstitution;
   signedIn: boolean;
+  prices: LandingPrices;
 }) {
   const t = await getTranslations('landing');
   // El mensaje pre-escrito del chat (28/9): el teléfono sigue saliendo de la institución.
@@ -77,13 +79,13 @@ export async function Landing({
         <WaveSeparator from="navy" to="white" variant="fall" accent="blue" origin="left" />
         <ProcessTimeline />
         <ValueStrip />
-        <Faq contact={contact} />
+        <Faq contact={contact} prices={prices} />
         <FinalCta contact={contact} signedIn={signedIn} />
       </main>
       <SiteFooter institution={institution} signedIn={signedIn} />
       <FloatingContact contact={contact} />
       <MotionRoot />
-      <StructuredData institution={institution} />
+      <StructuredData institution={institution} prices={prices} />
     </div>
   );
 }

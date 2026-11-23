@@ -3,14 +3,24 @@ import { siteUrl } from '@/lib/seo/site-url';
 import { getTranslations } from 'next-intl/server';
 import { faqPage, serializeJsonLd } from '@/lib/seo/json-ld';
 import type { LandingInstitution } from './landing';
+import { FAQ_ITEMS, type LandingPrices } from './sections/faq';
 
 /** JSON-LD de la portada (SEO-08), solo con datos visibles en la página. */
-export async function StructuredData({ institution }: { institution: LandingInstitution }) {
+export async function StructuredData({
+  institution,
+  prices,
+}: {
+  institution: LandingInstitution;
+  prices: LandingPrices;
+}) {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const base = siteUrl();
   const t = await getTranslations('landing');
   // Las mismas preguntas que se ven en la sección de la portada.
-  const faq = Object.values(t.raw('faq.items') as Record<string, { q: string; a: string }>);
+  const faq = FAQ_ITEMS.map((key) => ({
+    q: t(`faq.items.${key}.q`),
+    a: t(`faq.items.${key}.a`, { ...prices }),
+  }));
   const graph = [
     {
       '@type': 'EducationalOrganization',

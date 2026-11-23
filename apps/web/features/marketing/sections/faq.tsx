@@ -5,7 +5,19 @@ import type { ContactLink } from '../contact-links';
 import { Reveal } from '../motion/Reveal';
 import { FaqItem } from './faq-item';
 
-const ITEMS = ['work', 'schedule', 'route', 'years', 'legal', 'price'] as const;
+export const FAQ_ITEMS = ['work', 'schedule', 'route', 'years', 'legal', 'price'] as const;
+const ITEMS = FAQ_ITEMS;
+/** Precios de la plataforma para la respuesta de «¿Cuánto cuesta?» (23/11). */
+export interface LandingPrices {
+  modulePrice: string;
+  total: string;
+}
+// La guía que amplía cada respuesta (23/11): enlaces internos hacia las páginas de contenido.
+const MORE: Partial<Record<(typeof FAQ_ITEMS)[number], string>> = {
+  route: '/bachillerato-por-ciclos',
+  legal: '/quienes-somos',
+  price: '/cuanto-cuesta-el-bachillerato',
+};
 
 /**
  * Preguntas (ALBA, 5/10): título a la izquierda, acordeón a la derecha; en el teléfono, título
@@ -16,7 +28,7 @@ const ITEMS = ['work', 'schedule', 'route', 'years', 'legal', 'price'] as const;
  * Movimiento («reduces incertidumbre»): el acordeón abre y cierra con su alto en 220 ms
  * (`FaqItem`); el chevron gira. Nada más.
  */
-export async function Faq({ contact }: { contact: ContactLink }) {
+export async function Faq({ contact, prices }: { contact: ContactLink; prices: LandingPrices }) {
   const t = await getTranslations('landing.faq');
   return (
     <section
@@ -53,7 +65,15 @@ export async function Faq({ contact }: { contact: ContactLink }) {
                 </>
               }
             >
-              {t(`items.${key}.a`)}
+              {t(`items.${key}.a`, { ...prices })}
+              {MORE[key] && (
+                <>
+                  {' '}
+                  <a href={MORE[key]} className="site-link">
+                    {t(`more.${key}`)}
+                  </a>
+                </>
+              )}
             </FaqItem>
           ))}
         </Reveal>

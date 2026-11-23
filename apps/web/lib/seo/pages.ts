@@ -5,7 +5,7 @@
  */
 export const SITE_PAGES = [
   { key: 'bogota', path: '/bachillerato-para-adultos-bogota', lastReviewed: '2026-11-19' },
-  { key: 'ciclos', path: '/bachillerato-por-ciclos', lastReviewed: '2026-11-19' },
+  { key: 'ciclos', path: '/bachillerato-por-ciclos', lastReviewed: '2026-11-23' },
   { key: 'validar', path: '/validar-bachillerato', lastReviewed: '2026-11-23' },
   { key: 'precio', path: '/cuanto-cuesta-el-bachillerato', lastReviewed: '2026-11-23' },
   { key: 'requisitos', path: '/requisitos', lastReviewed: '2026-11-19' },
