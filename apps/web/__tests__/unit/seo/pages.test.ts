@@ -77,6 +77,8 @@ describe('metadata y datos estructurados', () => {
     const meta = pageMetadata({ title: 'T', description: 'D', path: '/requisitos' });
     expect(meta.alternates).toEqual({ canonical: '/requisitos' });
     expect(meta.openGraph).toMatchObject({ url: '/requisitos', title: 'T' });
+    // Con `openGraph` propio la imagen del layout se pierde: la página la repite (23/11).
+    expect(meta.openGraph).toMatchObject({ images: [{ url: '/opengraph-image.png' }] });
   });
 
   it('migas, preguntas y página, con URL absolutas', () => {

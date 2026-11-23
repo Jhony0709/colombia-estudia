@@ -48,11 +48,31 @@ jest.mock('@/features/marketing/sections/floating-contact', () => ({
   FloatingContact: () => null,
 }));
 
-import { SitePage, sitePageMetadata } from '@/features/marketing/site-page';
+import { fillCopy, SitePage, sitePageMetadata } from '@/features/marketing/site-page';
 
 const copy = messages.sitePages as unknown as Record<string, { h1: string; lead: string }>;
+// Lo que las páginas con datos de la plataforma (23/11) reciben en producción.
+const VALUES: Record<string, Record<string, string | number | null>> = {
+  precio: {
+    modules: 10,
+    modulePrice: '$90.000',
+    stages: '$900.000',
+    graduationFee: '$350.000',
+    total: '$1.250.000',
+    months: 6,
+    certificatePrice: '$11.000',
+    certificateBusinessDays: 3,
+  },
+  nosotros: {
+    name: 'ALBA Futuro Educativo',
+    legalName: null,
+    taxId: null,
+    supportEmail: 'info@alba.test',
+    supportPhone: '+57 301 000 0000',
+  },
+};
 const render = async (key: (typeof SITE_PAGES)[number]['key']) =>
-  renderToStaticMarkup(await SitePage({ pageKey: key }));
+  renderToStaticMarkup(await SitePage({ pageKey: key, values: VALUES[key] }));
 
 describe.each(SITE_PAGES.map((page) => [page.key, page.path] as const))('%s', (key, path) => {
   it('un solo h1, la respuesta arriba y las dos acciones', async () => {
@@ -76,7 +96,7 @@ describe.each(SITE_PAGES.map((page) => [page.key, page.path] as const))('%s', (k
   });
 
   it('metadata con canónica propia', async () => {
-    const meta = await sitePageMetadata(key);
+    const meta = await sitePageMetadata(key, VALUES[key]);
     expect(meta.alternates).toEqual({ canonical: path });
     expect(String(meta.description).length).toBeGreaterThan(70);
   });
@@ -96,4 +116,28 @@ it('contacto dice dónde está y a quién atiende', async () => {
   const html = await render('contacto');
   expect(html).toContain('mailto:info@alba.test');
   expect(html).toContain('"addressLocality":"Bogotá"');
+});
+
+it('precios: los valores de la plataforma, sin llaves sueltas', async () => {
+  const html = await render('precio');
+  expect(html).toContain('$1.250.000');
+  expect(html).toContain('10 etapas');
+  expect(html).not.toMatch(/\{\w+\}/);
+});
+
+it('quiénes somos: sin razón social ni NIT no muestra esas líneas', async () => {
+  const html = await render('nosotros');
+  expect(html).toContain('Marca: ALBA Futuro Educativo');
+  expect(html).not.toContain('NIT:');
+  const withNit = renderToStaticMarkup(
+    await SitePage({ pageKey: 'nosotros', values: { ...VALUES.nosotros, taxId: '900.123.456-7' } })
+  );
+  expect(withNit).toContain('NIT: 900.123.456-7');
+  expect(withNit).toContain('"taxID":"900.123.456-7"');
+});
+
+it('fillCopy quita el texto que nombra un dato que falta', () => {
+  expect(fillCopy({ items: ['A: {a}', 'B: {b}', 'C'] }, { a: 1, b: '' })).toEqual({
+    items: ['A: 1', 'C'],
+  });
 });

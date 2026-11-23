@@ -14,6 +14,7 @@ import { resolveInstitutionBySlug } from '@/lib/authz/institution-cache';
 import { findLoginPerson } from '@/features/auth/server/session.service';
 import { COLOMBIA_ESTUDIA } from '@/lib/authz/tenant';
 import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
+import { enforceRateLimit } from '@/lib/http/rate-limit';
 
 const schema = z.object({
   email: z.string().email(),
@@ -30,7 +31,8 @@ const GENERIC_ERROR = 'Correo o contraseña incorrectos';
  */
 export const POST = apiHandler({
   schema,
-})(async (_req, _ctx, { email, password, next }) => {
+})(async (req, _ctx, { email, password, next }) => {
+  enforceRateLimit(req, `login:${email.toLowerCase()}`, 10, 10 * 60_000);
   const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });

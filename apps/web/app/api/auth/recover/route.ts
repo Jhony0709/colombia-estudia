@@ -9,6 +9,7 @@
 import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
 import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
+import { enforceRateLimit } from '@/lib/http/rate-limit';
 
 const schema = z.object({
   email: z.string().email(),
@@ -17,6 +18,7 @@ const schema = z.object({
 export const POST = apiHandler({
   schema,
 })(async (req, _ctx, { email }) => {
+  enforceRateLimit(req, 'recover', 5, 10 * 60_000);
   const supabase = await createServerSupabaseClient();
 
   // PKCE: the email link comes back with `?code=` and only /auth/callback can exchange it

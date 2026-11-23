@@ -4291,7 +4291,7 @@
           "url": "https://www.noticiasrcn.com/economia/matriculaton-bogota-abre-inscripciones-para-validar-el-bachillerato-en-2026-984630"
         }
       ],
-      "related": ["ciclos", "requisitos", "faq"]
+      "related": ["validar", "ciclos", "requisitos"]
     },
     "ciclos": {
       "nav": "Bachillerato por ciclos",
@@ -4383,7 +4383,183 @@
           "url": "https://www.calendariodecolombia.com/educacion/como-validar-el-bachillerato-en-colombia-y-requisitos-para-presentar-el-examen-de-validacion-ante-el-icfes"
         }
       ],
-      "related": ["requisitos", "bogota", "faq"]
+      "related": ["validar", "requisitos", "bogota"]
+    },
+    "validar": {
+      "nav": "Validar el bachillerato",
+      "meta": {
+        "title": "Validar el bachillerato: examen del ICFES o por ciclos",
+        "description": "Cómo validar el bachillerato en Colombia: el examen de validación del ICFES o el bachillerato por ciclos. Requisitos, diferencias y cuál te conviene."
+      },
+      "eyebrow": "Guía",
+      "h1": "Validar el bachillerato: examen del ICFES o por ciclos",
+      "lead": "Hay dos formas de validar el bachillerato en Colombia: presentar el examen de validación del ICFES, si tienes 18 años o más, o terminarlo por ciclos, estudiando con acompañamiento desde los 16. Aquí te explicamos cada una y cómo elegir.",
+      "whatsappMessage": "Hola 👋 Quiero validar mi bachillerato. ¿Qué opción me sirve?",
+      "sections": [
+        {
+          "id": "dos-caminos",
+          "title": "Dos caminos para el mismo título",
+          "paragraphs": [
+            "En la calle se usa «validar» para las dos cosas, pero son caminos distintos. La validación es un examen del ICFES: si lo apruebas, obtienes el título sin cursar nada. Por ciclos, en cambio, estudias y apruebas cada ciclo con acompañamiento. Los dos terminan en el título de bachiller."
+          ]
+        },
+        {
+          "id": "icfes",
+          "title": "El examen de validación del ICFES",
+          "items": [
+            "Es para mayores de 18 años, o para quien los cumpla a la fecha del examen.",
+            "Tiene la misma estructura que la prueba Saber 11.",
+            "Se aprueba con un puntaje total de 30 puntos o más.",
+            "Hay dos convocatorias al año; el ICFES publica las fechas y las tarifas de cada una.",
+            "De la inscripción a los resultados pasan unos cuatro meses. Si apruebas, descargas el diploma y el acta de validación."
+          ],
+          "closing": ["Sirve si ya dominas los temas y solo te falta el título."]
+        },
+        {
+          "id": "ciclos",
+          "title": "El bachillerato por ciclos",
+          "paragraphs": [
+            "Es la educación formal para jóvenes y adultos que regula el Decreto 3011 de 1997, hoy recogido en el Decreto 1075 de 2015. En vez de once grados se cursan seis ciclos (CLEI), y empiezas en el que sigue al último grado que aprobaste."
+          ],
+          "items": [
+            "Puedes empezar con 16 años o más.",
+            "No repites lo que ya tienes certificado.",
+            "Estudias cada ciclo con acompañamiento y lo apruebas.",
+            "Al aprobar el CLEI 6 recibes el título de bachiller."
+          ]
+        },
+        {
+          "id": "comparar",
+          "title": "Las diferencias, lado a lado",
+          "table": {
+            "caption": "Validación del ICFES frente al bachillerato por ciclos",
+            "head": ["Aspecto", "Validación del ICFES", "Bachillerato por ciclos"],
+            "rows": [
+              ["Qué haces", "Presentas un examen", "Estudias y apruebas cada ciclo"],
+              ["Edad", "18 años o más", "16 años o más"],
+              [
+                "Cuándo",
+                "En una de las dos convocatorias del año",
+                "En ALBA, en línea y a tu ritmo"
+              ],
+              ["Acompañamiento", "El examen no incluye clases", "Un tutor te acompaña"],
+              ["Al final", "Diploma y acta de validación", "Título de bachiller"]
+            ]
+          }
+        },
+        {
+          "id": "cual-elegir",
+          "title": "¿Cuál te conviene?",
+          "paragraphs": [
+            "Si ya dominas los temas y solo te falta el título, el examen del ICFES es una opción. Si hace tiempo que no estudias o te faltan varios grados, por ciclos avanzas tema por tema, con acompañamiento y desde donde estés."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "¿Dónde se valida el bachillerato?",
+          "a": "El examen de validación lo aplica el ICFES, con dos convocatorias al año. El bachillerato por ciclos lo ofrecen instituciones autorizadas, de forma presencial o virtual, como ALBA."
+        },
+        {
+          "q": "¿Con cuántos puntos se aprueba la validación del ICFES?",
+          "a": "Con un puntaje total de 30 puntos o más."
+        },
+        {
+          "q": "¿Puedo validar el bachillerato con 16 o 17 años?",
+          "a": "El examen del ICFES es para mayores de 18 años o para quien los cumpla a la fecha del examen. Con 16 o 17 años puedes estudiar por ciclos; tu acudiente acompaña la matrícula."
+        },
+        {
+          "q": "¿Los dos caminos dan el título de bachiller?",
+          "a": "Sí. La validación del ICFES certifica las competencias para el título de bachiller académico, y por ciclos recibes el título al aprobar el CLEI 6."
+        }
+      ],
+      "sources": [
+        {
+          "label": "ICFES: inscripción, aplicación y resultados del examen de validación",
+          "url": "https://www.icfes.gov.co/atencion-y-servicios-a-la-ciudadania/tramites/inscripcion-aplicacion-y-resultados-examen-de-validacion-del-bachillerato/"
+        },
+        {
+          "label": "ICFES: acerca del examen de validación del bachillerato académico",
+          "url": "https://www.icfes.gov.co/evaluaciones-icfes/1-acerca-del-examen-validacion-del-bachillerato-academico/"
+        },
+        {
+          "label": "Decreto 1075 de 2015, educación de adultos (compila el Decreto 3011 de 1997)",
+          "url": "https://cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_1075_2015_pr017.htm"
+        }
+      ],
+      "related": ["ciclos", "requisitos", "faq"]
+    },
+    "precio": {
+      "nav": "Precios",
+      "meta": {
+        "title": "¿Cuánto cuesta terminar el bachillerato virtual?",
+        "description": "Matrícula gratis y pagas por etapas de {modulePrice}. El bachillerato completo, con derechos de grado, cuesta {total}. Formas de pago y planes."
+      },
+      "eyebrow": "Precios",
+      "h1": "¿Cuánto cuesta terminar el bachillerato?",
+      "lead": "En ALBA la matrícula es gratis y pagas por etapas: {modulePrice} cada una. El bachillerato completo, con derechos de grado, cuesta {total}, y te puedes graduar en {months} meses.",
+      "whatsappMessage": "Hola 👋 Quiero saber cuánto me cuesta terminar el bachillerato.",
+      "sections": [
+        {
+          "id": "detalle",
+          "title": "Lo que pagas",
+          "table": {
+            "caption": "Lo que pagas en ALBA",
+            "head": ["Concepto", "Valor"],
+            "rows": [
+              ["Matrícula", "Gratis"],
+              ["Cada etapa", "{modulePrice}"],
+              ["{modules} etapas", "{stages}"],
+              ["Derechos de grado, al terminar", "{graduationFee}"],
+              ["Total", "{total}"]
+            ]
+          }
+        },
+        {
+          "id": "como-pagas",
+          "title": "Cómo pagas",
+          "paragraphs": [
+            "Pagas cada etapa con tarjeta, PSE o Nequi, con un link de pago seguro. Si necesitas un plan de pagos, lo acuerdas con un asesor."
+          ]
+        },
+        {
+          "id": "lo-que-te-falta",
+          "title": "Si ya tienes grados aprobados",
+          "paragraphs": [
+            "Empiezas en el ciclo que sigue al último grado que aprobaste y no repites lo que ya tienes certificado. Con tu certificado te decimos desde dónde sigues y qué te falta para graduarte."
+          ]
+        },
+        {
+          "id": "otras-opciones",
+          "title": "Cómo se compara con otras opciones",
+          "items": [
+            "Validación del ICFES: un examen, con las tarifas que el ICFES publica en cada convocatoria.",
+            "Ciclos gratuitos de la Secretaría de Educación del Distrito, en Bogotá: presenciales, en colegios oficiales y con inscripciones en fechas fijas.",
+            "Ciclos en línea, como los de ALBA: pagas por etapas y estudias a tu ritmo, sin desplazarte."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "¿La matrícula tiene costo?",
+          "a": "No, la matrícula es gratis. Pagas cada etapa: {modulePrice}."
+        },
+        {
+          "q": "¿Puedo pagar a cuotas?",
+          "a": "Sí. Si necesitas un plan de pagos, lo acuerdas con un asesor."
+        },
+        {
+          "q": "¿Cuánto cuesta un certificado de estudios?",
+          "a": "{certificatePrice}. Después del pago te lo enviamos en máximo {certificateBusinessDays} días hábiles."
+        }
+      ],
+      "sources": [
+        {
+          "label": "ICFES: acerca del examen de validación del bachillerato académico",
+          "url": "https://www.icfes.gov.co/evaluaciones-icfes/1-acerca-del-examen-validacion-del-bachillerato-academico/"
+        }
+      ],
+      "related": ["validar", "requisitos", "faq"]
     },
     "requisitos": {
       "nav": "Requisitos",
@@ -4527,6 +4703,69 @@
       "faq": [],
       "sources": [],
       "related": ["requisitos", "faq"]
+    },
+    "nosotros": {
+      "nav": "Quiénes somos",
+      "meta": {
+        "title": "Quiénes somos: ALBA, bachillerato virtual para adultos",
+        "description": "ALBA Futuro Educativo es un programa de bachillerato 100 % virtual para jóvenes y adultos en Colombia: quiénes somos, cómo funciona y quién te acompaña."
+      },
+      "eyebrow": "Nosotros",
+      "h1": "Quiénes somos",
+      "lead": "ALBA Futuro Educativo es un programa para terminar el bachillerato 100 % en línea: flexible, con acompañamiento real y pensado para la vida adulta.",
+      "whatsappMessage": "Hola 👋 Quiero conocer más sobre ALBA.",
+      "sections": [
+        {
+          "id": "que-hacemos",
+          "title": "Qué hacemos",
+          "paragraphs": [
+            "Te ayudamos a terminar el bachillerato por ciclos (CLEI), la modalidad de educación formal para jóvenes y adultos que regula el Decreto 3011 de 1997, hoy recogido en el Decreto 1075 de 2015.",
+            "Estudias en línea y a tu ritmo: los temas, las actividades y los cuestionarios están disponibles las 24 horas, y un tutor te acompaña."
+          ]
+        },
+        {
+          "id": "institucion",
+          "title": "Quién valida tu proceso",
+          "paragraphs": [
+            "El programa se dicta en convenio con instituciones educativas autorizadas. Al inscribirte te asignamos la institución que valida tu proceso; a ella le puedes pedir tus certificaciones e incluso visitar sus instalaciones."
+          ]
+        },
+        {
+          "id": "donde",
+          "title": "Dónde estamos",
+          "paragraphs": [
+            "Somos 100 % virtuales: estudias desde donde estés. Tenemos sede administrativa en Bogotá y te atendemos por WhatsApp, por correo y en la plataforma."
+          ]
+        },
+        {
+          "id": "datos",
+          "title": "Datos de la organización",
+          "items": [
+            "Marca: {name}",
+            "Razón social: {legalName}",
+            "NIT: {taxId}",
+            "Correo: {supportEmail}",
+            "WhatsApp: {supportPhone}"
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "¿Las clases son presenciales?",
+          "a": "No. Estudias 100 % en línea, a tu ritmo y desde donde estés."
+        },
+        {
+          "q": "¿Quién valida mi proceso?",
+          "a": "Una institución educativa autorizada en convenio con ALBA, que te asignamos al inscribirte. A ella le puedes pedir tus certificaciones."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Decreto 1075 de 2015, educación de adultos (compila el Decreto 3011 de 1997)",
+          "url": "https://cancilleria.gov.co/sites/default/files/Normograma/docs/decreto_1075_2015_pr017.htm"
+        }
+      ],
+      "related": ["contacto", "precio", "ciclos"]
     }
   }
 }

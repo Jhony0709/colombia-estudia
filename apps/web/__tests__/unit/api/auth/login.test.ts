@@ -44,6 +44,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 
 // Import handler after mocks
 import { POST } from '@/app/api/auth/login/route';
+import { resetRateLimits } from '@/lib/http/rate-limit';
 
 const institution = {
   id: 'inst-1',
@@ -65,6 +66,7 @@ describe('POST /api/auth/login', () => {
   let mockPersonFindUnique: jest.Mock;
 
   beforeEach(() => {
+    resetRateLimits();
     jest.clearAllMocks();
 
     // Setup default mock implementations
@@ -179,6 +181,17 @@ describe('POST /api/auth/login', () => {
     const body = await response.json();
     expect(body.error.code).toBe('UNAUTHENTICATED');
     expect(body.error.message).toBe('Correo o contraseña incorrectos');
+  });
+
+  it('el intento 11 con el mismo correo en 10 minutos responde 429 (23/11)', async () => {
+    mockSupabaseAuth.signInWithPassword.mockResolvedValue({
+      data: null,
+      error: { message: 'Invalid login credentials' },
+    });
+    const attempt = () => POST(createRequest({ email: 'User@Example.com', password: 'x' }));
+    for (let i = 0; i < 10; i++) expect((await attempt()).status).toBe(401);
+    expect((await attempt()).status).toBe(429);
+    expect(mockSupabaseAuth.signInWithPassword).toHaveBeenCalledTimes(10);
   });
 
   it('returns 401 with same message for non-existent email', async () => {

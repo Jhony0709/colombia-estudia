@@ -15,12 +15,14 @@ jest.mock('@/lib/auth/supabase-server', () => ({
 }));
 
 import { NextRequest } from 'next/server';
+import { resetRateLimits } from '@/lib/http/rate-limit';
 
 // Import after mocks
 const { POST } = require('@/app/api/auth/magic-link/route');
 
 describe('POST /api/auth/magic-link', () => {
   beforeEach(() => {
+    resetRateLimits();
     jest.clearAllMocks();
     mockSignInWithOtp.mockResolvedValue({ error: null });
   });

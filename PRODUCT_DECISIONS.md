@@ -1342,6 +1342,29 @@ tiene `WHATSAPP`.
 **Schema**: `ConversationMessage.replyToId` y `ConversationMessage.buttons` (migración
 `20261122000000_message_reply_buttons`).
 
+## 2026-11-23 — Seguridad y SEO: límites en auth y «validar bachillerato»
+
+**Decisión** (Jhonny, 23/11: «seguridad y SEO experto»; búsquedas objetivo: bachillerato virtual y
+validar bachillerato). **SEO**: página `/validar-bachillerato` (examen del ICFES frente a ciclos,
+con datos de icfes.gov.co: mayores de 18, misma estructura que Saber 11, aprueba con 30 puntos,
+dos convocatorias al año) enlazada desde ciclos y Bogotá; las páginas de contenido repiten la
+imagen social del sitio, que se perdía al definir `openGraph` (`lib/seo/page-metadata.ts`).
+**Seguridad**: login (por IP y correo), recuperar contraseña, enlace mágico y «pedir invitación
+nueva» cortan con 429 (`enforceRateLimit`, en memoria y por instancia). El WAF de Vercel que
+suponía plan/03 no tiene reglas: queda propuesto, igual que `CRON_SECRET`.
+**Posicionamiento** (mismo día): `/cuanto-cuesta-el-bachillerato` con los precios de la plataforma
+(los mismos del bot, `facts.service.ts`) y `/quienes-somos` con razón social y NIT de
+`/admin/institucion` (sin ellos, esas líneas no salen; con ellos van también en `legalName` y
+`taxID`). El copy de `sitePages` admite `{clave}` (`fillCopy`): un texto con un dato vacío no se
+muestra. Las reseñas de Google van al Perfil de Empresa solo si la sede atiende en persona.
+
+## 2026-11-23 — Vercel Web Analytics
+
+**Decisión** (Jhonny, 23/11): visitas con Vercel Web Analytics (`@vercel/analytics`, en
+`app/layout.tsx` vía `lib/observability/web-analytics.tsx`). Sin cookies y por el mismo dominio,
+así que la CSP no cambia. Antes de enviar, la URL pierde la consulta, el fragmento y el token de
+`/invitacion/[token]`. Hay que activarlo en el proyecto de Vercel (pestaña Analytics).
+
 ## 2026-11-23 — El certificado de estudios es de un estudiante, y preguntar no abre formularios
 
 **Decisión** (Jhonny, 23/11: «hay gente que solo quiere preguntar»; «los certificados deben estar

@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { apiHandler } from '@/lib/http/api-handler';
 import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
 import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
+import { enforceRateLimit } from '@/lib/http/rate-limit';
 
 const schema = z.object({
   email: z.string().email(),
@@ -19,6 +20,7 @@ const schema = z.object({
 export const POST = apiHandler({
   schema,
 })(async (req, _ctx, { email, next }) => {
+  enforceRateLimit(req, 'magic-link', 5, 10 * 60_000);
   const supabase = await createServerSupabaseClient();
   // `req.nextUrl.origin`, not the Origin header: with '' as base `new URL` throws (500).
   const callbackUrl = new URL('/auth/callback', req.nextUrl.origin);

@@ -34,9 +34,11 @@ jest.mock('@colombia-estudia/domain', () => ({
 
 // Import after mocks
 import { POST } from '@/app/api/invitations/[token]/request-new/route';
+import { resetRateLimits } from '@/lib/http/rate-limit';
 
 describe('POST /api/invitations/[token]/request-new', () => {
   beforeEach(() => {
+    resetRateLimits();
     jest.clearAllMocks();
     mockHashToken.mockReturnValue('hashed-token');
     mockPrismaNotificationCreateMany.mockResolvedValue({ count: 0 });

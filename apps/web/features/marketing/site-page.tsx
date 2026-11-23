@@ -48,20 +48,56 @@ interface PageCopy {
 const H2 = 'm-0 text-xl font-semibold text-[var(--site-navy)]';
 const BODY = 'site-body m-0';
 
-async function copyOf(key: SitePageKey) {
-  const t = await getTranslations('sitePages');
-  return { t, copy: t.raw(key) as PageCopy };
+/** Datos de la plataforma para el copy (23/11: precios, razón social). */
+export type PageValues = Record<string, string | number | null | undefined>;
+
+/**
+ * Pone `{clave}` con su valor. Un texto que nombra un dato que falta se quita entero: mejor no
+ * decirlo que decir «NIT: ».
+ */
+export function fillCopy<T>(node: T, values: PageValues): T {
+  const walk = (value: unknown): unknown => {
+    if (typeof value === 'string') {
+      let missing = false;
+      const out = value.replace(/\{(\w+)\}/g, (_, key: string) => {
+        const v = values[key];
+        if (v === null || v === undefined || v === '') missing = true;
+        return String(v ?? '');
+      });
+      return missing ? null : out;
+    }
+    if (Array.isArray(value)) return value.map(walk).filter((v) => v !== null);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, walk(v)]));
+    }
+    return value;
+  };
+  return walk(node) as T;
 }
 
-export async function sitePageMetadata(key: SitePageKey): Promise<Metadata> {
-  const { copy } = await copyOf(key);
+async function copyOf(key: SitePageKey, values: PageValues = {}) {
+  const t = await getTranslations('sitePages');
+  return { t, copy: fillCopy(t.raw(key) as PageCopy, values) };
+}
+
+export async function sitePageMetadata(
+  key: SitePageKey,
+  values: PageValues = {}
+): Promise<Metadata> {
+  const { copy } = await copyOf(key, values);
   return pageMetadata({ ...copy.meta, path: sitePage(key).path });
 }
 
-export async function SitePage({ pageKey }: { pageKey: SitePageKey }) {
+export async function SitePage({
+  pageKey,
+  values = {},
+}: {
+  pageKey: SitePageKey;
+  values?: PageValues;
+}) {
   const [ctx, { t, copy }, format, nonce] = await Promise.all([
     getRequestContext(),
-    copyOf(pageKey),
+    copyOf(pageKey, values),
     getFormatter(),
     headers().then((h) => h.get('x-nonce') ?? undefined),
   ]);
@@ -85,13 +121,15 @@ export async function SitePage({ pageKey }: { pageKey: SitePageKey }) {
       { name: copy.nav, path: page.path },
     ]),
     ...(copy.faq.length > 0 ? [faqPage(copy.faq)] : []),
-    // En contacto se dice dónde está y a quién atiende: ahí va en los datos estructurados.
-    ...(pageKey === 'contacto'
+    // En contacto y en quiénes somos se dice dónde está y a quién atiende.
+    ...(pageKey === 'contacto' || pageKey === 'nosotros'
       ? [
           {
             '@type': 'EducationalOrganization',
             '@id': `${base}/#organizacion`,
             name,
+            ...(typeof values.legalName === 'string' ? { legalName: values.legalName } : {}),
+            ...(typeof values.taxId === 'string' ? { taxID: values.taxId } : {}),
             url: `${base}/`,
             email: supportEmail,
             ...(supportPhone ? { telephone: supportPhone } : {}),

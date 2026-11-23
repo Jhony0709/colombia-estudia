@@ -8,6 +8,8 @@
  * hace falta más, el sitio es un store compartido (Upstash), no este archivo.
  */
 
+import { APIError } from '@/lib/core/errors';
+
 interface Bucket {
   count: number;
   resetAt: number;
@@ -51,4 +53,16 @@ export function clientKey(req: Request): string {
     ? forwarded.split(',')[0]!.trim()
     : (req.headers.get('x-real-ip') ?? 'unknown');
   return ip;
+}
+
+/** Corta con 429 si `scope` pasó de `limit` en la ventana (23/11: auth sin regla en el WAF). */
+export function enforceRateLimit(req: Request, scope: string, limit: number, windowMs: number) {
+  if (!rateLimit({ key: `${scope}:${clientKey(req)}`, limit, windowMs }).allowed) {
+    throw new APIError('Demasiados intentos. Espera unos minutos.', 'RATE_LIMITED');
+  }
+}
+
+/** Vacía los contadores; para las pruebas, que comparten la IP `unknown`. */
+export function resetRateLimits() {
+  buckets.clear();
 }

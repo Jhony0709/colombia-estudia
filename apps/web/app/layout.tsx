@@ -12,6 +12,7 @@ import { FocusManager } from '@/lib/a11y/focus-manager';
 import { SkipLink } from '@/lib/a11y/skip-link';
 import { StyleNonce } from '@/lib/csp/style-nonce';
 import { siteUrl } from '@/lib/seo/site-url';
+import { WebAnalytics } from '@/lib/observability/web-analytics';
 import { atkinson } from './fonts/sans';
 import './globals.css';
 
@@ -114,6 +115,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </TooltipProvider>
           </AccessibilityPreferencesProvider>
         </NextIntlClientProvider>
+        <WebAnalytics />
       </body>
     </html>
   );

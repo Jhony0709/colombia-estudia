@@ -8,10 +8,12 @@
 
 import { apiHandler } from '@/lib/http/api-handler';
 import { requestNewInvitation } from '@/features/auth/server/invitations.service';
+import { enforceRateLimit } from '@/lib/http/rate-limit';
 
 const RESPONSE = { message: 'Solicitud enviada' };
 
-export const POST = apiHandler()(async (_req, ctx) => {
+export const POST = apiHandler()(async (req, ctx) => {
+  enforceRateLimit(req, 'invitation-request-new', 5, 60 * 60_000);
   const { token } = await ctx.params;
   if (typeof token === 'string' && token.length > 0) {
     await requestNewInvitation(token);

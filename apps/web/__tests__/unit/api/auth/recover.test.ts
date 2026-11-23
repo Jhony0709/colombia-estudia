@@ -15,12 +15,14 @@ jest.mock('@/lib/auth/supabase-server', () => ({
 }));
 
 import { NextRequest } from 'next/server';
+import { resetRateLimits } from '@/lib/http/rate-limit';
 
 // Import after mocks
 const { POST } = require('@/app/api/auth/recover/route');
 
 describe('POST /api/auth/recover', () => {
   beforeEach(() => {
+    resetRateLimits();
     jest.clearAllMocks();
     mockResetPasswordForEmail.mockResolvedValue({ error: null });
   });
