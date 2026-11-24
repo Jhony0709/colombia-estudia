@@ -15,9 +15,11 @@ import { findLoginPerson } from '@/features/auth/server/session.service';
 import { COLOMBIA_ESTUDIA } from '@/lib/authz/tenant';
 import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
 import { enforceRateLimit } from '@/lib/http/rate-limit';
+import { logger } from '@/lib/observability/logger';
 
 const schema = z.object({
-  email: z.string().email(),
+  // El teléfono pone mayúscula inicial o un espacio al final (23/11).
+  email: z.string().trim().toLowerCase().email(),
   password: z.string().min(1),
   next: z.string().optional(),
 });
@@ -38,7 +40,8 @@ export const POST = apiHandler({
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    // Same message whether the email exists or not (plan/03 "Login")
+    // Same message whether the email exists or not (plan/03 "Login"); the reason goes to the log.
+    logger.warn({ event: 'login-failed', reason: error.code ?? 'unknown' });
     throw new APIError(GENERIC_ERROR, 'UNAUTHENTICATED');
   }
 
@@ -52,6 +55,7 @@ export const POST = apiHandler({
   if (!login) {
     // Supabase account without a Person in this institution (e.g. anonymized): keeping the
     // session would leave the user bouncing between / and /auth/login (routes.md:7).
+    logger.warn({ event: 'login-failed', reason: 'no_person' });
     await supabase.auth.signOut();
     throw new APIError(GENERIC_ERROR, 'UNAUTHENTICATED');
   }

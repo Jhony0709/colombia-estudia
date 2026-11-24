@@ -47,7 +47,9 @@ export async function RouteSection({
   const later =
     firstLockedIndex < 0
       ? []
-      : modules.slice(firstLockedIndex + 1).filter((m) => m.access.state === 'LOCKED');
+      : modules
+          .slice(firstLockedIndex + 1)
+          .filter((m) => m.access.state === 'LOCKED' && !m.items.some((i) => i.enabled));
   const shownModules = modules.filter((m) => !later.includes(m));
 
   // Los estados terminales tienen pantalla propia: enseñar una ruta que no se puede recorrer
@@ -142,7 +144,8 @@ async function ModuleBlock({
   // Cerrado por el componente (3/10: operación no lo ha habilitado, o está fuera de sus
   // fechas) o por secuencia (ningún ítem habilitado y el primero espera a otro tema).
   const { access } = module;
-  const closed = access.state !== 'OPEN';
+  // Con temas abiertos a mano (24/11) el componente se recorre: cada tema dice si está cerrado.
+  const closed = access.state !== 'OPEN' && !module.items.some((item) => item.enabled);
   const locked =
     closed ||
     (module.items.length > 0 && module.items.every((item) => !item.enabled) && !!first?.blockedBy);

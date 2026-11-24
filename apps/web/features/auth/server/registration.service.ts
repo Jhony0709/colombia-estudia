@@ -29,6 +29,7 @@ import { APIError } from '@/lib/core/errors';
 import { createTenantClient } from '@/lib/db/tenant';
 import { getSupabaseAdmin } from '@/lib/auth/supabase-server';
 import { enrollPerson } from '@/features/cohorts/server/enrollments.service';
+import { MIN_STUDENT_AGE } from '../age';
 
 export interface RegistrationInput {
   institutionId: string;
@@ -65,7 +66,14 @@ export async function registerPerson(input: RegistrationInput): Promise<Registra
   if (Number.isNaN(birthDate.getTime()) || birthDate > now) {
     throw new APIError('La fecha de nacimiento no es válida', 'VALIDATION_ERROR');
   }
-  const isMinor = calculateAgeAt(birthDate, now) < 18;
+  const age = calculateAgeAt(birthDate, now);
+  if (age < MIN_STUDENT_AGE) {
+    throw new APIError(
+      `Para estudiar con nosotros necesitas tener ${MIN_STUDENT_AGE} años o más`,
+      'VALIDATION_ERROR'
+    );
+  }
+  const isMinor = age < 18;
   if (!isMinor && !input.acceptsDataPolicy) {
     throw new APIError('Debes aceptar la política de tratamiento de datos', 'CONSENT_REQUIRED');
   }

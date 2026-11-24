@@ -12,7 +12,8 @@ import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
 import { enforceRateLimit } from '@/lib/http/rate-limit';
 
 const schema = z.object({
-  email: z.string().email(),
+  // El teléfono pone mayúscula inicial o un espacio al final (23/11).
+  email: z.string().trim().toLowerCase().email(),
 });
 
 export const POST = apiHandler({

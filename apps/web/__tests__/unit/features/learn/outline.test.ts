@@ -353,6 +353,45 @@ describe('sequence con componente bloqueado', () => {
     const result = lineal([modules[0]!, { id: 'm2', items: modules[1]!.items }]);
     expect(result.get('b1')?.enabled).toBe(true);
   });
+
+  // 24/11: tema por tema dentro de un componente cerrado.
+  it('un tema abierto a mano se recorre aunque su componente siga bloqueado', () => {
+    const result = lineal([
+      modules[0]!,
+      {
+        ...modules[1]!,
+        items: [item({ assignmentId: 'b1', title: 'Tema 2', moduleId: 'm2', opened: true })],
+      },
+    ]);
+    expect(result.get('b1')).toMatchObject({ enabled: true, unavailableReason: null });
+  });
+
+  it('lo bloqueado por el componente no bloquea por secuencia lo que viene después', () => {
+    const result = lineal([
+      {
+        ...modules[0]!,
+        items: [item({ assignmentId: 'a1', title: 'Tema 1' })],
+        access: { state: 'LOCKED' as const },
+      },
+      {
+        ...modules[1]!,
+        items: [item({ assignmentId: 'b1', title: 'Tema 2', moduleId: 'm2', opened: true })],
+      },
+    ]);
+    expect(result.get('b1')).toMatchObject({ enabled: true, blockedBy: null });
+  });
+
+  it('abrir a mano no salta la ventana de fechas del componente', () => {
+    const result = lineal([
+      modules[0]!,
+      {
+        id: 'm2',
+        items: [item({ assignmentId: 'b1', title: 'Tema 2', moduleId: 'm2', opened: true })],
+        access: { state: 'NOT_YET' as const, from: MANANA },
+      },
+    ]);
+    expect(result.get('b1')?.unavailableReason).toBe('NOT_YET');
+  });
 });
 
 describe('resumePoint', () => {

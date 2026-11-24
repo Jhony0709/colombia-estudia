@@ -249,7 +249,8 @@ export async function RouteTile({
   const t = await getTranslations('learn.tiles');
   const rows = modules.map((m) => {
     const done = m.items.length > 0 && m.items.every((i) => i.status === 'COMPLETED');
-    const open = m.access.state === 'OPEN';
+    // Un componente con temas abiertos a mano (24/11) cuenta como abierto.
+    const open = m.access.state === 'OPEN' || m.items.some((i) => i.enabled);
     const kind = done ? 'done' : m.id === currentId && open ? 'current' : open ? 'open' : 'locked';
     const sub =
       kind === 'done'

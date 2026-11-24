@@ -16,7 +16,7 @@ import 'server-only';
 import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { notify } from '@/features/notifications/server/notifications.service';
-import { moduleAccess, type ModuleAccess } from '@/features/learn/server/outline';
+import { closedByDefault, moduleAccess, type ModuleAccess } from '@/features/learn/server/outline';
 import { closeRequests } from '@/features/requests/server/requests.service';
 import { stageInstallments } from '@/features/billing/server/stage-installments';
 
@@ -36,11 +36,25 @@ export interface ModuleAccessRow {
   requestedAt: string | null;
   /** La cuota que lo abre al quedar pagada (20/11); nulo si ninguna. */
   installmentPosition: number | null;
+  /** Los temas, para abrirlos uno a uno (24/11); vacío si la matrícula no es cerrada por defecto. */
+  lessons: LessonAccessRow[];
+}
+
+export interface LessonAccessRow {
+  lessonId: string;
+  title: string;
+  position: number;
+  /** Habilitado a mano (`EnrollmentLesson`). */
+  unlocked: boolean;
+  /** Ya empezado: queda abierto aunque no tenga habilitación. */
+  started: boolean;
 }
 
 export interface ModuleAccessList {
   /** En progresión `FREE` la habilitación no aplica: todo está abierto. */
   applies: boolean;
+  /** Programa de pago y adulto (24/11): nada abre sin habilitación; se abre tema por tema. */
+  closed: boolean;
   modules: ModuleAccessRow[];
 }
 
@@ -64,9 +78,12 @@ async function loadEnrollment(institutionId: string, enrollmentId: string) {
     select: {
       id: true,
       studentId: true,
+      cohortId: true,
       startsAtModule: true,
       isMinorAtEnrollment: true,
-      cohort: { select: { programId: true, progression: true } },
+      cohort: {
+        select: { programId: true, progression: true, program: { select: { pricing: true } } },
+      },
       paymentPlan: {
         select: {
           installments: {
@@ -91,9 +108,15 @@ export async function listModuleAccess({
 }): Promise<ModuleAccessList> {
   const db = createTenantClient(institutionId);
   const enrollment = await loadEnrollment(institutionId, enrollmentId);
-  const progression = enrollment.cohort.progression === 'FREE' ? 'FREE' : 'LINEAR';
+  const closed = closedByDefault({
+    preview: false,
+    isMinor: enrollment.isMinorAtEnrollment,
+    pricing: enrollment.cohort.program.pricing,
+  });
+  // La misma regla que ve el estudiante (cohort.service): cerrado por defecto, aplica siempre.
+  const progression = closed || enrollment.cohort.progression !== 'FREE' ? 'LINEAR' : 'FREE';
 
-  const [modules, unlocks, requests] = await Promise.all([
+  const [modules, unlocks, requests, lessonRows, lessonUnlocks] = await Promise.all([
     db.module.findMany({
       where: {
         programId: enrollment.cohort.programId,
@@ -117,7 +140,21 @@ export async function listModuleAccess({
       where: { enrollmentId, kind: 'UNLOCK', status: 'PENDING' },
       select: { moduleId: true, createdAt: true },
     }),
+    closed
+      ? db.lessonAssignment.findMany({
+          where: { cohortId: enrollment.cohortId },
+          orderBy: { lesson: { position: 'asc' } },
+          select: {
+            lesson: { select: { id: true, title: true, moduleId: true, position: true } },
+            progress: { where: { enrollmentId }, select: { id: true }, take: 1 },
+          },
+        })
+      : [],
+    closed
+      ? db.enrollmentLesson.findMany({ where: { enrollmentId }, select: { lessonId: true } })
+      : [],
   ]);
+  const lessonOpen = new Set(lessonUnlocks.map((row) => row.lessonId));
   const unlockOf = new Map(unlocks.map((row) => [row.moduleId, row]));
   const requestOf = new Map(requests.map((row) => [row.moduleId, row.createdAt.toISOString()]));
   const stages = stageInstallments(
@@ -127,10 +164,11 @@ export async function listModuleAccess({
 
   return {
     applies: progression === 'LINEAR',
+    closed,
     modules: modules.map((component, index) => {
       const unlock = unlockOf.get(component.id) ?? null;
       // El primero está abierto salvo que lo abra una cuota (20/11).
-      const first = index === 0 && !stages.has(component.id);
+      const first = !closed && index === 0 && !stages.has(component.id);
       return {
         moduleId: component.id,
         name: component.name,
@@ -145,6 +183,15 @@ export async function listModuleAccess({
         availableUntil: bogotaDay(unlock?.availableUntil ?? null),
         requestedAt: requestOf.get(component.id) ?? null,
         installmentPosition: stages.get(component.id)?.position ?? null,
+        lessons: lessonRows
+          .filter((row) => row.lesson.moduleId === component.id)
+          .map((row) => ({
+            lessonId: row.lesson.id,
+            title: row.lesson.title,
+            position: row.lesson.position,
+            unlocked: lessonOpen.has(row.lesson.id),
+            started: row.progress.length > 0,
+          })),
       };
     }),
   };
@@ -291,4 +338,74 @@ export async function setModuleAccess({
   }
 
   return { changed: true, state: stateOf({ availableFrom: from, availableUntil: until }) };
+}
+
+/**
+ * Abre o cierra un tema para una matrícula cerrada por defecto (24/11, cliente: «tema por tema»).
+ * Audita (`enrollment_lesson.unlock|lock`) y, al abrir, avisa al estudiante. Idempotente.
+ */
+export async function setLessonAccess({
+  institutionId,
+  actorId,
+  enrollmentId,
+  lessonId,
+  unlocked,
+  now = new Date(),
+}: {
+  institutionId: string;
+  actorId: string;
+  enrollmentId: string;
+  lessonId: string;
+  unlocked: boolean;
+  now?: Date;
+}): Promise<{ changed: boolean }> {
+  const db = createTenantClient(institutionId);
+  const enrollment = await loadEnrollment(institutionId, enrollmentId);
+
+  const lesson = await db.lesson.findFirst({
+    where: { id: lessonId, programId: enrollment.cohort.programId },
+    select: { id: true, title: true },
+  });
+  if (!lesson) throw new APIError('Not found', 'NOT_FOUND');
+
+  const existing = await db.enrollmentLesson.findFirst({
+    where: { enrollmentId, lessonId },
+    select: { id: true },
+  });
+  if (unlocked === !!existing) return { changed: false };
+
+  await db.$transaction(async (tx) => {
+    const row = existing
+      ? await tx.enrollmentLesson.delete({ where: { id: existing.id }, select: { id: true } })
+      : await tx.enrollmentLesson.create({
+          data: { institutionId, enrollmentId, lessonId, unlockedAt: now, unlockedById: actorId },
+          select: { id: true },
+        });
+    await tx.auditLog.create({
+      data: {
+        institutionId,
+        actorId,
+        entity: 'enrollment_lesson',
+        entityId: row.id,
+        action: unlocked ? 'unlock' : 'lock',
+        before: {},
+        after: { enrollmentId, lessonId },
+        occurredAt: now,
+      },
+    });
+  });
+
+  // El aviso, fuera de la transacción. Mismo tipo que el del componente: lleva a la ruta.
+  if (unlocked) {
+    await notify(institutionId, {
+      personId: enrollment.studentId,
+      type: 'module_unlocked',
+      title: 'Tienes un tema nuevo habilitado',
+      body: `«${lesson.title}» quedó habilitado para ti. Entra a tu ruta para continuar.`,
+      href: '/aprender',
+      dedupeKey: `lesson_unlocked:${enrollmentId}:${lessonId}:${now.toISOString().slice(0, 10)}`,
+    });
+  }
+
+  return { changed: true };
 }

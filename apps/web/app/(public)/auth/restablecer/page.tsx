@@ -20,6 +20,7 @@ export default function RestablecerPage() {
   const router = useRouter();
 
   const [password, setPassword] = useState('');
+  const [repeat, setRepeat] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -35,6 +36,10 @@ export default function RestablecerPage() {
 
     if (password.length < 12) {
       setError(t('passwordHint'));
+      return;
+    }
+    if (repeat !== password) {
+      setError(t('passwordMismatch'));
       return;
     }
 
@@ -92,6 +97,15 @@ export default function RestablecerPage() {
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </FormField>
+        <FormField label={t('repeatPassword')} name="passwordRepeat" required>
+          <FormPasswordInput
+            name="passwordRepeat"
+            autoComplete="new-password"
+            value={repeat}
+            onChange={(e) => setRepeat(e.target.value)}
             required
           />
         </FormField>

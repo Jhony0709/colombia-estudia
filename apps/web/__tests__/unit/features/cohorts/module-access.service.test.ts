@@ -9,6 +9,7 @@ const mockCloseRequests = jest.fn();
 
 const tx = {
   enrollmentModule: { create: jest.fn(), update: jest.fn(), delete: jest.fn() },
+  enrollmentLesson: { create: jest.fn(), delete: jest.fn() },
   auditLog: { create: jest.fn() },
 };
 const db = {
@@ -16,6 +17,9 @@ const db = {
   enrollment: { findFirst: jest.fn() },
   module: { findFirst: jest.fn(), findMany: jest.fn() },
   enrollmentModule: { ...tx.enrollmentModule, findFirst: jest.fn(), findMany: jest.fn() },
+  enrollmentLesson: { ...tx.enrollmentLesson, findFirst: jest.fn(), findMany: jest.fn() },
+  lesson: { findFirst: jest.fn() },
+  lessonAssignment: { findMany: jest.fn() },
   accessRequest: { findMany: jest.fn() },
   $transaction: (fn: (t: typeof tx) => unknown) => fn(tx),
 };
@@ -29,14 +33,20 @@ jest.mock('@/features/requests/server/requests.service', () => ({
   closeRequests: (...args: unknown[]) => mockCloseRequests(...args),
 }));
 
-import { listModuleAccess, setModuleAccess } from '@/features/cohorts/server/module-access.service';
+import {
+  listModuleAccess,
+  setLessonAccess,
+  setModuleAccess,
+} from '@/features/cohorts/server/module-access.service';
 
 const NOW = new Date('2026-10-03T15:00:00.000Z');
 const ENROLLMENT = {
   id: 'enr-1',
   studentId: 'stu-1',
+  cohortId: 'coh-1',
   startsAtModule: null,
-  cohort: { programId: 'prog-1', progression: 'LINEAR' },
+  // Programa gratis: las reglas de antes del 24/11 (el primero abierto).
+  cohort: { programId: 'prog-1', progression: 'LINEAR', program: { pricing: 'FREE' } },
 };
 const BASE = { institutionId: 'inst-1', actorId: 'staff-1', enrollmentId: 'enr-1', now: NOW };
 
@@ -319,5 +329,109 @@ describe('listModuleAccess', () => {
 
     expect(result.applies).toBe(false);
     expect(result.modules.every((m) => m.state === 'OPEN')).toBe(true);
+  });
+});
+
+// 24/11: programa de pago y adulto, todo cerrado; se abre tema por tema.
+describe('cerrado por defecto', () => {
+  const PAID = {
+    ...ENROLLMENT,
+    isMinorAtEnrollment: false,
+    cohort: { ...ENROLLMENT.cohort, progression: 'FREE', program: { pricing: 'PAID' } },
+  };
+  beforeEach(() => {
+    db.enrollment.findFirst.mockResolvedValue(PAID);
+    db.module.findMany.mockResolvedValue([
+      { id: 'mod-1', name: 'A', position: 1 },
+      { id: 'mod-2', name: 'B', position: 2 },
+    ]);
+    db.enrollmentModule.findMany.mockResolvedValue([]);
+    db.lessonAssignment.findMany.mockResolvedValue([
+      { lesson: { id: 'l-1', title: 'Uno', moduleId: 'mod-1', position: 1 }, progress: [] },
+      { lesson: { id: 'l-2', title: 'Dos', moduleId: 'mod-1', position: 2 }, progress: [{}] },
+      { lesson: { id: 'l-3', title: 'Tres', moduleId: 'mod-2', position: 1 }, progress: [] },
+    ]);
+    db.enrollmentLesson.findMany.mockResolvedValue([{ lessonId: 'l-1' }]);
+    db.lesson.findFirst.mockResolvedValue({ id: 'l-3', title: 'Tres' });
+    db.enrollmentLesson.findFirst.mockResolvedValue(null);
+    tx.enrollmentLesson.create.mockResolvedValue({ id: 'el-1' });
+    tx.enrollmentLesson.delete.mockResolvedValue({ id: 'el-1' });
+  });
+
+  it('aplica aunque la cohorte sea libre: todo bloqueado, también el primero, con sus temas', async () => {
+    const result = await listModuleAccess(BASE);
+
+    expect(result).toMatchObject({ applies: true, closed: true });
+    expect(result.modules.map((m) => [m.state, m.first])).toEqual([
+      ['LOCKED', false],
+      ['LOCKED', false],
+    ]);
+    expect(result.modules[0]!.lessons).toEqual([
+      { lessonId: 'l-1', title: 'Uno', position: 1, unlocked: true, started: false },
+      { lessonId: 'l-2', title: 'Dos', position: 2, unlocked: false, started: true },
+    ]);
+  });
+
+  it('un menor sigue con las reglas de antes y sin temas', async () => {
+    db.enrollment.findFirst.mockResolvedValue({ ...PAID, isMinorAtEnrollment: true });
+    const result = await listModuleAccess(BASE);
+
+    expect(result.closed).toBe(false);
+    expect(result.modules.every((m) => m.state === 'OPEN' && m.lessons.length === 0)).toBe(true);
+  });
+
+  it('abrir un tema crea la fila, audita y avisa; repetir no hace nada', async () => {
+    expect(await setLessonAccess({ ...BASE, lessonId: 'l-3', unlocked: true })).toEqual({
+      changed: true,
+    });
+    expect(tx.enrollmentLesson.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          enrollmentId: 'enr-1',
+          lessonId: 'l-3',
+          unlockedById: 'staff-1',
+        }),
+      })
+    );
+    expect(tx.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ entity: 'enrollment_lesson', action: 'unlock' }),
+      })
+    );
+    expect(mockNotify).toHaveBeenCalledWith(
+      'inst-1',
+      expect.objectContaining({
+        personId: 'stu-1',
+        dedupeKey: 'lesson_unlocked:enr-1:l-3:2026-10-03',
+      })
+    );
+
+    jest.clearAllMocks();
+    db.enrollmentLesson.findFirst.mockResolvedValue({ id: 'el-1' });
+    expect(await setLessonAccess({ ...BASE, lessonId: 'l-3', unlocked: true })).toEqual({
+      changed: false,
+    });
+    expect(tx.enrollmentLesson.create).not.toHaveBeenCalled();
+  });
+
+  it('cerrar borra la fila y audita `lock` sin avisar', async () => {
+    db.enrollmentLesson.findFirst.mockResolvedValue({ id: 'el-1' });
+    await setLessonAccess({ ...BASE, lessonId: 'l-3', unlocked: false });
+
+    expect(tx.enrollmentLesson.delete).toHaveBeenCalledWith({
+      where: { id: 'el-1' },
+      select: { id: true },
+    });
+    expect(tx.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ action: 'lock' }) })
+    );
+    expect(mockNotify).not.toHaveBeenCalled();
+  });
+
+  it('un tema de otro programa no existe para esta matrícula', async () => {
+    db.lesson.findFirst.mockResolvedValue(null);
+    await expect(
+      setLessonAccess({ ...BASE, lessonId: 'ajeno', unlocked: true })
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
   });
 });

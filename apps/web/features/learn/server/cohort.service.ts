@@ -13,6 +13,7 @@ import { COVER_URL_SECONDS, createReadUrls } from '@/lib/media/storage';
 import { bogotaDate } from '@colombia-estudia/domain';
 import {
   assessmentStatus,
+  closedByDefault,
   sequence,
   moduleAccess,
   resumePoint,
@@ -250,75 +251,94 @@ export async function getCohortOutline({
   // cuentan en su avance. `openCohort` los asigna igual; la matrícula es la que decide.
   const fromModule = enrollment.startsAtModule ?? 1;
 
-  const [modules, unlocks, lessonAssignments, assessmentAssignments] = await Promise.all([
-    db.module.findMany({
-      where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
-      orderBy: { position: 'asc' },
-      select: {
-        id: true,
-        name: true,
-        position: true,
-        description: true,
-        coverMedia: { select: { providerRef: true, status: true } },
-      },
-    }),
-    db.enrollmentModule.findMany({
-      where: { enrollmentId: enrollment.id },
-      select: { moduleId: true, availableFrom: true, availableUntil: true },
-    }),
-    db.lessonAssignment.findMany({
-      where: { cohortId: cohort.id },
-      select: {
-        id: true,
-        availableFrom: true,
-        availableUntil: true,
-        lesson: {
-          select: {
-            id: true,
-            title: true,
-            moduleId: true,
-            position: true,
-            requiresSubmission: true,
-            subject: { select: { id: true, name: true } },
+  const closed = closedByDefault({
+    preview,
+    isMinor: enrollment.isMinorAtEnrollment,
+    pricing: cohort.program.pricing,
+  });
+
+  const [modules, unlocks, lessonAssignments, assessmentAssignments, lessonUnlocks] =
+    await Promise.all([
+      db.module.findMany({
+        where: { programId: cohort.programId, archivedAt: null, position: { gte: fromModule } },
+        orderBy: { position: 'asc' },
+        select: {
+          id: true,
+          name: true,
+          position: true,
+          description: true,
+          coverMedia: { select: { providerRef: true, status: true } },
+        },
+      }),
+      db.enrollmentModule.findMany({
+        where: { enrollmentId: enrollment.id },
+        select: { moduleId: true, availableFrom: true, availableUntil: true },
+      }),
+      db.lessonAssignment.findMany({
+        where: { cohortId: cohort.id },
+        select: {
+          id: true,
+          availableFrom: true,
+          availableUntil: true,
+          lesson: {
+            select: {
+              id: true,
+              title: true,
+              moduleId: true,
+              position: true,
+              requiresSubmission: true,
+              subject: { select: { id: true, name: true } },
+            },
+          },
+          // Los minutos y si embebe vídeo: la forma del ítem en la ruta (misma regla que
+          // `lesson-form.ts`: entrega > vídeo > lectura).
+          lessonVersion: {
+            select: {
+              estimatedMinutes: true,
+              assets: { select: { mediaAsset: { select: { kind: true } } } },
+            },
+          },
+          progress: {
+            where: { enrollmentId: enrollment.id },
+            select: { status: true },
           },
         },
-        // Los minutos y si embebe vídeo: la forma del ítem en la ruta (misma regla que
-        // `lesson-form.ts`: entrega > vídeo > lectura).
-        lessonVersion: {
-          select: {
-            estimatedMinutes: true,
-            assets: { select: { mediaAsset: { select: { kind: true } } } },
+      }),
+      db.assessmentAssignment.findMany({
+        where: { cohortId: cohort.id },
+        select: {
+          id: true,
+          availableFrom: true,
+          dueAt: true,
+          assessment: {
+            select: {
+              id: true,
+              title: true,
+              moduleId: true,
+              lessonId: true,
+              position: true,
+              subject: { select: { id: true, name: true } },
+            },
+          },
+          assessmentVersion: { select: { timeLimitMinutes: true, passPercent: true } },
+          attempts: {
+            where: { enrollmentId: enrollment.id },
+            select: { status: true, score: true, maxScore: true },
           },
         },
-        progress: {
-          where: { enrollmentId: enrollment.id },
-          select: { status: true },
-        },
-      },
-    }),
-    db.assessmentAssignment.findMany({
-      where: { cohortId: cohort.id },
-      select: {
-        id: true,
-        availableFrom: true,
-        dueAt: true,
-        assessment: {
-          select: {
-            id: true,
-            title: true,
-            moduleId: true,
-            lessonId: true,
-            position: true,
-            subject: { select: { id: true, name: true } },
-          },
-        },
-        assessmentVersion: { select: { timeLimitMinutes: true, passPercent: true } },
-        attempts: {
-          where: { enrollmentId: enrollment.id },
-          select: { status: true, score: true, maxScore: true },
-        },
-      },
-    }),
+      }),
+      closed
+        ? db.enrollmentLesson.findMany({
+            where: { enrollmentId: enrollment.id },
+            select: { lessonId: true },
+          })
+        : [],
+    ]);
+
+  // Temas abiertos dentro de un componente cerrado: habilitados a mano o ya empezados (24/11).
+  const openLessons = new Set([
+    ...lessonUnlocks.map((row) => row.lessonId),
+    ...lessonAssignments.flatMap((a) => (a.progress.length > 0 ? [a.lesson.id] : [])),
   ]);
 
   // Sin fechas en la vista de estudiante: se ve todo lo asignado, venza cuando venza.
@@ -353,6 +373,7 @@ export async function getCohortOutline({
             : 'MARKDOWN',
         estimatedMinutes: assignment.lessonVersion.estimatedMinutes,
         ...windowOf(assignment.availableFrom, assignment.availableUntil),
+        opened: openLessons.has(assignment.lesson.id),
       };
     }),
     ...assessmentAssignments.flatMap((assignment): OutlineItem[] => {
@@ -386,6 +407,9 @@ export async function getCohortOutline({
           // `dueAt` es la fecha de entrega, no el cierre del acceso: una evaluación vencida
           // se sigue viendo, y quien decide si admite un intento es el motor de intentos.
           ...windowOf(assignment.availableFrom, null),
+          // El examen va con su tema; el ya presentado no se cierra.
+          opened:
+            openLessons.has(assignment.assessment.lessonId ?? '') || assignment.attempts.length > 0,
         },
       ];
     }),
@@ -403,9 +427,10 @@ export async function getCohortOutline({
       module.id,
       moduleAccess({
         // El primero está abierto salvo que lo abra una cuota (20/11).
-        first: index === 0 && !stages.has(module.id),
+        first: !closed && index === 0 && !stages.has(module.id),
         unlock: unlockOf.get(module.id) ?? null,
-        progression: preview ? 'FREE' : cohortInfo.progression,
+        // Cerrado por defecto, la habilitación aplica aunque la cohorte sea de progresión libre.
+        progression: preview ? 'FREE' : closed ? 'LINEAR' : cohortInfo.progression,
         now,
       }),
     ])

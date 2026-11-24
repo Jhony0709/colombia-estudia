@@ -111,6 +111,15 @@ por defecto, ninguno.
 Para adultos sigue pendiente la validación jurídica de §2; la decisión de usarlo es de Jhonny
 (`PRODUCT_DECISIONS.md`, 20/11).
 
+### Cerrado por defecto en programas de pago (24/11)
+
+Adulto (`!isMinorAtEnrollment`) en un programa `PAID` y fuera de la vista de estudiante
+(`closedByDefault`, `outline.ts`): todos los componentes empiezan `LOCKED`, también el primero, y
+la habilitación aplica aunque la cohorte sea `FREE`. Se abren por `EnrollmentModule` (a mano o al
+pagar la cuota) o tema por tema por `EnrollmentLesson` (`PUT …/lessons/[lessonId]`). Un tema
+abierto lleva consigo sus exámenes; un tema con avance o un examen con intentos sigue abierto
+sin fila. El curso sigue en la lista del estudiante. Un menor y un programa `FREE`, sin cambios.
+
 ## 4. Estado de cuenta: derivado, por matrícula, con `now`
 
 `Account.status` **se calcula** a partir de las `Installment` de la matrícula (solo pagos

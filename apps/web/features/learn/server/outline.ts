@@ -46,6 +46,8 @@ export interface OutlineItem {
   dueAt?: Date | null;
   availableFrom: Date;
   availableUntil: Date | null;
+  /** Tema abierto aunque su componente esté cerrado (24/11): habilitado a mano o ya empezado. */
+  opened?: boolean;
 }
 
 export interface SequencedItem extends OutlineItem {
@@ -57,6 +59,11 @@ export interface SequencedItem extends OutlineItem {
    * todavía no está habilitado para esta matrícula.
    */
   unavailableReason: 'NOT_YET' | 'CLOSED' | 'LOCKED' | null;
+}
+
+/** Programa de pago y adulto (24/11, cliente): nada abre sin habilitación, ni el primero. */
+export function closedByDefault(e: { preview: boolean; isMinor: boolean; pricing: string }) {
+  return !e.preview && !e.isMinor && e.pricing !== 'FREE';
 }
 
 /**
@@ -189,7 +196,7 @@ export function sequence({
     // El componente cerrado manda sobre la secuencia (3/10): «completa el tema 3» no sirve
     // de nada si el componente entero espera a que operación lo habilite.
     const moduleReason: SequencedItem['unavailableReason'] =
-      access.state === 'OPEN' ? null : access.state;
+      access.state === 'OPEN' || (access.state === 'LOCKED' && item.opened) ? null : access.state;
 
     const windowReason: SequencedItem['unavailableReason'] =
       moduleReason ??
@@ -214,7 +221,13 @@ export function sequence({
     // El primer incompleto bloquea todo lo que venga después, y sigue siendo ÉL quien
     // aparece como bloqueador: decir "completa el tema 3" en el tema 7 es más útil que
     // decir "completa el tema 6".
-    if (progression === 'LINEAR' && blocker === null && item.status !== 'COMPLETED') {
+    // Lo cerrado por el componente no bloquea: nadie puede completarlo (24/11).
+    if (
+      progression === 'LINEAR' &&
+      blocker === null &&
+      moduleReason !== 'LOCKED' &&
+      item.status !== 'COMPLETED'
+    ) {
       blocker = item.title;
     }
   }

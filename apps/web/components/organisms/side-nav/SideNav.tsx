@@ -316,7 +316,9 @@ export function SideNav({
 
           <Dialog.Portal>
             <Dialog.Overlay className="dialog-overlay fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden" />
-            <Dialog.Content className="drawer-panel bg-surface-base elevation-modal w-sidenav fixed inset-y-0 left-0 z-50 flex flex-col gap-6 p-3 lg:hidden">
+            {/* `overflow-y-auto` (23/11): igual que la columna de escritorio (23/9); con el menú
+                de staff el cajón no cabía en el teléfono y el cuerpo está bloqueado por el diálogo. */}
+            <Dialog.Content className="drawer-panel bg-surface-base elevation-modal w-sidenav fixed inset-y-0 left-0 z-50 flex max-w-[85vw] flex-col gap-6 overflow-y-auto overscroll-contain p-3 lg:hidden">
               <VisuallyHidden>
                 <Dialog.Title>Navegación</Dialog.Title>
               </VisuallyHidden>

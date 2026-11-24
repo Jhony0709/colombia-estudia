@@ -37,7 +37,8 @@ function setup() {
 
 async function toConsent() {
   await userEvent.click(screen.getByRole('button', { name: 'continue' }));
-  await userEvent.type(screen.getByLabelText(/password/), 'contraseña1234');
+  await userEvent.type(screen.getByLabelText(/^password/), 'contraseña1234');
+  await userEvent.type(screen.getByLabelText(/repeatPassword/), 'contraseña1234');
   await userEvent.click(screen.getByRole('button', { name: 'continue' }));
   expect(screen.getByRole('heading', { name: 'dataPolicy' })).toBeTruthy();
 }
@@ -50,7 +51,7 @@ it('contraseña rechazada: vuelve al paso de contraseña con el error y el campo
 
   expect(await screen.findByRole('heading', { name: 'createPassword' })).toBeTruthy();
   expect(screen.getByText(WEAK)).toBeTruthy();
-  expect((screen.getByLabelText(/password/) as HTMLInputElement).value).toBe('');
+  expect((screen.getByLabelText(/^password/) as HTMLInputElement).value).toBe('');
 });
 
 it('desde la política se puede volver a cambiar la contraseña', async () => {
@@ -59,4 +60,13 @@ it('desde la política se puede volver a cambiar la contraseña', async () => {
   await userEvent.click(screen.getByRole('button', { name: 'back' }));
   expect(screen.getByRole('heading', { name: 'createPassword' })).toBeTruthy();
   expect(fetchMock).not.toHaveBeenCalled();
+});
+
+it('si las dos contraseñas no coinciden, lo dice y no deja seguir (23/11)', async () => {
+  setup();
+  await userEvent.click(screen.getByRole('button', { name: 'continue' }));
+  await userEvent.type(screen.getByLabelText(/^password/), 'contraseña1234');
+  await userEvent.type(screen.getByLabelText(/repeatPassword/), 'contraseña1235');
+  expect(screen.getByText('passwordMismatch')).toBeTruthy();
+  expect(screen.getByRole('button', { name: 'continue' })).toHaveProperty('disabled', true);
 });

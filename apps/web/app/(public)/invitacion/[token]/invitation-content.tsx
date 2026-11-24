@@ -36,6 +36,7 @@ export default function InvitationContent({
   const t = useTranslations('invitation');
   const [step, setStep] = useState<Step>('welcome');
   const [password, setPassword] = useState('');
+  const [repeat, setRepeat] = useState('');
   const [acceptsPolicy, setAcceptsPolicy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +68,8 @@ export default function InvitationContent({
     }
   }, [step]);
 
-  const isPasswordValid = password.length >= 12;
+  const mismatch = repeat.length > 0 && repeat !== password;
+  const isPasswordValid = password.length >= 12 && repeat === password;
 
   async function handleSubmit() {
     setError(null);
@@ -107,6 +109,7 @@ export default function InvitationContent({
         case 'VALIDATION_ERROR':
           // Contraseña rechazada por Supabase: volver al paso donde se puede cambiar.
           setPassword('');
+          setRepeat('');
           setStep('password');
           setError(data.error?.message || t('genericError'));
           break;
@@ -191,6 +194,21 @@ export default function InvitationContent({
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={12}
+            />
+          </FormField>
+
+          <FormField
+            label={t('repeatPassword')}
+            name="passwordRepeat"
+            required
+            error={mismatch ? t('passwordMismatch') : undefined}
+          >
+            <FormPasswordInput
+              name="passwordRepeat"
+              autoComplete="new-password"
+              value={repeat}
+              onChange={(e) => setRepeat(e.target.value)}
+              required
             />
           </FormField>
 

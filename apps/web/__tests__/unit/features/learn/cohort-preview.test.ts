@@ -8,6 +8,7 @@ const db = {
   enrollment: { findFirst: jest.fn() },
   module: { findMany: jest.fn() },
   enrollmentModule: { findMany: jest.fn() },
+  enrollmentLesson: { findMany: jest.fn() },
   accommodation: { findUnique: jest.fn() },
   lessonAssignment: { findMany: jest.fn() },
   assessmentAssignment: { findMany: jest.fn() },
@@ -33,6 +34,7 @@ const enrollment = (isPreview: boolean) => ({
     : new Date('2027-06-30T00:00:00.000Z'),
   startsAtModule: null,
   isPreview,
+  isMinorAtEnrollment: false,
   cohort: {
     id: 'c-1',
     code: 'BACH-1',
@@ -71,6 +73,7 @@ beforeEach(() => {
     { id: 'm-2', name: 'Dos', position: 2, description: null, coverMedia: null },
   ]);
   db.enrollmentModule.findMany.mockResolvedValue([]);
+  db.enrollmentLesson.findMany.mockResolvedValue([]);
   db.accommodation.findUnique.mockResolvedValue(null);
   db.lessonAssignment.findMany.mockResolvedValue([
     lesson('a', 'm-1', FUTURE),
@@ -121,7 +124,7 @@ describe('getCohortOutline en la vista de estudiante', () => {
   });
 
   it('una matrícula real sigue con sus reglas', async () => {
-    db.enrollment.findFirst.mockResolvedValue(enrollment(false));
+    db.enrollment.findFirst.mockResolvedValue({ ...enrollment(false), isMinorAtEnrollment: true });
     const outline = await getCohortOutline({ institutionId: 'inst-1', personId: 'p-1', now: NOW });
 
     expect(outline.preview).toBe(false);
@@ -152,5 +155,46 @@ describe('getCohortOutline · awaitingPlan', () => {
         cohort: { ...enrollment(false).cohort, program: { name: 'Intro', pricing: 'FREE' } },
       })
     ).toBe(false);
+  });
+});
+
+// 24/11 (cliente): programa de pago y adulto, nada abierto hasta que operación lo habilite.
+describe('getCohortOutline · cerrado por defecto', () => {
+  const run = async () => getCohortOutline({ institutionId: 'inst-1', personId: 'p-1', now: NOW });
+  const byId = (outline: Awaited<ReturnType<typeof run>>, id: string) =>
+    items(outline).find((i) => i.assignmentId === id);
+
+  beforeEach(() => db.enrollment.findFirst.mockResolvedValue(enrollment(false)));
+
+  it('todo bloqueado, también el primero; lo ya presentado sigue abierto', async () => {
+    const outline = await run();
+
+    expect(outline.modules.map((m) => m.access.state)).toEqual(['LOCKED', 'LOCKED']);
+    expect(byId(outline, 'b')).toMatchObject({ enabled: false, unavailableReason: 'LOCKED' });
+    expect(byId(outline, 'q')?.enabled).toBe(true);
+  });
+
+  it('un tema habilitado se abre solo, aunque su componente siga bloqueado', async () => {
+    // Sin el cuestionario reprobado, que en LINEAR bloquearía lo de después.
+    db.assessmentAssignment.findMany.mockResolvedValue([]);
+    db.enrollmentLesson.findMany.mockResolvedValue([{ lessonId: 'l-b' }]);
+    const outline = await run();
+
+    expect(outline.modules[1]?.access.state).toBe('LOCKED');
+    expect(byId(outline, 'b')).toMatchObject({ enabled: true, blockedBy: null });
+  });
+
+  it('un tema empezado sigue abierto', async () => {
+    db.assessmentAssignment.findMany.mockResolvedValue([]);
+    db.lessonAssignment.findMany.mockResolvedValue([
+      { ...lesson('b', 'm-2', NOW), progress: [{ status: 'IN_PROGRESS' }] },
+    ]);
+    expect(byId(await run(), 'b')?.enabled).toBe(true);
+  });
+
+  it('a un menor no le aplica', async () => {
+    db.enrollment.findFirst.mockResolvedValue({ ...enrollment(false), isMinorAtEnrollment: true });
+    await run();
+    expect(db.enrollmentLesson.findMany).not.toHaveBeenCalled();
   });
 });

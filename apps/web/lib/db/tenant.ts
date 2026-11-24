@@ -61,6 +61,8 @@ export const TENANT_SCOPED_MODELS = [
   // 6/10: `EnrollmentModule` faltaba desde el 3/10; `AccessRequest` es nueva.
   'EnrollmentModule',
   'AccessRequest',
+  // 24/11: temas habilitados uno a uno.
+  'EnrollmentLesson',
   // 11/10: la opinión al terminar un componente.
   'ModuleFeedback',
   // 5/11: la bandeja de mensajes.

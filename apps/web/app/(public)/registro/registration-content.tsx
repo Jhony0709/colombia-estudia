@@ -24,6 +24,7 @@ import {
 } from '@/components/organisms/conversational-form';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { HOME_AFTER_LOGIN } from '@/lib/authz/routes';
+import { MIN_STUDENT_AGE } from '@/features/auth/age';
 
 type Enrollment =
   | { status: 'ENROLLED'; cohortCode: string; cohortName: string; free: boolean }
@@ -107,6 +108,8 @@ export default function RegistrationContent({
     documentNumber: '',
     password: '',
   });
+  // Se compara en el navegador; al servidor solo va `password`.
+  const [repeat, setRepeat] = useState('');
   const [acceptsPolicy, setAcceptsPolicy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -235,7 +238,12 @@ export default function RegistrationContent({
               timeZone: 'UTC',
             })
           : '',
-      validate: () => (age === null || age < 0 || age > 120 ? t('convo.birthDateInvalid') : null),
+      validate: () =>
+        age === null || age < 0 || age > 120
+          ? t('convo.birthDateInvalid')
+          : age < MIN_STUDENT_AGE
+            ? t('convo.birthDateTooYoung', { age: MIN_STUDENT_AGE })
+            : null,
       field: () => (
         <FormField label={t('birthDate')} name="birthDate" required hint={t('birthDateHint')}>
           <FormInput
@@ -327,7 +335,12 @@ export default function RegistrationContent({
       section: sections.account,
       prompt: t('convo.password'),
       answer: '••••••••',
-      validate: () => (values.password.length >= MIN_PASSWORD ? null : t('passwordHint')),
+      validate: () =>
+        values.password.length < MIN_PASSWORD
+          ? t('passwordHint')
+          : repeat !== values.password
+            ? t('passwordMismatch')
+            : null,
       field: () => (
         <>
           {/* El gestor de contraseñas guarda la pareja: el correo va aquí aunque ya se respondió. */}
@@ -346,6 +359,14 @@ export default function RegistrationContent({
               value={values.password}
               onChange={(e) => set('password', e.target.value)}
               minLength={MIN_PASSWORD}
+            />
+          </FormField>
+          <FormField label={t('repeatPassword')} name="passwordRepeat" required>
+            <FormPasswordInput
+              name="passwordRepeat"
+              autoComplete="new-password"
+              value={repeat}
+              onChange={(e) => setRepeat(e.target.value)}
             />
           </FormField>
         </>

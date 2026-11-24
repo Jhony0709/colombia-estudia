@@ -26,7 +26,12 @@ jest.mock('server-only', () => ({}));
 jest.mock('@/lib/db/tenant', () => ({
   createTenantClient: jest.fn(() => db),
   prisma: {
-    institution: { findUnique: jest.fn(async () => ({ whatsappPhoneNumberId: 'pn-1' })) },
+    institution: {
+      findUnique: jest.fn(async () => ({
+        whatsappPhoneNumberId: 'pn-1',
+        whatsappAgentPhones: ['573001110000', '573002220000'],
+      })),
+    },
   },
 }));
 jest.mock('@/lib/db/errors', () => ({
@@ -92,6 +97,30 @@ beforeEach(() => {
 });
 
 describe('openEnrollRequest', () => {
+  afterEach(() => {
+    delete process.env.WHATSAPP_TEMPLATE_NEW_REQUEST;
+  });
+
+  it('con plantilla, avisa por WhatsApp a cada teléfono de quienes atienden (23/11)', async () => {
+    process.env.WHATSAPP_TEMPLATE_NEW_REQUEST = 'nueva_solicitud';
+    mockSendTemplate.mockResolvedValue({ sent: true });
+    await openEnrollRequest(ENROLL);
+    expect(mockSendTemplate).toHaveBeenCalledTimes(2);
+    expect(mockSendTemplate).toHaveBeenCalledWith(
+      '573001110000',
+      'nueva_solicitud',
+      ['Ana Ruiz', 'Bachillerato por ciclos (BACH-2026-2)'],
+      { phoneNumberId: 'pn-1' }
+    );
+  });
+
+  it('sin plantilla configurada no manda WhatsApp, solo el aviso en la plataforma', async () => {
+    mockSendTemplate.mockClear();
+    await openEnrollRequest(ENROLL);
+    expect(mockSendTemplate).not.toHaveBeenCalled();
+    expect(mockNotifyMany).toHaveBeenCalled();
+  });
+
   it('creates the request and tells operations once, pointing at the inbox', async () => {
     const result = await openEnrollRequest(ENROLL);
 

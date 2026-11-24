@@ -13,7 +13,8 @@ import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
 import { enforceRateLimit } from '@/lib/http/rate-limit';
 
 const schema = z.object({
-  email: z.string().email(),
+  // El teléfono pone mayúscula inicial o un espacio al final (23/11).
+  email: z.string().trim().toLowerCase().email(),
   next: z.string().optional(),
 });
 

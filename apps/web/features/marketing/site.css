@@ -266,10 +266,14 @@
   text-decoration-thickness: 2px;
   text-underline-offset: 8px;
 }
-/* Menú del teléfono: hoja bajo la cabecera, enlaces a 48 px. */
+/* Menú del teléfono: hoja bajo la cabecera, enlaces a 48 px. Si no cabe (teléfono acostado),
+   se desplaza ella sola (23/11). */
 .site-menu {
   position: absolute;
   inset: var(--site-header-h) 0 auto 0;
+  max-height: calc(100dvh - var(--site-header-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: #fff;
   border-bottom: 1px solid var(--site-line);
   box-shadow: 0 24px 40px rgba(15, 23, 42, 0.1);

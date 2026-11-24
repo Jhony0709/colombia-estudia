@@ -92,6 +92,7 @@ model Institution {
   learningEvents        LearningEvent[]
   accommodations        Accommodation[]
   enrollmentModules     EnrollmentModule[]
+  enrollmentLessons     EnrollmentLesson[]
   accessRequests        AccessRequest[]
   moduleFeedback        ModuleFeedback[]
   conversations         Conversation[]
@@ -175,6 +176,7 @@ model Person {
   paymentPlansPaid     PaymentPlan[]         @relation("PlanPayerPerson")
   programPricesCreated ProgramPrice[]        @relation("PriceCreatedBy")
   modulesUnlocked      EnrollmentModule[]    @relation("ModuleUnlockedBy")
+  lessonsUnlocked      EnrollmentLesson[]    @relation("LessonUnlockedBy")
   accessRequests       AccessRequest[]       @relation("AccessRequestPerson")
   accessRequestsClosed AccessRequest[]       @relation("AccessRequestResolver")
   agreementsSigned     PaymentAgreement[]    @relation("AgreementPayerPerson")
@@ -486,6 +488,7 @@ model Enrollment {
   certificates      Certificate[]
   submissions       Submission[]
   modules           EnrollmentModule[]
+  lessons           EnrollmentLesson[]
   accessRequests    AccessRequest[]
   moduleFeedback    ModuleFeedback[]
 
@@ -517,6 +520,25 @@ model EnrollmentModule {
   unlockedBy  Person?     @relation("ModuleUnlockedBy", fields: [unlockedById], references: [id])
 
   @@unique([enrollmentId, moduleId])
+  @@index([institutionId, enrollmentId])
+}
+
+/// Tema habilitado a mano dentro de un componente cerrado (24/11, cliente): en un programa de
+/// pago, el adulto no ve nada hasta que operación abre tema por tema o el componente entero.
+model EnrollmentLesson {
+  id            String   @id @default(cuid())
+  institutionId String
+  enrollmentId  String
+  lessonId      String
+  unlockedAt    DateTime @default(now())
+  unlockedById  String?
+
+  institution Institution @relation(fields: [institutionId], references: [id])
+  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+  lesson      Lesson      @relation(fields: [lessonId], references: [id])
+  unlockedBy  Person?     @relation("LessonUnlockedBy", fields: [unlockedById], references: [id])
+
+  @@unique([enrollmentId, lessonId])
   @@index([institutionId, enrollmentId])
 }
 
@@ -657,6 +679,7 @@ model Lesson {
   assignments LessonAssignment[]
   /// Los exámenes de este tema (Assessment.lessonId).
   assessments Assessment[]
+  unlocks     EnrollmentLesson[]
 
   @@unique([moduleId, position])
   @@unique([institutionId, sourceRef])

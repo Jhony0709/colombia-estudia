@@ -25,6 +25,12 @@ jest.mock('@/lib/authz/request-context', () => ({
   MFA_REQUIRED_ROLES: ['ADMIN', 'OPERATIONS'],
 }));
 
+const mockWarn = jest.fn();
+jest.mock('@/lib/observability/logger', () => ({
+  ...jest.requireActual('@/lib/observability/logger'),
+  logger: { warn: (...args: unknown[]) => mockWarn(...args), info: jest.fn(), error: jest.fn() },
+}));
+
 // Mock institution cache
 jest.mock('@/lib/authz/institution-cache', () => ({
   resolveInstitutionBySlug: jest.fn(),
@@ -181,6 +187,29 @@ describe('POST /api/auth/login', () => {
     const body = await response.json();
     expect(body.error.code).toBe('UNAUTHENTICATED');
     expect(body.error.message).toBe('Correo o contraseña incorrectos');
+  });
+
+  it('el correo llega a Supabase en minúsculas y sin espacios (23/11)', async () => {
+    mockSupabaseAuth.signInWithPassword.mockResolvedValue({
+      data: null,
+      error: { message: 'Invalid login credentials', code: 'invalid_credentials' },
+    });
+    await POST(createRequest({ email: ' Juan@Example.com ', password: 'x' }));
+    expect(mockSupabaseAuth.signInWithPassword).toHaveBeenLastCalledWith({
+      email: 'juan@example.com',
+      password: 'x',
+    });
+  });
+
+  it('deja el motivo en el log, sin el correo (23/11)', async () => {
+    mockWarn.mockClear();
+    mockSupabaseAuth.signInWithPassword.mockResolvedValue({
+      data: null,
+      error: { message: 'Invalid login credentials', code: 'invalid_credentials' },
+    });
+    await POST(createRequest({ email: 'user@example.com', password: 'x' }));
+    expect(mockWarn).toHaveBeenCalledWith({ event: 'login-failed', reason: 'invalid_credentials' });
+    expect(JSON.stringify(mockWarn.mock.calls)).not.toContain('user@example.com');
   });
 
   it('el intento 11 con el mismo correo en 10 minutos responde 429 (23/11)', async () => {

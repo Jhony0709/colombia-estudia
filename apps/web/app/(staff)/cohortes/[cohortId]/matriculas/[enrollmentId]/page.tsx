@@ -142,7 +142,7 @@ export default async function EnrollmentDetailPage({
       {moduleAccess.applies && moduleAccess.modules.length > 0 && (
         <PageSection
           title={t('modules.title')}
-          description={t('modules.hint')}
+          description={t(moduleAccess.closed ? 'modules.hintClosed' : 'modules.hint')}
           id="componentes"
           card
         >

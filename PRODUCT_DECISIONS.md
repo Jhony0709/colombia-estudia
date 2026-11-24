@@ -1264,6 +1264,27 @@ y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de ap
 los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
 cada consulta lleva su `institutionId`.
 
+## 2026-11-24 — Programa de pago: el adulto no ve nada hasta que se habilita, tema por tema
+
+**Decisión** (cliente vía Jhonny, 24/11): en un programa de pago, un adulto matriculado ve el
+curso en su lista pero ningún tema abierto, tampoco el primer componente. Operación abre desde la
+ficha de la matrícula el componente entero (como hasta ahora, o al pagar su cuota) o **tema por
+tema** (`EnrollmentLesson`). El examen de un tema se abre con él.
+
+- **Solo adultos**: un menor sigue con el primer componente abierto (§2 de acceso-y-cartera).
+  Programas gratis y la vista de estudiante, igual que antes.
+- **Aplica aunque la cohorte sea de progresión libre**: en `FREE` la habilitación no se miraba.
+- **Lo empezado no se cierra**: un tema con avance, o un examen ya presentado, sigue abierto.
+- Lo bloqueado por el componente deja de bloquear por secuencia lo que viene después: nadie puede
+  completarlo.
+
+**Por qué**: con el primer componente abierto por defecto, un adulto podía recorrer y terminar
+la etapa sin haber pagado nada.
+
+**Schema**: tabla nueva `EnrollmentLesson` (migración `20261124000000_enrollment_lesson`, con RLS).
+
+**Descartado**: cerrar también a los menores; quitar lo ya empezado a quien lo tenía abierto.
+
 ## 2026-11-22 — El chat, más amable: retomar, avance, horario y encuesta
 
 **Decisión** (Jhonny, 22/11: «haz 1, 2, 3, 4, 5 para asesores si no bot 24/7, 6, 7, 9»):
@@ -1357,6 +1378,22 @@ suponía plan/03 no tiene reglas: queda propuesto, igual que `CRON_SECRET`.
 `/admin/institucion` (sin ellos, esas líneas no salen; con ellos van también en `legalName` y
 `taxID`). El copy de `sitePages` admite `{clave}` (`fillCopy`): un texto con un dato vacío no se
 muestra. Las reseñas de Google van al Perfil de Empresa solo si la sede atiende en persona.
+
+## 2026-11-23 — Solicitud de matrícula: aviso también por WhatsApp
+
+**Decisión** (Jhonny, 23/11): además del aviso en la plataforma, cada solicitud de matrícula nueva
+llega por WhatsApp a los teléfonos de quienes atienden (`whatsappAgentPhones`), con la plantilla
+`WHATSAPP_TEMPLATE_NEW_REQUEST` (`requests.service.ts`, `alertAgentsOfEnrollRequest`). Una
+solicitud repetida no avisa otra vez. Un envío fallido queda en el log y no rompe la solicitud.
+
+## 2026-11-23 — Registro: 16 años o más
+
+**Decisión** (Jhonny, 23/11: «normalmente debería ser así»): el registro público rechaza a quien
+tiene menos de 16 años (`MIN_STUDENT_AGE`, `features/auth/age.ts`), en el servidor antes de crear
+la cuenta y en el formulario; es la edad que publican `/requisitos` y el bot. De 16 a 17 sigue
+igual: cuenta, Introducción gratis y acudiente para lo de pago. Las cohortes gratuitas abiertas
+se siguen tomando solas desde el catálogo (`selfEnroll`). El chat no guarda datos de menores:
+los manda a `/registro`.
 
 ## 2026-11-23 — Vercel Web Analytics
 

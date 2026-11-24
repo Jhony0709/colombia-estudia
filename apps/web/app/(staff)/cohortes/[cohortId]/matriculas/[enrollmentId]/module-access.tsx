@@ -3,6 +3,7 @@
 /**
  * Los componentes de la ruta y su habilitación para esta matrícula (3/10, cliente): el primero
  * abierto; los demás, «Habilitar» de un clic, con fechas opcionales, y «Bloquear» para deshacer.
+ * En un programa de pago (adulto) todo empieza cerrado y se abre también tema por tema (24/11).
  * `cohort.manage`. SSOT: endpoints.md (PUT …/modules/[moduleId]).
  */
 
@@ -16,7 +17,10 @@ import { Badge } from '@/components/atoms/badge';
 import { Alert } from '@/components/atoms/alert';
 import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
-import type { ModuleAccessRow } from '@/features/cohorts/server/module-access.service';
+import type {
+  LessonAccessRow,
+  ModuleAccessRow,
+} from '@/features/cohorts/server/module-access.service';
 
 const TONE: Record<ModuleAccessRow['state'], 'success' | 'neutral' | 'info' | 'warning'> = {
   OPEN: 'success',
@@ -176,6 +180,28 @@ function ModuleRow({
 
       {error && <Alert severity="error">{error}</Alert>}
 
+      {/* 24/11: cerrado por defecto, se abre tema por tema. */}
+      {row.state === 'LOCKED' && row.lessons.length > 0 && (
+        <details className="pl-7">
+          <summary className="type-caption text-text-muted min-h-touch flex cursor-pointer items-center">
+            {t('lessons', {
+              open: row.lessons.filter((l) => l.unlocked || l.started).length,
+              total: row.lessons.length,
+            })}
+          </summary>
+          <ul className="m-0 list-none space-y-1 p-0">
+            {row.lessons.map((lesson) => (
+              <LessonRow
+                key={lesson.lessonId}
+                enrollmentId={enrollmentId}
+                lesson={lesson}
+                canManage={canManage}
+              />
+            ))}
+          </ul>
+        </details>
+      )}
+
       {editing && (
         <form
           className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
@@ -211,6 +237,78 @@ function ModuleRow({
           </div>
         </form>
       )}
+    </li>
+  );
+}
+
+function LessonRow({
+  enrollmentId,
+  lesson,
+  canManage,
+}: {
+  enrollmentId: string;
+  lesson: LessonAccessRow;
+  canManage: boolean;
+}) {
+  const t = useTranslations('enrollmentDetail.modules');
+  const router = useRouter();
+  const { announce } = useAnnounce();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const open = lesson.unlocked || lesson.started;
+
+  async function save(unlocked: boolean) {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        `/api/cohorts/enrollments/${enrollmentId}/lessons/${lesson.lessonId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ unlocked }),
+        }
+      );
+      const payload = await res.json().catch(() => null);
+      if (!res.ok) return setError(apiErrorText(payload, t('error')));
+      announce(t(unlocked ? 'lessonUnlocked' : 'lessonLocked', { name: lesson.title }));
+      router.refresh();
+    } catch {
+      setError(t('error'));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <li className="space-y-1">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="type-body flex min-w-0 items-center gap-2">
+          {open ? (
+            <LockOpen aria-hidden className="text-status-success-base size-4 shrink-0" />
+          ) : (
+            <Lock aria-hidden className="text-text-muted size-4 shrink-0" />
+          )}
+          {lesson.title}
+        </span>
+        <span className="flex items-center gap-2">
+          {lesson.started && <Badge variant="info">{t('lessonStarted')}</Badge>}
+          {/* Lo empezado queda abierto: no hay nada que cerrar. */}
+          {canManage && !lesson.started && (
+            <Button
+              variant={lesson.unlocked ? 'quiet' : 'secondary'}
+              loading={busy}
+              onClick={() => save(!lesson.unlocked)}
+              aria-label={t(lesson.unlocked ? 'lessonCloseNamed' : 'lessonOpenNamed', {
+                name: lesson.title,
+              })}
+            >
+              {t(lesson.unlocked ? 'lessonClose' : 'lessonOpen')}
+            </Button>
+          )}
+        </span>
+      </div>
+      {error && <Alert severity="error">{error}</Alert>}
     </li>
   );
 }

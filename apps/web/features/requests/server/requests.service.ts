@@ -148,8 +148,36 @@ export async function openEnrollRequest({
       body: `${personName} quiere inscribirse en ${courseName} (${cohortCode}).`,
       key: `access_request:${opened.id}`,
     });
+    await alertAgentsOfEnrollRequest(institutionId, personName, `${courseName} (${cohortCode})`);
   }
   return opened;
+}
+
+/**
+ * También por WhatsApp a los teléfonos de quienes atienden (23/11), con la plantilla
+ * `WHATSAPP_TEMPLATE_NEW_REQUEST` (`{{1}}` nombre, `{{2}}` curso; botón a `/solicitudes`). Sin
+ * plantilla o sin número de la institución, solo queda el aviso en la plataforma.
+ */
+async function alertAgentsOfEnrollRequest(
+  institutionId: string,
+  personName: string,
+  course: string
+) {
+  const template = process.env.WHATSAPP_TEMPLATE_NEW_REQUEST;
+  if (!template) return;
+  const institution = await prisma.institution.findUnique({
+    where: { id: institutionId },
+    select: { whatsappPhoneNumberId: true, whatsappAgentPhones: true },
+  });
+  if (!institution?.whatsappPhoneNumberId) return;
+  for (const phone of institution.whatsappAgentPhones) {
+    const result = await sendTemplate(phone, template, [personName, course], {
+      phoneNumberId: institution.whatsappPhoneNumberId,
+    });
+    if (!result.sent) {
+      logger.warn({ event: 'whatsapp-request-alert-failed', institutionId, reason: result.reason });
+    }
+  }
 }
 
 /**

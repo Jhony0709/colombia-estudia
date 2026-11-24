@@ -134,7 +134,7 @@ describe('registerPerson', () => {
   it('creates a minor without consent and enrols them in the intro cohort (free, 25/9)', async () => {
     const result = await registerPerson({
       ...BASE,
-      birthDate: '2012-05-01',
+      birthDate: '2009-05-01',
       acceptsDataPolicy: false,
     });
     expect(result.isMinor).toBe(true);
@@ -144,6 +144,17 @@ describe('registerPerson', () => {
       expect.objectContaining({ cohortId: INTRO_COHORT_ID, personHandle: 'ana@example.com' })
     );
     expect(result.enrollment.status).toBe('ENROLLED');
+  });
+
+  it('rechaza a quien tiene menos de 16 años, antes de crear la cuenta (23/11)', async () => {
+    await expect(
+      registerPerson({ ...BASE, birthDate: '2010-09-24', acceptsDataPolicy: false })
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(admin.auth.admin.createUser).not.toHaveBeenCalled();
+    // El día que cumple 16 ya puede.
+    await expect(
+      registerPerson({ ...BASE, birthDate: '2010-09-23', acceptsDataPolicy: false })
+    ).resolves.toMatchObject({ isMinor: true });
   });
 
   it('keeps the account when the enrolment fails, and audits why', async () => {
