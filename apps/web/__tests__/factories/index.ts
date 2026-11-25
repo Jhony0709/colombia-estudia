@@ -1186,6 +1186,17 @@ export const enrollmentModuleFactory = {
     prisma.enrollmentModule.create({ data: { id: cuid(), institutionId, enrollmentId, moduleId } }),
 };
 
+/** Tema habilitado para una matrícula (24/11). */
+export const enrollmentLessonFactory = {
+  create: async (
+    prisma: PrismaClientType,
+    institutionId: string,
+    enrollmentId: string,
+    lessonId: string
+  ) =>
+    prisma.enrollmentLesson.create({ data: { id: cuid(), institutionId, enrollmentId, lessonId } }),
+};
+
 /** Solicitud de inscripción o de habilitación (6/10). */
 export const accessRequestFactory = {
   create: async (
@@ -1298,6 +1309,7 @@ export const factories = {
   programPrice: programPriceFactory,
   counter: counterFactory,
   enrollmentModule: enrollmentModuleFactory,
+  enrollmentLesson: enrollmentLessonFactory,
   accessRequest: accessRequestFactory,
   moduleFeedback: moduleFeedbackFactory,
   conversation: conversationFactory,

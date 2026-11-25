@@ -72,6 +72,7 @@ const PARENTS: Record<string, readonly string[]> = {
   ProgramPrice: ['Program'],
   Counter: [],
   EnrollmentModule: ['Enrollment', 'Module'],
+  EnrollmentLesson: ['Enrollment', 'Lesson'],
   AccessRequest: ['Person', 'Cohort', 'Module'],
   ModuleFeedback: ['Enrollment', 'Module'],
   Conversation: [],
@@ -415,6 +416,8 @@ async function createEntity(model: string, ctx: GraphContext, db: typeof prisma)
       return factories.counter.create(db, institutionId);
     case 'EnrollmentModule':
       return factories.enrollmentModule.create(db, institutionId, getEnrollment(), getModule());
+    case 'EnrollmentLesson':
+      return factories.enrollmentLesson.create(db, institutionId, getEnrollment(), getLesson());
     case 'AccessRequest':
       return factories.accessRequest.create(
         db,

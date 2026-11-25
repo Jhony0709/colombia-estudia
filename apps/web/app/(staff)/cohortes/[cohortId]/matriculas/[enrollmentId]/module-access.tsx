@@ -262,7 +262,7 @@ function LessonRow({
     setError(null);
     try {
       const res = await fetch(
-        `/api/cohorts/enrollments/${enrollmentId}/lessons/${lesson.lessonId}`,
+        `/api/cohorts/enrollments/${enrollmentId}/lesson-access/${lesson.lessonId}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

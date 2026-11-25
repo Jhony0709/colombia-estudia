@@ -116,7 +116,7 @@ Para adultos sigue pendiente la validación jurídica de §2; la decisión de us
 Adulto (`!isMinorAtEnrollment`) en un programa `PAID` y fuera de la vista de estudiante
 (`closedByDefault`, `outline.ts`): todos los componentes empiezan `LOCKED`, también el primero, y
 la habilitación aplica aunque la cohorte sea `FREE`. Se abren por `EnrollmentModule` (a mano o al
-pagar la cuota) o tema por tema por `EnrollmentLesson` (`PUT …/lessons/[lessonId]`). Un tema
+pagar la cuota) o tema por tema por `EnrollmentLesson` (`PUT …/lesson-access/[lessonId]`). Un tema
 abierto lleva consigo sus exámenes; un tema con avance o un examen con intentos sigue abierto
 sin fila. El curso sigue en la lista del estudiante. Un menor y un programa `FREE`, sin cambios.
 

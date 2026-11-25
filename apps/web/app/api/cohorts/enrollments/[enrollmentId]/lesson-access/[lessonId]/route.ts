@@ -1,5 +1,5 @@
 /**
- * PUT /api/cohorts/enrollments/[enrollmentId]/lessons/[lessonId] — abrir o cerrar un tema para
+ * PUT /api/cohorts/enrollments/[enrollmentId]/lesson-access/[lessonId] — abrir o cerrar un tema para
  * una matrícula cerrada por defecto (`cohort.manage`, 24/11). Audita y, al abrir, avisa al
  * estudiante. SSOT: reference/02-api/endpoints.md.
  */

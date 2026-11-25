@@ -363,7 +363,11 @@ export async function setLessonAccess({
   const enrollment = await loadEnrollment(institutionId, enrollmentId);
 
   const lesson = await db.lesson.findFirst({
-    where: { id: lessonId, programId: enrollment.cohort.programId },
+    where: {
+      id: lessonId,
+      programId: enrollment.cohort.programId,
+      assignments: { some: { cohortId: enrollment.cohortId } },
+    },
     select: { id: true, title: true },
   });
   if (!lesson) throw new APIError('Not found', 'NOT_FOUND');
