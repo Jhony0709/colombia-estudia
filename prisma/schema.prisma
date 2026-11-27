@@ -1524,6 +1524,8 @@ model Conversation {
   /// Último mensaje suyo: en WhatsApp, dentro de 24 h se responde sin plantilla.
   lastInboundAt    DateTime?
   lastMessageAt    DateTime            @default(now())
+  /// Cuándo lo tenía abierto quien lo atiende (27/11): con el chat a la vista no se le avisa.
+  agentSeenAt      DateTime?
   createdAt        DateTime            @default(now())
   /// Datos que el bot pide por el chat (14/11): inscripción o certificado. `intakeStep` es la
   /// pregunta en curso; nulo con `intakeKind` = completo, para el asesor.
@@ -1556,6 +1558,13 @@ model ConversationMessage {
   replyToId      String?
   /// Botones de respuesta rápida que llevó, `[{ id, title }]` (22/11).
   buttons        Json?
+  /// Archivo que llegó (27/11): `audio`, `image`, `video`, `document` o `sticker`. Nulo en texto.
+  mediaType      String?
+  mediaMime      String?
+  /// Ruta en el bucket `media`; nula si no se pudo bajar de Meta.
+  mediaPath      String?
+  /// Nombre del documento, si vino.
+  mediaName      String?
   createdAt      DateTime         @default(now())
 
   institution  Institution           @relation(fields: [institutionId], references: [id])

@@ -21,6 +21,7 @@ import {
 import { intakeSummary, type IntakeData, type IntakeKind } from '../intake';
 import { CHANNEL_FEATURES, type MessagingChannel } from '../channels';
 import { CSAT } from '../bot';
+import { chatMediaHref } from './chat-media.service';
 
 // El saludo y la despedida no detienen la acción: si no salen, queda en el log.
 const logNotSent = (conversationId: string, err: unknown) =>
@@ -166,6 +167,8 @@ export interface ConversationDetail extends ConversationRow {
     replyTo: { body: string; inbound: boolean } | null;
     /** Títulos de los botones de respuesta rápida que llevó. */
     buttons: string[];
+    /** El archivo que mandó (27/11); nulo si no hay o no se pudo bajar. */
+    media: { type: string; name: string | null; url: string } | null;
     /** ISO */
     at: string;
   }>;
@@ -207,6 +210,9 @@ export async function getConversation({
           fromBot: true,
           createdAt: true,
           buttons: true,
+          mediaType: true,
+          mediaPath: true,
+          mediaName: true,
           author: { select: { givenName: true, familyName: true } },
           replyTo: { select: { body: true, direction: true } },
         },
@@ -254,6 +260,10 @@ export async function getConversation({
         ? { body: m.replyTo.body.slice(0, 160), inbound: m.replyTo.direction === 'INBOUND' }
         : null,
       buttons: buttonTitles(m.buttons),
+      media:
+        m.mediaType && m.mediaPath
+          ? { type: m.mediaType, name: m.mediaName, url: chatMediaHref(row.id, m.id) }
+          : null,
       at: m.createdAt.toISOString(),
     })),
   };
@@ -380,7 +390,8 @@ export async function takeConversation({
 
   const taken = await prisma.conversation.updateMany({
     where: { id: conversationId, institutionId, status: { in: ['WAITING', 'BOT', 'CLOSED'] } },
-    data: { status: 'OPEN', assignedToId: actorId, assignedAt: now },
+    // Quien lo toma lo está viendo: sin esto, el recordatorio le llegaría en el mismo minuto.
+    data: { status: 'OPEN', assignedToId: actorId, assignedAt: now, agentSeenAt: now },
   });
   if (taken.count === 0) {
     const current = await load(institutionId, conversationId);

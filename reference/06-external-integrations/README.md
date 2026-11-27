@@ -134,6 +134,16 @@ Para la otra oportunidad en un examen (`PRODUCT_DECISIONS.md`, 5/11). Código en
 - **Bandeja** (22/11): las respuestas desde `/mensajes` pueden citar un mensaje (`context.message_id`)
   y llevar hasta 3 botones de respuesta; lo que la persona cita llega en `context.id` y se enlaza.
   Fuera de las 24 h se retoma con `WHATSAPP_TEMPLATE_FOLLOW_UP` (`{{1}}` nombre, «Utility»).
+- **Archivos** (27/11): audios, fotos, videos, documentos y stickers llegan con un `media.id`.
+  Al recibirlos se bajan (`GET /{media-id}` → URL que caduca, pedida con el mismo token; tope
+  20 MB) y se guardan en el bucket privado `media` (`institutions/{id}/chat/{mensaje}.{ext}`).
+  La bandeja los pide a `GET /api/conversations/[id]/messages/[id]/media`, que firma en cada
+  pedido; se borran con la conversación (retención y anonimización). La descarga corre después de
+  responder al webhook (`after`); si falla, el mensaje queda como `[audio]`.
+- **Avisos al asesor** (27/11): un mensaje nuevo en el chat que atiende, si no lo tiene abierto
+  (`Conversation.agentSeenAt`, que marca la bandeja cada 10 s), y recordatorios a los 10 y 30 min
+  de lo que sigue sin tomar o sin respuesta, en horario de asesores. Campana y plantilla
+  `WHATSAPP_TEMPLATE_PENDING_MESSAGE` a su WhatsApp (`features/messaging/server/agent-alerts.service.ts`).
 - **Leído y «escribiendo…»** (22/11): cada mensaje que contesta el bot se marca con
   `status: read` y `typing_indicator` (`markRead`, `lib/whatsapp/cloud-api.ts`).
 - **Antes de activarlo**: el número del negocio registrado en la cuenta de WhatsApp de ALBA, el

@@ -4146,7 +4146,12 @@
       "takenBy": "Lo atiende {name}.",
       "takenByOther": "Lo atiende {name}. Solo responde quien lo tomó.",
       "back": "Volver a mensajes",
-      "buttons": "Botones del mensaje"
+      "buttons": "Botones del mensaje",
+      "media": {
+        "audio": "Descargar el audio",
+        "image": "Foto que envió la persona",
+        "document": "Documento"
+      }
     },
     "actions": {
       "take": "Tomar chat",

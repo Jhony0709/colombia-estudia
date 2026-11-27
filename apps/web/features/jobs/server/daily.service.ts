@@ -35,6 +35,7 @@ import {
 } from '@/features/notifications/server/notifications.service';
 import { getPolicy } from '@/features/admin/server/policies.service';
 import { sweepUnusedMedia } from '@/features/content/server/media.service';
+import { removeChatMedia } from '@/features/messaging/server/chat-media.service';
 
 export interface DailyJobReport {
   institutionId: string;
@@ -297,9 +298,9 @@ async function runForInstitution({
   try {
     const cutoff = new Date(now);
     cutoff.setUTCFullYear(cutoff.getUTCFullYear() - 1);
-    report.conversationsPurged = (
-      await db.conversation.deleteMany({ where: { personId: null, lastMessageAt: { lt: cutoff } } })
-    ).count;
+    const stale = { personId: null, lastMessageAt: { lt: cutoff } };
+    await removeChatMedia(institutionId, stale);
+    report.conversationsPurged = (await db.conversation.deleteMany({ where: stale })).count;
   } catch (err) {
     logger.warn({ event: 'job-conversation-purge-failed', institutionId, error: String(err) });
   }

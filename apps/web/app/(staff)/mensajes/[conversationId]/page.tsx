@@ -33,6 +33,7 @@ import {
   TakeAction,
 } from '../conversation-actions';
 import { MessageText } from '../message-text';
+import { MessageMedia } from '../message-media';
 import { QuoteButton, ReplyTargetProvider } from '../reply-target';
 import { ScrollToLatest } from '../scroll-to-latest';
 import { ThreadItem, ThreadList } from '../thread-motion';
@@ -206,7 +207,11 @@ export default async function ConversationPage({
                           {m.replyTo.inbound ? name : t('thread.team')}: {m.replyTo.body}
                         </p>
                       )}
-                      <MessageText text={m.body} format={features.format} />
+                      {m.media && <MessageMedia media={m.media} />}
+                      {/* Sin leyenda, el texto de un archivo es `[audio]`: con el archivo sobra. */}
+                      {!(m.media && /^\[\w+\]$/.test(m.body)) && (
+                        <MessageText text={m.body} format={features.format} />
+                      )}
                       {m.buttons.length > 0 && (
                         <ul
                           aria-label={t('thread.buttons')}

@@ -4,7 +4,8 @@
  * plan/10 §3, prisma `Person.anonymizedAt`, catálogo `person.anonymized`.
  *
  * Qué se borra: nombre, documento, fecha de nacimiento, correo, teléfono, el usuario de
- * Auth (no podrá entrar) y sus chats de WhatsApp (5/11), que guardan su número y lo que escribió. Qué se conserva: la fila (`id`) y todo lo que cuelga de ella
+ * Auth (no podrá entrar) y sus chats de WhatsApp (5/11), que guardan su número y lo que escribió,
+ * con los audios y fotos que mandó (27/11). Qué se conserva: la fila (`id`) y todo lo que cuelga de ella
  * —matrículas, progreso, intentos, notas, cartera, auditoría—, porque son registros de la
  * institución (académicos y contables) que la ley obliga a guardar y que ya no identifican
  * a nadie sin los campos borrados. Las membresías se revocan y las invitaciones pendientes
@@ -19,6 +20,7 @@ import { createTenantClient } from '@/lib/db/tenant';
 import { APIError } from '@/lib/core/errors';
 import { getSupabaseAdmin } from '@/lib/auth/supabase-server';
 import { logger } from '@/lib/observability/logger';
+import { removeChatMedia } from '@/features/messaging/server/chat-media.service';
 
 export async function anonymizePerson({
   institutionId,
@@ -43,6 +45,9 @@ export async function anonymizePerson({
   });
   if (!person) throw new APIError('Not found', 'NOT_FOUND');
   if (person.anonymizedAt) throw new APIError('Esta persona ya fue anonimizada', 'CONFLICT');
+
+  // Los archivos del chat no caen con la cascada: van antes, y si fallan no se toca nada.
+  await removeChatMedia(institutionId, { personId: person.id });
 
   // Primero la base: si esto falla, nada cambió. El usuario de Auth se borra después, y si
   // esa parte falla queda un usuario sin persona que no puede hacer nada (sin membresías,

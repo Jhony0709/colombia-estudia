@@ -56,6 +56,16 @@ jest.mock('@/features/notifications/server/notifications.service', () => ({
 jest.mock('@/features/requests/server/whatsapp.service', () => ({
   handleInboundMessage: (...args: unknown[]) => mockAttemptCode(...args),
 }));
+const mockSaveMedia = jest.fn();
+const mockAlertAgent = jest.fn();
+jest.mock('@/features/messaging/server/agent-alerts.service', () => ({
+  alertAssignedAgent: (...args: unknown[]) => mockAlertAgent(...args),
+}));
+const mockAfter = jest.fn((fn: () => unknown) => fn());
+jest.mock('next/server', () => ({ after: (fn: () => unknown) => mockAfter(fn) }));
+jest.mock('@/features/messaging/server/chat-media.service', () => ({
+  saveInboundMedia: (...args: unknown[]) => mockSaveMedia(...args),
+}));
 jest.mock('@/features/messaging/server/chat-account.service', () => ({
   createAccountFromChat: (...args: unknown[]) => mockCreateAccount(...args),
 }));
@@ -63,7 +73,7 @@ jest.mock('@/features/requests/server/requests.service', () => ({
   whatsappIdOf: (phone: string | null) => (phone ? `57${phone.replace(/\D/g, '')}` : null),
 }));
 
-import { handleWhatsAppMessage } from '@/features/messaging/server/inbound.service';
+import { handleWhatsAppMessage, offHoursText } from '@/features/messaging/server/inbound.service';
 
 const AT = new Date('2026-11-05T15:00:00.000Z');
 const message = (overrides: Record<string, unknown> = {}) => ({
@@ -91,6 +101,7 @@ beforeEach(() => {
     id: 'inst-1',
     name: 'ALBA Futuro Educativo',
     whatsappAgentPhones: ['573102502207', '33652614789'],
+    supportEmail: 'soporte@alba.test',
   });
   prisma.conversation.findUnique.mockResolvedValue({ id: 'conv-1' });
   prisma.conversation.update.mockResolvedValue(conversation('BOT'));
@@ -107,14 +118,17 @@ describe('handleWhatsAppMessage', () => {
   it('un saludo queda guardado y el bot responde con tres caminos', async () => {
     expect(await handleWhatsAppMessage(message())).toBe('menu');
 
-    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        conversationId: 'conv-1',
-        direction: 'INBOUND',
-        body: 'Buenas tardes',
-        externalId: 'wamid.1',
-      }),
-    });
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          conversationId: 'conv-1',
+          direction: 'INBOUND',
+          body: 'Buenas tardes',
+          externalId: 'wamid.1',
+        }),
+      })
+    );
+    expect(mockAfter).not.toHaveBeenCalled();
     expect(mockSendButtons).toHaveBeenCalledWith(
       '573001112233',
       expect.stringContaining('Soy el asistente'),
@@ -361,15 +375,69 @@ describe('handleWhatsAppMessage', () => {
     expect(mockSendList).not.toHaveBeenCalled();
   });
 
-  it('en curso, se guarda y se avisa a quien lo atiende', async () => {
+  it('en curso, se guarda y se avisa a quien lo atiende (27/11: si no lo tiene abierto)', async () => {
     prisma.conversation.update.mockResolvedValueOnce(conversation('OPEN', 'staff-2'));
     expect(await handleWhatsAppMessage(message())).toBe('stored');
     expect(mockSendList).not.toHaveBeenCalled();
-    expect(mockNotifyMany).toHaveBeenCalledWith(
-      'inst-1',
-      ['staff-2'],
-      expect.objectContaining({ type: 'conversation_message' })
+    expect(mockAlertAgent).toHaveBeenCalledWith({
+      conversation: expect.objectContaining({ id: 'conv-1', assignedToId: 'staff-2' }),
+      body: 'Buenas tardes',
+      phoneNumberId: 'pn-1',
+      now: expect.any(Date),
+    });
+  });
+
+  it('esperando asesor no avisa al momento: lo hacen los recordatorios', async () => {
+    prisma.conversation.update.mockResolvedValueOnce(conversation('WAITING'));
+    await handleWhatsAppMessage(message());
+    expect(mockAlertAgent).not.toHaveBeenCalled();
+  });
+
+  // 27/11: fuera de horario, el bot le da el horario y el correo; una vez cada 12 h.
+  describe('fuera del horario de asesores', () => {
+    const NIGHT = new Date('2026-11-06T03:00:00.000Z'); // jueves 10:00 p. m. en Bogotá
+
+    it.each(['OPEN', 'WAITING'])(
+      'en %s, el bot responde con el horario y el correo',
+      async (status) => {
+        prisma.conversation.update.mockResolvedValueOnce(conversation(status, 'staff-2'));
+        prisma.conversationMessage.findFirst.mockResolvedValue(null);
+
+        expect(await handleWhatsAppMessage(message({ at: NIGHT }))).toBe('stored');
+        const text = offHoursText('soporte@alba.test');
+        expect(text).toContain('de lunes a sábado, de 8:00 a. m. a 6:00 p. m.');
+        expect(text).toContain('soporte@alba.test');
+        expect(mockSendText).toHaveBeenCalledWith('573001112233', text, 'pn-1');
+        expect(prisma.conversationMessage.create).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({ direction: 'OUTBOUND', fromBot: true, body: text }),
+          })
+        );
+      }
     );
+
+    it('si ya se le dijo el horario en las últimas 12 h, no se repite', async () => {
+      prisma.conversation.update.mockResolvedValueOnce(conversation('OPEN', 'staff-2'));
+      prisma.conversationMessage.findFirst.mockResolvedValue({ id: 'm-hours' });
+
+      await handleWhatsAppMessage(message({ at: NIGHT }));
+      expect(prisma.conversationMessage.findFirst).toHaveBeenCalledWith({
+        where: {
+          conversationId: 'conv-1',
+          fromBot: true,
+          body: { contains: 'de lunes a sábado, de 8:00 a. m. a 6:00 p. m.' },
+          createdAt: { gte: new Date(NIGHT.getTime() - 12 * 60 * 60 * 1000) },
+        },
+        select: { id: true },
+      });
+      expect(mockSendText).not.toHaveBeenCalled();
+    });
+
+    it('en horario no dice nada: el asesor responde', async () => {
+      prisma.conversation.update.mockResolvedValueOnce(conversation('OPEN', 'staff-2'));
+      await handleWhatsAppMessage(message());
+      expect(mockSendText).not.toHaveBeenCalled();
+    });
   });
 
   it('si responde citando un mensaje del chat, queda enlazado a él (22/11)', async () => {
@@ -380,9 +448,11 @@ describe('handleWhatsAppMessage', () => {
       where: { conversationId: 'conv-1', externalId: 'wamid.out' },
       select: { id: true },
     });
-    expect(prisma.conversationMessage.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({ direction: 'INBOUND', replyToId: 'm-out' }),
-    });
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ direction: 'INBOUND', replyToId: 'm-out' }),
+      })
+    );
   });
 
   it('cerrada que vuelve a escribir: la atiende el bot otra vez', async () => {
@@ -397,6 +467,35 @@ describe('handleWhatsAppMessage', () => {
         intakeKind: null,
         intakeStep: null,
       }),
+    });
+  });
+
+  // 27/11: el archivo se guarda con el mensaje; la leyenda es lo que escribió.
+  it('una foto con leyenda guarda la leyenda y baja el archivo', async () => {
+    const media = {
+      id: 'media-1',
+      type: 'image',
+      mime: 'image/jpeg',
+      filename: null,
+      caption: 'Mi recibo',
+    };
+    await handleWhatsAppMessage({ ...message(), text: '[image]', media } as never);
+
+    expect(prisma.conversationMessage.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          body: 'Mi recibo',
+          mediaType: 'image',
+          mediaMime: 'image/jpeg',
+        }),
+      })
+    );
+    // Después de responder: `after` la agenda, el bot no la espera.
+    expect(mockAfter).toHaveBeenCalledTimes(1);
+    expect(mockSaveMedia).toHaveBeenCalledWith({
+      institutionId: 'inst-1',
+      messageId: 'm-1',
+      media,
     });
   });
 

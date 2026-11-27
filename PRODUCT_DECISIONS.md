@@ -1264,6 +1264,53 @@ y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de ap
 los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
 cada consulta lleva su `institutionId`.
 
+## 2026-11-27 — Avisos al asesor: mensaje nuevo y lo que sigue esperando
+
+**Decisión** (Jhonny, 27/11): a quien atiende se le avisa por la campana y por WhatsApp
+(plantilla `mensaje_pendiente`):
+
+- **Mensaje nuevo** en el chat que atiende, solo si no lo tiene abierto: la bandeja marca
+  `Conversation.agentSeenAt` cada 10 s mientras el chat está a la vista, y con menos de 30 s no se
+  avisa. Como mucho uno cada media hora por chat.
+- **Recordatorios a los 10 y 30 min**, en horario de asesores: un chat en espera que nadie tomó
+  (a todo el equipo de operación y administración, y a los WhatsApp de asesores) y un chat tomado
+  cuyo último mensaje es de la persona y nadie responde (solo a quien lo atiende, a su teléfono).
+  En un chat tomado se cuenta desde su último mensaje o desde que lo tomaron, lo que sea después;
+  al tomarlo cuenta como visto. Después de los dos, para.
+- El WhatsApp personal solo va a quien sigue en el equipo (operación o administración).
+- **Fuera de horario** (Jhonny, 27/11): si la persona escribe en un chat en espera o tomado, el
+  bot le responde con el horario y el correo de soporte («déjanos tu mensaje… un asesor te
+  contactará»), una vez cada 12 h (si ya se le dijo el horario al pasar a la fila, no se repite).
+  Al asesor solo le llega la campana; el WhatsApp sale con el recordatorio al abrir el horario. El
+  aviso del bot no cuenta como respuesta para los recordatorios.
+
+El WhatsApp sale solo si la campana creó un aviso nuevo: la deduplicación de la campana es la
+que evita repetirlo. Sin la plantilla configurada, solo la campana.
+
+**Schema**: `Conversation.agentSeenAt` (migración `20261127010000_conversation_agent_seen`).
+
+**Descartado**: avisar al momento cada mensaje de un chat en espera (ya se avisó al entrar en la
+fila); recordar sin límite.
+
+## 2026-11-27 — La bandeja muestra los audios, fotos y documentos del chat
+
+**Decisión** (Jhonny, 27/11): lo que la persona manda por WhatsApp se ve en `/mensajes`: el
+audio con reproductor, la foto, el video y el documento para descargar. Se bajan de Meta al
+llegar, porque su enlace caduca, y se guardan en el bucket privado `media`; el equipo los pide
+por una ruta propia que firma en cada pedido, así el reproductor no se rompe al caducar la URL.
+Solo audio, JPEG/PNG/WebP y MP4/3GP se muestran; lo demás se descarga.
+
+- La leyenda de una foto o un documento se guarda como el texto del mensaje.
+- Se borran con la conversación: en la retención de 12 meses y al anonimizar a la persona.
+- Tope de 20 MB por archivo; lo que no se pudo bajar queda como antes, `[audio]`.
+- El bot no cambia: un archivo fuera de un formulario sigue sin entenderse.
+
+**Schema**: `ConversationMessage.mediaType`, `mediaMime`, `mediaPath`, `mediaName` (migración
+`20261127000000_message_media`).
+
+**Descartado**: pedir el archivo a Meta al abrirlo, sin guardarlo (deja de verse cuando Meta lo
+borra); transcribir los audios (otro paso, si hace falta).
+
 ## 2026-11-24 — Programa de pago: el adulto no ve nada hasta que se habilita, tema por tema
 
 **Decisión** (cliente vía Jhonny, 24/11): en un programa de pago, un adulto matriculado ve el

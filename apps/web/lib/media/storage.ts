@@ -200,6 +200,28 @@ export async function putText(path: string, text: string, contentType: string): 
   }
 }
 
+/** Guarda bytes que ya están en el servidor (un archivo del chat, 27/11). */
+export async function putBytes(
+  path: string,
+  bytes: ArrayBuffer,
+  contentType: string
+): Promise<void> {
+  const { error } = await admin()
+    .storage.from(MEDIA_BUCKET)
+    .upload(path, new Blob([bytes], { type: contentType }), { contentType, upsert: true });
+  if (error) throw new Error(`No se pudo guardar el archivo en Storage: ${error.message}`);
+}
+
+/** Borra varios objetos de una vez; Storage acepta listas. */
+export async function removeObjects(paths: string[]): Promise<void> {
+  for (let i = 0; i < paths.length; i += 100) {
+    const { error } = await admin()
+      .storage.from(MEDIA_BUCKET)
+      .remove(paths.slice(i, i + 100));
+    if (error) throw new Error(`No se pudieron borrar los objetos: ${error.message}`);
+  }
+}
+
 export async function removeObject(path: string): Promise<void> {
   const { error } = await admin().storage.from(MEDIA_BUCKET).remove([path]);
   if (error) {

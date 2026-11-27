@@ -6,6 +6,7 @@
 
 import { createHmac } from 'node:crypto';
 import {
+  downloadMedia,
   inboundMessages,
   sendText,
   verifyChallenge,
@@ -96,6 +97,7 @@ describe('inboundMessages', () => {
         text: 'Hola',
         choiceId: null,
         replyToExternalId: null,
+        media: null,
         at: new Date(1793900000 * 1000),
       },
       {
@@ -106,10 +108,55 @@ describe('inboundMessages', () => {
         text: '[image]',
         choiceId: null,
         replyToExternalId: null,
+        media: null,
         at: expect.any(Date),
       },
     ]);
     expect(inboundMessages(null)).toEqual([]);
+  });
+});
+
+// 27/11: el archivo viaja con su id para bajarlo; el texto sigue siendo `[audio]` para el bot.
+describe('inboundMessages: archivos', () => {
+  const one = (m: Record<string, unknown>) =>
+    inboundMessages({
+      entry: [{ changes: [{ value: { metadata: { phone_number_id: 'pn-1' }, messages: [m] } }] }],
+    })[0];
+
+  it('una nota de voz trae su id y su tipo', () => {
+    expect(
+      one({
+        id: 'wamid.a',
+        from: '573001112233',
+        type: 'audio',
+        audio: { id: 'media-1', mime_type: 'audio/ogg; codecs=opus', voice: true },
+      })
+    ).toMatchObject({
+      text: '[audio]',
+      media: { id: 'media-1', type: 'audio', mime: 'audio/ogg; codecs=opus', filename: null },
+    });
+  });
+
+  it('un documento trae su nombre y su leyenda', () => {
+    expect(
+      one({
+        id: 'wamid.d',
+        from: '573001112233',
+        type: 'document',
+        document: {
+          id: 'media-2',
+          mime_type: 'application/pdf',
+          filename: 'cedula.pdf',
+          caption: 'Mi cédula',
+        },
+      })?.media
+    ).toEqual({
+      id: 'media-2',
+      type: 'document',
+      mime: 'application/pdf',
+      filename: 'cedula.pdf',
+      caption: 'Mi cédula',
+    });
   });
 });
 
@@ -204,5 +251,64 @@ describe('responder citando (22/11)', () => {
     expect(bodies[1]).not.toHaveProperty('context');
     fetchMock.mockRestore();
     delete process.env.WHATSAPP_ACCESS_TOKEN;
+  });
+});
+
+// 27/11: el archivo se pide en dos pasos, los dos con el token; sin token o muy grande, nada.
+describe('downloadMedia', () => {
+  const fetchMock = jest.fn();
+  const json = (body: unknown, ok = true) => ({ ok, json: async () => body });
+
+  beforeEach(() => {
+    fetchMock.mockReset();
+    global.fetch = fetchMock as unknown as typeof fetch;
+    process.env.WHATSAPP_ACCESS_TOKEN = 'tok';
+  });
+  afterEach(() => delete process.env.WHATSAPP_ACCESS_TOKEN);
+
+  it('pide la URL del archivo y luego el archivo, con el token en los dos', async () => {
+    const bytes = new ArrayBuffer(4);
+    fetchMock
+      .mockResolvedValueOnce(
+        json({ url: 'https://lookaside.test/f', mime_type: 'audio/ogg', file_size: 4 })
+      )
+      .mockResolvedValueOnce({ ok: true, arrayBuffer: async () => bytes, headers: new Headers() });
+
+    expect(await downloadMedia('media-1')).toEqual({ bytes, mime: 'audio/ogg' });
+    expect(fetchMock.mock.calls[0][0]).toBe('https://graph.facebook.com/v23.0/media-1');
+    expect(fetchMock.mock.calls[1][0]).toBe('https://lookaside.test/f');
+    for (const [, init] of fetchMock.mock.calls) {
+      expect(init.headers).toEqual({ Authorization: 'Bearer tok' });
+    }
+  });
+
+  it('sin token no llama a Meta', async () => {
+    delete process.env.WHATSAPP_ACCESS_TOKEN;
+    expect(await downloadMedia('media-1')).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('si Meta ya no lo tiene, nulo', async () => {
+    fetchMock.mockResolvedValueOnce(json({ error: {} }, false));
+    expect(await downloadMedia('media-1')).toBeNull();
+  });
+
+  it('más de 20 MB no se baja', async () => {
+    fetchMock.mockResolvedValueOnce(
+      json({ url: 'https://lookaside.test/f', mime_type: 'video/mp4', file_size: 21 * 1024 * 1024 })
+    );
+    expect(await downloadMedia('media-1')).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('si el archivo llega más grande de lo anunciado, tampoco', async () => {
+    fetchMock
+      .mockResolvedValueOnce(json({ url: 'https://lookaside.test/f', mime_type: 'audio/ogg' }))
+      .mockResolvedValueOnce({
+        ok: true,
+        arrayBuffer: async () => new ArrayBuffer(21 * 1024 * 1024),
+        headers: new Headers(),
+      });
+    expect(await downloadMedia('media-1')).toBeNull();
   });
 });

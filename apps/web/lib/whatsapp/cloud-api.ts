@@ -57,7 +57,26 @@ export interface InboundMessage {
   choiceId: string | null;
   /** El `wamid` del mensaje que citó al responder, si citó uno. */
   replyToExternalId?: string | null;
+  /** El archivo que mandó (27/11): se baja con `downloadMedia` mientras Meta lo guarda. */
+  media?: InboundMedia | null;
   at: Date;
+}
+
+export interface InboundMedia {
+  id: string;
+  type: (typeof MEDIA_TYPES)[number];
+  mime: string | null;
+  filename: string | null;
+  caption: string | null;
+}
+
+const MEDIA_TYPES = ['audio', 'image', 'video', 'document', 'sticker'] as const;
+
+interface MediaPayload {
+  id?: string;
+  mime_type?: string;
+  filename?: string;
+  caption?: string;
 }
 
 interface WebhookPayload {
@@ -66,19 +85,21 @@ interface WebhookPayload {
       value?: {
         metadata?: { phone_number_id?: string };
         contacts?: Array<{ wa_id?: string; profile?: { name?: string } }>;
-        messages?: Array<{
-          id?: string;
-          from?: string;
-          timestamp?: string;
-          type?: string;
-          text?: { body?: string };
-          interactive?: {
-            list_reply?: { id?: string; title?: string };
-            button_reply?: { id?: string; title?: string };
-          };
-          button?: { payload?: string; text?: string };
-          context?: { id?: string };
-        }>;
+        messages?: Array<
+          {
+            id?: string;
+            from?: string;
+            timestamp?: string;
+            type?: string;
+            text?: { body?: string };
+            interactive?: {
+              list_reply?: { id?: string; title?: string };
+              button_reply?: { id?: string; title?: string };
+            };
+            button?: { payload?: string; text?: string };
+            context?: { id?: string };
+          } & Partial<Record<(typeof MEDIA_TYPES)[number], MediaPayload>>
+        >;
       };
     }>;
   }>;
@@ -100,6 +121,8 @@ export function inboundMessages(payload: unknown): InboundMessage[] {
             ? (m.text?.body ?? '')
             : (reply?.title ?? m.button?.text ?? `[${m.type}]`);
         const seconds = Number(m.timestamp);
+        const type = MEDIA_TYPES.find((t) => t === m.type);
+        const file = type ? m[type] : undefined;
         out.push({
           id: m.id,
           from: m.from,
@@ -108,12 +131,57 @@ export function inboundMessages(payload: unknown): InboundMessage[] {
           text,
           choiceId,
           replyToExternalId: m.context?.id ?? null,
+          media:
+            type && file?.id
+              ? {
+                  id: file.id,
+                  type,
+                  mime: file.mime_type ?? null,
+                  filename: file.filename ?? null,
+                  caption: file.caption ?? null,
+                }
+              : null,
           at: Number.isFinite(seconds) ? new Date(seconds * 1000) : new Date(),
         });
       }
     }
   }
   return out;
+}
+
+/** Tope de lo que se baja de un chat: un documento de 100 MB no cabe en una función. */
+export const MEDIA_MAX_BYTES = 20 * 1024 * 1024;
+
+/**
+ * Baja un archivo del chat: `GET /{media-id}` da una URL que caduca en minutos, y esa URL
+ * también pide el token. Nulo sin configurar, si Meta ya no lo tiene o si pasa del tope.
+ */
+export async function downloadMedia(
+  mediaId: string
+): Promise<{ bytes: ArrayBuffer; mime: string } | null> {
+  const token = process.env.WHATSAPP_ACCESS_TOKEN;
+  if (!token) return null;
+  const version = process.env.WHATSAPP_API_VERSION || 'v23.0';
+  const auth = { Authorization: `Bearer ${token}` };
+  const meta = await fetch(`${GRAPH_URL}/${version}/${mediaId}`, {
+    headers: auth,
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!meta.ok) return null;
+  const info = (await meta.json().catch(() => null)) as {
+    url?: string;
+    mime_type?: string;
+    file_size?: number;
+  } | null;
+  if (!info?.url || (info.file_size ?? 0) > MEDIA_MAX_BYTES) return null;
+  const file = await fetch(info.url, { headers: auth, signal: AbortSignal.timeout(15_000) });
+  if (!file.ok) return null;
+  const bytes = await file.arrayBuffer();
+  if (bytes.byteLength > MEDIA_MAX_BYTES) return null;
+  return {
+    bytes,
+    mime: info.mime_type ?? file.headers.get('content-type') ?? 'application/octet-stream',
+  };
 }
 
 export type SendResult = { sent: true; id: string | null } | { sent: false; reason: string };

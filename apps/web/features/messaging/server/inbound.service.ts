@@ -9,6 +9,7 @@ import 'server-only';
  * - si espera o la atiende alguien, solo se guarda: se responde desde `/mensajes`.
  */
 
+import { after } from 'next/server';
 import { JSON_NULL } from '@/lib/db/prisma';
 import { createTenantClient, prisma } from '@/lib/db/tenant';
 import { isUniqueViolation } from '@/lib/db/errors';
@@ -37,8 +38,10 @@ import {
   TOPICS,
 } from '../bot';
 import { createAccountFromChat, resendAccountEmail } from './chat-account.service';
+import { saveInboundMedia } from './chat-media.service';
+import { alertAssignedAgent } from './agent-alerts.service';
 import { botContext } from './facts.service';
-import { ADVISOR_HOURS_TEXT } from '../facts';
+import { ADVISOR_HOURS_TEXT, advisorsOpen } from '../facts';
 import {
   cancelsIntake,
   intakeAnswer,
@@ -114,6 +117,36 @@ function say(
   const options = list?.options ?? buttons;
   const body = options ? `${text} [${options.map((o) => o.title).join(' · ')}]` : text;
   return botSays(conversation, send, body, now);
+}
+
+/** Lo que dice el bot si escriben a un asesor fuera de horario (27/11). */
+export function offHoursText(supportEmail: string): string {
+  return `Gracias por escribirnos 🙌 Nuestros asesores atienden ${ADVISOR_HOURS_TEXT}. Déjanos aquí tu mensaje, o escríbenos a ${supportEmail} con tus preguntas, y un asesor te contactará apenas abran.`;
+}
+
+/** Si ya se le dijo el horario en las últimas 12 h (aquí o al pasar a la fila), no se repite. */
+const OFF_HOURS_REPEAT_MS = 12 * 60 * 60 * 1000;
+
+async function offHoursNotice(
+  conversation: Conversation,
+  to: string,
+  supportEmail: string,
+  phoneNumberId: string,
+  now: Date
+): Promise<void> {
+  if (advisorsOpen(now)) return;
+  const told = await prisma.conversationMessage.findFirst({
+    where: {
+      conversationId: conversation.id,
+      fromBot: true,
+      body: { contains: ADVISOR_HOURS_TEXT },
+      createdAt: { gte: new Date(now.getTime() - OFF_HOURS_REPEAT_MS) },
+    },
+    select: { id: true },
+  });
+  if (told) return;
+  const text = offHoursText(supportEmail);
+  await botSays(conversation, () => sendText(to, text, phoneNumberId), text, now);
 }
 
 /** Pasa a esperar asesor: los recordatorios (`waiting.service.ts`) cuentan desde aquí. */
@@ -197,7 +230,7 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
   const institution = message.phoneNumberId
     ? await prisma.institution.findUnique({
         where: { whatsappPhoneNumberId: message.phoneNumberId },
-        select: { id: true, name: true, whatsappAgentPhones: true },
+        select: { id: true, name: true, whatsappAgentPhones: true, supportEmail: true },
       })
     : null;
   if (!institution || !message.phoneNumberId) {
@@ -225,6 +258,7 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
     intakeKind: true,
     intakeStep: true,
     intake: true,
+    agentSeenAt: true,
   } as const;
   const touch = {
     ...(message.name ? { contactName: message.name } : {}),
@@ -262,38 +296,47 @@ export async function handleWhatsAppMessage(message: InboundMessage): Promise<In
       })
     : null;
 
+  const { media } = message;
+  let stored: { id: string };
   try {
-    await prisma.conversationMessage.create({
+    stored = await prisma.conversationMessage.create({
       data: {
         institutionId: institution.id,
         conversationId: conversation.id,
         direction: 'INBOUND',
-        body: message.text,
+        // La leyenda de una foto o un documento es lo que escribió.
+        body: media?.caption || message.text,
         externalId: message.id,
         ...(quoted ? { replyToId: quoted.id } : {}),
+        ...(media
+          ? { mediaType: media.type, mediaMime: media.mime, mediaName: media.filename }
+          : {}),
         createdAt: now,
       },
+      select: { id: true },
     });
   } catch (err) {
     // Meta reintenta lo que no recibió 200 a tiempo: lo ya guardado no se contesta otra vez.
     if (isUniqueViolation(err)) return 'duplicate';
     throw err;
   }
+  // Después de responder a Meta: bajar un archivo no debe demorar al bot ni al webhook.
+  if (media) {
+    after(() => saveInboundMedia({ institutionId: institution.id, messageId: stored.id, media }));
+  }
 
   if ((await handleInboundMessage(message)) === 'linked') return 'attempt_request';
 
-  if (conversation.status === 'WAITING') return 'stored';
-  if (conversation.status === 'OPEN') {
-    if (conversation.assignedToId) {
-      await notifyMany(institution.id, [conversation.assignedToId], {
-        type: 'conversation_message',
-        title: `Mensaje de ${conversation.contactName ?? `+${conversation.contact}`}`,
-        body: message.text.slice(0, 140),
-        href: `/mensajes/${conversation.id}`,
-        // Uno por conversación cada media hora: avisa sin llenar la campana.
-        dedupeKey: `conversation_message:${conversation.id}:${Math.floor(now.getTime() / 1_800_000)}`,
+  if (conversation.status === 'WAITING' || conversation.status === 'OPEN') {
+    if (conversation.status === 'OPEN') {
+      await alertAssignedAgent({
+        conversation,
+        body: media?.caption || message.text,
+        phoneNumberId,
+        now,
       });
     }
+    await offHoursNotice(conversation, message.from, institution.supportEmail, phoneNumberId, now);
     return 'stored';
   }
 

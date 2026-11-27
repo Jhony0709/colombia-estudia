@@ -53,6 +53,7 @@ jest.mock('@/lib/whatsapp/cloud-api', () => ({
 import {
   closeConversation,
   conversationsPulse,
+  getConversation,
   createPersonFromIntake,
   replyToConversation,
   sendFollowUp,
@@ -91,7 +92,8 @@ describe('takeConversation', () => {
         institutionId: 'inst-1',
         status: { in: ['WAITING', 'BOT', 'CLOSED'] },
       },
-      data: { status: 'OPEN', assignedToId: 'staff-1', assignedAt: NOW },
+      // 27/11: quien lo toma lo está viendo.
+      data: { status: 'OPEN', assignedToId: 'staff-1', assignedAt: NOW, agentSeenAt: NOW },
     });
     expect(prisma.auditLog.create).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ action: 'taken' }) })
@@ -475,5 +477,47 @@ describe('sendFollowUp (22/11)', () => {
       row({ status: 'OPEN', assignedToId: 'staff-2', lastInboundAt: OUT })
     );
     await expect(sendFollowUp(BASE)).rejects.toMatchObject({ code: 'CONFLICT' });
+  });
+});
+
+// 27/11: el archivo se pide por la ruta estable; sin ruta en el bucket, el mensaje sigue de texto.
+describe('getConversation: archivos del chat', () => {
+  const msg = (overrides: Record<string, unknown>) => ({
+    id: 'm-1',
+    direction: 'INBOUND',
+    body: '[audio]',
+    fromBot: false,
+    createdAt: NOW,
+    buttons: null,
+    mediaType: null,
+    mediaPath: null,
+    mediaName: null,
+    author: null,
+    replyTo: null,
+    ...overrides,
+  });
+
+  it('un audio bajado va por la ruta estable; uno que no se bajó queda sin archivo', async () => {
+    prisma.conversation.findFirst.mockResolvedValue({
+      ...row({ contactName: 'Laura', lastMessageAt: NOW, intakeKind: null, person: null }),
+      messages: [
+        msg({ id: 'm-2', mediaType: 'audio', mediaPath: null }),
+        msg({ id: 'm-1', mediaType: 'document', mediaPath: 'p/m-1.pdf', mediaName: 'cedula.pdf' }),
+      ],
+    });
+    const detail = await getConversation({
+      institutionId: 'inst-1',
+      conversationId: 'conv-1',
+      now: NOW,
+    });
+
+    expect(detail?.messages.map((m) => m.media)).toEqual([
+      {
+        type: 'document',
+        name: 'cedula.pdf',
+        url: '/api/conversations/conv-1/messages/m-1/media',
+      },
+      null,
+    ]);
   });
 });
