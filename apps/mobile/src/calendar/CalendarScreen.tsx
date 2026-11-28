@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import {
   Badge,
   Button,
@@ -54,7 +54,6 @@ function Entry({ item, days }: { item: CalendarItem; days: number | null }) {
 
 /** Calendario (reference/03-ui/movil.md, M2). */
 export function CalendarScreen() {
-  const router = useRouter();
   const [items, setItems] = useState<CalendarItem[] | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -85,9 +84,6 @@ export function CalendarScreen() {
 
   return (
     <Screen scroll>
-      <Button variant="ghost" style={{ alignSelf: 'flex-start' }} onPress={() => router.back()}>
-        {copy.learn.lesson.back}
-      </Button>
       <Text variant="heading">{t.title}</Text>
       <Text tone="muted">{t.description}</Text>
       {failed && (

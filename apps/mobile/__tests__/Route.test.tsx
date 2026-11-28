@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { openBrowserAsync } from 'expo-web-browser';
 import { ThemeProvider } from '@fluxus-ui/native';
@@ -20,6 +20,10 @@ jest.mock('../src/learn/api', () => ({
   unreadNotifications: jest.fn(),
 }));
 jest.mock('../src/SessionProvider', () => ({ useSession: () => ({ signOut: jest.fn() }) }));
+const mockSetUnread = jest.fn();
+jest.mock('../src/notifications/unread', () => ({
+  setUnread: (count: number) => mockSetUnread(count),
+}));
 const outlineOf = getOutline as jest.MockedFunction<typeof getOutline>;
 const enrollments = listEnrollments as jest.MockedFunction<typeof listEnrollments>;
 const t = copy.learn;
@@ -169,15 +173,17 @@ describe('Route', () => {
     expect(await screen.findByText('Bachillerato')).toBeTruthy();
   });
 
-  it('counts the unread notifications', async () => {
+  it('tells the tab how many notices are unread', async () => {
     (unreadNotifications as jest.Mock).mockResolvedValue(4);
     await open();
-    expect(await screen.findByText(t.unread(4))).toBeTruthy();
+    await waitFor(() => expect(mockSetUnread).toHaveBeenCalledWith(4));
   });
 
-  it('opens the notifications in the app', async () => {
+  it('opens the certificates; the rest is in the tabs', async () => {
     await open();
-    await fireEvent.press(await screen.findByText(t.notifications));
-    expect(router.push).toHaveBeenCalledWith('/aprender/notificaciones');
+    await fireEvent.press(await screen.findByText(t.certificates));
+    expect(router.push).toHaveBeenCalledWith('/aprender/certificados');
+    expect(screen.queryByText(t.notifications)).toBeNull();
+    expect(screen.queryByText(t.calendar)).toBeNull();
   });
 });

@@ -64,7 +64,7 @@ KaTeX se sirve desde `self`. La CSP se prueba en CI con una página que la viola
 
 Subida directa a Storage con URL firmada (`POST /api/media/upload` decide bucket y
 ruta `institutions/{id}/{kind}/{cuid}.{ext}`), tamaño máximo por tipo (imagen 10 MB, PDF
-50 MB, audio 100 MB, entrega 20 MB), `confirm` descarga la cabecera del objeto y verifica
+50 MB, audio 100 MB, entrega 50 MB desde el 28/11), `confirm` descarga la cabecera del objeto y verifica
 magic bytes contra la extensión; lo que no coincide se borra y se audita. Servir siempre
 por URL firmada corta; nunca bucket público.
 

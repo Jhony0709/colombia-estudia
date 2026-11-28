@@ -27,7 +27,7 @@ describe('checkUploadRequest', () => {
     expect(MAX_BYTES.IMAGE).toBe(10 * MB);
     expect(MAX_BYTES.DOCUMENT).toBe(50 * MB);
     expect(MAX_BYTES.AUDIO).toBe(100 * MB);
-    expect(MAX_BYTES.SUBMISSION).toBe(20 * MB);
+    expect(MAX_BYTES.SUBMISSION).toBe(50 * MB);
   });
 
   it('rechaza lo que pasa del límite y dice cuánto pesa y cuánto cabe', () => {

@@ -47,11 +47,21 @@ jest.mock('expo-notifications', () => ({
   setNotificationChannelAsync: jest.fn(async () => null),
   getPermissionsAsync: jest.fn(async () => ({ granted: true, canAskAgain: true })),
   requestPermissionsAsync: jest.fn(async () => ({ granted: true, canAskAgain: true })),
+  getDevicePushTokenAsync: jest.fn(async () => ({ type: 'ios', data: 'device-test' })),
   getExpoPushTokenAsync: jest.fn(async () => ({ data: 'ExponentPushToken[test]' })),
   unregisterForNotificationsAsync: jest.fn(async () => undefined),
   addPushTokenListener: jest.fn(() => ({ remove: jest.fn() })),
   useLastNotificationResponse: jest.fn(() => null),
   clearLastNotificationResponseAsync: jest.fn(async () => undefined),
+}));
+
+// El reporte de caídas: se comprueba qué manda.
+jest.mock('@sentry/react-native', () => ({ init: jest.fn(), captureException: jest.fn() }));
+
+// La pantalla de arranque es nativa.
+jest.mock('expo-splash-screen', () => ({
+  preventAutoHideAsync: jest.fn(async () => true),
+  hide: jest.fn(),
 }));
 
 // El navegador de la app: se comprueba qué abre.

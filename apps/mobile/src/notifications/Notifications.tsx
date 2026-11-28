@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import {
   Badge,
   Button,
@@ -15,6 +15,7 @@ import { Screen } from '@fluxus-ui/native/screen';
 import { copy } from '../copy';
 import { follow } from '../links';
 import { listNotifications, markAllRead, markRead, type Notice } from './api';
+import { setUnread } from './unread';
 
 const t = copy.notifications;
 
@@ -46,7 +47,6 @@ function byDay(items: Notice[], now = new Date()) {
 
 /** Notificaciones (reference/03-ui/movil.md, M2). */
 export function Notifications() {
-  const router = useRouter();
   const [data, setData] = useState<{ items: Notice[]; unread: number } | null>(null);
   const [failed, setFailed] = useState(false);
   const [markFailed, setMarkFailed] = useState(false);
@@ -56,6 +56,7 @@ export function Notifications() {
       listNotifications().then(
         (next) => {
           setData(next);
+          setUnread(next.unread);
           setFailed(false);
         },
         (error: unknown) => {
@@ -90,9 +91,6 @@ export function Notifications() {
 
   return (
     <Screen scroll>
-      <Button variant="ghost" style={{ alignSelf: 'flex-start' }} onPress={() => router.back()}>
-        {copy.learn.lesson.back}
-      </Button>
       <Text variant="heading">{t.title}</Text>
       {failed && (
         <>

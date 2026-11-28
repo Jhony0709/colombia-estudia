@@ -165,7 +165,7 @@ Decisión en `PRODUCT_DECISIONS.md` (27/11); pantallas, sesión y tema en `refer
 - **M2 — Estudiante.** Su ruta, temas en WebView, evidencia, notificaciones, cuenta y pago en el
   navegador, calendario, constancias y recuperar la contraseña.
 - **M3 — Evaluar.** Exámenes y actividades en la app.
-- **M4 — Publicar.** Notificaciones push (el servidor, adelantado el 27/11; falta la app),
+- **M4 — Publicar.** Notificaciones push (servidor y app, adelantados el 27-28/11; vistas en Android, falta iOS),
   «Abrir chat» del aviso por WhatsApp a la app, y las tiendas.
 
 ## Después del MVP (en orden probable de demanda real)

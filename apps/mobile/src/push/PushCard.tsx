@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import * as Notifications from 'expo-notifications';
 import { Button, Card, Message, Stack, Text } from '@fluxus-ui/native';
 import { copy } from '../copy';
 import { enablePush, syncPush, type PushState } from './push';
@@ -7,7 +6,7 @@ import { enablePush, syncPush, type PushState } from './push';
 const t = copy.push;
 
 /** El permiso de los avisos se pide aquí, en contexto y con un botón, no al abrir la app. */
-export function PushCard() {
+export function PushCard({ body = t.body }: { body?: string }) {
   const [state, setState] = useState<PushState | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -20,11 +19,8 @@ export function PushCard() {
         () => undefined
       );
     void sync();
-    // El sistema puede cambiar el token con la app abierta.
-    const changed = Notifications.addPushTokenListener(() => void sync());
     return () => {
       live = false;
-      changed.remove();
     };
   }, []);
 
@@ -42,7 +38,7 @@ export function PushCard() {
     <Card>
       <Stack gap="2">
         <Text weight="medium">{t.title}</Text>
-        <Text tone="muted">{t.body}</Text>
+        <Text tone="muted">{body}</Text>
         <Button variant="primary" onPress={enable}>
           {t.enable}
         </Button>

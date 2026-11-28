@@ -9,11 +9,12 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { routeParam, optionalText, blankToNull } from '@/lib/http/admin-input';
 import { APIError } from '@/lib/core/errors';
 import { submitLesson } from '@/features/learn/server/submission.service';
+import { MAX_PROMPTS } from '@/features/content/activity-limits';
 
 const schema = z.object({
   text: optionalText(20_000).optional(),
   /** Respuestas por enunciado (24/9), en el orden de los enunciados del tema. */
-  answers: z.array(z.string().max(5_000)).max(20).optional(),
+  answers: z.array(z.string().max(5_000)).max(MAX_PROMPTS).optional(),
   fileAssetId: z.string().cuid().nullable().optional(),
 });
 

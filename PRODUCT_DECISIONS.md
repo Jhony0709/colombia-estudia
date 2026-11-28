@@ -1282,7 +1282,8 @@ M2. Corrige el «estudiante primero» de la entrada siguiente.
 ## 2026-11-27 — App móvil con Expo y `@fluxus-ui/native`, estudiante primero — **CORREGIDA el 27/11**
 
 **Decisión** (Jhonny, 27/11): ALBA tiene app en `apps/mobile`, con Expo 58 y los componentes de
-`@fluxus-ui/native`, copiados en `packages/fluxus-native` mientras no estén en npm. Es un cliente
+`@fluxus-ui/native`, copiados en `packages/fluxus-native` mientras no estén en npm (desde el 28/11,
+de npm: 0.3.0, con `@fluxus-ui/icons`; la copia se borró). Es un cliente
 más de la misma API y empieza por el estudiante: M0 el acceso; M1 su ruta, los temas, la
 evidencia, las notificaciones, su cuenta, el calendario y las constancias; M2 exámenes y
 actividades; M3 push y tiendas. Detalle: `reference/03-ui/movil.md`.
@@ -1346,6 +1347,52 @@ Solo audio, JPEG/PNG/WebP y MP4/3GP se muestran; lo demás se descarga.
 
 **Descartado**: pedir el archivo a Meta al abrirlo, sin guardarlo (deja de verse cuando Meta lo
 borra); transcribir los audios (otro paso, si hace falta).
+
+## 2026-11-28 — Entregas de hasta 50 MB
+
+**Decisión** (Jhonny, 28/11): el archivo de una entrega (actividad con archivo) sube de 20 MB a
+50 MB, el tope del plan gratuito de Supabase para un archivo. Cambia `MAX_BYTES.SUBMISSION`
+(`apps/web/lib/media/limits.ts`), que el formulario de entrega ya lee en vez de repetir el número,
+y los textos de `messages/es-CO.json`. `plan/04-seguridad.md` al día.
+
+- **Sigue igual:** imagen 10 MB, PDF 50 MB, audio 100 MB y los archivos del chat de WhatsApp,
+  20 MB.
+- **Fuera del código:** el límite global de Storage del proyecto («Global file size limit», en
+  Storage Settings) tiene que ser de 50 MB o más; si no, Supabase rechaza la subida.
+
+## 2026-11-28 — App: camino a producción
+
+Plan completo, con el diagnóstico y las fuentes: «ALBA móvil — camino a producción»
+(https://claude.ai/artifact/Wh5JgmXeQwi4YDDx9MBLaW). Cinco fases: estabilizar; navegación nativa
+y chat; calidad y tiendas (1.0); equipo completo; M3.
+
+**Decisión** (Jhonny, 28/11):
+
+- **Estudiante:** Mi ruta · Calendario · Pagos · Perfil; los avisos, en una campana de Mi ruta
+  (fase 2). Cambia lo decidido el mismo día en «Pestañas en la app».
+- **Equipo:** se suma la pestaña Personas (fase 4).
+- **Librerías aprobadas:** `@sentry/react-native`, `expo-updates`, `expo-splash-screen`,
+  `expo-haptics` y `react-native-gesture-handler`; opcional, `expo-local-authentication`. Y
+  `react-native-svg`, para los iconos que se mueven de Fluxus (aprobada el mismo día).
+- **iOS sin modo tableta** en la 1.0.
+- **Sin ambiente de pruebas:** se construye y se prueba contra producción.
+- **Orden:** la 1.0 sale antes que Personas y que M3.
+- **El job diario** pasa a las 7:00 de Bogotá, para que sus avisos lleguen por push.
+
+**Abierto:** el pago en línea en iOS (regla 3.1.3 de Apple); la cuenta con que entra el revisor
+de Apple; `react-native-keyboard-controller` para el chat (la pediría la entrada de chat de
+Fluxus).
+
+## 2026-11-28 — Pestañas en la app y push del estudiante
+
+**Decisión** (Jhonny, 28/11):
+
+- **Pestañas nativas** (`expo-router/native-tabs`), no una barra hecha con Fluxus: Fluxus no tiene
+  barra inferior, y la del sistema trae la accesibilidad. `expo-symbols` (aprobada) da los iconos
+  de Android.
+- **Push del estudiante** de 7:00 a 21:00 de Bogotá; lo de la noche queda en la campana.
+- **El WhatsApp al asesor sigue** además del push.
+- **Preferencias:** las del sistema, un canal de Android por categoría. Sin tabla ni migración.
 
 ## 2026-11-27 — Notificaciones push: sobre la campana, con Expo
 

@@ -20,6 +20,9 @@ export type PushState = 'on' | 'ask' | 'off';
 
 /** El token con que este teléfono quedó registrado, para borrarlo al cerrar sesión. */
 let registered: string | null = null;
+/** Android vuelve a anunciar el token del sistema cada vez que se pide: solo uno distinto registra. */
+let device: unknown = null;
+let watching: { remove(): void } | null = null;
 
 /** Android no pregunta por el permiso sin un canal, y el servidor manda cada aviso a uno de estos. */
 async function channels(): Promise<void> {
@@ -34,12 +37,20 @@ async function channels(): Promise<void> {
 
 async function register(): Promise<void> {
   const projectId: string | undefined = Constants.expoConfig?.extra?.eas?.projectId;
-  const { data: token } = await Notifications.getExpoPushTokenAsync({ projectId });
-  await request<unknown>('/api/push/devices', {
-    method: 'PUT',
-    body: { token, platform: Platform.OS },
+  const devicePushToken = await Notifications.getDevicePushTokenAsync();
+  device = devicePushToken.data;
+  const { data: token } = await Notifications.getExpoPushTokenAsync({ projectId, devicePushToken });
+  if (token !== registered) {
+    await request<unknown>('/api/push/devices', {
+      method: 'PUT',
+      body: { token, platform: Platform.OS },
+    });
+    registered = token;
+  }
+  // El sistema puede cambiar el token con la app abierta.
+  watching ??= Notifications.addPushTokenListener(({ data }) => {
+    if (data !== device) void register().catch(() => undefined);
   });
-  registered = token;
 }
 
 /** Al entrar: con permiso, registra el teléfono; sin él, dice si se puede pedir. No pregunta nada. */
@@ -67,6 +78,9 @@ export async function enablePush(): Promise<PushState> {
 export async function forgetPush(): Promise<void> {
   const token = registered;
   registered = null;
+  device = null;
+  watching?.remove();
+  watching = null;
   if (token) {
     await request<unknown>('/api/push/devices', { method: 'DELETE', body: { token } }).catch(
       () => undefined

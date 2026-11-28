@@ -19,6 +19,8 @@ const ONE_OF_EACH = [
   'react-native-reanimated',
   'react-native-worklets',
   'react-native-safe-area-context',
+  'react-native-svg',
+  'expo-haptics',
 ];
 const here = path.join(projectRoot, 'package.json');
 config.resolver.resolveRequest = (context, name, platform) => {

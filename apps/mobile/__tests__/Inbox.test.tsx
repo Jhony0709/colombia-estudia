@@ -11,8 +11,6 @@ jest.mock('../src/messages/api', () => ({
   listConversations: jest.fn(),
   pulse: jest.fn(),
 }));
-const mockSignOut = jest.fn();
-jest.mock('../src/SessionProvider', () => ({ useSession: () => ({ signOut: mockSignOut }) }));
 const list = listConversations as jest.MockedFunction<typeof listConversations>;
 
 const row = (over: Partial<ConversationRow> = {}): ConversationRow => ({
@@ -56,13 +54,6 @@ describe('Inbox', () => {
     expect(router.push).toHaveBeenCalledWith('/mensajes/c-1');
   });
 
-  it('leads to the requests of the students', async () => {
-    list.mockResolvedValue([]);
-    await open();
-    await fireEvent.press(screen.getByRole('button', { name: copy.requests.title }));
-    expect(router.push).toHaveBeenCalledWith('/solicitudes');
-  });
-
   it('changes tab, and says which one is selected', async () => {
     list.mockResolvedValue([]);
     await open();
@@ -85,12 +76,5 @@ describe('Inbox', () => {
     await open();
     await fireEvent.press(await screen.findByRole('button', { name: copy.retry }));
     expect(await screen.findByText('Laura')).toBeTruthy();
-  });
-
-  it('signs out', async () => {
-    list.mockResolvedValue([]);
-    await open();
-    await fireEvent.press(screen.getByRole('button', { name: copy.signOut }));
-    expect(mockSignOut).toHaveBeenCalled();
   });
 });

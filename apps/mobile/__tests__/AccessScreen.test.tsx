@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { AccessibilityInfo, Platform, Text } from 'react-native';
+import { AccessibilityInfo, AppState, Platform, Text } from 'react-native';
 import { openBrowserAsync } from 'expo-web-browser';
 import { ThemeProvider } from '@fluxus-ui/native';
 import { ApiError } from '../src/api';
@@ -8,6 +8,7 @@ import { copy } from '../src/copy';
 import { abandon, currentUser, recover, signIn, signOut, verifyCode } from '../src/session';
 import { SessionProvider, useSession } from '../src/SessionProvider';
 import { Loading } from '../src/ui/Loading';
+import { Offline } from '../src/ui/Offline';
 import { theme } from '../theme/alba';
 
 jest.mock('../src/session', () => ({
@@ -34,6 +35,7 @@ const pending = {
 function Gate() {
   const { state } = useSession();
   if (state.kind === 'checking') return <Loading />;
+  if (state.kind === 'offline') return <Offline />;
   if (state.kind !== 'in') return <AccessScreen />;
   return <Text>{`dentro:${state.me.person.givenName}`}</Text>;
 }
@@ -81,6 +83,40 @@ describe('AccessScreen', () => {
     expect(screen.getByLabelText(copy.password).props.secureTextEntry).toBe(true);
     expect(screen.getByRole('button', { name: copy.submit })).toBeTruthy();
     expect(screen.getByRole('button', { name: copy.forgot })).toBeTruthy();
+  });
+
+  it('shows the password on request', async () => {
+    me.mockResolvedValue(null);
+    await open();
+    await fireEvent.press(await screen.findByRole('button', { name: copy.showPassword }));
+    expect(screen.getByLabelText(copy.password).props.secureTextEntry).toBe(false);
+    expect(screen.getByRole('button', { name: copy.hidePassword })).toBeTruthy();
+  });
+
+  it('keeps the saved session when it opens without a connection, and tries again', async () => {
+    me.mockRejectedValueOnce(new ApiError(0, 'NETWORK', 'x'));
+    await open();
+    expect(await screen.findByText(copy.offlineTitle)).toBeTruthy();
+    expect(screen.queryByLabelText(copy.email)).toBeNull();
+    expect(leave).not.toHaveBeenCalled();
+    me.mockResolvedValue(ana);
+    await fireEvent.press(screen.getByRole('button', { name: copy.retry }));
+    expect(await screen.findByText('dentro:Ana')).toBeTruthy();
+  });
+
+  it('tries again by itself when the app comes back to the front', async () => {
+    let back: (state: 'active') => void = () => undefined;
+    const listen = jest.spyOn(AppState, 'addEventListener').mockImplementation((_, fn) => {
+      back = fn;
+      return { remove: jest.fn() } as never;
+    });
+    me.mockRejectedValueOnce(new ApiError(503, 'INTERNAL', 'x'));
+    await open();
+    await screen.findByText(copy.offlineTitle);
+    me.mockResolvedValue(ana);
+    back('active');
+    expect(await screen.findByText('dentro:Ana')).toBeTruthy();
+    listen.mockRestore();
   });
 
   it('checks the fields before calling the server', async () => {

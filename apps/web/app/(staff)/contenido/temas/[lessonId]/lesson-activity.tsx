@@ -18,6 +18,7 @@ import { useToast } from '@/components/organisms/toaster';
 import { Card } from '@/components/atoms/card';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { cn } from '@/lib/utils';
+import { MAX_PROMPTS } from '@/features/content/activity-limits';
 
 export type ActivityAccepts = 'TEXT' | 'FILE' | 'TEXT_OR_FILE';
 
@@ -188,7 +189,7 @@ export function LessonActivity({
           <Button
             type="button"
             variant="quiet"
-            disabled={busy || prompts.length >= 20}
+            disabled={busy || prompts.length >= MAX_PROMPTS}
             onClick={() => {
               setPrompts([...prompts, '']);
             }}

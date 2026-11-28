@@ -1,5 +1,5 @@
 {
-  // packages/fluxus-native no trae @types/react (VENDOR.md): se le dan los de la app. Aparte de
+  // En el monorepo conviven los tipos de React 18 (web) y 19: se fijan los de la app. Aparte de
   // tsconfig.json porque Metro y jest-expo convierten `paths` en alias de ejecución.
   "extends": "./tsconfig.json",
   "compilerOptions": {

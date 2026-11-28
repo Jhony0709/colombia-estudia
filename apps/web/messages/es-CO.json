@@ -1220,7 +1220,7 @@
       },
       "optionHint": {
         "TEXT": "Escribe la respuesta en la plataforma.",
-        "FILE": "Sube una foto, imagen o PDF (hasta 20 MB).",
+        "FILE": "Sube una foto, imagen o PDF (hasta 50 MB).",
         "TEXT_OR_FILE": "Lo que prefiera; puede mandar los dos."
       },
       "prompts": {
@@ -1824,9 +1824,11 @@
         "FILE": "Foto o escaneo de tu hoja",
         "TEXT_OR_FILE": "Foto o escaneo de tu hoja (opcional)"
       },
-      "fileHint": "PDF, PNG o JPG de hasta 20 MB. Una foto con el celular sirve.",
+      "fileHint": "PDF, PNG o JPG de hasta 50 MB. Una foto con el celular sirve: si pesa mucho, la reducimos antes de subirla. Con varias hojas, elige varias fotos (hasta 10) y las juntamos en un PDF.",
       "send": "Enviar actividad",
       "resend": "Enviar de nuevo",
+      "preparing": "Preparando el archivo…",
+      "combined": "{count} fotos en un PDF",
       "uploading": "Subiendo el archivo…",
       "sending": "Enviando…",
       "sentAnnounce": "Actividad enviada. Un instructor la revisará.",
@@ -1850,7 +1852,10 @@
       "errors": {
         "empty": "Escribe algo o adjunta un archivo antes de enviar.",
         "type": "Ese tipo de archivo no se admite. Usa PDF, PNG o JPG.",
-        "size": "El archivo pesa más de 20 MB.",
+        "mixed": "Para varias hojas elige solo fotos (PNG o JPG). Un PDF se sube solo.",
+        "tooMany": "Elige hasta {max} fotos.",
+        "combine": "No pudimos juntar las fotos. Prueba con menos fotos o súbelas en un solo PDF.",
+        "size": "El archivo pesa {size} MB y el máximo es 50 MB, así que no se adjuntó. Si es un PDF, redúcelo con una app para comprimir PDF o sube una foto de la hoja. Si no lo logras, envíalo a {email}.",
         "upload": "No se pudo subir el archivo. Inténtalo de nuevo.",
         "send": "No se pudo enviar la actividad. Inténtalo de nuevo.",
         "needText": "Esta actividad se entrega con un texto: escribe tu respuesta.",
@@ -2266,8 +2271,8 @@
       "autoApprove": "No pasa por revisión: al enviarla completa, el tema queda completado en el acto.",
       "accepts": {
         "TEXT": "Se entrega escribiendo la respuesta aquí.",
-        "FILE": "Resuélvela en una hoja y sube una foto o un escaneo: PDF, PNG o JPG de hasta 20 MB.",
-        "TEXT_OR_FILE": "Puedes responder aquí o resolverla en una hoja y subir una foto o un escaneo (PDF, PNG o JPG de hasta 20 MB)."
+        "FILE": "Resuélvela en una hoja y sube una foto o un escaneo: PDF, PNG o JPG de hasta 50 MB.",
+        "TEXT_OR_FILE": "Puedes responder aquí o resolverla en una hoja y subir una foto o un escaneo (PDF, PNG o JPG de hasta 50 MB)."
       },
       "step": "Practica"
     },

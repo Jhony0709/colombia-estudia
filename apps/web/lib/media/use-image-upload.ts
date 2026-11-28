@@ -35,24 +35,30 @@ async function readJson(res: Response): Promise<unknown> {
 
 /**
  * Reescala si hace falta. Si el navegador no puede (sin `createImageBitmap` o `toBlob`), se
- * sube el original: el servidor sigue validando tamaño y tipo.
+ * sube el original: el servidor sigue validando tamaño y tipo. En JPEG (las entregas, que no
+ * admiten WebP) lo transparente de un PNG queda blanco.
  */
-async function downscale(file: File): Promise<Blob> {
+export async function downscale(
+  file: File,
+  type: 'image/webp' | 'image/jpeg' = 'image/webp'
+): Promise<Blob> {
   if (typeof createImageBitmap !== 'function') return file;
   try {
     const bitmap = await createImageBitmap(file);
     const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
-    if (scale === 1 && file.type === 'image/webp') return file;
+    if (scale === 1 && file.type === type) return file;
     const canvas = document.createElement('canvas');
     canvas.width = Math.round(bitmap.width * scale);
     canvas.height = Math.round(bitmap.height * scale);
     const ctx = canvas.getContext('2d');
     if (!ctx) return file;
+    if (type === 'image/jpeg') {
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
     ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
     bitmap.close();
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, 'image/webp', 0.85)
-    );
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, 0.85));
     // Un PNG pequeño puede pesar menos que su WebP: se queda el más ligero.
     return blob && blob.size < file.size ? blob : file;
   } catch {

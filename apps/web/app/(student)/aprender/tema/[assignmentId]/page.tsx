@@ -301,6 +301,7 @@ export default async function LessonPage({
                       submission={submission}
                       accepts={lesson.activity.accepts}
                       prompts={lesson.activity.prompts}
+                      supportEmail={ctx.institution.supportEmail}
                       dateLabel={
                         submission
                           ? format.dateTime(

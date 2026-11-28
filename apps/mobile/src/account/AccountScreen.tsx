@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AppState } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import {
   Badge,
@@ -142,7 +142,6 @@ function AccountCard({
 
 /** Mi cuenta y pagar (reference/03-ui/movil.md, M2). */
 export function AccountScreen() {
-  const router = useRouter();
   const [data, setData] = useState<Loaded | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -176,9 +175,6 @@ export function AccountScreen() {
 
   return (
     <Screen scroll>
-      <Button variant="ghost" style={{ alignSelf: 'flex-start' }} onPress={() => router.back()}>
-        {copy.learn.lesson.back}
-      </Button>
       <Text variant="heading">{t.title}</Text>
       <Text tone="muted">{t.description}</Text>
       {failed && (

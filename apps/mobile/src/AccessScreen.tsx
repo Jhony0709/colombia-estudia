@@ -173,7 +173,7 @@ export function AccessScreen() {
         value={password}
         onChangeText={setPassword}
         error={errors.password}
-        secureTextEntry
+        reveal={{ show: copy.showPassword, hide: copy.hidePassword }}
         autoCapitalize="none"
         autoComplete="current-password"
         textContentType="password"

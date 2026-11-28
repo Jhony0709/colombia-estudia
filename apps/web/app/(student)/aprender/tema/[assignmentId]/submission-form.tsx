@@ -37,6 +37,9 @@ import { useAnnounce } from '@/lib/a11y/announce';
 import { apiErrorText } from '@/lib/http/api-error-text';
 import { cn } from '@/lib/utils';
 import { useDraft } from '@/lib/net/draft';
+import { downscale } from '@/lib/media/use-image-upload';
+import { photosToPdf } from '@/lib/media/photos-to-pdf';
+import { MAX_BYTES as UPLOAD_MAX } from '@/lib/media/limits';
 import { useSlowRequest } from '@/lib/net/slow-request';
 import { RequestStatus } from '@/components/molecules/request-status';
 
@@ -57,12 +60,22 @@ export interface SubmissionViewProps {
 /** Espejo de `lib/media/limits.ts` (SUBMISSION). Se comprueba aquí para avisar antes de subir. */
 const ACCEPT = 'image/png,image/jpeg,application/pdf';
 const ALLOWED = new Set(['image/png', 'image/jpeg', 'application/pdf']);
-const MAX_BYTES = 20 * 1024 * 1024;
+const MAX_BYTES = UPLOAD_MAX.SUBMISSION;
+/** Hojas en fotos que se juntan en un PDF (28/11). */
+const MAX_PHOTOS = 10;
 
-type Phase = 'idle' | 'uploading' | 'sending';
+type Phase = 'idle' | 'preparing' | 'uploading' | 'sending';
 
 async function readJson(res: Response): Promise<unknown> {
   return res.json().catch(() => null);
+}
+
+/** Una foto del teléfono pasa a JPEG de 2000 px: pesa poco y la letra se sigue leyendo. */
+async function lighten(file: File): Promise<File> {
+  if (file.type === 'application/pdf') return file;
+  const blob = await downscale(file, 'image/jpeg');
+  if (blob === file) return file;
+  return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
 }
 
 /** Las respuestas del borrador: una lista del largo de los enunciados, o nada si no cuadra. */
@@ -88,6 +101,7 @@ export function SubmissionForm({
   dateLabel,
   accepts,
   prompts = [],
+  supportEmail,
 }: {
   assignmentId: string;
   submission: SubmissionViewProps | null;
@@ -101,6 +115,8 @@ export function SubmissionForm({
    * Chrome «20 de septiembre a las 10:59», y React lo trata como HTML distinto.
    */
   dateLabel: string | null;
+  /** A dónde mandar un archivo que no logra subir (`Institution.supportEmail`). */
+  supportEmail: string;
 }) {
   const t = useTranslations('learn.submission');
   // Solo para el tamaño del archivo elegido, que nace en el cliente y no se hidrata.
@@ -147,8 +163,12 @@ export function SubmissionForm({
   // La espera que se ve: «está tardando», «no pudimos», reintentar (E1).
   const wait = useSlowRequest({ screen: 'lesson', action: 'submit', request: 'submission' });
   const [file, setFile] = useState<File | null>(null);
+  // Cuántas fotos se juntaron en `file`; 0 si es un archivo tal cual.
+  const [photos, setPhotos] = useState(0);
   const [phase, setPhase] = useState<Phase>('idle');
   const [error, setError] = useState<string | null>(null);
+  // Un archivo que no cabe no se adjunta: al enviar se dice eso, no que falten respuestas.
+  const [tooBig, setTooBig] = useState<string | null>(null);
   const [replacing, setReplacing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -184,20 +204,53 @@ export function SubmissionForm({
     );
   }
 
-  const onFileChange = (chosen: File | null) => {
+  const reject = (message: string) => {
+    setFile(null);
+    setPhotos(0);
+    if (fileInput.current) fileInput.current.value = '';
+    setError(message);
+  };
+
+  /** Un archivo tal cual, o varias fotos juntas en un PDF. */
+  const prepare = async (chosen: File[]): Promise<File | null> => {
+    if (chosen.length === 1) return lighten(chosen[0]!);
+    try {
+      return await photosToPdf(await Promise.all(chosen.map(lighten)));
+    } catch {
+      reject(t('errors.combine'));
+      return null;
+    }
+  };
+
+  const onFileChange = async (chosen: File[]) => {
     setError(null);
-    if (!chosen) return setFile(null);
-    if (!ALLOWED.has(chosen.type)) {
-      setFile(null);
-      if (fileInput.current) fileInput.current.value = '';
-      return setError(t('errors.type'));
+    setTooBig(null);
+    if (chosen.length === 0) {
+      setPhotos(0);
+      return setFile(null);
     }
-    if (chosen.size > MAX_BYTES) {
-      setFile(null);
-      if (fileInput.current) fileInput.current.value = '';
-      return setError(t('errors.size'));
+    if (chosen.some((c) => !ALLOWED.has(c.type))) return reject(t('errors.type'));
+    if (chosen.length > 1 && chosen.some((c) => c.type === 'application/pdf')) {
+      return reject(t('errors.mixed'));
     }
-    setFile(chosen);
+    if (chosen.length > MAX_PHOTOS) return reject(t('errors.tooMany', { max: MAX_PHOTOS }));
+    setPhase('preparing');
+    const ready = await prepare(chosen);
+    setPhase('idle');
+    if (!ready) return;
+    if (ready.size > MAX_BYTES) {
+      setFile(null);
+      setPhotos(0);
+      if (fileInput.current) fileInput.current.value = '';
+      const message = t('errors.size', {
+        size: format.number(ready.size / 1024 / 1024, { maximumFractionDigits: 1 }),
+        email: supportEmail,
+      });
+      setTooBig(message);
+      return setError(message);
+    }
+    setFile(ready);
+    setPhotos(chosen.length > 1 ? chosen.length : 0);
   };
 
   const onSubmit = async (event?: FormEvent<HTMLFormElement>) => {
@@ -206,12 +259,18 @@ export function SubmissionForm({
     wait.reset();
     const trimmed = wantsText ? text.trim() : '';
     const trimmedAnswers = hasPrompts ? answers.map((a) => a.trim()) : [];
-    if (accepts === 'FILE' && !file) return setError(t('errors.needFile'));
-    if (hasPrompts && !file && trimmedAnswers.some((a) => a === '')) {
-      return setError(t('errors.answerAll'));
-    }
-    if (!hasPrompts && accepts === 'TEXT' && !trimmed) return setError(t('errors.needText'));
-    if (!hasPrompts && !trimmed && !file) return setError(t('errors.empty'));
+    const missing =
+      accepts === 'FILE' && !file
+        ? t('errors.needFile')
+        : hasPrompts && !file && trimmedAnswers.some((a) => a === '')
+          ? t('errors.answerAll')
+          : !hasPrompts && accepts === 'TEXT' && !trimmed
+            ? t('errors.needText')
+            : !hasPrompts && !trimmed && !file
+              ? t('errors.empty')
+              : null;
+    // Si falta algo porque el archivo no cabía, se dice eso y no que falten respuestas.
+    if (missing) return setError(tooBig ?? missing);
 
     // Un fallo de servidor (respuesta con error) se dice con su texto; un `fetch` que
     // lanza (sin respuesta) lo recoge `wait` como `failed` con «Reintentar». En los dos
@@ -374,16 +433,17 @@ export function SubmissionForm({
               type="file"
               name="file"
               accept={ACCEPT}
+              multiple
               disabled={busy}
-              onChange={(e) => onFileChange(e.target.files?.[0] ?? null)}
+              onChange={(e) => void onFileChange(Array.from(e.target.files ?? []))}
               className="type-body text-text block w-full"
             />
             <p className="type-caption text-text-muted">{t('fileHint')}</p>
             {file && (
               <p className="type-caption text-text inline-flex items-center gap-1.5">
                 <FileText className="size-4" aria-hidden="true" />
-                {file.name} · {format.number(file.size / 1024 / 1024, { maximumFractionDigits: 1 })}{' '}
-                MB
+                {photos > 0 ? t('combined', { count: photos }) : file.name} ·{' '}
+                {format.number(file.size / 1024 / 1024, { maximumFractionDigits: 1 })} MB
               </p>
             )}
           </div>
@@ -407,13 +467,15 @@ export function SubmissionForm({
 
         <div className="flex flex-wrap items-center gap-3">
           <Button type="submit" disabled={busy}>
-            {phase === 'uploading'
-              ? t('uploading')
-              : phase === 'sending'
-                ? t('sending')
-                : submission?.status === 'RETURNED' || replacing
-                  ? t('resend')
-                  : t('send')}
+            {phase === 'preparing'
+              ? t('preparing')
+              : phase === 'uploading'
+                ? t('uploading')
+                : phase === 'sending'
+                  ? t('sending')
+                  : submission?.status === 'RETURNED' || replacing
+                    ? t('resend')
+                    : t('send')}
           </Button>
           {replacing && (
             <Button

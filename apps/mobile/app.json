@@ -3,21 +3,54 @@
     "name": "ALBA",
     "slug": "alba-futuro-educativo",
     "version": "0.1.0",
+    "icon": "./assets/icon.png",
     "orientation": "portrait",
     "scheme": "alba",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.albafuturoeducativo.app"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.albafuturoeducativo.app",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.albafuturoeducativo.app",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/adaptive-icon-mono.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "fingerprint"
     },
     "updates": {
-      "enabled": false
+      "url": "https://u.expo.dev/5bf5294e-271a-47c6-a8dc-1bd3bd13768d"
     },
-    "plugins": ["expo-router", "expo-notifications"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#057FFB"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "backgroundColor": "#f3f5f8",
+          "dark": {
+            "image": "./assets/splash-icon.png",
+            "backgroundColor": "#0b1220"
+          }
+        }
+      ]
+    ],
     "extra": {
       "router": {
         "asyncRoutes": {

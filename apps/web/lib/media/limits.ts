@@ -19,7 +19,7 @@ export const MAX_BYTES: Record<UploadKind, number> = {
   AUDIO: 100 * 1024 * 1024,
   // Las entregas son de la Fase 4; el límite se fija aquí porque el límite es de
   // seguridad, no de la pantalla que lo use.
-  SUBMISSION: 20 * 1024 * 1024,
+  SUBMISSION: 50 * 1024 * 1024,
 };
 
 /**

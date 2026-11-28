@@ -18,6 +18,8 @@ import {
 } from '@fluxus-ui/native';
 import { Screen } from '@fluxus-ui/native/screen';
 import { copy } from '../copy';
+import { setUnread } from '../notifications/unread';
+import { PushCard } from '../push/PushCard';
 import { useSession } from '../SessionProvider';
 import { openWeb } from '../ui/WebLink';
 import {
@@ -168,19 +170,12 @@ function Outline({ outline }: { outline: CohortOutline }) {
   );
 }
 
-function More({ unread }: { unread: number }) {
+// Avisos, Calendario y Mi cuenta están en las pestañas; las constancias, aquí.
+function More() {
   const router = useRouter();
-  // Cada una pasa a la app en su fase (reference/03-ui/movil.md, M2); hasta entonces, la web.
   return (
     <Stack gap="1">
       <Text variant="title">{t.more}</Text>
-      <ListItem
-        title={t.notifications}
-        trailing={unread > 0 ? <Badge tone="accent">{t.unread(unread)}</Badge> : undefined}
-        onPress={() => router.push('/aprender/notificaciones')}
-      />
-      <ListItem title={t.account} onPress={() => router.push('/aprender/mi-cuenta')} />
-      <ListItem title={t.calendar} onPress={() => router.push('/aprender/calendario')} />
       <ListItem title={t.certificates} onPress={() => router.push('/aprender/certificados')} />
     </Stack>
   );
@@ -193,7 +188,6 @@ export function Route() {
   // La matrícula elegida no es estado: cambiarla no debe volver a disparar la carga del foco.
   const picked = useRef<string | null>(null);
   const [outline, setOutline] = useState<CohortOutline | null>(null);
-  const [unread, setUnread] = useState(0);
   const [failed, setFailed] = useState(false);
 
   const load = useCallback(async (enrollmentId: string | null = picked.current) => {
@@ -257,7 +251,8 @@ export function Route() {
           </Stack>
         )}
       </Swap>
-      <More unread={unread} />
+      <PushCard body={copy.push.student} />
+      <More />
     </Screen>
   );
 }

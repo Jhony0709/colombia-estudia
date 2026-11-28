@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import {
   Badge,
   Button,
@@ -188,7 +188,6 @@ function RequestCard({ row, act }: { row: RequestRow; act: Act }) {
 /** Lo que piden los estudiantes (reference/03-ui/movil.md, M1, «Solicitudes»). */
 export function Requests() {
   const theme = useTheme();
-  const router = useRouter();
   const [view, setView] = useState<RequestsView>('pending');
   const [rows, setRows] = useState<RequestRow[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -236,9 +235,6 @@ export function Requests() {
 
   return (
     <Screen scroll>
-      <Button variant="ghost" style={{ alignSelf: 'flex-start' }} onPress={() => router.back()}>
-        {copy.back}
-      </Button>
       <Text variant="heading">{t.title}</Text>
       <Tabs
         label={t.title}

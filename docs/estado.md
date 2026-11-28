@@ -8175,3 +8175,227 @@ Apple `QL4RRHD3G9`, que reusa su clave de APNs. `eas init` escribió `extra.eas.
 
 **Falta:** ver un aviso de punta a punta. La app apunta por defecto a producción
 (`src/api.ts:4-6`), que aún no tiene el servidor del push ni su migración.
+
+## 2026-11-28 — Entrega con archivo: fotos reducidas y el archivo que no cabe
+
+Reporte de un estudiante de BACH-2026-2 («dice que está muy grande… y que está incompleto»): el
+archivo pasaba de 20 MB, el formulario lo soltaba y al enviar pedía las respuestas.
+
+- Una foto (PNG o JPG) se reduce en el navegador a JPEG de 2000 px antes de subirla
+  (`downscale` de `lib/media/use-image-upload.ts`, que ahora también da JPEG).
+- Un archivo que sigue pasando de 20 MB (en la práctica, un PDF) dice su tamaño, cómo reducirlo y
+  el correo de soporte de la institución. Al enviar sin él se repite ese aviso, no «responde todas
+  las preguntas»; con las preguntas respondidas se envía igual.
+- Un PDF no se comprime en el navegador. Lo que llegue por correo se cierra a mano («Marcar
+  completado» con motivo).
+
+### Verificado (en la nube)
+
+Las pruebas nuevas (`submission-form.test.tsx`, `media/downscale.test.ts`), `tsc` y ESLint sobre
+los ficheros tocados. En un teléfono, nada.
+
+## 2026-11-28 — Entrega con varias fotos
+
+Una entrega sigue siendo un archivo, pero el estudiante puede elegir varias fotos (hasta 10, solo
+PNG o JPG): se reducen y se juntan en un PDF en el navegador antes de subirlo
+(`lib/media/photos-to-pdf.ts`, con `pdf-lib` 1.17.1, aprobada; se carga al juntar). Un PDF va
+solo. El servidor y la revisión no cambian.
+
+### Verificado (en la nube)
+
+`submission-form.test.tsx` (6), `media/photos-to-pdf.test.ts` (2, con `pdf-lib` real),
+`media/downscale.test.ts` (3); `tsc` y ESLint sobre los ficheros tocados; el lockfile pasa
+`--frozen-lockfile`. No: `next build` (que `pdf-lib` quede en su propio trozo) ni un teléfono.
+
+## 2026-11-28 — App: pestañas y push del estudiante
+
+Decisión: `PRODUCT_DECISIONS.md`, «Pestañas en la app y push del estudiante».
+
+- **Pestañas nativas:** equipo, Mensajes · Solicitudes · Cuenta (`app/(equipo)/`); estudiante, Mi
+  ruta · Avisos · Calendario · Mi cuenta (`app/aprender/_layout.tsx`, con la ruta y lo que se abre
+  desde ella en `app/aprender/(ruta)/`). Las URL no cambian. Fuera «Volver» en las raíces; la
+  bandeja ya no lleva «Salir» ni la fila de Solicitudes (Cuenta y su pestaña); Mi ruta deja solo
+  Constancias. Las no leídas pasan a la pestaña Avisos (`src/notifications/unread.ts`).
+- **Push del estudiante** (`push.service.ts`): pagos y aprendizaje, de 7:00 a 21:00 de Bogotá, solo
+  a quien no tiene rol de equipo. Tarjeta de permiso en Mi ruta.
+
+### Verificado (en la nube)
+
+App: `tsc`, ESLint, 157 tests (dos vueltas), `knip`, `expo export` iOS y Android. Web: las pruebas
+de push (34), `tsc` y ESLint. El lockfile pasa `--frozen-lockfile`. **No:** las pestañas en un
+teléfono (Jest no pinta la navegación nativa).
+
+### Falta
+
+El job diario (5:00 de Bogotá) queda fuera del horario del estudiante: `live_session_soon` y
+`overdue_reminder` no hacen push.
+
+## 2026-11-28 — Push: visto en Android, y el bucle del registro
+
+Jhonny lo vio funcionar en Android (development build contra producción).
+
+- **Bucle:** Android anuncia el token del sistema cada vez que se pide, aunque no cambie
+  (`expo-notifications`, `PushTokenModule.kt:68-69`), y `PushCard` volvía a registrar con cada
+  anuncio: `PUT /api/push/devices` sin parar, cortado por el límite de la ruta (429). Arreglo:
+  `src/push/push.ts` escucha en un solo sitio y registra solo con un token distinto; sin `PUT` si
+  el de Expo no cambió. Prueba en `__tests__/push.test.tsx`.
+- **Expo Go en Android** no tiene push (SDK 53+): la app se prueba en el development build.
+
+**Falta:** iOS.
+
+## 2026-11-28 — App, producción: fase 1 (estabilizar)
+
+Decisiones: `PRODUCT_DECISIONS.md`, «App: camino a producción». Referencia:
+`reference/03-ui/movil.md`, «Producción».
+
+- **Abrir sin conexión** ya no manda al formulario: estado `offline` en
+  `src/SessionProvider.tsx`, pantalla `src/ui/Offline.tsx` con «Reintentar» y reintento al volver
+  la app al frente. Solo un 401 es «sin sesión».
+- **Pantalla que falla:** `ErrorBoundary` (`src/ui/ErrorScreen.tsx`) en la raíz y en las siete
+  raíces de pestaña.
+- **Reporte de caídas:** `src/monitoring.ts` con `@sentry/react-native` ~8.28.1. Apagado sin
+  `EXPO_PUBLIC_SENTRY_DSN` y en desarrollo; sin datos personales ni `ApiError`.
+- **Actualizaciones por aire:** `expo-updates` ~58.0.23; `app.json` con `updates.url` y
+  `runtimeVersion` por huella; canales `preview` y `production` en `eas.json`.
+- **Contraseña visible** al escribirla (`reveal` de Fluxus en `src/AccessScreen.tsx`).
+- **`app.json`:** sin modo tableta en iOS; sin cifrado propio que declarar.
+- **Job diario** a las 7:00 de Bogotá (`apps/web/vercel.json`, `0 12 * * *`).
+- **Lockfile:** +616 líneas sobre el de la mañana, solo Sentry y `expo-updates`. Se dejaron
+  fuera 22 trozos que cambiaban, sin relación, el `jiti` de ESLint en la web.
+
+### Verificado (en la nube)
+
+`tsc`, ESLint, 166 pruebas (dos vueltas), `knip`, `expo export` iOS y Android, la huella de
+`@expo/fingerprint` y `pnpm install --frozen-lockfile` del filtro de la app con el lockfile
+nuevo (0 referencias sin resolver). `expo-doctor`: 18 de 20; las dos que fallan piden red a
+`exp.host`. **No:** un build nativo con Sentry y `expo-updates`, ni una actualización publicada.
+
+### Falta
+
+- El build nuevo (hay dos módulos nativos más) y verlo en un teléfono.
+- Icono y pantalla de arranque: esperan el logo en vector.
+- Sentry: el DSN en EAS, y los mapas de código (plugin, `metro.config.js`, `SENTRY_AUTH_TOKEN`).
+- Fluxus: las piezas de teléfono y el movimiento de los iconos, pedidos el 28/11.
+
+## 2026-11-28 — App: icono, icono adaptable y pantalla de arranque
+
+Los SVG que dio la herramienta no eran fieles (el valle del sol y las puntas de las olas salían
+redondos; las letras, solo con rectas). Se volvieron a trazar de los PNG de la web: el isotipo
+coincide con el PNG en un 99,5 % por dentro del círculo, y el borde pasa a ser un círculo exacto
+(el PNG mide 493 × 486). Jhonny aprobó usarlo.
+
+- `apps/mobile/assets/brand/` (los SVG) y los cinco PNG de `assets/`; `app.json` con `icon`,
+  `android.adaptiveIcon` y los plugins de `expo-notifications` y `expo-splash-screen`.
+- `expo-splash-screen` ~58.0.15: la pantalla de arranque espera a la letra (`app/_layout.tsx`).
+- Lockfile: +21 líneas.
+
+**Verificado (en la nube):** `tsc`, ESLint, 166 pruebas, `knip`, `expo export`, y
+`expo prebuild` de Android e iOS: genera los iconos, el monocromo, el arranque claro y oscuro, el
+icono de aviso, los metadatos de `expo-updates`, iPhone solo y «sin cifrado propio».
+**No:** verlo en un teléfono.
+
+**El build nuevo** hace falta para ver el icono y el arranque (y para Sentry y `expo-updates`).
+El development build instalado sigue abriendo: `expo-splash-screen` no falla si su parte nativa
+no está (`requireOptionalNativeModule`).
+
+## 2026-11-28 — App: los dos avisos de `expo-doctor`
+
+Jhonny corrió `npx expo-doctor` en su Mac (en la nube, sin acceso a la API de Expo, no
+salieron).
+
+- **`expo-asset` faltaba como dependencia directa:** la pide `expo-audio` (peer). Ya estaba en el
+  árbol, por `expo`; ahora está declarada en `apps/mobile/package.json` (~58.0.21). Lockfile: +3.
+- **TypeScript 5.9.3 y Expo 58 espera ~6.0.3:** se deja 5.9.3, la de todo el monorepo, y se
+  excluye de esa comprobación (`expo.install.exclude`). Con 6.0.3 la app no pasa tipos sin tocar
+  la configuración (deja de incluir sola los tipos de Jest). No afecta al binario.
+
+**Visto (28/11):** `expo-doctor` sin avisos en el Mac de Jhonny, tras `pnpm install`.
+
+## 2026-11-28 — App: `react-native-svg` y `expo-haptics`, antes de que Fluxus las use
+
+Jhonny aprobó `react-native-svg` (los iconos animados de `@fluxus-ui/native/icon`); `expo-haptics`
+ya estaba aprobada. Entran ya en `apps/mobile/package.json`, con las versiones de Expo 58
+(15.16.0 y ~58.0.8), para que el próximo build nativo las lleve y no haga falta otro cuando
+llegue la entrega de Fluxus.
+
+- `apps/mobile/metro.config.js`: `react-native-svg` con una sola copia, la de la app (la copia de
+  Fluxus resuelve la 15.16.1 por su cuenta).
+- `knip.json`: `expo-haptics` ignorada en `apps/mobile` hasta que la use la entrada `haptics` de
+  Fluxus. Se quita entonces.
+- Lockfile: +34 líneas.
+
+**Verificado (en la nube):** `tsc`, ESLint, 166 pruebas, `knip`, `expo export`, y el lockfile con
+`--frozen-lockfile`.
+
+## 2026-11-28 — App: fase 1 vista en Android, y el campo del chat como en WhatsApp
+
+Jhonny probó la fase 1 en Android con el build nuevo: todo bien, salvo el campo de responder, que
+quedaba debajo del teclado.
+
+- **Por qué:** el campo iba dentro del scroll de `Screen`, que solo se ajusta al teclado en iOS
+  (`automaticallyAdjustKeyboardInsets`, `packages/fluxus-native/src/screen.tsx:29`). En Android, con
+  borde a borde (`edgeToEdgeEnabled=true` en el `gradle.properties` que genera `expo prebuild`), la
+  ventana no se encoge con el teclado.
+- **Arreglo, sin librerías nuevas:** la franja de abajo sale del scroll; mensajes y franja van en
+  un `KeyboardAvoidingView` con `behavior="padding"` en las dos plataformas, como pide la guía de
+  Expo para borde a borde. Al abrir el teclado, si se estaba viendo lo último, sigue a la vista.
+- **Como en WhatsApp:** el chat se abre encima de las pestañas (`app/(chat)/`, misma dirección);
+  franja con «+» (cerrar, con confirmación, y la web), campo que crece hasta seis líneas y enviar
+  como icono, apagado si está vacío (`src/messages/Composer.tsx`); envío al instante con
+  «Enviando…», y «No se envió» con «Reintentar»; borrador por chat.
+- **Iconos:** `+` y enviar, con los trazados de `@fluxus-ui/icons` 0.3.0 copiados en
+  `src/ui/glyphs.ts`. Se cambian por el paquete, y se mueven, cuando esté en npm.
+
+**Verificado (en la nube):** `tsc`, ESLint, 169 pruebas (tres nuevas del chat y una de rutas con
+el `expo-router` real: `/mensajes/c-1` cae en `(chat)` y «atrás» vuelve a la bandeja), `knip` y
+`expo export`. **No:** verlo en un teléfono. Es JavaScript: basta recargar, sin build nuevo.
+
+**Límites:** sin arrastrar el teclado hacia abajo en Android ni el campo que sube a la vez que el
+teclado (eso es `react-native-keyboard-controller`, pendiente de aprobar, en la entrada `chat` de
+Fluxus); sin «N nuevos» ni separador por día (tanda 1 de Fluxus).
+
+**Corrección (28/11, misma tarde):** en Android el teclado aún tapaba parte de la franja.
+`KeyboardAvoidingView` calcula lo que tapa con su `y` del `onLayout`, que es relativa a la pantalla y
+no a la ventana (`react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js:107-119`): le
+faltaba el área segura de arriba (la barra de estado). Ahora `keyboardVerticalOffset` es ese
+margen (`src/messages/Thread.tsx`). Prueba nueva: con una barra de estado de 32, la franja sube lo
+que tapa el teclado contando esos 32; sin el arreglo da 32 menos.
+
+## 2026-11-28 — App: Fluxus de npm (0.3.0), háptica e iconos que se mueven
+
+Jhonny publicó `@fluxus-ui/native` 0.3.0 y `@fluxus-ui/icons` 0.3.0. ALBA deja la copia
+`packages/fluxus-native` y los instala de npm, en versión exacta.
+
+- **Antes de cambiar:** el `src/` publicado de `native` es idéntico al del repo de Fluxus (mismo
+  sha256 de los 45 ficheros, sin pruebas).
+- **Cambios:** `apps/mobile/package.json`; se borran `packages/fluxus-native` y
+  `apps/mobile/src/ui/glyphs.ts`; `knip.json` sin la copia ni la excepción de `expo-haptics`;
+  `.prettierignore` sin la copia; `metro.config.js` con una sola copia de `expo-haptics`;
+  `jest.config.js` transforma `@fluxus-ui` (llega como módulos ES); `CLAUDE.md` y la referencia,
+  al día. Lockfile: +79 −45.
+- **Uso:** `enableHaptics()` en la raíz (`app/_layout.tsx`); en el chat, «+» y enviar son
+  `Button` con los iconos del paquete, que toman su color y se mueven al pulsarlos; el mensaje que
+  sale lleva `status` en su burbuja (`sending`, `failed`).
+
+**Verificado (en la nube):** `tsc`, ESLint, 170 pruebas, `knip` (solo avisa de un `@types/react`
+del `package.json` raíz de la copia en la nube, que no es el del repo: hay que pasarlo en el Mac),
+`expo export` iOS y Android, y el lockfile con `--frozen-lockfile`. **No:** verlo en un teléfono.
+`expo-haptics` y `react-native-svg` ya iban en el build instalado: no hace falta build nuevo.
+
+## 2026-11-28 — Entregas de hasta 50 MB
+
+`PRODUCT_DECISIONS.md`, «Entregas de hasta 50 MB». `MAX_BYTES.SUBMISSION` a 50 MB; el formulario
+lo importa (antes repetía 20 MB a mano); los cinco textos que decían «20 MB», a «50 MB»; dos
+pruebas pasan de 25 MB a 60 MB (lo que ya no supera el tope dejaba de probar el rechazo).
+**Verificado (en la nube):** las pruebas de `limits` y del formulario (14). **Falta:** el límite
+global de Storage en el panel de Supabase, y ver una subida de 40-50 MB en producción.
+
+## 2026-11-28 — Actividades de más de 20 preguntas
+
+Un estudiante no pudo entregar el tema 8.3 (23 enunciados): `POST …/submission` respondía 400
+`validation` porque la ruta aceptaba hasta 20 respuestas, y el formulario manda una por
+enunciado. El seed cargó 25 actividades con más de 20 (hasta 65). El tope pasa a 100 y vive en
+`features/content/activity-limits.ts` (`MAX_PROMPTS`), que usan la entrega, el autor y su
+pantalla; `reference/02-api/endpoints.md` al día. **Verificado (en la nube):** prueba nueva de la
+ruta (23 entran, 101 no), que falla con el tope viejo. **Falta:** el archivo subido antes de que
+el servidor valide, y el error con el nombre técnico del campo (`answers`).

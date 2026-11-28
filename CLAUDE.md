@@ -61,7 +61,6 @@ colombia-estudia/
 │       └── http/               # api-handler.ts (envuelve Zod + errores + logging)
 ├── apps/mobile/                # Expo 58 + @fluxus-ui/native; cliente de la misma API (27/11)
 ├── packages/
-│   ├── fluxus-native/          # Copia de @fluxus-ui/native: no se edita aquí (VENDOR.md)
 │   ├── domain/                 # Reglas puras SIN dependencias de runtime
 │   ├── types/                  # content.ts (parser Markdown + schema evaluación)
 │   └── design-tokens/          # Contrato de tokens + test de contraste

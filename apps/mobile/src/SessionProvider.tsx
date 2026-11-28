@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 import { ApiError } from './api';
 import { copy } from './copy';
 import { homeOf } from './roles';
@@ -17,12 +25,15 @@ export type Notice = { tone: 'danger' | 'info'; title: string; text: string; lin
 
 export type SessionState =
   | { kind: 'checking' }
+  | { kind: 'offline' }
   | { kind: 'out'; notice?: Notice }
   | { kind: 'mfa'; pending: PendingMfa; notice?: Notice }
   | { kind: 'in'; me: Me };
 
 interface Session {
   state: SessionState;
+  /** Tras abrir sin red: vuelve a comprobar la sesión guardada. */
+  retry(): Promise<void>;
   signIn(email: string, password: string): Promise<void>;
   verify(code: string): Promise<void>;
   cancelMfa(): void;
@@ -53,6 +64,19 @@ const after = (result: SignIn): SessionState =>
       ? { kind: 'mfa', pending: result.pending }
       : { kind: 'out', notice: OTHER };
 
+/** La sesión guardada, al abrir. Sin respuesta no se sabe si vale: se conserva y se reintenta. */
+async function check(): Promise<SessionState> {
+  try {
+    const me = await currentUser();
+    if (!me) return { kind: 'out' };
+    if (homeOf(me)) return { kind: 'in', me };
+    await signOut();
+    return { kind: 'out', notice: OTHER };
+  } catch {
+    return { kind: 'offline' };
+  }
+}
+
 const Context = createContext<Session | null>(null);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
@@ -60,23 +84,18 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let live = true;
-    currentUser()
-      .then(async (me): Promise<SessionState> => {
-        if (!me) return { kind: 'out' };
-        if (homeOf(me)) return { kind: 'in', me };
-        await signOut();
-        return { kind: 'out', notice: OTHER };
-      })
-      .catch((error: unknown): SessionState => ({ kind: 'out', notice: failure(error) }))
-      .then((next) => live && setState(next));
+    void check().then((next) => live && setState(next));
     return () => {
       live = false;
     };
   }, []);
 
+  const retry = useCallback(async () => setState(await check()), []);
+
   const session = useMemo<Session>(
     () => ({
       state,
+      retry,
       async signIn(email, password) {
         try {
           setState(after(await begin(email, password)));
@@ -106,7 +125,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setState({ kind: 'out' });
       },
     }),
-    [state]
+    [state, retry]
   );
 
   return <Context.Provider value={session}>{children}</Context.Provider>;

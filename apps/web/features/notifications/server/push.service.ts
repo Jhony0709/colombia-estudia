@@ -7,18 +7,61 @@
 
 import 'server-only';
 
+import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db/tenant';
 import { logger } from '@/lib/observability/logger';
 import { advisorsOpen } from '@/features/messaging/facts';
 
+type Channel = 'mensajes' | 'solicitudes' | 'pagos' | 'aprendizaje';
+
 /** Los avisos que salen por push y su canal de Android. Lo demás, solo la campana. */
-export const PUSH_CHANNEL: Record<string, 'mensajes' | 'solicitudes'> = {
+export const PUSH_CHANNEL: Record<string, Channel> = {
   conversation_message: 'mensajes',
   conversation_waiting: 'mensajes',
   enrollment_requested: 'solicitudes',
   unlock_requested: 'solicitudes',
   attempt_requested: 'solicitudes',
+  // Del estudiante (28/11).
+  payment_confirmed: 'pagos',
+  payment_failed: 'pagos',
+  overdue_reminder: 'pagos',
+  agreement_signed: 'pagos',
+  enrollment_created: 'aprendizaje',
+  module_unlocked: 'aprendizaje',
+  lesson_reopened: 'aprendizaje',
+  submission_approved: 'aprendizaje',
+  submission_returned: 'aprendizaje',
+  attempt_graded: 'aprendizaje',
+  attempt_granted: 'aprendizaje',
+  request_dismissed: 'aprendizaje',
+  certificate_issued: 'aprendizaje',
+  live_session_soon: 'aprendizaje',
 };
+
+const FOR_STUDENTS: ReadonlySet<Channel> = new Set(['pagos', 'aprendizaje']);
+
+/** Al estudiante, de 7:00 a 21:00 de Bogotá (UTC−5 todo el año), cualquier día. */
+export function studentHours(now: Date): boolean {
+  const hour = new Date(now.getTime() - 5 * 60 * 60 * 1000).getUTCHours();
+  return hour >= 7 && hour < 21;
+}
+
+/** Los del estudiante, solo a quien abre la app como estudiante: con rol de equipo, la app es la del equipo. */
+async function onlyStudents(institutionId: string, personIds: string[]): Promise<Set<string>> {
+  const of = (role: Prisma.MembershipWhereInput['role']) =>
+    prisma.membership.findMany({
+      where: {
+        institutionId,
+        personId: { in: personIds },
+        role,
+        revokedAt: null,
+      },
+      select: { personId: true },
+    });
+  const [students, staff] = await Promise.all([of('STUDENT'), of({ in: ['ADMIN', 'OPERATIONS'] })]);
+  const team = new Set(staff.map((m) => m.personId));
+  return new Set(students.map((m) => m.personId).filter((id) => !team.has(id)));
+}
 
 const EXPO = 'https://exp.host/--/api/v2/push';
 /** Lo que Expo admite por petición (docs.expo.dev/push-notifications/sending-notifications). */
@@ -75,15 +118,23 @@ export async function removeDevice({
   return { removed: count > 0 };
 }
 
-/** Una entrega por teléfono de cada persona avisada. Fuera del horario de asesores, ninguna. */
+/** Una entrega por teléfono de cada persona avisada, en su horario: el de asesores o el del estudiante. */
 async function enqueue(
   institutionId: string,
   type: string,
   created: { id: string; personId: string }[],
   now: Date
 ): Promise<number> {
-  if (!(type in PUSH_CHANNEL) || created.length === 0 || !advisorsOpen(now)) return 0;
-  const notificationOf = new Map(created.map((row) => [row.personId, row.id]));
+  const channel = PUSH_CHANNEL[type];
+  if (!channel || created.length === 0) return 0;
+  const student = FOR_STUDENTS.has(channel);
+  if (!(student ? studentHours(now) : advisorsOpen(now))) return 0;
+  let notificationOf = new Map(created.map((row) => [row.personId, row.id]));
+  if (student) {
+    const students = await onlyStudents(institutionId, [...notificationOf.keys()]);
+    notificationOf = new Map([...notificationOf].filter(([personId]) => students.has(personId)));
+    if (notificationOf.size === 0) return 0;
+  }
   const devices = await prisma.pushDevice.findMany({
     where: { institutionId, personId: { in: [...notificationOf.keys()] } },
     select: { id: true, personId: true },
@@ -113,7 +164,10 @@ export async function pushCreated(
   try {
     if ((await enqueue(institutionId, type, created, now)) > 0) await sendDue(now);
   } catch (error) {
-    logger.error({ event: 'push-failed', err: error instanceof Error ? error.message : error });
+    logger.error({
+      event: 'push-failed',
+      err: error instanceof Error ? error.message : error,
+    });
   }
 }
 
@@ -230,7 +284,10 @@ export async function sendDue(now: Date = new Date()): Promise<PushReport> {
 /** El recibo dice si Apple o Google lo aceptaron: ahí es donde llega la mayoría de las bajas. */
 export async function checkReceipts(now: Date = new Date()): Promise<{ checked: number }> {
   const sent = await prisma.pushDelivery.findMany({
-    where: { status: 'SENT', sentAt: { lte: new Date(now.getTime() - RECEIPT_AFTER_MS) } },
+    where: {
+      status: 'SENT',
+      sentAt: { lte: new Date(now.getTime() - RECEIPT_AFTER_MS) },
+    },
     take: RECEIPTS,
     select: { id: true, ticketId: true, deviceId: true, sentAt: true },
   });
@@ -242,7 +299,10 @@ export async function checkReceipts(now: Date = new Date()): Promise<{ checked: 
   for (const row of sent) {
     const receipt = receipts[row.ticketId!];
     if (receipt?.status === 'ok') {
-      await prisma.pushDelivery.updateMany({ where: { id: row.id }, data: { status: 'DONE' } });
+      await prisma.pushDelivery.updateMany({
+        where: { id: row.id },
+        data: { status: 'DONE' },
+      });
     } else if (receipt?.details?.error === 'DeviceNotRegistered') {
       await forget(row.deviceId);
     } else if (receipt || now.getTime() - row.sentAt!.getTime() > RECEIPT_GONE_MS) {

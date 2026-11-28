@@ -7,7 +7,6 @@ import {
   EmptyState,
   ListItem,
   Message,
-  Row,
   Skeleton,
   Stack,
   Swap,
@@ -17,7 +16,6 @@ import {
 import { Screen } from '@fluxus-ui/native/screen';
 import { copy } from '../copy';
 import { PushCard } from '../push/PushCard';
-import { useSession } from '../SessionProvider';
 import { listConversations, nameOf, type ConversationRow, type View as InboxView } from './api';
 import { ago } from './time';
 import { usePulse } from './usePulse';
@@ -56,7 +54,6 @@ function ConversationItem({ row, onOpen }: { row: ConversationRow; onOpen: () =>
 /** La bandeja (reference/03-ui/movil.md, M1). */
 export function Inbox() {
   const router = useRouter();
-  const { signOut } = useSession();
   const [view, setView] = useState<InboxView>('waiting');
   const [rows, setRows] = useState<ConversationRow[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -89,14 +86,8 @@ export function Inbox() {
 
   return (
     <Screen scroll>
-      <Row justify="space-between" wrap>
-        <Text variant="heading">{copy.inbox}</Text>
-        <Button variant="ghost" onPress={signOut}>
-          {copy.signOut}
-        </Button>
-      </Row>
+      <Text variant="heading">{copy.inbox}</Text>
       <PushCard />
-      <ListItem title={copy.requests.title} onPress={() => router.push('/solicitudes')} />
       <Tabs
         label={copy.inbox}
         items={VIEWS.map((key) => ({ key, label: copy.views[key] }))}

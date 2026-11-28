@@ -126,6 +126,6 @@ El mismo contrato, con lo que cambia en un teléfono (`reference/03-ui/movil.md`
 - **Letra del sistema al 200 %**: sin alturas fijas ni `numberOfLines`, y cada pantalla con
   scroll; no se pone `maxFontSizeMultiplier`.
 - **Movimiento reducido**: las animaciones de `@fluxus-ui/native` lo respetan
-  (`ReduceMotion.System`, `packages/fluxus-native/src/motion.ts:15,21`, `presence.tsx:26`).
+  (`ReduceMotion.System`, en `src/motion.ts` y `presence.tsx` de `@fluxus-ui/native`).
 - **DoD de una pantalla**: lo de arriba, prueba en Jest de nombres, roles y avisos, y la
   revisión en un iOS y un Android de la sección «Lo que solo se comprueba en un teléfono».

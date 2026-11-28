@@ -6,13 +6,15 @@ la app; se escribe aquí antes que en `apps/mobile`.
 
 ## Paquetes
 
-| Paquete                  | Qué es                                                                                                                                                                    | Regla                                                                                   |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `apps/mobile`            | La app, con Expo 58 (`expo ~58.1.0`). React, React Native, Reanimated y worklets van en las versiones que fija `expo/bundledNativeModules.json`, no en las últimas de npm | Nueva dependencia, con aprobación (`CLAUDE.md`)                                         |
-| `packages/fluxus-native` | Copia de `@fluxus-ui/native` (`~/development/fluxus/packages/native`) mientras no esté en npm: `src/` y un `package.json` sin `devDependencies`                           | **No se edita aquí** (`VENDOR.md`). Lo que falte se pide en Fluxus y se vuelve a copiar |
+| Paquete                                  | Qué es                                                                                                                                                                              | Regla                                                                   |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `apps/mobile`                            | La app, con Expo 58 (`expo ~58.1.0`). React, React Native, Reanimated y worklets van en las versiones que fija `expo/bundledNativeModules.json`, no en las últimas de npm           | Nueva dependencia, con aprobación (`CLAUDE.md`)                         |
+| `@fluxus-ui/native` y `@fluxus-ui/icons` | De npm desde el 28/11, versión exacta (`0.3.0`). Las entradas `icon` (`react-native-svg`) y `haptics` (`expo-haptics`) tienen sus librerías en la app; la principal no las necesita | No se parchea: lo que falte se pide en Fluxus, que publica otra versión |
 
 En el monorepo conviven React 18.3 (web) y el de Expo (app): `apps/mobile/metro.config.js` hace
-que React, React Native, Reanimated y worklets se resuelvan siempre desde la app.
+que React, React Native, Reanimated, worklets, `react-native-svg` y `expo-haptics` se resuelvan
+siempre desde la app. Fluxus llega como módulos ES: Jest lo transforma (`apps/mobile/jest.config.js`).
+La háptica se activa una vez en la raíz (`enableHaptics`, `app/_layout.tsx`).
 
 Los tipos, igual: el `package.json` raíz fija `@types/react` 18 (el de la web) para que pnpm no
 hoistee el 19 y lo tomen los `.d.ts` de `next` y compañía; la app usa el 19 con
@@ -20,6 +22,14 @@ hoistee el 19 y lo tomen los `.d.ts` de `next` y compañía; la app usa el 19 co
 
 **Navegación:** `expo-router` (rutas en `apps/mobile/app/`). Sin sesión, `app/_layout.tsx` pinta
 la pantalla de acceso; con ella, `app/index.tsx` lleva a cada rol a su inicio (`src/roles.ts`).
+**Pestañas (28/11):** las del sistema (`expo-router/native-tabs`; iconos SF Symbols en iOS y
+Material Symbols con `expo-symbols` en Android). Equipo (`app/(equipo)/_layout.tsx`): Mensajes,
+Solicitudes y Cuenta (quién entró, los avisos, la web y salir). Estudiante
+(`app/aprender/_layout.tsx`): Mi ruta, Avisos, Calendario y Mi cuenta. Cada pestaña es la raíz de
+su pila: sin «Volver»; lo que se abre desde ella sí lo lleva. Una persona que entra en las
+pestañas del otro rol vuelve a su inicio. **El chat** (`app/(chat)/mensajes/[id].tsx`, 28/11) se
+abre encima de las pestañas, como en WhatsApp: sin la barra de abajo. La dirección es la misma,
+`/mensajes/[id]`.
 
 ## Sesión
 
@@ -52,34 +62,35 @@ sola; «Salir» la borra y ya no sirve en el servidor.
 
 Una pantalla, con `Text`, `TextField`, `Button` y `Message` de `@fluxus-ui/native`.
 
-| Estado                           | Qué se ve                                                                                                     | De dónde sale                                                        |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Comprobando                      | Nada que leer todavía; el lector oye «Cargando»                                                               | `GET /api/me` al abrir                                               |
-| Sin sesión                       | Correo, contraseña, «Entrar» y «¿Olvidaste tu contraseña?» (abre `/auth/recuperar` de la web en el navegador) | Sin tokens guardados, o `GET /api/me` → 401                          |
-| Campo vacío o correo sin `@`     | Error bajo el campo, sin llamar al servidor                                                                   | En la app                                                            |
-| Enviando                         | «Entrar» ocupado; no admite otra pulsación                                                                    | —                                                                    |
-| Correo o contraseña incorrectos  | Aviso de error con el mensaje del servidor                                                                    | 401 `UNAUTHENTICATED` de `POST /api/auth/token`                      |
-| Correo que el servidor no acepta | «Revisa el correo y la contraseña»                                                                            | 400 `VALIDATION_ERROR` (Zod)                                         |
-| Demasiados intentos              | «Espera unos minutos y vuelve a intentarlo»                                                                   | 429 `RATE_LIMITED` (10 en 10 min, el mismo cupo que el login web)    |
-| Sin conexión o servidor caído    | «No pudimos conectar. Revisa tu conexión»                                                                     | Error de red o 5xx                                                   |
-| Código del segundo factor        | «Código de verificación» (6 dígitos, el de la app de autenticación) y «Verificar»                             | `POST /api/auth/token` → `{ mfa }`; luego `POST /api/auth/token/mfa` |
-| Código incorrecto                | Error bajo el campo                                                                                           | 400 de `POST /api/auth/token/mfa`                                    |
-| Segundo factor sin activar       | «Activa el segundo factor en la web», con enlace                                                              | 403 de `POST /api/auth/token`                                        |
-| Otro rol                         | «La app es para el equipo y los estudiantes. Usa la web», con enlace; la sesión se cierra                     | `GET /api/me` sin `ADMIN`, `OPERATIONS` ni `STUDENT`                 |
-| Sesión iniciada                  | ADMIN u OPERATIONS → «Mensajes» (M1); STUDENT → «Mi ruta» (M2)                                                | `GET /api/me`                                                        |
+| Estado                           | Qué se ve                                                                                                                     | De dónde sale                                                        |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Comprobando                      | Nada que leer todavía; el lector oye «Cargando»                                                                               | `GET /api/me` al abrir                                               |
+| Sin conexión al abrir            | «Sin conexión»: la sesión guardada se conserva. «Reintentar», y sola al volver la app al frente                               | `GET /api/me` sin respuesta, o con otro error que no sea 401         |
+| Sin sesión                       | Correo, contraseña (con «Mostrar»), «Entrar» y «¿Olvidaste tu contraseña?» (abre `/auth/recuperar` de la web en el navegador) | Sin tokens guardados, o `GET /api/me` → 401                          |
+| Campo vacío o correo sin `@`     | Error bajo el campo, sin llamar al servidor                                                                                   | En la app                                                            |
+| Enviando                         | «Entrar» ocupado; no admite otra pulsación                                                                                    | —                                                                    |
+| Correo o contraseña incorrectos  | Aviso de error con el mensaje del servidor                                                                                    | 401 `UNAUTHENTICATED` de `POST /api/auth/token`                      |
+| Correo que el servidor no acepta | «Revisa el correo y la contraseña»                                                                                            | 400 `VALIDATION_ERROR` (Zod)                                         |
+| Demasiados intentos              | «Espera unos minutos y vuelve a intentarlo»                                                                                   | 429 `RATE_LIMITED` (10 en 10 min, el mismo cupo que el login web)    |
+| Sin conexión o servidor caído    | «No pudimos conectar. Revisa tu conexión»                                                                                     | Error de red o 5xx                                                   |
+| Código del segundo factor        | «Código de verificación» (6 dígitos, el de la app de autenticación) y «Verificar»                                             | `POST /api/auth/token` → `{ mfa }`; luego `POST /api/auth/token/mfa` |
+| Código incorrecto                | Error bajo el campo                                                                                                           | 400 de `POST /api/auth/token/mfa`                                    |
+| Segundo factor sin activar       | «Activa el segundo factor en la web», con enlace                                                                              | 403 de `POST /api/auth/token`                                        |
+| Otro rol                         | «La app es para el equipo y los estudiantes. Usa la web», con enlace; la sesión se cierra                                     | `GET /api/me` sin `ADMIN`, `OPERATIONS` ni `STUDENT`                 |
+| Sesión iniciada                  | ADMIN u OPERATIONS → «Mensajes» (M1); STUDENT → «Mi ruta» (M2)                                                                | `GET /api/me`                                                        |
 
 ### M1 — Equipo: Mensajes
 
 Para ADMIN y OPERATIONS (Jhonny, 27/11), lo mismo que `/mensajes` en la web, sin lo que pide
 pantalla grande.
 
-| Pantalla         | Qué hace                                                                                                                                                                                                    | Endpoint                                                                                                                |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Bandeja          | Pestañas «En espera», «Míos» y «Abiertos»; cada fila con el nombre, el último mensaje y cuánto hace                                                                                                         | `GET /api/conversations?view=waiting\|mine\|open`                                                                       |
-| Chat             | Los mensajes, con audio, foto, video y documento; «Tomar chat», responder con texto y «Cerrar»                                                                                                              | `GET /api/conversations/[id]`, `POST …/take`, `POST …/messages`, `POST …/close`                                         |
-| Archivo del chat | La URL firmada para el reproductor o el visor                                                                                                                                                               | `GET …/messages/[messageId]/media?as=url`                                                                               |
-| Al día           | Con la app en primer plano, cada 5 s; si cambió, vuelve a pedir la bandeja o el chat. Con un chat abierto marca que quien lo atiende lo ve                                                                  | `GET /api/conversations/pulse?id=`                                                                                      |
-| Solicitudes      | Lo que piden los estudiantes (como `/solicitudes`): «Abiertas» y «Cerradas»; quién, qué, desde cuándo y lo que hace falta para decidir. «Habilitar», «Dar otra oportunidad» y «Descartar», con confirmación | `GET /api/access-requests?status=`, `PATCH /api/access-requests/[id]`, `PUT /api/cohorts/enrollments/[id]/modules/[id]` |
+| Pantalla         | Qué hace                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Endpoint                                                                                                                |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Bandeja          | Pestañas «En espera», «Míos» y «Abiertos»; cada fila con el nombre, el último mensaje y cuánto hace                                                                                                                                                                                                                                                                                                                                                                                            | `GET /api/conversations?view=waiting\|mine\|open`                                                                       |
+| Chat             | Los mensajes, con audio, foto, video y documento. Abajo, siempre a la vista y sobre el teclado, una franja: «+» (cerrar el chat, con confirmación, y «Más opciones en la web»), el campo, que crece hasta seis líneas, y enviar, apagado si está vacío. Lo enviado sale al instante («Enviando…»); si falla, «No se envió» y «Reintentar». El borrador de cada chat se guarda mientras la app está abierta. Sin tomarlo, la franja es «Tomar chat»; si lo atiende otra persona, «Solo lectura» | `GET /api/conversations/[id]`, `POST …/take`, `POST …/messages`, `POST …/close`                                         |
+| Archivo del chat | La URL firmada para el reproductor o el visor                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `GET …/messages/[messageId]/media?as=url`                                                                               |
+| Al día           | Con la app en primer plano, cada 5 s; si cambió, vuelve a pedir la bandeja o el chat. Con un chat abierto marca que quien lo atiende lo ve                                                                                                                                                                                                                                                                                                                                                     | `GET /api/conversations/pulse?id=`                                                                                      |
+| Solicitudes      | Lo que piden los estudiantes (como `/solicitudes`): «Abiertas» y «Cerradas»; quién, qué, desde cuándo y lo que hace falta para decidir. «Habilitar», «Dar otra oportunidad» y «Descartar», con confirmación                                                                                                                                                                                                                                                                                    | `GET /api/access-requests?status=`, `PATCH /api/access-requests/[id]`, `PUT /api/cohorts/enrollments/[id]/modules/[id]` |
 
 Con «Hazlo en la web»: plantilla de seguimiento, crear persona, link de pago, botones de
 respuesta y citar un mensaje; de las solicitudes, matricular (la hoja de matrícula), habilitar
@@ -94,12 +105,12 @@ promesa y espera solo (`useAsyncPress` de `@fluxus-ui/native`); lo que cambia de
 «Reintentar»; sin conexión, lo mismo con el texto de red, y lo ya cargado se queda a la vista. La
 app no decide acceso, progreso ni cartera: pinta lo que dice el servidor.
 
-Navegación: «Mi ruta» es el inicio del estudiante (`app/aprender/index.tsx`) y lleva una lista a
-Notificaciones (con las no leídas), Mi cuenta, Calendario y Constancias, todas en la app. Un
-`href` del servidor que la app tiene se abre en la app (`apps/mobile/src/links.ts`); el resto, en
-el navegador de la app (`src/ui/browser.tsx`); una dirección que no es web (`mailto:`, `tel:`), en
-el sistema. Lo pulsado espera mientras el navegador está abierto y, si no se pudo abrir, lo dice
-un aviso (`Toast`) desde un solo sitio.
+Navegación: «Mi ruta» es el inicio del estudiante (`app/aprender/(ruta)/index.tsx`), con la
+lista de Constancias; Avisos (con las no leídas en la pestaña), Calendario y Mi cuenta son
+pestañas. Un `href` del servidor que la app tiene se abre en la app (`apps/mobile/src/links.ts`); el
+resto, en el navegador de la app (`src/ui/browser.tsx`); una dirección que no es web (`mailto:`,
+`tel:`), en el sistema. Lo pulsado espera mientras el navegador está abierto y, si no se pudo
+abrir, lo dice un aviso (`Toast`) desde un solo sitio.
 
 | Pantalla             | Endpoint                                                                                                                                            | Piezas                                                                                                                                                                                             | Estados propios                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -111,7 +122,7 @@ un aviso (`Toast`) desde un solo sitio.
 | Constancias          | `GET /api/learn/certificates` (`route.ts:11`)                                                                                                       | `ListItem` por constancia, `Badge` del tipo y «Revocada»                                                                                                                                           | Pulsar abre `/certificado/[code]` de la web (verificar, compartir, PDF); vacío. «Certificado de estudios» (pedirlo) queda en la web                                                                                                                                                                                                                                                                                                                                                               |
 | Olvidé mi contraseña | `POST /api/auth/recover` (`recover/route.ts:19`)                                                                                                    | `TextField`, `Button`, `Message`                                                                                                                                                                   | Desde la pantalla de acceso; responde siempre lo mismo (`:34`) y el enlace del correo vuelve a la web (`:28-29`); 429 con su texto                                                                                                                                                                                                                                                                                                                                                                |
 
-**El tema** (`app/aprender/tema/[id].tsx`):
+**El tema** (`app/aprender/(ruta)/tema/[id].tsx`):
 
 - El HTML del servidor, ya saneado, en una `react-native-webview` a la altura de su contenido
   (la página manda su alto), dentro del scroll de la pantalla; `baseUrl` es la web, para que
@@ -128,23 +139,33 @@ un aviso (`Toast`) desde un solo sitio.
 - Un tema con actividad, o un examen: «Hazlo en la web».
 - Anterior y siguiente: los de `navigation`; uno bloqueado dice por qué.
 
-**Fuera de M2:** exámenes y actividades (M3); notificaciones push y publicar en las tiendas
-(M4); registro, catálogo, pedir habilitación, opinión, pedir certificado, reportar un problema y
+**Fuera de M2:** exámenes y actividades (M3); publicar en las tiendas (M4); registro, catálogo, pedir habilitación, opinión, pedir certificado, reportar un problema y
 biblioteca.
 
-### Push — Equipo (27/11)
+### Push (27/11; estudiante, 28/11)
 
 Decisión: `PRODUCT_DECISIONS.md`, «Notificaciones push: sobre la campana, con Expo». Un push es la
 entrega de un aviso de la campana: nace en `notify` y nada más lo crea.
 
-- **Qué avisa:** mensajes (`conversation_message`, `conversation_waiting`) y solicitudes
-  (`enrollment_requested`, `unlock_requested`, `attempt_requested`).
-- **Cuándo:** en horario de asesores (`advisorsOpen`); fuera, solo la campana.
+- **Qué avisa al equipo:** mensajes (`conversation_message`, `conversation_waiting`) y solicitudes
+  (`enrollment_requested`, `unlock_requested`, `attempt_requested`), en horario de asesores
+  (`advisorsOpen`).
+- **Qué avisa al estudiante:** pagos (`payment_confirmed`, `payment_failed`, `overdue_reminder`,
+  `agreement_signed`) y aprendizaje (`enrollment_created`, `module_unlocked`, `lesson_reopened`,
+  `submission_approved`, `submission_returned`, `attempt_graded`, `attempt_granted`,
+  `request_dismissed`, `certificate_issued`, `live_session_soon`), de 7:00 a 21:00 de Bogotá.
+  Solo a quien abre la app como estudiante: con rol de operación o administración, no.
+- **Fuera de horario,** solo la campana; no se envía después. El job diario corre a las 7:00 de
+  Bogotá (`apps/web/vercel.json`, `0 12 * * *` desde el 28/11) para que sus avisos caigan en el
+  horario del estudiante.
+- **Preferencias:** las del sistema. Un canal de Android por categoría (`mensajes`,
+  `solicitudes`, `pagos`, `aprendizaje`), que se apaga en Ajustes; en iOS, el interruptor general.
+- **WhatsApp al asesor:** sigue saliendo además del push (Jhonny, 28/11).
 - **Qué muestra:** el título y el texto del aviso, también con la pantalla bloqueada. El toque
   lleva al `href` del aviso y lo deja leído en la campana (`src/push/PushTaps.tsx`).
 - **Sin contador en el icono:** la app del equipo no tiene campana donde bajarlo.
-- **Permiso:** se pide en la bandeja, con un botón (`src/push/PushCard.tsx`), no al abrir la app.
-  Android necesita antes sus canales: `mensajes` y `solicitudes`.
+- **Permiso:** se pide con un botón (`src/push/PushCard.tsx`) en la bandeja y en Cuenta (equipo) y
+  en Mi ruta (estudiante), no al abrir la app. Android necesita antes sus canales.
 - **Dispositivo:** con permiso, la app guarda su token de Expo al entrar (`PUT /api/push/devices`,
   `src/push/push.ts`). Antes de cerrar sesión lo borra (`DELETE`) y se da de baja del servicio de
   push, haya red o no: un teléfono sin sesión no recibe avisos.
@@ -157,7 +178,47 @@ entrega de un aviso de la campana: nace en `notify` y nada más lo crea.
 `alba-futuro-educativo` (`apps/mobile/google-services.json`) y su cuenta de servicio en EAS para FCM
 v1. iOS: App ID con Push Notifications en el equipo de Apple `QL4RRHD3G9` y la clave de APNs del
 equipo en EAS. Expo Go no recibe push: hace falta un build (`eas.json`, perfil `development`).
-**Falta:** ver un aviso llegar a un teléfono; los avisos del estudiante.
+**Visto (28/11):** en Android, con el development build, contra producción (Jhonny). **Falta:** iOS.
+
+## Producción
+
+Plan y diagnóstico: `PRODUCT_DECISIONS.md`, «App: camino a producción» (28/11). No hay ambiente
+de pruebas: todo build apunta a producción (`src/api.ts`).
+
+### Fase 1 — Estabilizar (28/11)
+
+- **Abrir sin conexión:** la sesión no se pierde (tabla de M0, «Sin conexión al abrir»;
+  `src/SessionProvider.tsx`, `src/ui/Offline.tsx`). Solo un 401 es «sin sesión».
+- **Pantalla que falla:** cada raíz de pestaña y la raíz de la app exportan `ErrorBoundary`
+  (`src/ui/ErrorScreen.tsx`): «Algo falló en esta pantalla» y «Reintentar». Las demás pestañas
+  siguen. Trae su propio tema, porque la que falla puede ser la raíz.
+- **Reporte de caídas:** `@sentry/react-native` (`src/monitoring.ts`). Solo con
+  `EXPO_PUBLIC_SENTRY_DSN` y fuera de desarrollo. Sin datos personales (`sendDefaultPii: false`,
+  sin grabación de sesión) y sin los `ApiError`: un fallo de red o del servidor no es una caída,
+  y su mensaje puede traer un nombre.
+- **Actualizaciones por aire:** `expo-updates`, con `runtimeVersion` por huella (`fingerprint`)
+  y un canal por perfil (`preview`, `production`, en `eas.json`). Una actualización solo llega a
+  los builds con la misma parte nativa. Se baja al abrir y entra en el siguiente arranque.
+  Publicar: `eas update --channel production --environment production --message "…"`.
+- **Tiendas:** sin modo tableta en iOS para la 1.0 (`ios.supportsTablet: false`) y sin cifrado
+  propio que declarar (`ios.config.usesNonExemptEncryption: false`).
+
+- **Marca:** el isotipo en vector está en `assets/brand/` (`alba-mark.svg` y su versión de un
+  color), trazado de los PNG de la web con el borde como círculo exacto (Jhonny, 28/11). De él
+  salen, con `rsvg-convert`:
+  - `assets/icon.png`: 1024 px, sin transparencia, isotipo de 720 px sobre blanco;
+  - `assets/adaptive-icon.png` y `adaptive-icon-mono.png`: 1024 px, isotipo de 540 px, dentro de
+    la zona segura de Android (66 de 108 dp); fondo `#FFFFFF`;
+  - `assets/splash-icon.png`: el isotipo a 1024 px; se pinta a 160 de ancho sobre
+    `surface.page` (`#f3f5f8` en claro, `#0b1220` en oscuro);
+  - `assets/notification-icon.png`: 96 px, blanco, para la barra de Android; color `#057FFB`.
+- **Arranque:** la pantalla de arranque (`expo-splash-screen`) se queda hasta que hay letra
+  (`app/_layout.tsx`); la quita también la pantalla de error de la raíz.
+
+**Falta de la fase 1:** los mapas de código en Sentry (plugin de `app.json` y
+`getSentryExpoConfig` en `metro.config.js`: necesitan la organización y el proyecto de Sentry, y
+`SENTRY_AUTH_TOKEN` en EAS). Sin ellos una caída llega, pero con el código minificado. Las
+variantes oscura y teñida del icono de iOS: hoy las genera el sistema.
 
 ## Tema
 

@@ -13,12 +13,13 @@ import { getRequestContext } from '@/lib/authz/request-context';
 import { routeParam } from '@/lib/http/admin-input';
 import { APIError } from '@/lib/core/errors';
 import { updateLessonActivity } from '@/features/content/server/lessons.service';
+import { MAX_PROMPTS } from '@/features/content/activity-limits';
 
 const schema = z.object({
   instructions: z.string().trim().max(10_000),
   accepts: z.enum(['TEXT', 'FILE', 'TEXT_OR_FILE']),
   /** Enunciados (24/9); vacío = un solo texto. */
-  prompts: z.array(z.string().trim().max(1_000)).max(20).optional(),
+  prompts: z.array(z.string().trim().max(1_000)).max(MAX_PROMPTS).optional(),
   /** Aprobar al enviar (27/9). */
   autoApprove: z.boolean().optional(),
 });

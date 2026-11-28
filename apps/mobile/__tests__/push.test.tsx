@@ -45,6 +45,29 @@ describe('push', () => {
     expect(ask).not.toHaveBeenCalled();
   });
 
+  it('registers again only when the system token changes, not when Android repeats it', async () => {
+    await syncPush();
+    await syncPush();
+    expect(call).toHaveBeenCalledTimes(1);
+    const changed = (Notifications.addPushTokenListener as jest.Mock).mock.calls[0][0];
+    changed({ type: 'android', data: 'device-test' });
+    await Promise.resolve();
+    expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalledTimes(2);
+    (Notifications.getDevicePushTokenAsync as jest.Mock).mockResolvedValueOnce({
+      type: 'ios',
+      data: 'device-new',
+    });
+    (Notifications.getExpoPushTokenAsync as jest.Mock).mockResolvedValueOnce({
+      data: 'ExponentPushToken[new]',
+    });
+    changed({ type: 'android', data: 'device-new' });
+    await new Promise((done) => setTimeout(done, 0));
+    expect(call).toHaveBeenLastCalledWith('/api/push/devices', {
+      method: 'PUT',
+      body: { token: 'ExponentPushToken[new]', platform: 'ios' },
+    });
+  });
+
   it('does not ask by itself', async () => {
     permission.mockResolvedValueOnce(undecided);
     expect(await syncPush()).toBe('ask');
