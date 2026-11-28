@@ -18,12 +18,12 @@ jest.mock('server-only', () => ({}));
 // "Cannot access 'mockCreateMany' before initialization".
 jest.mock('@/lib/db/tenant', () => ({
   prisma: {
-    notification: { createMany: (...args: unknown[]) => mockCreateMany(...args) },
+    notification: { createManyAndReturn: (...args: unknown[]) => mockCreateMany(...args) },
     membership: { findMany: (...args: unknown[]) => mockMembershipFindMany(...args) },
   },
   createTenantClient: jest.fn(() => ({
     notification: {
-      createMany: (...args: unknown[]) => mockCreateMany(...args),
+      createManyAndReturn: (...args: unknown[]) => mockCreateMany(...args),
       updateMany: (...args: unknown[]) => mockUpdateMany(...args),
       findFirst: (...args: unknown[]) => mockFindFirst(...args),
       count: (...args: unknown[]) => mockCount(...args),
@@ -32,6 +32,11 @@ jest.mock('@/lib/db/tenant', () => ({
 }));
 
 jest.mock('@/lib/observability/logger', () => ({ logger: { error: jest.fn() } }));
+
+const mockPushCreated = jest.fn();
+jest.mock('@/features/notifications/server/push.service', () => ({
+  pushCreated: (...args: unknown[]) => mockPushCreated(...args),
+}));
 
 import {
   notify,
@@ -45,7 +50,7 @@ beforeEach(() => jest.clearAllMocks());
 
 describe('notify', () => {
   it('dice que no creó nada cuando el dedupeKey ya existía', async () => {
-    mockCreateMany.mockResolvedValue({ count: 0 });
+    mockCreateMany.mockResolvedValue([]);
 
     const result = await notify('inst1', {
       personId: 'p1',
@@ -70,6 +75,22 @@ describe('notifyMany', () => {
 
     expect(result.created).toBe(0);
     expect(mockCreateMany).not.toHaveBeenCalled();
+  });
+
+  it('pasa al push solo los avisos que se crearon', async () => {
+    // p2 ya tenía el aviso: `skipDuplicates` no lo devuelve y no recibe otro push.
+    const created = [{ id: 'n1', personId: 'p1' }];
+    mockCreateMany.mockResolvedValue(created);
+
+    const result = await notifyMany('inst1', ['p1', 'p2'], {
+      type: 'conversation_waiting',
+      title: 'T',
+      body: 'B',
+      dedupeKey: 'k',
+    });
+
+    expect(result.created).toBe(1);
+    expect(mockPushCreated).toHaveBeenCalledWith('inst1', 'conversation_waiting', created);
   });
 });
 

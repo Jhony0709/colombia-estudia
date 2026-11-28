@@ -38,7 +38,8 @@ mora en adultos y plan de Vimeo (antes de producción).
 ### Fase 1 — Fundaciones (2-3 semanas)
 
 - Monorepo desde la plantilla de don-pepo: `apps/web`, `packages/domain`, `packages/types`,
-  tooling (turbo, husky, knip, depcruise, prettier, eslint + jsx-a11y). Sin `apps/mobile`.
+  tooling (turbo, husky, knip, depcruise, prettier, eslint + jsx-a11y). Sin `apps/mobile`
+  (hasta el 27/11: «App móvil», abajo).
 - **Dos proyectos Supabase (staging, prod) + local con Supabase CLI.** Previews de Vercel
   → staging. `prisma migrate deploy` en GitHub Action sobre `main`, nunca a mano. Sentry
   desde el primer handler. Nada de datos reales en local.
@@ -151,6 +152,21 @@ paralelo con Basikon, el doble. Como el corte es solo para cohortes nuevas, la f
 lanzamiento se fija con la apertura de una cohorte, no contra las que están en curso.
 Criterios de aceptación por fase en `reference/07-testing-matrix.md`; hitos para el
 cliente en `docs/propuesta-comercial-validaya.md`.
+
+## App móvil (desde el 27/11)
+
+Decisión en `PRODUCT_DECISIONS.md` (27/11); pantallas, sesión y tema en `reference/03-ui/movil.md`.
+
+- **M0 — Acceso.** `apps/mobile` con Expo 58, `packages/fluxus-native`, el tema de ALBA y la
+  pantalla de acceso con sesión por token. Se cierra con las tres pruebas de sesión en un iOS y
+  un Android.
+- **M1 — Equipo: Mensajes.** Segundo factor en la app; bandeja, chat con audios y fotos,
+  tomar, responder y cerrar.
+- **M2 — Estudiante.** Su ruta, temas en WebView, evidencia, notificaciones, cuenta y pago en el
+  navegador, calendario, constancias y recuperar la contraseña.
+- **M3 — Evaluar.** Exámenes y actividades en la app.
+- **M4 — Publicar.** Notificaciones push (el servidor, adelantado el 27/11; falta la app),
+  «Abrir chat» del aviso por WhatsApp a la app, y las tiendas.
 
 ## Después del MVP (en orden probable de demanda real)
 

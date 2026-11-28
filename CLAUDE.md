@@ -22,6 +22,7 @@ en Prisma. Ver `ROADMAP.md` para qué entra en cada fase.
 pnpm install                    # Instalar dependencias
 pnpm dev                        # Next.js dev server
 pnpm storybook                  # Storybook con addon-a11y
+pnpm --filter @colombia-estudia/mobile start   # App móvil (Expo); ver reference/03-ui/movil.md
 supabase start                  # BD local (Docker)
 supabase stop                   # Apagar BD local
 
@@ -58,7 +59,9 @@ colombia-estudia/
 │       ├── authz/              # with-capability.ts, request-context.ts
 │       ├── a11y/               # useAnnounce, FocusManager, preferences provider
 │       └── http/               # api-handler.ts (envuelve Zod + errores + logging)
+├── apps/mobile/                # Expo 58 + @fluxus-ui/native; cliente de la misma API (27/11)
 ├── packages/
+│   ├── fluxus-native/          # Copia de @fluxus-ui/native: no se edita aquí (VENDOR.md)
 │   ├── domain/                 # Reglas puras SIN dependencias de runtime
 │   ├── types/                  # content.ts (parser Markdown + schema evaluación)
 │   └── design-tokens/          # Contrato de tokens + test de contraste

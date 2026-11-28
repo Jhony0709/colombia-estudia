@@ -21,6 +21,10 @@ const PUBLIC_ROUTES = new Map([
   ['health/route.ts', 'health check sin sesión'],
   ['auth/login/route.ts', 'endpoint de login'],
   ['auth/logout/route.ts', 'endpoint de logout'],
+  // App móvil (27/11): la sesión por token; ver reference/03-ui/movil.md «Sesión».
+  ['auth/token/route.ts', 'login de la app; mismo límite por correo que el login'],
+  ['auth/token/mfa/route.ts', 'segundo factor de la app; Bearer aal1 de su propio login'],
+  ['auth/refresh/route.ts', 'renovar con el refreshToken; límite por IP'],
   ['auth/magic-link/route.ts', 'magic link sin sesión'],
   ['auth/recover/route.ts', 'recuperación sin sesión'],
   ['auth/reset/route.ts', 'reset con token de sesión (no capability)'],
@@ -45,6 +49,7 @@ const PUBLIC_ROUTES = new Map([
     'exige sesión; el personId del contexto va en el where del UPDATE',
   ],
   ['notifications/read-all/route.ts', 'exige sesión; solo marca las propias'],
+  ['push/devices/route.ts', 'exige sesión; registra y borra el teléfono propio'],
   // Catálogo del estudiante (25/9): quien no tiene matrícula no tiene ninguna capacidad
   // (`resolveCapabilities`: STUDENT se resuelve por matrículas), y es justo quien se inscribe.
   // Lo que filtra es el `personId` del contexto y que la cohorte sea OPEN + FREE (catalog.service).

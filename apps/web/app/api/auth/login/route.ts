@@ -11,7 +11,7 @@ import { apiHandler } from '@/lib/http/api-handler';
 import { APIError } from '@/lib/core/errors';
 import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
 import { resolveInstitutionBySlug } from '@/lib/authz/institution-cache';
-import { findLoginPerson } from '@/features/auth/server/session.service';
+import { findLoginPerson, LOGIN_FAILED } from '@/features/auth/server/session.service';
 import { COLOMBIA_ESTUDIA } from '@/lib/authz/tenant';
 import { HOME_AFTER_LOGIN, sanitizeNextUrl } from '@/lib/authz/routes';
 import { enforceRateLimit } from '@/lib/http/rate-limit';
@@ -23,8 +23,6 @@ const schema = z.object({
   password: z.string().min(1),
   next: z.string().optional(),
 });
-
-const GENERIC_ERROR = 'Correo o contraseña incorrectos';
 
 /**
  * Responds `{ next }` as JSON: the login form is JS-only (docs/estado.md §9b, "Lo pedido y
@@ -42,7 +40,7 @@ export const POST = apiHandler({
   if (error) {
     // Same message whether the email exists or not (plan/03 "Login"); the reason goes to the log.
     logger.warn({ event: 'login-failed', reason: error.code ?? 'unknown' });
-    throw new APIError(GENERIC_ERROR, 'UNAUTHENTICATED');
+    throw new APIError(LOGIN_FAILED, 'UNAUTHENTICATED');
   }
 
   const institution = await resolveInstitutionBySlug(COLOMBIA_ESTUDIA);
@@ -57,7 +55,7 @@ export const POST = apiHandler({
     // session would leave the user bouncing between / and /auth/login (routes.md:7).
     logger.warn({ event: 'login-failed', reason: 'no_person' });
     await supabase.auth.signOut();
-    throw new APIError(GENERIC_ERROR, 'UNAUTHENTICATED');
+    throw new APIError(LOGIN_FAILED, 'UNAUTHENTICATED');
   }
 
   // A session created by password is always aal1; ADMIN/OPERATIONS must verify (or enroll)

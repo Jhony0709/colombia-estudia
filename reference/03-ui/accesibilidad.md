@@ -109,3 +109,23 @@ Por fase, media hora, sobre el vertical slice completo: **Safari iOS + VoiceOver
 **Chrome Android + TalkBack**, **macOS VoiceOver**, **Windows NVDA + Firefox**, Chrome
 de escritorio solo teclado. A 320 px y con espaciado de texto forzado. Lo que se encuentre
 ahí no lo encuentra ninguna herramienta.
+
+## App móvil (27/11)
+
+El mismo contrato, con lo que cambia en un teléfono (`reference/03-ui/movil.md`):
+
+- **Nombre y estado** de cada control para VoiceOver y TalkBack: el campo, por su etiqueta
+  (`accessibilityLabel`) y su ayuda o error (`accessibilityHint`); el botón, `disabled` y
+  `busy` en `accessibilityState`; un enlace, con rol `link`; un título de pantalla, con rol
+  `header`.
+- **Avisos**: un error tiene rol `alert` y región viva. La región viva solo existe en Android:
+  en iOS la app lo anuncia con `AccessibilityInfo.announceForAccessibility`
+  (`apps/mobile/src/announce.ts`).
+- **Objetivo táctil de 44 puntos** (`target.min`), con `hitSlop` donde el control se dibuja
+  más chico.
+- **Letra del sistema al 200 %**: sin alturas fijas ni `numberOfLines`, y cada pantalla con
+  scroll; no se pone `maxFontSizeMultiplier`.
+- **Movimiento reducido**: las animaciones de `@fluxus-ui/native` lo respetan
+  (`ReduceMotion.System`, `packages/fluxus-native/src/motion.ts:15,21`, `presence.tsx:26`).
+- **DoD de una pantalla**: lo de arriba, prueba en Jest de nombres, roles y avisos, y la
+  revisión en un iOS y un Android de la sección «Lo que solo se comprueba en un teléfono».

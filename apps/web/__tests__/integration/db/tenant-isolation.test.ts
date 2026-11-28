@@ -4,7 +4,7 @@
  * Verifies that the tenant-scoped Prisma client properly isolates
  * data between institutions. This is a critical security test.
  *
- * Coverage: every tenant-scoped model in TENANT_SCOPED_MODELS (42 on 5/11)
+ * Coverage: every tenant-scoped model in TENANT_SCOPED_MODELS (46 on 27/11)
  *
  * Run with: set -a; source .env; set +a; RUN_DB_TESTS=1 pnpm --filter @colombia-estudia/web test:integration
  */
@@ -78,6 +78,8 @@ const PARENTS: Record<string, readonly string[]> = {
   Conversation: [],
   ConversationMessage: ['Conversation'],
   PaymentLink: ['Installment'],
+  PushDevice: ['Person'],
+  PushDelivery: ['Notification', 'PushDevice'],
 } as const;
 
 /**
@@ -438,6 +440,15 @@ async function createEntity(model: string, ctx: GraphContext, db: typeof prisma)
       );
     case 'PaymentLink':
       return factories.paymentLink.create(db, institutionId, getInstallment());
+    case 'PushDevice':
+      return factories.pushDevice.create(db, institutionId, getPerson());
+    case 'PushDelivery':
+      return factories.pushDelivery.create(
+        db,
+        institutionId,
+        entities.get('Notification')?.id as string,
+        entities.get('PushDevice')?.id as string
+      );
 
     default:
       throw new Error(`Unknown model: ${model}`);

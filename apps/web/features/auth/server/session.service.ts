@@ -8,6 +8,9 @@ import 'server-only';
 import { createTenantClient } from '@/lib/db/tenant';
 import { MFA_REQUIRED_ROLES } from '@/lib/authz/request-context';
 
+/** Same message whether the email exists or not (plan/03 "Login"). */
+export const LOGIN_FAILED = 'Correo o contraseña incorrectos';
+
 /**
  * Whether the Auth user belongs to this institution, and whether MFA is mandatory.
  * `null` person → the account is not a Person here (e.g. anonymized): the caller signs out.

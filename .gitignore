@@ -8,6 +8,7 @@ node_modules/
 dist/
 out/
 storybook-static/
+.expo/
 
 # Environment files (except example)
 .env

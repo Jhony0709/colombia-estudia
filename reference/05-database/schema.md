@@ -249,6 +249,23 @@ borra el usuario en Supabase Auth); `Consent.revokedAt`; se conservan `Attempt`,
 
 Añadir un literal = PR que toca el catálogo y este doc, sin migración.
 
+## Push (27/11)
+
+`PushDevice { id, institutionId, personId, platform, token, createdAt, lastSeenAt }`: un teléfono
+con la app y sesión iniciada. `token` (el de Expo) es único; al cerrar sesión, o cuando Expo lo da
+de baja, la fila se borra.
+
+`PushDelivery { id, institutionId, notificationId, deviceId, status, attempts, runAfter, ticketId,
+error, createdAt, sentAt }`: la entrega de un aviso a un teléfono, una por par
+(`@@unique([notificationId, deviceId])`). `status`: `PENDING` (por enviar o reintentar desde
+`runAfter`), `SENT` (Expo lo aceptó; falta el recibo), `DONE` (recibo bueno) y `DEAD` (cinco
+intentos, o un error que no se arregla solo; `error` dice cuál). Se borra en cascada con el aviso
+o el dispositivo, y a los 7 días. RLS como el resto. Migración `20261127020000_push`.
+
+Las dos en `TENANT_SCOPED_MODELS`. `push.service.ts` usa `prisma` sin tenant, con el
+`institutionId` en el `where` de lo que es de una persona: el cron envía lo de todas las
+instituciones.
+
 ## RLS
 
 Activo en todas las tablas como **defensa en profundidad**: políticas que deniegan todo a

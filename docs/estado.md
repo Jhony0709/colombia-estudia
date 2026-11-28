@@ -7877,3 +7877,301 @@ Iconos nuevos en `ICONS`. `StudentHeader` movido a `_to_delete/components-organi
 3. `Badge.test.tsx` y `Badge.stories.tsx` están escritos pero **no ejecutados**.
 4. Sigue sin haber átomo `Textarea`, y `packages/domain|types|design-tokens|scripts` siguen sin
    script `lint`.
+
+## 2026-11-27 — App móvil, M0: acceso
+
+Decisión: `PRODUCT_DECISIONS.md`, «App móvil con Expo y `@fluxus-ui/native`». Referencia:
+`reference/03-ui/movil.md`, más «Tema nativo» en `tokens.md`, «App móvil» en
+`accesibilidad.md`, `EXPO_PUBLIC_API_URL` en `08-env-vars.md`, criterios en
+`07-testing-matrix.md` y fases en `ROADMAP.md`.
+
+### Hecho
+
+- `packages/fluxus-native`: copia de `src/` de Fluxus, idéntica (`diff -r`), con `VENDOR.md`.
+- `apps/mobile` con Expo 58.1 y las versiones de `expo/bundledNativeModules.json`; Metro
+  resuelve React, React Native, Reanimated y worklets desde la app.
+- Tema: `theme/alba.tokens.json` → `theme/alba.ts`, validador de Fluxus en verde;
+  `theme/extra.ts` para `surface.note`, `status.locked.*` y `brand.*`.
+- Letra: Atkinson Hyperlegible Next en tres caras estáticas, con `OFL.txt`.
+- Pantalla de acceso con todos los estados de `movil.md` M0, contra `POST /api/auth/login`,
+  `GET /api/me` y `POST /api/auth/logout`, sin tocar el servidor.
+- `.gitignore` (`.expo/`), `.prettierignore` (la copia de Fluxus y el tema generado),
+  `knip.json` (los dos workspaces).
+- `expo-system-ui` (aprobado): sin él Android no sigue el modo oscuro del sistema.
+
+### Verificado (en un workspace aparte en la nube con las mismas versiones)
+
+`tsc` (`tsconfig.check.json`), `eslint`, `knip`, 26 tests de Jest y `expo export` para iOS y Android;
+el bundle lleva una sola copia de React 19.3, React Native, Reanimated y worklets aun con React
+18 en otro workspace.
+
+### Falta
+
+1. `pnpm install` en el Mac de Jhonny, para `pnpm-lock.yaml` (el CI instala con el lockfile
+   congelado).
+2. Las cuatro pruebas de sesión, VoiceOver, TalkBack y letra al 200 %, en un iOS y un Android.
+3. A Fluxus: que `TextField` y `Message` anuncien en iOS, y que el foco de `TextField` use
+   `focus.ring`.
+
+## 2026-11-27 — App móvil: sesión por token
+
+Aprobado por Jhonny: token ya en M0, ruta aparte, `expo-secure-store`, duración la de Supabase.
+Referencia: `03-ui/movil.md` «Sesión», `02-api/endpoints.md` (`token`, `refresh`, `logout`).
+
+- Servidor: `bearerToken`, `createStatelessSupabaseClient` y `revokeSession` en
+  `lib/auth/supabase-server.ts`; `getSupabaseUser` valida el `Bearer` sin mirar la cookie;
+  `request-context.ts` pide el segundo factor con el jwt; `features/auth/server/token.service.ts`;
+  rutas `POST /api/auth/token` y `/api/auth/refresh`; `logout` revoca con `Bearer`;
+  `LOGIN_FAILED` compartido en `session.service.ts`.
+- App: `src/tokens.ts` (solo el `refreshToken`, en SecureStore), `src/api.ts` (Bearer, renovar
+  antes de caducar y ante un 401, una sola renovación a la vez), `src/session.ts`.
+
+### Verificado (en la nube)
+
+Web: Jest de `api/auth`, `auth` y `authz` (68 en las 7 suites que tocan esto), `tsc` sobre los
+ficheros cambiados con el cliente de Prisma generado, ESLint. App: `tsc`, ESLint, 33 tests y
+`expo export`.
+
+### Falta
+
+1. `pnpm install` en el Mac (lockfile, por `expo-secure-store`), y `type-check`, `lint` y
+   `test:unit` completos.
+2. Las tres pruebas de sesión en un iOS y un Android.
+
+## 2026-11-27 — App móvil, M1: el equipo y Mensajes
+
+Decisión: `PRODUCT_DECISIONS.md`, «La app empieza por el equipo: Mensajes». Aprobado por
+Jhonny: `expo-router` (con `react-native-screens`, `expo-linking`, `expo-constants`),
+`expo-audio`, y el código TOTP si la institución lo exige.
+
+- Servidor: `POST /api/auth/token` da a staff el par `aal1` con `mfa.factorId` (403 si no tiene
+  TOTP verificado); `POST /api/auth/token/mfa` (nuevo) lo cambia por el `aal2`;
+  `GET /api/conversations` y `GET /api/conversations/[conversationId]` (nuevos, `cohort.manage`);
+  `?as=url` en la ruta de media.
+- App: `app/` con `expo-router`; `src/SessionProvider.tsx` (estados de la sesión, el código,
+  roles); `src/messages/` (bandeja, chat, audio, foto y documento, pulso cada 5 s en primer
+  plano). `index.ts` y `App.tsx` borrados: la entrada es `expo-router/entry`.
+- Le falta a Fluxus, armado en la app con sus tokens: pestañas (`src/ui/Tabs.tsx`), burbuja de
+  chat, reproductor de audio.
+
+### Verificado (en la nube)
+
+Web: Jest de `api/auth`, `api/conversations`, `auth/supabase-server` y `authz/request-context`
+(93 tests), `tsc` sobre los ficheros cambiados, ESLint. App: `tsc`, ESLint, 66 tests (tres
+vueltas), `knip` y `expo export` iOS y Android.
+
+### Falta
+
+1. `pnpm install` en el Mac (las dependencias nuevas) y `type-check`, `lint`, `test:unit`.
+2. En un teléfono, con una cuenta del equipo con TOTP: entrar con el código; tomar, responder y
+   cerrar un chat; oír una nota de voz y ver una foto; VoiceOver y TalkBack; letra al 200 %.
+
+## 2026-11-27 — App móvil, M2: fase 0 (Fluxus entero) y fase 1 (Mi ruta)
+
+Plan aprobado por Jhonny (27/11): `react-native-webview` 14.0.1, `expo-web-browser ~58.1.0`,
+`GET /api/learn/enrollments` y `onlinePayment` en la cuenta; sin `react-native-svg` (sin iconos).
+
+### Fase 0
+
+- `packages/fluxus-native`: segunda copia, idéntica a Fluxus (`diff -r`), 35 ficheros con su
+  sha256 en `VENDOR.md`; `package.json` con las entradas `./screen`, `./icon` y `./blur`.
+- M1 pasa a las piezas de Fluxus: `Screen`, `Tabs`, `ListItem`, `Skeleton`, `EmptyState`,
+  `Swap`, `TextArea`, `Spinner`; los botones esperan su promesa (sin `busy` a mano); los avisos
+  los dice Fluxus en iOS (`announce` de la app, borrado). `src/ui/Page.tsx` y `src/ui/Tabs.tsx`,
+  borrados.
+- Metro resuelve también `react-native-safe-area-context` desde la app (una sola copia, comprobado
+  en el source map).
+- **No hecho:** los tokens `app.` del tema. El validador del árbol los rechaza («sets
+  "app.brand.yellow", which the base does not have»): usa `fluxus/packages/ui/dist`, de las 14:32,
+  anterior al cambio del motor (SPEC §15.9). Se reconstruye en Fluxus; hasta entonces sigue
+  `theme/extra.ts`.
+
+### Fase 1
+
+- Servidor: `GET /api/learn/enrollments` (`listMyEnrollments`), con su prueba.
+- App: `app/aprender/index.tsx` → `src/learn/Route.tsx`: programa, avance, «Seguir con…», etapas
+  en `Accordion`, pasos en `ListItem`, cada `gate` y cada bloqueo con el texto de
+  `learn.*`; selector de programa con más de una matrícula; «Más» con las no leídas. El tema, el
+  examen y las pantallas de «Más» abren la web hasta su fase. `app/hola.tsx` y
+  `src/StudentHome.tsx`, borrados.
+
+### Verificado (en la nube)
+
+App: `tsc`, ESLint, 78 tests (dos vueltas), `knip`, `expo export`. Web: la prueba de la ruta
+nueva, `tsc` y ESLint sobre ella.
+
+### Falta
+
+1. `pnpm install` en el Mac (dependencias nuevas) y `type-check`, `lint`, `knip`, `test:unit`.
+2. Reconstruir `@fluxus-ui/ui` en Fluxus para los tokens `app.`.
+3. En un teléfono: fechas y pesos con el `Intl` de Hermes; el selector de programa; VoiceOver y
+   TalkBack; letra al 200 %.
+
+## 2026-11-27 — App móvil, M2: fase 2 (el tema)
+
+- `app/aprender/tema/[id].tsx` → `src/learn/Lesson.tsx`: el HTML del servidor en
+  `react-native-webview` a la altura de su contenido (`src/learn/lessonDocument.ts`: CSS de los
+  tokens, letra del sistema; script que manda el alto y lo que reporta Vimeo); transcripciones
+  en `Accordion`; anterior y siguiente; cada `gate`; actividad → la web; enlaces del tema → el
+  navegador de la app.
+- `src/learn/useEvidence.ts`: la evidencia como `evidence-recorder.tsx` (umbral de 5, envío cada
+  20 s, al encenderse una bandera, al cruzar el 90 % del video y al salir o pasar a segundo
+  plano). El servidor decide.
+- Mi ruta abre los temas en la app; examen y actividad, en la web.
+- **No replicado:** el envío anticipado al cumplirse `requiredReadingSeconds` con el final ya
+  visto (`evidence-recorder.tsx:160-164`): llega en el siguiente envío, como mucho 20 s después.
+- **Texto sin equivalente en la web:** «Este tema no está en tu ruta» (`NOT_ASSIGNED`; la web da
+  404, `page.tsx:93`).
+
+### Verificado (en la nube)
+
+`tsc`, ESLint, 94 tests (tres vueltas), `knip`, `expo export` iOS.
+
+### Falta (en un teléfono)
+
+El video de Vimeo dentro de la WebView y su `postMessage`; el alto de la WebView con imágenes
+que cargan tarde; la letra al 200 % (CSS en iOS, `textZoom` en Android); MathML; VoiceOver y
+TalkBack dentro de la WebView.
+
+## 2026-11-27 — App móvil, M2: fase 3 (notificaciones)
+
+- `app/aprender/notificaciones.tsx` → `src/notifications/Notifications.tsx`: por día (Hoy, Ayer,
+  fecha) como `NotificationList.tsx`; «Sin leer»; «Marcar todas como leídas». Pulsar un aviso lo
+  marca leído (si no se pudo, lo dice y no lo abre) y abre su `href`.
+- `src/links.ts`: el `href` que la app tiene se abre en la app (`/aprender`, el tema,
+  notificaciones, un chat); el resto, en el navegador de la app.
+- **Distinto de la web:** allí «Ver» y «Marcar leída» son dos controles; en la app, una fila.
+
+### Verificado (en la nube)
+
+`tsc`, ESLint, 108 tests (dos vueltas), `knip`, `expo export` Android.
+
+## 2026-11-27 — App móvil, M2: fase 4 (mi cuenta y pagar)
+
+- Servidor: `GET /api/learn/account` responde `{ accounts, onlinePayment }` (`isBoldConfigured()`,
+  lo que la web usa para pintar «Pagar en línea», `mi-cuenta/page.tsx:64`), con su prueba. Nadie
+  más llamaba a esa ruta (`grep`).
+- App: `app/aprender/mi-cuenta.tsx` → `src/account/AccountScreen.tsx`: estado de la cuenta,
+  próxima cuota y lo que abre, acuerdo vigente, cuotas y pagos en `Disclosure`; «Pagar en línea»
+  (Bold en el navegador de la app) y «Enviarme el link al correo» solo para `summary.next` y con
+  `onlinePayment`; al volver se pide la cuenta otra vez (también al volver la app al primer
+  plano, porque en Android el navegador no espera a cerrarse).
+- **Quitado en la auditoría:** «Pagado X de Y»: el total salía de sumar `paid + pending` en la
+  app, y la web no pinta esa línea (`learn.account.totals` no se usa).
+- **En la web:** «Datos para transferencia» (el correo de soporte no viene en la respuesta).
+- **Limitación:** tras pagar, Bold vuelve a `/aprender/mi-cuenta` de la web dentro del navegador
+  de la app, sin la sesión de la app; el aviso de `?pago=` no se ve en la app.
+
+### Verificado (en la nube)
+
+Web: la prueba de la ruta, `tsc` y ESLint sobre ella. App: `tsc`, ESLint, 117 tests (tres
+vueltas), `knip`, `expo export` iOS.
+
+## 2026-11-27 — App móvil, M2: fases 5 a 7 (calendario, constancias, recuperar)
+
+- **Calendario** (`app/aprender/calendario.tsx` → `src/calendar/`): «Hoy», «Próximos 7 días» y
+  «Después» con los cortes de `aprender/calendario/page.tsx:46-100` (día en Bogotá; los días sueltos
+  en UTC), lo pasado en un `Disclosure`, el fin de acceso arriba. «Unirse» solo con `joinable` y
+  `href` del servidor; un cuestionario, en la web.
+- **Constancias** (`app/aprender/certificados.tsx` → `src/certificates/`): cada una abre
+  `/certificado/[code]` de la web, que es pública. Pedir el certificado de estudios, en la web.
+- **Olvidé mi contraseña:** dentro de la pantalla de acceso, con `POST /api/auth/recover`; dice lo
+  que responde el servidor, siempre lo mismo; 429 y red con su texto. El enlace del correo vuelve
+  a la web.
+- Mi ruta abre ya todas sus pantallas en la app; `src/links.ts` las conoce todas.
+
+### Verificado (en la nube)
+
+`tsc`, ESLint, 132 tests (tres vueltas), `knip`, `expo export` iOS y Android.
+
+### Falta para cerrar M2 (en un teléfono)
+
+`Intl` de Hermes (fechas en Bogotá, `en-CA` para los días, pesos); el tema con Vimeo, MathML y
+letra al 200 %; el pago con Bold de punta a punta; VoiceOver y TalkBack en cada pantalla. Y lo de
+antes: `pnpm install`, las cuatro verificaciones, y reconstruir `@fluxus-ui/ui` para los tokens `app.`.
+
+## 2026-11-27 — Verificado en el Mac de Jhonny
+
+`pnpm type-check`, `lint`, `knip` y `test:unit` en verde, tras registrar `auth/token`,
+`auth/token/mfa` y `auth/refresh` en `PUBLIC_ROUTES` de `__tests__/unit/http/route-guard.test.ts`
+(faltaban: no había corrido esa prueba al crearlas). Queda lo de un teléfono.
+
+## 2026-11-27 — Fluxus desde su scope nuevo y lo que la app le pidió
+
+- **`@fluxus-ui/native`:** el paquete cambió de scope (SPEC de Fluxus §16.1); la copia de
+  `packages/fluxus-native` va por la quinta, versión 0.2.0 (`VENDOR.md`). En npm está la 0.1.0:
+  pasar de la copia al paquete espera a que se publique la 0.2.0.
+- **Lo que la app armaba a mano ya es de Fluxus:** `Bubble`, `Screen` con `scrollRef` y
+  `scrollProps`, `Link` (espera la promesa de `onPress`) y `Audio`. No queda ninguna nota «Para
+  Fluxus».
+- **Tokens de ALBA bajo `app.`** en `theme/alba.tokens.json`; `theme/extra.ts` ya no existe.
+- **Abrir el navegador pasa por un sitio** (`src/ui/browser.tsx`): `mailto:` y `tel:` van al
+  sistema, y si no abre lo dice un `Toast`.
+
+### Verificado (en la nube)
+
+`tsc`, ESLint, 136 tests, `knip`, `expo export` iOS y Android. En un teléfono, nada.
+
+## 2026-11-27 — Push, fase 1: el servidor
+
+Decisión y diseño: `PRODUCT_DECISIONS.md`, «Notificaciones push: sobre la campana, con Expo»;
+`reference/03-ui/movil.md`, «Push».
+
+- **Modelos** `PushDevice` y `PushDelivery` (migración `20261127020000_push`, sin aplicar), en
+  `TENANT_SCOPED_MODELS` (aprobado por Jhonny).
+- **`push.service.ts`:** al crear un aviso de mensajes o solicitudes, en horario de asesores, una
+  entrega por teléfono y un primer envío a Expo; el cron de cada minuto reintenta, lee los recibos
+  y limpia. Un token dado de baja se borra.
+- **`PUT` y `DELETE /api/push/devices`:** el teléfono de quien pregunta.
+- **`notify` y compañía** usan `createManyAndReturn`: el push solo sale para los avisos creados.
+
+### Verificado (en la nube)
+
+Las pruebas de `notifications`, `push`, `request-new` y `route-guard` (203), `tsc` y ESLint sobre
+los ficheros tocados. No: `pnpm type-check` completo ni `knip` de la web (la copia de la nube es
+parcial), ni la migración contra una base (`prisma migrate diff` no pudo correr).
+
+### Falta
+
+1. Aplicar la migración y `pnpm db:generate` (Jhonny).
+2. La app: `expo-notifications`, permiso, registro y baja del token, toque, contador; y la
+   pantalla de Solicitudes. Pide build de desarrollo, FCM, APNs y proyecto de EAS.
+3. `packages/types/src/catalogs.ts` lista 11 tipos de aviso; el servicio tiene 27.
+4. La prueba de aislamiento (`tenant-isolation.test.ts`) con los dos modelos nuevos: necesita
+   una base (`RUN_DB_TESTS=1`).
+
+## 2026-11-27 — App móvil: Solicitudes
+
+`app/solicitudes/index.tsx` → `src/requests/`: lo que piden los estudiantes, como `/solicitudes`
+de la web. «Abiertas» y «Cerradas»; «Habilitar», «Dar otra oportunidad» y «Descartar» (con un
+segundo botón); matricular, habilitar con fechas y la cartera, en la web. Se entra desde la
+bandeja de Mensajes. Ruta nueva: `GET /api/access-requests?status=`.
+
+### Verificado (en la nube)
+
+App: `tsc`, ESLint, 146 tests (tres vueltas), `knip`, `expo export` iOS y Android. Web: la prueba
+de la ruta, `tsc` y ESLint sobre ella. En un teléfono, nada.
+
+## 2026-11-27 — Push, fase 2: la app
+
+`expo-notifications` (aprobada). `src/push/`: el permiso se pide con un botón en la bandeja; con
+permiso, el teléfono se registra al entrar; tocar un aviso abre su `href` y lo marca leído; al
+cerrar sesión el teléfono se borra del servidor y se da de baja del servicio. El servidor ya no
+manda contador: la app del equipo no tiene dónde bajarlo.
+
+### Verificado (en la nube)
+
+`tsc`, ESLint, 156 tests (tres vueltas), `knip`, `expo export` iOS y Android; el lockfile pasa
+`--frozen-lockfile`. **Ningún aviso real:** falta el proyecto de EAS, los identificadores de la
+app, FCM, APNs y un build de desarrollo.
+
+## 2026-11-28 — Push: credenciales
+
+Jhonny, con Claude en su Chrome: app de Android en Firebase (`alba-futuro-educativo`), su
+`google-services.json` en `apps/mobile` (en `app.json`, `android.googleServicesFile`) y la cuenta de
+servicio subida a EAS; App ID `com.albafuturoeducativo.app` con Push Notifications en el equipo de
+Apple `QL4RRHD3G9`, que reusa su clave de APNs. `eas init` escribió `extra.eas.projectId` y
+`owner`; `eas.json` con `development`, `preview` y `production`; `expo-dev-client` instalado.
+
+**Falta:** ver un aviso de punta a punta. La app apunta por defecto a producción
+(`src/api.ts:4-6`), que aún no tiene el servidor del push ni su migración.

@@ -1,0 +1,577 @@
+{
+  "$description": "ALBA Futuro Educativo para @fluxus-ui/native. Cada color es el exacto de packages/design-tokens/src/values/light.ts y dark.ts, convertido con fluxus/packages/ui/scripts/hex-to-oklch.mjs (vuelve al mismo hex). Equivalencias en reference/03-ui/tokens.md, «Tema nativo».",
+  "$extensions": {
+    "dev.fluxus": {
+      "name": "alba",
+      "extends": "base"
+    }
+  },
+  "seed": {
+    "accent": {
+      "h": {
+        "$value": 261
+      },
+      "c": {
+        "$value": 0.19
+      }
+    },
+    "neutral": {
+      "h": {
+        "$value": 258
+      },
+      "c": {
+        "$value": 0.012
+      }
+    }
+  },
+  "surface": {
+    "page": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.9695, 0.0045, 258.32]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.1831, 0.0309, 263.38]
+          }
+        }
+      }
+    },
+    "base": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [1, 0, 89.88]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.2346, 0.0338, 261.53]
+          }
+        }
+      }
+    },
+    "raised": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [1, 0, 89.88]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.2833, 0.039, 259.37]
+          }
+        }
+      }
+    },
+    "sunken": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.9478, 0.0091, 258.34]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.2085, 0.0329, 260.28]
+          }
+        }
+      }
+    }
+  },
+  "text": {
+    "default": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.1941, 0.0297, 257.53]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.9785, 0.0045, 258.32]
+          }
+        }
+      }
+    },
+    "muted": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.4622, 0.0417, 255.04]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.7549, 0.0321, 254.36]
+          }
+        }
+      }
+    },
+    "disabled": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.5018, 0.0369, 255.69]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.7549, 0.0321, 254.36]
+          }
+        }
+      }
+    },
+    "accent": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.4421, 0.1915, 261.04]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.7697, 0.0938, 258.13]
+          }
+        }
+      }
+    },
+    "on-accent": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [1, 0, 89.88]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.1719, 0.0281, 257.96]
+          }
+        }
+      }
+    }
+  },
+  "accent": {
+    "9": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.4421, 0.1915, 261.04]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.7697, 0.0938, 258.13]
+          }
+        }
+      }
+    },
+    "10": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.4892, 0.2137, 261.17]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.8388, 0.0665, 258.36]
+          }
+        }
+      }
+    }
+  },
+  "border": {
+    "default": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.9139, 0.0139, 258.35]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.3338, 0.038, 257.78]
+          }
+        }
+      }
+    },
+    "control": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.5752, 0.0384, 257.87]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.6346, 0.0399, 256.01]
+          }
+        }
+      }
+    }
+  },
+  "focus": {
+    "ring": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [0.3216, 0.1178, 261.84]
+      },
+      "$extensions": {
+        "dev.fluxus": {
+          "dark": {
+            "colorSpace": "oklch",
+            "components": [0.7697, 0.0938, 258.13]
+          }
+        }
+      }
+    },
+    "width": {
+      "$value": {
+        "value": 3,
+        "unit": "px"
+      }
+    },
+    "offset": {
+      "$value": {
+        "value": 3,
+        "unit": "px"
+      }
+    }
+  },
+  "state": {
+    "success": {
+      "solid": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.4945, 0.1285, 149.95]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.7588, 0.1766, 153.69]
+            }
+          }
+        }
+      },
+      "subtle": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.9624, 0.0434, 156.74]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.2941, 0.0594, 156.96]
+            }
+          }
+        }
+      },
+      "text": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.4945, 0.1285, 149.95]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.7588, 0.1766, 153.69]
+            }
+          }
+        }
+      }
+    },
+    "warning": {
+      "solid": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.5292, 0.1392, 48.69]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.8204, 0.1503, 81.49]
+            }
+          }
+        }
+      },
+      "subtle": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.9619, 0.058, 95.62]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.2965, 0.0533, 82.4]
+            }
+          }
+        }
+      },
+      "text": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.5292, 0.1392, 48.69]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.8204, 0.1503, 81.49]
+            }
+          }
+        }
+      }
+    },
+    "danger": {
+      "solid": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.5155, 0.1943, 27.52]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.6959, 0.1645, 22.29]
+            }
+          }
+        }
+      },
+      "subtle": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.9456, 0.0241, 17.59]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.2419, 0.0683, 23.73]
+            }
+          }
+        }
+      },
+      "text": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.5155, 0.1943, 27.52]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.6959, 0.1645, 22.29]
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "solid": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.4421, 0.1915, 261.04]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.7697, 0.0938, 258.13]
+            }
+          }
+        }
+      },
+      "subtle": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.9254, 0.0284, 261.48]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.3147, 0.0896, 258.89]
+            }
+          }
+        }
+      },
+      "text": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.4421, 0.1915, 261.04]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.7697, 0.0938, 258.13]
+            }
+          }
+        }
+      }
+    }
+  },
+  "radius": {
+    "card": {
+      "$value": "{radius.4}"
+    }
+  },
+  "font": {
+    "weight": {
+      "medium": {
+        "$value": 600
+      },
+      "bold": {
+        "$value": 700
+      }
+    }
+  },
+  "type": {
+    "caption": {
+      "size": {
+        "$value": {
+          "value": 0.8125,
+          "unit": "rem"
+        }
+      }
+    },
+    "label": {
+      "size": {
+        "$value": {
+          "value": 0.875,
+          "unit": "rem"
+        }
+      }
+    },
+    "body": {
+      "size": {
+        "$value": {
+          "value": 1,
+          "unit": "rem"
+        }
+      }
+    },
+    "title": {
+      "size": {
+        "$value": {
+          "value": 1.125,
+          "unit": "rem"
+        }
+      }
+    },
+    "heading": {
+      "size": {
+        "$value": {
+          "value": 1.5,
+          "unit": "rem"
+        }
+      },
+      "weight": {
+        "$value": "{font.weight.medium}"
+      }
+    },
+    "display": {
+      "size": {
+        "$value": {
+          "value": 1.875,
+          "unit": "rem"
+        }
+      }
+    }
+  },
+  "app": {
+    "$description": "Los de ALBA que Fluxus no tiene (SPEC §15.9), con los valores de packages/design-tokens/src/values: el fondo de una nota, el estado bloqueado y la marca.",
+    "$type": "color",
+    "surface": {
+      "note": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.9687, 0.0332, 88.06]
+        },
+        "$extensions": {
+          "dev.fluxus": {
+            "dark": {
+              "colorSpace": "oklch",
+              "components": [0.2965, 0.0533, 82.4]
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "locked": {
+        "base": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.5231, 0.0279, 254.08]
+          },
+          "$extensions": {
+            "dev.fluxus": {
+              "dark": {
+                "colorSpace": "oklch",
+                "components": [0.7422, 0.0292, 253.29]
+              }
+            }
+          }
+        },
+        "muted": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.957, 0.0063, 255.48]
+          },
+          "$extensions": {
+            "dev.fluxus": {
+              "dark": {
+                "colorSpace": "oklch",
+                "components": [0.2584, 0.0295, 259.07]
+              }
+            }
+          }
+        },
+        "on-base": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [1, 0, 89.88]
+          },
+          "$extensions": {
+            "dev.fluxus": {
+              "dark": {
+                "colorSpace": "oklch",
+                "components": [0.1719, 0.0281, 257.96]
+              }
+            }
+          }
+        }
+      }
+    },
+    "brand": {
+      "yellow": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.8396, 0.1716, 90.43]
+        }
+      },
+      "on-yellow": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.1941, 0.0297, 257.53]
+        }
+      },
+      "red": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [0.57, 0.209, 22.65]
+        }
+      }
+    }
+  }
+}

@@ -36,6 +36,19 @@
       ],
       "ignore": ["lib/editor/**"]
     },
+    "apps/mobile": {
+      "entry": ["app/**/*.tsx", "*.config.js", "__tests__/**/*.{ts,tsx}"],
+      "project": ["**/*.{ts,tsx}"]
+    },
+    "packages/fluxus-native": {
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignoreDependencies": [
+        "react-native-safe-area-context",
+        "react-native-svg",
+        "expo-blur",
+        "expo-audio"
+      ]
+    },
     "packages/domain": {
       "project": ["src/**/*.ts"]
     },

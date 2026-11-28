@@ -7,9 +7,16 @@
 
 import { NextResponse } from 'next/server';
 import { apiHandler } from '@/lib/http/api-handler';
-import { createServerSupabaseClient } from '@/lib/auth/supabase-server';
+import { bearerToken, createServerSupabaseClient, revokeSession } from '@/lib/auth/supabase-server';
 
 export const POST = apiHandler()(async (req) => {
+  // The mobile app (reference/03-ui/movil.md «Sesión»): revoke its session, answer JSON.
+  const jwt = await bearerToken();
+  if (jwt) {
+    await revokeSession(jwt);
+    return { signedOut: true };
+  }
+
   const supabase = await createServerSupabaseClient();
   await supabase.auth.signOut();
 

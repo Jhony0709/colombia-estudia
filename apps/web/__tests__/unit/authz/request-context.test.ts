@@ -39,9 +39,15 @@ const mockCreateServerSupabaseClient = jest.fn(() => ({
     },
   },
 }));
+const mockBearerToken = jest.fn(async (): Promise<string | null> => null);
+const mockStatelessAal = jest.fn();
 jest.mock('@/lib/auth/supabase-server', () => ({
   getSupabaseUser: mockGetSupabaseUser,
   createServerSupabaseClient: mockCreateServerSupabaseClient,
+  bearerToken: () => mockBearerToken(),
+  createStatelessSupabaseClient: () => ({
+    auth: { mfa: { getAuthenticatorAssuranceLevel: mockStatelessAal } },
+  }),
 }));
 
 // Mock tenant client
@@ -466,5 +472,21 @@ describe('getRequestContext', () => {
     const last = mockResolve.mock.calls.at(-1)![0] as { enrollments: { id: string }[] };
     expect(last.enrollments.map((e) => e.id)).toEqual(expected);
     mockResolve.mockImplementation(() => new Map());
+  });
+
+  it('reads the second factor from the Bearer of the mobile app, not from the cookie', async () => {
+    mockGet.mockReturnValue(null);
+    mockResolveInstitution.mockResolvedValue(institution);
+    mockGetSupabaseUser.mockResolvedValue({ id: 'auth-user-1' });
+    mockBearerToken.mockResolvedValueOnce('at-1');
+    mockStatelessAal.mockResolvedValue({ data: { currentLevel: 'aal1' } });
+    mockFindUniquePerson.mockResolvedValue(null);
+
+    const { getRequestContext } = await import('@/lib/authz/request-context');
+    const ctx = await getRequestContext();
+
+    expect(mockStatelessAal).toHaveBeenCalledWith('at-1');
+    expect(mockCreateServerSupabaseClient).not.toHaveBeenCalled();
+    expect(ctx.aal).toBe('aal1');
   });
 });

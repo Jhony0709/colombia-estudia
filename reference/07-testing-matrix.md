@@ -11,6 +11,7 @@ Qué se prueba, dónde y con qué umbral. Sin esto no cierra una fase.
 | a11y estático | pa11y-ci, eslint-plugin-jsx-a11y, Storybook addon-a11y | Rutas del MVP y cada story                                                                                                                                                                                                  | 0 errores                                             |
 | Tokens        | Jest                                                   | Cada par texto/fondo del contrato ≥ 4.5:1 (3:1 UI) en claro y oscuro                                                                                                                                                        | 100 %                                                 |
 | Manual        | Persona                                                | Recorrido con VoiceOver/TalkBack y espaciado de texto forzado, una vez por fase                                                                                                                                             | Hallazgos fichados y cerrados antes de cerrar la fase |
+| App móvil     | jest-expo + Testing Library de React Native            | Cliente de la API y sesión; cada estado de las pantallas de `03-ui/movil.md`, con el nombre, rol y aviso de cada control; el tema nativo igual al contrato                                                                  | Cada estado de `movil.md`                             |
 
 ## Criterios de aceptación por fase (verificables)
 
@@ -31,5 +32,8 @@ Qué se prueba, dónde y con qué umbral. Sin esto no cierra una fase.
   derivado correctos en los tres pasos; un acuerdo firmado anula las cuotas pendientes y
   crea las nuevas; un pago en sandbox de Bold confirma la cuota por webhook una sola vez
   aunque el evento llegue dos veces.
+- **App M0**: las tres pruebas de sesión de `03-ui/movil.md` en un iOS y un Android; con
+  VoiceOver y TalkBack cada control se oye con su nombre y estado y cada error se anuncia; a
+  letra del sistema al 200 % nada se recorta.
 - **Fase 6**: restauración de backup probada; ≥ 90 % de los activos con invitación aceptada
   en 14 días; 0 tickets por progreso perdido; regla de rollback escrita y ensayada.

@@ -62,4 +62,20 @@ describe('GET …/messages/[messageId]/media', () => {
 
     expect((await GET(request(), params)).status).toBe(404);
   });
+
+  it('con ?as=url responde la URL en JSON para la app móvil, sin caché', async () => {
+    mockContext.mockResolvedValue(ctx(new Map([['cohort.manage', [{ institution: true }]]])));
+    mockChatMediaUrl.mockResolvedValue('https://storage.test/signed/a.ogg');
+
+    const res = await GET(
+      new NextRequest(
+        new URL('/api/conversations/conv-1/messages/m-1/media?as=url', 'http://localhost')
+      ),
+      params
+    );
+
+    expect(res.status).toBe(200);
+    expect((await res.json()).data).toEqual({ url: 'https://storage.test/signed/a.ogg' });
+    expect(res.headers.get('cache-control')).toBe('private, no-store');
+  });
 });

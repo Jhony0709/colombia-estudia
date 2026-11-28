@@ -5,7 +5,7 @@ Las marcadas **PROPUESTA** las decide Jhonny; están aquí para que la discusió
 
 ---
 
-## 2026-09-09 — Stack: el de don-pepo, sin mobile
+## 2026-09-09 — Stack: el de don-pepo, sin mobile — **SUPERADA en lo móvil el 27/11**
 
 **Decisión**: Next.js 15 App Router + TypeScript strict, Supabase (Postgres, Auth, Storage),
 Prisma, Radix + Tailwind con tokens propios, TanStack Query, Jest + Playwright, Storybook,
@@ -139,6 +139,8 @@ Ver `reference/04-business-logic/contenido-y-evaluaciones.md`. Deliberado.
 Realtime, IA (tutor, generación de quizzes, pgvector), gamificación, competencias/DBA como
 motor (queda `learningObjective` como texto), certificados verificables, contrato de aliado
 que agrupe cuotas, varias sedes, app móvil, pasarela, DIAN, Mux.
+
+> **27/11:** la app móvil sale de esta lista («App móvil con Expo y `@fluxus-ui/native`»).
 
 Ninguna requiere cambiar el modelo para entrar después.
 
@@ -1264,6 +1266,40 @@ y `whatsappAgentPhones` (migración `20261105010000_messaging`). Pendiente de ap
 los dos modelos a `TENANT_SCOPED_MODELS` (`lib/db/tenant.ts`, archivo protegido); mientras tanto
 cada consulta lleva su `institutionId`.
 
+## 2026-11-27 — La app empieza por el equipo: Mensajes
+
+**Decisión** (Jhonny, 27/11): la app es para el equipo (ADMIN y OPERATIONS) y para los
+estudiantes, y empieza por el equipo con la bandeja de mensajes (M1); lo del estudiante pasa a
+M2. Corrige el «estudiante primero» de la entrada siguiente.
+
+- El equipo entra con su segundo factor si la institución lo exige: código TOTP tras la
+  contraseña. Quien no lo activó lo hace en la web.
+- El estudiante sigue entrando, con la pantalla provisional hasta M2.
+- Otro rol (instructor, coordinador, acudiente, aliado) ve «Usa la web».
+
+**Por qué**: pendiente de que Jhonny lo escriba.
+
+## 2026-11-27 — App móvil con Expo y `@fluxus-ui/native`, estudiante primero — **CORREGIDA el 27/11**
+
+**Decisión** (Jhonny, 27/11): ALBA tiene app en `apps/mobile`, con Expo 58 y los componentes de
+`@fluxus-ui/native`, copiados en `packages/fluxus-native` mientras no estén en npm. Es un cliente
+más de la misma API y empieza por el estudiante: M0 el acceso; M1 su ruta, los temas, la
+evidencia, las notificaciones, su cuenta, el calendario y las constancias; M2 exámenes y
+actividades; M3 push y tiendas. Detalle: `reference/03-ui/movil.md`.
+
+- **Supera** «sin app móvil: PWA responsive» (9/9) y saca la app de «Fuera del MVP» (14/9).
+- **La web no cambia**: sigue con Radix + Tailwind; Fluxus es solo de la app.
+- **Sesión**: por token (`Authorization: Bearer`) desde M0, como en don-pepo; la app no usa
+  cookies (Jhonny, 27/11, en vez de probar primero la cookie de la web). Tokens en
+  `expo-secure-store`; la sesión dura lo que diga la configuración de Supabase.
+- **Tema**: los valores exactos de `packages/design-tokens`, en el formato de Fluxus y con su
+  validador de contraste. Letra: Atkinson Hyperlegible Next en tres caras estáticas.
+
+**Por qué**: pendiente de que Jhonny lo escriba.
+
+**Descartado**: un solo código para web y app con `react-native-web`: obligaría a reescribir una
+web que ya funciona.
+
 ## 2026-11-27 — Avisos al asesor: mensaje nuevo y lo que sigue esperando
 
 **Decisión** (Jhonny, 27/11): a quien atiende se le avisa por la campana y por WhatsApp
@@ -1310,6 +1346,32 @@ Solo audio, JPEG/PNG/WebP y MP4/3GP se muestran; lo demás se descarga.
 
 **Descartado**: pedir el archivo a Meta al abrirlo, sin guardarlo (deja de verse cuando Meta lo
 borra); transcribir los audios (otro paso, si hace falta).
+
+## 2026-11-27 — Notificaciones push: sobre la campana, con Expo
+
+**Decisión** (Jhonny, 27/11): la app avisa con push al equipo de los mensajes y las solicitudes.
+
+- **El aviso de la campana es la fuente de verdad.** Un push es su entrega a un teléfono: nace
+  en `notify`, con su `dedupeKey`, y no hay push sin aviso.
+- **Servicio de push de Expo, llamado con `fetch`.** Sin proveedor de notificaciones ni cola
+  nueva: las entregas son una tabla, se envían al crear el aviso y el cron de cada minuto
+  reintenta y lee los recibos.
+- **Pantalla bloqueada:** el nombre y el inicio del mensaje, como la campana.
+- **Fuera del horario de asesores no sale push,** como el WhatsApp de hoy.
+- **La app tendrá su pantalla de Solicitudes:** el toque no puede acabar en un login de la web.
+- **`expo-notifications`** en la app.
+
+**Por qué**: la campana, la deduplicación y los roles ya existen (27 tipos, 28 llamadas); faltaban
+los teléfonos y el reintento. Un proveedor (Knock, Novu, Courier) cabe en su plan gratis, pero
+suma otro tercero con datos de estudiantes para resolver lo que aquí son dos tablas.
+
+**Schema**: `PushDevice` y `PushDelivery` (migración `20261127020000_push`).
+
+**Descartado**: web push (en iPhone exige instalar la web en la pantalla de inicio; la app ya lo
+cubre); una cola aparte (pgmq, Inngest, QStash) para este volumen; push de madrugada.
+
+**Pendiente**: la app y sus credenciales (FCM, APNs, proyecto de EAS); preferencias por
+categoría; que el WhatsApp al asesor pase a ser el respaldo del push; los avisos del estudiante.
 
 ## 2026-11-24 — Programa de pago: el adulto no ve nada hasta que se habilita, tema por tema
 

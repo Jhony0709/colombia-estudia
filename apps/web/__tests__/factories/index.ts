@@ -1266,6 +1266,26 @@ export const paymentLinkFactory = {
   },
 };
 
+/** Un teléfono con la app (27/11) y la entrega de un aviso a él. */
+export const pushDeviceFactory = {
+  create: async (prisma: PrismaClientType, institutionId: string, personId: string) => {
+    const id = cuid();
+    return prisma.pushDevice.create({
+      data: { id, institutionId, personId, platform: 'IOS', token: `ExponentPushToken[${id}]` },
+    });
+  },
+};
+
+export const pushDeliveryFactory = {
+  create: async (
+    prisma: PrismaClientType,
+    institutionId: string,
+    notificationId: string,
+    deviceId: string
+  ) =>
+    prisma.pushDelivery.create({ data: { id: cuid(), institutionId, notificationId, deviceId } }),
+};
+
 /**
  * All factories grouped for easy access
  */
@@ -1315,4 +1335,6 @@ export const factories = {
   conversation: conversationFactory,
   conversationMessage: conversationMessageFactory,
   paymentLink: paymentLinkFactory,
+  pushDevice: pushDeviceFactory,
+  pushDelivery: pushDeliveryFactory,
 };

@@ -189,6 +189,38 @@ Añadidos el 8/10 (pedido de Jhonny) para el resultado del cuestionario: `durati
 layout raíz y pone `data-motion="reduced"` en `<html>` desde el servidor, como el tema; la
 misma regla de corte seco de `prefers-reduced-motion` aplica bajo ese atributo.
 
+## Tema nativo (27/11)
+
+La app (`reference/03-ui/movil.md`) usa estos mismos valores con los nombres de Fluxus:
+`apps/mobile/theme/alba.tokens.json`, de donde se genera `apps/mobile/theme/alba.ts`. Los
+colores van en OKLCH y vuelven al hex exacto de `packages/design-tokens/src/values` en los dos
+modos; `apps/mobile/__tests__/theme.test.ts` lo comprueba.
+
+| ALBA                                 | Fluxus                                                |
+| ------------------------------------ | ----------------------------------------------------- |
+| `surface.canvas`                     | `surface.page`                                        |
+| `surface.base`, `raised`, `sunken`   | los mismos                                            |
+| `text.default`, `text.muted`         | los mismos                                            |
+| `text.subtle`                        | `text.disabled`                                       |
+| `text.link`                          | `text.accent`                                         |
+| `text.onAccent`                      | `text.on-accent`                                      |
+| `accent.base`                        | `accent.9` (y `accent.default`, `button.bg`)          |
+| `accent.hover`                       | `accent.10`                                           |
+| `border.muted`                       | `border.default`                                      |
+| `border.default`                     | `border.control` (y `input.border`)                   |
+| `focus.ring`                         | `focus.ring`, con `focus.width` y `focus.offset` de 3 |
+| `status.{success,warning,info}.base` | `state.*.solid` y `state.*.text`                      |
+| `status.{…}.muted`                   | `state.*.subtle`                                      |
+| `status.error.*`                     | `state.danger.*`                                      |
+
+- Sin sitio en Fluxus, en el mismo tema bajo `app.`: `surface.note`, `status.locked.*` y
+  `brand.*` (`onBase` y `onYellow` se escriben `on-base` y `on-yellow`). `accent.active` no pasa:
+  los botones de Fluxus marcan la pulsación con escala.
+- Tipografía: los tamaños de la escala de arriba (13, 14, 16, 18, 24 y 30); pesos 400, 600 y
+  700; `label` y `heading` en 600. Radio de tarjeta 16, de control 8; objetivo táctil 44.
+- El validador de Fluxus pasa; avisa de `accent.11` fuera de sRGB en oscuro, un paso derivado
+  que ALBA no usa.
+
 ## Prohibido
 
 Hex literales en componentes; `px` para texto; grises inventados; color como único

@@ -1,9 +1,13 @@
-/** GET /api/learn/account — la cuenta de quien paga (`billing.read.own`). 404 si no hay. */
+/**
+ * GET /api/learn/account — la cuenta de quien paga (`billing.read.own`). 404 si no hay.
+ * `onlinePayment`: si «Pagar en línea» existe (27/11, para la app móvil).
+ */
 
 import { apiHandler } from '@/lib/http/api-handler';
 import { getRequestContext } from '@/lib/authz/request-context';
 import { APIError } from '@/lib/core/errors';
 import { listOwnAccounts } from '@/features/billing/server/account.service';
+import { isBoldConfigured } from '@/lib/billing/bold';
 
 export const GET = apiHandler({ capability: 'billing.read.own' })(async () => {
   const ctx = await getRequestContext();
@@ -12,5 +16,5 @@ export const GET = apiHandler({ capability: 'billing.read.own' })(async () => {
     scopes: ctx.capabilities.get('billing.read.own') ?? [],
   });
   if (accounts.length === 0) throw new APIError('Not found', 'NOT_FOUND');
-  return accounts;
+  return { accounts, onlinePayment: isBoldConfigured() };
 });

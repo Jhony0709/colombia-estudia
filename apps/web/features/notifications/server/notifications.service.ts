@@ -18,6 +18,7 @@ import type { Role } from '@colombia-estudia/domain';
 import { prisma, createTenantClient } from '@/lib/db/tenant';
 import { logger } from '@/lib/observability/logger';
 import { APIError } from '@/lib/core/errors';
+import { pushCreated } from './push.service';
 
 /**
  * Los tipos que el producto conoce. `Notification.type` es `String` en el schema, así que
@@ -88,6 +89,9 @@ export interface NotificationListItem {
   createdAt: string;
 }
 
+/** Lo que el push necesita de cada aviso creado (`push.service.ts`); los repetidos no vuelven. */
+const CREATED = { id: true, personId: true } as const;
+
 /** Crea el aviso. Devuelve `false` si el `dedupeKey` ya existía y no se creó nada. */
 export async function notify(
   institutionId: string,
@@ -95,7 +99,7 @@ export async function notify(
 ): Promise<{ created: boolean }> {
   const db = createTenantClient(institutionId);
 
-  const result = await db.notification.createMany({
+  const created = await db.notification.createManyAndReturn({
     data: [
       {
         institutionId,
@@ -108,9 +112,11 @@ export async function notify(
       },
     ],
     skipDuplicates: true,
+    select: CREATED,
   });
+  await pushCreated(institutionId, input.type, created);
 
-  return { created: result.count > 0 };
+  return { created: created.length > 0 };
 }
 
 /** El mismo aviso para varias personas: el caso de avisar a todo el equipo de operaciones. */
@@ -123,7 +129,7 @@ export async function notifyMany(
 
   const db = createTenantClient(institutionId);
 
-  const result = await db.notification.createMany({
+  const created = await db.notification.createManyAndReturn({
     data: personIds.map((personId) => ({
       institutionId,
       personId,
@@ -134,9 +140,11 @@ export async function notifyMany(
       dedupeKey: input.dedupeKey ?? null,
     })),
     skipDuplicates: true,
+    select: CREATED,
   });
+  await pushCreated(institutionId, input.type, created);
 
-  return { created: result.count };
+  return { created: created.length };
 }
 
 /**
@@ -165,7 +173,7 @@ export async function notifyManyWithoutContext(
 ): Promise<{ created: number }> {
   if (personIds.length === 0) return { created: 0 };
 
-  const result = await prisma.notification.createMany({
+  const created = await prisma.notification.createManyAndReturn({
     data: personIds.map((personId) => ({
       institutionId,
       personId,
@@ -176,9 +184,11 @@ export async function notifyManyWithoutContext(
       dedupeKey: input.dedupeKey ?? null,
     })),
     skipDuplicates: true,
+    select: CREATED,
   });
+  await pushCreated(institutionId, input.type, created);
 
-  return { created: result.count };
+  return { created: created.length };
 }
 
 const iso = (date: Date) => date.toISOString();

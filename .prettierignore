@@ -1,0 +1,4 @@
+# Copia de Fluxus, se compara por sha256 (packages/fluxus-native/VENDOR.md).
+packages/fluxus-native/
+# Generado por build-native-tokens.mjs (reference/03-ui/movil.md, «Tema»).
+apps/mobile/theme/alba.ts

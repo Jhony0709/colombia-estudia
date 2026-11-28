@@ -191,8 +191,9 @@ describe('scopeArgs', () => {
     // 39 desde el 6/10: `EnrollmentModule` (faltaba desde el 3/10) y `AccessRequest`.
     // 40 desde el 11/10: `ModuleFeedback`.
     // 44 desde el 24/11: `EnrollmentLesson`.
-    it('should have exactly 44 models', () => {
-      expect(TENANT_SCOPED_MODELS.length).toBe(44);
+    // 46 desde el 27/11: `PushDevice` y `PushDelivery`.
+    it('should have exactly 46 models', () => {
+      expect(TENANT_SCOPED_MODELS.length).toBe(46);
     });
 
     it('should not include Institution', () => {

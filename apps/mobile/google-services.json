@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1030223436101",
+    "project_id": "alba-futuro-educativo",
+    "storage_bucket": "alba-futuro-educativo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030223436101:android:4d210333742dd4fcac062c",
+        "android_client_info": {
+          "package_name": "com.albafuturoeducativo.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7rvqCL23INVlKOyw2531tGP7f_RXRbEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -70,6 +70,9 @@ export const TENANT_SCOPED_MODELS = [
   'ConversationMessage',
   // 19/11: los links de pago de Bold.
   'PaymentLink',
+  // 27/11: los teléfonos de la app y sus entregas de push.
+  'PushDevice',
+  'PushDelivery',
 ] as const;
 
 type TenantScopedModel = (typeof TENANT_SCOPED_MODELS)[number];

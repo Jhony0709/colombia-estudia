@@ -13,7 +13,12 @@
 import { cache } from 'react';
 import { headers } from 'next/headers';
 import { createTenantClient } from '../db/tenant';
-import { createServerSupabaseClient, getSupabaseUser } from '../auth/supabase-server';
+import {
+  bearerToken,
+  createServerSupabaseClient,
+  createStatelessSupabaseClient,
+  getSupabaseUser,
+} from '../auth/supabase-server';
 import { resolveInstitutionBySlug, type CachedInstitution } from './institution-cache';
 import { COLOMBIA_ESTUDIA } from './tenant';
 import {
@@ -124,8 +129,11 @@ export const getRequestContext = cache(async (): Promise<RequestContext> => {
   }
 
   // Get MFA assurance level (one call, cached with everything else)
-  const supabase = await createServerSupabaseClient();
-  const { data: mfaData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  const jwt = await bearerToken();
+  const supabase = jwt ? createStatelessSupabaseClient() : await createServerSupabaseClient();
+  const { data: mfaData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel(
+    jwt ?? undefined
+  );
   const aal: AAL = mfaData?.currentLevel === 'aal2' ? 'aal2' : 'aal1';
 
   // Find Person in this institution by authUserId

@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "ALBA",
+    "slug": "alba-futuro-educativo",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "alba",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.albafuturoeducativo.app"
+    },
+    "android": {
+      "package": "com.albafuturoeducativo.app",
+      "googleServicesFile": "./google-services.json"
+    },
+    "updates": {
+      "enabled": false
+    },
+    "plugins": ["expo-router", "expo-notifications"],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "5bf5294e-271a-47c6-a8dc-1bd3bd13768d"
+      }
+    },
+    "owner": "jhonnyq"
+  }
+}

@@ -12,7 +12,8 @@ import 'server-only';
 
 import { createServerClient } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { APIError } from '../core/errors';
 
 function getPublicEnv() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -49,6 +50,20 @@ export async function createServerSupabaseClient() {
   });
 }
 
+/** Without cookies or state: validates and issues the mobile app's tokens. */
+export function createStatelessSupabaseClient() {
+  const { url, publishableKey } = getPublicEnv();
+  return createClient(url, publishableKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
+/** `Authorization: Bearer` of the mobile app (reference/03-ui/movil.md, «Sesión»). */
+export async function bearerToken(): Promise<string | null> {
+  const value = (await headers()).get('authorization');
+  return value?.startsWith('Bearer ') ? value.slice(7) || null : null;
+}
+
 let adminClient: ReturnType<typeof createClient> | null = null;
 
 /**
@@ -68,14 +83,22 @@ export function getSupabaseAdmin() {
   return adminClient;
 }
 
+/** Revokes the session of this token; fails when Supabase no longer accepts it. */
+export async function revokeSession(jwt: string): Promise<void> {
+  const { error } = await getSupabaseAdmin().auth.admin.signOut(jwt, 'local');
+  if (error) throw new APIError('Sesión vencida', 'UNAUTHENTICATED');
+}
+
 /**
  * Current authenticated user, validated against Supabase (`getUser`, never `getSession`).
  * Returns null when anonymous.
  */
 export async function getSupabaseUser() {
-  const supabase = await createServerSupabaseClient();
+  const jwt = await bearerToken();
+  // With a Bearer the cookie is not read: a bad token is anonymous, and the 401 makes the app renew.
+  const supabase = jwt ? createStatelessSupabaseClient() : await createServerSupabaseClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser(jwt ?? undefined);
   return user;
 }

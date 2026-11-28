@@ -1,0 +1,50 @@
+{
+  "name": "@colombia-estudia/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
+    "theme": "node ../../../fluxus/packages/ui/scripts/build-native-tokens.mjs --theme theme/alba.tokens.json --out theme/alba.ts",
+    "type-check": "tsc --noEmit -p tsconfig.check.json",
+    "lint": "eslint .",
+    "test:unit": "jest"
+  },
+  "dependencies": {
+    "@fluxus-ui/native": "workspace:*",
+    "expo": "~58.1.0",
+    "expo-audio": "~58.0.12",
+    "expo-constants": "~58.0.16",
+    "expo-dev-client": "~58.0.22",
+    "expo-font": "~58.0.12",
+    "expo-linking": "~58.0.17",
+    "expo-notifications": "~58.1.10",
+    "expo-router": "~58.0.33",
+    "expo-secure-store": "~58.0.3",
+    "expo-status-bar": "~58.0.5",
+    "expo-system-ui": "~58.0.7",
+    "expo-web-browser": "~58.1.0",
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-reanimated": "4.7.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "react-native-webview": "14.0.1",
+    "react-native-worklets": "0.13.0"
+  },
+  "devDependencies": {
+    "@colombia-estudia/design-tokens": "workspace:*",
+    "@react-native/jest-preset": "0.88.1",
+    "@testing-library/react-native": "14.1.0",
+    "@types/jest": "^30.0.0",
+    "@types/react": "~19.3.3",
+    "eslint": "^9.39.0",
+    "eslint-config-expo": "~58.0.4",
+    "jest": "^30.2.0",
+    "jest-expo": "~58.0.16",
+    "test-renderer": "1.3.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -112,6 +112,8 @@ model Institution {
   notifications         Notification[]
   invitations           Invitation[]
   counters              Counter[]
+  pushDevices           PushDevice[]
+  pushDeliveries        PushDelivery[]
 }
 
 /// Contador por institución y entidad para los códigos legibles (25/9, patrón Basikon
@@ -182,6 +184,7 @@ model Person {
   agreementsSigned     PaymentAgreement[]    @relation("AgreementPayerPerson")
   learningEvents       LearningEvent[]
   notifications        Notification[]
+  pushDevices          PushDevice[]
   uploadedMedia        MediaAsset[]
   submissionsReviewed  Submission[]          @relation("SubmissionReviewer")
   invitations          Invitation[]
@@ -1443,11 +1446,69 @@ model Notification {
   readAt        DateTime?
   createdAt     DateTime  @default(now())
 
-  institution Institution @relation(fields: [institutionId], references: [id])
-  person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
+  institution Institution    @relation(fields: [institutionId], references: [id])
+  person      Person         @relation(fields: [personId], references: [id], onDelete: Cascade)
+  deliveries  PushDelivery[]
 
   @@unique([personId, dedupeKey])
   @@index([personId, readAt])
+}
+
+// ───────────────────────────── Push ─────────────────────────────
+
+enum PushPlatform {
+  IOS
+  ANDROID
+}
+
+enum PushStatus {
+  PENDING
+  SENT
+  DONE
+  DEAD
+}
+
+/// Un teléfono con la app y sesión iniciada (27/11). Se borra al cerrar sesión o cuando Expo da
+/// de baja el token.
+model PushDevice {
+  id            String       @id @default(cuid())
+  institutionId String
+  personId      String
+  platform      PushPlatform
+  /// El token de Expo (`ExponentPushToken[…]`).
+  token         String       @unique
+  createdAt     DateTime     @default(now())
+  lastSeenAt    DateTime     @default(now())
+
+  institution Institution    @relation(fields: [institutionId], references: [id])
+  person      Person         @relation(fields: [personId], references: [id], onDelete: Cascade)
+  deliveries  PushDelivery[]
+
+  @@index([institutionId, personId])
+}
+
+/// La entrega de un aviso a un teléfono (27/11). `PENDING` se envía desde `runAfter`; `SENT`
+/// espera el recibo de Expo; `DEAD` ya no se reintenta y `error` dice por qué.
+model PushDelivery {
+  id             String     @id @default(cuid())
+  institutionId  String
+  notificationId String
+  deviceId       String
+  status         PushStatus @default(PENDING)
+  attempts       Int        @default(0)
+  runAfter       DateTime   @default(now())
+  /// El id del ticket de Expo, para pedir el recibo.
+  ticketId       String?
+  error          String?
+  createdAt      DateTime   @default(now())
+  sentAt         DateTime?
+
+  institution  Institution  @relation(fields: [institutionId], references: [id])
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  device       PushDevice   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, deviceId])
+  @@index([status, runAfter])
 }
 
 // ───────────────────────────── Invitaciones ─────────────────────────────

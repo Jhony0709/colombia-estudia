@@ -23,7 +23,9 @@ jest.mock('@/lib/db/tenant', () => ({
   prisma: {
     invitation: { findFirst: (...args: unknown[]) => mockPrismaInvitationFindFirst(...args) },
     membership: { findMany: (...args: unknown[]) => mockPrismaMembershipFindMany(...args) },
-    notification: { createMany: (...args: unknown[]) => mockPrismaNotificationCreateMany(...args) },
+    notification: {
+      createManyAndReturn: (...args: unknown[]) => mockPrismaNotificationCreateMany(...args),
+    },
   },
 }));
 
@@ -41,7 +43,7 @@ describe('POST /api/invitations/[token]/request-new', () => {
     resetRateLimits();
     jest.clearAllMocks();
     mockHashToken.mockReturnValue('hashed-token');
-    mockPrismaNotificationCreateMany.mockResolvedValue({ count: 0 });
+    mockPrismaNotificationCreateMany.mockResolvedValue([]);
   });
 
   function createRequest(token: string) {
@@ -129,6 +131,7 @@ describe('POST /api/invitations/[token]/request-new', () => {
         }),
       ],
       skipDuplicates: true,
+      select: { id: true, personId: true },
     });
   });
 
